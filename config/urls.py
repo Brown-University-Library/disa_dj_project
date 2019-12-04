@@ -19,7 +19,7 @@ urlpatterns = [
     url( r'^login/$', views.login, name='login_url' ),
     url( r'^editor_index/$', views.editor_index, name='editor_index_url' ),
     url( r'^logout/$', views.logout, name='logout_url' ),
-    url( r'^admin/', admin.site.urls ),  # eg host/project_x/admin/
+    url( r'^admin/', admin.site.urls ),
 
     ## support urls...
     url( r'^denormalized.json$', views.dnrmlzd_jsn_prx_url, name='dnrmlzd_jsn_prx_url_url' ),

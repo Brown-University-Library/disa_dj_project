@@ -1,12 +1,12 @@
-# # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
-# import datetime, json, logging, os, pprint
-# from django.conf import settings as project_settings
-# from django.core.urlresolvers import reverse
-# from django.db import models
-# from django.http import HttpResponseRedirect
+import datetime, json, logging, os, pprint
+from django.conf import settings as project_settings
+from django.core.urlresolvers import reverse
+from django.db import models
+from django.http import HttpResponseRedirect
 
-# log = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 # class Document(models.Model):
@@ -76,13 +76,13 @@
 #         return self.citation_string[0:10]
 
 
-# # class Person(models.Model):
-# #     created = models.DateTimeField( auto_now_add=True )
-# #     modified = models.DateTimeField( auto_now=True )
-# #     display_name = models.CharField( max_length=190, default='', help_text='auto-populated from associated first&last Name' )
+# class Person(models.Model):
+#     created = models.DateTimeField( auto_now_add=True )
+#     modified = models.DateTimeField( auto_now=True )
+#     display_name = models.CharField( max_length=190, default='', help_text='auto-populated from associated first&last Name' )
 
-# #     def __str__(self):
-# #         return self.display_name[0:10]
+#     def __str__(self):
+#         return self.display_name[0:10]
 
 
 
