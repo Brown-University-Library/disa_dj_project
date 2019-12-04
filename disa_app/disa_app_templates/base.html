@@ -1,0 +1,98 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        {% if title %}
+        <title>{{ title }}</title>
+        {% else %}
+        <title>DISA</title>
+        {% endif %}
+
+        <link rel="stylesheet" type="text/css" href="{% static 'lib/jquery-ui-themes-1.12.1/themes/base/jquery-ui.min.css' %}">
+
+        <link rel="stylesheet" type="text/css" href="{% static 'lib/select2-dist/css/select2.min.css' %}">
+
+        <style type="text/css">
+            .navbar-nav > li{
+              margin-right:30px;
+            }
+        </style>
+        <script src="{% static 'lib/jquery/jquery-3.3.1.min.js' %}"></script>
+        <script
+            src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+        <script src="{% static 'lib/bootstrap-4.1.2-dist/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'lib/fontawesome-free-5.1.1-web/js/all.js' %}"></script>
+        <script src="{% static 'lib/select2-dist/js/select2.min.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'lib/slickgrid/css/smoothness/jquery-ui-1.11.3.custom.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'lib/slickgrid/slick.grid.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/browse.css' %}" type="text/css">
+        <style type="text/css" rel="stylesheet">
+            .slickgrid_372802 .slick-header-column { left: 1000px; }
+            .slickgrid_372802 .slick-top-panel { height:25px; }
+            .slickgrid_372802 .slick-preheader-panel { height:25px; }
+            .slickgrid_372802 .slick-headerrow-columns { height:30px; }
+            .slickgrid_372802 .slick-footerrow-columns { height:25px; }
+            .slickgrid_372802 .slick-cell { height:35px; }
+            .slickgrid_372802 .slick-row { height:40px; }
+            .slickgrid_372802 .l0 { }
+            .slickgrid_372802 .r0 { }
+            .slickgrid_372802 .l1 { }
+            .slickgrid_372802 .r1 { }
+            .slickgrid_372802 .l2 { }
+            .slickgrid_372802 .r2 { }
+            .slickgrid_372802 .l3 { }
+            .slickgrid_372802 .r3 { }
+            .slickgrid_372802 .l4 { }
+            .slickgrid_372802 .r4 { }
+            .slickgrid_372802 .l5 { }
+            .slickgrid_372802 .r5 { }
+            .slickgrid_372802 .l6 { }
+            .slickgrid_372802 .r6 { }
+            .slickgrid_372802 .l7 { }
+            .slickgrid_372802 .r7 { }
+            .slickgrid_372802 .l8 { }
+            .slickgrid_372802 .r8 { }
+            .slickgrid_372802 .l9 { }
+            .slickgrid_372802 .r9 { }
+            .slickgrid_372802 .l10 { }
+            .slickgrid_372802 .r10 { }
+            .slickgrid_372802 .l11 { }
+            .slickgrid_372802 .r11 { }
+            .slickgrid_372802 .l12 { }
+            .slickgrid_372802 .r12 { }
+        </style>
+        <link rel="shortcut icon" href="{% static 'images/disa_favicon.png' type='image/x-icon' %}">
+        {% block header %}{% endblock %}
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-secondary">
+            <a class="navbar-brand text-white" href="{% url 'browse_url' %}">Database of Indigenous Slavery in the Americas</a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'person_index_url' %}">index</a>
+                </li>
+                {% if not logged_in %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'login_url' %}">login</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'editor_index_url' %}">editor</a>
+                </li>
+                <li class="nav-item">
+                    <span class="navbar-text text-white">Welcome {{ username }}</span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'logout_url' %}">logout</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% comment %} {% with messages = get_flashed_messages() %} {% endcomment %}
+        {% comment %} {% endwith %}                                {% endcomment %}
+        {% block content %}{% endblock %}
+        {% block scripts %}{% endblock %}
+    </body>
+</html>
