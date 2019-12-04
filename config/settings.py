@@ -23,14 +23,14 @@ BASE_DIR = os.path.dirname( os.path.dirname(os.path.abspath(__file__)) )
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['DISA_DJ__SECRET_KEY']
+SECRET_KEY = os.environ['DISA_DJ_19V1__SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = json.loads( os.environ['DISA_DJ__DEBUG_JSON'] )  # will be True or False
+DEBUG = json.loads( os.environ['DISA_DJ_19V1__DEBUG_JSON'] )  # will be True or False
 
-ADMINS = json.loads( os.environ['DISA_DJ__ADMINS_JSON'] )
+ADMINS = json.loads( os.environ['DISA_DJ_19V1__ADMINS_JSON'] )
 
-ALLOWED_HOSTS = json.loads( os.environ['DISA_DJ__ALLOWED_HOSTS'] )  # list
+ALLOWED_HOSTS = json.loads( os.environ['DISA_DJ_19V1__ALLOWED_HOSTS'] )  # list
 
 
 # Application definition
@@ -58,7 +58,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
-# template_dirs = json.loads( os.environ['DISA_DJ__TEMPLATES_JSON'] )  # if template-directory info is complex
+# template_dirs = json.loads( os.environ['DISA_DJ_19V1__TEMPLATES_JSON'] )  # if template-directory info is complex
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'config.passenger_wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = json.loads( os.environ['DISA_DJ__DATABASES_JSON'] )
+DATABASES = json.loads( os.environ['DISA_DJ_19V1__DATABASES_JSON'] )
 
 
 # Password validation
@@ -121,14 +121,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = os.environ['DISA_DJ__STATIC_URL']
-STATIC_ROOT = os.environ['DISA_DJ__STATIC_ROOT']  # needed for collectstatic command
+STATIC_URL = os.environ['DISA_DJ_19V1__STATIC_URL']
+STATIC_ROOT = os.environ['DISA_DJ_19V1__STATIC_ROOT']  # needed for collectstatic command
 
 
 # Email
-SERVER_EMAIL = os.environ['DISA_DJ__SERVER_EMAIL']
-EMAIL_HOST = os.environ['DISA_DJ__EMAIL_HOST']
-EMAIL_PORT = int( os.environ['DISA_DJ__EMAIL_PORT'] )
+SERVER_EMAIL = os.environ['DISA_DJ_19V1__SERVER_EMAIL']
+EMAIL_HOST = os.environ['DISA_DJ_19V1__EMAIL_HOST']
+EMAIL_PORT = int( os.environ['DISA_DJ_19V1__EMAIL_PORT'] )
 
 
 # sessions
@@ -164,7 +164,7 @@ LOGGING = {
         'logfile': {
             'level':'DEBUG',
             'class':'logging.FileHandler',  # note: configure server to use system's log-rotate to avoid permissions issues
-            'filename': os.environ.get(u'DISA_DJ__LOG_PATH'),
+            'filename': os.environ.get(u'DISA_DJ_19V1__LOG_PATH'),
             'formatter': 'standard',
         },
         'console':{
@@ -182,7 +182,7 @@ LOGGING = {
         'disa_app': {
             # 'handlers': ['logfile', 'console'],  # leaving here as reminder that this is how to show output in the terminal
             'handlers': ['logfile'],
-            'level': os.environ.get(u'DISA_DJ__LOG_LEVEL'),
+            'level': os.environ.get(u'DISA_DJ_19V1__LOG_LEVEL'),
             'propagate': False
         },
     }

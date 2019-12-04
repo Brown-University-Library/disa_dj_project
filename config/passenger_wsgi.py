@@ -32,7 +32,7 @@ from django.core.wsgi import get_wsgi_application
 # print( 'the initial env, ```{}```'.format( pprint.pformat(dict(os.environ)) ) )
 
 PROJECT_DIR_PATH = os.path.dirname( os.path.dirname(os.path.abspath(__file__)) )
-ENV_SETTINGS_FILE = os.environ['DISA_DJ__ENV_SETTINGS_PATH']  # set in `httpd/passenger.conf`, and `env/bin/activate`
+ENV_SETTINGS_FILE = os.environ['DISA_DJ_19V1__ENV_SETTINGS_PATH']  # set in `httpd/passenger.conf`, and `env/bin/activate`
 
 ## update path
 sys.path.append( PROJECT_DIR_PATH )
