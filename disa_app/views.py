@@ -22,8 +22,9 @@ log = logging.getLogger(__name__)
 
 
 def temp_response( request ):
-    log.debug( f'path, ```{request.META["PATH_INFO"]}```' )
-    return HttpResponse( 'coming' )
+    requested_path = request.META.get( 'PATH_INFO', 'path_unknown' )
+    log.debug( f'requested_path, ```requested_path```' )
+    return HttpResponse( f'`{requested_path}` handling coming' )
 
 
 def browse( request ):
