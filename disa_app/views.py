@@ -21,6 +21,11 @@ log = logging.getLogger(__name__)
 # ===========================
 
 
+def temp_response( request ):
+    log.debug( f'path, ```{request.META["PATH_INFO"]}```' )
+    return HttpResponse( 'coming' )
+
+
 def browse( request ):
     """ Displays home page. """
     context = {
