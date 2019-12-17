@@ -29,6 +29,7 @@ urlpatterns = [
     url( r'^data/sections/(?P<refId>.*)/relationships/$', views.temp_response, name='temp_name_url' ),
     url( r'^data/relationships/(?P<relId>.*)/$', views.temp_response, name='temp_name_url' ),
 
+    url( r'^people/$', views.temp_response, name='temp_name_url' ),
     url( r'^people/(?P<persId>.*)/$', views.temp_response, name='temp_name_url' ),
 
     url( r'^source/(?P<srcId>.*)/$', views.temp_response, name='temp_name_url' ),
