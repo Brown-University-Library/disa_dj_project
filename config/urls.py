@@ -43,7 +43,7 @@ urlpatterns = [
     # url( r'^login/$', views.login, name='login_url' ),
     # url( r'^editor_index/$', views.editor_index, name='editor_index_url' ),
     # url( r'^logout/$', views.logout, name='logout_url' ),
-    # url( r'^admin/', admin.site.urls ),
+    url( r'^admin/', admin.site.urls ),
 
     ## support urls...
 
