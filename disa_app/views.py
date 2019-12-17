@@ -45,8 +45,14 @@ def browse( request ):
         resp = render( request, 'disa_app_templates/browse.html', context )
     return resp
 
-def person_index( request ):
-    return HttpResponse( 'coming' )
+def people( request ):
+    context = {}
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/people.html', context )
+    return resp
+
 
 def login( request ):
     return HttpResponse( 'coming' )

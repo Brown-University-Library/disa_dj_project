@@ -27,7 +27,7 @@
         <script src="{% static 'lib/select2-dist/js/select2.min.js' %}"></script>
         <link rel="stylesheet" href="{% static 'lib/slickgrid/css/smoothness/jquery-ui-1.11.3.custom.css' %}" type="text/css">
         <link rel="stylesheet" href="{% static 'lib/slickgrid/slick.grid.css' %}" type="text/css">
-        <link rel="stylesheet" href="{% static 'css/browse.css' %}" type="text/css">
+        <!-- <link rel="stylesheet" href="{% static 'css/browse.css' %}" type="text/css"> -->
         <style type="text/css" rel="stylesheet">
             .slickgrid_372802 .slick-header-column { left: 1000px; }
             .slickgrid_372802 .slick-top-panel { height:25px; }
@@ -71,7 +71,7 @@
             <a class="navbar-brand text-white" href="{% url 'browse_url' %}">Database of Indigenous Slavery in the Americas</a>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'person_index_url' %}">index</a>
+                    <a class="nav-link text-white" href="{% url 'people_url' %}">index</a>
                 </li>
                 {% if not logged_in %}
                 <li class="nav-item">

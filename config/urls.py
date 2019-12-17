@@ -13,7 +13,7 @@ urlpatterns = [
 
     ## primary app urls...
 
-    url( r'^login/$', views.temp_response, name='temp_name_url' ),
+    url( r'^login/$', views.temp_response, name='login_url' ),
     url( r'^logout/$', views.temp_response, name='temp_name_url' ),
 
     url( r'^editor/documents/(?P<citeId>.*)/$', views.temp_response, name='temp_name_url' ),
@@ -29,7 +29,7 @@ urlpatterns = [
     url( r'^data/sections/(?P<refId>.*)/relationships/$', views.temp_response, name='temp_name_url' ),
     url( r'^data/relationships/(?P<relId>.*)/$', views.temp_response, name='temp_name_url' ),
 
-    url( r'^people/$', views.temp_response, name='temp_name_url' ),
+    url( r'^people/$', views.people, name='people_url' ),
     url( r'^people/(?P<persId>.*)/$', views.temp_response, name='temp_name_url' ),
 
     url( r'^source/(?P<srcId>.*)/$', views.temp_response, name='temp_name_url' ),
@@ -38,7 +38,7 @@ urlpatterns = [
 
     ## old...
 
-    # url( r'^browse/$', views.browse, name='browse_url' ),
+    url( r'^browse/$', views.browse, name='browse_url' ),
     # url( r'^person_index/$', views.person_index, name='person_index_url' ),
     # url( r'^login/$', views.login, name='login_url' ),
     # url( r'^editor_index/$', views.editor_index, name='editor_index_url' ),
