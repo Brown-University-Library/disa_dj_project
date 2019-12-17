@@ -3,9 +3,16 @@
 import json, os
 
 
+## general
+
 README_URL = os.environ['DISA_DJ_19V1__README_URL']
 
 DENORMALIZED_JSON_URL = os.environ['DISA_DJ_19V1__DENORMALIZED_JSON_URL']
+
+
+## db
+
+DB_URL = os.environ['DISA_DJ_19V1__DATABASE_URL']
 
 
 ## auth

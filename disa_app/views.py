@@ -3,14 +3,15 @@
 import datetime, json, logging, os, pprint
 
 import requests
-from . import settings_app
+from disa_app import settings_app
 from disa_app.lib import view_info_helper
-# from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+
+# from disa_app.lib.shib_auth import shib_login  # decorator
 
 
 log = logging.getLogger(__name__)
@@ -46,7 +47,32 @@ def browse( request ):
     return resp
 
 def people( request ):
+    log.debug( '\n\nstarting people()' )
     context = {}
+
+    db = SQLAlchemy(app)
+    db_url = settings_app.DB_URL
+    people = []
+    for (prsn, rfrnt) in db.session.query( models.Person, models.Referent ).filter( models.Person.id==models.Referent.id ).all():
+        sex = rfrnt.sex if rfrnt.sex else "Not Listed"
+        age = rfrnt.age if rfrnt.age else "Not Listed"
+        race = None
+        try:
+            race = rfrnt.races[0].name
+        except:
+            log.debug( 'no race-name; races, ```{rfrnt.races}```' )
+        race = race if race else "Not Listed"
+        temp_demographic = f'age, `{age}`; sex, `{sex}`; race, `{race}`'
+        # prsn.tmp_dmgrphc = temp_demographic
+        # prsn.last_name = f'{prsn.last_name} ({temp_str})'
+        prsn.calc_sex = sex
+        prsn.calc_age = age
+        prsn.calc_race = race
+        people.append( prsn )
+    p = people[1]
+    log.debug( f'p.__dict__, ```{p.__dict__}```' )
+
+
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
