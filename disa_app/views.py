@@ -62,7 +62,7 @@ def people( request ):
 
 
 
-    from sqlalchemy import Column, Integer, String
+    from sqlalchemy import Column, Integer, String, ForeignKey
     from sqlalchemy import create_engine
     engine = create_engine( settings_app.DB_URL, echo=True )
     from sqlalchemy.ext.declarative import declarative_base
@@ -71,7 +71,7 @@ def people( request ):
     class Citation(Base):
         __tablename__ = '3_citations'
         id = Column( Integer, primary_key=True )
-        # citation_type_id = Column( Integer, ForeignKey('2_citation_types.id'), nullable=False )
+        citation_type_id = Column( Integer, ForeignKey('2_citation_types.id'), nullable=False )
         display = Column( String(500) )
         zotero_id = Column( String(255) )
         # comments = Column( UnicodeText() )
@@ -84,10 +84,15 @@ def people( request ):
     from sqlalchemy.orm import sessionmaker
     Session = sessionmaker(bind = engine)
     session = Session()
-    result = session.query(Citation).all()
+    resultset: list = session.query( Citation ).all()
+    log.debug( f'type(resultset), `{type(resultset)}`' )
 
-    for row in result:
-        log.debug( f'id, `{row.id}`; display, ```{row.display}```' )
+    for row in resultset:
+        citation: sqlalchemy.orm.state.InstanceState = row
+        # log.debug( f'type(row), `{type(row)}`' )
+        # log.debug( f'id, `{row.id}`; display, ```{row.display}```; citation_type_id, `{row.citation_type_id}`' )
+        log.debug( f'citation, ```{pprint.pformat(citation.__dict__)}```' )
+        # break
 
 
 
