@@ -2,6 +2,9 @@
 
 import datetime, json, logging, os, pprint
 
+# import sqlalchemy
+# from sqlalchemy.orm import sessionmaker as sqla_sessionmaker
+
 import requests
 from disa_app import settings_app
 from disa_app.lib import view_info_helper
@@ -50,27 +53,90 @@ def people( request ):
     log.debug( '\n\nstarting people()' )
     context = {}
 
-    db = SQLAlchemy(app)
-    db_url = settings_app.DB_URL
-    people = []
-    for (prsn, rfrnt) in db.session.query( models.Person, models.Referent ).filter( models.Person.id==models.Referent.id ).all():
-        sex = rfrnt.sex if rfrnt.sex else "Not Listed"
-        age = rfrnt.age if rfrnt.age else "Not Listed"
-        race = None
-        try:
-            race = rfrnt.races[0].name
-        except:
-            log.debug( 'no race-name; races, ```{rfrnt.races}```' )
-        race = race if race else "Not Listed"
-        temp_demographic = f'age, `{age}`; sex, `{sex}`; race, `{race}`'
-        # prsn.tmp_dmgrphc = temp_demographic
-        # prsn.last_name = f'{prsn.last_name} ({temp_str})'
-        prsn.calc_sex = sex
-        prsn.calc_age = age
-        prsn.calc_race = race
-        people.append( prsn )
-    p = people[1]
-    log.debug( f'p.__dict__, ```{p.__dict__}```' )
+
+
+    # engine = sqlalchemy.create_engine( settings_app.DB_URL )
+    # log.debug( f'engine, ```{engine}```' )
+    # sqla_session = sqla_sessionmaker(bind = engine)
+    # log.debug( f'sqla_session, ```{sqla_session}```' )
+
+
+
+    from sqlalchemy import Column, Integer, String
+    from sqlalchemy import create_engine
+    engine = create_engine( settings_app.DB_URL, echo=True )
+    from sqlalchemy.ext.declarative import declarative_base
+    Base = declarative_base()
+
+    class Citation(Base):
+        __tablename__ = '3_citations'
+        id = Column( Integer, primary_key=True )
+        # citation_type_id = Column( Integer, ForeignKey('2_citation_types.id'), nullable=False )
+        display = Column( String(500) )
+        zotero_id = Column( String(255) )
+        # comments = Column( UnicodeText() )
+        acknowledgements = Column( String(255) )
+        # references = db.relationship('Reference', backref='citation', lazy=True)
+
+        def __repr__(self):
+            return f'<Citation {self.id}>'
+
+    from sqlalchemy.orm import sessionmaker
+    Session = sessionmaker(bind = engine)
+    session = Session()
+    result = session.query(Citation).all()
+
+    for row in result:
+        log.debug( f'id, `{row.id}`; display, ```{row.display}```' )
+
+
+
+    # from sqlalchemy import Column, Integer, String
+    # from sqlalchemy import create_engine
+    # engine = create_engine('sqlite:///sales.db', echo = True)
+    # from sqlalchemy.ext.declarative import declarative_base
+    # Base = declarative_base()
+
+    # class Customers(Base):
+    #    __tablename__ = 'customers'
+    #    id = Column(Integer, primary_key =  True)
+    #    name = Column(String)
+
+    #    address = Column(String)
+    #    email = Column(String)
+
+    # from sqlalchemy.orm import sessionmaker
+    # Session = sessionmaker(bind = engine)
+    # session = Session()
+    # result = session.query(Customers).all()
+
+    # for row in result:
+    #    print ("Name: ",row.name, "Address:",row.address, "Email:",row.email)
+
+
+
+    # db = SQLAlchemy(app)
+    # db_url = settings_app.DB_URL
+    # people = []
+    # for (prsn, rfrnt) in db.session.query( models.Person, models.Referent ).filter( models.Person.id==models.Referent.id ).all():
+    #     sex = rfrnt.sex if rfrnt.sex else "Not Listed"
+    #     age = rfrnt.age if rfrnt.age else "Not Listed"
+    #     race = None
+    #     try:
+    #         race = rfrnt.races[0].name
+    #     except:
+    #         log.debug( 'no race-name; races, ```{rfrnt.races}```' )
+    #     race = race if race else "Not Listed"
+    #     temp_demographic = f'age, `{age}`; sex, `{sex}`; race, `{race}`'
+    #     # prsn.tmp_dmgrphc = temp_demographic
+    #     # prsn.last_name = f'{prsn.last_name} ({temp_str})'
+    #     prsn.calc_sex = sex
+    #     prsn.calc_age = age
+    #     prsn.calc_race = race
+    #     people.append( prsn )
+    # p = people[1]
+    # log.debug( f'p.__dict__, ```{p.__dict__}```' )
+
 
 
     if request.GET.get('format', '') == 'json':
