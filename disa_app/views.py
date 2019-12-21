@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime, json, logging, os, pprint
+from typing import List
 
 # import sqlalchemy
 # from sqlalchemy.orm import sessionmaker as sqla_sessionmaker
@@ -131,16 +132,31 @@ def people( request ):
     from sqlalchemy.orm import sessionmaker
     Session = sessionmaker(bind = engine)
     session = Session()
-    resultset: list = session.query( Person ).all()
+    # q = Person
+    # q = ( Person.id, Person.first_name, Person.last_name, Person.comments )
+    # resultset: List(Person) = session.query( q ).all()
+    resultset: List(Person) = session.query( Person.id, Person.first_name, Person.last_name, Person.comments ).all()
+
     log.debug( f'type(resultset), `{type(resultset)}`' )
+
+    # <https://stackoverflow.com/questions/19406859/sqlalchemy-convert-select-query-result-to-a-list-of-dicts/20078977>
+    # <https://stackoverflow.com/questions/2828248/sqlalchemy-returns-tuple-not-dictionary>
 
     for row in resultset:
         person: sqlalchemy.orm.state.InstanceState = row
         # log.debug( f'type(row), `{type(row)}`' )
-        # log.debug( f'id, `{row.id}`; display, ```{row.display}```; citation_type_id, `{row.citation_type_id}`' )
-        log.debug( f'person, ```{person.__dict__}```' )
+        # log.debug( f'person, ```{person.__dict__}```' )
+        log.debug( f'row, ```{row}```' )
         # break
 
+
+    # j_resultset: List(dict) = [ dict(row) for row in resultset ]
+
+    # j_resultset: List(dict) = [ row.__dict__ for row in resultset ]
+    # log.debug( f'j_resultset, ```{pprint.pformat(j_resultset)}```' )
+
+    j_resultset: List(dict) = [ dict( zip(row.keys(), row) ) for row in resultset ]
+    log.debug( f'j_resultset, ```{pprint.pformat(j_resultset)}```' )
 
 
     # db = SQLAlchemy(app)
@@ -195,7 +211,8 @@ def people( request ):
 #         return ', '.join(list(vals))
 
 
-
+    # context = { 'data': resultset }
+    context = { 'data': j_resultset }
 
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
