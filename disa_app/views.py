@@ -8,12 +8,14 @@ from typing import List
 
 import requests
 from disa_app import settings_app
-from disa_app.lib import view_info_helper
+from disa_app.lib import view_info_helper, view_people_helper
 from django.conf import settings as project_settings
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+# from disa_app.models_sqlalchemy import Person
+
 
 # from disa_app.lib.shib_auth import shib_login  # decorator
 
@@ -53,167 +55,8 @@ def browse( request ):
 
 def people( request ):
     log.debug( '\n\nstarting people()' )
-    context = {}
-
-
-
-    # # ==========
-    # # works
-    # # ==========
-    # from sqlalchemy import Column, Integer, String, ForeignKey
-    # from sqlalchemy import create_engine
-    # engine = create_engine( settings_app.DB_URL, echo=True )
-    # from sqlalchemy.ext.declarative import declarative_base
-    # Base = declarative_base()
-
-    # class Citation(Base):
-    #     __tablename__ = '3_citations'
-    #     id = Column( Integer, primary_key=True )
-    #     citation_type_id = Column( Integer, ForeignKey('2_citation_types.id'), nullable=False )
-    #     display = Column( String(500) )
-    #     zotero_id = Column( String(255) )
-    #     # comments = Column( UnicodeText() )
-    #     acknowledgements = Column( String(255) )
-    #     # references = db.relationship('Reference', backref='citation', lazy=True)
-
-    #     def __repr__(self):
-    #         return f'<Citation {self.id}>'
-
-    # from sqlalchemy.orm import sessionmaker
-    # Session = sessionmaker(bind = engine)
-    # session = Session()
-    # resultset: list = session.query( Citation ).all()
-    # log.debug( f'type(resultset), `{type(resultset)}`' )
-
-    # for row in resultset:
-    #     citation: sqlalchemy.orm.state.InstanceState = row
-    #     # log.debug( f'type(row), `{type(row)}`' )
-    #     # log.debug( f'id, `{row.id}`; display, ```{row.display}```; citation_type_id, `{row.citation_type_id}`' )
-    #     log.debug( f'citation, ```{pprint.pformat(citation.__dict__)}```' )
-    #     # break
-
-
-
-    from sqlalchemy import Column, Integer, String, ForeignKey
-    from sqlalchemy import create_engine
-    engine = create_engine( settings_app.DB_URL, echo=True )
-    from sqlalchemy.ext.declarative import declarative_base
-    Base = declarative_base()
-
-    from sqlalchemy.orm import relationship
-
-    class Person(Base):
-        __tablename__ = '1_people'
-
-        id = Column( Integer, primary_key=True )
-        first_name = Column( String(255) )
-        last_name = Column( String(255) )
-        comments = Column( String(255) )
-        # references = relationship( 'Referent', backref='person', lazy=True )
-
-        @classmethod
-        def filter_on_description( cls, desc ):
-            return cls.query.join(
-                cls.references).join(Referent.roles).filter(Role.name==desc)
-
-        def display_name( self ):
-            display = "{0} {1}".format(
-                self.first_name, self.last_name).strip()
-            if display == "":
-                return "Unknown"
-            else:
-                return display
-
-        def display_attr( self, attr ):
-            vals = { desc.name for ref in self.references
-                for desc in getattr(ref, attr) }
-            return ', '.join(list(vals))
-
-    from sqlalchemy.orm import sessionmaker
-    Session = sessionmaker(bind = engine)
-    session = Session()
-    # q = Person
-    # q = ( Person.id, Person.first_name, Person.last_name, Person.comments )
-    # resultset: List(Person) = session.query( q ).all()
-    resultset: List(sqlalchemy.util._collections.result) = session.query(
-        Person.id, Person.first_name, Person.last_name, Person.comments ).all()
-
-    log.debug( f'type(resultset), `{type(resultset)}`' )
-
-    # <https://stackoverflow.com/questions/19406859/sqlalchemy-convert-select-query-result-to-a-list-of-dicts/20078977>
-    # <https://stackoverflow.com/questions/2828248/sqlalchemy-returns-tuple-not-dictionary>
-
-    # for row in resultset:
-    #     person: sqlalchemy.util._collections.result = row
-    #     log.debug( f'type(row), `{type(row)}`' )
-    #     # log.debug( f'person, ```{person.__dict__}```' )
-    #     log.debug( f'row, ```{row}```' )
-    #     # break
-
-    # j_resultset: List(dict) = [ dict(row) for row in resultset ]
-
-    # j_resultset: List(dict) = [ row.__dict__ for row in resultset ]
-    # log.debug( f'j_resultset, ```{pprint.pformat(j_resultset)}```' )
-
-    j_resultset: List(dict) = [ dict( zip(row.keys(), row) ) for row in resultset ]
-    log.debug( f'j_resultset, ```{pprint.pformat(j_resultset)}```' )
-
-
-    # db = SQLAlchemy(app)
-    # db_url = settings_app.DB_URL
-    # people = []
-    # for (prsn, rfrnt) in db.session.query( models.Person, models.Referent ).filter( models.Person.id==models.Referent.id ).all():
-    #     sex = rfrnt.sex if rfrnt.sex else "Not Listed"
-    #     age = rfrnt.age if rfrnt.age else "Not Listed"
-    #     race = None
-    #     try:
-    #         race = rfrnt.races[0].name
-    #     except:
-    #         log.debug( 'no race-name; races, ```{rfrnt.races}```' )
-    #     race = race if race else "Not Listed"
-    #     temp_demographic = f'age, `{age}`; sex, `{sex}`; race, `{race}`'
-    #     # prsn.tmp_dmgrphc = temp_demographic
-    #     # prsn.last_name = f'{prsn.last_name} ({temp_str})'
-    #     prsn.calc_sex = sex
-    #     prsn.calc_age = age
-    #     prsn.calc_race = race
-    #     people.append( prsn )
-    # p = people[1]
-    # log.debug( f'p.__dict__, ```{p.__dict__}```' )
-
-
-
-# class Person(db.Model):
-#     __tablename__ = '1_people'
-
-#     id = db.Column(db.Integer, primary_key=True)
-#     first_name = db.Column(db.String(255))
-#     last_name = db.Column(db.String(255))
-#     comments = db.Column(db.String(255))
-#     references = db.relationship('Referent', backref='person', lazy=True)
-
-#     @classmethod
-#     def filter_on_description(cls, desc):
-#         return cls.query.join(
-#             cls.references).join(Referent.roles).filter(Role.name==desc)
-
-#     def display_name(self):
-#         display = "{0} {1}".format(
-#             self.first_name, self.last_name).strip()
-#         if display == "":
-#             return "Unknown"
-#         else:
-#             return display
-
-#     def display_attr(self, attr):
-#         vals = { desc.name for ref in self.references
-#             for desc in getattr(ref, attr) }
-#         return ', '.join(list(vals))
-
-
-    # context = { 'data': resultset }
-    context = { 'data': j_resultset }
-
+    people: List(dict) = view_people_helper.query_people()
+    context = { 'data': people }
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
@@ -224,8 +67,10 @@ def people( request ):
 def login( request ):
     return HttpResponse( 'coming' )
 
+
 def editor_index( request ):
     return HttpResponse( 'coming' )
+
 
 def logout( request ):
     return HttpResponse( 'coming' )
@@ -284,3 +129,41 @@ def error_check( request ):
 #         redirect_url = request.GET['next']  # will often be same page
 #     log.debug( 'redirect_url, ```%s```' % redirect_url )
 #     return HttpResponseRedirect( redirect_url )
+
+
+
+
+# # ==========
+# # works
+# # ==========
+# from sqlalchemy import Column, Integer, String, ForeignKey
+# from sqlalchemy import create_engine
+# engine = create_engine( settings_app.DB_URL, echo=True )
+# from sqlalchemy.ext.declarative import declarative_base
+# Base = declarative_base()
+
+# class Citation(Base):
+#     __tablename__ = '3_citations'
+#     id = Column( Integer, primary_key=True )
+#     citation_type_id = Column( Integer, ForeignKey('2_citation_types.id'), nullable=False )
+#     display = Column( String(500) )
+#     zotero_id = Column( String(255) )
+#     # comments = Column( UnicodeText() )
+#     acknowledgements = Column( String(255) )
+#     # references = db.relationship('Reference', backref='citation', lazy=True)
+
+#     def __repr__(self):
+#         return f'<Citation {self.id}>'
+
+# from sqlalchemy.orm import sessionmaker
+# Session = sessionmaker(bind = engine)
+# session = Session()
+# resultset: list = session.query( Citation ).all()
+# log.debug( f'type(resultset), `{type(resultset)}`' )
+
+# for row in resultset:
+#     citation: sqlalchemy.orm.state.InstanceState = row
+#     # log.debug( f'type(row), `{type(row)}`' )
+#     # log.debug( f'id, `{row.id}`; display, ```{row.display}```; citation_type_id, `{row.citation_type_id}`' )
+#     log.debug( f'citation, ```{pprint.pformat(citation.__dict__)}```' )
+#     # break
