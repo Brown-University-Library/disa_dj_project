@@ -135,20 +135,20 @@ def people( request ):
     # q = Person
     # q = ( Person.id, Person.first_name, Person.last_name, Person.comments )
     # resultset: List(Person) = session.query( q ).all()
-    resultset: List(Person) = session.query( Person.id, Person.first_name, Person.last_name, Person.comments ).all()
+    resultset: List(sqlalchemy.util._collections.result) = session.query(
+        Person.id, Person.first_name, Person.last_name, Person.comments ).all()
 
     log.debug( f'type(resultset), `{type(resultset)}`' )
 
     # <https://stackoverflow.com/questions/19406859/sqlalchemy-convert-select-query-result-to-a-list-of-dicts/20078977>
     # <https://stackoverflow.com/questions/2828248/sqlalchemy-returns-tuple-not-dictionary>
 
-    for row in resultset:
-        person: sqlalchemy.orm.state.InstanceState = row
-        # log.debug( f'type(row), `{type(row)}`' )
-        # log.debug( f'person, ```{person.__dict__}```' )
-        log.debug( f'row, ```{row}```' )
-        # break
-
+    # for row in resultset:
+    #     person: sqlalchemy.util._collections.result = row
+    #     log.debug( f'type(row), `{type(row)}`' )
+    #     # log.debug( f'person, ```{person.__dict__}```' )
+    #     log.debug( f'row, ```{row}```' )
+    #     # break
 
     # j_resultset: List(dict) = [ dict(row) for row in resultset ]
 
