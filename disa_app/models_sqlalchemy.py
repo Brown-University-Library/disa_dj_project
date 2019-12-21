@@ -11,16 +11,11 @@ from typing import List
 
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, sessionmaker
+from sqlalchemy.orm import relationship
 
 
 log = logging.getLogger(__name__)
-
-
-# engine = create_engine( settings_app.DB_URL, echo=True )
 Base = declarative_base()
-# Session = sessionmaker(bind = engine)
-# session = Session()
 
 
 class Person(Base):
@@ -51,14 +46,3 @@ class Person(Base):
         return ', '.join(list(vals))
 
     ## end class Person
-
-    # resultset: List(sqlalchemy.util._collections.result) = session.query(
-    #     Person.id, Person.first_name, Person.last_name, Person.comments ).all()
-
-    # log.debug( f'type(resultset), `{type(resultset)}`' )
-
-    # j_resultset: List(dict) = [ dict( zip(row.keys(), row) ) for row in resultset ]
-    # log.debug( f'j_resultset, ```{pprint.pformat(j_resultset)}```' )
-
-
-

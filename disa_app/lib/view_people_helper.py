@@ -6,6 +6,10 @@ from disa_app import settings_app
 from disa_app.models_sqlalchemy import Person
 from django.conf import settings
 
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import sessionmaker
+
 
 log = logging.getLogger(__name__)
 
@@ -17,17 +21,11 @@ def query_people():
         - <https://stackoverflow.com/questions/19406859/sqlalchemy-convert-select-query-result-to-a-list-of-dicts/20078977>
         - <https://stackoverflow.com/questions/2828248/sqlalchemy-returns-tuple-not-dictionary>
         """
-    from sqlalchemy import Column, Integer, String, ForeignKey
-    from sqlalchemy import create_engine
     engine = create_engine( settings_app.DB_URL, echo=True )
-    from sqlalchemy.ext.declarative import declarative_base
-    Base = declarative_base()
-    from sqlalchemy.orm import relationship
-    from sqlalchemy.orm import sessionmaker
-    Session = sessionmaker(bind = engine)
+    Session = sessionmaker( bind=engine )
     session = Session()
     resultset: List(sqlalchemy.util._collections.result) = session.query(
-        Person.id, Person.first_name, Person.last_name, Person.comments ).all()
+        Person.id, Person.first_name, Person.last_name, Person.comments ).all()  # can't be jsonified
     log.debug( f'type(resultset), `{type(resultset)}`' )
     people: List(dict) = [ dict( zip(row.keys(), row) ) for row in resultset ]  # enables returned list to be jsonified
     log.debug( f'people, ```{pprint.pformat(people)}```' )
