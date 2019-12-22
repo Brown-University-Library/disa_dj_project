@@ -3,7 +3,7 @@
 import datetime, json, logging, os, pprint
 
 from disa_app import settings_app
-from disa_app.models_sqlalchemy import Person
+from disa_app.models_sqlalchemy import Person, Referent
 from django.conf import settings
 
 from sqlalchemy import create_engine
@@ -32,7 +32,10 @@ def query_people():
         Person.id,
         Person.first_name,
         Person.last_name,
-        Person.comments ).all()  # can't be jsonified
+        Referent.age,
+        Referent.sex,
+        Referent.races
+        ).filter( Person.id == Referent.id ).all()  # can't be jsonified
     log.debug( f'type(resultset), `{type(resultset)}`' )
     people: List(dict) = [ dict( zip(row.keys(), row) ) for row in resultset ]  # enables returned list to be jsonified
     log.debug( f'people, ```{pprint.pformat(people)}```' )

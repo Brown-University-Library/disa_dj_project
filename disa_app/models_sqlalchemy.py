@@ -68,20 +68,20 @@ class Referent(Base):
     primary_name = relationship('ReferentName',
         primaryjoin=(primary_name_id == 'ReferentName.id'),
         post_update=True )
-    roles = relationship('Role',
-        secondary='has_role', back_populates='referents')
-    tribes = relationship('Tribe',
-        secondary='has_tribe', back_populates='referents')
+    # roles = relationship('Role',
+    #     secondary='has_role', back_populates='referents')
+    # tribes = relationship('Tribe',
+    #     secondary='has_tribe', back_populates='referents')
     races = relationship('Race',
         secondary='has_race', back_populates='referents')
-    titles = relationship('Title',
-        secondary='has_title', back_populates='referents')
-    vocations = relationship('Vocation',
-        secondary='has_vocation', back_populates='referents')
-    origins = relationship('Location',
-        secondary='has_origin', back_populates='origin_for')
-    enslavements = relationship('EnslavementType',
-        secondary='enslaved_as', back_populates='referents')
+    # titles = relationship('Title',
+    #     secondary='has_title', back_populates='referents')
+    # vocations = relationship('Vocation',
+    #     secondary='has_vocation', back_populates='referents')
+    # origins = relationship('Location',
+    #     secondary='has_origin', back_populates='origin_for')
+    # enslavements = relationship('EnslavementType',
+    #     secondary='enslaved_as', back_populates='referents')
 
     def __repr__(self):
         return '<Referent {0}: {1}>'.format(
@@ -110,6 +110,15 @@ class ReferentName(Base):
         primaryjoin=(name_type_id == 'NameType.id') )
 
 
+class Race(Base):
+    __tablename__ = '1_races'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    referents = relationship('Referent',
+        secondary='has_race', back_populates='races')
+
+
 # ==========
 # RDF-ish
 # ==========
@@ -120,5 +129,13 @@ has_role = Table('6_has_role',
     Column('id', Integer, primary_key=True),
     Column('referent', Integer, ForeignKey('5_referents.id')),
     Column('role', Integer, ForeignKey('1_roles.id'))
+)
+
+
+has_race = Table('6_has_race',
+    Base.metadata,
+    Column('id', Integer, primary_key=True),
+    Column('referent', Integer, ForeignKey('5_referents.id')),
+    Column('race', Integer, ForeignKey('1_races.id'))
 )
 
