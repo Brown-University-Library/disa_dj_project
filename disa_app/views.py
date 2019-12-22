@@ -14,8 +14,6 @@ from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-# from disa_app.models_sqlalchemy import Person
-
 
 # from disa_app.lib.shib_auth import shib_login  # decorator
 
