@@ -71,6 +71,18 @@ class Person(Base):
     ## end class Person
 
 
+class ReferentName(Base):
+    __tablename__ = '6_referent_names'
+
+    id = Column(Integer, primary_key=True)
+    referent_id = Column(Integer, ForeignKey('5_referents.id'))
+    name_type_id = Column(Integer, ForeignKey('1_name_types.id'))
+    first = Column(String(255))
+    last = Column(String(255))
+    # name_type = relationship('NameType',
+    #     primaryjoin=(name_type_id == 'NameType.id') )
+
+
 class Referent(Base):
     __tablename__ = '5_referents'
 
@@ -87,9 +99,9 @@ class Referent(Base):
     # names = relationship('ReferentName',
     #     primaryjoin=(id == 'ReferentName.referent_id'),
     #     backref='referent', cascade='delete')
-    # primary_name = relationship('ReferentName',
-    #     primaryjoin=(primary_name_id == 'ReferentName.id'),
-    #     post_update=True )
+    primary_name = relationship('ReferentName',
+        primaryjoin=(primary_name_id == ReferentName.id),
+        post_update=True )
     # roles = relationship('Role',
     #     secondary='has_role', back_populates='referents')
     # tribes = relationship('Tribe',
@@ -120,16 +132,6 @@ class Referent(Base):
     ## end class Referent
 
 
-class ReferentName(Base):
-    __tablename__ = '6_referent_names'
-
-    id = Column(Integer, primary_key=True)
-    referent_id = Column(Integer, ForeignKey('5_referents.id'))
-    name_type_id = Column(Integer, ForeignKey('1_name_types.id'))
-    first = Column(String(255))
-    last = Column(String(255))
-    # name_type = relationship('NameType',
-    #     primaryjoin=(name_type_id == 'NameType.id') )
 
 
 class Race(Base):
