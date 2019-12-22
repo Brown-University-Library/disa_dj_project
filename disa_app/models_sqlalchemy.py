@@ -41,6 +41,11 @@ has_race = Table('6_has_race',
 )
 
 
+# ==========
+# models
+# ==========
+
+
 class Person(Base):
     __tablename__ = '1_people'
 
@@ -114,8 +119,8 @@ class Referent(Base):
     #     secondary='has_vocation', back_populates='referents')
     # origins = relationship('Location',
     #     secondary='has_origin', back_populates='origin_for')
-    # enslavements = relationship('EnslavementType',
-    #     secondary='enslaved_as', back_populates='referents')
+    enslavements = relationship('EnslavementType',
+        secondary=enslaved_as, back_populates='referents')
 
     def __repr__(self):
         return '<Referent {0}: {1}>'.format(

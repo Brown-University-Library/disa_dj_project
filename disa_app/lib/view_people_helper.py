@@ -41,20 +41,28 @@ def query_people():
         sex = rfrnt.sex if rfrnt.sex else "Not Listed"
         age = rfrnt.age if rfrnt.age else "Not Listed"
         race = None
+
+        log.debug( f'rfrnt.races, ```{rfrnt.races}```' )
         try:
             race = rfrnt.races[0].name
             log.debug( f'race, `{race}`' )
         except:
             log.debug( f'no race-name; races, ```{rfrnt.races}```' )
         race = race if race else "Not Listed"
+
+        log.debug( f'rfrnt.enslavements, ```{rfrnt.enslavements}```' )
+
         # prsn.calc_sex = sex
         # prsn.calc_age = age
         # prsn.calc_race = race
         # people.append( prsn )
+
         entry['calc_name'] = f'{prsn.first_name} {prsn.last_name}'.strip()
         entry['calc_age'] = age
         entry['calc_sex'] = sex
         entry['calc_race'] = race
+
+
         people.append( entry )
     log.debug( f'people, ```{pprint.pformat(people)}```' )
     return people
