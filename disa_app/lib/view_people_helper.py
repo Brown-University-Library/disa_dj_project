@@ -34,7 +34,7 @@ def query_people():
         Person.last_name,
         Referent.age,
         Referent.sex,
-        Referent.races
+        Referent.races[0].name
         ).filter( Person.id == Referent.id ).all()  # can't be jsonified
     log.debug( f'type(resultset), `{type(resultset)}`' )
     people: List(dict) = [ dict( zip(row.keys(), row) ) for row in resultset ]  # enables returned list to be jsonified

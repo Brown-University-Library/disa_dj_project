@@ -19,6 +19,28 @@ log = logging.getLogger(__name__)
 Base = declarative_base()
 
 
+
+# ==========
+# RDF-ish
+# ==========
+
+
+has_role = Table('6_has_role',
+    Base.metadata,
+    Column('id', Integer, primary_key=True),
+    Column('referent', Integer, ForeignKey('5_referents.id')),
+    Column('role', Integer, ForeignKey('1_roles.id'))
+)
+
+
+has_race = Table('6_has_race',
+    Base.metadata,
+    Column('id', Integer, primary_key=True),
+    Column('referent', Integer, ForeignKey('5_referents.id')),
+    Column('race', Integer, ForeignKey('1_races.id'))
+)
+
+
 class Person(Base):
     __tablename__ = '1_people'
 
@@ -62,12 +84,12 @@ class Referent(Base):
         nullable=False)
     person_id = Column(Integer, ForeignKey('1_people.id'),
         nullable=True)
-    names = relationship('ReferentName',
-        primaryjoin=(id == 'ReferentName.referent_id'),
-        backref='referent', cascade='delete')
-    primary_name = relationship('ReferentName',
-        primaryjoin=(primary_name_id == 'ReferentName.id'),
-        post_update=True )
+    # names = relationship('ReferentName',
+    #     primaryjoin=(id == 'ReferentName.referent_id'),
+    #     backref='referent', cascade='delete')
+    # primary_name = relationship('ReferentName',
+    #     primaryjoin=(primary_name_id == 'ReferentName.id'),
+    #     post_update=True )
     # roles = relationship('Role',
     #     secondary='has_role', back_populates='referents')
     # tribes = relationship('Tribe',
@@ -106,8 +128,8 @@ class ReferentName(Base):
     name_type_id = Column(Integer, ForeignKey('1_name_types.id'))
     first = Column(String(255))
     last = Column(String(255))
-    name_type = relationship('NameType',
-        primaryjoin=(name_type_id == 'NameType.id') )
+    # name_type = relationship('NameType',
+    #     primaryjoin=(name_type_id == 'NameType.id') )
 
 
 class Race(Base):
@@ -119,23 +141,23 @@ class Race(Base):
         secondary='has_race', back_populates='races')
 
 
-# ==========
-# RDF-ish
-# ==========
+# # ==========
+# # RDF-ish
+# # ==========
 
 
-has_role = Table('6_has_role',
-    Base.metadata,
-    Column('id', Integer, primary_key=True),
-    Column('referent', Integer, ForeignKey('5_referents.id')),
-    Column('role', Integer, ForeignKey('1_roles.id'))
-)
+# has_role = Table('6_has_role',
+#     Base.metadata,
+#     Column('id', Integer, primary_key=True),
+#     Column('referent', Integer, ForeignKey('5_referents.id')),
+#     Column('role', Integer, ForeignKey('1_roles.id'))
+# )
 
 
-has_race = Table('6_has_race',
-    Base.metadata,
-    Column('id', Integer, primary_key=True),
-    Column('referent', Integer, ForeignKey('5_referents.id')),
-    Column('race', Integer, ForeignKey('1_races.id'))
-)
+# has_race = Table('6_has_race',
+#     Base.metadata,
+#     Column('id', Integer, primary_key=True),
+#     Column('referent', Integer, ForeignKey('5_referents.id')),
+#     Column('race', Integer, ForeignKey('1_races.id'))
+# )
 
