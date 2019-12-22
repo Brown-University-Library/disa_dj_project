@@ -95,7 +95,7 @@ class Referent(Base):
     # tribes = relationship('Tribe',
     #     secondary='has_tribe', back_populates='referents')
     races = relationship('Race',
-        secondary='has_race', back_populates='referents')
+        secondary=has_race, back_populates='referents')
     # titles = relationship('Title',
     #     secondary='has_title', back_populates='referents')
     # vocations = relationship('Vocation',
@@ -138,7 +138,7 @@ class Race(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
     referents = relationship('Referent',
-        secondary='has_race', back_populates='races')
+        secondary=has_race, back_populates='races')
 
 
 # # ==========
