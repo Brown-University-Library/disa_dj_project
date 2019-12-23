@@ -34,14 +34,12 @@ def query_people():
         models_alch.Person, models_alch.Referent ).filter( models_alch.Person.id == models_alch.Referent.id ).all()
     log.debug( f'type(resultset), `{type(resultset)}`' )
     log.debug( f'resultset[0], ```{resultset[0]}```' )
-    # people: List(dict) = [ dict( zip(row.keys(), row) ) for row in resultset ]  # enables returned list to be jsonified
     people = []
     for ( prsn, rfrnt ) in resultset:
         entry = { 'id': prsn.id }
         sex = rfrnt.sex if rfrnt.sex else "Not Listed"
         age = rfrnt.age if rfrnt.age else "Not Listed"
         race = None
-
         log.debug( f'rfrnt.races, ```{rfrnt.races}```' )
         try:
             race = rfrnt.races[0].name
@@ -49,12 +47,11 @@ def query_people():
         except:
             log.debug( f'no race-name; races, ```{rfrnt.races}```' )
         race = race if race else "Not Listed"
-
         log.debug( f'rfrnt.enslavements, ```{rfrnt.enslavements}```' )
         calc_status = ''
         try:
             statuses: sqlalchemy.orm.collections.InstrumentedList = rfrnt.enslavements
-            status: EnslavementType = statuses[0]
+            status: EnslavementType = statuses[0]  # there is only ever one enslavement-type
             calc_status: str = status.name
             log.debug( f'type(statuses), ```{type(statuses)}```' )
             log.debug( f'type(statuses[0]), ```{type(statuses[0])}```' )
@@ -66,20 +63,11 @@ def query_people():
         except:
             log.exception( 'problem ascertaining rfrnt.enslavements; traceback follows; processing will continue' )
             pass
-
-
-        # prsn.calc_sex = sex
-        # prsn.calc_age = age
-        # prsn.calc_race = race
-        # people.append( prsn )
-
         entry['calc_name'] = f'{prsn.first_name} {prsn.last_name}'.strip()
         entry['calc_age'] = age
         entry['calc_sex'] = sex
         entry['calc_race'] = race
         entry['calc_status'] = calc_status
-
-
         people.append( entry )
     log.debug( f'people, ```{pprint.pformat(people)}```' )
     return people
