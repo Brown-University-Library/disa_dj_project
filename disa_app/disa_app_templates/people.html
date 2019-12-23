@@ -39,6 +39,12 @@
     th.tbl_view {
         width: 5%;
     }
+    span.not_listed{
+        font-style: italic;
+        font-size: small;
+        color: brown;
+        vertical-align: text-bottom;
+    }
 </style>
 {% endblock header_other %}
 
@@ -67,11 +73,37 @@
             {% for pers in people %}
             <tr>
               <td>{{ pers.id }}</td>
+
+              {% if pers.calc_name == "Not Listed" %}
+              <td><span class="not_listed">({{ pers.calc_name }})<span></td>
+              {% else %}
               <td>{{ pers.calc_name }}</td>
+              {% endif %}
+
+              {% if pers.calc_age == "Not Listed" %}
+              <td><span class="not_listed">({{ pers.calc_age }})<span></td>
+              {% else %}
               <td>{{ pers.calc_age }}</td>
+              {% endif %}
+
+              {% if pers.calc_sex == "Not Listed" %}
+              <td><span class="not_listed">({{ pers.calc_sex }})<span></td>
+              {% else %}
               <td>{{ pers.calc_sex }}</td>
+              {% endif %}
+
+              {% if pers.calc_race == "Not Listed" %}
+              <td><span class="not_listed">({{ pers.calc_race }})<span></td>
+              {% else %}
               <td>{{ pers.calc_race }}</td>
+              {% endif %}
+
+              {% if pers.calc_status %}
               <td>{{ pers.calc_status }}</td>
+              {% else %}
+              <td><span class="not_listed">(Not Listed)<span></td>
+              {% endif %}
+
               <td><a href="{% url 'person_url' pers.id  %}">View</a></td>
             </tr>
             {% endfor %}

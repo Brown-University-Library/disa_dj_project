@@ -63,7 +63,10 @@ def query_people():
         except:
             log.exception( 'problem ascertaining rfrnt.enslavements; traceback follows; processing will continue' )
             pass
-        entry['calc_name'] = f'{prsn.first_name} {prsn.last_name}'.strip()
+        calc_name = f'{prsn.first_name} {prsn.last_name}'.strip()
+        if not calc_name:
+            calc_name = 'Not Listed'
+        entry['calc_name'] = calc_name
         entry['calc_age'] = age
         entry['calc_sex'] = sex
         entry['calc_race'] = race
