@@ -51,6 +51,22 @@ def query_people():
         race = race if race else "Not Listed"
 
         log.debug( f'rfrnt.enslavements, ```{rfrnt.enslavements}```' )
+        calc_status = ''
+        try:
+            statuses: sqlalchemy.orm.collections.InstrumentedList = rfrnt.enslavements
+            status: EnslavementType = statuses[0]
+            calc_status: str = status.name
+            log.debug( f'type(statuses), ```{type(statuses)}```' )
+            log.debug( f'type(statuses[0]), ```{type(statuses[0])}```' )
+            log.debug( f'len(statuses), `{len(statuses)}`' )
+            log.debug( f'statuses[0].name, ```{statuses[0].name}```' )
+        except IndexError:
+            log.debug( 'no enslavements result' )
+            pass
+        except:
+            log.exception( 'problem ascertaining rfrnt.enslavements; traceback follows; processing will continue' )
+            pass
+
 
         # prsn.calc_sex = sex
         # prsn.calc_age = age
@@ -61,6 +77,7 @@ def query_people():
         entry['calc_age'] = age
         entry['calc_sex'] = sex
         entry['calc_race'] = race
+        entry['calc_status'] = calc_status
 
 
         people.append( entry )

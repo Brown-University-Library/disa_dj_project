@@ -40,6 +40,13 @@ has_race = Table('6_has_race',
     Column('race', Integer, ForeignKey('1_races.id'))
 )
 
+enslaved_as = Table('6_enslaved_as',
+    Base.metadata,
+    Column('id', Integer, primary_key=True),
+    Column('referent', Integer, ForeignKey('5_referents.id')),
+    Column('enslavement', Integer, ForeignKey('1_enslavement_types.id'))
+)
+
 
 # ==========
 # models
@@ -137,15 +144,26 @@ class Referent(Base):
     ## end class Referent
 
 
-
-
 class Race(Base):
     __tablename__ = '1_races'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
-    referents = relationship('Referent',
-        secondary=has_race, back_populates='races')
+    referents = relationship(
+        'Referent',
+        secondary=has_race,
+        back_populates='races' )
+
+
+class EnslavementType(Base):
+    __tablename__ = '1_enslavement_types'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    referents = relationship(
+        'Referent',
+        secondary=enslaved_as,
+        back_populates='enslavements' )
 
 
 # # ==========
