@@ -62,6 +62,10 @@ def people( request ):
     return resp
 
 
+def person( request, prsn_id ):
+    return HttpResponse( f'handling coming for person ```{prsn_id}```' )
+
+
 def login( request ):
     return HttpResponse( 'coming' )
 
