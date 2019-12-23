@@ -54,7 +54,7 @@ def browse( request ):
 def people( request ):
     log.debug( '\n\nstarting people()' )
     people: List(dict) = view_people_helper.query_people()
-    context = { 'data': people }
+    context = { 'people': people }
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
