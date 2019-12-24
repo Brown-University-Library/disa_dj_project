@@ -3,7 +3,6 @@
 import datetime, json, logging, os, pprint
 
 from disa_app import settings_app
-# from disa_app.models_sqlalchemy import Person, Referent
 from disa_app import models_sqlalchemy as models_alch
 from django.conf import settings
 
@@ -46,14 +45,9 @@ def query_people():
 
         prep_race( entry, rfrnt )
 
-        race = None
-        log.debug( f'rfrnt.races, ```{rfrnt.races}```' )
-        try:
-            race = rfrnt.races[0].name
-            log.debug( f'race, `{race}`' )
-        except:
-            log.debug( f'no race-name; races, ```{rfrnt.races}```' )
-        race = race if race else 'Not Listed'
+        prep_status( entry, rfrnt )
+
+
         log.debug( f'rfrnt.enslavements, ```{rfrnt.enslavements}```' )
         calc_status = ''
         try:
@@ -70,27 +64,35 @@ def query_people():
         except:
             log.exception( 'problem ascertaining rfrnt.enslavements; traceback follows; processing will continue' )
             pass
+
+
         calc_name = f'{prsn.first_name} {prsn.last_name}'.strip()
         if not calc_name:
             calc_name = 'Not Listed'
         entry['calc_name'] = calc_name
-        entry['calc_age'] = age
+        # entry['calc_age'] = age
         # entry['calc_sex'] = sex
-        entry['calc_race'] = race
+        # entry['calc_race'] = race
         entry['calc_status'] = calc_status
         people.append( entry )
     log.debug( f'people, ```{pprint.pformat(people)}```' )
     return people
 
 
-def prep_race( entry: dict, rfrnt ) -> None:
-    """ Updates entry.
+def prep_status( entry: dict, rfrnt: models_alch.Referent ) -> None:
+    """ Updates entry with enslavement-type/status data.
         Called by query_people() """
-    log.debug( f'type(rfrnt), ```{}```' )
+
+
+
+def prep_race( entry: dict, rfrnt: models_alch.Referent ) -> None:
+    """ Updates entry with race data.
+        Called by query_people() """
     db_race = []
     calc_race = ''
-    if len( rfrnt.races ) > 0:  # rfrnt.races: List(Race)
-        db_race: str = db_race[0].name
+    if len( rfrnt.races ) > 0:  # rfrnt.races: sqlalchemy.orm.collections.InstrumentedList
+        db_race: str = rfrnt.races[0].name
+        calc_race: str = db_race
     else:
         calc_race = 'Not Listed'
     entry['db_race'] = db_race
