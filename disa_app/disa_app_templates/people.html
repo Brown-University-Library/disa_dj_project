@@ -72,7 +72,7 @@
         <tbody id="people">
             {% for pers in people %}
             <tr>
-              <td>{{ pers.id }}</td>
+              <td>{{ pers.db_id }}</td>
 
               {% if pers.calc_name == "Not Listed" %}
               <td><span class="not_listed">({{ pers.calc_name }})<span></td>

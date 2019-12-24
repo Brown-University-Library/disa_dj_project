@@ -36,9 +36,14 @@ def query_people():
     log.debug( f'resultset[0], ```{resultset[0]}```' )
     people = []
     for ( prsn, rfrnt ) in resultset:
-        entry = { 'id': prsn.id }
-        sex = rfrnt.sex if rfrnt.sex else "Not Listed"
-        age = rfrnt.age if rfrnt.age else "Not Listed"
+        entry = { 'db_id': prsn.id }
+
+        entry['db_sex'] = rfrnt.sex
+        entry['calc_sex'] = rfrnt.sex if rfrnt.sex else 'Not Listed'
+
+        entry['db_age'] = rfrnt.age
+        entry['calc_age'] = rfrnt.age if rfrnt.age else 'Not Listed'
+
         race = None
         log.debug( f'rfrnt.races, ```{rfrnt.races}```' )
         try:
@@ -46,7 +51,7 @@ def query_people():
             log.debug( f'race, `{race}`' )
         except:
             log.debug( f'no race-name; races, ```{rfrnt.races}```' )
-        race = race if race else "Not Listed"
+        race = race if race else 'Not Listed'
         log.debug( f'rfrnt.enslavements, ```{rfrnt.enslavements}```' )
         calc_status = ''
         try:
@@ -68,7 +73,7 @@ def query_people():
             calc_name = 'Not Listed'
         entry['calc_name'] = calc_name
         entry['calc_age'] = age
-        entry['calc_sex'] = sex
+        # entry['calc_sex'] = sex
         entry['calc_race'] = race
         entry['calc_status'] = calc_status
         people.append( entry )
@@ -76,27 +81,6 @@ def query_people():
     return people
 
 
-# def query_people():
-#     """ Queries db for people.
-#         Called by views.people()
-#         Resources:
-#         - <https://stackoverflow.com/questions/19406859/sqlalchemy-convert-select-query-result-to-a-list-of-dicts/20078977>
-#         - <https://stackoverflow.com/questions/2828248/sqlalchemy-returns-tuple-not-dictionary>
-#         """
-#     session = make_session()
-#     resultset: List(sqlalchemy.util._collections.result) = session.query(
-#         Person.id,
-#         Person.first_name,
-#         Person.last_name,
-#         Referent.age,
-#         Referent.sex,
-#         # Referent.races[0].name  # returns getitem error
-#         # Referent.races  # hangs
-#         ).filter( Person.id == Referent.id ).all()  # can't be jsonified
-#     log.debug( f'type(resultset), `{type(resultset)}`' )
-#     people: List(dict) = [ dict( zip(row.keys(), row) ) for row in resultset ]  # enables returned list to be jsonified
-#     log.debug( f'people, ```{pprint.pformat(people)}```' )
-#     return people
 
 
 
@@ -104,14 +88,14 @@ def query_people():
 # db_url = settings_app.DB_URL
 # people = []
 # for (prsn, rfrnt) in db.session.query( models.Person, models.Referent ).filter( models.Person.id==models.Referent.id ).all():
-#     sex = rfrnt.sex if rfrnt.sex else "Not Listed"
-#     age = rfrnt.age if rfrnt.age else "Not Listed"
+#     sex = rfrnt.sex if rfrnt.sex else 'Not Listed'
+#     age = rfrnt.age if rfrnt.age else 'Not Listed'
 #     race = None
 #     try:
 #         race = rfrnt.races[0].name
 #     except:
 #         log.debug( 'no race-name; races, ```{rfrnt.races}```' )
-#     race = race if race else "Not Listed"
+#     race = race if race else 'Not Listed'
 #     temp_demographic = f'age, `{age}`; sex, `{sex}`; race, `{race}`'
 #     # prsn.tmp_dmgrphc = temp_demographic
 #     # prsn.last_name = f'{prsn.last_name} ({temp_str})'
