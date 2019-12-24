@@ -66,8 +66,7 @@ def people( request ):
 
 def person( request, prsn_id ):
     log.debug( f'\n\nstarting person(), with prsn_id, `{prsn_id}`' )
-    prsn_info: dict = view_person_helper.query_person( prsn_id )
-    context = { 'person_info': prsn_info }
+    context: dict = view_person_helper.query_person( prsn_id )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:

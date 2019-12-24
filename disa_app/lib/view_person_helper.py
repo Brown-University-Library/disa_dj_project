@@ -5,6 +5,7 @@ import datetime, json, logging, os, pprint
 import sqlalchemy
 from disa_app import settings_app
 from disa_app import models_sqlalchemy as models_alch
+from disa_app.lib import person_common
 from django.conf import settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -26,9 +27,12 @@ def query_person( prsn_id ):
         """
     log.debug( 'starting query_person()' )
     session = make_session()
-    rlst = session.query( models_alch.Person.get(prsn_id) )
-    log.debug( f'rlst, ```{rlst}```' )
-    prsn_info = {}
+    prsn: models_sqlalchemy.Person = session.query( models_alch.Person ).get( prsn_id )
+    log.debug( f'prsn, ```{prsn}```' )
+    prsn_info = {
+        'name': person_common.parse_person_name( prsn ),
+        'tribes': person_common.parse_person_descriptors( prsn, 'tribes' )
+        }
     return prsn_info
 
 
