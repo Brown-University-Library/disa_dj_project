@@ -36,53 +36,16 @@ def query_people():
     people = []
     for ( prsn, rfrnt ) in resultset:
         entry = { 'db_id': prsn.id }
-
         entry['db_sex'] = rfrnt.sex
         entry['calc_sex'] = rfrnt.sex if rfrnt.sex else 'Not Listed'
-
         entry['db_age'] = rfrnt.age
         entry['calc_age'] = rfrnt.age if rfrnt.age else 'Not Listed'
-
         prep_race( entry, rfrnt )
-
         prep_status( entry, rfrnt )
-
-
-        log.debug( f'rfrnt.enslavements, ```{rfrnt.enslavements}```' )
-        calc_status = ''
-        try:
-            statuses: sqlalchemy.orm.collections.InstrumentedList = rfrnt.enslavements
-            status: EnslavementType = statuses[0]  # there is only ever one enslavement-type
-            calc_status: str = status.name
-            log.debug( f'type(statuses), ```{type(statuses)}```' )
-            log.debug( f'type(statuses[0]), ```{type(statuses[0])}```' )
-            log.debug( f'len(statuses), `{len(statuses)}`' )
-            log.debug( f'statuses[0].name, ```{statuses[0].name}```' )
-        except IndexError:
-            log.debug( 'no enslavements result' )
-            pass
-        except:
-            log.exception( 'problem ascertaining rfrnt.enslavements; traceback follows; processing will continue' )
-            pass
-
-
-        calc_name = f'{prsn.first_name} {prsn.last_name}'.strip()
-        if not calc_name:
-            calc_name = 'Not Listed'
-        entry['calc_name'] = calc_name
-        # entry['calc_age'] = age
-        # entry['calc_sex'] = sex
-        # entry['calc_race'] = race
-        entry['calc_status'] = calc_status
+        prep_name( entry, prsn )
         people.append( entry )
     log.debug( f'people, ```{pprint.pformat(people)}```' )
     return people
-
-
-def prep_status( entry: dict, rfrnt: models_alch.Referent ) -> None:
-    """ Updates entry with enslavement-type/status data.
-        Called by query_people() """
-
 
 
 def prep_race( entry: dict, rfrnt: models_alch.Referent ) -> None:
@@ -91,7 +54,7 @@ def prep_race( entry: dict, rfrnt: models_alch.Referent ) -> None:
     db_race = []
     calc_race = ''
     if len( rfrnt.races ) > 0:  # rfrnt.races: sqlalchemy.orm.collections.InstrumentedList
-        db_race: str = rfrnt.races[0].name
+        db_race: str = rfrnt.races[0].name  # there is only ever one Race associated-record
         calc_race: str = db_race
     else:
         calc_race = 'Not Listed'
@@ -99,6 +62,30 @@ def prep_race( entry: dict, rfrnt: models_alch.Referent ) -> None:
     entry['calc_race'] = calc_race
     return
 
+
+def prep_status( entry: dict, rfrnt: models_alch.Referent ) -> None:
+    """ Updates entry with enslavement-type/status data.
+        Called by query_people() """
+    db_status = []
+    calc_status = ''
+    if len( rfrnt.enslavements ) > 0:  # rfrnt.enslavements: sqlalchemy.orm.collections.InstrumentedList
+        db_status: str = rfrnt.enslavements[0].name  # there is only ever one EnslavementType associated-record
+        calc_status: str = db_status
+    else:
+        calc_status = 'Not Listed'
+    entry['db_status'] = db_status
+    entry['calc_status'] = calc_status
+    return
+
+
+def prep_name( entry: dict, prsn: models_alch.Person ) -> None:
+    """ Updates entry with name data.
+        Called by query_people() """
+    entry['db_name_first'] = prsn.first_name  # first_name: str
+    entry['db_name_last'] = prsn.last_name  # last_name: str
+    calc_name: str = f'{prsn.first_name} {prsn.last_name}'.strip()
+    calc_name: str = calc_name if calc_name else 'Not Listed'
+    entry['calc_name'] = calc_name
 
 
 # db = SQLAlchemy(app)
@@ -122,4 +109,3 @@ def prep_race( entry: dict, rfrnt: models_alch.Referent ) -> None:
 #     people.append( prsn )
 # p = people[1]
 # log.debug( f'p.__dict__, ```{p.__dict__}```' )
-
