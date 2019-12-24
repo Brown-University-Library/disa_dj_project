@@ -8,7 +8,7 @@ from typing import List
 
 import requests
 from disa_app import settings_app
-from disa_app.lib import view_info_helper, view_people_helper
+from disa_app.lib import view_info_helper, view_people_helper, view_person_helper
 from django.conf import settings as project_settings
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
@@ -63,7 +63,35 @@ def people( request ):
 
 
 def person( request, prsn_id ):
-    return HttpResponse( f'handling coming for person ```{prsn_id}```' )
+    log.debug( f'\n\nstarting person(), with prsn_id, `{prsn_id}`' )
+    prsn_info: dict = view_person_helper.query_person( prsn_id )
+    context = { 'person_info': prsn_info }
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/person_view.html', context )
+    return resp
+
+
+## from DISA
+# @app.route('/people/<persId>')
+# def get_person(persId):
+#     log.debug( 'starting get_person' )
+#     person = models.Person.query.get(persId)
+#     name = parse_person_name(person)
+#     tribes = parse_person_descriptors(person, 'tribes')
+#     origins = parse_person_descriptors(person, 'origins')
+#     races = parse_person_descriptors(person, 'races')
+#     statuses = parse_person_descriptors(person, 'enslavements')
+#     vocations = parse_person_descriptors(person, 'vocations')
+#     titles = parse_person_descriptors(person, 'titles')
+#     relations = parse_person_relations(person)
+#     return render_template('person_display.html',
+#         name=name, dbId=persId, refs = person.references,
+#         origins=origins, tribes=tribes, titles=titles,
+#         races=races, vocations=vocations, statuses=statuses,
+#         relations=relations)
+
 
 
 def login( request ):
