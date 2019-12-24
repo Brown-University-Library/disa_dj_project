@@ -44,6 +44,8 @@ def query_people():
         entry['db_age'] = rfrnt.age
         entry['calc_age'] = rfrnt.age if rfrnt.age else 'Not Listed'
 
+        prep_race( entry, rfrnt )
+
         race = None
         log.debug( f'rfrnt.races, ```{rfrnt.races}```' )
         try:
@@ -81,6 +83,19 @@ def query_people():
     return people
 
 
+def prep_race( entry: dict, rfrnt ) -> None:
+    """ Updates entry.
+        Called by query_people() """
+    log.debug( f'type(rfrnt), ```{}```' )
+    db_race = []
+    calc_race = ''
+    if len( rfrnt.races ) > 0:  # rfrnt.races: List(Race)
+        db_race: str = db_race[0].name
+    else:
+        calc_race = 'Not Listed'
+    entry['db_race'] = db_race
+    entry['calc_race'] = calc_race
+    return
 
 
 
