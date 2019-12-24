@@ -62,6 +62,8 @@ def people( request ):
     return resp
 
 
+
+
 def person( request, prsn_id ):
     log.debug( f'\n\nstarting person(), with prsn_id, `{prsn_id}`' )
     prsn_info: dict = view_person_helper.query_person( prsn_id )
@@ -72,25 +74,6 @@ def person( request, prsn_id ):
         resp = render( request, 'disa_app_templates/person_view.html', context )
     return resp
 
-
-## from DISA
-# @app.route('/people/<persId>')
-# def get_person(persId):
-#     log.debug( 'starting get_person' )
-#     person = models.Person.query.get(persId)
-#     name = parse_person_name(person)
-#     tribes = parse_person_descriptors(person, 'tribes')
-#     origins = parse_person_descriptors(person, 'origins')
-#     races = parse_person_descriptors(person, 'races')
-#     statuses = parse_person_descriptors(person, 'enslavements')
-#     vocations = parse_person_descriptors(person, 'vocations')
-#     titles = parse_person_descriptors(person, 'titles')
-#     relations = parse_person_relations(person)
-#     return render_template('person_display.html',
-#         name=name, dbId=persId, refs = person.references,
-#         origins=origins, tribes=tribes, titles=titles,
-#         races=races, vocations=vocations, statuses=statuses,
-#         relations=relations)
 
 
 
