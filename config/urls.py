@@ -51,7 +51,7 @@ urlpatterns = [
     url( r'^version/$', views.version, name='version_url' ),
     url( r'^error_check/$', views.error_check, name='error_check_url' ),
 
-    # url( r'^$', RedirectView.as_view(pattern_name='browse_url') ),
+    url( r'^$', RedirectView.as_view(pattern_name='browse_url') ),
     url( r'^$', views.temp_response, name='temp_name_url' ),
 
     # url( r'^admin/login/', RedirectView.as_view(pattern_name='login_url') ),
