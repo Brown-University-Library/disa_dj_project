@@ -38,6 +38,8 @@ def query_person( prsn_id ):
         'vocations': person_common.parse_person_descriptors( prsn, 'vocations' ),
         'titles': person_common.parse_person_descriptors( prsn, 'titles' ),
 
+        'relations': person_common.parse_person_relations( prsn ),
+
         'dbId': prsn.id
         }
     return prsn_info

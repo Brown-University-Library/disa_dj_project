@@ -14,6 +14,8 @@ from sqlalchemy import Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
+from sqlalchemy.orm import backref
+
 
 log = logging.getLogger(__name__)
 Base = declarative_base()
@@ -77,6 +79,14 @@ has_vocation = Table('6_has_vocation',
     Column('id', Integer, primary_key=True),
     Column('referent', Integer, ForeignKey('5_referents.id')),
     Column('vocation', Integer, ForeignKey('1_vocations.id'))
+)
+
+
+referencetype_roles = Table('2_referencetype_roles',
+    Base.metadata,
+    Column('id', Integer, primary_key=True),
+    Column('reference_type', Integer, ForeignKey('1_reference_types.id')),
+    Column('role', Integer, ForeignKey('1_roles.id'))
 )
 
 
@@ -159,12 +169,14 @@ class Referent(Base):
         'ReferentName',
         primaryjoin=(primary_name_id == ReferentName.id),
         post_update=True )
-    # roles = relationship('Role',
-    #     secondary=has_role, back_populates='referents')
+    roles = relationship(
+        'Role',
+        secondary=has_role,
+        back_populates='referents' )
     tribes = relationship(
         'Tribe',
         secondary=has_tribe,
-        back_populates='referents')
+        back_populates='referents' )
     races = relationship(
         'Race',
         secondary=has_race,
@@ -222,7 +234,6 @@ class Vocation(Base):
         secondary=has_vocation, back_populates='vocations')
 
 
-
 class EnslavementType(Base):
     __tablename__ = '1_enslavement_types'
 
@@ -232,6 +243,54 @@ class EnslavementType(Base):
         'Referent',
         secondary=enslaved_as,
         back_populates='enslavements' )
+
+
+
+
+class Role(Base):
+    __tablename__ = '1_roles'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    name_as_relationship = Column(String(255))
+    referents = relationship(
+        'Referent',
+        secondary=has_role,
+        back_populates='roles' )
+    reference_types = relationship(
+        'ReferenceType',
+        secondary=referencetype_roles,
+        back_populates='roles' )
+
+
+
+
+class ReferentRelationship(Base):
+    __tablename__ = '6_referent_relationships'
+
+    id = Column(Integer, primary_key=True)
+    subject_id = Column(Integer, ForeignKey('5_referents.id'))
+    object_id = Column(Integer, ForeignKey('5_referents.id'))
+    role_id = Column(Integer, ForeignKey('1_roles.id'))
+    sbj = relationship(Referent,
+        primaryjoin=(subject_id == Referent.id),
+        backref=backref('as_subject', cascade='delete'))
+    obj = relationship(Referent,
+        primaryjoin=(object_id == Referent.id),
+        backref=backref('as_object', cascade='delete'))
+    related_as = relationship(Role,
+        primaryjoin=(role_id == Role.id),
+        backref='describes')
+
+    def entailed_relationships(self):
+        implied = []
+        entailed = RoleRelationship.query.filter_by(role1=self.role_id).all()
+        for e in entailed:
+            implied.append(e.entail_relationships(
+                self.subject_id, self.object_id))
+        return implied
+
+
 
 
 class Tribe(Base):

@@ -44,3 +44,29 @@ def parse_person_descriptors( prsn, dscrptr ):
 #                 for desc in getattr(ref, descField) }
 #     out = ', '.join(list(vals))
 #     return out if out else 'None'
+
+
+def parse_person_relations( prsn ):
+    rels = [ (r.related_as, r.obj) for e in prsn.references
+                for r in e.as_subject ]
+    grouped = collections.defaultdict( list )
+    for r in rels:
+        grouped[ r[0].name_as_relationship ].append( {
+            'id': r[1].person_id,
+            'name': parse_person_name(r[1].person)
+            } )
+    calc_rels = [ { 'type': k, 'related': v } for k,v in grouped.items() ]
+    log.debug( f'calc_rels, ```{pprint.pformat(calc_rels)}```' )
+    return out
+
+
+# def parse_person_relations(personObj):
+#     rels = [ (r.related_as, r.obj) for e in personObj.references
+#                 for r in e.as_subject ]
+#     grouped = collections.defaultdict(list)
+#     for r in rels:
+#         grouped[ r[0].name_as_relationship ].append(
+#             { 'id': r[1].person_id,
+#             'name': parse_person_name(r[1].person) } )
+#     out = [ { 'type': k, 'related': v } for k,v in grouped.items() ]
+#     return out
