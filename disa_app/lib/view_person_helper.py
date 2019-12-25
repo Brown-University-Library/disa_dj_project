@@ -31,7 +31,8 @@ def query_person( prsn_id ):
     log.debug( f'prsn, ```{prsn}```' )
     prsn_info = {
         'name': person_common.parse_person_name( prsn ),
-        'tribes': person_common.parse_person_descriptors( prsn, 'tribes' )
+        'tribes': person_common.parse_person_descriptors( prsn, 'tribes' ),
+        'origins': person_common.parse_person_descriptors( prsn, 'origins' )
         }
     return prsn_info
 
