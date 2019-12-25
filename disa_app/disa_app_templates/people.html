@@ -104,7 +104,7 @@
               <td><span class="not_listed">(Not Listed)<span></td>
               {% endif %}
 
-              <td><a href="{% url 'person_url' pers.id  %}">View</a></td>
+              <td><a href="{% url 'person_url' pers.db_id  %}">View</a></td>
             </tr>
             {% endfor %}
         </tbody>
