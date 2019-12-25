@@ -25,11 +25,11 @@ Base = declarative_base()
 # ==========
 
 
-has_role = Table('6_has_role',
+enslaved_as = Table('6_enslaved_as',
     Base.metadata,
     Column('id', Integer, primary_key=True),
     Column('referent', Integer, ForeignKey('5_referents.id')),
-    Column('role', Integer, ForeignKey('1_roles.id'))
+    Column('enslavement', Integer, ForeignKey('1_enslavement_types.id'))
 )
 
 
@@ -40,11 +40,20 @@ has_race = Table('6_has_race',
     Column('race', Integer, ForeignKey('1_races.id'))
 )
 
-enslaved_as = Table('6_enslaved_as',
+
+has_role = Table('6_has_role',
     Base.metadata,
     Column('id', Integer, primary_key=True),
     Column('referent', Integer, ForeignKey('5_referents.id')),
-    Column('enslavement', Integer, ForeignKey('1_enslavement_types.id'))
+    Column('role', Integer, ForeignKey('1_roles.id'))
+)
+
+
+has_tribe = Table('6_has_tribe',
+    Base.metadata,
+    Column('id', Integer, primary_key=True),
+    Column('referent', Integer, ForeignKey('5_referents.id')),
+    Column('tribe', Integer, ForeignKey('1_tribes.id'))
 )
 
 
@@ -111,21 +120,26 @@ class Referent(Base):
     # names = relationship('ReferentName',
     #     primaryjoin=(id == 'ReferentName.referent_id'),
     #     backref='referent', cascade='delete')
-    primary_name = relationship('ReferentName',
+    primary_name = relationship(
+        'ReferentName',
         primaryjoin=(primary_name_id == ReferentName.id),
         post_update=True )
     # roles = relationship('Role',
-    #     secondary='has_role', back_populates='referents')
-    # tribes = relationship('Tribe',
-    #     secondary='has_tribe', back_populates='referents')
-    races = relationship('Race',
-        secondary=has_race, back_populates='referents')
+    #     secondary=has_role, back_populates='referents')
+    tribes = relationship(
+        'Tribe',
+        secondary=has_tribe,
+        back_populates='referents')
+    races = relationship(
+        'Race',
+        secondary=has_race,
+        back_populates='referents')
     # titles = relationship('Title',
-    #     secondary='has_title', back_populates='referents')
+    #     secondary=has_title, back_populates='referents')
     # vocations = relationship('Vocation',
-    #     secondary='has_vocation', back_populates='referents')
+    #     secondary=has_vocation, back_populates='referents')
     # origins = relationship('Location',
-    #     secondary='has_origin', back_populates='origin_for')
+    #     secondary=has_origin, back_populates='origin_for')
     enslavements = relationship('EnslavementType',
         secondary=enslaved_as, back_populates='referents')
 
@@ -166,23 +180,13 @@ class EnslavementType(Base):
         back_populates='enslavements' )
 
 
-# # ==========
-# # RDF-ish
-# # ==========
+class Tribe(Base):
+    __tablename__ = '1_tribes'
 
-
-# has_role = Table('6_has_role',
-#     Base.metadata,
-#     Column('id', Integer, primary_key=True),
-#     Column('referent', Integer, ForeignKey('5_referents.id')),
-#     Column('role', Integer, ForeignKey('1_roles.id'))
-# )
-
-
-# has_race = Table('6_has_race',
-#     Base.metadata,
-#     Column('id', Integer, primary_key=True),
-#     Column('referent', Integer, ForeignKey('5_referents.id')),
-#     Column('race', Integer, ForeignKey('1_races.id'))
-# )
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    referents = relationship(
+        'Referent',
+        secondary=has_tribe,
+        back_populates='tribes' )
 

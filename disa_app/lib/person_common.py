@@ -21,17 +21,25 @@ log = logging.getLogger(__name__)
 
 
 def parse_person_name( prsn ) -> str:
-    log.debug( f'type(prsn), ```{type(prsn)}```' )
-    log.debug( f'prsn.__dict__, ```{prsn.__dict__}```' )
-    log.debug( f'prsn.references, ```{prsn.references}```' )
+    # log.debug( f'type(prsn), ```{type(prsn)}```' )
+    # log.debug( f'prsn.__dict__, ```{prsn.__dict__}```' )
+    # log.debug( f'prsn.references, ```{prsn.references}```' )
     name: str = f'{prsn.first_name} {prsn.last_name}'.strip()
     if name == '':
         name = 'Not Listed'
     return name
 
 
-def parse_person_descriptors( prsn, descriptor ):
-    vals = { desc.name for ref in prsn.references for desc in getattr(ref, descField) }
+def parse_person_descriptors( prsn, dscrptr ):
+    log.debug( f'type(prsn), ```{type(prsn)}```' )
+    log.debug( f'prsn.__dict__, ```{prsn.__dict__}```' )
+    log.debug( f'prsn.__dict__.keys()[0], ```{list(prsn.__dict__.keys())[0]}```' )
+    target_key = list(prsn.__dict__.keys())[0]
+    log.debug( f'target_val, ```{prsn.__dict__[target_key].__dict__}```' )
+    log.debug( f'prsn.references, ```{prsn.references}```' )
+    # vals = { desc.name for ref in prsn.references for desc in getattr(ref, descField) }
+    vals = { desc.name for ref in prsn.references for desc in getattr(ref, dscrptr) }
+
     log.debug( f'vals, ```{vals}```' )
     out = ', '.join(list(vals))
     return out if out else 'None'
