@@ -36,6 +36,7 @@ def query_person( prsn_id ):
         'races': person_common.parse_person_descriptors( prsn, 'races' ),
         'statuses': person_common.parse_person_descriptors( prsn, 'enslavements' ),
         'vocations': person_common.parse_person_descriptors( prsn, 'vocations' ),
+        'titles': person_common.parse_person_descriptors( prsn, 'titles' ),
 
         'dbId': prsn.id
         }

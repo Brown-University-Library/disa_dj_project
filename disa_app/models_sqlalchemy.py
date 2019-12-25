@@ -56,11 +56,27 @@ has_role = Table('6_has_role',
 )
 
 
+has_title = Table('6_has_title',
+    Base.metadata,
+    Column('id', Integer, primary_key=True),
+    Column('referent', Integer, ForeignKey('5_referents.id')),
+    Column('title', Integer, ForeignKey('1_titles.id'))
+)
+
+
 has_tribe = Table('6_has_tribe',
     Base.metadata,
     Column('id', Integer, primary_key=True),
     Column('referent', Integer, ForeignKey('5_referents.id')),
     Column('tribe', Integer, ForeignKey('1_tribes.id'))
+)
+
+
+has_vocation = Table('6_has_vocation',
+    Base.metadata,
+    Column('id', Integer, primary_key=True),
+    Column('referent', Integer, ForeignKey('5_referents.id')),
+    Column('vocation', Integer, ForeignKey('1_vocations.id'))
 )
 
 
@@ -153,8 +169,8 @@ class Referent(Base):
         'Race',
         secondary=has_race,
         back_populates='referents')
-    # titles = relationship('Title',
-    #     secondary=has_title, back_populates='referents')
+    titles = relationship('Title',
+        secondary=has_title, back_populates='referents')
     vocations = relationship('Vocation',
         secondary=has_vocation, back_populates='referents')
     origins = relationship('Location',
@@ -177,6 +193,15 @@ class Referent(Base):
     ## end class Referent
 
 
+class Title(Base):
+    __tablename__ = '1_titles'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    referents = relationship('Referent',
+        secondary=has_title, back_populates='titles')
+
+
 class Race(Base):
     __tablename__ = '1_races'
 
@@ -188,12 +213,12 @@ class Race(Base):
         back_populates='races' )
 
 
-class Vocation(db.Model):
+class Vocation(Base):
     __tablename__ = '1_vocations'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
-    referents = db.relationship('Referent',
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    referents = relationship('Referent',
         secondary=has_vocation, back_populates='vocations')
 
 
