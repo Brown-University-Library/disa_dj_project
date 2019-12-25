@@ -36,7 +36,7 @@ def parse_person_descriptors( prsn, dscrptr ):
     vals = { desc.name for ref in prsn.references for desc in getattr(ref, dscrptr) }
     log.debug( f'vals, ```{vals}```' )
     out = ', '.join(list(vals))
-    return out if out else 'None'
+    return out if out else 'Not Listed'
 
 
 # def parse_person_descriptors( prsn, descriptor ):

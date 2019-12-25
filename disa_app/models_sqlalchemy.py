@@ -32,6 +32,13 @@ enslaved_as = Table('6_enslaved_as',
     Column('enslavement', Integer, ForeignKey('1_enslavement_types.id'))
 )
 
+has_origin = Table('6_has_origin',
+    Base.metadata,
+    Column('id', Integer, primary_key=True),
+    Column('referent', Integer, ForeignKey('5_referents.id')),
+    Column('origin', Integer, ForeignKey('1_locations.id'))
+)
+
 
 has_race = Table('6_has_race',
     Base.metadata,
@@ -60,6 +67,18 @@ has_tribe = Table('6_has_tribe',
 # ==========
 # models
 # ==========
+
+
+class Location(Base):
+    __tablename__ = '1_locations'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    origin_for = relationship('Referent',
+        secondary=has_origin, back_populates='origins')
+
+    def __repr__(self):
+        return '<Location {0}: {1}>'.format(self.id, self.name)
 
 
 class Person(Base):
@@ -136,10 +155,10 @@ class Referent(Base):
         back_populates='referents')
     # titles = relationship('Title',
     #     secondary=has_title, back_populates='referents')
-    # vocations = relationship('Vocation',
-    #     secondary=has_vocation, back_populates='referents')
-    # origins = relationship('Location',
-    #     secondary=has_origin, back_populates='origin_for')
+    vocations = relationship('Vocation',
+        secondary=has_vocation, back_populates='referents')
+    origins = relationship('Location',
+        secondary=has_origin, back_populates='origin_for')
     enslavements = relationship('EnslavementType',
         secondary=enslaved_as, back_populates='referents')
 
@@ -167,6 +186,16 @@ class Race(Base):
         'Referent',
         secondary=has_race,
         back_populates='races' )
+
+
+class Vocation(db.Model):
+    __tablename__ = '1_vocations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    referents = db.relationship('Referent',
+        secondary=has_vocation, back_populates='vocations')
+
 
 
 class EnslavementType(Base):
