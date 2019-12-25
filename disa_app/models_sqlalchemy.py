@@ -60,7 +60,7 @@ class Person(Base):
     first_name = Column( String(255) )
     last_name = Column( String(255) )
     comments = Column( String(255) )
-    # references = relationship( 'Referent', backref='person', lazy=True )
+    references = relationship( 'Referent', backref='person', lazy=True )
 
     @classmethod
     def filter_on_description( cls, desc ):
