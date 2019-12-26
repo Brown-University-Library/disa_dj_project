@@ -98,10 +98,10 @@
               <td>{{ pers.calc_race }}</td>
               {% endif %}
 
-              {% if pers.calc_status %}
-              <td>{{ pers.calc_status }}</td>
-              {% else %}
+              {% if pers.calc_status == "Not Listed" %}
               <td><span class="not_listed">(Not Listed)<span></td>
+              {% else %}
+              <td>{{ pers.calc_status }}</td>
               {% endif %}
 
               <td><a href="{% url 'person_url' pers.db_id  %}">View</a></td>
