@@ -172,7 +172,7 @@
                 {% for person in rel.related %}
                 <li>
                   {% comment %}<a href="{{ url_for('get_person', persId=person.id) }}">{{ person.name }}</a>{% endcomment %}
-                  <a href="{% url 'person_url' person.db_id  %}">{{ person.name }}</a>
+                  <a href="{% url 'person_url' person.id  %}">{{ person.name }}</a>
                 </li>
                 {% endfor%}
               </ul>
@@ -191,21 +191,29 @@
           {% for ref in refs %}
           <tr>
             {% comment %}<td>{{ ref.reference.display_date() }}</td>{% endcomment %}
-            <td>{{ ref.reference.display_date }}</td>
+            <td>{{ ref.rfrnc_display_date }}</td>
             <td>
-            {% for role in ref.roles %}
-              <span>{{ role.name }}</span>
+
+            {% comment %}
+                {% for role in ref.roles %}
+                  <span>{{ role.name }}</span>
+                {% endfor %}
+            {% endcomment %}
+
+            {% for role in ref.rfnrt_role_names %}
+              <span>{{ role }}</span>
             {% endfor %}
+
             </td>
             <td>
               {% comment %}{% for loc in ref.reference.locations | reverse %}{% endcomment %}
-              {% for loc in ref.reference.locations %}
-              <span class="location">{{ loc.location.name }}</span>
+              {% for loc in ref.rfrnc_location_names %}
+              <span class="location">{{ loc }}</span>
               {% endfor %}
             </td>
             <td>
               {% comment %}<a href="{{ url_for('get_source', srcId=ref.reference_id) }}">View source</a>{% endcomment %}
-              <a href="{% url 'source_url' source_id  %}">View source</a>
+              <a href="{% url 'source_url' dbId  %}">View source</a>
           </tr>
           {% endfor %}
         </tbody>

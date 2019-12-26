@@ -32,7 +32,7 @@ urlpatterns = [
     url( r'^people/$', views.people, name='people_url' ),
     url( r'^people/(?P<prsn_id>.*)/$', views.person, name='person_url' ),
 
-    url( r'^source/(?P<srcId>.*)/$', views.temp_response, name='temp_name_url' ),
+    url( r'^source/(?P<src_id>.*)/$', views.source, name='source_url' ),
 
     url( r'^record/relationships/(?P<recId>.*)/$', views.temp_response, name='temp_name_url' ),
 

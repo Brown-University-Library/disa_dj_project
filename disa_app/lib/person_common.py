@@ -71,9 +71,8 @@ def parse_person_references( prsn ) -> list:
         rfrnc_locations_names = []
         for location in rfrnt.reference.locations:
             rfrnc_locations_names.append( location.location.name )
-        data['rfrnc_role_names'] = rfrnc_locations_names
-
-
+        rfrnc_locations_names.reverse()
+        data['rfrnc_location_names'] = rfrnc_locations_names
         j_rfrnts.append( data )
     log.debug( f'j_rfrnts, ```{pprint.pformat(j_rfrnts)}```' )
     return j_rfrnts
