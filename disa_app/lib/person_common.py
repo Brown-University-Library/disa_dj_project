@@ -29,7 +29,7 @@ def parse_person_name( prsn ) -> str:
     return name
 
 
-def parse_person_descriptors( prsn, dscrptr ):
+def parse_person_descriptors( prsn, dscrptr ) -> str:
     """ Returns Referent descriptor value.
         Called by view_person_helper.query_person() """
     log.debug( f'person-id, `{prsn.id}`; descriptor, `{dscrptr}`' )
@@ -46,7 +46,9 @@ def parse_person_descriptors( prsn, dscrptr ):
 #     return out if out else 'None'
 
 
-def parse_person_relations( prsn ):
+def parse_person_relations( prsn ) -> list:
+    """ Returns a list of relationship entries, each consisting of an id and name, and the relationship type.
+        Called by view_person_helper.query_person() """
     rels = [ (r.related_as, r.obj) for e in prsn.references
                 for r in e.as_subject ]
     grouped = collections.defaultdict( list )
