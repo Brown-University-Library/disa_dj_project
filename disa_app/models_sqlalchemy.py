@@ -9,7 +9,7 @@ Resources...
 import logging
 from typing import List
 
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, UnicodeText
 from sqlalchemy import Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -25,6 +25,14 @@ Base = declarative_base()
 # ==========
 # RDF-ish
 # ==========
+
+
+citationtype_referencetypes = Table('3_citationtype_referencetypes',
+    Base.metadata,
+    Column('id', Integer, primary_key=True),
+    Column('citation_type', Integer, ForeignKey('2_citation_types.id')),
+    Column('reference_type', Integer, ForeignKey('1_reference_types.id')),
+)
 
 
 enslaved_as = Table('6_enslaved_as',
@@ -93,6 +101,84 @@ referencetype_roles = Table('2_referencetype_roles',
 # ==========
 # models
 # ==========
+
+
+
+class Citation(Base):
+    __tablename__ = '3_citations'
+
+    id = Column(Integer, primary_key=True)
+    citation_type_id = Column(Integer, ForeignKey('2_citation_types.id'),
+        nullable=False)
+    display = Column(String(500))
+    zotero_id = Column(String(255))
+    comments = Column(UnicodeText())
+    acknowledgements = Column(String(255))
+    references = relationship('Reference', backref='citation', lazy=True)
+
+    def __repr__(self):
+        return '<Citation {0}>'.format(self.id)
+
+class CitationType(Base):
+    __tablename__ = '2_citation_types'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    zotero_type_id = Column(Integer, ForeignKey('1_zotero_types.id'),
+        nullable=False)
+    reference_types = relationship(
+        'ReferenceType', secondary=citationtype_referencetypes,
+        back_populates='citation_types')
+    citations = relationship('Citation',
+        backref='citation_type', lazy=True)
+
+
+class Reference(Base):
+    __tablename__ = '4_references'
+
+    id = Column(Integer, primary_key=True)
+    citation_id = Column(Integer, ForeignKey('3_citations.id'),
+        nullable=False)
+    reference_type_id = Column(Integer, ForeignKey('1_reference_types.id'),
+        nullable=False)
+    national_context_id = Column(Integer, ForeignKey('1_national_context.id'),
+        nullable=False)
+    date = Column(DateTime())
+    transcription = Column(UnicodeText())
+    referents = relationship(
+        'Referent', backref='reference', lazy=True, cascade="delete")
+
+    def last_edit(self):
+        edits = sorted([ (e.timestamp, e) for e in self.edits ],
+             key=operator.itemgetter(0), reverse=True)
+        return edits[0][1]
+
+    def display_date(self):
+        if self.date:
+            return self.date.strftime('%Y %B %d')
+        else:
+            return ''
+
+    def __repr__(self):
+        return '<Reference {0}>'.format(self.id)
+
+    ## end class ReferenceType
+
+
+class ReferenceType(Base):
+    __tablename__ = '1_reference_types'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    references = relationship('Reference',
+        backref='reference_type', lazy=True)
+    roles = relationship(
+        'Role', secondary=referencetype_roles,
+        back_populates='reference_types')
+    citation_types = relationship(
+        'CitationType', secondary=citationtype_referencetypes,
+        back_populates='reference_types')
+
 
 
 class Location(Base):
@@ -203,6 +289,9 @@ class Referent(Base):
             return display
 
     ## end class Referent
+
+
+
 
 
 class Title(Base):

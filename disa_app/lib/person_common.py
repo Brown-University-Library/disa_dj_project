@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import datetime, json, logging, os, pprint
+import collections, datetime, json, logging, os, pprint
 
 # import sqlalchemy
 # from disa_app import settings_app
@@ -57,7 +57,7 @@ def parse_person_relations( prsn ):
             } )
     calc_rels = [ { 'type': k, 'related': v } for k,v in grouped.items() ]
     log.debug( f'calc_rels, ```{pprint.pformat(calc_rels)}```' )
-    return out
+    return calc_rels
 
 
 # def parse_person_relations(personObj):
