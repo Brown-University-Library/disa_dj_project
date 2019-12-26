@@ -2,7 +2,7 @@
 
 import collections, datetime, json, logging, os, pprint
 
-# import sqlalchemy
+import sqlalchemy
 # from disa_app import settings_app
 # from disa_app import models_sqlalchemy as models_alch
 # from django.conf import settings
@@ -11,13 +11,6 @@ import collections, datetime, json, logging, os, pprint
 
 
 log = logging.getLogger(__name__)
-
-
-# def make_session() -> sqlalchemy.orm.session.Session:
-#     engine = create_engine( settings_app.DB_URL, echo=True )
-#     Session = sessionmaker( bind=engine )
-#     session = Session()
-#     return session
 
 
 def parse_person_name( prsn ) -> str:
@@ -39,13 +32,6 @@ def parse_person_descriptors( prsn, dscrptr ) -> str:
     return out if out else 'Not Listed'
 
 
-# def parse_person_descriptors( prsn, descriptor ):
-#     vals = { desc.name for ref in personObj.references
-#                 for desc in getattr(ref, descField) }
-#     out = ', '.join(list(vals))
-#     return out if out else 'None'
-
-
 def parse_person_relations( prsn ) -> list:
     """ Returns a list of relationship entries, each consisting of an id and name, and the relationship type.
         Called by view_person_helper.query_person() """
@@ -60,6 +46,44 @@ def parse_person_relations( prsn ) -> list:
     calc_rels = [ { 'type': k, 'related': v } for k,v in grouped.items() ]
     log.debug( f'calc_rels, ```{pprint.pformat(calc_rels)}```' )
     return calc_rels
+
+
+def parse_person_references( prsn ) -> list:
+    """ Returns Referent and Reference information for a Person.
+        Called by view_person_helper.query_person()
+        Reminder: A Person-record is a human.
+                  A Referent-record is a bridge between a Person-record and a Reference-record.
+                  A Referent-record contains transcription and some other info, and an id to a Citation-record.
+        NOTE: prsn.references returns a list of Referent-objects, _not_ Reference-objects.
+              To get reference data, we need to call the `referent-record.reference`.
+        """
+    rfrnts: sqlalchemy.orm.collections.InstrumentedList = prsn.references
+    log.debug( f'type(rfrnts), ```{type( prsn.references )}```' )
+    log.debug( f'rfrnts, ```{prsn.references}```' )
+    j_rfrnts = []
+    for rfrnt in rfrnts:  # ref: Referent
+        data = {}
+        data['rfrnc_display_date']: str = rfrnt.reference.display_date()
+        rfnrt_role_names = []
+        for role in rfrnt.roles:
+            rfnrt_role_names.append( role.name )
+        data['rfnrt_role_names'] = rfnrt_role_names
+        rfrnc_locations_names = []
+        for location in rfrnt.reference.locations:
+            rfrnc_locations_names.append( location.location.name )
+        data['rfrnc_role_names'] = rfrnc_locations_names
+
+
+        j_rfrnts.append( data )
+    log.debug( f'j_rfrnts, ```{pprint.pformat(j_rfrnts)}```' )
+    return j_rfrnts
+
+
+# def parse_person_descriptors( prsn, descriptor ):
+#     vals = { desc.name for ref in personObj.references
+#                 for desc in getattr(ref, descField) }
+#     out = ', '.join(list(vals))
+#     return out if out else 'None'
 
 
 # def parse_person_relations(personObj):
