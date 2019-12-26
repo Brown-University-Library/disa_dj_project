@@ -14,31 +14,18 @@
         width: 80%;
         margin-right: -20em;
     }
+
     h1#list_heading {
         margin-top: .5em;
         font-family: 'Source Sans Pro', sans-serif;
         font-size: 32px;
     }
-    table.table {
-        table-layout: fixed ;
-        width:200%;
-        max-width: 200%;
-    }
+
     th,td {
         font-family: 'Source Sans Pro', sans-serif;
     }
-    th.tbl_id {
-        width: 7.5%;
-    }
-    th.tbl_name {
-        width: 20%;
-    }
-    th.tbl_fixed {
-        width: 15%;
-    }
-    th.tbl_view {
-        width: 5%;
-    }
+
+
     span.not_listed{
         font-style: italic;
         font-size: small;
@@ -54,110 +41,82 @@
 
 {% block content %}
 <div class="container-fluid">
-  <header>
-    <h2>Elizabeth</h2>
-    <p>ID: 2</p>
-  </header>
-  <div class="row">
-    <div class="col-md-2">
-    <dl>
-      <dt>Origin</dt>
-      <dd>None</dd>
-      <dt>Tribe</dt>
-      <dd>None</dd>
-      <dt>Race</dt>
-      <dd>Indian</dd>
-    </dl>
-    </div>
-    <div class="col-md-2">
-    <dl>
-      <dt>Status</dt>
-      <dd>Servant</dd>
-      <dt>Title</dt>
-      <dd>None</dd>
-      <dt>Vocation</dt>
-      <dd>None</dd>
-    </dl>
-    </div>
-    <div class="col-md-4">
-      <table class="table relations">
-        <caption>Relations</caption>
-        <tbody id="refs">
 
-          <tr>
-            <td>enslaved by</td>
-            <td>
-              <ul class="relations">
-
-                <li>
-                  <a href="/projects/disa/people/3">Duglas</a>
-                </li>
-
-              </ul>
-            </td>
-          </tr>
-
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-8 offset-md-4">
-      <table class="table timeline">
-        <caption>Timeline</caption>
-        <tbody id="refs">
-
-          <tr>
-            <td>1671 May 07</td>
-            <td>
-
-              <span>Enslaved</span>
-
-            </td>
-            <td>
-
-              <span class="location">New London</span>
-
-              <span class="location">Connecticut</span>
-
-            </td>
-            <td>
-              <a href="/projects/disa/source/2">View source</a>
-          </td></tr>
-
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-
-
-
-<div class="container-fluid">
+<!--
   <header>
     <h2>{{ name }}</h2>
     <p>ID: {{ dbId }}</p>
   </header>
+ -->
+  <div>
+    <h1 id="list_heading">{{ name }}</h2>
+    <p>ID: {{ dbId }}</p>
+    <hr/>
+  </div>
+
   <div class="row">
     <div class="col-md-2">
     <dl>
+
       <dt>Origin</dt>
-      <dd>{{ origins }}</dd>
+      <dd>
+      {% if origins == "Not Listed" %}
+        <span class="not_listed">({{ origins }})<span>
+      {% else %}
+        {{ origins }}
+      {% endif %}
+      </dd>
+
       <dt>Tribe</dt>
-      <dd>{{ tribes }}</dd>
+      <dd>
+      {% if tribes == "Not Listed" %}
+        <span class="not_listed">({{ tribes }})<span>
+      {% else %}
+        {{ tribes }}
+      {% endif %}
+      </dd>
+
       <dt>Race</dt>
-      <dd>{{ races }}</dd>
+      <dd>
+      {% if races == "Not Listed" %}
+        <span class="not_listed">({{ races }})<span>
+      {% else %}
+        {{ races }}
+      {% endif %}
+      </dd>
+
     </dl>
     </div>
     <div class="col-md-2">
     <dl>
+
       <dt>Status</dt>
-      <dd>{{ statuses }}</dd>
+      <dd>
+      {% if statuses == "Not Listed" %}
+        <span class="not_listed">({{ statuses }})<span>
+      {% else %}
+        {{ statuses }}
+      {% endif %}
+      </dd>
+
       <dt>Title</dt>
-      <dd>{{ titles }}</dd>
+      <dd>
+      {% if titles == "Not Listed" %}
+        <span class="not_listed">({{ titles }})<span>
+      {% else %}
+        {{ titles }}
+      {% endif %}
+      </dd>
+
       <dt>Vocation</dt>
-      <dd>{{ vocations }}</dd>
+      <dd>
+      {% if vocations == "Not Listed" %}
+        <span class="not_listed">({{ vocations }})<span>
+      {% else %}
+        {{ vocations }}
+      {% endif %}
+      </dd>
+
     </dl>
     </div>
     <div class="col-md-4">
