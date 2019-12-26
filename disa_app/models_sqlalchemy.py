@@ -180,7 +180,6 @@ class ReferenceType(Base):
         back_populates='reference_types')
 
 
-
 class Location(Base):
     __tablename__ = '1_locations'
 
@@ -191,6 +190,26 @@ class Location(Base):
 
     def __repr__(self):
         return '<Location {0}: {1}>'.format(self.id, self.name)
+
+
+
+
+class ReferenceLocation(Base):
+    __tablename__ = '5_has_location'
+
+    id = Column(Integer, primary_key=True)
+    reference_id = Column(Integer, ForeignKey('4_references.id'))
+    location_id = Column(Integer, ForeignKey('1_locations.id'))
+    location_type_id = Column(Integer, ForeignKey('1_location_types.id'))
+    location_rank = Column(Integer)
+    reference = relationship(Reference,
+        primaryjoin=(reference_id == Reference.id),
+        backref='locations')
+    location = relationship(Location,
+        primaryjoin=(location_id == Location.id),
+        backref='references')
+
+
 
 
 class Person(Base):
@@ -291,9 +310,6 @@ class Referent(Base):
     ## end class Referent
 
 
-
-
-
 class Title(Base):
     __tablename__ = '1_titles'
 
@@ -334,8 +350,6 @@ class EnslavementType(Base):
         back_populates='enslavements' )
 
 
-
-
 class Role(Base):
     __tablename__ = '1_roles'
 
@@ -350,8 +364,6 @@ class Role(Base):
         'ReferenceType',
         secondary=referencetype_roles,
         back_populates='roles' )
-
-
 
 
 class ReferentRelationship(Base):
@@ -378,8 +390,6 @@ class ReferentRelationship(Base):
             implied.append(e.entail_relationships(
                 self.subject_id, self.object_id))
         return implied
-
-
 
 
 class Tribe(Base):
