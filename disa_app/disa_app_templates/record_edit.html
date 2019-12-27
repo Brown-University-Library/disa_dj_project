@@ -1,7 +1,9 @@
 {% extends "editor.html" %}
+{% load staticfiles %}
+
 <!-- https://stackoverflow.com/questions/14942379/jquery-ui-autocomplete-how-to-allow-free-text-->
 {% block header %}
-{{ super() }}
+{% comment %} {{ super() }} {% endcomment %}
 <style>
 #document_header {
     font-size: 150%;
@@ -26,7 +28,8 @@
 
 </style>
 
-<script src="{{ url_for('static', filename='lib/tinymce/tinymce.js') }}"></script>
+{% comment %}<script src="{{ url_for('static', filename='lib/tinymce/tinymce.js') }}"></script>{% endcomment %}
+<script src="{% static 'lib/tinymce/tinymce.js' %}"></script>
 
 {% endblock %}
 
@@ -37,7 +40,8 @@
             <h2 id="doc_header">{{ doc.display }}</h2>
         </div>
         <div class='col-md-1'>
-            <a href="{{ url_for('edit_citation', citeId=doc.id)}}">Back</a>
+            {% comment %}<a href="{{ url_for('edit_citation', citeId=doc.id)}}">Back</a>{% endcomment %}
+            HERE --> <a href="{{ url_for('edit_citation', citeId=doc.id)}}">Back</a>
         </div>
     </div>
     <div id="record_form">

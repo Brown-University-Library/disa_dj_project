@@ -80,8 +80,6 @@ def source( request, src_id ):
     return HttpResponseRedirect( redirect_url )
 
 
-
-
 @shib_login
 def edit_record( request, rec_id ):
     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
@@ -91,11 +89,6 @@ def edit_record( request, rec_id ):
     else:
         resp = render( request, 'disa_app_templates/record_edit.html', context )
     return resp
-
-
-
-
-
 
 
 @shib_login
