@@ -9,6 +9,7 @@ from typing import List
 import requests
 from disa_app import settings_app
 from disa_app.lib import view_info_helper, view_people_helper, view_person_helper
+from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
@@ -62,8 +63,6 @@ def people( request ):
     return resp
 
 
-
-
 def person( request, prsn_id ):
     log.debug( f'\n\nstarting person(), with prsn_id, `{prsn_id}`' )
     context: dict = view_person_helper.query_person( prsn_id )
@@ -74,7 +73,6 @@ def person( request, prsn_id ):
     return resp
 
 
-
 def source( request, src_id ):
     log.debug( f'\n\nstarting source(), with src_id, `{src_id}`' )
     redirect_url = reverse( 'edit_record_url', kwargs={'rec_id': src_id} )
@@ -82,7 +80,7 @@ def source( request, src_id ):
     return HttpResponseRedirect( redirect_url )
 
 
-
+@shib_login
 def edit_record( request, rec_id ):
     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
     return HttpResponse( 'coming' )

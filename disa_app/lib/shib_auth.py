@@ -12,7 +12,7 @@ import copy, json, logging, os, pprint
 from django.contrib.auth import authenticate, get_backends, login
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponseForbidden
-from bul_cbp_app import settings_app
+from disa_app import settings_app
 
 
 log = logging.getLogger(__name__)
