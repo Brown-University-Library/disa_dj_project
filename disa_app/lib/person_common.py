@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 
 def parse_person_name( prsn ) -> str:
     """ Returns display-name.
-        Called by view_person_helper.query_person() """
+        Called by view_person_manager.query_person() """
     name: str = f'{prsn.first_name} {prsn.last_name}'.strip()
     if name == '':
         name = 'Not Listed'
@@ -24,7 +24,7 @@ def parse_person_name( prsn ) -> str:
 
 def parse_person_descriptors( prsn, dscrptr ) -> str:
     """ Returns Referent descriptor value.
-        Called by view_person_helper.query_person() """
+        Called by view_person_manager.query_person() """
     log.debug( f'person-id, `{prsn.id}`; descriptor, `{dscrptr}`' )
     vals = { desc.name for ref in prsn.references for desc in getattr(ref, dscrptr) }
     log.debug( f'vals, ```{vals}```' )
@@ -34,7 +34,7 @@ def parse_person_descriptors( prsn, dscrptr ) -> str:
 
 def parse_person_relations( prsn ) -> list:
     """ Returns a list of relationship entries, each consisting of an id and name, and the relationship type.
-        Called by view_person_helper.query_person() """
+        Called by view_person_manager.query_person() """
     rels = [ (r.related_as, r.obj) for e in prsn.references
                 for r in e.as_subject ]
     grouped = collections.defaultdict( list )
@@ -50,7 +50,7 @@ def parse_person_relations( prsn ) -> list:
 
 def parse_person_references( prsn ) -> list:
     """ Returns Referent and Reference information for a Person.
-        Called by view_person_helper.query_person()
+        Called by view_person_manager.query_person()
         Reminder: A Person-record is a human.
                   A Referent-record is a bridge between a Person-record and a Reference-record.
                   A Referent-record contains transcription and some other info, and an id to a Citation-record.

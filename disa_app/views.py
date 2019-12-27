@@ -8,7 +8,7 @@ from typing import List
 
 import requests
 from disa_app import settings_app
-from disa_app.lib import view_info_helper, view_people_helper, view_person_helper
+from disa_app.lib import view_info_manager, view_people_manager, view_person_manager, view_editrecord_manager
 from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout
@@ -54,7 +54,7 @@ def browse( request ):
 
 def people( request ):
     log.debug( '\n\nstarting people()' )
-    people: List(dict) = view_people_helper.query_people()
+    people: List(dict) = view_people_manager.query_people()
     context = { 'people': people }
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
@@ -65,7 +65,7 @@ def people( request ):
 
 def person( request, prsn_id ):
     log.debug( f'\n\nstarting person(), with prsn_id, `{prsn_id}`' )
-    context: dict = view_person_helper.query_person( prsn_id )
+    context: dict = view_person_manager.query_person( prsn_id )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
@@ -80,15 +80,40 @@ def source( request, src_id ):
     return HttpResponseRedirect( redirect_url )
 
 
+
+
 @shib_login
 def edit_record( request, rec_id ):
     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
-    return HttpResponse( 'coming' )
+    context: dict = view_editrecord_manager.prep_context( rec_id )
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/edit_record.html', context )
+    return resp
 
 
 
+
+
+
+
+@shib_login
 def login( request ):
-    return HttpResponse( 'coming' )
+    """ Handles authNZ, & redirects to admin.
+        Called by click on login or admin link. """
+    log.debug( '\n\nstarting login()' )
+    next_url = request.GET.get( 'next', None )
+    if not next_url:
+        redirect_url = reverse( settings_app.POST_LOGIN_ADMIN_REVERSE_URL )
+    else:
+        redirect_url = request.GET['next']  # will often be same page
+    log.debug( 'redirect_url, ```%s```' % redirect_url )
+    return HttpResponseRedirect( redirect_url )
+
+
+# def login( request ):
+#     return HttpResponse( 'coming' )
 
 
 def editor_index( request ):
@@ -119,12 +144,12 @@ def version( request ):
     """ Returns basic data including branch & commit. """
     # log.debug( 'request.__dict__, ```%s```' % pprint.pformat(request.__dict__) )
     rq_now = datetime.datetime.now()
-    commit = view_info_helper.get_commit()
-    branch = view_info_helper.get_branch()
+    commit = view_info_manager.get_commit()
+    branch = view_info_manager.get_branch()
     info_txt = commit.replace( 'commit', branch )
     resp_now = datetime.datetime.now()
     taken = resp_now - rq_now
-    context_dct = view_info_helper.make_context( request, rq_now, info_txt, taken )
+    context_dct = view_info_manager.make_context( request, rq_now, info_txt, taken )
     output = json.dumps( context_dct, sort_keys=True, indent=2 )
     return HttpResponse( output, content_type='application/json; charset=utf-8' )
 
@@ -141,17 +166,6 @@ def error_check( request ):
         return HttpResponseNotFound( '<div>404 / Not Found</div>' )
 
 
-# @shib_login
-# def login( request ):
-#     """ Handles authNZ, & redirects to admin.
-#         Called by click on login or admin link. """
-#     next_url = request.GET.get( 'next', None )
-#     if not next_url:
-#         redirect_url = reverse( settings_app.POST_LOGIN_ADMIN_REVERSE_URL )
-#     else:
-#         redirect_url = request.GET['next']  # will often be same page
-#     log.debug( 'redirect_url, ```%s```' % redirect_url )
-#     return HttpResponseRedirect( redirect_url )
 
 
 
