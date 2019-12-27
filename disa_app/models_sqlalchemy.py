@@ -242,6 +242,14 @@ class Person(Base):
     ## end class Person
 
 
+class NationalContext(Base):
+    __tablename__ = '1_national_context'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    references = relationship('Reference', backref='national_context', lazy=True)
+
+
 class ReferentName(Base):
     __tablename__ = '6_referent_names'
 
