@@ -17,7 +17,7 @@ urlpatterns = [
     url( r'^logout/$', views.temp_response, name='temp_name_url' ),
 
     url( r'^editor/documents/(?P<citeId>.*)/$', views.temp_response, name='temp_name_url' ),
-    url( r'^editor/records/(?P<recId>.*)/$', views.temp_response, name='temp_name_url' ),
+    url( r'^editor/records/(?P<rec_id>.*)/$', views.edit_record, name='edit_record_url' ),
     url( r'^editor/person/(?P<entId>.*)/$', views.temp_response, name='temp_name_url' ),
     url( r'^editor/$', views.temp_response, name='temp_name_url' ),
 

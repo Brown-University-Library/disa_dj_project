@@ -77,12 +77,15 @@ def person( request, prsn_id ):
 
 def source( request, src_id ):
     log.debug( f'\n\nstarting source(), with src_id, `{src_id}`' )
-    context = {}
-    if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    else:
-        resp = render( request, 'disa_app_templates/source.html', context )
-    return resp
+    redirect_url = reverse( 'edit_record_url', kwargs={'rec_id': src_id} )
+    log.debug( f'redirect_url, ```{redirect_url}```' )
+    return HttpResponseRedirect( redirect_url )
+
+
+
+def edit_record( request, rec_id ):
+    log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
+    return HttpResponse( 'coming' )
 
 
 
