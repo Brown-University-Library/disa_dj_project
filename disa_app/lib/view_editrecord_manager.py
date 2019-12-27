@@ -49,9 +49,27 @@ def prep_context( rec_id ):
 
     addl_loc = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_addl ]
 
-    rec = models.Reference.query.get(recId)
+    rec = session.query( models_alch.Reference ).get( rec_id )
 
-    log.debug( f'locs (first 5), ```{pprint.pformat(locs[0:5])}...```' )
+    log.debug( 'data obtained' )
+
+    context['rec_id'] = rec.id
+
+    context['doc_display'] = rec.citation.display
+    context['doc_id'] = rec.citation.id
+
+    context['rec_types'] = rec_types
+
+    context['roles'] = roles
+
+    context['natl_ctxs'] = natl_ctxs
+
+    context['col_state'] = col_state
+
+    context['towns'] = towns
+
+    context['addl_loc'] = addl_loc
+
     log.debug( f'context, ```{pprint.pformat(context)}```' )
     return context
 
