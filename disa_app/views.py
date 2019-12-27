@@ -89,7 +89,7 @@ def edit_record( request, rec_id ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/edit_record.html', context )
+        resp = render( request, 'disa_app_templates/record_edit.html', context )
     return resp
 
 

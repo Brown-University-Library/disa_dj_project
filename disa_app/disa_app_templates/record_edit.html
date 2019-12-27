@@ -1,0 +1,669 @@
+{% extends "editor.html" %}
+<!-- https://stackoverflow.com/questions/14942379/jquery-ui-autocomplete-how-to-allow-free-text-->
+{% block header %}
+{{ super() }}
+<style>
+#document_header {
+    font-size: 150%;
+}
+
+#locations {
+    margin-top: 5px;
+}
+
+.location-btn {
+    background-color: Transparent;
+    border: none;
+}
+
+.entrant-ctl {
+    margin-right: 5px;
+}
+
+.text-format-button {
+    margin: auto 5px 5px;
+}
+
+</style>
+
+<script src="{{ url_for('static', filename='lib/tinymce/tinymce.js') }}"></script>
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class='col-md-11'>
+            <h2 id="doc_header">{{ doc.display }}</h2>
+        </div>
+        <div class='col-md-1'>
+            <a href="{{ url_for('edit_citation', citeId=doc.id)}}">Back</a>
+        </div>
+    </div>
+    <div id="record_form">
+        <h2 id="record_header"></h2>
+        <form action="" method="">
+            <div class="alert alert-primary">
+                    <strong>Please record information based on what is written in the document, rather than interpreting the text.</strong><br />
+                    For example, if a location is identified as "Charles-Town" in the document, please preserve the spelling rather than modernizing to "Charleston."
+            </div>
+            <div class="form-group row">
+                <label for="recordtype_autocomplete">Type<br />
+                    <em class="small">Enter the type of item within the document that you’re adding. Use the drop down menu to see a list of options.</em></label>
+                <input class="form-control" data-rectype-id="" type="text" id="recordtype_autocomplete"/>
+            </div>
+            <div class="form-group row">
+                <label for="national_context">National Context<br />
+                    <em class="small">Can be either a European nation or empire (e.g. Spanish, English, Dutch)</em></label>
+                <select class="form-control" id="national_context">
+                </select>
+            </div>
+            <div class="form-group row">
+                <label for="col_state_autocomplete">Colony/State<br />
+                    <em class="small">If the item lists a state or colony, write it here. Use the drop down menu to see a list of options.<br/>
+                    Please write out the full name&mdash;e.g. enter "Rhode Island", not "RI".</em></label>
+                <input class="form-control location-input" type="text" id="col_state_autocomplete" data-loc-id=""/>
+            </div>
+            <div class="form-group row">
+                <label for="town_autocomplete">Town<br />
+                    <em class="small">If there is a town listed in the item, write the name of the town here. </em></label>
+                <input class="form-control location-input" type="text" id="town_autocomplete" data-loc-id=""/>
+            </div>
+            <div class="form-group row">
+                <label for="addl_loc_autocomplete">Additional location<br />
+                    <em class="small">If there are additional locations listed in the item, enter them here (e.g. “the dock”)</em></label>
+                <input class="form-control location-input" type="text" id="addl_loc_autocomplete" data-loc-id=""/>
+            </div>
+            <div class="form-group row">
+                <label for="record_date">Event date<br />
+                    <em class="small">Enter the date of the events described in the item, <strong>not</strong> the publication date of the containing document</em></label>
+                <input class="form-control" type="text" id="record_date" />
+            </div>
+            <div class="form-group row">
+                <label for="transcription">Transcription<br />
+                    <em class="small">Write the full text of the item in this field, as close as possible to the original (e.g. using original spelling, etc.)</em></label>
+                    <br />
+                <textarea class="form-control" id="transcription"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" id="rec_update">
+                Update
+            </button>
+        </form>
+    </div>
+    {% if rec %}
+    <h2>People</h2>
+    <div id="entrant_component"><!--
+            <div class="d-flex flex-row-reverse">
+              <p><a href="{{ url_for('edit_relationships', recId=rec.id)}}">Manage relationships</a></p>
+            </div>-->
+        <table class="table">
+            <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col" style="width:25%">First</th>
+                  <th scope="col" style="width:25%">Last</th>
+                  <th scope="col" style="width:25%">Description</th>
+                  <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody id="entrants">
+            </tbody>
+        </table>
+        <div id="new_person_button" class="d-flex flex-row-reverse">
+            <button class="btn btn-primary" id="add-person">Add a person</button>&nbsp;&nbsp;
+            <a class="btn btn-primary" href="{{ url_for('edit_relationships', recId=rec.id)}}">Identify connections between people</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts%}
+{{ super() }}
+<script>
+var getDocumentId = function () {
+    var doc_id = "{{ doc.id or '' }}";
+    return doc_id;
+}
+
+var getRecId = function () {
+    var rec_id = "{{ rec.id or '' }}";
+    return rec_id;
+}
+
+var updateLocationInputs = function (locsArray) {
+    var col_state,
+        town, addl_loc,
+        loc_inputs;
+    col_state = $('#col_state_autocomplete');
+    town = $('#town_autocomplete');
+    addl_loc = $('#addl_loc_autocomplete');
+    loc_inputs = [col_state, town, addl_loc];
+    for ( var i=0; i < locsArray.length; i++ ) {
+        var loc_data, loc_input;
+
+        loc_data = locsArray[i];
+        loc_input = loc_inputs[i];
+        loc_input.val(loc_data.value);
+        loc_input.attr('data-loc-id', loc_data.id);
+    }
+}
+var setInputValues = function(recData) {
+    if ( $.isEmptyObject(recData) ) {
+        return;
+    }
+    $('#transcription').text(recData['transcription']);
+    tinymce.get('transcription').setContent(recData['transcription']);
+    $('#record_date').val(recData['date']);
+    updateLocationInputs(recData['locations']);
+    updateRecordType($('#recordtype_autocomplete'), recData['record_type']);
+    updateNationalContext($('#national_context'), recData['national_context']);
+}
+
+var updateRecordType = function ($input, data) {
+    if ( $.isEmptyObject(data) ) {
+        $input.attr('data-rectype-id', '');
+        $input.val = '';
+    } else {
+        $input.attr('data-rectype-id', data.id);
+        $input.val(data.value);
+    }
+}
+
+var updateNationalContext = function ($select, data) {
+    if ( data === '')  {
+        $select.val(null);
+    } else {
+        $select.val(data);
+    }
+}
+
+var updateLocationInput = function ($input, data) {
+    if ( $.isEmptyObject(data) ) {
+        $input.attr('data-loc-id', '');
+        $input.val = '';
+    } else {
+        $input.attr('data-loc-id', data.id);
+        $input.val(data.value);
+    }
+}
+
+var collectLocations = function() {
+    var locArray = [];
+    $(".location-input").each( function( idx ) {
+        var locData = {}
+        locData['id'] = Number( $(this).attr('data-loc-id') );
+        var loc_name = $(this).val();
+        if (loc_name && locData['id'] == 0) {
+            locData['id'] = -1;
+        } else if (locData['id'] == 0) {
+            return true;
+        }
+        locData['label'] = loc_name;
+        locData['value'] = loc_name;
+        locArray.push(locData);
+    });
+    return locArray;
+}
+
+var collectInputValues = function(docId) {
+    var data = {};
+    data['transcription'] = $('#transcription').val();
+    data['record_type'] =  {
+        'id': Number( $('#recordtype_autocomplete').attr('data-rectype-id') ),
+        'value': $('#recordtype_autocomplete').val(),
+        'label': $('#recordtype_autocomplete').val()
+    }
+    data['national_context'] =  Number( $('#national_context').val() );
+    data['locations'] = collectLocations();
+    data['date'] = $('#record_date').val();
+    data['citation_id'] = Number(docId);
+    return data;
+}
+
+var addTypeOptions = function(opts) {
+    var rtype_select = $('#record_type');
+    rtype_select.empty();
+    for (var i = 0; i < opts.length; i++) {
+        var opt = opts[i];
+        var opt_elem = $("<option/>", { 'value': opt.id ,
+                                        'text': opt.name });
+        rtype_select.append(opt_elem);
+    }
+}
+
+var addNationalContextOptions = function(opts) {
+    var natl_ctx_select = $('#national_context');
+    natl_ctx_select.empty();
+    for (var i = 0; i < opts.length; i++) {
+        var opt = opts[i];
+        var opt_elem = $("<option/>", { 'value': opt.id ,
+                                        'text': opt.name });
+        natl_ctx_select.append(opt_elem);
+    }
+}
+
+var setFormHeader = function (recData) {
+    var header, header_txt = '';
+
+    header = $('#record_header');
+    if ( $.isEmptyObject(recData) ) {
+        header.html('Add new item<br /><em>An "item" is a description of one or more people (with their relationship) that appears in the document.<br />There may be associated time and place information&mdash;for example, if the item describes an event.</em>');
+        $('#rec_update').text('Create');
+    } else {
+        header.text(recData['header']);
+    }
+}
+
+var initializeForm = function (data, tags, editUrl) {
+    setFormHeader(data['rec']);
+    setInputValues(data['rec']);
+    for (var i=0; i < data['entrants'].length; i++ ) {
+        addEntrantInput(
+            $('#entrants'), data['entrants'][i], tags );
+    }
+    initiateEntrantWorkflow( $('#entrant_component'), editUrl );
+}
+
+var readRecordData = function(recId, roles, edit_url) {
+    var rec_data_api = "{{ url_for('read_record_data', recId=None ) }}" + recId;
+    var out = null;
+    $.get(rec_data_api, function(data) {
+        initializeForm(data, roles, edit_url);
+    });
+}
+
+var updateRecordData = function(recId, docId) {
+    var rec_data_api = "{{ url_for('update_reference_data', recId=None )}}" + recId;
+    var data = collectInputValues(docId);
+    var method = (recId ? "PUT" : "POST");
+    $.ajax({
+        type: method,
+        url: rec_data_api,
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(data) {
+            if ( method === 'POST' ) {
+                window.location.href = data.redirect;
+            } else {
+                setInputValues(data.rec);
+                $('#record_form').accordion('option','active', false );
+            }
+        }
+    });
+}
+
+var addEntrantInput = function($container, entData, tags) {
+    var $tr, $td1, $td2, $td3, $td4,
+        $input1, $input2, $select,
+        $button, $span;
+
+    $tr = $('<tr/>', { 'class': 'entrant-row',
+        'data-ent-id': entData['id'],
+        'data-name-id': entData['name_id']});
+    $td1 = $('<td/>', {'class': 'person-id',
+        'html': entData['person_id']});
+    $td2 = $('<td/>');
+    $td3 = $('<td/>');
+    $td4 = $('<td/>');
+    $td5 = $('<td/>', { 'class': 'entrant-controls'});
+    $input1 = $('<input/>', {
+        'class': 'form-control entrant-input name-first',
+        'type': 'text',
+        'value': entData['first'] });
+    $input2 = $('<input/>', {
+        'class': 'form-control entrant-input name-last',
+        'type': 'text',
+        'value': entData['last'] });
+    $select = $('<select/>',
+        { 'class': 'form-control entrant-input role-tags'});
+
+    for (var i = 0; i < tags.length; i++) {
+        var opt = tags[i];
+        var $opt = $("<option/>", { 'value': opt.id ,
+                                    'text': opt.value });
+        $select.append($opt);
+    }
+    $td2.append($input1);
+    $td3.append($input2);
+    $td4.append($select);
+    $td5.append($button);
+    $tr.append($td1).append($td2).append($td3).append($td4).append($td5);
+    $container.append($tr);
+
+    $select.prop("multiple", true);
+    $select.select2({
+        tags: true,
+    });
+
+    $select.val(entData['roles']);
+    $select.trigger('change');
+
+    return $container;
+}
+
+var makeEntrantEditable = function ($container, entId) {
+    $active = $container.find($(`.entrant-row[data-ent-id=${entId}]`));
+
+    $save_btn = $('<button/>', {
+        'class': 'btn btn-primary save-entrant entrant-ctl',
+        'save-entrant-id': entId,
+        'title': 'Save changes' });
+    $save_span = $('<span/>', {'class': 'fas fa-check-circle'});
+
+    $del_btn = $('<button/>', {
+        'class': 'btn btn-danger del-entrant entrant-ctl',
+        'del-entrant-id': entId,
+        'title': 'Delete entry for this person' });
+    $del_span = $('<span/>', {'class': 'fas fa-times-circle'});
+
+    $save_btn.append($save_span);
+    $del_btn.append($del_span);
+
+    $active.find($('.form-control')).prop('disabled', false);
+    $active.find($('.entrant-controls')).append($save_btn).append($del_btn);
+
+    if (entId !== 'new') {
+        $cancel_btn = $('<button/>', {
+            'class': 'btn btn-secondary cancel-entrant entrant-ctl',
+            'title': 'Cancel current changes'
+        });
+        $cancel_span = $('<span/>', {'class': 'fas fa-undo'});
+
+        $cancel_btn.append($cancel_span);
+
+        $active.find($('.entrant-controls')).append($cancel_btn)
+    }
+
+    return $container;
+}
+
+var initiateEntrantWorkflow = function ($container, editUrl) {
+    var $rows = $container.find('.entrant-row');
+    var $btn = $container.find('#add-person');
+    $rows.each( function( idx ) {
+        var ent_id = $(this).attr('data-ent-id');
+        var $details_btn = $('<a/>', { 'class': 'btn btn-secondary details-entrant entrant-ctl',
+            'text': 'Details',
+            'href': `${editUrl}/${ent_id}` });
+        var $merge_btn = $('<button/>', { 'class': 'btn btn-warning merge-entrant entrant-ctl',
+            'hidden': 'hidden',
+            'text': 'Merge'});
+        var $edit_btn = $('<button/>', { 'class': 'btn btn-primary edit-entrant entrant-ctl',
+            'text': 'Edit'});
+        $row = deactivateEntrantInput( $(this) );
+        $row.find($('.entrant-controls')).append($details_btn)
+            .append($merge_btn).append($edit_btn);
+    });
+    activateButton( $btn );
+}
+
+var deactivateEntrantInput = function ($row) {
+    $row.find($('.entrant-input')).each( function(idx) {
+        $( this ).prop('disabled', true);
+    });
+    $row.find($('.entrant-controls')).empty();
+    return $row;
+}
+
+var activateButton = function ( $button ) {
+    $button.prop('disabled', false);
+}
+
+var deactivateButton = function ( $button ) {
+    $button.prop('disabled', true);
+}
+
+var deleteEntrant = function($container, entId, editUrl ) {
+    var ent_data_api = "{{ url_for('update_referent', rntId=None )}}" + entId;
+    $.ajax({
+        type: "DELETE",
+        url: ent_data_api,
+        contentType: "application/json",
+        success: function(data) {
+            deleteEntrantRow($container, data['id'], editUrl);
+        }
+    });
+}
+
+var updateEntrant = function($container, entId, entData, editUrl) {
+    var method,
+        ent_data_api = "{{ url_for('update_referent', rntId=None )}}";
+    if (entId === 'new') {
+        method = 'POST';
+    } else {
+        ent_data_api = ent_data_api + entId;
+        method = 'PUT';
+    }
+    $.ajax({
+        type: method,
+        url: ent_data_api,
+        data: JSON.stringify(entData),
+        contentType: "application/json",
+        success: function(data) {
+            updateEntrantRow($container, data, entId, editUrl);
+        }
+    });
+}
+
+var updateEntrantRow = function ($container, entData, entId, editUrl ) {
+    var $row, $select;
+    $row = $container.find(`.entrant-row[data-ent-id=${entId}]`);
+    $row.attr('data-ent-id', entData['id']);
+    $row.attr('data-name-id', entData['name_id']);
+    $row.find('.person-id').html(entData['person_id']);
+    $row.find('.name-first').val(entData['first']);
+    $row.find('.name-last').val(entData['last']);
+    $select = $row.find('.role-tags');
+    $select.val(entData['roles']);
+    $select.trigger('change')
+
+    initiateEntrantWorkflow($container, editUrl);
+    return $container;
+}
+
+var deleteEntrantRow = function ($container, entId, editUrl ) {
+    $container.find(`.entrant-row[data-ent-id=${entId}]`).remove();
+    initiateEntrantWorkflow($container, editUrl);
+    return $container;
+}
+
+var deactivateEntrantEditing = function ($container) {
+    var $rows = $container.find('.entrant-row');
+    var $btn = $container.find('#add-person');
+    $rows.each( function( idx ) {
+        deactivateEntrantInput( $(this) );
+    });
+    deactivateButton( $btn );
+
+    return $container
+}
+
+var getAttributeData = function( $container ) {
+    var att_data = [];
+    $opts = $container.find(':selected');
+    $opts.each( function(idx) {
+        var $opt = $( this );
+        var data = {};
+        data['id'] = $opt.val();
+        data['name'] = $opt.text();
+        att_data.push(data);
+    });
+
+    return att_data;
+}
+
+var getEntrantData = function($container, entId, recId) {
+    var $row = $container.find(`.entrant-row[data-ent-id=${entId}]`);
+    var data = { 'name': {} };
+    data['id'] = $row.attr('data-ent-id');
+    data['record_id'] = recId;
+    data['name']['id'] = $row.attr('data-name-id');
+    data['name']['first'] = $row.find('.name-first').val();
+    data['name']['last'] = $row.find('.name-last').val();
+    data['roles'] = getAttributeData($row.find('.role-tags'));
+
+    return data;
+}
+
+$( document ).ready(function() {
+
+    var doc_id = getDocumentId();
+    var rec_id = getRecId();
+    var details_url = "{{ url_for('edit_entrant', entId=None)}}";
+    var roles = JSON.parse('{{ roles | tojson | safe}}');
+
+    // Add formatting controls to transcription field
+    // (uses tinyMCE https://www.tiny.cloud/)
+
+    tinymce.init({
+        selector: '#transcription',
+        menubar: false,
+        toolbar: false,
+        plugins: ['quickbars'],
+        quickbars_selection_toolbar: 'bold italic underline',
+        contextmenu: 'bold italic underline',
+        width: '100%'
+    });
+
+    $('#recordtype_autocomplete').autocomplete({
+        source: JSON.parse('{{ rec_types | tojson | safe}}'),
+        minLength: 0,
+        delay: 5,
+        autoFocus: true,
+        response: function (event, ui) {
+
+            if (ui.content.length == 0) {
+                ui.content.push({
+                    label: $(this).val(),
+                    value: $(this).val(),
+                    id: -1
+                });
+            }
+        },
+        change: function (event, ui) {
+            updateRecordType($('#recordtype_autocomplete'), ui.item);
+        }
+    });
+    addNationalContextOptions(JSON.parse('{{ natl_ctxs | tojson | safe}}'));
+    $('#col_state_autocomplete').autocomplete({
+        source: JSON.parse('{{ col_state | tojson | safe}}'),
+        minLength: 1,
+        delay: 10,
+        autoFocus: true,
+        response: function (event, ui) {
+            if (ui.content.length == 0) {
+                ui.content.push({
+                    label: $(this).val(),
+                    value: $(this).val(),
+                    id: -1
+                });
+            }
+        },
+        change: function (event, ui) {
+            updateLocationInput($('#col_state_autocomplete'), ui.item);
+        }
+    });
+    $('#town_autocomplete').autocomplete({
+        source: JSON.parse('{{ towns | tojson | safe}}'),
+        minLength: 1,
+        delay: 10,
+        autoFocus: true,
+        response: function (event, ui) {
+            if (ui.content.length == 0) {
+                ui.content.push({
+                    label: $(this).val(),
+                    value: $(this).val(),
+                    id: -1
+                });
+            }
+        },
+        change: function (event, ui) {
+            updateLocationInput($('#town_autocomplete'), ui.item);
+        }
+    });
+    $('#addl_loc_autocomplete').autocomplete({
+        source: JSON.parse('{{ addl_loc | tojson | safe}}'),
+        minLength: 1,
+        delay: 10,
+        autoFocus: true,
+        response: function (event, ui) {
+            if (ui.content.length == 0) {
+                ui.content.push({
+                    label: $(this).val(),
+                    value: $(this).val(),
+                    id: -1
+                });
+            }
+        },
+        change: function (event, ui) {
+            updateLocationInput($('#addl_loc_autocomplete'), ui.item);
+        }
+    });
+    $( "#record_form" ).accordion({
+        collapsible: true,
+        header: "h2",
+        heightStyle: 'content',
+        active: (rec_id ? false : 0)
+    });
+    $( "#record_date" ).datepicker({
+      defaultDate: "01/01/1492",
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "1491:2000"
+    });
+    $("#rec_update").on('click', function(e) {
+        e.preventDefault();
+        if ($(this).attr('data-clicked') == 1) {
+            $(this).attr('data-clicked', 0);
+            return true;
+        } else {
+            $(this).attr('data-clicked', 1);
+            tinymce.triggerSave();
+            updateRecordData(rec_id, doc_id);
+        }
+    });
+    $('#entrant_component').on('click', '#add-person', function(e) {
+        e.preventDefault();
+        var data = { 'id': 'new', 'first': '',
+            'last': '', 'roles': [], 'name_id': 'name' };
+        addEntrantInput( $('#entrants'), data, roles);
+        deactivateEntrantEditing( $('#entrant_component') );
+        makeEntrantEditable( $('#entrants'), 'new');
+    });
+    $('#entrant_component').on('click', '.edit-entrant', function(e) {
+        e.preventDefault();
+
+        var ent_id = $( this ).closest('.entrant-row').attr('data-ent-id');
+        deactivateEntrantEditing( $('#entrant_component') );
+        makeEntrantEditable( $('#entrants'), ent_id);
+    });
+    $('#entrant_component').on('click', '.cancel-entrant', function(e) {
+        e.preventDefault();
+
+        initiateEntrantWorkflow( $('#entrant_component'), details_url );
+    });
+    $('#entrant_component').on('click', '.del-entrant', function(e) {
+
+        e.preventDefault();
+        var ent_id = $( this ).attr('del-entrant-id');
+
+        if (ent_id === 'new') {
+            deleteEntrantRow( $('#entrant_component'), ent_id, details_url );
+        } else {
+            deleteEntrant( $('#entrant_component'), ent_id, details_url );
+        }
+
+        return;
+    });
+    $('#entrant_component').on('click', '.save-entrant', function(e) {
+        e.preventDefault();
+        var ent_id = $( this ).attr('save-entrant-id');
+
+        var data = getEntrantData($('#entrant_component'), ent_id, rec_id);
+        updateEntrant( $('#entrant_component'), ent_id, data, details_url );
+    });
+    readRecordData(rec_id, roles, details_url);
+});
+</script>
+{% endblock %}

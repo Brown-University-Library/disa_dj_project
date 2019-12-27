@@ -70,7 +70,8 @@ def prep_context( rec_id ):
 
     context['addl_loc'] = addl_loc
 
-    log.debug( f'context, ```{pprint.pformat(context)}```' )
+    # log.debug( f'context, ```{pprint.pformat(context)}```' )
+    log.debug( 'context prepared' )
     return context
 
 
