@@ -105,15 +105,34 @@ def login( request ):
     return HttpResponseRedirect( redirect_url )
 
 
-# def login( request ):
-#     return HttpResponse( 'coming' )
+def logout( request ):
+    return HttpResponse( 'coming' )
+
+
+# ===========================
+# editor urls
+# ===========================
+
+
+@shib_login
+def edit_citation( request, cite_id ):
+    return HttpResponse( 'coming' )
 
 
 def editor_index( request ):
     return HttpResponse( 'coming' )
 
 
-def logout( request ):
+# ===========================
+# data urls
+# ===========================
+
+
+def data_entrants( request, rfrnt_id ):
+    return HttpResponse( 'coming' )
+
+
+def data_records( request, rec_id ):
     return HttpResponse( 'coming' )
 
 

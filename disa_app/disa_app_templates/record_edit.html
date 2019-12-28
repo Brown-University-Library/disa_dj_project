@@ -41,7 +41,7 @@
         </div>
         <div class='col-md-1'>
             {% comment %}<a href="{{ url_for('edit_citation', citeId=doc.id)}}">Back</a>{% endcomment %}
-            <a href="{% url 'edit_citation' doc_id %}">Back</a>
+            <a href="{% url 'edit_citation_url' doc_id %}">Back</a>
         </div>
     </div>
     <div id="record_form">
@@ -286,8 +286,7 @@ var initializeForm = function (data, tags, editUrl) {
 
 var readRecordData = function(recId, roles, edit_url) {
     {% comment %} var rec_data_api = "{{ url_for('read_record_data', recId=None ) }}" + recId; {% endcomment %}
-    var rec_data_api = "{% url 'read_record_data' None %}" + recId;
-    var rec_data_api = "{% url 'read_record_data' None %}" + recId;
+    var rec_data_api = "{% url 'data_record_url' None %}" + recId;
     var out = null;
     $.get(rec_data_api, function(data) {
         initializeForm(data, roles, edit_url);
@@ -296,7 +295,7 @@ var readRecordData = function(recId, roles, edit_url) {
 
 var updateRecordData = function(recId, docId) {
     {% comment %} var rec_data_api = "{{ url_for('update_reference_data', recId=None )}}" + recId; {% endcomment %}
-    var rec_data_api = "{% url 'update_reference_data' None %}" + recId;
+    var rec_data_api = "{% url 'data_record_url' None %}" + recId;
     var data = collectInputValues(docId);
     var method = (recId ? "PUT" : "POST");
     $.ajax({
