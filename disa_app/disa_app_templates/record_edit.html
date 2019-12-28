@@ -37,7 +37,7 @@
 <div class="container">
     <div class="row">
         <div class='col-md-11'>
-            <h2 id="doc_header">{{ doc.display }}</h2>
+            <h2 id="doc_header">{{ doc_display }}</h2>
         </div>
         <div class='col-md-1'>
             {% comment %}<a href="{{ url_for('edit_citation', citeId=doc.id)}}">Back</a>{% endcomment %}
@@ -129,6 +129,19 @@
 
 {% block scripts%}
 {% comment %} {{ super() }} {% endcomment %}
+
+<script id="towns_id" type="application/json">{{ towns|safe }}</script>
+
+
+
+<script type="text/javascript">
+    var zzz = JSON.parse( document.getElementById('towns_id').textContent );
+    console.log( 'zzz...' );
+    console.log( zzz );
+</script>
+
+
+
 <script>
 var getDocumentId = function () {
     {% comment %} var doc_id = "{{ doc.id or '' }}"; {% endcomment %}
@@ -536,6 +549,11 @@ $( document ).ready(function() {
     {% comment %} var details_url = "{{ url_for('edit_entrant', entId=None)}}"; {% endcomment %}
     var details_url = "{% url 'edit_person_url' None %}";
     {% comment %} var roles = JSON.parse('{{ roles | tojson | safe}}'); {% endcomment %}
+    {% comment %}
+    <!-- json_script filter added in django-2.1 -->
+    {{ roles|json_script:"roles_id" }}
+    var roles = JSON.parse( document.getElementById('roles_id').textContent );
+    {% endcomment %}
     var roles = JSON.parse('{{ roles | safe}}');
 
     // Add formatting controls to transcription field
@@ -552,7 +570,6 @@ $( document ).ready(function() {
     });
 
     $('#recordtype_autocomplete').autocomplete({
-        {% comment %} source: JSON.parse('{{ rec_types | tojson | safe}}'), {% endcomment %}
         source: JSON.parse('{{ rec_types | safe}}'),
         minLength: 0,
         delay: 5,
@@ -571,10 +588,10 @@ $( document ).ready(function() {
             updateRecordType($('#recordtype_autocomplete'), ui.item);
         }
     });
+
     {% comment %} addNationalContextOptions(JSON.parse('{{ natl_ctxs | tojson | safe}}')); {% endcomment %}
     addNationalContextOptions(JSON.parse('{{ natl_ctxs | safe}}'));
     $('#col_state_autocomplete').autocomplete({
-        {% comment %} source: JSON.parse('{{ col_state | tojson | safe}}'), {% endcomment %}
         source: JSON.parse('{{ col_state | safe}}'),
         minLength: 1,
         delay: 10,
@@ -592,9 +609,11 @@ $( document ).ready(function() {
             updateLocationInput($('#col_state_autocomplete'), ui.item);
         }
     });
+
+
     $('#town_autocomplete').autocomplete({
-        {% comment %} source: JSON.parse('{{ towns | tojson | safe}}'), {% endcomment %}
-        source: JSON.parse('{{ towns | safe}}'),
+        // source: JSON.parse( {{ towns | safe}} ),
+        source: JSON.parse( document.getElementById('towns_id').textContent ),
         minLength: 1,
         delay: 10,
         autoFocus: true,
@@ -611,6 +630,7 @@ $( document ).ready(function() {
             updateLocationInput($('#town_autocomplete'), ui.item);
         }
     });
+
     $('#addl_loc_autocomplete').autocomplete({
         {% comment %} source: JSON.parse('{{ addl_loc | tojson | safe}}'), {% endcomment %}
         source: JSON.parse('{{ addl_loc | safe}}'),

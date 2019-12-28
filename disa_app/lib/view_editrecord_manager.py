@@ -28,13 +28,16 @@ def prep_context( rec_id ):
     locs = session.query( models_alch.ReferenceLocation ).all()
 
     ref_types = session.query( models_alch.ReferenceType ).all()
-    rec_types = [ { 'id': rt.id, 'value': rt.name, 'name': rt.name } for rt in ref_types ]
+    rec_types_list = [ { 'id': rt.id, 'value': rt.name, 'name': rt.name } for rt in ref_types ]
+    rec_types_json = json.dumps( rec_types_list )
 
     all_roles = session.query( models_alch.Role ).all()
-    roles = [ { 'id': role.id, 'value': role.name, 'name': role.name } for role in all_roles ]
+    roles_list = [ { 'id': role.id, 'value': role.name, 'name': role.name } for role in all_roles ]
+    roles_json = json.dumps( roles_list )
 
     all_ntl_contexts = session.query( models_alch.NationalContext ).all()
-    natl_ctxs = [ { 'id': nc.id, 'value': nc.name, 'name': nc.name } for nc in all_ntl_contexts ]
+    natl_ctxs_list = [ { 'id': nc.id, 'value': nc.name, 'name': nc.name } for nc in all_ntl_contexts ]
+    natl_ctxs_json = json.dumps( natl_ctxs_list )
 
     # uniq_cols = { (l.location.name, l.location_id) for l in locs if l.location_rank == 0 }
     uniq_locs = uniq_cols = { (l.location.name, l.location_id) for l in locs if l.location_rank == 0 }  # i think `uniq_cols` was a typo.
@@ -43,9 +46,11 @@ def prep_context( rec_id ):
 
     uniq_addl = { (l.location.name, l.location_id) for l in locs if l.location_rank == 2 and l.location_id is not None}
 
-    col_state = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_cols ]  # again, typo?
+    col_state_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_cols ]  # again, typo?
+    col_state_json = json.dumps( col_state_list )
 
-    towns = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_town ]
+    towns_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_town ]
+    towns_json = json.dumps( towns_list )
 
     addl_loc = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_addl ]
 
@@ -58,15 +63,20 @@ def prep_context( rec_id ):
     context['doc_display'] = rec.citation.display
     context['doc_id'] = rec.citation.id
 
-    context['rec_types'] = rec_types
+    context['rec_types_list'] = rec_types_list  # not used; for reference
+    context['rec_types'] = rec_types_json
 
-    context['roles'] = roles
+    context['roles_list'] = roles_list  # not used; for reference
+    context['roles'] = roles_json
 
-    context['natl_ctxs'] = natl_ctxs
+    context['natl_ctxs_list'] = natl_ctxs_list  # not used; for reference
+    context['natl_ctxs'] = natl_ctxs_json
 
-    context['col_state'] = col_state
+    context['col_state_list'] = col_state_list  # not used; for reference
+    context['col_state'] = col_state_json
 
-    context['towns'] = towns
+    context['towns_list'] = towns_list
+    context['towns'] = towns_json
 
     context['addl_loc'] = addl_loc
 
