@@ -119,6 +119,11 @@ def edit_citation( request, cite_id ):
     return HttpResponse( 'coming' )
 
 
+@shib_login
+def edit_person( request, rfrnt_id ):
+    return HttpResponse( 'coming' )
+
+
 def editor_index( request ):
     return HttpResponse( 'coming' )
 

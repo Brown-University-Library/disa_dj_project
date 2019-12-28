@@ -437,7 +437,7 @@ var deactivateButton = function ( $button ) {
 
 var deleteEntrant = function($container, entId, editUrl ) {
     {% comment %} var ent_data_api = "{{ url_for('update_referent', rntId=None )}}" + entId; {% endcomment %}
-    var ent_data_api = "{% url 'update_referent' None %}" + entId;
+    var ent_data_api = "{% url 'data_referent_url' None %}" + entId;
     $.ajax({
         type: "DELETE",
         url: ent_data_api,
@@ -451,7 +451,7 @@ var deleteEntrant = function($container, entId, editUrl ) {
 var updateEntrant = function($container, entId, entData, editUrl) {
     var method,
         {% comment %} ent_data_api = "{{ url_for('update_referent', rntId=None )}}"; {% endcomment %}
-        ent_data_api = "{% url 'update_referent' None %}";
+        ent_data_api = "{% url 'data_referent_url' None %}";
     if (entId === 'new') {
         method = 'POST';
     } else {
@@ -534,7 +534,7 @@ $( document ).ready(function() {
     var doc_id = getDocumentId();
     var rec_id = getRecId();
     {% comment %} var details_url = "{{ url_for('edit_entrant', entId=None)}}"; {% endcomment %}
-    var details_url = "{% url 'edit_entrant' None %}";
+    var details_url = "{% url 'edit_person_url' None %}";
     {% comment %} var roles = JSON.parse('{{ roles | tojson | safe}}'); {% endcomment %}
     var roles = JSON.parse('{{ roles | safe}}');
 
