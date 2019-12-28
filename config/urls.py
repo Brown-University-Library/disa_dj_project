@@ -14,12 +14,12 @@ urlpatterns = [
     ## primary app urls...
 
     url( r'^login/$', views.temp_response, name='login_url' ),
-    url( r'^logout/$', views.temp_response, name='temp_name_url' ),
+    url( r'^logout/$', views.logout, name='logout_url' ),
 
     url( r'^editor/documents/(?P<cite_id>.*)/$', views.edit_citation, name='edit_citation_url' ),
     url( r'^editor/records/(?P<rec_id>.*)/$', views.edit_record, name='edit_record_url' ),
     url( r'^editor/person/(?P<rfrnt_id>.*)/$', views.edit_person, name='edit_person_url' ),
-    url( r'^editor/$', views.temp_response, name='temp_name_url' ),
+    url( r'^editor/$', views.editor_index, name='editor_index_url' ),
 
     url( r'^data/documents/(?P<docId>.*)/$', views.temp_response, name='temp_name_url' ),  # note, 'citeID' is passed on a PUT.
     url( r'^data/records/(?P<rec_id>.*)/$', views.data_records, name='data_record_url' ),  # note, 'refID' is passed on a PUT.
