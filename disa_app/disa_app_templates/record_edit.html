@@ -1,4 +1,4 @@
-{% extends "editor.html" %}
+{% extends "disa_app_templates/editor.html" %}
 {% load staticfiles %}
 
 <!-- https://stackoverflow.com/questions/14942379/jquery-ui-autocomplete-how-to-allow-free-text-->
@@ -41,7 +41,7 @@
         </div>
         <div class='col-md-1'>
             {% comment %}<a href="{{ url_for('edit_citation', citeId=doc.id)}}">Back</a>{% endcomment %}
-            HERE --> <a href="{{ url_for('edit_citation', citeId=doc.id)}}">Back</a>
+            <a href="{% url 'edit_citation' doc_id %}">Back</a>
         </div>
     </div>
     <div id="record_form">
@@ -96,10 +96,14 @@
     </div>
     {% if rec %}
     <h2>People</h2>
-    <div id="entrant_component"><!--
-            <div class="d-flex flex-row-reverse">
-              <p><a href="{{ url_for('edit_relationships', recId=rec.id)}}">Manage relationships</a></p>
-            </div>-->
+    <div id="entrant_component">
+        {% comment %}
+        <!--
+        <div class="d-flex flex-row-reverse">
+          <p><a href="{{ url_for('edit_relationships', recId=rec.id)}}">Manage relationships</a></p>
+        </div>
+        -->
+        {% endcomment %}
         <table class="table">
             <thead>
                 <tr>
@@ -115,7 +119,8 @@
         </table>
         <div id="new_person_button" class="d-flex flex-row-reverse">
             <button class="btn btn-primary" id="add-person">Add a person</button>&nbsp;&nbsp;
-            <a class="btn btn-primary" href="{{ url_for('edit_relationships', recId=rec.id)}}">Identify connections between people</a>
+            {% comment %}<a class="btn btn-primary" href="{{ url_for('edit_relationships', recId=rec.id)}}">Identify connections between people</a>{% endcomment %}
+            <a class="btn btn-primary" href="{% url 'edit_relationships' rec_id %}">Identify connections between people</a>
         </div>
     </div>
     {% endif %}
@@ -123,15 +128,25 @@
 {% endblock %}
 
 {% block scripts%}
-{{ super() }}
+{% comment %} {{ super() }} {% endcomment %}
 <script>
 var getDocumentId = function () {
-    var doc_id = "{{ doc.id or '' }}";
+    {% comment %} var doc_id = "{{ doc.id or '' }}"; {% endcomment %}
+    {% if doc_id %}
+        var doc_id = "{{ doc_id }}";
+    {% else %}
+        var doc_id = "";
+    {% endif %}
     return doc_id;
 }
 
 var getRecId = function () {
-    var rec_id = "{{ rec.id or '' }}";
+    {% comment %} var rec_id = "{{ rec.id or '' }}"; {% endcomment %}
+    {% if rec_id %}
+        var rec_id = "{{ rec_id }}";
+    {% else %}
+        var rec_id = "";
+    {% endif %}
     return rec_id;
 }
 
@@ -270,7 +285,9 @@ var initializeForm = function (data, tags, editUrl) {
 }
 
 var readRecordData = function(recId, roles, edit_url) {
-    var rec_data_api = "{{ url_for('read_record_data', recId=None ) }}" + recId;
+    {% comment %} var rec_data_api = "{{ url_for('read_record_data', recId=None ) }}" + recId; {% endcomment %}
+    var rec_data_api = "{% url 'read_record_data' None %}" + recId;
+    var rec_data_api = "{% url 'read_record_data' None %}" + recId;
     var out = null;
     $.get(rec_data_api, function(data) {
         initializeForm(data, roles, edit_url);
@@ -278,7 +295,8 @@ var readRecordData = function(recId, roles, edit_url) {
 }
 
 var updateRecordData = function(recId, docId) {
-    var rec_data_api = "{{ url_for('update_reference_data', recId=None )}}" + recId;
+    {% comment %} var rec_data_api = "{{ url_for('update_reference_data', recId=None )}}" + recId; {% endcomment %}
+    var rec_data_api = "{% url 'update_reference_data' None %}" + recId;
     var data = collectInputValues(docId);
     var method = (recId ? "PUT" : "POST");
     $.ajax({
@@ -419,7 +437,8 @@ var deactivateButton = function ( $button ) {
 }
 
 var deleteEntrant = function($container, entId, editUrl ) {
-    var ent_data_api = "{{ url_for('update_referent', rntId=None )}}" + entId;
+    {% comment %} var ent_data_api = "{{ url_for('update_referent', rntId=None )}}" + entId; {% endcomment %}
+    var ent_data_api = "{% url 'update_referent' None %}" + entId;
     $.ajax({
         type: "DELETE",
         url: ent_data_api,
@@ -432,7 +451,8 @@ var deleteEntrant = function($container, entId, editUrl ) {
 
 var updateEntrant = function($container, entId, entData, editUrl) {
     var method,
-        ent_data_api = "{{ url_for('update_referent', rntId=None )}}";
+        {% comment %} ent_data_api = "{{ url_for('update_referent', rntId=None )}}"; {% endcomment %}
+        ent_data_api = "{% url 'update_referent' None %}";
     if (entId === 'new') {
         method = 'POST';
     } else {
@@ -514,8 +534,10 @@ $( document ).ready(function() {
 
     var doc_id = getDocumentId();
     var rec_id = getRecId();
-    var details_url = "{{ url_for('edit_entrant', entId=None)}}";
-    var roles = JSON.parse('{{ roles | tojson | safe}}');
+    {% comment %} var details_url = "{{ url_for('edit_entrant', entId=None)}}"; {% endcomment %}
+    var details_url = "{% url 'edit_entrant' None %}";
+    {% comment %} var roles = JSON.parse('{{ roles | tojson | safe}}'); {% endcomment %}
+    var roles = JSON.parse('{{ roles | safe}}');
 
     // Add formatting controls to transcription field
     // (uses tinyMCE https://www.tiny.cloud/)
@@ -531,7 +553,8 @@ $( document ).ready(function() {
     });
 
     $('#recordtype_autocomplete').autocomplete({
-        source: JSON.parse('{{ rec_types | tojson | safe}}'),
+        {% comment %} source: JSON.parse('{{ rec_types | tojson | safe}}'), {% endcomment %}
+        source: JSON.parse('{{ rec_types | safe}}'),
         minLength: 0,
         delay: 5,
         autoFocus: true,
@@ -549,9 +572,11 @@ $( document ).ready(function() {
             updateRecordType($('#recordtype_autocomplete'), ui.item);
         }
     });
-    addNationalContextOptions(JSON.parse('{{ natl_ctxs | tojson | safe}}'));
+    {% comment %} addNationalContextOptions(JSON.parse('{{ natl_ctxs | tojson | safe}}')); {% endcomment %}
+    addNationalContextOptions(JSON.parse('{{ natl_ctxs | safe}}'));
     $('#col_state_autocomplete').autocomplete({
-        source: JSON.parse('{{ col_state | tojson | safe}}'),
+        {% comment %} source: JSON.parse('{{ col_state | tojson | safe}}'), {% endcomment %}
+        source: JSON.parse('{{ col_state | safe}}'),
         minLength: 1,
         delay: 10,
         autoFocus: true,
@@ -569,7 +594,8 @@ $( document ).ready(function() {
         }
     });
     $('#town_autocomplete').autocomplete({
-        source: JSON.parse('{{ towns | tojson | safe}}'),
+        {% comment %} source: JSON.parse('{{ towns | tojson | safe}}'), {% endcomment %}
+        source: JSON.parse('{{ towns | safe}}'),
         minLength: 1,
         delay: 10,
         autoFocus: true,
@@ -587,7 +613,8 @@ $( document ).ready(function() {
         }
     });
     $('#addl_loc_autocomplete').autocomplete({
-        source: JSON.parse('{{ addl_loc | tojson | safe}}'),
+        {% comment %} source: JSON.parse('{{ addl_loc | tojson | safe}}'), {% endcomment %}
+        source: JSON.parse('{{ addl_loc | safe}}'),
         minLength: 1,
         delay: 10,
         autoFocus: true,

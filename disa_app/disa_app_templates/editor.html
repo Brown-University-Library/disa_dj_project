@@ -1,11 +1,14 @@
-{% extends "base.html" %}
+{% extends "disa_app_templates/base.html" %}
+
 {% block header %}
-<link rel="stylesheet" href="{{ url_for('static', filename='lib/bootstrap-4.1.2-dist/css/bootstrap.min.css') }}">
+{% comment %} <link rel="stylesheet" href="{{ url_for('static', filename='lib/bootstrap-4.1.2-dist/css/bootstrap.min.css') }}"> {% endcomment %}
+<link rel="stylesheet" href="{%  url 'static' 'lib/bootstrap-4.1.2-dist/css/bootstrap.min.css' %}">
 {% endblock %}
 {% block content %}{% endblock %}
 {% block scripts %}
 <script type="text/javascript">
-    var csrf_token = "{{ csrf_token() }}";
+    {% comment %} var csrf_token = "{{ csrf_token() }}"; {% endcomment %}
+    var csrf_token = "{{ csrf_token }}";
 
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
