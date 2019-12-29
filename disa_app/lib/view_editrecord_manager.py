@@ -52,7 +52,8 @@ def prep_context( rec_id ):
     towns_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_town ]
     towns_json = json.dumps( towns_list )
 
-    addl_loc = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_addl ]
+    addl_loc_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_addl ]
+    addl_loc_json = json.dumps( addl_loc_list )
 
     rec = session.query( models_alch.Reference ).get( rec_id )
 
@@ -78,7 +79,8 @@ def prep_context( rec_id ):
     context['towns_list'] = towns_list
     context['towns'] = towns_json
 
-    context['addl_loc'] = addl_loc
+    context['addl_loc_list'] = addl_loc_list
+    context['addl_loc'] = addl_loc_json
 
     # log.debug( f'context, ```{pprint.pformat(context)}```' )
     log.debug( 'context prepared' )

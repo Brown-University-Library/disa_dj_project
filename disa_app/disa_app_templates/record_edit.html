@@ -132,15 +132,18 @@
 
 <script id="towns_id" type="application/json">{{ towns|safe }}</script>
 
+<script id="addl_loc_id" type="application/json">{{ addl_loc|safe }}</script>
 
-
+<!-- A test of the js far below that accesses this json
+     The idea is from <https://docs.djangoproject.com/en/2.1/ref/templates/builtins/#json-script>,
+     ...not yet available in Django 1.11 -->
+<!--
 <script type="text/javascript">
     var zzz = JSON.parse( document.getElementById('towns_id').textContent );
     console.log( 'zzz...' );
     console.log( zzz );
 </script>
-
-
+ -->
 
 <script>
 var getDocumentId = function () {
@@ -632,8 +635,8 @@ $( document ).ready(function() {
     });
 
     $('#addl_loc_autocomplete').autocomplete({
-        {% comment %} source: JSON.parse('{{ addl_loc | tojson | safe}}'), {% endcomment %}
-        source: JSON.parse('{{ addl_loc | safe}}'),
+        // {% comment %} source: JSON.parse('{{ addl_loc | tojson | safe}}'), {% endcomment %}
+        source: JSON.parse( document.getElementById('addl_loc_id').textContent ),
         minLength: 1,
         delay: 10,
         autoFocus: true,
