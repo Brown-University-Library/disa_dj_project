@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 <!-- https://stackoverflow.com/questions/14942379/jquery-ui-autocomplete-how-to-allow-free-text-->
-{% block header %}
+{% block header_other %}
 {% comment %} {{ super() }} {% endcomment %}
 <style>
 #document_header {
@@ -28,6 +28,7 @@
 
 </style>
 
+<!-- tinymce should load here -->
 {% comment %}<script src="{{ url_for('static', filename='lib/tinymce/tinymce.js') }}"></script>{% endcomment %}
 <script src="{% static 'lib/tinymce/tinymce.js' %}"></script>
 
@@ -302,7 +303,11 @@ var initializeForm = function (data, tags, editUrl) {
 
 var readRecordData = function(recId, roles, edit_url) {
     {% comment %} var rec_data_api = "{{ url_for('read_record_data', recId=None ) }}" + recId; {% endcomment %}
-    var rec_data_api = "{% url 'data_record_url' None %}" + recId;
+    console.log( "recId, ```" + recId + "```" );
+    // var rec_data_api = "{% url 'data_record_url' rec_id=recId %}";  // this should work; grr...
+    var rec_id = recId;
+    var rec_data_api = "{% url 'data_record_url' rec_id %}";  // yes, a little crazy; grr...
+    console.log( "rec_data_api, ```" + rec_data_api + "```" );
     var out = null;
     $.get(rec_data_api, function(data) {
         initializeForm(data, roles, edit_url);
