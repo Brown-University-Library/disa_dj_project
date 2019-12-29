@@ -25,10 +25,35 @@ def query_record( rec_id ):
     data = { 'rec': {}, 'entrants': [] }
     if rec_id == None:
         data = json.dumps( data )
-    else:
-        session = make_session()
+        log.debug( f'no rec_id; data, ```{pprint.pformat(data)}```' )
+    session = make_session()
+    rec: models_sqlalchemy.Reference = session.query( models_alch.Reference ).get( rec_id )
+    data['rec']['id'] = rec.id
+    data['rec']['date'] = None
+    if rec.date:
+        data['rec']['date'] = '{}/{}/{}'.format(rec.date.month,
+            rec.date.day, rec.date.year)
+    data['rec']['locations'] = [ {
+        'label':l.location.name,
+        'value':l.location.name,
+        'id': l.location.id } for l in rec.locations ]
+    data['rec']['transcription'] = rec.transcription
+    data['rec']['national_context'] = rec.national_context_id
+    data['rec']['record_type'] = {
+        'label': rec.reference_type.name,
+        'value': rec.reference_type.name,
+        'id':rec.reference_type.id }
+    data['entrants'] = [ {
+        'name_id': ent.primary_name.id,
+        'first': ent.primary_name.first,
+        'last': ent.primary_name.last,
+        'id': ent.id,
+        'person_id': ent.person_id,
+        'roles': [ role.id for role in ent.roles ] } for ent in rec.referents ]
+    data['rec']['header'] = '{}'.format(
+        rec.reference_type.name or '').strip()
+
     log.debug( f'data, ```{pprint.pformat(data)}```' )
-    1/0
     return data
 
 
