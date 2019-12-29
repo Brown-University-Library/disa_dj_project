@@ -5,26 +5,31 @@
 {% block header_other %}
 {% comment %} {{ super() }} {% endcomment %}
 <style>
-#document_header {
-    font-size: 150%;
-}
 
-#locations {
-    margin-top: 5px;
-}
+    div.container-fluid {
+        margin-left: 4em;
+        width: 80%;
+        margin-right: -20em;
+    }
 
-.location-btn {
-    background-color: Transparent;
-    border: none;
-}
+    p#document_header {
+        font-style: italic;
+    }
 
-.entrant-ctl {
-    margin-right: 5px;
-}
+    div.row {
+        margin-top: -1em;
+    }
 
-.text-format-button {
-    margin: auto 5px 5px;
-}
+    h1#doc_header {
+        margin-top: .5em;
+        font-family: 'Source Sans Pro', sans-serif;
+        font-size: 32px;
+        font-weight: 500;
+    }
+
+    p#items_header {
+        font-style: italic;
+    }
 
 </style>
 
@@ -35,16 +40,22 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<!-- <div class="container"> -->
+<div class="container-fluid">
+
+    <p id="document_header">Document...</p>
     <div class="row">
         <div class='col-md-11'>
-            <h2 id="doc_header">{{ doc_display }}</h2>
+            <h1 id="doc_header">{{ doc_display }}</h1>
         </div>
         <div class='col-md-1'>
             {% comment %}<a href="{{ url_for('edit_citation', citeId=doc.id)}}">Back</a>{% endcomment %}
             <a href="{% url 'edit_citation_url' doc_id %}">Back</a>
         </div>
     </div>
+    <hr/>
+
+    <p id="items_header">Items...</p>
     <div id="record_form">
         <h2 id="record_header"></h2>
         <form action="" method="">
