@@ -291,6 +291,7 @@ var setFormHeader = function (recData) {
     }
 }
 
+/* `data` comes from ```var readRecordData...``` below, the result of calling the `rec_data_api`  */
 var initializeForm = function (data, tags, editUrl) {
     setFormHeader(data['rec']);
     setInputValues(data['rec']);
@@ -307,7 +308,7 @@ var readRecordData = function(recId, roles, edit_url) {
     // var rec_data_api = "{% url 'data_record_url' rec_id=recId %}";  // this should work; grr...
     var rec_id = recId;
     var rec_data_api = "{% url 'data_record_url' rec_id %}";  // yes, a little crazy; grr...
-    console.log( "rec_data_api, ```" + rec_data_api + "```" );
+    console.log( "rec_data_api for readRecordData, ```" + rec_data_api + "```" );
     var out = null;
     $.get(rec_data_api, function(data) {
         initializeForm(data, roles, edit_url);
@@ -316,7 +317,9 @@ var readRecordData = function(recId, roles, edit_url) {
 
 var updateRecordData = function(recId, docId) {
     {% comment %} var rec_data_api = "{{ url_for('update_reference_data', recId=None )}}" + recId; {% endcomment %}
-    var rec_data_api = "{% url 'data_record_url' None %}" + recId;
+    var rec_id = recId;
+    var rec_data_api = "{% url 'data_record_url' rec_id %}";
+    console.log( "rec_data_api for updateRecordData, ```" + rec_data_api + "```" );
     var data = collectInputValues(docId);
     var method = (recId ? "PUT" : "POST");
     $.ajax({
@@ -459,6 +462,7 @@ var deactivateButton = function ( $button ) {
 var deleteEntrant = function($container, entId, editUrl ) {
     {% comment %} var ent_data_api = "{{ url_for('update_referent', rntId=None )}}" + entId; {% endcomment %}
     var ent_data_api = "{% url 'data_referent_url' None %}" + entId;
+    console.log( "ent_data_api for deleteEntrant, ```" + ent_data_api + "```" );
     $.ajax({
         type: "DELETE",
         url: ent_data_api,
@@ -473,6 +477,7 @@ var updateEntrant = function($container, entId, entData, editUrl) {
     var method,
         {% comment %} ent_data_api = "{{ url_for('update_referent', rntId=None )}}"; {% endcomment %}
         ent_data_api = "{% url 'data_referent_url' None %}";
+    console.log( "ent_data_api for updateEntrant, ```" + ent_data_api + "```" );
     if (entId === 'new') {
         method = 'POST';
     } else {
@@ -556,6 +561,7 @@ $( document ).ready(function() {
     var rec_id = getRecId();
     {% comment %} var details_url = "{{ url_for('edit_entrant', entId=None)}}"; {% endcomment %}
     var details_url = "{% url 'edit_person_url' None %}";
+    console.log( "details_url, ```" + details_url + "```" );
     {% comment %} var roles = JSON.parse('{{ roles | tojson | safe}}'); {% endcomment %}
     {% comment %}
     <!-- json_script filter added in django-2.1 -->

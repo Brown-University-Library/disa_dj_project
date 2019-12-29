@@ -8,6 +8,7 @@ from typing import List
 
 import requests
 from disa_app import settings_app
+from disa_app.lib import view_data_records_manager
 from disa_app.lib import view_info_manager, view_people_manager, view_person_manager, view_editrecord_manager
 from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
@@ -133,12 +134,17 @@ def editor_index( request ):
 # ===========================
 
 
+@shib_login
 def data_entrants( request, rfrnt_id ):
     return HttpResponse( 'coming' )
 
 
+@shib_login
 def data_records( request, rec_id ):
-    return HttpResponse( 'coming' )
+    log.debug( f'\n\nstarting data_records person(), with rec_id, `{rec_id}`' )
+    context: dict = view_data_records_manager.query_record( rec_id )
+    resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    return resp
 
 
 # ===========================
