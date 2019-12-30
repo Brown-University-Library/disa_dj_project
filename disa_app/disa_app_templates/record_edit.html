@@ -27,6 +27,12 @@
         font-weight: 500;
     }
 
+    a.title_link {
+        float: right;
+        margin-top: -3em;
+    }
+
+
     p#items_header {
         font-style: italic;
     }
@@ -47,11 +53,14 @@
     <div class="row">
         <div class='col-md-11'>
             <h1 id="doc_header">{{ doc_display }}</h1>
+            <a class="title_link" href="{% url 'edit_citation_url' doc_id %}">(edit document)</a>
         </div>
+<!--
         <div class='col-md-1'>
             {% comment %}<a href="{{ url_for('edit_citation', citeId=doc.id)}}">Back</a>{% endcomment %}
             <a href="{% url 'edit_citation_url' doc_id %}">Back</a>
         </div>
+ -->
     </div>
     <hr/>
 
