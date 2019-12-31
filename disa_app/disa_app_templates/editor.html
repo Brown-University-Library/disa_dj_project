@@ -1,8 +1,9 @@
 {% extends "disa_app_templates/base.html" %}
+{% load staticfiles %}
 
 {% block header %}
 {% comment %} <link rel="stylesheet" href="{{ url_for('static', filename='lib/bootstrap-4.1.2-dist/css/bootstrap.min.css') }}"> {% endcomment %}
-<link rel="stylesheet" href="{%  url 'static' 'lib/bootstrap-4.1.2-dist/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{%  static 'lib/bootstrap-4.1.2-dist/css/bootstrap.min.css' %}">
 {% endblock %}
 {% block content %}{% endblock %}
 {% block scripts %}
