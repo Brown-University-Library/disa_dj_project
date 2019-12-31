@@ -493,6 +493,7 @@ var updateRecordData = function(recId, docId) {
 }
 
 var addEntrantInput = function($container, entData, tags) {
+    console.log( "entData, ```" + entData + "```" );
     var $tr, $td1, $td2, $td3, $td4,
         $input1, $input2, $select,
         $button, $span;
@@ -710,6 +711,8 @@ var getEntrantData = function($container, entId, recId) {
 }
 
 $( document ).ready(function() {
+
+    console.log( "starting document.ready()" );
 
     var doc_id = getDocumentId();
     var rec_id = getRecId();
