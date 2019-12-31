@@ -16,16 +16,24 @@
         font-style: italic;
     }
 
-/*
+
     div.row {
         margin-top: -1em;
     }
-*/
+
     h1#doc_header {
         margin-top: .5em;
         font-family: 'Source Sans Pro', sans-serif;
         font-size: 32px;
         font-weight: 500;
+    }
+
+    .col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
+        position: relative;
+        width: 100%;
+        min-height: 1px;
+        padding-right: 15px;
+        padding-left: 15px;
     }
 
     a.title_link {
@@ -35,6 +43,10 @@
 
     p#items_header {
         font-style: italic;
+    }
+
+    hr {
+        margin-top: -1em;
     }
 
     /* The bootstrap scss does isn't being accessed properly. Will look into that later, but for now, putting that css here. */
@@ -76,21 +88,10 @@
 
     label {
         display: inline-block;
+        margin-top: 1rem;  /* not in scss -- custom addition to get spacing to look like S.M. page */
         margin-bottom: .5rem;
     }
 
-/*
-    body {
-        margin: 0;
-        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-        font-size: 1rem;
-        font-weight: 400;
-        line-height: 1.5;
-        color: #212529;
-        text-align: left;
-        background-color: #fff;
-    }
-*/
     select.form-control:not([size]):not([multiple]) {
         height: calc(2.25rem + 2px);
     }
@@ -163,6 +164,13 @@
 
     /* End of bootstrap-scss work-around. */
 
+    span.click_message {
+        font-style: italic;
+        font-size: 80%;
+        font-weight: 400;
+    }
+
+
 </style>
 
 <!-- tinymce should load here -->
@@ -190,7 +198,7 @@
     </div>
     <hr/>
 
-    <p id="items_header">Items...</p>
+    <p id="items_header">Items... <span class="click_message">(click to open/close)</span></p>
     <div id="record_form">
         <h2 id="record_header"></h2>
         <form action="" method="">
