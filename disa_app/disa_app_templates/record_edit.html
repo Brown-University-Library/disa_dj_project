@@ -447,7 +447,8 @@ var setFormHeader = function (recData) {
 
 /* `data` comes from ```var readRecordData...``` below, the result of calling the `rec_data_api`  */
 var initializeForm = function (data, tags, editUrl) {
-    console.log( "in initializeForm(); data, ```" + data + "```" );
+    // console.log( "in initializeForm(); data, ```" + data + "```" );
+    console.log( "in initializeForm(); data: ", data );
     setFormHeader(data['rec']);
     setInputValues(data['rec']);
     for (var i=0; i < data['entrants'].length; i++ ) {
@@ -493,7 +494,7 @@ var updateRecordData = function(recId, docId) {
 }
 
 var addEntrantInput = function($container, entData, tags) {
-    console.log( "entData, ```" + entData + "```" );
+    console.log( "in `var addEntrantInput`; entData: ", entData );
     var $tr, $td1, $td2, $td3, $td4,
         $input1, $input2, $select,
         $button, $span;
@@ -715,7 +716,10 @@ $( document ).ready(function() {
     console.log( "starting document.ready()" );
 
     var doc_id = getDocumentId();
+
     var rec_id = getRecId();
+    console.log( "in document.ready(); rec_id: ", rec_id );
+
     {% comment %} var details_url = "{{ url_for('edit_entrant', entId=None)}}"; {% endcomment %}
     var details_url = "{% url 'edit_person_root_url' %}";
     console.log( "in document.ready(); details_url, ```" + details_url + "```" );
@@ -727,6 +731,7 @@ $( document ).ready(function() {
     var roles = JSON.parse( document.getElementById('roles_id').textContent );
     {% endcomment %}
     var roles = JSON.parse('{{ roles | safe}}');
+    console.log( "in document.ready(); roles: ", roles );
 
     // Add formatting controls to transcription field
     // (uses tinyMCE https://www.tiny.cloud/)
@@ -763,6 +768,7 @@ $( document ).ready(function() {
 
     {% comment %} addNationalContextOptions(JSON.parse('{{ natl_ctxs | tojson | safe}}')); {% endcomment %}
     addNationalContextOptions(JSON.parse('{{ natl_ctxs | safe}}'));
+
     $('#col_state_autocomplete').autocomplete({
         source: JSON.parse('{{ col_state | safe}}'),
         minLength: 1,
@@ -822,18 +828,21 @@ $( document ).ready(function() {
             updateLocationInput($('#addl_loc_autocomplete'), ui.item);
         }
     });
+
     $( "#record_form" ).accordion({
         collapsible: true,
         header: "h2",
         heightStyle: 'content',
         active: (rec_id ? false : 0)
     });
+
     $( "#record_date" ).datepicker({
       defaultDate: "01/01/1492",
       changeMonth: true,
       changeYear: true,
       yearRange: "1491:2000"
     });
+
     $("#rec_update").on('click', function(e) {
         e.preventDefault();
         if ($(this).attr('data-clicked') == 1) {
@@ -845,6 +854,7 @@ $( document ).ready(function() {
             updateRecordData(rec_id, doc_id);
         }
     });
+
     $('#entrant_component').on('click', '#add-person', function(e) {
         e.preventDefault();
         var data = { 'id': 'new', 'first': '',
@@ -853,6 +863,7 @@ $( document ).ready(function() {
         deactivateEntrantEditing( $('#entrant_component') );
         makeEntrantEditable( $('#entrants'), 'new');
     });
+
     $('#entrant_component').on('click', '.edit-entrant', function(e) {
         e.preventDefault();
 
@@ -860,11 +871,13 @@ $( document ).ready(function() {
         deactivateEntrantEditing( $('#entrant_component') );
         makeEntrantEditable( $('#entrants'), ent_id);
     });
+
     $('#entrant_component').on('click', '.cancel-entrant', function(e) {
         e.preventDefault();
 
         initiateEntrantWorkflow( $('#entrant_component'), details_url );
     });
+
     $('#entrant_component').on('click', '.del-entrant', function(e) {
 
         e.preventDefault();
@@ -878,6 +891,7 @@ $( document ).ready(function() {
 
         return;
     });
+
     $('#entrant_component').on('click', '.save-entrant', function(e) {
         e.preventDefault();
         var ent_id = $( this ).attr('save-entrant-id');
@@ -885,7 +899,10 @@ $( document ).ready(function() {
         var data = getEntrantData($('#entrant_component'), ent_id, rec_id);
         updateEntrant( $('#entrant_component'), ent_id, data, details_url );
     });
+
+    console.log( "in document.ready(), near end, about to call readRecordData()" );
     readRecordData(rec_id, roles, details_url);
+
 });
 </script>
 {% endblock %}
