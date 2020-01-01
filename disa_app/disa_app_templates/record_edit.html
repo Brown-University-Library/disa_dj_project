@@ -447,6 +447,7 @@ var setFormHeader = function (recData) {
 
 /* `data` comes from ```var readRecordData...``` below, the result of calling the `rec_data_api`  */
 var initializeForm = function (data, tags, editUrl) {
+    console.log( "in initializeForm(); data, ```" + data + "```" );
     setFormHeader(data['rec']);
     setInputValues(data['rec']);
     for (var i=0; i < data['entrants'].length; i++ ) {
@@ -458,11 +459,10 @@ var initializeForm = function (data, tags, editUrl) {
 
 var readRecordData = function(recId, roles, edit_url) {
     {% comment %} var rec_data_api = "{{ url_for('read_record_data', recId=None ) }}" + recId; {% endcomment %}
-    console.log( "recId, ```" + recId + "```" );
     // var rec_data_api = "{% url 'data_record_url' rec_id=recId %}";  // this should work; grr...
     var rec_id = recId;
     var rec_data_api = "{% url 'data_record_url' rec_id %}";  // yes, a little crazy; grr...
-    console.log( "rec_data_api for readRecordData, ```" + rec_data_api + "```" );
+    console.log( "in `var readRecordData`; rec_data_api, ```" + rec_data_api + "```" );
     var out = null;
     $.get(rec_data_api, function(data) {
         initializeForm(data, roles, edit_url);
@@ -717,8 +717,9 @@ $( document ).ready(function() {
     var doc_id = getDocumentId();
     var rec_id = getRecId();
     {% comment %} var details_url = "{{ url_for('edit_entrant', entId=None)}}"; {% endcomment %}
-    var details_url = "{% url 'edit_person_url' None %}";
-    console.log( "details_url, ```" + details_url + "```" );
+    var details_url = "{% url 'edit_person_root_url' %}";
+    console.log( "in document.ready(); details_url, ```" + details_url + "```" );
+
     {% comment %} var roles = JSON.parse('{{ roles | tojson | safe}}'); {% endcomment %}
     {% comment %}
     <!-- json_script filter added in django-2.1 -->
