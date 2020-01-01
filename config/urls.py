@@ -35,7 +35,8 @@ urlpatterns = [
 
     url( r'^source/(?P<src_id>.*)/$', views.source, name='source_url' ),
 
-    url( r'^record/relationships/(?P<recId>.*)/$', views.temp_response, name='temp_name_url' ),
+    url( r'^record/relationships/$', views.edit_relationships, name='edit_relationships_url' ),
+    # url( r'^record/relationships/(?P<recId>.*)/$', views.edit_relationships, name='edit_relationships_url' ),
 
     ## old...
 

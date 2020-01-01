@@ -249,7 +249,7 @@
             </button>
         </form>
     </div>
-    {% if rec %}
+    {% if rec_id %}
     <h2>People</h2>
     <div id="entrant_component">
         {% comment %}
@@ -275,7 +275,7 @@
         <div id="new_person_button" class="d-flex flex-row-reverse">
             <button class="btn btn-primary" id="add-person">Add a person</button>&nbsp;&nbsp;
             {% comment %}<a class="btn btn-primary" href="{{ url_for('edit_relationships', recId=rec.id)}}">Identify connections between people</a>{% endcomment %}
-            <a class="btn btn-primary" href="{% url 'edit_relationships' rec_id %}">Identify connections between people</a>
+            <a class="btn btn-primary" href="{% url 'edit_relationships_url' %}">Identify connections between people</a>
         </div>
     </div>
     {% endif %}

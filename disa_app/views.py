@@ -124,6 +124,11 @@ def edit_citation( request, cite_id ):
 def edit_person( request, rfrnt_id=None ):
     return HttpResponse( 'coming' )
 
+@shib_login
+def edit_relationships( request ):
+    """ Note: though this is in the 'editor' section here, the url is `/record/relationships/`. """
+    return HttpResponse( 'edit-relationships coming' )
+
 
 def editor_index( request ):
     return HttpResponse( 'coming' )
