@@ -18,6 +18,7 @@ urlpatterns = [
 
     url( r'^editor/documents/(?P<cite_id>.*)/$', views.edit_citation, name='edit_citation_url' ),
     url( r'^editor/records/(?P<rec_id>.*)/$', views.edit_record, name='edit_record_url' ),
+    url( r'^editor/person/$', views.edit_person, name='edit_person_root_url' ),
     url( r'^editor/person/(?P<rfrnt_id>.*)/$', views.edit_person, name='edit_person_url' ),
     url( r'^editor/$', views.editor_index, name='editor_index_url' ),
 
