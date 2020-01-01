@@ -45,7 +45,7 @@
         font-style: italic;
     }
 
-    hr {
+    hr#post_document {
         margin-top: -1em;
     }
 
@@ -170,6 +170,9 @@
         font-weight: 400;
     }
 
+    hr#post_items {
+        margin-top: 1em;
+    }
 
 </style>
 
@@ -196,7 +199,7 @@
         </div>
  -->
     </div>
-    <hr/>
+    <hr id="post_document"> </hr>
 
     <p id="items_header">Items... <span class="click_message">(click to open/close)</span></p>
     <div id="record_form">
@@ -249,6 +252,8 @@
             </button>
         </form>
     </div>
+    <hr id="post_items"></hr>
+
     {% if rec_id %}
     <h2>People</h2>
     <div id="entrant_component">
