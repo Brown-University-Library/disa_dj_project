@@ -338,7 +338,11 @@ var updateLocationInputs = function (locsArray) {
         loc_input.attr('data-loc-id', loc_data.id);
     }
 }
+
 var setInputValues = function(recData) {
+    /*  Updates input fields from readRecordData() api call when initializing form, and from ajax-update from when data is updated.
+        Called by initializeForm() and updateRecordData() */
+    console.log( "in setInputValues; will update item fields." )
     if ( $.isEmptyObject(recData) ) {
         return;
     }
@@ -434,8 +438,8 @@ var addNationalContextOptions = function(opts) {
 }
 
 var setFormHeader = function (recData) {
+    console.log( "in setFormHeader; recData: ", recData )
     var header, header_txt = '';
-
     header = $('#record_header');
     if ( $.isEmptyObject(recData) ) {
         header.html('Add new item<br /><em>An "item" is a description of one or more people (with their relationship) that appears in the document.<br />There may be associated time and place information&mdash;for example, if the item describes an event.</em>');
@@ -445,13 +449,16 @@ var setFormHeader = function (recData) {
     }
 }
 
-/* `data` comes from ```var readRecordData...``` below, the result of calling the `rec_data_api`  */
 var initializeForm = function (data, tags, editUrl) {
-    // console.log( "in initializeForm(); data, ```" + data + "```" );
+    /*  Main controller.
+        Called by readRecordData with results of api-call */
     console.log( "in initializeForm(); data: ", data );
+    console.log( "in initializeForm(); tags: ", tags );
+    console.log( "in initializeForm(); editUrl: ", editUrl );
     setFormHeader(data['rec']);
     setInputValues(data['rec']);
     for (var i=0; i < data['entrants'].length; i++ ) {
+        console.log( "in initializeForm(); about to call addEntrantInput() with data: ", data['entrants'][i] );
         addEntrantInput(
             $('#entrants'), data['entrants'][i], tags );
     }
@@ -459,11 +466,13 @@ var initializeForm = function (data, tags, editUrl) {
 }
 
 var readRecordData = function(recId, roles, edit_url) {
+    /*  Bridge to main controller (initializeForm).
+        Called by document.ready() */
     {% comment %} var rec_data_api = "{{ url_for('read_record_data', recId=None ) }}" + recId; {% endcomment %}
     // var rec_data_api = "{% url 'data_record_url' rec_id=recId %}";  // this should work; grr...
     var rec_id = recId;
     var rec_data_api = "{% url 'data_record_url' rec_id %}";  // yes, a little crazy; grr...
-    console.log( "in `var readRecordData`; rec_data_api, ```" + rec_data_api + "```" );
+    console.log( "in `var readRecordData`; rec_data_api: ", rec_data_api );
     var out = null;
     $.get(rec_data_api, function(data) {
         initializeForm(data, roles, edit_url);
