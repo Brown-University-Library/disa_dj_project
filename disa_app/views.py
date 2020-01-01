@@ -121,7 +121,7 @@ def edit_citation( request, cite_id ):
 
 
 @shib_login
-def edit_person( request, rfrnt_id ):
+def edit_person( request, rfrnt_id=None ):
     return HttpResponse( 'coming' )
 
 
