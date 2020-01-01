@@ -155,7 +155,7 @@
       <table class="table timeline">
         <caption>Timeline</caption>
         <tbody id="refs">
-          {% for ref in refs %}
+          {% for ref in refs %}  {# Note: `refs` here is person.references #}
           <tr>
             {% comment %}<td>{{ ref.reference.display_date() }}</td>{% endcomment %}
             <td>{{ ref.rfrnc_display_date }}</td>
@@ -180,7 +180,7 @@
             </td>
             <td>
               {% comment %}<a href="{{ url_for('get_source', srcId=ref.reference_id) }}">View source</a>{% endcomment %}
-              <a href="{% url 'source_url' dbId  %}">View source</a>
+              <a href="{% url 'source_url' ref.rfrnc_id  %}">View source</a>
           </tr>
           {% endfor %}
         </tbody>
