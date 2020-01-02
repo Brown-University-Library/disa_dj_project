@@ -22,12 +22,16 @@
     }
 
     h1#doc_header {
-        margin-top: .5em;
+        margin-top: .25em;
         font-family: 'Source Sans Pro', sans-serif;
         font-size: 32px;
         font-weight: 500;
         line-height: 1.25;
     }
+
+    /***************************************************/
+    /* `Document` and `Items` scss work-around styling */
+    /***************************************************/
 
     .col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
         position: relative;
@@ -50,7 +54,6 @@
         margin-top: -.5em;
     }
 
-    /* The bootstrap scss does isn't being accessed properly. Will look into that later, but for now, putting that css here. */
 
     input[type=text] {
         height: 2.5em;
@@ -154,7 +157,8 @@
 
     button, input, optgroup, select, textarea {
         margin: 0;
-        font-family: inherit;
+        /*font-family: inherit;*/
+        font-family: 'Source Sans Pro', sans-serif;
         font-size: inherit;
         line-height: inherit;
     }
@@ -166,24 +170,25 @@
     /* End of bootstrap-scss work-around. */
 
     span.click_message {
+        font-size: 12px;
+        font-weight: 300;
         font-style: italic;
-        font-size: 80%;
-        font-weight: 400;
     }
 
     hr#post_items {
         margin-top: 1.2em;
     }
 
-    /******************/
-    /* People styling */
-    /******************/
+    /*************************************/
+    /* `People` scss work-around styling */
+    /*************************************/
 
     .h2, h2 {
         font-size: 2rem;
         margin-top: ,5em;
         margin-bottom: .5rem;
-        font-family: inherit;
+        /*font-family: inherit;*/
+        font-family: 'Source Sans Pro', sans-serif;
         font-weight: 500;
         line-height: 1.2;
         color: inherit;
@@ -201,6 +206,53 @@
     .table thead th {
         vertical-align: bottom;
         border-bottom: 2px solid #dee2e6;
+    }
+
+    .table td, .table th {
+        padding: .75rem;
+        /*vertical-align: top;*/
+        border-top: 1px solid #dee2e6;
+    }
+
+    .form-control:disabled, .form-control[readonly] {
+        background-color: #e9ecef;
+        opacity: 1;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        /*background-color: #fff;*/
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+    .btn-secondary {
+        color: #fff;
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .entrant-ctl {
+        margin-right: 5px;
+    }
+
+    [hidden] {
+        display: none!important;
+    }
+
+    /* END of `People` scss work-around styling */
+
+    span#people_explanation {
+        font-size: 12px;
+        font-weight: 300;
+        font-style: italic;
     }
 
 </style>
@@ -284,7 +336,7 @@
     <hr id="post_items"></hr>
 
     {% if rec_id %}
-    <h2>People</h2>
+    <h2>People <span id="people_explanation">(referenced in "Items..." above)</span></h2>
     <div id="entrant_component">
         {% comment %}
         <!--
