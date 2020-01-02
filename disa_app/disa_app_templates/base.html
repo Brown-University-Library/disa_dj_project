@@ -72,6 +72,24 @@
                 <li class="nav-item">
                     <a class="nav-link text-white" href="{% url 'people_url' %}">index</a>
                 </li>
+
+                {% if user_email %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'editor_index_url' %}">editor</a>
+                </li>
+                <li class="nav-item">
+                    <span class="navbar-text text-white">Welcome {{ user_email }}</span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'logout_url' %}">logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'login_url' %}">login</a>
+                </li>
+                {% endif %}
+
+                {% comment %}
                 {% if not logged_in %}
                 <li class="nav-item">
                     <a class="nav-link text-white" href="{% url 'login_url' %}">login</a>
@@ -87,6 +105,8 @@
                     <a class="nav-link text-white" href="{% url 'logout_url' %}">logout</a>
                 </li>
                 {% endif %}
+                {% endcomment %}
+
             </ul>
         </nav>
         {% comment %} {% with messages = get_flashed_messages() %} {% endcomment %}
