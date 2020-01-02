@@ -82,17 +82,6 @@ def source( request, src_id ):
 
 
 @shib_login
-def edit_record( request, rec_id ):
-    log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
-    context: dict = view_editrecord_manager.prep_context( rec_id )
-    if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    else:
-        resp = render( request, 'disa_app_templates/record_edit.html', context )
-    return resp
-
-
-@shib_login
 def login( request ):
     """ Handles authNZ, & redirects to admin.
         Called by click on login or admin link. """
@@ -123,6 +112,18 @@ def edit_citation( request, cite_id ):
 @shib_login
 def edit_person( request, rfrnt_id=None ):
     return HttpResponse( 'coming' )
+
+
+@shib_login
+def edit_record( request, rec_id ):
+    log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
+    context: dict = view_editrecord_manager.prep_context( rec_id )
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/record_edit.html', context )
+    return resp
+
 
 @shib_login
 def edit_relationships( request ):
