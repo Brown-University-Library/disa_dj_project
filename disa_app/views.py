@@ -117,7 +117,11 @@ def edit_person( request, rfrnt_id=None ):
 @shib_login
 def edit_record( request, rec_id ):
     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
-    context: dict = view_editrecord_manager.prep_context( rec_id )
+    # log.debug( f'request.user.__dict__, ```{pprint.pformat(request.user.__dict__)}```' )
+    # log.debug( f'request.user.email, `{request.user.email}`; is_authenticated, `{request.user.is_authenticated}`; first_name, `{request.user.first_name}`' )
+    # log.debug( f'is_authenticated == True, ```{request.user.is_authenticated == True}```' )
+    # context: dict = view_editrecord_manager.prep_context( rec_id )
+    context: dict = view_editrecord_manager.prep_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:

@@ -2,7 +2,7 @@
 
 import datetime, json, logging, os, pprint
 
-import sqlalchemy
+import django, sqlalchemy
 from disa_app import settings_app
 from disa_app import models_sqlalchemy as models_alch
 from disa_app.lib import person_common
@@ -21,8 +21,9 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-def prep_context( rec_id ):
-    context = {}
+# def prep_context( rec_id ):
+def prep_context( rec_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
+    context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
     session = make_session()
 
     locs = session.query( models_alch.ReferenceLocation ).all()
