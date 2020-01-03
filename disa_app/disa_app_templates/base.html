@@ -81,7 +81,11 @@
                     <span class="navbar-text text-white">(Welcome {{ user_first_name }})</span>
                 </li>
                 <li class="nav-item">
+                    {% if logout_next %}
+                    <a class="nav-link text-white" href="{% url 'logout_url' %}?next={{ logout_next }}">logout</a>
+                    {% else %}
                     <a class="nav-link text-white" href="{% url 'logout_url' %}?next={% url 'people_url' %}">logout</a>
+                    {% endif %}
                 </li>
                 {% else %}
                 <li class="nav-item">

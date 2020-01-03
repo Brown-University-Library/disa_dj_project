@@ -35,34 +35,40 @@ def temp_response( request ):
     return HttpResponse( f'`{requested_path}` handling coming' )
 
 
+# def browse( request ):
+#     """ Displays home page. """
+#     context = {
+#         'denormalized_json_url': reverse('dnrmlzd_jsn_prx_url_url'),
+#         'info_image_url': f'{project_settings.STATIC_URL}images/info.png' }
+#     username = None
+#     if request.user.is_authenticated:
+#         username = request.user.first_name
+#         context['logged_in'] = True
+#     else:
+#         context['logged_in'] = False
+#     context['username'] = username
+#     if request.GET.get('format', '') == 'json':
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         resp = render( request, 'disa_app_templates/browse.html', context )
+#     return resp
+
+
 def browse( request ):
     """ Displays home page. """
+    log.debug( '\n\nstarting browse()' )
     context = {
         'denormalized_json_url': reverse('dnrmlzd_jsn_prx_url_url'),
-        'info_image_url': f'{project_settings.STATIC_URL}images/info.png' }
-    username = None
+        'info_image_url': f'{project_settings.STATIC_URL}images/info.png',
+        'logout_next': reverse( 'browse_url' ) }
     if request.user.is_authenticated:
-        username = request.user.first_name
-        context['logged_in'] = True
-    else:
-        context['logged_in'] = False
-    context['username'] = username
+        context['user_is_authenticated'] = True
+        context['user_first_name'] = request.user.first_name
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
         resp = render( request, 'disa_app_templates/browse.html', context )
     return resp
-
-
-# def people( request ):
-#     log.debug( '\n\nstarting people()' )
-#     people: List(dict) = view_people_manager.query_people()
-#     context = { 'people': people }
-#     if request.GET.get('format', '') == 'json':
-#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     else:
-#         resp = render( request, 'disa_app_templates/people.html', context )
-#     return resp
 
 
 def people( request ):
