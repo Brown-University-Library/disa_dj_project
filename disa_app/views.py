@@ -12,7 +12,8 @@ from disa_app.lib import view_data_records_manager
 from disa_app.lib import view_info_manager, view_people_manager, view_person_manager, view_editrecord_manager
 from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
-from django.contrib.auth import logout
+# from django.contrib.auth import logout
+from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -96,7 +97,14 @@ def login( request ):
 
 
 def logout( request ):
-    return HttpResponse( 'coming' )
+    """ Logs _app_ out; shib logout not yet implemented.
+        Called by click on Welcome/Logout link in header-bar. """
+    redirect_url = request.GET.get( 'next', None )
+    if not redirect_url:
+        redirect_url = reverse( 'info_url' )
+    django_logout( request )
+    log.debug( 'redirect_url, ```%s```' % redirect_url )
+    return HttpResponseRedirect( redirect_url )
 
 
 # ===========================

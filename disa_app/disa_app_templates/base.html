@@ -73,15 +73,15 @@
                     <a class="nav-link text-white" href="{% url 'people_url' %}">index</a>
                 </li>
 
-                {% if user_email %}
+                {% if user_is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link text-white" href="{% url 'editor_index_url' %}">editor</a>
                 </li>
                 <li class="nav-item">
-                    <span class="navbar-text text-white">Welcome {{ user_email }}</span>
+                    <span class="navbar-text text-white">(Welcome {{ user_first_name }})</span>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'logout_url' %}">logout</a>
+                    <a class="nav-link text-white" href="{% url 'logout_url' %}?next={% url 'people_url' %}">logout</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
