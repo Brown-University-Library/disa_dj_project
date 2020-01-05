@@ -3,22 +3,16 @@
 import datetime, json, logging, os, pprint
 from typing import List
 
-# import sqlalchemy
-# from sqlalchemy.orm import sessionmaker as sqla_sessionmaker
-
 import requests
 from disa_app import settings_app
 from disa_app.lib import view_data_records_manager
 from disa_app.lib import view_info_manager, view_people_manager, view_person_manager, view_editrecord_manager
 from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
-# from django.contrib.auth import logout
 from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-
-# from disa_app.lib.shib_auth import shib_login  # decorator
 
 
 log = logging.getLogger(__name__)
@@ -33,25 +27,6 @@ def temp_response( request ):
     requested_path = request.META.get( 'PATH_INFO', 'path_unknown' )
     log.debug( f'requested_path, ```{requested_path}```' )
     return HttpResponse( f'`{requested_path}` handling coming' )
-
-
-# def browse( request ):
-#     """ Displays home page. """
-#     context = {
-#         'denormalized_json_url': reverse('dnrmlzd_jsn_prx_url_url'),
-#         'info_image_url': f'{project_settings.STATIC_URL}images/info.png' }
-#     username = None
-#     if request.user.is_authenticated:
-#         username = request.user.first_name
-#         context['logged_in'] = True
-#     else:
-#         context['logged_in'] = False
-#     context['username'] = username
-#     if request.GET.get('format', '') == 'json':
-#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     else:
-#         resp = render( request, 'disa_app_templates/browse.html', context )
-#     return resp
 
 
 def browse( request ):
