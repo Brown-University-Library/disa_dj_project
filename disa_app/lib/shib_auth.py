@@ -11,7 +11,7 @@ import copy, json, logging, os, pprint
 
 from django.contrib.auth import authenticate, get_backends, login
 from django.contrib.auth.models import User, Group
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from disa_app import settings_app
 
 
@@ -27,7 +27,8 @@ def shib_login(func):
         cleaned_meta_dct = hlpr.prep_shib_dct( request.META, request.get_host() )
         user_obj = hlpr.manage_usr_obj( request, cleaned_meta_dct )
         if not user_obj:
-            return HttpResponseForbidden( '403 / Forbidden' )
+            # return HttpResponseForbidden( '403 / Forbidden' )
+            return HttpResponseRedirect( reverse('login_url') )
         return func(request, *args, **kwargs)
     return decorator
 
