@@ -109,7 +109,8 @@ def login( request ):
     log.debug( '\n\nstarting login()' )
     next_url = request.GET.get( 'next', None )
     if not next_url:
-        redirect_url = reverse( settings_app.POST_LOGIN_ADMIN_REVERSE_URL )
+        # redirect_url = reverse( settings_app.POST_LOGIN_ADMIN_REVERSE_URL )
+        redirect_url = reverse( 'people_url' )
     else:
         redirect_url = request.GET['next']  # will often be same page
     log.debug( 'redirect_url, ```%s```' % redirect_url )
