@@ -13,7 +13,7 @@ urlpatterns = [
 
     ## primary app urls...
 
-    url( r'^login/$', views.temp_response, name='login_url' ),
+    url( r'^login/$', views.login, name='login_url' ),
     url( r'^logout/$', views.logout, name='logout_url' ),
 
     url( r'^editor/documents/(?P<cite_id>.*)/$', views.edit_citation, name='edit_citation_url' ),
