@@ -110,7 +110,7 @@ def login( request ):
     next_url = request.GET.get( 'next', None )
     if not next_url:
         # redirect_url = reverse( settings_app.POST_LOGIN_ADMIN_REVERSE_URL )
-        redirect_url = reverse( 'people_url' )
+        redirect_url = reverse( 'people_url' )  # TODO: check w/A.C.; I think this should go to the most-recent-user docs.
     else:
         redirect_url = request.GET['next']  # will often be same page
     log.debug( 'redirect_url, ```%s```' % redirect_url )
