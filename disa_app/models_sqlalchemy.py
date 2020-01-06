@@ -410,3 +410,82 @@ class Tribe(Base):
         secondary=has_tribe,
         back_populates='tribes' )
 
+
+
+
+class User(Base):
+    __tablename__ = '1_users'
+
+    id = Column(Integer, primary_key=True)
+    role = Column(String(64))
+    name = Column(String(64))
+    email = Column(String(120))
+    created = Column(DateTime())
+    last_login = Column(DateTime())
+    password_hash = Column(String(128))
+
+    # def set_password(self, password):
+    #     self.password_hash = security.generate_password_hash(password)
+
+    # def check_password(self, password):
+    #     try:
+    #         return security.check_password_hash(self.password_hash, password)
+    #     except:
+    #         return None
+
+
+# class User(UserMixin, db.Model):
+#     __tablename__ = '1_users'
+
+#     id = db.Column(db.Integer, primary_key=True)
+#     role = db.Column(db.String(64))
+#     name = db.Column(db.String(64))
+#     email = db.Column(db.String(120))
+#     created = db.Column(db.DateTime())
+#     last_login = db.Column(db.DateTime())
+#     password_hash = db.Column(db.String(128))
+
+#     def set_password(self, password):
+#         self.password_hash = security.generate_password_hash(password)
+
+#     def check_password(self, password):
+#         try:
+#             return security.check_password_hash(self.password_hash, password)
+#         except:
+#             return None
+
+
+# @login.user_loader
+# def load_user(id):
+#     return User.query.get(int(id))
+
+
+
+
+class ReferenceEdit(Base):
+    __tablename__ = '5_reference_edits'
+
+    id = Column(Integer, primary_key=True)
+    reference_id = Column(Integer, ForeignKey('4_references.id'))
+    user_id = Column(Integer, ForeignKey('1_users.id'))
+    timestamp = Column(DateTime())
+    edited = relationship(Reference,
+        primaryjoin=(reference_id == Reference.id),
+        backref='edits')
+    edited_by = relationship(User,
+        primaryjoin=(user_id == User.id),
+        backref='edits')
+
+# class ReferenceEdit(db.Model):
+#     __tablename__ = '5_reference_edits'
+
+#     id = db.Column(db.Integer, primary_key=True)
+#     reference_id = db.Column(db.Integer, db.ForeignKey('4_references.id'))
+#     user_id = db.Column(db.Integer, db.ForeignKey('1_users.id'))
+#     timestamp = db.Column(db.DateTime())
+#     edited = db.relationship(Reference,
+#         primaryjoin=(reference_id == Reference.id),
+#         backref='edits')
+#     edited_by = db.relationship(User,
+#         primaryjoin=(user_id == User.id),
+#         backref='edits')
