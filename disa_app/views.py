@@ -85,7 +85,7 @@ def source( request, src_id ):
 @shib_login
 def editor_index( request ):
     log.debug( '\n\nstarting editor_index()' )
-    context: dict = view_editor_index_manager.query_documents( request.user.username )
+    context: dict = view_editor_index_manager.query_documents( request.user.username, request.user.profile.old_db_id )
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
         context['user_first_name'] = request.user.first_name
