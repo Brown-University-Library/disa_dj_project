@@ -21,15 +21,16 @@ class UserProfile( models.Model ):
       `users = User.objects.all().select_related('profile')`
       ...to minimize extra db queries.
     """
-    user = models.OneToOneField( User, on_delete=models.CASCADE )
+    user = models.OneToOneField( User, on_delete=models.CASCADE, related_name='profile' )
     old_db_id = models.IntegerField( blank=True, null=True )
+
 
 ## auto create and save UserProfile entries
 
 @receiver( post_save, sender=User )
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        UserProfile.objects.create(user=instance)
 
 @receiver( post_save, sender=User )
 def save_user_profile(sender, instance, **kwargs):
