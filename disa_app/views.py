@@ -6,7 +6,7 @@ from typing import List
 import requests
 from disa_app import settings_app
 from disa_app.lib import view_data_records_manager
-from disa_app.lib import view_info_manager, view_people_manager, view_person_manager, view_editrecord_manager
+from disa_app.lib import view_info_manager, view_people_manager, view_person_manager, view_edit_record_manager, view_editor_index_manager
 from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
@@ -80,6 +80,24 @@ def source( request, src_id ):
     return HttpResponseRedirect( redirect_url )
 
 
+
+
+@shib_login
+def editor_index( request ):
+    log.debug( '\n\nstarting editor_index()' )
+    context: dict = view_editor_index_manager.query_documents( request.user.username )
+    if request.user.is_authenticated:
+        context['user_is_authenticated'] = True
+        context['user_first_name'] = request.user.first_name
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/document_index.html.html', context )
+    return resp
+
+
+
+
 @shib_login
 def login( request ):
     """ Handles authNZ, & redirects to admin.
@@ -88,7 +106,7 @@ def login( request ):
     next_url = request.GET.get( 'next', None )
     if not next_url:
         # redirect_url = reverse( settings_app.POST_LOGIN_ADMIN_REVERSE_URL )
-        redirect_url = reverse( 'people_url' )  # TODO: check w/A.C.; I think this should go to the most-recent-user docs.
+        redirect_url = reverse( 'editor_index_url' )
     else:
         redirect_url = request.GET['next']  # will often be same page
     log.debug( 'redirect_url, ```%s```' % redirect_url )
@@ -124,7 +142,7 @@ def edit_person( request, rfrnt_id=None ):
 @shib_login
 def edit_record( request, rec_id ):
     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
-    context: dict = view_editrecord_manager.prep_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
+    context: dict = view_edit_record_manager.prep_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
@@ -136,10 +154,6 @@ def edit_record( request, rec_id ):
 def edit_relationships( request ):
     """ Note: though this is in the 'editor' section here, the url is `/record/relationships/`. """
     return HttpResponse( 'edit-relationships coming' )
-
-
-def editor_index( request ):
-    return HttpResponse( 'coming' )
 
 
 # ===========================

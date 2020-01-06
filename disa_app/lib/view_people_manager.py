@@ -44,7 +44,7 @@ def query_people():
         prep_status( entry, rfrnt )
         prep_name( entry, prsn )
         people.append( entry )
-    log.debug( f'people, ```{pprint.pformat(people)}```' )
+    log.debug( f'people (first 3), ```{pprint.pformat(people[0:3])}```...' )
     return people
 
 
