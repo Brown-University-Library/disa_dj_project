@@ -63,8 +63,10 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
                                 for edit in ref.edits ]
     log.debug( f'wrapped_refs (first 20), ```{pprint.pformat(wrapped_refs[0:20])}...```' )
 
+    # user_cites = [ wrapped for wrapped in wrapped_refs
+    #                 if wrapped[1] == current_user.id ]
     user_cites = [ wrapped for wrapped in wrapped_refs
-                    if wrapped[1] == current_user.id ]
+                    if wrapped[1] == old_usr_db_id ]
     log.debug( f'user_cites (first 10), ```{pprint.pformat(user_cites[0:10])}...```' )
 
     # srtd_all = sort_documents(no_refs + wrapped_refs)
@@ -84,6 +86,22 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
 
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     return data
+
+
+
+# def sort_documents(wrappedDocs):
+#     log.debug( f'before sort (first 10), ```{pprint.pformat(wrappedDocs[0:10])}...```' )
+#     merge = {}
+#     for w in wrappedDocs:
+#         if w[0].id not in merge or merge[w[0].id][0] < w[2]:
+#             merge[w[0].id] = (w[2], w[3], w[0])
+#         else:
+#             continue
+#     sorted_docs = sorted([ merge[w] for w in merge], reverse=True)
+#     # log.debug( f'sorted_docs (first 10), ```{pprint.pformat(sorted_docs)}```...' )
+#     return sorted_docs
+
+
 
 
 
