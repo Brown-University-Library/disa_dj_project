@@ -21,22 +21,41 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-def query_documents( username: str ) -> dict:
+def query_documents( username: str, old_usr_db_id: int ) -> dict:
     session = make_session()
     data = {}
 
     log.debug( f'username, ```{username}```' )
+    log.debug( f'old_usr_db_id, `{old_usr_db_id}`' )
 
     all_cites = session.query( models_alch.Citation ).all()
     log.debug( f'all_cites (first 10), ```{pprint.pformat(all_cites[0:10])}...```' )
 
+    # no_refs = [
+    #     (cite, current_user.id, datetime.datetime.now(), '') for cite in all_cites if len(cite.references) == 0
+    #     ]
     no_refs = [
-        (cite, current_user.id, datetime.datetime.now(), '') for cite in all_cites if len(cite.references) == 0
+        (cite, old_usr_db_id, datetime.datetime.now(), '') for cite in all_cites if len(cite.references) == 0
         ]
     log.debug( f'no_refs (first 10), ```{pprint.pformat(no_refs[0:10])}...```' )
 
     has_refs = [ cite for cite in all_cites if len(cite.references) > 0 ]
     log.debug( f'has_refs (first 10), ```{pprint.pformat(has_refs[0:10])}...```' )
+
+
+
+
+    # for ( i, cite ) in enumerate( has_refs):
+    #     log.debug( f'cite, `{cite}`' )
+    #     log.debug( f'display, ```{cite.display}```' )
+    #     log.debug( f'cite.references, ```{cite.references}```' )
+    #     for rfrnc in cite.references:
+    #         log.debug( f'rfrnc.edits for rfrnc.id `{rfrnc.id}`, ```{rfrnc.edits}```' )
+    #     if i > 4:
+    #         break
+    # 1/0
+
+
 
     wrapped_refs = [ (cite, edit.user_id, edit.timestamp, edit.edited_by.email)
                         for cite in has_refs
