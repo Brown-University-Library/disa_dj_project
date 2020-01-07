@@ -107,10 +107,14 @@ def login( request ):
     next_url = request.GET.get( 'next', None )
     log.debug( f'next_url, ```{next_url}```' )
     if not next_url:
-        # redirect_url = reverse( settings_app.POST_LOGIN_ADMIN_REVERSE_URL )
-        redirect_url = reverse( 'editor_index_url' )
+        log.debug( f'session_keys, ```{list( request.session.keys() )}```' )
+        if request.session.get( 'redirect_url', None ):
+            redirect_url = request.session['redirect_url']
+            del request.session['redirect_url']
+        else:
+            redirect_url = reverse( 'editor_index_url' )
     else:
-        redirect_url = request.GET['next']  # will often be same page
+        redirect_url = request.GET['next']  # may be same page
     log.debug( 'redirect_url, ```%s```' % redirect_url )
     return HttpResponseRedirect( redirect_url )
 

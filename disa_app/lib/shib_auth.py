@@ -43,6 +43,7 @@ def shib_login(func):
             if not user_obj:
                 if request.path:
                     login_redirect_url = f'{reverse("login_url")}?next={request.path}'
+                    request.session['redirect_url'] = request.path
                 else:
                     login_redirect_url = reverse( 'login_url ')
                 log.debug( f'no user_obj, redirecting to url, ```{login_redirect_url}```' )
