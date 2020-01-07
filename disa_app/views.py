@@ -110,11 +110,12 @@ def login( request ):
         log.debug( f'session_keys, ```{list( request.session.keys() )}```' )
         if request.session.get( 'redirect_url', None ):
             redirect_url = request.session['redirect_url']
-            del request.session['redirect_url']
         else:
             redirect_url = reverse( 'editor_index_url' )
     else:
         redirect_url = request.GET['next']  # may be same page
+    if request.session.get( 'redirect_url', None ):  # cleanup
+        del request.session['redirect_url']
     log.debug( 'redirect_url, ```%s```' % redirect_url )
     return HttpResponseRedirect( redirect_url )
 
