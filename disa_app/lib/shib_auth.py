@@ -24,6 +24,11 @@ def shib_login(func):
         Called by views.py decorators. """
     log.debug( 'starting shib_login() decorator' )
     def decorator(request, *args, **kwargs):
+        log.debug( f'args, ```{args}```' )
+        log.debug( f'kwargs, ```{kwargs}```' )
+        log.debug( f'request.path, ```{request.path}```' )
+        log.debug( f'request.path_info, ```{request.path_info}```' )
+        log.debug( f'request.__dict__, ```{request.__dict__}```' )
         if request.user.is_authenticated == True:
             log.debug( 'user already logged in; skip authentication' )
             pass
