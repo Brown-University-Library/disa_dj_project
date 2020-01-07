@@ -105,6 +105,7 @@ def login( request ):
         Called by click on login or admin link. """
     log.debug( '\n\nstarting login()' )
     next_url = request.GET.get( 'next', None )
+    log.debug( f'next_url, ```{next_url}```' )
     if not next_url:
         # redirect_url = reverse( settings_app.POST_LOGIN_ADMIN_REVERSE_URL )
         redirect_url = reverse( 'editor_index_url' )
