@@ -38,7 +38,7 @@ def shib_login(func):
             cleaned_meta_dct = hlpr.prep_shib_dct( request.META, request.get_host() )
             user_obj = hlpr.manage_usr_obj( request, cleaned_meta_dct )
             if not user_obj:
-                log.debug( 'no user_obj, redirecting to url, ```{reverse("login_url")}```' )
+                log.debug( f'no user_obj, redirecting to url, ```{reverse("login_url")}```' )
                 # return HttpResponseForbidden( '403 / Forbidden' )
                 return HttpResponseRedirect( reverse('login_url') )
         return func(request, *args, **kwargs)
