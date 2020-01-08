@@ -2,8 +2,10 @@
 {% load staticfiles %}
 
 {% block header_other %}
-{% comment %} <link rel="stylesheet" href="{{ url_for('static', filename='lib/bootstrap-4.1.2-dist/css/bootstrap.min.css') }}"> {% endcomment %}
 <link rel="stylesheet" href="{%  static 'lib/bootstrap-4.1.2-dist/css/bootstrap.min.css' %}">
+{% endblock %}
+
+{% block header_other_2 %}  {# does not override `base.html`; this is for templates extending `editor.html` #}
 {% endblock %}
 
 {% block content %}{% endblock %}
