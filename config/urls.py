@@ -39,7 +39,7 @@ urlpatterns = [
     url( r'^record/relationships/$', views.edit_relationships, name='edit_relationships_url' ),
     # url( r'^record/relationships/(?P<recId>.*)/$', views.edit_relationships, name='edit_relationships_url' ),
 
-    url( r'^search_handler/$', views.search_handler, name='search_handler_url' ),
+    url( r'^search_results/$', views.search_results, name='search_results_url' ),
 
     ## old...
 
