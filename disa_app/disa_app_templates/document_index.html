@@ -1,7 +1,7 @@
 {% extends "disa_app_templates/editor.html" %}
 
 {% block header_other %}
-{{ block.super }}
+{{ block.super }}  {# adds-to the `editor.html` `header_other` block, instead of replacing it. #}
 <style>
     #new_document_button {
         margin-top: 5px;
@@ -30,15 +30,15 @@
                 </tr>
             </thead>
             <tbody>
-            {% for date, email, doc in user_documents %}
+            {% for entry in user_documents %}
                 <tr>
-                    <th scope="row">{{ doc.id }}</th>
+                    <th scope="row">{{ entry.doc.id }}</th>
                     <td>
                         <a href="{% url 'edit_citation_url' doc.id %}">{{ doc.display }}</a>
                     </td>
-                    <td>{{ doc.references|length }}</td>
-                    <td>{{ email }}</td>
-                    <td>{{ date_str }}<br/>{{ time_str }}</td>
+                    <td>{{ entry.doc.reference_count }}</td>
+                    <td>{{ entry.email }}</td>
+                    <td>{{ entry.date.dt_date }}<br/>{{ entry.date.dt_time }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -58,15 +58,15 @@
                 </tr>
             </thead>
             <tbody>
-            {% for date, email, doc in documents %}
+            {% for entry in documents %}
                 <tr>
-                    <th scope="row">{{ doc.id }}</th>
+                    <th scope="row">{{ entry.doc.id }}</th>
                     <td>
                         <a href="{% url 'edit_citation_url' doc.id %}">{{ doc.display }}</a>
                     </td>
-                    <td>{{ doc.references|length }}</td>
-                    <td>{{ email }}</td>
-                    <td>{{ date_str }}<br/>{{ time_str }}</td>
+                    <td>{{ entry.doc.reference_count }}</td>
+                    <td>{{ entry.email }}</td>
+                    <td>{{ entry.date.dt_date }}<br/>{{ entry.date.dt_time }}</td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -87,15 +87,27 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
     # data['user_documents'] = srtd_user
     # data['documents'] = srtd_all
 
-    data['user_documents'] = []
-    data['documents'] = []
+    # data['user_documents'] = [
+    #     {
+    #     'date': {'dt_date': 'the-date', 'dt_time': 'the-time'},
+    #     'email': 'the-email',
+    #     'doc': {'id': 'the-doc-id', 'display': 'the-doc-display', 'reference_count': 1} },
+    #     {
+    #     'date': {'dt_date': 'the-date2', 'dt_time': 'the-time2'},
+    #     'email': 'the-email2',
+    #     'doc': {'id': 'the-doc-id2', 'display': 'the-doc-display2', 'reference_count': 2} }
+    #     ]
+
+    data['user_documents'] = jsonify_entries( srtd_user[0:10] )
+    data['documents'] = jsonify_entries( srtd_all )
 
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     return data
 
 
-
-def sort_documents( wrappedDocs ):
+def sort_documents( wrappedDocs ) --> list:
+    """ Sorts documents.
+        Called by query_documents() """
     log.debug( f'before sort (first 5), ```{pprint.pformat(wrappedDocs[0:5])}```...' )
     merge = {}
     for w in wrappedDocs:
@@ -106,6 +118,14 @@ def sort_documents( wrappedDocs ):
     sorted_docs = sorted([ merge[w] for w in merge], reverse=True)
     log.debug( f'after sort (first 5), ```{pprint.pformat(sorted_docs[0:5])}```...' )
     return sorted_docs
+
+
+def jsonify_entries( doc_list ) --> list:
+    """ Converts data elements into json-compatible data-structures.
+        Called by query_documents() """
+    jsonified_entries = []
+    for entry in doc_list:
+
 
 
 
