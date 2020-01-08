@@ -105,7 +105,7 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
     return data
 
 
-def sort_documents( wrappedDocs ) --> list:
+def sort_documents( wrappedDocs ) -> list:
     """ Sorts documents.
         Called by query_documents() """
     log.debug( f'before sort (first 5), ```{pprint.pformat(wrappedDocs[0:5])}```...' )
@@ -120,11 +120,12 @@ def sort_documents( wrappedDocs ) --> list:
     return sorted_docs
 
 
-def jsonify_entries( doc_list ) --> list:
+def jsonify_entries( doc_list ) -> list:
     """ Converts data elements into json-compatible data-structures.
         Called by query_documents() """
-    jsonified_entries = []
-    for entry in doc_list:
+    pass
+    # jsonified_entries = []
+    # for entry in doc_list:
 
 
 
