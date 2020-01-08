@@ -1,6 +1,7 @@
 {% extends "disa_app_templates/editor.html" %}
 
-{% block header_other_2 %}  {# does not override `base.html`; overrides `editor.html` #}
+{% block header_other %}
+{{ block.super }}
 <style>
     #new_document_button {
         margin-top: 5px;
