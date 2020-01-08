@@ -17,12 +17,13 @@ urlpatterns = [
     url( r'^logout/$', views.logout, name='logout_url' ),
 
     url( r'^editor/documents/(?P<cite_id>.*)/$', views.edit_citation, name='edit_citation_url' ),
+    url( r'^editor/documents/new/$', views.new_citation, name='new_citation_url' ),
     url( r'^editor/records/(?P<rec_id>.*)/$', views.edit_record, name='edit_record_url' ),
     url( r'^editor/person/$', views.edit_person, name='edit_person_root_url' ),
     url( r'^editor/person/(?P<rfrnt_id>.*)/$', views.edit_person, name='edit_person_url' ),
     url( r'^editor/$', views.editor_index, name='editor_index_url' ),
 
-    url( r'^data/documents/(?P<docId>.*)/$', views.temp_response, name='temp_name_url' ),  # note, 'citeID' is passed on a PUT.
+    url( r'^data/documents/(?P<docId>.*)/$', views.temp_response, name='temp_name_url' ),  # note, 'citeID', above, is passed on a PUT.
     url( r'^data/records/(?P<rec_id>.*)/$', views.data_records, name='data_record_url' ),  # note, 'refID' is passed on a PUT.
     url( r'^data/entrants/details/(?P<rntId>.*)/$', views.temp_response, name='temp_name_url' ),
     url( r'^data/entrants/(?P<rfrnt_id>.*)/$', views.data_entrants, name='data_referent_url' ),
@@ -37,6 +38,8 @@ urlpatterns = [
 
     url( r'^record/relationships/$', views.edit_relationships, name='edit_relationships_url' ),
     # url( r'^record/relationships/(?P<recId>.*)/$', views.edit_relationships, name='edit_relationships_url' ),
+
+    url( r'^search_handler/$', views.search_handler, name='search_handler_url' ),
 
     ## old...
 

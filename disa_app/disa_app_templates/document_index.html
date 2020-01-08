@@ -1,0 +1,75 @@
+{% extends "disa_app_templates/editor.html" %}
+
+{% block header %}
+<style>
+    #new_document_button {
+        margin-top: 5px;
+    }
+    .citation-titles {
+        width: 50%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+	<div class="container">
+        <div id="new_document_button" class="d-flex flex-row-reverse">
+            <a class="btn btn-primary" href="{% url 'new_citation_url' %}" >New document</a>
+        </div>
+		<h2>Your recent documents</h2>
+        {% if user_documents %}
+        <table class="table">
+            <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th class='citation-titles' scope="col">Citation</th>
+                  <th scope="col">Items</th>
+                  <th scope="col">Editor</th>
+                  <th scope="col">Time</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for date, email, doc in user_documents %}
+                <tr>
+                    <th scope="row">{{ doc.id }}</th>
+                    <td>
+                        <a href="{% url 'edit_citation_url' doc.id %}">{{ doc.display }}</a>
+                    </td>
+                    <td>{{ doc.references|length }}</td>
+                    <td>{{ email }}</td>
+                    <td>{{ date_str }}<br/>{{ time_str }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else%}
+        <p class='text-danger'>You have not comitted any changes to any documents</p>
+        {% endif %}
+        <h2>All documents</h2>
+		<table class="table">
+            <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th class='citation-titles' scope="col">Citation</th>
+                  <th scope="col">Items</th>
+                  <th scope="col">Editor</th>
+                  <th scope="col">Time</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for date, email, doc in documents %}
+                <tr>
+                    <th scope="row">{{ doc.id }}</th>
+                    <td>
+                        <a href="{% url 'edit_citation_url' doc.id %}">{{ doc.display }}</a>
+                    </td>
+                    <td>{{ doc.references|length }}</td>
+                    <td>{{ email }}</td>
+                    <td>{{ date_str }}<br/>{{ time_str }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+	</div>
+
+{% endblock %}

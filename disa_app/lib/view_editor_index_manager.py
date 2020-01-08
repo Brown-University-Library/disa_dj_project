@@ -61,20 +61,22 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
                         for cite in has_refs
                             for ref in cite.references
                                 for edit in ref.edits ]
-    log.debug( f'wrapped_refs (first 20), ```{pprint.pformat(wrapped_refs[0:20])}...```' )
+    log.debug( f'wrapped_refs (first 5), ```{pprint.pformat(wrapped_refs[0:5])}...```' )
 
     # user_cites = [ wrapped for wrapped in wrapped_refs
     #                 if wrapped[1] == current_user.id ]
     user_cites = [ wrapped for wrapped in wrapped_refs
                     if wrapped[1] == old_usr_db_id ]
-    log.debug( f'user_cites (first 10), ```{pprint.pformat(user_cites[0:10])}...```' )
+    log.debug( f'user_cites (first 5), ```{pprint.pformat(user_cites[0:5])}...```' )
 
     # srtd_all = sort_documents(no_refs + wrapped_refs)
     srtd_all = sort_documents(wrapped_refs)
-    log.debug( f'srtd_all (first 10), ```{pprint.pformat(srtd_all[0:10])}...```' )
+    log.debug( f'srtd_all (first 5), ```{pprint.pformat(srtd_all[0:5])}...```' )
+    log.debug( f'srtd_all count, `{len(srtd_all)}`' )
 
     srtd_user = sort_documents(user_cites)
-    log.debug( f'srtd_user (first 10), ```{pprint.pformat(srtd_user[0:10])}...```' )
+    log.debug( f'srtd_user (first 5), ```{pprint.pformat(srtd_user[0:5])}...```' )
+    log.debug( f'srtd_user count, `{len(srtd_user)}`' )
 
     # return render_template(
     #     'document_index.html',
@@ -82,24 +84,28 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
     #     documents=srtd_all
     #     )
 
-    data['user_documents'] = srtd_user
+    # data['user_documents'] = srtd_user
+    # data['documents'] = srtd_all
+
+    data['user_documents'] = []
+    data['documents'] = []
 
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     return data
 
 
 
-# def sort_documents(wrappedDocs):
-#     log.debug( f'before sort (first 10), ```{pprint.pformat(wrappedDocs[0:10])}...```' )
-#     merge = {}
-#     for w in wrappedDocs:
-#         if w[0].id not in merge or merge[w[0].id][0] < w[2]:
-#             merge[w[0].id] = (w[2], w[3], w[0])
-#         else:
-#             continue
-#     sorted_docs = sorted([ merge[w] for w in merge], reverse=True)
-#     # log.debug( f'sorted_docs (first 10), ```{pprint.pformat(sorted_docs)}```...' )
-#     return sorted_docs
+def sort_documents( wrappedDocs ):
+    log.debug( f'before sort (first 5), ```{pprint.pformat(wrappedDocs[0:5])}```...' )
+    merge = {}
+    for w in wrappedDocs:
+        if w[0].id not in merge or merge[w[0].id][0] < w[2]:
+            merge[w[0].id] = (w[2], w[3], w[0])
+        else:
+            continue
+    sorted_docs = sorted([ merge[w] for w in merge], reverse=True)
+    log.debug( f'after sort (first 5), ```{pprint.pformat(sorted_docs[0:5])}```...' )
+    return sorted_docs
 
 
 

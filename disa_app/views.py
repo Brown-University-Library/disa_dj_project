@@ -85,7 +85,23 @@ def source( request, src_id ):
 @shib_login
 def editor_index( request ):
     log.debug( '\n\nstarting editor_index()' )
-    return HttpResponse( 'editor-index coming' )
+    # return HttpResponse( 'editor-index coming' )
+    context: dict = view_editor_index_manager.query_documents( request.user.username, request.user.profile.old_db_id )
+    if request.user.is_authenticated:
+        context['user_is_authenticated'] = True
+        context['user_first_name'] = request.user.first_name
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/document_index.html', context )
+    return resp
+
+
+
+
+def search_handler( request ):
+    log.debug( '\n\nstarting search_handler()' )
+    return HttpResponse( 'search-handler coming' )
     context: dict = view_editor_index_manager.query_documents( request.user.username, request.user.profile.old_db_id )
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
@@ -97,6 +113,9 @@ def editor_index( request ):
     return resp
 
 
+# ===========================
+# auth urls
+# ===========================
 
 
 @shib_login
@@ -161,6 +180,12 @@ def edit_record( request, rec_id ):
 def edit_relationships( request ):
     """ Note: though this is in the 'editor' section here, the url is `/record/relationships/`. """
     return HttpResponse( 'edit-relationships coming' )
+
+
+@shib_login
+def new_citation( request ):
+    return HttpResponse( 'new-citation (new-document) coming' )
+
 
 
 # ===========================
