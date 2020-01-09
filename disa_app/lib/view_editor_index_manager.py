@@ -123,9 +123,19 @@ def sort_documents( wrappedDocs ) -> list:
 def jsonify_entries( doc_list ) -> list:
     """ Converts data elements into json-compatible data-structures.
         Called by query_documents() """
-    pass
-    # jsonified_entries = []
-    # for entry in doc_list:
+
+    jsonified_entries = []
+    for entry in doc_list:
+        ( date, email, citation_obj ) = ( entry[0], entry[1], entry[2] )
+        dtstr_date = date.strftime( '%Y-%m-%d')
+        dtstr_time = date.strftime( '%H:%M %p' )
+        entry_dct = {
+            'date': {'dt_date': dtstr_date, 'dt_time': dtstr_time},
+            'email': email,
+            }
+        jsonified_entries.append( entry_dct )
+    log.debug( f'jsonified_entries, ```{pprint.pformat(jsonified_entries)}```' )
+    return jsonified_entries
 
 
 
