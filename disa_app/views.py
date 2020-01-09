@@ -161,7 +161,7 @@ def logout( request ):
 @shib_login
 def edit_citation( request, cite_id ):
     ## TODO: rename function to `edit_document()`?
-    # return HttpResponse( 'coming' )
+    return HttpResponse( 'coming' )
     log.debug( '\n\nstarting edit_citation()' )
     context: dict = view_edit_citation_manager.query_data( cite_id )
     if request.user.is_authenticated:
