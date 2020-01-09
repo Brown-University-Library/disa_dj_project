@@ -34,7 +34,7 @@
                 <tr>
                     <th scope="row">{{ entry.doc.id }}</th>
                     <td>
-                        <a href="{% url 'edit_citation_url' doc.id %}">{{ doc.display }}</a>
+                        <a href="{% url 'edit_citation_url' entry.doc.id %}">{{ entry.doc.display }}</a>
                     </td>
                     <td>{{ entry.doc.reference_count }}</td>
                     <td>{{ entry.email }}</td>
@@ -62,7 +62,7 @@
                 <tr>
                     <th scope="row">{{ entry.doc.id }}</th>
                     <td>
-                        <a href="{% url 'edit_citation_url' doc.id %}">{{ doc.display }}</a>
+                        <a href="{% url 'edit_citation_url' entry.doc.id %}">{{ entry.doc.display }}</a>
                     </td>
                     <td>{{ entry.doc.reference_count }}</td>
                     <td>{{ entry.email }}</td>
