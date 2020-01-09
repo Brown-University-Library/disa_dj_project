@@ -6,7 +6,7 @@ from typing import List
 import requests
 from disa_app import settings_app
 from disa_app.lib import view_data_records_manager
-from disa_app.lib import view_info_manager, view_people_manager, view_person_manager, view_edit_record_manager, view_editor_index_manager
+from disa_app.lib import view_info_manager, view_people_manager, view_person_manager, view_edit_record_manager, view_editor_index_manager, view_edit_citation_manager
 from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
@@ -80,12 +80,10 @@ def source( request, src_id ):
     return HttpResponseRedirect( redirect_url )
 
 
-
-
 @shib_login
 def editor_index( request ):
+    ## TODO: rename this url from `/editor/` to `/documents/`?
     log.debug( '\n\nstarting editor_index()' )
-    # return HttpResponse( 'editor-index coming' )
     context: dict = view_editor_index_manager.query_documents( request.user.username, request.user.profile.old_db_id )
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
@@ -95,8 +93,6 @@ def editor_index( request ):
     else:
         resp = render( request, 'disa_app_templates/document_index.html', context )
     return resp
-
-
 
 
 def search_results( request ):
@@ -118,8 +114,6 @@ def search_results( request ):
     else:
         resp = render( request, 'disa_app_templates/search_results.html', context )
     return resp
-
-
 
 
 # ===========================
@@ -166,7 +160,19 @@ def logout( request ):
 
 @shib_login
 def edit_citation( request, cite_id ):
-    return HttpResponse( 'coming' )
+    ## TODO: rename function to `edit_document()`?
+    # return HttpResponse( 'coming' )
+    log.debug( '\n\nstarting edit_citation()' )
+    context: dict = view_edit_citation_manager.query_data( cite_id )
+    if request.user.is_authenticated:
+        context['user_is_authenticated'] = True
+        context['user_first_name'] = request.user.first_name
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/document_edit.html', context )
+    return resp
+
 
 
 @shib_login
