@@ -232,9 +232,10 @@ var initializeForm = function (data, ctMap) {
 
 var readDocumentData = function(docId, ctMap, copy) {
     if (copy) {
-        var doc_data_api = "{% url 'read_document_data' 'copy' %}";
+        var doc_data_api = "{% url 'data_documents_url' 'copy' %}";
     } else {
-        var doc_data_api = "{% url 'read_document_data' None %}" + docId;
+        {# var doc_data_api = "{% url 'data_documents_url' None %}" + docId; #}
+        var doc_data_api = "{% url 'data_documents_url' docId %}";
     }
     $.get(doc_data_api, function(data) {
         initializeForm(data, ctMap);
@@ -242,7 +243,8 @@ var readDocumentData = function(docId, ctMap, copy) {
 }
 
 var updateDocumentData = function(docId, ctMap) {
-    var doc_data_api = "{% url 'update_citation_data' None %}" + docId;
+    {# var doc_data_api = "{% url 'update_citation_data' None %}" + docId; #}
+    var doc_data_api = "{% url 'data_documents_url' docId %}";
     var data = collectInputValues();
     var method = (docId ? "PUT" : "POST");
     $.ajax({
@@ -282,7 +284,7 @@ var deactivateReferenceDelete = function($cancelBtn) {
 }
 
 var deleteReference = function($refRow, ctMap) {
-    var ref_del_api = "{% url 'delete_reference' 'STUB' %}"
+    var ref_del_api = "{% url 'data_reference_url' 'STUB' %}"
         .replace('STUB', $refRow.attr('data-reference'));
     $.ajax({
         type: "DELETE",

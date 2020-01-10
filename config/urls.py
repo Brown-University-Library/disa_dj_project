@@ -23,11 +23,11 @@ urlpatterns = [
     url( r'^editor/person/(?P<rfrnt_id>.*)/$', views.edit_person, name='edit_person_url' ),
     url( r'^editor/$', views.editor_index, name='editor_index_url' ),
 
-    url( r'^data/documents/(?P<docId>.*)/$', views.temp_response, name='temp_name_url' ),  # note, 'citeID', above, is passed on a PUT.
+    url( r'^data/documents/(?P<docId>.*)/$', views.temp_response, name='data_documents_url' ),  # note, 'citeID', above, is passed on a PUT.
     url( r'^data/records/(?P<rec_id>.*)/$', views.data_records, name='data_record_url' ),  # note, 'refID' is passed on a PUT.
     url( r'^data/entrants/details/(?P<rntId>.*)/$', views.temp_response, name='temp_name_url' ),
     url( r'^data/entrants/(?P<rfrnt_id>.*)/$', views.data_entrants, name='data_referent_url' ),
-    url( r'^data/reference/(?P<refId>.*)/$', views.temp_response, name='temp_name_url' ),
+    url( r'^data/reference/(?P<refId>.*)/$', views.temp_response, name='data_reference_url' ),
     url( r'^data/sections/(?P<refId>.*)/relationships/$', views.temp_response, name='temp_name_url' ),
     url( r'^data/relationships/(?P<relId>.*)/$', views.temp_response, name='temp_name_url' ),
 
