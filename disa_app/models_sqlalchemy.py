@@ -119,6 +119,7 @@ class Citation(Base):
     def __repr__(self):
         return '<Citation {0}>'.format(self.id)
 
+
 class CitationType(Base):
     __tablename__ = '2_citation_types'
 
@@ -131,6 +132,43 @@ class CitationType(Base):
         back_populates='citation_types')
     citations = relationship('Citation',
         backref='citation_type', lazy=True)
+
+
+
+
+class ZoteroType(Base):
+    __tablename__ = '1_zotero_types'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    creator_name = Column(String(255))
+    citation_types = relationship('CitationType',
+        backref='zotero_type', lazy=True)
+
+
+class ZoteroField(Base):
+    __tablename__ = '1_zotero_fields'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    display_name = Column(String(255))
+
+
+class ZoteroTypeField(Base):
+    __tablename__ = '2_zoterotype_fields'
+
+    id = Column(Integer, primary_key=True)
+    zotero_type_id = Column(Integer, ForeignKey('1_zotero_types.id'))
+    zotero_field_id = Column(Integer, ForeignKey('1_zotero_fields.id'))
+    rank = Column(Integer)
+    zotero_type = relationship(ZoteroType,
+        primaryjoin=(zotero_type_id == ZoteroType.id),
+        backref='template_fields')
+    zotero_field = relationship(ZoteroField,
+        primaryjoin=(zotero_field_id == ZoteroField.id),
+        backref='templates')
+
+
 
 
 class Reference(Base):
@@ -192,8 +230,6 @@ class Location(Base):
         return '<Location {0}: {1}>'.format(self.id, self.name)
 
 
-
-
 class ReferenceLocation(Base):
     __tablename__ = '5_has_location'
 
@@ -208,8 +244,6 @@ class ReferenceLocation(Base):
     location = relationship(Location,
         primaryjoin=(location_id == Location.id),
         backref='references')
-
-
 
 
 class Person(Base):

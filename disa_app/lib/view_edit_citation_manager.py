@@ -31,7 +31,7 @@ def query_data( cite_id: str ) -> dict:
     # cite = models.Citation.query.get(citeId)
     cite = session.query( models_alch.Citation ).get( cite_id )
 
-    data['foo'] = bar
+    data['foo'] = 'bar'
 
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     return data
