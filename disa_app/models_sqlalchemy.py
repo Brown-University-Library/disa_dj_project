@@ -6,7 +6,7 @@ Resources...
 - <https://stackoverflow.com/questions/2828248/sqlalchemy-returns-tuple-not-dictionary>
 """
 
-import logging
+import datetime, logging
 from typing import List
 
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, UnicodeText
@@ -116,6 +116,20 @@ class Citation(Base):
     acknowledgements = Column(String(255))
     references = relationship('Reference', backref='citation', lazy=True)
 
+    def dictify( self ):
+        jsn_references = []
+        for rfrnc in self.references:
+            jsn_references.append( rfrnc.dictify() )
+        data = {
+            'id': self.id,
+            'citation_type_id': self.citation_type_id,
+            'display': self.display,
+            'zotero_id': self.zotero_id,
+            'comments': self.comments,
+            'references': jsn_references
+            }
+        return data
+
     def __repr__(self):
         return '<Citation {0}>'.format(self.id)
 
@@ -132,8 +146,6 @@ class CitationType(Base):
         back_populates='citation_types')
     citations = relationship('Citation',
         backref='citation_type', lazy=True)
-
-
 
 
 class ZoteroType(Base):
@@ -169,8 +181,6 @@ class ZoteroTypeField(Base):
         backref='templates')
 
 
-
-
 class Reference(Base):
     __tablename__ = '4_references'
 
@@ -197,6 +207,25 @@ class Reference(Base):
         else:
             return ''
 
+    def dictify( self ):
+        if self.date:
+            isodate = datetime.date.isoformat( self.date )
+        else:
+            isodate = ''
+        jsn_referents = []
+        for rfrnt in self.referents:
+            jsn_referents.append( {'id': rfrnt.id, 'age': rfrnt.age, 'sex': rfrnt.sex} )
+        data = {
+            'id': self.id,
+            'citation_id': self.citation_id,
+            'reference_type_id': self.reference_type_id,
+            'national_context_id': self.national_context_id,
+            'date': isodate,
+            'transcription': self.transcription,
+            'referents': jsn_referents
+            }
+        return data
+
     def __repr__(self):
         return '<Reference {0}>'.format(self.id)
 
@@ -216,6 +245,13 @@ class ReferenceType(Base):
     citation_types = relationship(
         'CitationType', secondary=citationtype_referencetypes,
         back_populates='reference_types')
+
+    def dictify( self ):
+        data = {
+            'id': self.id,
+            'name': self.name
+            }
+        return data
 
 
 class Location(Base):
