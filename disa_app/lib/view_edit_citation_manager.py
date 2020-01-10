@@ -28,10 +28,14 @@ def query_data( cite_id: str ) -> dict:
     data = {}
     citation_type_data = build_ct_js_data( session )
 
-    # cite = models.Citation.query.get(citeId)
     cite = session.query( models_alch.Citation ).get( cite_id )
+    log.debug( f'cite.references, ```{cite.references}```' )
+    log.debug( f'cite.references[0].dictify(), ```{cite.references[0].dictify()}```' )
 
-    data['foo'] = 'bar'
+    cite_dct = cite.dictify()
+
+    data['ct_fields'] = citation_type_data
+    data['doc'] = cite_dct
 
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     return data

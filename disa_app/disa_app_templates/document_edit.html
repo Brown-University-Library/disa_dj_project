@@ -102,7 +102,7 @@
                 <tr data-reference="{{ item.id }}">
                     <th scope="row">{{ item.id }}</th>
                     <td>
-                        <a href="{% url 'edit_record' item.id %}">{{ item.reference_type.name }}</a>
+                        <a href="{% url 'edit_record_url' item.id %}">{{ item.reference_type.name }}</a>
                     </td>
                     {# <td>{{ item.last_edit().timestamp.strftime("%Y-%m-%d") }}</td> #}
                     <td>{{ item.last_edit_time }}</td>
@@ -114,7 +114,7 @@
         </table>
         {% endif %}
         <div id="new_document_button" class="d-flex flex-row-reverse">
-            <a class="btn btn-primary" href="{% url 'edit_record' doc.id %}">Add an item</a>
+            <a class="btn btn-primary" href="{% url 'edit_record_url' doc.id %}">Add an item</a>
         </div>
     {% endif %}
 </div>
