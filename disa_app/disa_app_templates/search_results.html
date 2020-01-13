@@ -35,8 +35,10 @@
 {% block content %}
 <div class="container-fluid">
     <h1 id="list_heading">Search Results</h1>
+    <hr/>
     <div class="zrow">
         <h2>People...</h2>
+        <p>(Count: {{ people_results.count }})</p>
         <p>(Fields searched: {{ people_results.fields_searched|join:', ' }})</p>
         {% for pers in people_results.people %}
         <ul>
@@ -47,8 +49,10 @@
         </ul>
         {% endfor %}
     </div>
+    <hr/>
     <div class="zrow">
       <h2>Citations...</h2>
+      <p>(Count: {{ citation_results.count }})</p>
       <p>(Fields searched: {{ citation_results.fields_searched|join:', ' }})</p>
       {% for cite in citation_results.citations %}
       <ul>
@@ -58,8 +62,10 @@
       </ul>
       {% endfor %}
     </div>
+    <hr/>
     <div class="zrow">
       <h2>Items...</h2>
+      <p>(Count: {{ item_results.count }})</p>
       <p>(Fields searched: {{ item_results.fields_searched|join:', ' }})</p>
       {% for rfrnc in item_results.references %}
       <ul>
