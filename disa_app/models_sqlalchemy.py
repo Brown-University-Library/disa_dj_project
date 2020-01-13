@@ -6,7 +6,7 @@ Resources...
 - <https://stackoverflow.com/questions/2828248/sqlalchemy-returns-tuple-not-dictionary>
 """
 
-import datetime, logging
+import datetime, logging, operator
 from typing import List
 
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, UnicodeText
@@ -219,10 +219,12 @@ class Reference(Base):
             'id': self.id,
             'citation_id': self.citation_id,
             'reference_type_id': self.reference_type_id,
+            'reference_type_name': self.reference_type.name,  # NB: this appears to be an sqlalchemy convention -- that if there is a ForeignKey, I can just go ahead and refernce the property name.
             'national_context_id': self.national_context_id,
             'date': isodate,
             'transcription': self.transcription,
-            'referents': jsn_referents
+            'referents': jsn_referents,
+            'last_edit': self.last_edit().timestamp.strftime('%Y-%m-%d')
             }
         return data
 
