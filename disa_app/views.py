@@ -7,6 +7,7 @@ import requests
 from disa_app import settings_app
 from disa_app.lib import view_data_records_manager
 from disa_app.lib import view_info_manager, view_people_manager, view_person_manager, view_edit_record_manager, view_editor_index_manager, view_edit_citation_manager
+from disa_app.lib import view_search_results_manager
 from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
@@ -104,7 +105,7 @@ def search_results( request ):
         log.debug( f'empty search, redirecting back to, ```{redirect_url}```' )
         return HttpResponseRedirect( redirect_url )
     context: dict = view_search_results_manager.run_search( srch_txt[0:50] )
-    return HttpResponse( 'search_results coming' )
+    # return HttpResponse( 'search_results coming' )
 
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True

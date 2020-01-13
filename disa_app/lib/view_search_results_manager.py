@@ -21,10 +21,57 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-# def run_search( srch_text: str ) -> dict:
-#     session = make_session()
-#     data = {}
-#     log.debug( f'srch_text, ```{srch_text}```' )
+def run_search( srch_text: str ) -> dict:
+    """ Queries people, citations, and items for search-text.
+        Called by views.search_results() """
+    log.debug( f'srch_text, ```{srch_text}```' )
+    session = make_session()
+    data = {}
+
+    people_results = search_people( srch_text, session )
+    citation_results = search_citations( srch_text, session )
+    # item_results = search_items( srch_text, session )
+
+    data = {
+        'people_results': people_results, 'citation_results': citation_results, 'item_results': [] }
+
+    log.debug( f'data, ```{pprint.pformat(data)}```' )
+    return data
+
+
+def search_people( srch_text, session ):
+    """ Searches `Person` table.
+        Called by run_search() """
+    people = []
+    qset_people = session.query( models_alch.Person ).filter(
+        or_(
+            models_alch.Person.first_name.contains( srch_text ),
+            models_alch.Person.last_name.contains( srch_text ),
+            models_alch.Person.comments.contains( srch_text )
+            ) ).all()
+    for person in qset_people:
+        people.append( person.dictify() )
+    people_info = {
+        'count': len(people), 'people': people, 'fields_searched': ['first_name', 'last_name', 'comments'] }
+    log.debug( f'people_info, ```{pprint.pformat( people_info )}```' )
+    return people_info
+
+
+def search_citations( srch_text, session ):
+    """ Searches `Citation` table.
+        Called by run_search() """
+    citations = []
+    qset_citations = session.query( models_alch.Citation ).filter(
+        or_(
+            models_alch.Citation.display.contains( srch_text ),
+            models_alch.Citation.comments.contains( srch_text )
+            ) ).all()
+    for cite in qset_citations:
+        citations.append( cite.dictify() )
+    citations_info = {
+        'count': len(citations), 'citations': citations, 'fields_searched': ['display', 'comments'] }
+    log.debug( f'citations_info, ```{pprint.pformat( citations_info )}```' )
+    return citations_info
 
 
 def experiment():
@@ -57,4 +104,4 @@ def experiment():
         print( f'\n\n---\n\n```{pprint.pformat(x.__dict__)}```' )
 
 
-experiment()
+# experiment()
