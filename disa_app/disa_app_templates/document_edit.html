@@ -102,10 +102,10 @@
                 <tr data-reference="{{ item.id }}">
                     <th scope="row">{{ item.id }}</th>
                     <td>
-                        <a href="{% url 'edit_record_url' item.id %}">{{ item.reference_type.name }}</a>
+                        <a href="{% url 'edit_record_url' item.id %}">{{ item.reference_type_name }}</a>
                     </td>
                     {# <td>{{ item.last_edit().timestamp.strftime("%Y-%m-%d") }}</td> #}
-                    <td>{{ item.last_edit_time }}</td>
+                    <td>{{ item.last_edit }}</td>
                     <td><button class="btn btn-danger del-reference"><span class="fas fa-times-circle"></span></button>
                     </td>
                 </tr>
@@ -237,6 +237,8 @@ var readDocumentData = function(docId, ctMap, copy) {
         {# var doc_data_api = "{% url 'data_documents_url' None %}" + docId; #}
         var doc_data_api = "{% url 'data_documents_url' docId %}";
     }
+    console.log( "foo" );
+    console.log( "doc_data_api, ", doc_data_api );
     $.get(doc_data_api, function(data) {
         initializeForm(data, ctMap);
     });
@@ -298,9 +300,12 @@ var deleteReference = function($refRow, ctMap) {
 }
 
 $( document ).ready(function() {
+    console.log( "here we go!" );
     var doc_id = getDocumentId();
-    {# var cite_type_fields = JSON.parse('{{ ct_fields | tojson | safe}}'); #}
+    console.log( "ok1" );
+    // {# var cite_type_fields = JSON.parse('{{ ct_fields | tojson | safe}}'); #}
     var cite_type_fields = JSON.parse( '{{ ct_fields_json | safe }}' );
+    console.log( "ok2" );
     readDocumentData(doc_id, cite_type_fields, false);
     $( "#document_form" ).accordion({
         collapsible: true,
