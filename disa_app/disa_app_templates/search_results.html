@@ -1,0 +1,72 @@
+{% extends "disa_app_templates/base.html" %}
+{% load staticfiles %}
+
+
+{# in <head> #}
+
+
+{% block header_other %}
+<link rel="stylesheet" href="{% static 'lib/bootstrap-4.1.2-dist/css/bootstrap.min.css' %}">
+
+<style type="text/css">
+    div.container-fluid {
+        margin-left: 4em;
+        width: 80%;
+        margin-right: -20em;
+    }
+    h1#list_heading {
+        margin-top: .5em;
+        font-family: 'Source Sans Pro', sans-serif;
+        font-size: 32px;
+    }
+    span.not_listed{
+        font-style: italic;
+        font-size: small;
+        color: brown;
+        vertical-align: text-bottom;
+    }
+</style>
+{% endblock header_other %}
+
+
+{# in <body> #}
+
+
+{% block content %}
+<div class="container-fluid">
+    <h1 id="list_heading">Search Results</h1>
+    <div class="zrow">
+        <h2>People...</h2>
+        <p>(Fields searched: {{ people_results.fields_searched|join:', ' }})</p>
+        {% for pers in people_results.people %}
+        <ul>
+            <li>person-id, {{ pers.id }}</li>
+            <li>first-name, {{ pers.first_name }}</li>
+            <li>last-name, {{ pers.last_name }}</li>
+            <li>comments, {{ pers.comments }}</li>
+        </ul>
+        {% endfor %}
+    </div>
+    <div class="zrow">
+      <h2>Citations...</h2>
+      <p>(Fields searched: {{ citation_results.fields_searched|join:', ' }})</p>
+      {% for cite in citation_results.citations %}
+      <ul>
+          <li>citation-id, {{ cite.id }}</li>
+          <li>display, {{ cite.display }}</li>
+          <li>comments, {{ cite.comments }}</li>
+      </ul>
+      {% endfor %}
+    </div>
+    <div class="zrow">
+      <h2>Items...</h2>
+      <p>(Fields searched: {{ item_results.fields_searched|join:', ' }})</p>
+      {% for rfrnc in item_results.references %}
+      <ul>
+          <li>reference-id, {{ rfrnc.id }}</li>
+          <li>transcription, {{ rfrnc.transcription }}</li>
+      </ul>
+      {% endfor %}
+    </div>
+</div>
+{% endblock content %}

@@ -30,10 +30,10 @@ def run_search( srch_text: str ) -> dict:
 
     people_results = search_people( srch_text, session )
     citation_results = search_citations( srch_text, session )
-    # item_results = search_items( srch_text, session )
+    item_results = search_items( srch_text, session )
 
     data = {
-        'people_results': people_results, 'citation_results': citation_results, 'item_results': [] }
+        'people_results': people_results, 'citation_results': citation_results, 'item_results': item_results }
 
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     return data
@@ -72,6 +72,23 @@ def search_citations( srch_text, session ):
         'count': len(citations), 'citations': citations, 'fields_searched': ['display', 'comments'] }
     log.debug( f'citations_info, ```{pprint.pformat( citations_info )}```' )
     return citations_info
+
+
+def search_items( srch_text, session ):
+    """ Searches `Reference` table.
+        Called by run_search() """
+    rfrncs = []
+    qset_rfrncs = session.query( models_alch.Reference ).filter(
+        or_(
+            models_alch.Reference.transcription.contains( srch_text ),
+            ) ).all()
+    for rfrnc in qset_rfrncs:
+        rfrncs.append( rfrnc.dictify() )
+    rfrncs_info = {
+        'count': len(rfrncs), 'references': rfrncs, 'fields_searched': ['transcription'] }
+    log.debug( f'rfrncs_info, ```{pprint.pformat( rfrncs_info )}```' )
+    return rfrncs_info
+
 
 
 def experiment():
