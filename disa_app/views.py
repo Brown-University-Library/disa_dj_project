@@ -222,6 +222,15 @@ def data_records( request, rec_id ):
     return resp
 
 
+@shib_login
+def read_document_data( request, docId ):
+    log.debug( f'\n\nstarting read_document_data(), with docId, `{docId}`' )
+    # context: dict = view_read_document_data_manager.query_record( docId )
+    context = {}
+    resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    return resp
+
+
 # ===========================
 # helper urls
 # ===========================
