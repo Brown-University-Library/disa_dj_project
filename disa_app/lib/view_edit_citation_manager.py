@@ -35,6 +35,7 @@ def query_data( cite_id: str ) -> dict:
     cite_dct = cite.dictify()
 
     data['ct_fields'] = citation_type_data
+    data['ct_fields_json'] = json.dumps( citation_type_data )
     data['doc'] = cite_dct
 
     log.debug( f'data, ```{pprint.pformat(data)}```' )
