@@ -234,10 +234,12 @@ var readDocumentData = function(docId, ctMap, copy) {
     if (copy) {
         var doc_data_api = "{% url 'data_documents_url' 'copy' %}";
     } else {
-        {# var doc_data_api = "{% url 'data_documents_url' None %}" + docId; #}
-        var doc_data_api = "{% url 'data_documents_url' docId %}";
+        //{# var doc_data_api = "{% url 'data_documents_url' None %}" + docId; #}
+        console.log( 'hereB' );
+        var doc_data_api = "{% url 'data_documents_url' 'STUB' %}".replace( "STUB", docId );  {#  odd; created urls in `record_edit.html can be created with variables` #}
     }
-    console.log( "foo" );
+    console.log( "docId, ", docId );
+    console.log( "copy, ", copy );
     console.log( "doc_data_api, ", doc_data_api );
     $.get(doc_data_api, function(data) {
         initializeForm(data, ctMap);
@@ -300,12 +302,9 @@ var deleteReference = function($refRow, ctMap) {
 }
 
 $( document ).ready(function() {
-    console.log( "here we go!" );
     var doc_id = getDocumentId();
-    console.log( "ok1" );
     // {# var cite_type_fields = JSON.parse('{{ ct_fields | tojson | safe}}'); #}
     var cite_type_fields = JSON.parse( '{{ ct_fields_json | safe }}' );
-    console.log( "ok2" );
     readDocumentData(doc_id, cite_type_fields, false);
     $( "#document_form" ).accordion({
         collapsible: true,
