@@ -6,7 +6,11 @@ from typing import List
 import requests
 from disa_app import settings_app
 from disa_app.lib import view_data_records_manager
-from disa_app.lib import view_info_manager, view_people_manager, view_person_manager, view_edit_record_manager, view_editor_index_manager, view_edit_citation_manager
+from disa_app.lib import view_edit_record_manager
+from disa_app.lib import view_editor_index_manager, view_edit_citation_manager  # documents
+from disa_app.lib import view_info_manager
+from disa_app.lib import view_people_manager, view_person_manager  # people
+from disa_app.lib import view_read_document_data_manager
 from disa_app.lib import view_search_results_manager
 from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
@@ -161,6 +165,7 @@ def logout( request ):
 
 @shib_login
 def edit_citation( request, cite_id ):
+    ## url( r'^editor/documents/(?P<cite_id>.*)/$' -- 'edit_citation_url'
     ## TODO: rename function to `edit_document()`?
     # return HttpResponse( 'coming' )
     log.debug( '\n\nstarting edit_citation()' )
@@ -216,6 +221,8 @@ def data_entrants( request, rfrnt_id ):
 
 @shib_login
 def data_records( request, rec_id ):
+    """ Called via ajax by views.edit_record()
+        Url: '/data/records/<rec_id>/' -- 'data_record_url' """
     log.debug( f'\n\nstarting data_records person(), with rec_id, `{rec_id}`' )
     context: dict = view_data_records_manager.query_record( rec_id )
     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
@@ -224,9 +231,10 @@ def data_records( request, rec_id ):
 
 @shib_login
 def read_document_data( request, docId ):
+    """ Called via ajax by views.edit_citation()
+        Url: '/data/documents/<docId>/' -- 'data_documents_url' """
     log.debug( f'\n\nstarting read_document_data(), with docId, `{docId}`' )
-    # context: dict = view_read_document_data_manager.query_record( docId )
-    context = {}
+    context: dict = view_read_document_data_manager.query_document( docId )
     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
 

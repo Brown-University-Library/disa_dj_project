@@ -42,9 +42,6 @@ def query_data( cite_id: str ) -> dict:
     return data
 
 
-
-
-
 def build_ct_js_data( session ) -> dict:
     """ Builds structural data for the page's javascript.
         Called by query_data()
@@ -75,8 +72,6 @@ def build_ct_js_data( session ) -> dict:
 
     log.debug( f'ct_fields, ```{pprint.pformat(ct_fields)}```' )
     return ct_fields
-
-
 
 
 ## from DISA
