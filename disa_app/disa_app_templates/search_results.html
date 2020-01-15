@@ -27,7 +27,9 @@
     }
 </style>
 
-<!-- Accordian effect -->
+<!-- Accordian effect
+     (based on KH's <https://github.com/Brown-University-Library/web_pattern_library/blob/master/examples/bul_pl_accordion_examples.html>)
+     -->
 <script>
     document.addEventListener('click', function (bul_pl_accordion_event) {
         var bul_pl_accordion_content = document.querySelector(bul_pl_accordion_event.target.hash);
@@ -53,20 +55,11 @@
                 document.getElementById( "content_3_a_element" ).innerHTML = "more";
             }
 
-            // a1 = document.getElementById( "content_1" );
-            // if ( a1.text == "less" ) {
-            //     console.log( "will change less to more" );
-            //     document.getElementById( "content_1" ).innerHTML = "more";
-            // }
-
-
-
             bul_pl_accordion_content.classList.remove('bul_pl_accordion_active');
             return;
         } else {
 
             console.log( "assuming user wants 'more'" );
-
 
             if ( bul_pl_accordion_content.id == "content-1" ) {
                 console.log( "will change `content-1` from more to less" );
@@ -79,46 +72,30 @@
                 document.getElementById( "content_3_a_element" ).innerHTML = "less";
             }
 
-
-            // a1 = document.getElementById( "content_1" );
-            // if ( a1.text == "more" ) {
-            //     console.log( "will change more to less" );
-            //     document.getElementById( "content_1" ).innerHTML = "less";
-            // }
-
-
         }
         bul_pl_accordion_content.classList.toggle('bul_pl_accordion_active');
     })
 </script>
 
-<!-- <link rel="stylesheet" type="text/css" href="https://library.brown.edu/common/css/bul_patterns.css" /> -->
-
 <style>
-
-    /* accordion functionality */
-
+    /***********************************************************************
+     accordion functionality
+     (based on KH's <https://library.brown.edu/common/css/bul_patterns.css>)
+     ***********************************************************************/
     .bul_pl_accordion-group {
         margin : 10px ;
     }
-
     .bul_pl_accordion-content {
         height : 15ex ; /* this is the height when the item is closed */
         transition: ease-in 1s ;
         overflow : hidden  ;
         clear : both ;
     }
-
     /* this is the height when the item is open */
     .bul_pl_accordion-content.bul_pl_accordion_active {
         height : fit-content ;
         transition: ease-in 1s ;
     }
-
-    /* end accordion functionality */
-
-    /* most styles for this functionality are contained in the "accordion" section in plib's /common/css/bul_patterns.css, but there are some optional styles below to get you started */
-
     .bul_pl_accordion-container {
         /* These are optional/custom display styles. Add your own custom styles here */
         margin-bottom : 3ex ;
