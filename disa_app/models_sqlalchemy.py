@@ -181,6 +181,25 @@ class ZoteroTypeField(Base):
         backref='templates')
 
 
+
+
+class CitationField(Base):
+    __tablename__ = '4_citation_fields'
+
+    id = Column(Integer, primary_key=True)
+    citation_id = Column(Integer, ForeignKey('3_citations.id'))
+    field_id = Column(Integer, ForeignKey('1_zotero_fields.id'))
+    field_data = Column(String(255))
+    citation = relationship(Citation,
+        primaryjoin=(citation_id == Citation.id),
+        backref='citation_data')
+    field = relationship(ZoteroField,
+        primaryjoin=(field_id == ZoteroField.id),
+        backref='citations')
+
+
+
+
 class Reference(Base):
     __tablename__ = '4_references'
 

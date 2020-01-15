@@ -234,7 +234,7 @@ def read_document_data( request, docId ):
     """ Called via ajax by views.edit_citation()
         Url: '/data/documents/<docId>/' -- 'data_documents_url' """
     log.debug( f'\n\nstarting read_document_data(), with docId, `{docId}`' )
-    context: dict = view_read_document_data_manager.query_document( docId )
+    context: dict = view_read_document_data_manager.query_document( docId, request.user.profile.old_db_id )
     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
 

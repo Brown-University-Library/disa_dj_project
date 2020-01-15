@@ -32,11 +32,11 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-def query_document( doc_id: str ) -> dict:
+def query_document( doc_id: str, old_usr_db_id: int ) -> dict:
     """ Queries and massages data.
         Called by views.read_document_data() """
     session = make_session()
-    data = {}
+    data = { 'doc': {} }
     included: list = CITATION_TYPES
     # ct = models.CitationType.query.filter( models.CitationType.name.in_(included) ).all()
     ct = session.query( models_alch.CitationType ).filter( models_alch.CitationType.name.in_(included) ).all()
@@ -44,21 +44,28 @@ def query_document( doc_id: str ) -> dict:
     data['doc_types'] = [ { 'id': c.id, 'name': c.name } for c in ct ]
 
 
-    1/0
 
 
     if doc_id == None:
         log.debug( f'returning data for docID equals None, ```{pprint.pformat(data)}```' )
         return jsonify(data)
     if doc_id == 'copy':
-        last_edit = edit = models.ReferenceEdit.query.filter_by(
-            user_id=current_user.id).order_by(
-            models.ReferenceEdit.timestamp.desc()).first()
+
+        # last_edit = edit = models.ReferenceEdit.query.filter_by(
+        #     user_id=current_user.id).order_by(
+        #     models.ReferenceEdit.timestamp.desc()).first()
+
+        last_edit = edit = session.query( models_alch.ReferenceEdit ).filter_by( user_id=old_usr_db_id ).order_by( models_alch.ReferenceEdit.timestamp.desc() ).first()
         log.debug( f'last_edit, ```{last_edit}```' )
+
+
+
         if not last_edit or not last_edit.edited:
             log.debug( f'returning data for docID equals copy with no last_edit, ```{pprint.pformat(data)}```' )
             return jsonify(data)
-        doc = models.Citation.query.get(last_edit.edited.citation_id)
+        # doc = models.Citation.query.get(last_edit.edited.citation_id)
+        doc = session.query( models_alch.Citation ).get( last_edit.edited.citation_id )
+        log.debug( f'doc, ```{doc}```' )
     else:
         doc = models.Citation.query.get(doc_id)
         data['doc']['id'] = doc.id
