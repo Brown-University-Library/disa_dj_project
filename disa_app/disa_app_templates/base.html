@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
         <meta charset="utf-8">
         {% if title %}
@@ -17,7 +18,16 @@
             .navbar-nav > li{
               margin-right:30px;
             }
+
+            div.container {
+                width: 100%;
+                padding-right: 15px;
+                padding-left: 15px;
+                margin-right: 7.5em;
+                margin-left: 7.5em;
+                }
         </style>
+
         <script src="{% static 'lib/jquery/jquery-3.3.1.min.js' %}"></script>
         <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
         <script src="{% static 'lib/bootstrap-4.1.2-dist/js/bootstrap.min.js' %}"></script>
@@ -26,6 +36,7 @@
         <link rel="shortcut icon" href="{% static 'images/disa_favicon.png' type='image/x-icon' %}">
         {% block header_other %}{% endblock %}
     </head>
+
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-secondary">
             <a class="navbar-brand text-white" href="{% url 'browse_url' %}">Database of Indigenous Slavery in the Americas</a>
@@ -76,7 +87,10 @@
         </nav>
         {% comment %} {% with messages = get_flashed_messages() %} {% endcomment %}
         {% comment %} {% endwith %}                                {% endcomment %}
-        {% block content %}{% endblock %}
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
         {% block scripts %}{% endblock %}
     </body>
+
 </html>

@@ -1,5 +1,9 @@
 {% extends "disa_app_templates/editor.html" %}
 
+
+{# in <head> #}
+
+
 {% block header_other %}
 {{ block.super }}  {# adds-to the `editor.html` `header_other` block, instead of replacing it. #}
 <style>
@@ -9,11 +13,22 @@
     .citation-titles {
         width: 50%;
     }
+
+    table.table {
+        table-layout: auto;
+        width: auto;
+        max-width: max-content;
+    }
+
 </style>
 {% endblock %}
 
+
+{# in <body> #}
+
+
 {% block content %}
-	<div class="container">
+	<!-- <div class="container"> -->
         <div id="new_document_button" class="d-flex flex-row-reverse">
             <a class="btn btn-primary" href="{% url 'new_citation_url' %}" >New document</a>
         </div>
@@ -71,6 +86,6 @@
             {% endfor %}
             </tbody>
         </table>
-	</div>
+	<!-- </div> -->
 
 {% endblock %}

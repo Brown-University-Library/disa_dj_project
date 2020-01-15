@@ -9,21 +9,35 @@
 <link rel="stylesheet" href="{% static 'lib/bootstrap-4.1.2-dist/css/bootstrap.min.css' %}">
 
 <style type="text/css">
+
+/*
     div.container-fluid {
         margin-left: 4em;
         width: 80%;
         margin-right: -20em;
     }
+*/
+
     h1#list_heading {
         margin-top: .5em;
         font-family: 'Source Sans Pro', sans-serif;
         font-size: 32px;
     }
+
+/*
     table.table {
         table-layout: fixed ;
         width:200%;
         max-width: 200%;
     }
+*/
+
+    table.table {
+        table-layout: auto;
+        width: auto;
+        max-width: auto;
+    }
+
     th,td {
         font-family: 'Source Sans Pro', sans-serif;
     }
@@ -53,63 +67,65 @@
 
 
 {% block content %}
-<div class="container-fluid">
-  <h1 id="list_heading">Comprehensive List of People</h2>
-  <div class="row">
-    <div class="col-md-6">
-      <table class="table">
-        <thead>
-          <tr>
-            <th class="tbl_id">ID</th>
-            <th class="tbl_name">Name</th>
-            <th class="tbl_fixed">Age</th>
-            <th class="tbl_fixed">Sex</th>
-            <th class="tbl_fixed">Race</th>
-            <th class="tbl_fixed">Status</th>
-            <th class="tbl_view"></th>
-          </tr>
-        </thead>
-        <tbody id="people">
-            {% for pers in people %}
-            <tr>
-              <td>{{ pers.db_id }}</td>
+<!-- <div class="container"> -->
+    <!-- <div class="container-fluid"> -->
+      <h1 id="list_heading">Comprehensive List of People</h2>
+      <!-- <div class="row"> -->
+        <!-- <div class="col-md-6"> -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="tbl_id">ID</th>
+                <th class="tbl_name">Name</th>
+                <th class="tbl_fixed">Age</th>
+                <th class="tbl_fixed">Sex</th>
+                <th class="tbl_fixed">Race</th>
+                <th class="tbl_fixed">Status</th>
+                <th class="tbl_view"></th>
+              </tr>
+            </thead>
+            <tbody id="people">
+                {% for pers in people %}
+                <tr>
+                  <td>{{ pers.db_id }}</td>
 
-              {% if pers.calc_name == "Not Listed" %}
-              <td><span class="not_listed">({{ pers.calc_name }})<span></td>
-              {% else %}
-              <td>{{ pers.calc_name }}</td>
-              {% endif %}
+                  {% if pers.calc_name == "Not Listed" %}
+                  <td><span class="not_listed">({{ pers.calc_name }})<span></td>
+                  {% else %}
+                  <td>{{ pers.calc_name }}</td>
+                  {% endif %}
 
-              {% if pers.calc_age == "Not Listed" %}
-              <td><span class="not_listed">({{ pers.calc_age }})<span></td>
-              {% else %}
-              <td>{{ pers.calc_age }}</td>
-              {% endif %}
+                  {% if pers.calc_age == "Not Listed" %}
+                  <td><span class="not_listed">({{ pers.calc_age }})<span></td>
+                  {% else %}
+                  <td>{{ pers.calc_age }}</td>
+                  {% endif %}
 
-              {% if pers.calc_sex == "Not Listed" %}
-              <td><span class="not_listed">({{ pers.calc_sex }})<span></td>
-              {% else %}
-              <td>{{ pers.calc_sex }}</td>
-              {% endif %}
+                  {% if pers.calc_sex == "Not Listed" %}
+                  <td><span class="not_listed">({{ pers.calc_sex }})<span></td>
+                  {% else %}
+                  <td>{{ pers.calc_sex }}</td>
+                  {% endif %}
 
-              {% if pers.calc_race == "Not Listed" %}
-              <td><span class="not_listed">({{ pers.calc_race }})<span></td>
-              {% else %}
-              <td>{{ pers.calc_race }}</td>
-              {% endif %}
+                  {% if pers.calc_race == "Not Listed" %}
+                  <td><span class="not_listed">({{ pers.calc_race }})<span></td>
+                  {% else %}
+                  <td>{{ pers.calc_race }}</td>
+                  {% endif %}
 
-              {% if pers.calc_status == "Not Listed" %}
-              <td><span class="not_listed">(Not Listed)<span></td>
-              {% else %}
-              <td>{{ pers.calc_status }}</td>
-              {% endif %}
+                  {% if pers.calc_status == "Not Listed" %}
+                  <td><span class="not_listed">(Not Listed)<span></td>
+                  {% else %}
+                  <td>{{ pers.calc_status }}</td>
+                  {% endif %}
 
-              <td><a href="{% url 'person_url' pers.db_id  %}">View</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+                  <td><a href="{% url 'person_url' pers.db_id  %}">View</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+        <!-- </div> -->
+      <!-- </div> -->
+    <!-- </div> -->
+<!-- </div>  --> <!-- end ```<div class="container">``` -->
 {% endblock content %}

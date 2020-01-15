@@ -1,16 +1,24 @@
 {% extends "disa_app_templates/editor.html" %}
 {% load staticfiles %}
 
-<!-- https://stackoverflow.com/questions/14942379/jquery-ui-autocomplete-how-to-allow-free-text-->
+
+{# in <head> #}
+
+
 {% block header_other %}
 {% comment %} {{ super() }} {% endcomment %}
+
+<link rel="stylesheet" href="{% static 'lib/bootstrap-4.1.2-dist/css/bootstrap.min.css' %}">
+
 <style>
 
-    div.container-fluid {
+
+    /*div.container-fluid {
         margin-left: 4em;
         width: 80%;
         margin-right: -20em;
-    }
+    }*/
+
 
     p#document_header {
         font-style: italic;
@@ -275,6 +283,10 @@
 <script src="{% static 'lib/tinymce/tinymce.js' %}"></script>
 
 {% endblock %}
+
+
+{# in <body> #}
+
 
 {% block content %}
 <!-- <div class="container"> -->
