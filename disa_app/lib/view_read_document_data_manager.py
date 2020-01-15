@@ -67,7 +67,8 @@ def query_document( doc_id: str, old_usr_db_id: int ) -> dict:
         doc = session.query( models_alch.Citation ).get( last_edit.edited.citation_id )
         log.debug( f'doc, ```{doc}```' )
     else:
-        doc = models.Citation.query.get(doc_id)
+        # doc = models.Citation.query.get(doc_id)
+        doc = session.query( models_alch.Citation ).get( doc_id )
         data['doc']['id'] = doc.id
     data['doc']['citation'] = doc.display
     # data['doc']['zotero_id'] = doc.zotero_id
