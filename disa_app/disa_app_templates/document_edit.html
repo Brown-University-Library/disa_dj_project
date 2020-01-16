@@ -5,8 +5,34 @@
 {{ block.super }}  {# adds-to the `editor.html` `header_other` block, instead of replacing it. #}
 
 <style>
+
+    div.row {
+        margin-top: .25em;
+    }
+
+    p#document_header_label {
+        font-style: italic;
+        margin-top: .5em;
+        margin-bottom: 0;
+    }
+
+    a#back_to_documents {
+        float: right;
+        margin-left: -5em;
+    }
+
+    span.click_message {
+        font-size: 12px;
+        font-weight: 300;
+        font-style: italic;
+    }
+
     #document_header {
         font-size: 150%;
+    }
+
+    h2#items_header {
+        margin-top: .5em;
     }
 
     #citation_fields {
@@ -41,52 +67,56 @@
 
 
 {% block content %}
-<div class="container">
+<!-- <div class="container"> -->
+    <p id="document_header_label">Document... <span class="click_message">(click to open/close)</span></p>
+    <a id="back_to_documents" href="{% url 'editor_index_url' %}">(back to documents list)</a>
     <div class="row">
-    <div id="document_form" class='col-md-11'>
-        <h2 id="document_header"></h2>
-        <form action="" method="">
-            {% if not doc %}
-            <div class="form-group row d-flex flex-row-reverse">
-              <button class="btn btn-warning" id="copy_previous">Copy Last Citation</button>
-            </div>
-            {% endif %}
-            <div class="form-group row">
-                <label for="document_type">Document type<br />
-                    <em class="small text-muted">Select the document type that most clearly describes the document you're adding</em></label>
-                <select class="form-control" id="document_type">
-                </select>
-            </div>
-            <div class="form-group row">
-                <label for="citation_fields">Citation information<br />
-                <em class="small text-muted">Information related to the publication of the document (e.g. the date of publication of the newspaper, not a date listed within an article)</em></label>
-                <ul  id="citation_fields">
-                </ul>
-            </div>
-            <div class="form-group row" hidden>
-                <label for="zotero">Zotero ID</label>
-                <input type="text" class="form-control" id="zotero" />
-            </div>
-            <div class="form-group row">
-                <label for="comments">Comments</label>
-                <textarea class="form-control" id="comments"></textarea>
+        <div id="document_form" class='col-md-11'>
+            <h2 id="document_header"></h2>
+            <form action="" method="">
+                {% if not doc %}
+                <div class="form-group row d-flex flex-row-reverse">
+                  <button class="btn btn-warning" id="copy_previous">Copy Last Citation</button>
+                </div>
+                {% endif %}
+                <div class="form-group row">
+                    <label for="document_type">Document type<br />
+                        <em class="small text-muted">Select the document type that most clearly describes the document you're adding</em></label>
+                    <select class="form-control" id="document_type">
+                    </select>
+                </div>
+                <div class="form-group row">
+                    <label for="citation_fields">Citation information<br />
+                    <em class="small text-muted">Information related to the publication of the document (e.g. the date of publication of the newspaper, not a date listed within an article)</em></label>
+                    <ul  id="citation_fields">
+                    </ul>
+                </div>
+                <div class="form-group row" hidden>
+                    <label for="zotero">Zotero ID</label>
+                    <input type="text" class="form-control" id="zotero" />
+                </div>
+                <div class="form-group row">
+                    <label for="comments">Comments</label>
+                    <textarea class="form-control" id="comments"></textarea>
 
-            </div>
-            <div class="form-group row">
-                <label for="acknowledgements">Acknowledgements<br />
-                <em class="small text-muted">If you've received the document from an individual or organization for the purposes of this project, please acknowledge their contribution (e.g. "Thank you to the Jennifer Shaw family")</em></label>
-                <textarea class="form-control" id="acknowledgements"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary" id="doc_update">Update</button>
-        </form>
+                </div>
+                <div class="form-group row">
+                    <label for="acknowledgements">Acknowledgements<br />
+                    <em class="small text-muted">If you've received the document from an individual or organization for the purposes of this project, please acknowledge their contribution (e.g. "Thank you to the Jennifer Shaw family")</em></label>
+                    <textarea class="form-control" id="acknowledgements"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" id="doc_update">Update</button>
+            </form>
+        </div>
+        <div class='col-md-1'>
+            <!-- <a href="{% url 'editor_index_url' %}">(back to documents list)</a> -->
+        </div>
     </div>
-    <div class='col-md-1'>
-        <a href="{% url 'editor_index_url' %}">Back</a>
-    </div>
-</div>
+
+    <hr/>
 
     {% if doc %}
-    <h2>Items</h2>
+    <h2 id="items_header">Items</h2>
         {% if doc.references|length != 0 %}
         <table class="table">
             <thead>
@@ -117,7 +147,7 @@
             <a class="btn btn-primary" href="{% url 'edit_record_url' doc.id %}">Add an item</a>
         </div>
     {% endif %}
-</div>
+<!-- </div> -->
 {% endblock %}
 
 
