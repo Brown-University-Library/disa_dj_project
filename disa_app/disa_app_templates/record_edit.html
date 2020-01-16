@@ -751,14 +751,15 @@ var deleteEntrant = function($container, entId, editUrl ) {
 }
 
 var updateEntrant = function($container, entId, entData, editUrl) {
+    console.log( "entId for updateEntrant, ", entId );
     var method,
         {% comment %} ent_data_api = "{{ url_for('update_referent', rntId=None )}}"; {% endcomment %}
-        ent_data_api = "{% url 'data_referent_url' None %}";
-    console.log( "ent_data_api for updateEntrant, ```" + ent_data_api + "```" );
+        ent_data_api = "{% url 'data_referent_url' 'STUB' %}".replace( 'STUB', entId );
+    console.log( "ent_data_api for updateEntrant(), ```" + ent_data_api + "```" );
     if (entId === 'new') {
         method = 'POST';
     } else {
-        ent_data_api = ent_data_api + entId;
+        // ent_data_api = ent_data_api + entId;
         method = 'PUT';
     }
     $.ajax({

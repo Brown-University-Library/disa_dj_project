@@ -216,7 +216,15 @@ def new_citation( request ):
 
 @shib_login
 def data_entrants( request, rfrnt_id ):
-    return HttpResponse( 'coming' )
+    """ Called via ajax by views.edit_record()
+        Url: '/data/entrants/<rfrnt_id>/' -- 'data_referent_url' """
+    if request.method == 'GET':
+        msg = 'data_entrants() get-handling coming'
+    elif request.method == 'PUT':
+        msg = 'data_entrants() put-handling coming'
+    else:
+        msg = 'data_entrants() other handling coming'
+    return HttpResponse( msg )
 
 
 @shib_login
