@@ -21,7 +21,7 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-def query_record( rec_id ):
+def query_record( rec_id ) -> dict:
     data = { 'rec': {}, 'entrants': [] }
     if rec_id == None:
         data = json.dumps( data )

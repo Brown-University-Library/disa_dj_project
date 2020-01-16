@@ -396,6 +396,7 @@
 
 {% block scripts%}
 {% comment %} {{ super() }} {% endcomment %}
+{{ block.super }}
 
 <script id="towns_id" type="application/json">{{ towns|safe }}</script>
 

@@ -5,6 +5,7 @@ from typing import List
 
 import requests
 from disa_app import settings_app
+from disa_app.lib import view_data_entrant_manager
 from disa_app.lib import view_data_records_manager
 from disa_app.lib import view_edit_record_manager
 from disa_app.lib import view_editor_index_manager, view_edit_citation_manager  # documents
@@ -180,7 +181,6 @@ def edit_citation( request, cite_id ):
     return resp
 
 
-
 @shib_login
 def edit_person( request, rfrnt_id=None ):
     return HttpResponse( 'coming' )
@@ -208,20 +208,34 @@ def new_citation( request ):
     return HttpResponse( 'new-citation (new-document) coming' )
 
 
-
 # ===========================
 # data urls
 # ===========================
 
 
 @shib_login
-def data_entrants( request, rfrnt_id ):
+def data_entrants( request, rfrnt_id: str ):
     """ Called via ajax by views.edit_record()
         Url: '/data/entrants/<rfrnt_id>/' -- 'data_referent_url' """
+    data_entrant_updater = view_data_entrant_manager.Updater()
     if request.method == 'GET':
+        log.debug( 'get detected' )
         msg = 'data_entrants() get-handling coming'
     elif request.method == 'PUT':
+        log.debug( 'put detected' )
+        # log.debug( f'rfrnt_id, ```{rfrnt_id}```' )
+        # log.debug( f'payload, ```{request.body}```' )
+        # log.debug( f'type(payload), ```{type(request.body)}```' )
+        payload: bytes = request.body
+        data: dict = json.loads( payload )
         msg = 'data_entrants() put-handling coming'
+        try:
+            context: dict = data_entrant_updater.manage_update( data, rfrnt_id )
+        except:
+            log.exception( 'problem building context' )
+    elif request.method == 'POST':
+        log.debug( 'post detected' )
+        msg = 'data_entrants() post-handling coming'
     else:
         msg = 'data_entrants() other handling coming'
     return HttpResponse( msg )
