@@ -33,23 +33,22 @@ class Updater():
         rnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rntId )
         primary_name: str = self.update_referent_name( data['name'] )
 
-
         rnt.names.append(primary_name)
         rnt.primary_name = primary_name
-
-        1/0
-
 
         # if request.method == 'POST':
         #     prs.first_name = primary_name.first
         #     prs.last_name = primary_name.last
         #     db.session.add(prs)
-        rnt.roles = [ get_or_create_referent_attribute(a, models.Role)
-            for a in data['roles'] ]
 
+        rnt.roles = [ self.get_or_create_referent_attribute(a, models_alch.Role) for a in data['roles'] ]
+        log.debug( f'rnt.roles, ```{rnt.roles}```' )
 
-        db.session.add(rnt)
-        db.session.commit()
+        self.session.add( rnt )
+        self.session.commit()
+        log.debug( 'referent add() and commit() completed' )
+
+        1/0
 
         stamp_edit(current_user, rnt.reference)
 
@@ -81,8 +80,21 @@ class Updater():
         log.debug( 'returning name' )
         return name
 
+    def get_or_create_referent_attribute( self, data: dict, attrModel: models_alch.Role ) -> models_alch.Role:
+        """ Obtains, or creates and obtains, and then returns, a models_alch.Role instance.
+            Called by manage_update() """
+        existing: models_alch.Role = self.session.query( attrModel ).filter_by( name=data['name'] ).first()  # or None, I think
+        if not existing:
+            new_attr: models_alch.Role = attrModel( name=data['name'] )
+            self.session.add( new_attr )
+            self.session.commit()
+            log.debug( f'new_attr, ```{new_attr}```' )
+            return new_attr
+        else:
+            log.debug( f'existing, ```{existing}```' )
+            return existing
 
-
+    ## end class Updater()
 
 
 ## from DISA
