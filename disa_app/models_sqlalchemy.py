@@ -365,13 +365,9 @@ class ReferentName(Base):
     name_type_id = Column(Integer, ForeignKey('1_name_types.id'))
     first = Column(String(255))
     last = Column(String(255))
-
-    # name_type = relationship('NameType',
-    #     primaryjoin=(name_type_id == 'NameType.id') )
-
     name_type = relationship(
         'NameType',
-        primaryjoin=(name_type_id == 'NameType.id') )
+        primaryjoin=(name_type_id == NameType.id) )
 
 
 class Referent(Base):
@@ -387,19 +383,11 @@ class Referent(Base):
         nullable=False)
     person_id = Column(Integer, ForeignKey('1_people.id'),
         nullable=True)
-
-
-    # names = relationship('ReferentName',
-    #     primaryjoin=(id == 'ReferentName.referent_id'),
-    #     backref='referent', cascade='delete')
-
     names = relationship(
         'ReferentName',
-        primaryjoin=(id == 'ReferentName.referent_id'),
+        primaryjoin=(id == ReferentName.referent_id),
         backref='referent',
         cascade='delete')
-
-
     primary_name = relationship(
         'ReferentName',
         primaryjoin=(primary_name_id == ReferentName.id),
