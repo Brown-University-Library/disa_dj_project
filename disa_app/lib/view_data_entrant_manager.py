@@ -3,10 +3,11 @@
 import datetime, json, logging, os, pprint
 
 import sqlalchemy
-from disa_app import settings_app
 from disa_app import models_sqlalchemy as models_alch
+from disa_app import settings_app
 from disa_app.lib import person_common
 from django.conf import settings
+from django.http import HttpResponse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -26,9 +27,24 @@ class Updater():
     def __init__( self ):
         self.session = None
 
-    def manage_update( self, user_id: int, data: dict, rntId: str ) -> dict:
+    def manage_put( self, payload: bytes, request_user_id: int, rfrnt_id: str ) -> HttpResponse:
         """ Manages data/api ajax 'PUT'.
             Called by views.data_entrants(), triggered by views.edit_record() webpage. """
+        log.debug( 'starting manage_put()' )
+        data: dict = json.loads( payload )
+        try:
+            context: dict = self.execute_update( request_user_id, data, rfrnt_id )
+            resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+        except:
+            msg = 'problem preparing data'
+            log.exception( msg )
+            resp = HttpResponse( msg )
+        log.debug( 'returning response' )
+        return resp
+
+    def execute_update( self, user_id: int, data: dict, rntId: str ) -> dict:
+        """ Updates db and returns data.
+            Called by manage_put() """
         self.session = make_session()
         rnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rntId )
         primary_name: str = self.update_referent_name( data['name'] )
@@ -36,10 +52,6 @@ class Updater():
         rnt.names.append(primary_name)
         rnt.primary_name = primary_name
 
-        # if request.method == 'POST':
-        #     prs.first_name = primary_name.first
-        #     prs.last_name = primary_name.last
-        #     db.session.add(prs)
 
         rnt.roles = [ self.get_or_create_referent_attribute(a, models_alch.Role) for a in data['roles'] ]
         log.debug( f'rnt.roles, ```{rnt.roles}```' )
@@ -63,7 +75,7 @@ class Updater():
 
     def update_referent_name( self, data: dict ) -> models_alch.ReferentName:
         """ Obtains a ReferentName object. Does not write to the db.
-            Called by manage_update() """
+            Called by execute_update() """
         log.debug( f'data, ```{data}```' )
         if data['id'] == 'name':
             name = self.session.query( models_alch.ReferentName() )
@@ -83,7 +95,7 @@ class Updater():
 
     def get_or_create_referent_attribute( self, data: dict, attrModel: models_alch.Role ) -> models_alch.Role:
         """ Obtains, or creates and obtains, and then returns, a models_alch.Role instance.
-            Called by manage_update() """
+            Called by execute_update() """
         existing: models_alch.Role = self.session.query( attrModel ).filter_by( name=data['name'] ).first()  # or None, I think
         if not existing:
             new_attr: models_alch.Role = attrModel( name=data['name'] )
@@ -97,7 +109,7 @@ class Updater():
 
     def stamp_edit( self, request_user_id: int, reference_obj: models_alch.Reference ) -> None:
         """ Updates when the Reference-object was last edited and by whom.
-            Called by manage_update() """
+            Called by execute_update() """
         log.debug( 'starting stamp_edit()' )
         edit = models_alch.ReferenceEdit( reference_id=reference_obj.id, user_id=request_user_id, timestamp=datetime.datetime.utcnow() )
         self.session.add( edit )

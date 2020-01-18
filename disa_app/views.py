@@ -224,19 +224,7 @@ def data_entrants( request, rfrnt_id: str ):
         resp = HttpResponse( msg )
     elif request.method == 'PUT':
         log.debug( 'put detected' )
-        # log.debug( f'rfrnt_id, ```{rfrnt_id}```' )
-        # log.debug( f'payload, ```{request.body}```' )
-        # log.debug( f'type(payload), ```{type(request.body)}```' )
-        payload: bytes = request.body
-        data: dict = json.loads( payload )
-        # msg = 'data_entrants() put-handling coming'
-        try:
-            context: dict = data_entrant_updater.manage_update( request.user.id, data, rfrnt_id )
-            resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-        except:
-            msg = 'problem preparing data'
-            log.exception( msg )
-            resp = HttpResponse( msg )
+        resp = data_entrant_updater.manage_put( request.body, request.user.id, rfrnt_id )
     elif request.method == 'POST':
         msg = 'data_entrants() post-handling coming'
         log.debug( msg )
