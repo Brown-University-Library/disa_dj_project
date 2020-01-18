@@ -221,6 +221,7 @@ def data_entrants( request, rfrnt_id: str ):
     if request.method == 'GET':
         log.debug( 'get detected' )
         msg = 'data_entrants() get-handling coming'
+        resp = HttpResponse( msg )
     elif request.method == 'PUT':
         log.debug( 'put detected' )
         # log.debug( f'rfrnt_id, ```{rfrnt_id}```' )
@@ -228,17 +229,23 @@ def data_entrants( request, rfrnt_id: str ):
         # log.debug( f'type(payload), ```{type(request.body)}```' )
         payload: bytes = request.body
         data: dict = json.loads( payload )
-        msg = 'data_entrants() put-handling coming'
+        # msg = 'data_entrants() put-handling coming'
         try:
-            context: dict = data_entrant_updater.manage_update( data, rfrnt_id )
+            context: dict = data_entrant_updater.manage_update( request.user.id, data, rfrnt_id )
+            resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         except:
-            log.exception( 'problem building context' )
+            msg = 'problem preparing data'
+            log.exception( msg )
+            resp = HttpResponse( msg )
     elif request.method == 'POST':
-        log.debug( 'post detected' )
         msg = 'data_entrants() post-handling coming'
+        log.debug( msg )
+        resp = HttpResponse( msg )
     else:
-        msg = 'data_entrants() other handling coming'
-    return HttpResponse( msg )
+        msg = 'data_entrants() other request.method handling coming'
+        log.debug( msg )
+        resp = HttpResponse( msg )
+    return resp
 
 
 @shib_login

@@ -181,8 +181,6 @@ class ZoteroTypeField(Base):
         backref='templates')
 
 
-
-
 class CitationField(Base):
     __tablename__ = '4_citation_fields'
 
@@ -196,8 +194,6 @@ class CitationField(Base):
     field = relationship(ZoteroField,
         primaryjoin=(field_id == ZoteroField.id),
         backref='citations')
-
-
 
 
 class Reference(Base):

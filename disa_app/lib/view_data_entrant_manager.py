@@ -26,7 +26,7 @@ class Updater():
     def __init__( self ):
         self.session = None
 
-    def manage_update( self, data: dict, rntId: str ) -> dict:
+    def manage_update( self, user_id: int, data: dict, rntId: str ) -> dict:
         """ Manages data/api ajax 'PUT'.
             Called by views.data_entrants(), triggered by views.edit_record() webpage. """
         self.session = make_session()
@@ -48,17 +48,18 @@ class Updater():
         self.session.commit()
         log.debug( 'referent add() and commit() completed' )
 
-        1/0
+        self.stamp_edit( user_id, rnt.reference)
 
-        stamp_edit(current_user, rnt.reference)
-
-        return jsonify({
+        data = {
             'name_id': rnt.primary_name.id,
             'first': rnt.primary_name.first,
             'last': rnt.primary_name.last,
             'id': rnt.id,
             'person_id': rnt.person_id,
-            'roles': [ role.id for role in rnt.roles ] })
+            'roles': [ role.id for role in rnt.roles ] }
+
+        log.debug( f'data, ```{pprint.pformat( data )}```' )
+        return data
 
     def update_referent_name( self, data: dict ) -> models_alch.ReferentName:
         """ Obtains a ReferentName object. Does not write to the db.
@@ -93,6 +94,21 @@ class Updater():
         else:
             log.debug( f'existing, ```{existing}```' )
             return existing
+
+    def stamp_edit( self, request_user_id: int, reference_obj: models_alch.Reference ) -> None:
+        """ Updates when the Reference-object was last edited and by whom.
+            Called by manage_update() """
+        log.debug( 'starting stamp_edit()' )
+        edit = models_alch.ReferenceEdit( reference_id=reference_obj.id, user_id=request_user_id, timestamp=datetime.datetime.utcnow() )
+        self.session.add( edit )
+        self.session.commit()
+        return
+
+    # def stamp_edit(user, ref):
+    #     edit = models.ReferenceEdit(reference_id=ref.id,
+    #         user_id=user.id, timestamp=datetime.datetime.utcnow())
+    #     db.session.add(edit)
+    #     db.session.commit()
 
     ## end class Updater()
 
