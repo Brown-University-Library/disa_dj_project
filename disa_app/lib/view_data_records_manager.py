@@ -21,7 +21,9 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-def query_record( rec_id ) -> dict:
+def query_record( rec_id: str ) -> dict:
+    """ Handles api call for reference-data and associated referent-data.
+        Called by views.data_records() """
     data = { 'rec': {}, 'entrants': [] }
     if rec_id == None:
         data = json.dumps( data )
