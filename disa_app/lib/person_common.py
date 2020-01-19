@@ -4,7 +4,7 @@ import collections, datetime, json, logging, os, pprint
 
 import sqlalchemy
 # from disa_app import settings_app
-# from disa_app import models_sqlalchemy as models_alch
+from disa_app import models_sqlalchemy as models_alch
 # from django.conf import settings
 # from sqlalchemy import create_engine
 # from sqlalchemy.orm import sessionmaker
@@ -32,7 +32,7 @@ def parse_person_descriptors( prsn, dscrptr ) -> str:
     return out if out else 'Not Listed'
 
 
-def parse_person_relations( prsn ) -> list:
+def parse_person_relations( prsn: models_alch.Referent ) -> list:
     """ Returns a list of relationship entries, each consisting of an id and name, and the relationship type.
         Called by view_person_manager.query_person() """
     rels = [ (r.related_as, r.obj) for e in prsn.references
@@ -53,7 +53,7 @@ def parse_person_references( prsn ) -> list:
         Called by view_person_manager.query_person()
         Reminder: A Person-record is a human.
                   A Referent-record is a bridge between a Person-record and a Reference-record.
-                  A Referent-record contains transcription and some other info, and an id to a Citation-record.
+                  A Reference-record contains transcription and some other info, and an id to a Citation-record.
         NOTE: prsn.references returns a list of Referent-objects, _not_ Reference-objects.
               To get reference data, we need to call the `referent-record.reference`.
         """
