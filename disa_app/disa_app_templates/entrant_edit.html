@@ -9,6 +9,11 @@
 
 <style>
 
+    p#document_header_label {
+        font-style: italic;
+        margin-top: .5em;
+    }
+
     #document_header {
         font-size: 150%;
     }
@@ -62,12 +67,19 @@
 <!-- <div class="container"> -->
     <div class="row">
         <div class='col-md-11'>
+            <p id="document_header_label">Document... </span></p>
             <h2 id="doc_header"><h2>{{ rec.citation.display }}</h2>
+            <hr id="post_document"> </hr>
+
+            <p id="items_header_label">Item summary...</p>
+            <p>Type: Reference; Transcription: Abc def ghi...</p>
+            <hr id="post_item_summary"> </hr>
+
             <h3>Individual Details</h3>
         </div>
         <div class='col-md-1'>
             {# <a href="{{ url_for('edit_record', recId=rec.id)}}">Back</a> #}
-            <a href="{% url 'edit_record_url' rec_id=rec.id %}">Back</a>
+            <a href="{% url 'edit_record_url' rec_id=rec.id %}">(to record)</a>
         </div>
     </div>
     <div id="entrant_form">
