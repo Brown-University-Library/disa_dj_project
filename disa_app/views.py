@@ -5,12 +5,12 @@ from typing import List
 
 import requests
 from disa_app import settings_app
-from disa_app.lib import view_data_entrant_manager
-from disa_app.lib import view_data_records_manager
+from disa_app.lib import view_data_entrant_manager  # api/people
+from disa_app.lib import view_data_records_manager  # api/items
 from disa_app.lib import view_edit_record_manager
 from disa_app.lib import view_editor_index_manager, view_edit_citation_manager  # documents
 from disa_app.lib import view_info_manager
-from disa_app.lib import view_people_manager, view_person_manager  # people
+from disa_app.lib import view_people_manager, view_person_manager, view_edit_referent_manager  # people
 from disa_app.lib import view_read_document_data_manager
 from disa_app.lib import view_search_results_manager
 from disa_app.lib.shib_auth import shib_login  # decorator
@@ -181,11 +181,12 @@ def edit_citation( request, cite_id ):
     return resp
 
 
+
+
 @shib_login
 def edit_person( request, rfrnt_id=None ):
     """ Url: '/editor/person/<rfrnt_id>/' -- 'edit_person_url' """
     log.debug( '\n\nstarting edit_person()' )
-    return HttpResponse( 'coming' )
     context: dict = view_edit_referent_manager.prep_context( rfrnt_id, request.user.first_name, bool(request.user.is_authenticated) )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
@@ -198,6 +199,7 @@ def edit_person( request, rfrnt_id=None ):
 
 @shib_login
 def edit_record( request, rec_id ):
+    """ Url: '/editor/records/<rec_id>/' -- 'edit_record_url' """
     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
     context: dict = view_edit_record_manager.prep_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
     if request.GET.get('format', '') == 'json':
@@ -244,6 +246,13 @@ def data_entrants( request, rfrnt_id: str ):
         log.debug( msg )
         resp = HttpResponse( msg )
     return resp
+
+
+@shib_login
+def data_entrants_details( request, rfrnt_id ):
+    """ Called via ajax by views.edit_person()
+        Url: 'data/entrants/details/<rfrnt_id>' -- 'data_entrants_details_url' """
+    return HttpResponse( 'data_entrants_details_url response coming' )
 
 
 @shib_login

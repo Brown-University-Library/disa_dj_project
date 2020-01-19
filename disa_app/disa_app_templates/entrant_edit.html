@@ -1,0 +1,474 @@
+{% extends "disa_app_templates/editor.html" %}
+
+
+{# in <head> #}
+
+
+{% block header_other %}
+{{ block.super }}  {# adds-to the `editor.html` `header_other` block, instead of replacing it. #}
+
+<style>
+
+    #document_header {
+        font-size: 150%;
+    }
+
+    #descriptors {
+        margin-top: 5px;
+    }
+
+    .del-btn {
+        background-color: Transparent;
+        border: none;
+        margin-left: 0.3em;
+        cursor: pointer;
+    }
+
+    .attr-list {
+        margin-top: 2em;
+        margin-bottom: 0;
+    }
+
+    .attr-item {
+        background-color: #DCDCDC;
+        padding: 0.2em;
+        border-radius: 5px;
+        margin-top: 0.2em;
+    }
+
+    .attr-label {
+        padding: 0.5em;
+    }
+
+    label {
+        margin-bottom: 0;
+        margin-top: 0.5rem;
+    }
+
+    label.radio-inline {
+        margin-top: 0;
+        margin-right:0.5rem;
+    }
+
+</style>
+
+{% endblock %}
+
+
+{# in <body> #}
+
+
+{% block content %}
+<!-- <div class="container"> -->
+    <div class="row">
+        <div class='col-md-11'>
+            <h2 id="doc_header"><h2>{{ rec.citation.display }}</h2>
+            <h3>Individual Details</h3>
+        </div>
+        <div class='col-md-1'>
+            {# <a href="{{ url_for('edit_record', recId=rec.id)}}">Back</a> #}
+            <a href="{% url 'edit_record_url' rec_id=rec.id %}">Back</a>
+        </div>
+    </div>
+    <div id="entrant_form">
+        <form action="" method="">
+            <h4>Name</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                      <th scope="col">First</th>
+                      <th scope="col">Last</th>
+                      <th scope="col">Name type</th>
+                      <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="names">
+                </tbody>
+            </table>
+            <div class="row">
+                <div class='col-md-6'>
+                    <button class="btn btn-primary" id="add-name">Add Name</button>
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label for="entrant_age">Age<br />
+                            <em class="small">List the age of the person if provided on the document (e.g. “young girl,” “32”, etc.)</em></label>
+                        <input class="form-control col-md-3" type="text" id="entrant_age" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <label>Gender</label>
+                        <div class="row">
+                            <div class="col-md-8" id="gender_select">
+                                <label class="radio-inline">
+                                  <input type="radio" name="entrant_gender" id="gender_male" value="Male">
+                                  Male
+                                </label>
+                                <label class="radio-inline">
+                                  <input type="radio" name="entrant_gender" id="gender_female" value="Female">
+                                  Female
+                                </label>
+                                <label class="radio-inline">
+                                  <input type="radio" name="entrant_gender" id="gender_other" value="Other" checked>
+                                  Other/Unknown
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class='form-group'>
+                <div class="row">
+                    <div class='col-md-10'>
+                        <label>Race<br/>
+                            <em class="small">List the race of the individual as described on the document. Click box to see other example entries.</em>
+                        </label>
+                        <select  id="races" class="col-md-8 form-control steve-tags" multiple="multiple">
+                            <option value='Indian'>Indian</option>
+                            <option value='Indian Mulatto'>Indian Mulatto</option>
+                            <option value='Indio'>Indio</option>
+                            <option value='Mulatto'>Mulatto</option>
+                            <option value='Black'>Black</option>
+                            <option value='Negro'>Negro</option>
+                            <option value='India'>India</option>
+                            <option value='Mustee'>Mustee</option>
+                            <option value='White'>White</option>
+                            <option value='Unknown'>Unknown</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-10'>
+                        <label>Tribe<br/>
+                        <em class="small">List tribe information if available. Click box to see other example entries.</em>
+                        </label><br />
+                        <select id="tribes" class="col-md-8 form-control steve-tags" multiple="multiple">
+                            <option value='Bocotora'>Bocotora</option>
+                            <option value='Eastern Pequot'>Eastern Pequot</option>
+                            <option value='Mashantucket Pequot'>Mashantucket Pequot</option>
+                            <option value='Mohegan'>Mohegan</option>
+                            <option value='Naragansett'>Naragansett</option>
+                            <option value='Pequot'>Pequot</option>
+                            <option value='Wampanoag'>Wampanoag</option>
+                            <option value='Woolwa'>Woolwa</option>
+                            <option value='Unspecified'>Unspecified</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-10'>
+                        <label>Origin<br/>
+                            <em class="small">If the document provides information regarding where the person was originally from, list that here (e.g. “Bermuda”).</em>
+                        </label><br />
+                        <select id="origins" class="col-md-8 form-control steve-tags" multiple="multiple">
+                            <option value='Bermuda'>Bermuda</option>
+                            <option value='Casanave'>Casanave</option>
+                            <option value='Pueblo de Casanare'>Pueblo de Casanare</option>
+                            <option value='Pueblo de Pauto'>Pueblo de Pauto</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-10'>
+                        <label>Status<br/>
+                            <em class='small'>
+                                Provide additional information regarding the status of the individual here.
+                                Click the box for common options. </em>
+                        </label><br />
+                        <select id="statuses" class="col-md-8 form-control steve-tags" multiple="multiple">
+                            <option value='Indentured Servant'>Indentured Servant</option>
+                            <option value='Servant'>Servant</option>
+                            <option value='Slave'>Slave</option>
+                            <option value='Indenture, Court-Ordered'>Indenture, Court-Ordered</option>
+                            <option value='Indenture, Parental'>Indenture, Parental</option>
+                            <option value='Indenture, Voluntary'>Indenture, Voluntary</option>
+                            <option value='Free'>Free</option>
+                            <option value='Unclear'>Unclear</option>
+                            <option value='Other'>Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-10'>
+                        <label>Title<br/>
+                            <em class="small">Provide the title of the person if applicable. Click the box for common options.</em>
+                        </label><br />
+                        <select id="titles" class="col-md-8 form-control steve-tags" multiple="multiple">
+
+                            <option value='Capt.'>Capt.</option>
+                            <option value='Captain'>Captain</option>
+                            <option value='Don'>Don</option>
+                            <option value='Dr.'>Dr.</option>
+                            <option value='Esq.'>Esq.</option>
+                            <option value='Fray'>Fray</option>
+                            <option value='Mistress'>Mistress</option>
+                            <option value='Mr.'>Mr.</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-10'>
+                        <label>Vocation<br />
+                        <em class="small">Provide the vocation of the person if applicable. Click the box for common options.</em>
+                        </label><br />
+                        <select id="vocations" class="col-md-8 form-control steve-tags" multiple="multiple">
+
+                            <option value='Baker'>Baker</option>
+                            <option value='Cordwainer'>Cordwainer</option>
+                            <option value='Farmer'>Farmer</option>
+                            <option value='Lawyer'>Lawyer</option>
+                            <option value='Leatherer'>Leatherer</option>
+                            <option value='Malster'>Malster</option>
+                            <option value='Mariner'>Mariner</option>
+                            <option value='Merchant'>Merchant</option>
+                            <option value='Sadler'>Sadler</option>
+                            <option value='Ship Captain'>Ship Captain</option>
+                            <option value='Shopkeeper'>Shopkeeper</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class='col-md-6'>
+                    <button type="submit" class="btn btn-primary" id="details_update">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+<!-- </div> --> <!-- end ```<div class="container">``` -->
+{% endblock %}
+
+{% block scripts%}
+{{ block.super }}  {# adds-to the `editor.html` `header_other` block, instead of replacing it. #}
+<script>
+
+var updateRadio = function($radioSelect, val) {
+    var $radio_opt;
+    $radio_opt = $radioSelect.find(`input:radio[value=${val}]`);
+    if ( $radio_opt ) {
+        $radio_opt.prop('checked', true);
+    } else {
+        return;
+    }
+}
+
+var updateAttributeList = function ($container, attArray, attGroup) {
+    var existing_vals, attribute_ids;
+
+    existing_vals = [];
+    $container.children('option').each(function(i) {
+        existing_vals.push($(this).text());
+    });
+    attribute_ids = [];
+    for (var x=0; x < attArray.length; x++) {
+        var att_id, att_value;
+
+        att_id = attArray[x].id;
+        att_value = attArray[x].value;
+        attribute_ids.push(att_id);
+        if (!existing_vals.includes(att_value)) {
+            var $opt = $("<option/>", { 'value': att_id ,
+                'text': att_value });
+            $container.append($opt);
+        }
+    }
+    $container.val(attribute_ids);
+    $container.trigger('change');
+}
+
+var initializeForm = function(entData, nameTypes) {
+    if ( $.isEmptyObject(entData) ) {
+        var blank_name = { 'first': '', 'last': '',
+            'name_type': 'Given', 'id': 'name' };
+        addNameInput($('#names'), blank_name, nameTypes);
+        disableNameDeletion($('#names'));
+        return;
+    }
+    for (var i=0; i < entData['names'].length; i++ ) {
+        addNameInput(
+            $('#names'), entData['names'][i], nameTypes );
+    }
+    disableNameDeletion($('#names'));
+    $('#entrant_age').val(entData['age']);
+    updateRadio($('#gender_select'), entData['sex']);
+    updateAttributeList($('#races'), entData['races'], 'races');
+    updateAttributeList($('#tribes'), entData['tribes'], 'tribes');
+    updateAttributeList($('#origins'), entData['origins'], 'origins');
+    updateAttributeList($('#titles'), entData['titles'], 'titles');
+    updateAttributeList(
+        $('#statuses'), entData['enslavements'], 'enslavements');
+    updateAttributeList(
+        $('#vocations'), entData['vocations'], 'vocations');
+}
+
+var addNameInput = function($nameContainer, nameData, nameTypes) {
+    var $tr, $td1, $td2, $td3, $td4,
+        $input1, $input2, $select,
+        $button, $span;
+
+    $tr = $('<tr/>', { 'class': 'name-row',
+        'data-name-id': nameData['id']});
+    $td1 = $('<td/>');
+    $td2 = $('<td/>');
+    $td3 = $('<td/>');
+    $td4 = $('<td/>');
+    $input1 = $('<input/>', {
+        'class': 'form-control name-first',
+        'type': 'text',
+        'value': nameData['first'] });
+    $input2 = $('<input/>', {
+        'class': 'form-control name-last',
+        'type': 'text',
+        'value': nameData['last'] });
+    $select = $('<select/>',
+        { 'class': 'form-control name-type'});
+
+    for (var i = 0; i < nameTypes.length; i++) {
+        var opt = nameTypes[i];
+        var $opt = $("<option/>", { 'value': opt.id ,
+                                    'text': opt.value });
+        if (opt.value === nameData['name_type']) {
+            $opt.prop('selected', true);
+        }
+        $select.append($opt);
+    }
+
+    $button = $('<button/>', { 'class': 'btn btn-danger del-name'});
+    $span = $('<span/>', {'class': 'fas fa-times-circle'});
+
+    $button.append($span);
+    $td1.append($input1);
+    $td2.append($input2);
+    $td3.append($select);
+    $td4.append($button);
+    $tr.append($td1).append($td2).append($td3).append($td4);
+    $nameContainer.append($tr);
+
+    disableNameDeletion($nameContainer);
+    return $nameContainer;
+}
+
+var disableNameDeletion = function($container) {
+    var $rows = $container.find('.name-row');
+    if ($rows.length == 1) {
+        $rows.find('button').prop('disabled', true);
+    } else {
+        $rows.find('button').prop('disabled', false);
+    }
+    return;
+}
+
+var getNameData = function($container) {
+    var name_data = [];
+    $rows = $container.find('.name-row');
+    $rows.each( function(idx) {
+        var $row = $( this );
+        var data = {};
+        data['id'] = $row.attr('data-name-id');
+        data['first'] = $row.find('.name-first').val();
+        data['last'] = $row.find('.name-last').val();
+        data['name_type'] = $row.find('.name-type').val();
+        name_data.push(data);
+    });
+
+    return name_data;
+}
+
+var getAgeData = function ( $container ) {
+    return $container.val();
+}
+
+var getGenderData = function ( $container ) {
+    return $container.find(':checked').val();
+}
+
+var getAttributeData = function( $container ) {
+    var att_data = [];
+    $opts = $container.find(':selected');
+    $opts.each( function(idx) {
+        var $opt = $( this );
+        var data = {};
+        data['id'] = $opt.val();
+        data['name'] = $opt.text();
+        att_data.push(data);
+    });
+
+    return att_data;
+}
+
+var getEntId = function () {
+    {# var ent_id = "{{ ent.id or '' }}"; #}
+    var ent_id = "{{ ent_id_value }}";
+    return ent_id;
+}
+
+var getFormData = function( $container ) {
+    var data = {};
+    data['names'] = getNameData($('#names'));
+    data['age'] = getAgeData($('#entrant_age'));
+    data['sex'] = getGenderData($('#gender_select'));
+    data['races'] = getAttributeData($('#races'));
+    data['tribes'] = getAttributeData($('#tribes'));
+    data['origins'] = getAttributeData($('#origins'));
+    data['statuses'] = getAttributeData($('#statuses'));
+    data['titles'] = getAttributeData($('#titles'));
+    data['vocations'] = getAttributeData($('#vocations'));
+    return data;
+}
+
+var readEntrantData = function(entId, nameTypes) {
+    {# var ent_data_api = "{{ url_for('read_referent_data', rntId=None ) }}" + entId; #}
+    var ent_data_api = "{% url 'data_referent_url' rfrnt_id=entId %}";  // may have to use the 'STUB'.replace() technique
+    var out = null;
+    $.get(ent_data_api, function(data) {
+        initializeForm(data['ent'], nameTypes);
+    });
+}
+
+var updateEntrantDetails = function(entId, dataObj) {
+    {# var ent_data_api = "{{ url_for('update_referent_details', rntId=None )}}" + entId; #}
+    var ent_data_api = "{% url 'data_entrants_details_url' rfrnt_id=entId %}" + entId;  // may have to use the 'STUB'.replace() technique
+    $.ajax({
+        type: "PUT",
+        url: ent_data_api,
+        contentType: "application/json",
+        data: JSON.stringify(dataObj),
+        success: function(data) {
+            window.location.href = data.redirect;
+        }
+    });
+}
+
+$( document ).ready(function() {
+    var ent_id = getEntId();
+    {# var name_types = JSON.parse('{{ nametypes | tojson | safe}}'); #}
+    var name_types = JSON.parse('{{ nametypes_json | safe}}');
+
+    readEntrantData(ent_id, name_types);
+    $('#add-name').on('click', function(e) {
+        e.preventDefault();
+
+        var blank_name = { 'first': '', 'last': '',
+            'name_type': 'Given', 'id': 'name' };
+        addNameInput($('#names'), blank_name, name_types);
+    });
+    $('#names').on('click', '.del-name', function(e) {
+        e.preventDefault();
+        var $name_row = $( this ).closest('.name-row');
+
+        $name_row.remove();
+        disableNameDeletion($('#names'));
+    });
+    $('#entrant_form').on('click', '#details_update', function(e) {
+        e.preventDefault();
+        var data = getFormData($('#entrant_form'));
+        updateEntrantDetails(ent_id, data);
+    });
+});
+</script>
+{% endblock %}

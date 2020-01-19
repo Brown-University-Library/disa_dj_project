@@ -23,7 +23,8 @@ def make_session() -> sqlalchemy.orm.session.Session:
 def prep_context( rfrnt_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
     """ Builds context for edit-referent display.
         Called by views.edit_person() """
-    context = {}
+    context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
+    session = make_session()
     log.debug( 'context prepared' )
     return context
 
