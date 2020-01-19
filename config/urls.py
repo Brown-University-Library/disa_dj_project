@@ -25,7 +25,7 @@ urlpatterns = [
 
     url( r'^data/documents/(?P<docId>.*)/$', views.read_document_data, name='data_documents_url' ),  # note, 'citeID', above, is passed on a PUT.
     url( r'^data/records/(?P<rec_id>.*)/$', views.data_records, name='data_record_url' ),  # note, 'refID' is passed on a PUT.
-    url( r'^data/entrants/details/(?P<rntId>.*)/$', views.temp_response, name='temp_name_url' ),
+    url( r'^data/entrants/details/(?P<rfrnt_id>.*)/$', views.data_entrants_details, name='data_entrants_details_url' ),
     url( r'^data/entrants/(?P<rfrnt_id>.*)/$', views.data_entrants, name='data_referent_url' ),
     url( r'^data/reference/(?P<refId>.*)/$', views.temp_response, name='data_reference_url' ),
     url( r'^data/sections/(?P<refId>.*)/relationships/$', views.temp_response, name='temp_name_url' ),
