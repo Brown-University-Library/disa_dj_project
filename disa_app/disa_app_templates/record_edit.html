@@ -702,13 +702,16 @@ var makeEntrantEditable = function ($container, entId) {
 }
 
 var initiateEntrantWorkflow = function ($container, editUrl) {
+    console.log( "editUrl, ", editUrl )
     var $rows = $container.find('.entrant-row');
     var $btn = $container.find('#add-person');
     $rows.each( function( idx ) {
         var ent_id = $(this).attr('data-ent-id');
         var $details_btn = $('<a/>', { 'class': 'btn btn-secondary details-entrant entrant-ctl',
             'text': 'Details',
-            'href': `${editUrl}/${ent_id}` });
+            // 'href': `${editUrl}/${ent_id}`
+            'href': `${editUrl}${ent_id}`
+            } );
         var $merge_btn = $('<button/>', { 'class': 'btn btn-warning merge-entrant entrant-ctl',
             'hidden': 'hidden',
             'text': 'Merge'});
