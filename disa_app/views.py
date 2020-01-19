@@ -183,7 +183,17 @@ def edit_citation( request, cite_id ):
 
 @shib_login
 def edit_person( request, rfrnt_id=None ):
+    """ Url: '/editor/person/<rfrnt_id>/' -- 'edit_person_url' """
+    log.debug( '\n\nstarting edit_person()' )
     return HttpResponse( 'coming' )
+    context: dict = view_edit_referent_manager.prep_context( rfrnt_id, request.user.first_name, bool(request.user.is_authenticated) )
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/entrant_edit.html', context )
+    return resp
+
+
 
 
 @shib_login
