@@ -31,6 +31,7 @@ class Updater():
         """ Manages data/api ajax 'PUT'.
             Called by views.data_entrants(), triggered by views.edit_record() webpage. """
         log.debug( 'starting manage_put()' )
+        self.session = make_session()
         data: dict = json.loads( payload )
         try:
             context: dict = self.execute_update( request_user_id, data, rfrnt_id )
@@ -45,32 +46,15 @@ class Updater():
     def execute_update( self, user_id: int, data: dict, rntId: str ) -> dict:
         """ Updates db and returns data.
             Called by manage_put() """
-        self.session = make_session()
         rnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rntId )
         primary_name: str = self.update_referent_name( data['name'] )
-
-        rnt.names.append(primary_name)
+        rnt.names.append( primary_name )
         rnt.primary_name = primary_name
-
-
         rnt.roles = [ self.get_or_create_referent_attribute(a, models_alch.Role) for a in data['roles'] ]
-        log.debug( f'rnt.roles, ```{rnt.roles}```' )
-
         self.session.add( rnt )
         self.session.commit()
-        log.debug( 'referent add() and commit() completed' )
-
         self.stamp_edit( user_id, rnt.reference)
-
-        data = {
-            'name_id': rnt.primary_name.id,
-            'first': rnt.primary_name.first,
-            'last': rnt.primary_name.last,
-            'id': rnt.id,
-            'person_id': rnt.person_id,
-            'roles': [ role.id for role in rnt.roles ] }
-
-        log.debug( f'data, ```{pprint.pformat( data )}```' )
+        data = self.prep_response_data( rnt )
         return data
 
     def update_referent_name( self, data: dict ) -> models_alch.ReferentName:
@@ -86,10 +70,7 @@ class Updater():
         name.first = data['first']
         name.last = data['last']
         given = self.session.query( models_alch.NameType ).filter_by( name='Given' ).first()
-        log.debug( f'given, ```{given}```' )
-        log.debug( f'given.id, ```{given.id}```' )
-        log.debug( f'type(given.id), ```{type(given.id)}```' )
-        name.name_type_id = data.get('name_type', given.id)
+        name.name_type_id: int = data.get('name_type', given.id)
         log.debug( 'returning name' )
         return name
 
@@ -116,11 +97,19 @@ class Updater():
         self.session.commit()
         return
 
-    # def stamp_edit(user, ref):
-    #     edit = models.ReferenceEdit(reference_id=ref.id,
-    #         user_id=user.id, timestamp=datetime.datetime.utcnow())
-    #     db.session.add(edit)
-    #     db.session.commit()
+    def prep_response_data( self, referent: models_alch.Referent ) -> dict:
+        """ Prepares dct for json response.
+            Called by execute_update() """
+        data = {
+            'name_id': referent.primary_name.id,
+            'first': referent.primary_name.first,
+            'last': referent.primary_name.last,
+            'id': referent.id,
+            'person_id': referent.person_id,
+            'roles': [ role.id for role in referent.roles ]
+            }
+        log.debug( f'data, ```{pprint.pformat( data )}```' )
+        return data
 
     ## end class Updater()
 
