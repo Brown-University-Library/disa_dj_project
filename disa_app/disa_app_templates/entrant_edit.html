@@ -24,7 +24,20 @@
         margin-top: .5em;
     }
 
-    span.summary {
+    p#record_summary {
+        padding-left: 2em;
+    }
+
+    span.record_summary_label {
+        font-size: 12px;
+        font-weight: 300;
+        font-style: italic;    }
+
+    span.record_summary_value {
+        font-style: italic;
+    }
+
+    span.spacer {
         padding-left: 2em;
         padding-right: 2em;
     }
@@ -103,7 +116,7 @@
             <hr id="post_document"/>
             <div>
                 <p id="items_header_label">Item summary...</p>
-                <p id="record_summary"><span class="summary">Type: {{ reference.reference_type_name }}</span> -- <span class="summary">Date: {{ reference.date }}</span> --  <span class="summary">Transcription: {{ reference.brief_transcription }}</span> </p>
+                <p id="record_summary"><span class="record_summary_label">Type:</span> <span class="record_summary_value">{{ reference.reference_type_name }}</span><span class="spacer"> -- </span><span class="record_summary_label">Date:</span> <span class="record_summary_value">{{ reference.date }}</span> <span class="spacer"> -- </span> <span class="record_summary_label">Transcription:</span> <span class="record_summary_value">{{ reference.brief_transcription }}</span> </p>
                 <a id="to_record_link" href="{% url 'edit_record_url' reference.id %}">(to item-record)</a>
             </div>
             <hr id="post_item_summary"/>
