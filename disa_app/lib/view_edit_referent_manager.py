@@ -28,11 +28,17 @@ def prep_context( rfrnt_id: str, usr_first_name: str, usr_is_authenticated: bool
     session = make_session()
 
 
-    ent = session.query( models_alch.Referent ).get( rfrnt_id )
-    reference = {
-        'id': ent.id
-        }
-    context['reference'] = reference
+    rfrnt = session.query( models_alch.Referent ).get( rfrnt_id )
+    context['citation_display'] = rfrnt.reference.citation.display
+    reference_data: dict = rfrnt.reference.dictify()
+    reference_summary = {
+        'date': reference_data.get( 'date', None ),
+        'id': reference_data['id'],
+        'reference_type_name': reference_data['reference_type_name'],
+        'transcription': reference_data['transcription']
+    }
+
+    context['reference'] = reference_summary
 
 
     log.debug( 'context prepared' )
