@@ -121,7 +121,7 @@
             </div>
             <hr id="post_item_summary"/>
             <hr />
-            <h3>Individual Details <span id="people_explanation">(for person listed in above item-record)</span></h3>
+            <h3>Individual Details <span id="people_explanation">(for this person listed in above item-record)</span></h3>
         </div>
         {% comment %}
         <div class='col-md-1'>
@@ -464,7 +464,7 @@ var getAttributeData = function( $container ) {
 
 var getEntId = function () {
     {# var ent_id = "{{ ent.id or '' }}"; #}
-    var ent_id = "{{ ent_id_value }}";
+    var ent_id = "{{ referent.id }}";
     return ent_id;
 }
 
@@ -484,7 +484,9 @@ var getFormData = function( $container ) {
 
 var readEntrantData = function(entId, nameTypes) {
     {# var ent_data_api = "{{ url_for('read_referent_data', rntId=None ) }}" + entId; #}
+    console.log( "entId in `var readEntrantData`, ", entId );
     var ent_data_api = "{% url 'data_referent_url' rfrnt_id=entId %}";  // may have to use the 'STUB'.replace() technique
+    console.log( "ent_data_api, ", ent_data_api );
     var out = null;
     $.get(ent_data_api, function(data) {
         initializeForm(data['ent'], nameTypes);
@@ -507,6 +509,7 @@ var updateEntrantDetails = function(entId, dataObj) {
 
 $( document ).ready(function() {
     var ent_id = getEntId();
+    console.log( "ent_id in `document.ready()`, ", ent_id );
     {# var name_types = JSON.parse('{{ nametypes | tojson | safe}}'); #}
     var name_types = JSON.parse('{{ nametypes_json | safe}}');
 

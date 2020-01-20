@@ -23,12 +23,15 @@ def make_session() -> sqlalchemy.orm.session.Session:
 def prep_context( rfrnt_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
     """ Builds context for edit-referent display.
         Called by views.edit_person() """
-    context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
-
     session = make_session()
 
+    context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
+
+    nametypes = [ { 'id': role.id, 'value': role.name, 'label': role.name } for role in session.query( models_alch.NameType ).all() ]
+    context[ 'nametypes_json' ] = json.dumps(nametypes)
 
     rfrnt = session.query( models_alch.Referent ).get( rfrnt_id )
+
     context['citation_display'] = rfrnt.reference.citation.display
     reference_data: dict = rfrnt.reference.dictify()
     if len( reference_data['transcription'] ) == 0:
@@ -44,8 +47,12 @@ def prep_context( rfrnt_id: str, usr_first_name: str, usr_is_authenticated: bool
         'transcription': reference_data['transcription'],
         'brief_transcription': brief_transcription
     }
-
     context['reference'] = reference_summary
+
+    referent_summary = {
+        'id': rfrnt.id
+    }
+    context['referent'] = referent_summary
 
 
     log.debug( 'context prepared' )
