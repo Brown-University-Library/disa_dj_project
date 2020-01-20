@@ -114,7 +114,7 @@ class Updater():
     ## end class Updater()
 
 
-## from DISA
+## from DISA (see methods)
 # @app.route('/data/entrants/', methods=['POST'])
 # @app.route('/data/entrants/<rntId>', methods=['PUT', 'DELETE'])
 # @login_required
