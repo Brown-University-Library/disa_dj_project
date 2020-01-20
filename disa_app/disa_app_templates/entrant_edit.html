@@ -485,8 +485,11 @@ var getFormData = function( $container ) {
 var readEntrantData = function(entId, nameTypes) {
     {# var ent_data_api = "{{ url_for('read_referent_data', rntId=None ) }}" + entId; #}
     console.log( "entId in `var readEntrantData`, ", entId );
-    var ent_data_api = "{% url 'data_referent_url' rfrnt_id=entId %}";  // may have to use the 'STUB'.replace() technique
+
+    // var ent_data_api = "{% url 'data_referent_url' 'STUB' %}";  // may have to use the 'STUB'.replace() technique
+    var ent_data_api = "{% url 'data_referent_url' 'STUB' %}".replace( 'STUB', entId );
     console.log( "ent_data_api, ", ent_data_api );
+
     var out = null;
     $.get(ent_data_api, function(data) {
         initializeForm(data['ent'], nameTypes);
@@ -510,7 +513,7 @@ var updateEntrantDetails = function(entId, dataObj) {
 $( document ).ready(function() {
     var ent_id = getEntId();
     console.log( "ent_id in `document.ready()`, ", ent_id );
-    {# var name_types = JSON.parse('{{ nametypes | tojson | safe}}'); #}
+
     var name_types = JSON.parse('{{ nametypes_json | safe}}');
 
     readEntrantData(ent_id, name_types);
