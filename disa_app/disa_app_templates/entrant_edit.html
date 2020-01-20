@@ -14,15 +14,27 @@
         margin-top: .5em;
     }
 
+    h2#doc_header {
+        /*margin-left: 2em;*/
+        padding-left: 35px;
+    }
+
     p#items_header_label {
         font-style: italic;
         margin-top: .5em;
     }
 
-/*    p#record_summary {
-        float: left;
+    span.summary {
+        padding-left: 2em;
+        padding-right: 2em;
     }
-*/
+
+    span#people_explanation {
+        font-size: 12px;
+        font-weight: 300;
+        font-style: italic;
+    }
+
     a#to_record_link {
         float: right;
         margin-top: -2.5em;
@@ -87,16 +99,16 @@
     <div class="row">
         <div class='col-md-11'>
             <p id="document_header_label">Document... </p>
-            <h2 id="doc_header"><h2>{{ citation_display }}</h2>
+            <h2 id="doc_header">{{ citation_display }}</h2>
             <hr id="post_document"/>
             <div>
                 <p id="items_header_label">Item summary...</p>
-                <p id="record_summary">Type: Reference; Transcription: Abc def ghi...</p>
+                <p id="record_summary"><span class="summary">Type: {{ reference.reference_type_name }}</span> -- <span class="summary">Date: {{ reference.date }}</span> --  <span class="summary">Transcription: {{ reference.brief_transcription }}</span> </p>
                 <a id="to_record_link" href="{% url 'edit_record_url' reference.id %}">(to item-record)</a>
             </div>
             <hr id="post_item_summary"/>
             <hr />
-            <h3>Individual Details</h3>
+            <h3>Individual Details <span id="people_explanation">(for person listed in above item-record)</span></h3>
         </div>
         {% comment %}
         <div class='col-md-1'>

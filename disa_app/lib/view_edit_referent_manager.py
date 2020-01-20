@@ -31,11 +31,18 @@ def prep_context( rfrnt_id: str, usr_first_name: str, usr_is_authenticated: bool
     rfrnt = session.query( models_alch.Referent ).get( rfrnt_id )
     context['citation_display'] = rfrnt.reference.citation.display
     reference_data: dict = rfrnt.reference.dictify()
+    if len( reference_data['transcription'] ) == 0:
+        brief_transcription = '(Not Listed)'
+    elif len( reference_data['transcription'] ) < 20:
+        brief_transcription = reference_data['transcription']
+    else:
+        brief_transcription = '%s...' % reference_data['transcription'][0:17]
     reference_summary = {
         'date': reference_data.get( 'date', None ),
         'id': reference_data['id'],
         'reference_type_name': reference_data['reference_type_name'],
-        'transcription': reference_data['transcription']
+        'transcription': reference_data['transcription'],
+        'brief_transcription': brief_transcription
     }
 
     context['reference'] = reference_summary
