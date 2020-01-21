@@ -233,8 +233,6 @@ def data_entrants( request, rfrnt_id: str ):
         log.debug( 'get detected' )
         data_entrant_getter = view_data_entrant_manager.Getter()
         resp = data_entrant_getter.manage_get( rfrnt_id )
-        # msg = 'data_entrants() get-handling coming'
-        # resp = HttpResponse( msg )
     elif request.method == 'PUT':
         log.debug( 'put detected' )
         data_entrant_updater = view_data_entrant_manager.Updater()
@@ -245,7 +243,7 @@ def data_entrants( request, rfrnt_id: str ):
         resp = HttpResponse( msg )
     else:
         msg = 'data_entrants() other request.method handling coming'
-        log.debug( msg )
+        log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
         resp = HttpResponse( msg )
     return resp
 
