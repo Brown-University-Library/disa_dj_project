@@ -21,8 +21,9 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-# def prep_context( rec_id ):
 def prep_context( rec_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
+    """ Preps context for template.
+        Called by views.edit_record() """
     context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
     session = make_session()
 

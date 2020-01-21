@@ -8,6 +8,7 @@ from disa_app import settings_app
 from disa_app.lib import view_data_entrant_manager  # api/people
 from disa_app.lib import view_data_records_manager  # api/items
 from disa_app.lib import view_edit_record_manager
+from disa_app.lib import view_edit_relationship_manager
 from disa_app.lib import view_editor_index_manager, view_edit_citation_manager  # documents
 from disa_app.lib import view_info_manager
 from disa_app.lib import view_people_manager, view_person_manager, view_edit_referent_manager  # people
@@ -205,10 +206,20 @@ def edit_record( request, rec_id ):
     return resp
 
 
+
+
 @shib_login
 def edit_relationships( request, rec_id: str ):
     """ Note: though this is in the 'editor' section here, the url is `/record/relationships/`. """
-    return HttpResponse( 'edit-relationships coming' )
+    log.debug( f'\n\nstarting edit_relationships(), with rec_id, `{rec_id}`' )
+    context: dict = view_edit_relationship_manager.prep_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/record_relationships.html', context )
+    return resp
+
+
 
 
 @shib_login
