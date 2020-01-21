@@ -22,6 +22,62 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
+class Getter():
+    def __init__( self ):
+        self.session = None
+
+    def manage_get( self, rfrnt_id: str ) -> HttpResponse:
+        """ Manages data/api ajax 'PUT'.
+            Called by views.data_entrants(), triggered by views.edit_person() webpage. """
+        log.debug( 'starting manage_get' )
+        log.debug( f'rfrnt_id, ```{rfrnt_id}```' )
+        self.session = make_session()
+        try:
+            rfrnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
+            context: dict = self.prep_get_response( rfrnt )
+            resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+        except:
+            msg = 'problem with update, or with response-prep; see logs'
+            log.exception( msg )
+            resp = HttpResponse( msg )
+        log.debug( 'returning response' )
+        return resp
+
+    def prep_get_response( self, rfrnt: models_alch.Referent ) -> dict:
+        """ Prepares context.
+            Called by manage_get() """
+        data = { 'ent': {} }
+        data['ent']['id'] = rfrnt.id
+        data['ent']['names'] = [
+            { 'first': n.first, 'last': n.last,
+                'name_type': n.name_type.name,
+                'id': n.id } for n in rfrnt.names ]
+        data['ent']['age'] = rfrnt.age
+        data['ent']['sex'] = rfrnt.sex
+        data['ent']['races'] = [
+            { 'label': r.name, 'value': r.name,
+                'id': r.name } for r in rfrnt.races ]
+        data['ent']['tribes'] = [
+            { 'label': t.name, 'value': t.name,
+                'id': t.name } for t in rfrnt.tribes ]
+        data['ent']['origins'] = [
+            { 'label': o.name, 'value': o.name,
+                'id': o.name } for o in rfrnt.origins ]
+        data['ent']['titles'] = [
+            { 'label': t.name, 'value': t.name,
+                'id': t.name } for t in rfrnt.titles ]
+        data['ent']['vocations'] = [
+            { 'label': v.name, 'value': v.name,
+                'id': v.name } for v in rfrnt.vocations ]
+        data['ent']['enslavements'] = [
+            { 'label': e.name, 'value': e.name,
+                'id': e.name } for e in rfrnt.enslavements ]
+        log.debug( f'data, ```{pprint.pformat(data)}```' )
+        return data
+
+    ## end class Getter()
+
+
 class Updater():
 
     def __init__( self ):
@@ -37,7 +93,7 @@ class Updater():
             context: dict = self.execute_update( request_user_id, data, rfrnt_id )
             resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         except:
-            msg = 'problem preparing data'
+            msg = 'problem with update, or with response-prep; see logs'
             log.exception( msg )
             resp = HttpResponse( msg )
         log.debug( 'returning response' )
@@ -114,7 +170,44 @@ class Updater():
     ## end class Updater()
 
 
-## from DISA (see methods)
+## from DISA -- GET
+# @app.route('/data/entrants/', methods=['GET'])
+# @app.route('/data/entrants/<rntId>', methods=['GET'])
+# @login_required
+# def read_referent_data(rntId=None):
+#     data = { 'ent': {} }
+#     if rntId == None:
+#         return jsonify(data)
+#     rnt = models.Referent.query.get(rntId)
+#     data['ent']['id'] = rnt.id
+#     data['ent']['names'] = [
+#         { 'first': n.first, 'last': n.last,
+#             'name_type': n.name_type.name,
+#             'id': n.id } for n in rnt.names ]
+#     data['ent']['age'] = rnt.age
+#     data['ent']['sex'] = rnt.sex
+#     data['ent']['races'] = [
+#         { 'label': r.name, 'value': r.name,
+#             'id': r.name } for r in rnt.races ]
+#     data['ent']['tribes'] = [
+#         { 'label': t.name, 'value': t.name,
+#             'id': t.name } for t in rnt.tribes ]
+#     data['ent']['origins'] = [
+#         { 'label': o.name, 'value': o.name,
+#             'id': o.name } for o in rnt.origins ]
+#     data['ent']['titles'] = [
+#         { 'label': t.name, 'value': t.name,
+#             'id': t.name } for t in rnt.titles ]
+#     data['ent']['vocations'] = [
+#         { 'label': v.name, 'value': v.name,
+#             'id': v.name } for v in rnt.vocations ]
+#     data['ent']['enslavements'] = [
+#         { 'label': e.name, 'value': e.name,
+#             'id': e.name } for e in rnt.enslavements ]
+#     return jsonify(data)
+
+
+## from DISA -- PUT
 # @app.route('/data/entrants/', methods=['POST'])
 # @app.route('/data/entrants/<rntId>', methods=['PUT', 'DELETE'])
 # @login_required
