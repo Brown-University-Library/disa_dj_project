@@ -7,6 +7,7 @@ import requests
 from disa_app import settings_app
 from disa_app.lib import view_data_entrant_manager  # api/people
 from disa_app.lib import view_data_records_manager  # api/items
+from disa_app.lib import v_data_rfrnc_relationships_manager  # api/relationship-by-reference
 from disa_app.lib import view_edit_record_manager
 from disa_app.lib import view_edit_relationship_manager
 from disa_app.lib import view_editor_index_manager, view_edit_citation_manager  # documents
@@ -280,6 +281,20 @@ def read_document_data( request, docId ):
     context: dict = view_read_document_data_manager.query_document( docId, request.user.profile.old_db_id )
     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
+
+
+
+
+@shib_login
+def relationships_by_reference( request, rfrnc_id ):
+    """ Called via ajax by views.edit_relationships()
+        Url: '/data/sections/<rfrnc_id>/relationships/' -- 'data_reference_relationships_url' """
+    log.debug( f'\n\nstarting relationships_by_reference person(), with rfrnc_id, `{rfrnc_id}`' )
+    context: dict = v_data_rfrnc_relationships_manager.prepare_data( rfrnc_id )
+    resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    return resp
+
+
 
 
 # ===========================

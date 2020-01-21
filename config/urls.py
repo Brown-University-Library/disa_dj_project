@@ -16,38 +16,35 @@ urlpatterns = [
     url( r'^login/$', views.login, name='login_url' ),
     url( r'^logout/$', views.logout, name='logout_url' ),
 
+    url( r'^browse/$', views.browse, name='browse_url' ),
+
     url( r'^editor/documents/(?P<cite_id>.*)/$', views.edit_citation, name='edit_citation_url' ),
     url( r'^editor/documents/new/$', views.new_citation, name='new_citation_url' ),
     url( r'^editor/records/(?P<rec_id>.*)/$', views.edit_record, name='edit_record_url' ),
     url( r'^editor/person/$', views.edit_person, name='edit_person_root_url' ),
     url( r'^editor/person/(?P<rfrnt_id>.*)/$', views.edit_person, name='edit_person_url' ),
     url( r'^editor/$', views.editor_index, name='editor_index_url' ),
-
-    url( r'^data/documents/(?P<docId>.*)/$', views.read_document_data, name='data_documents_url' ),  # note, 'citeID', above, is passed on a PUT.
-    url( r'^data/records/(?P<rec_id>.*)/$', views.data_records, name='data_record_url' ),  # note, 'refID' is passed on a PUT.
-    url( r'^data/entrants/details/(?P<rfrnt_id>.*)/$', views.data_entrants_details, name='data_entrants_details_url' ),
-    url( r'^data/entrants/(?P<rfrnt_id>.*)/$', views.data_entrants, name='data_referent_url' ),
-    url( r'^data/reference/(?P<refId>.*)/$', views.temp_response, name='data_reference_url' ),
-    url( r'^data/sections/(?P<refId>.*)/relationships/$', views.temp_response, name='temp_name_url' ),
-    url( r'^data/relationships/(?P<relId>.*)/$', views.temp_response, name='temp_name_url' ),
+    url( r'^record/relationships/(?P<rec_id>.*)/$', views.edit_relationships, name='edit_relationships_url' ),
 
     url( r'^people/$', views.people, name='people_url' ),
     url( r'^people/(?P<prsn_id>.*)/$', views.person, name='person_url' ),
 
     url( r'^source/(?P<src_id>.*)/$', views.source, name='source_url' ),
 
-    # url( r'^record/relationships/$', views.edit_relationships, name='edit_relationships_url' ),
-    url( r'^record/relationships/(?P<rec_id>.*)/$', views.edit_relationships, name='edit_relationships_url' ),
-
     url( r'^search_results/$', views.search_results, name='search_results_url' ),
 
-    ## old...
+    ## apis...
 
-    url( r'^browse/$', views.browse, name='browse_url' ),
-    # url( r'^person_index/$', views.person_index, name='person_index_url' ),
-    # url( r'^login/$', views.login, name='login_url' ),
-    # url( r'^editor_index/$', views.editor_index, name='editor_index_url' ),
-    # url( r'^logout/$', views.logout, name='logout_url' ),
+    url( r'^data/documents/(?P<docId>.*)/$', views.read_document_data, name='data_documents_url' ),  # note, 'citeID', above, is passed on a PUT.
+    url( r'^data/records/(?P<rec_id>.*)/$', views.data_records, name='data_record_url' ),  # note, 'refID' is passed on a PUT.
+    url( r'^data/entrants/details/(?P<rfrnt_id>.*)/$', views.data_entrants_details, name='data_entrants_details_url' ),
+    url( r'^data/entrants/(?P<rfrnt_id>.*)/$', views.data_entrants, name='data_referent_url' ),
+    url( r'^data/reference/(?P<refId>.*)/$', views.temp_response, name='data_reference_url' ),
+    url( r'^data/sections/(?P<rfrnc_id>.*)/relationships/$', views.relationships_by_reference, name='data_reference_relationships_url' ),
+    url( r'^data/relationships/(?P<relId>.*)/$', views.temp_response, name='temp_name_url' ),
+
+    ## misc...
+
     url( r'^admin/', admin.site.urls ),
 
     ## support urls...
@@ -58,9 +55,6 @@ urlpatterns = [
 
     url( r'^$', RedirectView.as_view(pattern_name='browse_url') ),
     url( r'^$', views.temp_response, name='temp_name_url' ),
-
-    # url( r'^admin/login/', RedirectView.as_view(pattern_name='login_url') ),
-    # url( r'^login/$', views.login, name='login_url' ),
 
     ]
 
