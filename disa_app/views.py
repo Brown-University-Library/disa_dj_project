@@ -181,8 +181,6 @@ def edit_citation( request, cite_id ):
     return resp
 
 
-
-
 @shib_login
 def edit_person( request, rfrnt_id=None ):
     """ Url: '/editor/person/<rfrnt_id>/' -- 'edit_person_url' """
@@ -193,8 +191,6 @@ def edit_person( request, rfrnt_id=None ):
     else:
         resp = render( request, 'disa_app_templates/entrant_edit.html', context )
     return resp
-
-
 
 
 @shib_login
@@ -210,7 +206,7 @@ def edit_record( request, rec_id ):
 
 
 @shib_login
-def edit_relationships( request ):
+def edit_relationships( request, rec_id: str ):
     """ Note: though this is in the 'editor' section here, the url is `/record/relationships/`. """
     return HttpResponse( 'edit-relationships coming' )
 

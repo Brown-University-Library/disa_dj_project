@@ -36,8 +36,8 @@ urlpatterns = [
 
     url( r'^source/(?P<src_id>.*)/$', views.source, name='source_url' ),
 
-    url( r'^record/relationships/$', views.edit_relationships, name='edit_relationships_url' ),
-    # url( r'^record/relationships/(?P<recId>.*)/$', views.edit_relationships, name='edit_relationships_url' ),
+    # url( r'^record/relationships/$', views.edit_relationships, name='edit_relationships_url' ),
+    url( r'^record/relationships/(?P<rec_id>.*)/$', views.edit_relationships, name='edit_relationships_url' ),
 
     url( r'^search_results/$', views.search_results, name='search_results_url' ),
 
