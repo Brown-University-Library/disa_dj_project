@@ -207,11 +207,11 @@ class Poster():
         """ Updates db and returns data.
             Called by manage_post() """
 
-        prs = models_sqlalchemy.Person()
+        prs = models_alch.Person()
         self.session.add( prs )
         self.session.commit()
 
-        rfrnt = models_sqlalchemy.Referent( reference_id=data['record_id'] )
+        rfrnt = models_alch.Referent( reference_id=data['record_id'] )
         rfrnt.person = prs
 
         # primary_name = update_referent_name(data['name'])
@@ -262,7 +262,7 @@ class Common():
     def get_or_create_referent_attribute( self, data: dict, attrModel: models_alch.Role, session: sqlalchemy.orm.session.Session ) -> models_alch.Role:
         """ Obtains, or creates and obtains, and then returns, a models_alch.Role instance.
             Called by Updater.execute_update() and Poster.manage_post() """
-        existing: models_alch.Role = self.session.query( attrModel ).filter_by( name=data['name'] ).first()  # or None, I think
+        existing: models_alch.Role = session.query( attrModel ).filter_by( name=data['name'] ).first()  # or None, I think
         if not existing:
             new_attr: models_alch.Role = attrModel( name=data['name'] )
             session.add( new_attr )
@@ -282,7 +282,7 @@ class Common():
         session.commit()
         return
 
-    def prep_response_data( self, rfrnt: models_alch.Referent ) -> dict:
+    def prep_put_post_response_data( self, rfrnt: models_alch.Referent ) -> dict:
         """ Prepares dct for json response.
             Called by Updater.execute_update() and Poster.manage_post() """
         data = {

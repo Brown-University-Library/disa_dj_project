@@ -231,6 +231,8 @@ def new_citation( request ):
 def data_entrants( request, rfrnt_id: str ):
     """ Called via ajax by views.edit_record()
         Url: '/data/entrants/<rfrnt_id>/' -- 'data_referent_url' """
+    log.debug( 'starting data_entrants()' )
+    log.debug( f'rfrnt_id, ```{rfrnt_id}```' )
     if request.method == 'GET':
         log.debug( 'get detected' )
         data_entrant_getter = view_data_entrant_manager.Getter()
@@ -242,7 +244,7 @@ def data_entrants( request, rfrnt_id: str ):
     elif request.method == 'POST':
         msg = 'data_entrants() post-handling coming'
         data_entrant_poster = view_data_entrant_manager.Poster()
-        resp = data_entrant_updater.manage_post( request.body, request.user.id, rfrnt_id )
+        resp = data_entrant_poster.manage_post( request.body, request.user.id, rfrnt_id )
         # log.debug( msg )
         # resp = HttpResponse( msg )
     else:
