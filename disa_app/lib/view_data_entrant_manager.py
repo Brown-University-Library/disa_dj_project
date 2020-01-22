@@ -81,13 +81,15 @@ class Getter():
 class Updater():
 
     def __init__( self ):
-        self.session = None
+        self.session = None  # updated by manage_put()
+        self.common = None   # updated by manage_put()
 
     def manage_put( self, payload: bytes, request_user_id: int, rfrnt_id: str ) -> HttpResponse:
         """ Manages data/api ajax 'PUT'.
             Called by views.data_entrants(), triggered by views.edit_record() webpage. """
         log.debug( 'starting manage_put()' )
         self.session = make_session()
+        self.common = Common()
         data: dict = json.loads( payload )
         try:
             context: dict = self.execute_update( request_user_id, data, rfrnt_id )
@@ -99,97 +101,202 @@ class Updater():
         log.debug( 'returning response' )
         return resp
 
-    def execute_update( self, user_id: int, data: dict, rntId: str ) -> dict:
+    def execute_update( self, user_id: int, data: dict, rfrnt_id: str ) -> dict:
         """ Updates db and returns data.
             Called by manage_put() """
-        rnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rntId )
-        primary_name: str = self.update_referent_name( data['name'] )
+        rnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
+        # primary_name: str = self.update_referent_name( data['name'] )
+        primary_name: str = self.common.update_referent_name( data['name'], self.session )
         rnt.names.append( primary_name )
         rnt.primary_name = primary_name
-        rnt.roles = [ self.get_or_create_referent_attribute(a, models_alch.Role) for a in data['roles'] ]
+        # rnt.roles = [ self.get_or_create_referent_attribute(a, models_alch.Role) for a in data['roles'] ]
+        rnt.roles = [ self.common.get_or_create_referent_attribute(a, models_alch.Role, self.session) for a in data['roles'] ]
         self.session.add( rnt )
         self.session.commit()
-        self.stamp_edit( user_id, rnt.reference)
-        data = self.prep_response_data( rnt )
+        # self.stamp_edit( user_id, rnt.reference)
+        self.common.stamp_edit( user_id, rnt.reference, self.session )
+        # data = self.prep_response_data( rnt )
+        data = self.common.prep_put_post_response_data( rnt )
+        log.debug( f'returning data, ```{pprint.pformat(data)}```' )
         return data
 
-    def update_referent_name( self, data: dict ) -> models_alch.ReferentName:
+    # def update_referent_name( self, data: dict ) -> models_alch.ReferentName:
+    #     """ Obtains a ReferentName object. Does not write to the db.
+    #         Called by execute_update() """
+    #     log.debug( f'data, ```{data}```' )
+    #     if data['id'] == 'name':
+    #         name = self.session.query( models_alch.ReferentName() )
+    #         log.debug( f'name, ```{name}```' )
+    #     else:
+    #         name = self.session.query( models_alch.ReferentName ).get( data['id'] )
+    #         log.debug( f'name, ```{name}```' )
+    #     name.first = data['first']
+    #     name.last = data['last']
+    #     given = self.session.query( models_alch.NameType ).filter_by( name='Given' ).first()
+    #     name.name_type_id: int = data.get('name_type', given.id)
+    #     log.debug( 'returning name' )
+    #     return name
+
+    # def get_or_create_referent_attribute( self, data: dict, attrModel: models_alch.Role ) -> models_alch.Role:
+    #     """ Obtains, or creates and obtains, and then returns, a models_alch.Role instance.
+    #         Called by execute_update() """
+    #     existing: models_alch.Role = self.session.query( attrModel ).filter_by( name=data['name'] ).first()  # or None, I think
+    #     if not existing:
+    #         new_attr: models_alch.Role = attrModel( name=data['name'] )
+    #         self.session.add( new_attr )
+    #         self.session.commit()
+    #         log.debug( f'new_attr, ```{new_attr}```' )
+    #         return new_attr
+    #     else:
+    #         log.debug( f'existing, ```{existing}```' )
+    #         return existing
+
+    # def stamp_edit( self, request_user_id: int, reference_obj: models_alch.Reference ) -> None:
+    #     """ Updates when the Reference-object was last edited and by whom.
+    #         Called by execute_update() """
+    #     log.debug( 'starting stamp_edit()' )
+    #     edit = models_alch.ReferenceEdit( reference_id=reference_obj.id, user_id=request_user_id, timestamp=datetime.datetime.utcnow() )
+    #     self.session.add( edit )
+    #     self.session.commit()
+    #     return
+
+    # def prep_response_data( self, referent: models_alch.Referent ) -> dict:
+    #     """ Prepares dct for json response.
+    #         Called by execute_update() """
+    #     data = {
+    #         'name_id': referent.primary_name.id,
+    #         'first': referent.primary_name.first,
+    #         'last': referent.primary_name.last,
+    #         'id': referent.id,
+    #         'person_id': referent.person_id,
+    #         'roles': [ role.id for role in referent.roles ]
+    #         }
+    #     log.debug( f'data, ```{pprint.pformat( data )}```' )
+    #     return data
+
+    ## end class Updater()
+
+
+class Poster():
+
+    def __init__( self ):
+        """ Updated by manage_post() """
+        self.session = None
+        self.common = None
+
+    def manage_post( self, payload: bytes, request_user_id: int, rfrnt_id: str ) -> HttpResponse:
+        """ Manages data/api ajax 'POST'.
+            Called by views.data_entrants(), triggered by views.edit_record() webpage 'Add person' button save. """
+        log.debug( 'starting manage_post' )
+        self.session = make_session()
+        self.common = Common()
+
+        data: dict = json.loads( payload )
+
+        try:
+            context: dict = self.execute_post( request_user_id, data )
+            resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+        except:
+            msg = 'problem with post, or with response-prep; see logs'
+            log.exception( msg )
+            resp = HttpResponse( msg )
+        log.debug( 'returning response' )
+        return resp
+
+    def execute_post( self, user_id: int, data: dict ) -> dict:
+        """ Updates db and returns data.
+            Called by manage_post() """
+
+        prs = models_sqlalchemy.Person()
+        self.session.add( prs )
+        self.session.commit()
+
+        rfrnt = models_sqlalchemy.Referent( reference_id=data['record_id'] )
+        rfrnt.person = prs
+
+        # primary_name = update_referent_name(data['name'])
+        primary_name: str = self.common.update_referent_name( data['name'], self.session )
+
+        rfrnt.names.append( primary_name )
+        rfrnt.primary_name = primary_name
+
+        prs.first_name = primary_name.first
+        prs.last_name = primary_name.last
+        self.session.add( prs )
+
+        rfrnt.roles = [ self.common.get_or_create_referent_attribute(a, models_alch.Role, self.session) for a in data['roles'] ]
+        self.session.add( rfrnt )
+        self.session.commit()
+
+        self.common.stamp_edit( user_id, rnt.reference, self.session )
+
+        log.debug( f'returning data, ```{pprint.pformat(data)}```' )
+        return data
+
+    ## end class Poster()
+
+
+
+class Common():
+
+    def __init__( self ):
+        pass
+
+    def update_referent_name( self, data: dict, session: sqlalchemy.orm.session.Session ) -> models_alch.ReferentName:
         """ Obtains a ReferentName object. Does not write to the db.
-            Called by execute_update() """
+            Called by Updater.execute_update() and Poster.manage_post() """
         log.debug( f'data, ```{data}```' )
         if data['id'] == 'name':
-            name = self.session.query( models_alch.ReferentName() )
+            name = session.query( models_alch.ReferentName() )
             log.debug( f'name, ```{name}```' )
         else:
-            name = self.session.query( models_alch.ReferentName ).get( data['id'] )
+            name = session.query( models_alch.ReferentName ).get( data['id'] )
             log.debug( f'name, ```{name}```' )
         name.first = data['first']
         name.last = data['last']
-        given = self.session.query( models_alch.NameType ).filter_by( name='Given' ).first()
+        given = session.query( models_alch.NameType ).filter_by( name='Given' ).first()
         name.name_type_id: int = data.get('name_type', given.id)
         log.debug( 'returning name' )
         return name
 
-    def get_or_create_referent_attribute( self, data: dict, attrModel: models_alch.Role ) -> models_alch.Role:
+    def get_or_create_referent_attribute( self, data: dict, attrModel: models_alch.Role, session: sqlalchemy.orm.session.Session ) -> models_alch.Role:
         """ Obtains, or creates and obtains, and then returns, a models_alch.Role instance.
-            Called by execute_update() """
+            Called by Updater.execute_update() and Poster.manage_post() """
         existing: models_alch.Role = self.session.query( attrModel ).filter_by( name=data['name'] ).first()  # or None, I think
         if not existing:
             new_attr: models_alch.Role = attrModel( name=data['name'] )
-            self.session.add( new_attr )
-            self.session.commit()
+            session.add( new_attr )
+            session.commit()
             log.debug( f'new_attr, ```{new_attr}```' )
             return new_attr
         else:
             log.debug( f'existing, ```{existing}```' )
             return existing
 
-    def stamp_edit( self, request_user_id: int, reference_obj: models_alch.Reference ) -> None:
+    def stamp_edit( self, request_user_id: int, reference_obj: models_alch.Reference, session: sqlalchemy.orm.session.Session ) -> None:
         """ Updates when the Reference-object was last edited and by whom.
-            Called by execute_update() """
+            Called by Updater.execute_update() and Poster.manage_post() """
         log.debug( 'starting stamp_edit()' )
         edit = models_alch.ReferenceEdit( reference_id=reference_obj.id, user_id=request_user_id, timestamp=datetime.datetime.utcnow() )
-        self.session.add( edit )
-        self.session.commit()
+        session.add( edit )
+        session.commit()
         return
 
-    def prep_response_data( self, referent: models_alch.Referent ) -> dict:
+    def prep_response_data( self, rfrnt: models_alch.Referent ) -> dict:
         """ Prepares dct for json response.
-            Called by execute_update() """
+            Called by Updater.execute_update() and Poster.manage_post() """
         data = {
-            'name_id': referent.primary_name.id,
-            'first': referent.primary_name.first,
-            'last': referent.primary_name.last,
-            'id': referent.id,
-            'person_id': referent.person_id,
-            'roles': [ role.id for role in referent.roles ]
+            'name_id': rfrnt.primary_name.id,
+            'first': rfrnt.primary_name.first,
+            'last': rfrnt.primary_name.last,
+            'id': rfrnt.id,
+            'person_id': rfrnt.person_id,
+            'roles': [ role.id for role in rfrnt.roles ]
             }
         log.debug( f'data, ```{pprint.pformat( data )}```' )
         return data
 
-    ## end class Updater()
-
-
-class Poster():
-    def __init__( self ):
-        self.session = None
-
-    def manage_post( self, rfrnt_id: str ) -> HttpResponse:
-        """ Manages data/api ajax 'POST'.
-            Called by views.data_entrants(), triggered by views.edit_record() webpage 'Add person' button save. """
-        log.debug( 'starting manage_post' )
-        self.session = make_session()
-        # try:
-        #     rfrnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
-        #     context: dict = self.prep_get_response( rfrnt )
-        #     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-        # except:
-        #     msg = 'problem with update, or with response-prep; see logs'
-        #     log.exception( msg )
-        #     resp = HttpResponse( msg )
-        log.debug( 'returning response' )
-        return HttpResponse( 'post-handling coming' )
-
+    ## end class Common()
 
 
 ## from DISA -- GET
@@ -229,7 +336,7 @@ class Poster():
 #     return jsonify(data)
 
 
-## from DISA -- PUT
+## from DISA -- PUT / POST / DELETE
 # @app.route('/data/entrants/', methods=['POST'])
 # @app.route('/data/entrants/<rntId>', methods=['PUT', 'DELETE'])
 # @login_required
