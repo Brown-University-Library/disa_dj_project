@@ -30,6 +30,7 @@ def prep_context( rec_id: str, usr_first_name: str, usr_is_authenticated: bool )
     rec = session.query( models_alch.Reference ).get( rec_id )
 
     context['rfrnc'] = rec.dictify()
+    context['base_url_segment'] = ''
 
     log.debug( f'context, ```{pprint.pformat(context)}```' )
     return context
