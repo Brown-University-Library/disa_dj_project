@@ -170,6 +170,28 @@ class Updater():
     ## end class Updater()
 
 
+class Poster():
+    def __init__( self ):
+        self.session = None
+
+    def manage_post( self, rfrnt_id: str ) -> HttpResponse:
+        """ Manages data/api ajax 'POST'.
+            Called by views.data_entrants(), triggered by views.edit_record() webpage 'Add person' button save. """
+        log.debug( 'starting manage_post' )
+        self.session = make_session()
+        # try:
+        #     rfrnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
+        #     context: dict = self.prep_get_response( rfrnt )
+        #     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+        # except:
+        #     msg = 'problem with update, or with response-prep; see logs'
+        #     log.exception( msg )
+        #     resp = HttpResponse( msg )
+        log.debug( 'returning response' )
+        return HttpResponse( 'post-handling coming' )
+
+
+
 ## from DISA -- GET
 # @app.route('/data/entrants/', methods=['GET'])
 # @app.route('/data/entrants/<rntId>', methods=['GET'])

@@ -168,9 +168,7 @@ def logout( request ):
 
 @shib_login
 def edit_citation( request, cite_id ):
-    ## url( r'^editor/documents/(?P<cite_id>.*)/$' -- 'edit_citation_url'
-    ## TODO: rename function to `edit_document()`?
-    # return HttpResponse( 'coming' )
+    """ Url: 'editor/documents/<cite_id>/' -- 'edit_citation_url' """
     log.debug( '\n\nstarting edit_citation()' )
     context: dict = view_edit_citation_manager.query_data( cite_id )
     if request.user.is_authenticated:
@@ -207,8 +205,6 @@ def edit_record( request, rec_id ):
     return resp
 
 
-
-
 @shib_login
 def edit_relationships( request, rec_id: str ):
     """ Note: though this is in the 'editor' section here, the url is `/record/relationships/`. """
@@ -219,8 +215,6 @@ def edit_relationships( request, rec_id: str ):
     else:
         resp = render( request, 'disa_app_templates/record_relationships.html', context )
     return resp
-
-
 
 
 @shib_login
@@ -247,8 +241,10 @@ def data_entrants( request, rfrnt_id: str ):
         resp = data_entrant_updater.manage_put( request.body, request.user.id, rfrnt_id )
     elif request.method == 'POST':
         msg = 'data_entrants() post-handling coming'
-        log.debug( msg )
-        resp = HttpResponse( msg )
+        data_entrant_poster = view_data_entrant_manager.Poster()
+        resp = data_entrant_updater.manage_post( request.body, request.user.id, rfrnt_id )
+        # log.debug( msg )
+        # resp = HttpResponse( msg )
     else:
         msg = 'data_entrants() other request.method handling coming'
         log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
