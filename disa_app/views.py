@@ -233,20 +233,20 @@ def data_entrants( request, rfrnt_id: str ):
         Url: '/data/entrants/<rfrnt_id>/' -- 'data_referent_url' """
     log.debug( 'starting data_entrants()' )
     log.debug( f'rfrnt_id, ```{rfrnt_id}```' )
+    log.debug( f'request.method, ```{request.method}```' )
     if request.method == 'GET':
-        log.debug( 'get detected' )
         data_entrant_getter = view_data_entrant_manager.Getter()
         resp = data_entrant_getter.manage_get( rfrnt_id )
     elif request.method == 'PUT':
-        log.debug( 'put detected' )
         data_entrant_updater = view_data_entrant_manager.Updater()
         resp = data_entrant_updater.manage_put( request.body, request.user.id, rfrnt_id )
     elif request.method == 'POST':
-        msg = 'data_entrants() post-handling coming'
         data_entrant_poster = view_data_entrant_manager.Poster()
         resp = data_entrant_poster.manage_post( request.body, request.user.id, rfrnt_id )
-        # log.debug( msg )
-        # resp = HttpResponse( msg )
+    elif request.method == 'DELETE':
+        log.debug( 'DELETE detected' )
+        data_entrant_deleter = view_data_entrant_manager.Deleter()
+        resp = data_entrant_deleter.manage_delete( request.user.id, rfrnt_id )
     else:
         msg = 'data_entrants() other request.method handling coming'
         log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )

@@ -741,8 +741,8 @@ var deactivateButton = function ( $button ) {
 }
 
 var deleteEntrant = function($container, entId, editUrl ) {
-    {% comment %} var ent_data_api = "{{ url_for('update_referent', rntId=None )}}" + entId; {% endcomment %}
-    var ent_data_api = "{% url 'data_referent_url' None %}" + entId;
+    {# var ent_data_api = "{{ url_for('update_referent', rntId=None )}}" + entId; #}
+    var ent_data_api = "{% url 'data_referent_url' 'STUB' %}".replace( 'STUB', entId );
     console.log( "ent_data_api for deleteEntrant, ```" + ent_data_api + "```" );
     $.ajax({
         type: "DELETE",

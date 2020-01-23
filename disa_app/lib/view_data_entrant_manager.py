@@ -175,6 +175,50 @@ class Poster():
     ## end class Poster()
 
 
+class Deleter():
+
+    def __init__( self ):
+        """ Updated by manage_post() """
+        self.session = None
+        self.common = None
+
+    def manage_delete( self, request_user_id: int, rfrnt_id: str ) -> HttpResponse:
+        """ Manages data/api ajax 'POST'.
+            Called by views.data_entrants(), triggered by views.edit_record() webpage 'Add person' button save. """
+        log.debug( 'starting manage_delete' )
+        self.session = make_session()
+        self.common = Common()
+        try:
+            context: dict = self.execute_delete( request_user_id, rfrnt_id )
+            resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+        except:
+            msg = 'problem with delete, or with response-prep; see logs'
+            log.exception( msg )
+            resp = HttpResponse( msg )
+        log.debug( 'returning response' )
+        return resp
+
+    def execute_delete( self, user_id: int, rfrnt_id: str ) -> dict:
+        """ Deletes given referent and associated data.
+            Called by manage_delete() """
+        rfrnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
+        rfrnc: models_sqlalchemy.Reference = rfrnt.reference
+        rels_as_sbj = self.session.query( models_alch.ReferentRelationship ).filter_by( subject_id=rfrnt.id ).all()
+        rels_as_obj = self.session.query( models_alch.ReferentRelationship ).filter_by( object_id=rfrnt.id ).all()
+        for r in rels_as_sbj:
+            self.session.delete( r )
+        for r in rels_as_obj:
+            self.session.delete( r )
+        self.session.delete( rfrnt )
+        self.session.commit()
+        self.common.stamp_edit( user_id, rfrnc, self.session )
+        data = { 'id': rfrnt_id }
+        log.debug( f'data, ```{data}```' )
+        return data
+
+    ## end class Deleter()
+
+
 class Common():
     """ Contains entrant-manager functions used by multiple method-classes. """
 
