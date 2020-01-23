@@ -228,8 +228,8 @@ class Poster():
         self.session.add( rfrnt )
         self.session.commit()
 
-        self.common.stamp_edit( user_id, rnt.reference, self.session )
-
+        self.common.stamp_edit( user_id, rfrnt.reference, self.session )
+        data = self.common.prep_put_post_response_data( rfrnt )
         log.debug( f'returning data, ```{pprint.pformat(data)}```' )
         return data
 
@@ -247,7 +247,7 @@ class Common():
             Called by Updater.execute_update() and Poster.manage_post() """
         log.debug( f'data, ```{data}```' )
         if data['id'] == 'name':
-            name = session.query( models_alch.ReferentName() )
+            name = models_alch.ReferentName()
             log.debug( f'name, ```{name}```' )
         else:
             name = session.query( models_alch.ReferentName ).get( data['id'] )
