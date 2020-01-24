@@ -502,7 +502,9 @@ var readEntrantData = function(entId, nameTypes) {
 
 var updateEntrantDetails = function(entId, dataObj) {
     {# var ent_data_api = "{{ url_for('update_referent_details', rntId=None )}}" + entId; #}
-    var ent_data_api = "{% url 'data_entrants_details_url' rfrnt_id=entId %}" + entId;  // may have to use the 'STUB'.replace() technique
+    {# var ent_data_api = "{% url 'data_entrants_details_url' rfrnt_id=entId %}" + entId;  // may have to use the 'STUB'.replace() technique #}
+    var ent_data_api = "{% url 'data_entrants_details_url' 'STUB' %}".replace( 'STUB', entId );
+    console.log( "ent_data_api url in `var updateEntrantDetails`: ", ent_data_api );
     $.ajax({
         type: "PUT",
         url: ent_data_api,
