@@ -7,6 +7,7 @@ from disa_app import models_sqlalchemy as models_alch
 from disa_app import settings_app
 from disa_app.lib import person_common
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -117,6 +118,63 @@ class Updater():
         return data
 
     ## end class Updater()
+
+
+class Details_Updater():
+
+    def __init__( self ):
+        """ Updated by manage_details_update() """
+        self.session = None
+        self.common = None
+
+    def manage_details_put( self, payload: bytes, request_user_id: int, rfrnt_id: str ) -> HttpResponse:
+        """ Manages data/api ajax 'PUT'.
+            Called by views.data_entrants_details(), triggered by views.edit_person() webpage. """
+        log.debug( 'starting manage_details_put' )
+        self.session = make_session()
+        self.common = Common()
+        try:
+            data: dict = json.loads( payload )
+            context: dict = self.execute_details_update( request_user_id, data, rfrnt_id )
+            # resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+        except:
+            msg = 'problem with details-update, or with response-prep; see logs'
+            log.exception( msg )
+            # resp = HttpResponse( msg )
+            context: dict = { 'problem': msg }
+        log.debug( 'returning response' )
+        # return resp
+        return context
+
+    def execute_details_update( self, user_id: int, data: dict, rfrnt_id: str ) -> dict:
+        """ Updates db and returns data.
+            Called by manage_details_put() """
+        rfrnt: models_alch.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
+        rfrnt.names = [ self.common.update_referent_name( na, self.session )
+            for na in data['names'] ]
+        rfrnt.age = data['age']
+        rfrnt.sex = data['sex']
+        rfrnt.primary_name = rfrnt.names[0]
+        rfrnt.races = [ self.common.get_or_create_referent_attribute( ra, models_alch.Race, self.session )
+            for ra in data['races'] ]
+        rfrnt.tribes = [ self.common.get_or_create_referent_attribute( tr, models_alch.Tribe, self.session )
+            for tr in data['tribes'] ]
+        rfrnt.origins = [ self.common.get_or_create_referent_attribute( ori, models_alch.Location, self.session )
+            for ori in data['origins'] ]
+        rfrnt.titles = [ self.common.get_or_create_referent_attribute( ti, models_alch.Title, self.session )
+            for ti in data['titles'] ]
+        rfrnt.enslavements = [ self.common.get_or_create_referent_attribute( st, models_alch.EnslavementType, self.session )
+            for st in data['statuses'] ]
+        rfrnt.vocations = [ self.common.get_or_create_referent_attribute( vo, models_alch.Vocation, self.session )
+            for vo in data['vocations'] ]
+        self.session.add( rfrnt )
+        self.session.commit()
+        self.common.stamp_edit( user_id, rfrnt.reference, self.session )
+        data = { 'redirect': reverse( 'edit_record_url', kwargs={'rec_id': rfrnt.reference_id} ) }
+        log.debug( f'returning data, ```{pprint.pformat(data)}```' )
+        return data
+
+    ## end class Details_Updater()
 
 
 class Poster():
@@ -282,7 +340,41 @@ class Common():
     ## end class Common()
 
 
-## from DISA -- GET
+## from DISA -- '/data/entrants/details/' -- PUT
+# @app.route('/data/entrants/details/', methods=['PUT'])
+# @app.route('/data/entrants/details/<rntId>', methods=['PUT'])
+# @login_required
+# def update_referent_details(rntId):
+#     rnt = models.Referent.query.get(rntId)
+#     data = request.get_json()
+#     rnt.names = [ update_referent_name(n) for n in data['names'] ]
+#     rnt.age = data['age']
+#     rnt.sex = data['sex']
+#     rnt.primary_name = rnt.names[0]
+#     rnt.races = [ get_or_create_referent_attribute(a, models.Race)
+#         for a in data['races'] ]
+#     rnt.tribes = [ get_or_create_referent_attribute(a, models.Tribe)
+#         for a in data['tribes'] ]
+#     rnt.origins = [ get_or_create_referent_attribute(a, models.Location)
+#         for a in data['origins'] ]
+#     rnt.titles = [ get_or_create_referent_attribute(a, models.Title)
+#         for a in data['titles'] ]
+#     rnt.enslavements = [ get_or_create_referent_attribute(
+#         a, models.EnslavementType)
+#             for a in data['statuses'] ]
+#     rnt.vocations = [ get_or_create_referent_attribute(
+#         a, models.Vocation)
+#             for a in data['vocations'] ]
+#     db.session.add(rnt)
+#     db.session.commit()
+
+#     stamp_edit(current_user, rnt.reference)
+
+#     return jsonify(
+#         { 'redirect': url_for('edit_record', recId=rnt.reference_id) })
+
+
+## from DISA -- '/data/entrants/' -- GET
 # @app.route('/data/entrants/', methods=['GET'])
 # @app.route('/data/entrants/<rntId>', methods=['GET'])
 # @login_required
@@ -319,7 +411,7 @@ class Common():
 #     return jsonify(data)
 
 
-## from DISA -- PUT / POST / DELETE
+## from DISA -- '/data/entrants/' -- PUT / POST / DELETE
 # @app.route('/data/entrants/', methods=['POST'])
 # @app.route('/data/entrants/<rntId>', methods=['PUT', 'DELETE'])
 # @login_required

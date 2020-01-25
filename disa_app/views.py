@@ -257,8 +257,14 @@ def data_entrants( request, rfrnt_id: str ):
 @shib_login
 def data_entrants_details( request, rfrnt_id ):
     """ Called via ajax by views.edit_person()
+        Updates referent details.
         Url: 'data/entrants/details/<rfrnt_id>' -- 'data_entrants_details_url' """
-    return HttpResponse( 'data_entrants_details_url response coming' )
+    log.debug( f'\n\nstarting data_entrants_details(), with rfrnt_id, `{rfrnt_id}`' )
+    log.debug( f'payload, ```{pprint.pformat(request.body)}```' )
+    data_entrant_details_updater = view_data_entrant_manager.Details_Updater()
+    context: dict = data_entrant_details_updater.manage_details_put( request.body, request.user.id, rfrnt_id )
+    resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    return resp
 
 
 @shib_login
