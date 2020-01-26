@@ -9,17 +9,26 @@ Resources...
 import datetime, logging, operator
 from typing import List
 
+import sqlalchemy
+from disa_app import settings_app
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, UnicodeText
 from sqlalchemy import Table
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-
 from sqlalchemy.orm import backref
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import sessionmaker
 
 
 log = logging.getLogger(__name__)
 Base = declarative_base()
 
+
+def make_session() -> sqlalchemy.orm.session.Session:
+    engine = create_engine( settings_app.DB_URL, echo=True )
+    Session = sessionmaker( bind=engine )
+    session = Session()
+    return session
 
 
 # ==========
@@ -498,12 +507,54 @@ class ReferentRelationship(Base):
         backref='describes')
 
     def entailed_relationships(self):
+        session = make_session()
         implied = []
-        entailed = RoleRelationship.query.filter_by(role1=self.role_id).all()
+        # entailed = RoleRelationship.query.filter_by(role1=self.role_id).all()
+        entailed = session.query( RoleRelationship ).filter_by(role1=self.role_id).all()
+
         for e in entailed:
             implied.append(e.entail_relationships(
                 self.subject_id, self.object_id))
         return implied
+
+
+
+
+class RoleRelationship(Base):
+    __tablename__ = '2_role_relationships'
+
+    id = Column(Integer, primary_key=True)
+    role1 = Column(Integer, ForeignKey('1_roles.id'))
+    role2 = Column(Integer, ForeignKey('1_roles.id'))
+    relationship_type = Column(Integer,
+        ForeignKey('1_role_relationship_types.id'))
+    alternate_text = Column(String(255))
+
+    def entail_role(self):
+        pass
+
+    def entail_relationships(self, sbjId, objId):
+        if self.related_as.name == 'inverse':
+            return ReferentRelationship(
+                subject_id=objId, role_id=self.role2, object_id=sbjId)
+        elif self.related_as.name == 'is_a':
+            return ReferentRelationship(
+                subject_id=sbjId, role_id=self.role2, object_id=objId)
+        else:
+            return
+
+class RoleRelationshipType(Base):
+    __tablename__ = '1_role_relationship_types'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    relationships = relationship(
+        'RoleRelationship', backref='related_as', lazy=True)
+
+
+
+
+
 
 
 class Tribe(Base):
