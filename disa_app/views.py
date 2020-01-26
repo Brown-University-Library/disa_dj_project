@@ -300,16 +300,17 @@ def relationships_by_reference( request, rfrnc_id ):
 
 
 @shib_login
-def data_relationships( request ):
+def data_relationships( request, rltnshp_id=None ):
     """ Called via ajax by views.edit_relationships() when `+` buton is clicked.
         Url: '/data/relationships/' -- 'data_relationships_url' """
     log.debug( f'\n\nstarting data_relationships(), with method, ```{request.method}```, with a payload of, `{request.body}`' )
     if request.method == 'POST':
         rfrnc_id: str = v_data_relationships_manager.manage_relationships_post( request.body, request.user.id )
         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+        log.debug( f'redirect_url, ```{redirect_url}```' )
         resp = HttpResponseRedirect( redirect_url )
     elif request.method == 'DELETE':
-        rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( request.body, request.user.id )
+        rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, request.body, request.user.id )
         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
         resp = HttpResponseRedirect( redirect_url )
     else:

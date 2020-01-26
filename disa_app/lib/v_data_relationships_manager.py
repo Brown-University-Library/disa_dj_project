@@ -68,6 +68,7 @@ def manage_relationships_post( payload: bytes, request_user_id: int ) -> str:
     try:
         section: int = data['section']  # seems to be the 'reference-id'
         rfrnc = session.query( models_alch.Reference ).get( section )
+        rfrnc_id = rfrnc.id
 
         existing = session.query( models_alch.ReferentRelationship ).filter_by(
             subject_id=data['sbj'], role_id=data['rel'],
@@ -80,23 +81,30 @@ def manage_relationships_post( payload: bytes, request_user_id: int ) -> str:
             session.add(relt)
             implied = relt.entailed_relationships()
             for i in implied:
-                existing = session.query( ReferentRelationship ).filter_by(
+                existing = session.query( models_alch.ReferentRelationship ).filter_by(
                     subject_id=i.subject_id, role_id=i.role_id,
                     object_id=i.object_id).first()
                 if not existing:
                     session.add(i)
             session.commit()
-            stamp_edit( request_user_id, rfrnc )
+            stamp_edit( request_user_id, rfrnc, session )
 
     except:
         log.exception( 'problem creating relationship...' )
 
     return rfrnc_id
 
+    ## end manage_relationships_post()
+
+
+def manage_relationships_delete( rltnshp_id, request.body, request.user.id ):
+    1/0
+    pass
+
 
 ## common
 
-def stamp_edit( request_user_id: int, reference_obj: models_alch.Reference ) -> None:
+def stamp_edit( request_user_id: int, reference_obj: models_alch.Reference, session: sqlalchemy.orm.session.Session ) -> None:
     """ Updates when the Reference-object was last edited and by whom.
         Called by manage_relationships_post() """
     log.debug( 'starting stamp_edit()' )
