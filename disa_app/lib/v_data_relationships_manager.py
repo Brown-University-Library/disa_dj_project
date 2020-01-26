@@ -60,7 +60,7 @@ def manage_relationships_post( payload: bytes, request_user_id: int ) -> str:
     """ Handles ajax api call; creates relationship entry.
         Called by views.data_relationships() """
     log.debug( 'starting manage_relationships_post()' )
-    self.session = make_session()
+    session = make_session()
     # self.common = Common()
     data: dict = json.loads( payload )
 
@@ -72,16 +72,39 @@ def manage_relationships_post( payload: bytes, request_user_id: int ) -> str:
         existing = session.query( models_alch.ReferentRelationship ).filter_by(
             subject_id=data['sbj'], role_id=data['rel'],
             object_id=data['obj']).first()
-        log.debug( 'type(existing), ```{type(existing)}```' )
 
-        #     existing = models.ReferentRelationship.query.filter_by(
-        #         subject_id=data['sbj'], role_id=data['rel'],
-        #         object_id=data['obj']).first()
+        if not existing:
+            relt = models_alch.ReferentRelationship(
+                subject_id=data['sbj'], role_id=data['rel'],
+                object_id=data['obj'])
+            session.add(relt)
+            implied = relt.entailed_relationships()
+            for i in implied:
+                existing = session.query( ReferentRelationship ).filter_by(
+                    subject_id=i.subject_id, role_id=i.role_id,
+                    object_id=i.object_id).first()
+                if not existing:
+                    session.add(i)
+            session.commit()
+            stamp_edit( request_user_id, rfrnc )
 
     except:
         log.exception( 'problem creating relationship...' )
 
     return rfrnc_id
+
+
+## common
+
+def stamp_edit( request_user_id: int, reference_obj: models_alch.Reference ) -> None:
+    """ Updates when the Reference-object was last edited and by whom.
+        Called by manage_relationships_post() """
+    log.debug( 'starting stamp_edit()' )
+    edit = models_alch.ReferenceEdit( reference_id=reference_obj.id, user_id=request_user_id, timestamp=datetime.datetime.utcnow() )
+    session.add( edit )
+    session.commit()
+    return
+
 
 
 
