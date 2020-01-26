@@ -23,9 +23,11 @@ class RelationshipMgmt {
       case "click":
         let btn = event.target.closest('button');
         if (btn.classList.contains('add-rel')) {
+          console.log( "add-button clicked" );
           let obj = this._adder.getData();
           obj['section'] = this._section;
           this._source.addRelationship(obj);
+          console.log( "addRelationship() complete" );
         } else if (btn.classList.contains('del-rel')) {
           let rel_id = parseInt(btn.getAttribute('data-rel-id'));
           this._source.deleteRelationship(this._section, rel_id);

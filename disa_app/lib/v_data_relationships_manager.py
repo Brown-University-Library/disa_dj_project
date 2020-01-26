@@ -21,33 +21,19 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-def prepare_data( rfrnc_id: str ):
+def prepare_relationships_by_reference_data( rfrnc_id: str ):
     """ Handles ajax api call for relationships_by_reference data.
         Called by views.relationships_by_reference()
         """
     log.debug( f'rfrnc_id, ```{rfrnc_id}```' )
     session = make_session()
     data = {}
-
     rfrnc = session.query( models_alch.Reference ).get( rfrnc_id )
-
     referents = [ { 'id': e.id, 'name': e.display_name() }
         for e in rfrnc.referents ]
-
-
-
-    # relationships = [ { 'id': r.id, 'name': r.name_as_relationship }
-    #     for r in models.Role.query.all()
-    #     if r.name_as_relationship is not None ]
-
     relationships = [ { 'id': r.id, 'name': r.name_as_relationship }
         for r in session.query( models_alch.Role ).all() if r.name_as_relationship is not None
         ]
-
-    # all_roles = session.query( models_alch.Role ).all()
-
-
-
     rnt_map = { f['id']: f['name'] for f in referents }
     rel_map = { r['id']: r['name'] for r in relationships }
     store = [
@@ -65,14 +51,72 @@ def prepare_data( rfrnc_id: str ):
     ]
     data = { 'store': store, 'people': referents,
         'relationships': relationships }
-
-
-
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     return data
 
 
-## from DISA
+
+def manage_relationships_post( payload: bytes, request_user_id: int ) -> str:
+    """ Handles ajax api call; creates relationship entry.
+        Called by views.data_relationships() """
+    log.debug( 'starting manage_relationships_post()' )
+    self.session = make_session()
+    # self.common = Common()
+    data: dict = json.loads( payload )
+
+    rfrnc_id = ''
+    try:
+        section: int = data['section']  # seems to be the 'reference-id'
+        rfrnc = session.query( models_alch.Reference ).get( section )
+
+        existing = session.query( models_alch.ReferentRelationship ).filter_by(
+            subject_id=data['sbj'], role_id=data['rel'],
+            object_id=data['obj']).first()
+        log.debug( 'type(existing), ```{type(existing)}```' )
+
+        #     existing = models.ReferentRelationship.query.filter_by(
+        #         subject_id=data['sbj'], role_id=data['rel'],
+        #         object_id=data['obj']).first()
+
+    except:
+        log.exception( 'problem creating relationship...' )
+
+    return rfrnc_id
+
+
+
+
+## from DISA -- POST
+# @app.route('/data/relationships/', methods=['POST'])
+# @login_required
+# def create_relationship():
+#     log.debug( 'starting create_relationship()' )
+#     data = request.get_json()
+#     ref = models.Reference.query.get(data['section'])
+#     existing = models.ReferentRelationship.query.filter_by(
+#         subject_id=data['sbj'], role_id=data['rel'],
+#         object_id=data['obj']).first()
+#     if not existing:
+#         relt = models.ReferentRelationship(
+#             subject_id=data['sbj'], role_id=data['rel'],
+#             object_id=data['obj'])
+#         db.session.add(relt)
+#         implied = relt.entailed_relationships()
+#         for i in implied:
+#             existing = models.ReferentRelationship.query.filter_by(
+#                 subject_id=i.subject_id, role_id=i.role_id,
+#                 object_id=i.object_id).first()
+#             if not existing:
+#                 db.session.add(i)
+#         db.session.commit()
+#         stamp_edit(current_user, ref)
+#     return redirect(
+#         url_for('relationships_by_reference', refId = ref.id),
+#         code=303 )
+
+
+
+## from DISA -- GET
 # @app.route('/data/sections/<refId>/relationships/')
 # @login_required
 # def relationships_by_reference(refId):

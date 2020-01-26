@@ -51,6 +51,7 @@ class RelationshipAdder {
   }
 
   getData() {
+    console.log( "in editor.relationships.adder.js getData()" );
     let data = {
       'sbj': parseInt(this._sbj),
       'rel': parseInt(this._prop),

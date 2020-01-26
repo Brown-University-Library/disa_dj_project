@@ -34,6 +34,7 @@ class DISASource {
         callback( data );
       }
     });
+    console.log( "postREST() success complete" );
   }
 
   delREST( endpoint, payload, callback ) {
@@ -58,8 +59,11 @@ class DISASource {
 
   addRelationship(obj) {
     let endpoint = this._base + `/data/relationships/`;
+    console.log( "endpoint: ", endpoint );
     let callback = this._apps['rel-mgmt'].setUp;
+    console.log( "callback: ", callback );
     this.postREST(endpoint, obj, callback);
+    console.log( "postREST() complete" )
   }
 
   deleteRelationship(sectionId, relId) {

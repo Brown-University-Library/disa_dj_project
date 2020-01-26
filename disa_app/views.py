@@ -7,7 +7,7 @@ import requests
 from disa_app import settings_app
 from disa_app.lib import view_data_entrant_manager  # api/people
 from disa_app.lib import view_data_records_manager  # api/items
-from disa_app.lib import v_data_rfrnc_relationships_manager  # api/relationship-by-reference
+from disa_app.lib import v_data_relationships_manager  # api/relationship-by-reference
 from disa_app.lib import view_edit_record_manager
 from disa_app.lib import view_edit_relationship_manager
 from disa_app.lib import view_editor_index_manager, view_edit_citation_manager  # documents
@@ -287,15 +287,34 @@ def read_document_data( request, docId ):
     return resp
 
 
+@shib_login
+def relationships_by_reference( request, rfrnc_id ):
+    """ Called via ajax by views.edit_relationships() when page is loaded.
+        Url: '/data/sections/<rfrnc_id>/relationships/' -- 'data_reference_relationships_url' """
+    log.debug( f'\n\nstarting relationships_by_reference person(), with rfrnc_id, `{rfrnc_id}`' )
+    context: dict = v_data_relationships_manager.prepare_relationships_by_reference_data( rfrnc_id )
+    resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    return resp
+
+
 
 
 @shib_login
-def relationships_by_reference( request, rfrnc_id ):
-    """ Called via ajax by views.edit_relationships()
-        Url: '/data/sections/<rfrnc_id>/relationships/' -- 'data_reference_relationships_url' """
-    log.debug( f'\n\nstarting relationships_by_reference person(), with rfrnc_id, `{rfrnc_id}`' )
-    context: dict = v_data_rfrnc_relationships_manager.prepare_data( rfrnc_id )
-    resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+def data_relationships( request ):
+    """ Called via ajax by views.edit_relationships() when `+` buton is clicked.
+        Url: '/data/relationships/' -- 'data_relationships_url' """
+    log.debug( f'\n\nstarting data_relationships(), with method, ```{request.method}```, with a payload of, `{request.body}`' )
+    if request.method == 'POST':
+        rfrnc_id: str = v_data_relationships_manager.manage_relationships_post( request.body, request.user.id )
+        redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+        resp = HttpResponseRedirect( redirect_url )
+    elif request.method == 'DELETE':
+        rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( request.body, request.user.id )
+        redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+        resp = HttpResponseRedirect( redirect_url )
+    else:
+        log.warning( f'we shouldn\'t get here' )
+        resp = HttpResponse( 'problem; see logs' )
     return resp
 
 
