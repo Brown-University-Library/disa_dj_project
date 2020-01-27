@@ -150,7 +150,8 @@
         </table>
         {% endif %}
         <div id="new_document_button" class="d-flex flex-row-reverse">
-            <a class="btn btn-primary" href="{% url 'edit_record_url' doc.id %}">Add an item</a>
+            {# <a class="btn btn-primary" href="{% url 'edit_record_url' doc.id %}">Add an item</a> #}
+            <a class="btn btn-primary" href="{% url 'edit_record_url' %}?doc_id={{doc.id}}">Add an item</a>
         </div>
     {% endif %}
 <!-- </div> -->

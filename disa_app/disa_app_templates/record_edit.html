@@ -581,10 +581,14 @@ var initializeForm = function (data, tags, editUrl) {
 var readRecordData = function(recId, roles, edit_url) {
     /*  Bridge to main controller (initializeForm).
         Called by document.ready() */
-    {% comment %} var rec_data_api = "{{ url_for('read_record_data', recId=None ) }}" + recId; {% endcomment %}
     // var rec_data_api = "{% url 'data_record_url' rec_id=recId %}";  // this should work; grr...
     var rec_id = recId;
-    var rec_data_api = "{% url 'data_record_url' rec_id %}";  // yes, a little crazy; grr...
+    console.log( "rec_id: ", rec_id );
+    {% if rec_id %}
+        var rec_data_api = "{% url 'data_record_url' rec_id %}";  // yes, needing the var is a little crazy; grr...
+    {% else %}
+        var rec_data_api = "{% url 'data_record_url' %}?doc_id={{ doc_id }}";
+    {% endif %}
     console.log( "in `var readRecordData`; rec_data_api: ", rec_data_api );
     var out = null;
     $.get(rec_data_api, function(data) {

@@ -194,15 +194,29 @@ def edit_person( request, rfrnt_id=None ):
 
 
 @shib_login
-def edit_record( request, rec_id ):
+def edit_record( request, rec_id=None ):
     """ Url: '/editor/records/<rec_id>/' -- 'edit_record_url' """
     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
-    context: dict = view_edit_record_manager.prep_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
+    if rec_id:
+        context: dict = view_edit_record_manager.prep_rec_id_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
+    else:
+        context: dict = view_edit_record_manager.prep_doc_id_context( request.GET.get('doc_id', None), request.user.first_name, bool(request.user.is_authenticated) )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
         resp = render( request, 'disa_app_templates/record_edit.html', context )
     return resp
+
+# @shib_login
+# def edit_record( request, rec_id ):
+#     """ Url: '/editor/records/<rec_id>/' -- 'edit_record_url' """
+#     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
+#     context: dict = view_edit_record_manager.prep_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
+#     if request.GET.get('format', '') == 'json':
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         resp = render( request, 'disa_app_templates/record_edit.html', context )
+#     return resp
 
 
 @shib_login
@@ -268,7 +282,7 @@ def data_entrants_details( request, rfrnt_id ):
 
 
 @shib_login
-def data_records( request, rec_id ):
+def data_records( request, rec_id=None ):
     """ Called via ajax by views.edit_record()
         Url: '/data/records/<rec_id>/' -- 'data_record_url' """
     log.debug( f'\n\nstarting data_records person(), with rec_id, `{rec_id}`' )

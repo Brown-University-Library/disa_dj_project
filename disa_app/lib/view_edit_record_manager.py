@@ -21,11 +21,42 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-def prep_context( rec_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
-    """ Preps context for template.
+def prep_doc_id_context( doc_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
+    """ Preps context for template when a doc_id (meaning a `Citation` id) is included.
         Called by views.edit_record() """
     context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
     session = make_session()
+    common_data: dict = prepare_common_data( session )
+    context.update( common_data )  # merges common_data key-vals into context
+    doc = session.query( models_alch.Citation ).get( doc_id )
+    context['rec_id'] = None
+    context['doc_display'] = doc.display
+    context['doc_id'] = doc.id
+    log.debug( 'context prepared' )
+    return context
+
+
+    # redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+
+
+def prep_rec_id_context( rec_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
+    """ Preps context for template when a rec_id (meaning a `Reference` id) is included.
+        Called by views.edit_record() """
+    context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
+    session = make_session()
+    common_data: dict = prepare_common_data( session )
+    context.update( common_data )  # merges common_data key-vals into context
+    rec = session.query( models_alch.Reference ).get( rec_id )
+    context['rec_id'] = rec.id
+    context['doc_display'] = rec.citation.display
+    context['doc_id'] = rec.citation.id
+    log.debug( 'context prepared' )
+    return context
+
+
+def prepare_common_data( session: sqlalchemy.orm.session.Session ):
+    """ Prepares data used for both the rec_id and doc_id calls.
+        Called by prep_rec_id_context() and prep_doc_id_context() """
 
     locs = session.query( models_alch.ReferenceLocation ).all()
 
@@ -41,11 +72,8 @@ def prep_context( rec_id: str, usr_first_name: str, usr_is_authenticated: bool )
     natl_ctxs_list = [ { 'id': nc.id, 'value': nc.name, 'name': nc.name } for nc in all_ntl_contexts ]
     natl_ctxs_json = json.dumps( natl_ctxs_list )
 
-    # uniq_cols = { (l.location.name, l.location_id) for l in locs if l.location_rank == 0 }
     uniq_locs = uniq_cols = { (l.location.name, l.location_id) for l in locs if l.location_rank == 0 }  # i think `uniq_cols` was a typo.
-
     uniq_town = { (l.location.name, l.location_id) for l in locs if l.location_rank == 1 }
-
     uniq_addl = { (l.location.name, l.location_id) for l in locs if l.location_rank == 2 and l.location_id is not None}
 
     col_state_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_cols ]  # again, typo?
@@ -57,36 +85,96 @@ def prep_context( rec_id: str, usr_first_name: str, usr_is_authenticated: bool )
     addl_loc_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_addl ]
     addl_loc_json = json.dumps( addl_loc_list )
 
-    rec = session.query( models_alch.Reference ).get( rec_id )
+    data = {
+        'rec_types_list': rec_types_list,   # not used in template; for possible viewing convenience
+        'rec_types': rec_types_json,
+        'roles_list': roles_list,           # not used; for reference
+        'roles': roles_json,
+        'natl_ctxs_list': natl_ctxs_list,   # not used; for reference
+        'natl_ctxs': natl_ctxs_json,
+        'col_state_list': col_state_list,   # not used; for reference
+        'col_state': col_state_json,
+        'towns_list': towns_list,           # not used; for reference
+        'towns': towns_json,
+        'addl_loc_list': addl_loc_list,     # not used; for reference
+        'addl_loc': addl_loc_json,
+        }
 
-    log.debug( 'data obtained' )
+    log.debug( 'data prepared' )
+    return data
 
-    context['rec_id'] = rec.id
+    ## end def prepare_common_data
 
-    context['doc_display'] = rec.citation.display
-    context['doc_id'] = rec.citation.id
 
-    context['rec_types_list'] = rec_types_list  # not used; for reference
-    context['rec_types'] = rec_types_json
 
-    context['roles_list'] = roles_list  # not used; for reference
-    context['roles'] = roles_json
 
-    context['natl_ctxs_list'] = natl_ctxs_list  # not used; for reference
-    context['natl_ctxs'] = natl_ctxs_json
+# def prep_rec_id_context( rec_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
+#     """ Preps context for template when a rec_id (meaning a `Reference` id) is included.
+#         Called by views.edit_record() """
+#     context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
+#     session = make_session()
 
-    context['col_state_list'] = col_state_list  # not used; for reference
-    context['col_state'] = col_state_json
+#     locs = session.query( models_alch.ReferenceLocation ).all()
 
-    context['towns_list'] = towns_list
-    context['towns'] = towns_json
+#     ref_types = session.query( models_alch.ReferenceType ).all()
+#     rec_types_list = [ { 'id': rt.id, 'value': rt.name, 'name': rt.name } for rt in ref_types ]
+#     rec_types_json = json.dumps( rec_types_list )
 
-    context['addl_loc_list'] = addl_loc_list
-    context['addl_loc'] = addl_loc_json
+#     all_roles = session.query( models_alch.Role ).all()
+#     roles_list = [ { 'id': role.id, 'value': role.name, 'name': role.name } for role in all_roles ]
+#     roles_json = json.dumps( roles_list )
 
-    # log.debug( f'context, ```{pprint.pformat(context)}```' )
-    log.debug( 'context prepared' )
-    return context
+#     all_ntl_contexts = session.query( models_alch.NationalContext ).all()
+#     natl_ctxs_list = [ { 'id': nc.id, 'value': nc.name, 'name': nc.name } for nc in all_ntl_contexts ]
+#     natl_ctxs_json = json.dumps( natl_ctxs_list )
+
+#     # uniq_cols = { (l.location.name, l.location_id) for l in locs if l.location_rank == 0 }
+#     uniq_locs = uniq_cols = { (l.location.name, l.location_id) for l in locs if l.location_rank == 0 }  # i think `uniq_cols` was a typo.
+
+#     uniq_town = { (l.location.name, l.location_id) for l in locs if l.location_rank == 1 }
+
+#     uniq_addl = { (l.location.name, l.location_id) for l in locs if l.location_rank == 2 and l.location_id is not None}
+
+#     col_state_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_cols ]  # again, typo?
+#     col_state_json = json.dumps( col_state_list )
+
+#     towns_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_town ]
+#     towns_json = json.dumps( towns_list )
+
+#     addl_loc_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_addl ]
+#     addl_loc_json = json.dumps( addl_loc_list )
+
+#     rec = session.query( models_alch.Reference ).get( rec_id )
+
+#     log.debug( 'data obtained' )
+
+#     context['rec_id'] = rec.id
+
+#     context['doc_display'] = rec.citation.display
+#     context['doc_id'] = rec.citation.id
+
+#     context['rec_types_list'] = rec_types_list  # not used; for reference
+#     context['rec_types'] = rec_types_json
+
+#     context['roles_list'] = roles_list  # not used; for reference
+#     context['roles'] = roles_json
+
+#     context['natl_ctxs_list'] = natl_ctxs_list  # not used; for reference
+#     context['natl_ctxs'] = natl_ctxs_json
+
+#     context['col_state_list'] = col_state_list  # not used; for reference
+#     context['col_state'] = col_state_json
+
+#     context['towns_list'] = towns_list
+#     context['towns'] = towns_json
+
+#     context['addl_loc_list'] = addl_loc_list
+#     context['addl_loc'] = addl_loc_json
+
+#     log.debug( 'context prepared' )
+#     return context
+
+#     ## end prep_rec_id_context()
 
 
 

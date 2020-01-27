@@ -20,7 +20,10 @@ urlpatterns = [
 
     url( r'^editor/documents/(?P<cite_id>.*)/$', views.edit_citation, name='edit_citation_url' ),
     url( r'^editor/documents/new/$', views.new_citation, name='new_citation_url' ),
+
+    url( r'^editor/records/$', views.edit_record, name='edit_record_url' ),
     url( r'^editor/records/(?P<rec_id>.*)/$', views.edit_record, name='edit_record_url' ),
+
     url( r'^editor/person/$', views.edit_person, name='edit_person_root_url' ),
     url( r'^editor/person/(?P<rfrnt_id>.*)/$', views.edit_person, name='edit_person_url' ),
     url( r'^editor/$', views.editor_index, name='editor_index_url' ),
@@ -36,11 +39,15 @@ urlpatterns = [
     ## apis...
 
     url( r'^data/documents/(?P<docId>.*)/$', views.read_document_data, name='data_documents_url' ),  # note, 'citeID', above, is passed on a PUT.
+
+    url( r'^data/records/$', views.data_records, name='data_record_url' ),  # note, 'refID' is passed on a PUT.
     url( r'^data/records/(?P<rec_id>.*)/$', views.data_records, name='data_record_url' ),  # note, 'refID' is passed on a PUT.
+
     url( r'^data/entrants/details/(?P<rfrnt_id>.*)/$', views.data_entrants_details, name='data_entrants_details_url' ),
     url( r'^data/entrants/(?P<rfrnt_id>.*)/$', views.data_entrants, name='data_referent_url' ),
     url( r'^data/reference/(?P<refId>.*)/$', views.temp_response, name='data_reference_url' ),
     url( r'^data/sections/(?P<rfrnc_id>.*)/relationships/$', views.relationships_by_reference, name='data_reference_relationships_url' ),
+
     url( r'^data/relationships/$', views.data_relationships, name='data_relationships_url' ),
     url( r'^data/relationships/(?P<rltnshp_id>.*)/$', views.data_relationships, name='data_relationships_url' ),
 
