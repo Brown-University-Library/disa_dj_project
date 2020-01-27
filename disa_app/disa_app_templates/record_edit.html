@@ -308,7 +308,7 @@
     </div>
     <hr id="post_document"> </hr>
 
-    <p id="items_header">Item... <span class="click_message">(item/record id: "{{rec_id}}")</span> <span class="click_message">(click to open/close)</span></p>
+    <p id="items_header">Item... {% if rec_id %}<span class="click_message">(item/record id: "{{rec_id}}")</span>{% endif %} <span class="click_message">(click to open/close)</span></p>
     <div id="record_form">
         <h2 id="record_header"></h2>
         <form action="" method="">
@@ -600,8 +600,17 @@ var updateRecordData = function(recId, docId) {
     {% comment %} var rec_data_api = "{{ url_for('update_reference_data', recId=None )}}" + recId; {% endcomment %}
     var rec_id = recId;
     var rec_data_api = "{% url 'data_record_url' rec_id %}";
-    console.log( "rec_data_api for updateRecordData, ```" + rec_data_api + "```" );
+
+    console.log( "rec_id: ", rec_id );
+    {% if rec_id %}
+        var rec_data_api = "{% url 'data_record_url' rec_id %}";  // yes, needing the var is a little crazy; grr...
+    {% else %}
+        var rec_data_api = "{% url 'data_record_url' %}";
+    {% endif %}
+    console.log( "in `var updateRecordData`; rec_data_api: ", rec_data_api );
+
     var data = collectInputValues(docId);
+    console.log( "collectInputValues data: ", data );
     var method = (recId ? "PUT" : "POST");
     $.ajax({
         type: method,

@@ -285,8 +285,19 @@ def data_entrants_details( request, rfrnt_id ):
 def data_records( request, rec_id=None ):
     """ Called via ajax by views.edit_record()
         Url: '/data/records/<rec_id>/' -- 'data_record_url' """
-    log.debug( f'\n\nstarting data_records person(), with rec_id, `{rec_id}`' )
-    context: dict = view_data_records_manager.query_record( rec_id )
+    log.debug( f'\n\nstarting data_records, with rec_id, `{rec_id}`; with method, ```{request.method}```, with a payload of, `{request.body}`' )
+    try:
+        if rec_id:
+            log.debug( f'here, because rec_id is, `{rec_id}`; and is type, `{type(rec_id)}`' )
+            context: dict = view_data_records_manager.query_record( rec_id )
+        elif request.method == 'GET':
+            context = { 'rec': {}, 'entrants': [] }
+        elif request.method == 'POST':
+            context: dict = view_data_records_manager.manage_post()
+        else:
+            log.warning( 'shouldn\'t get here' )
+    except:
+        log.exception( 'problem handling request' )
     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
 
