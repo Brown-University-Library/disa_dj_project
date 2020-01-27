@@ -54,21 +54,24 @@ def manage_relationships_post( payload: bytes, request_user_id: int ) -> str:
     """ Handles ajax api call; creates relationship entry.
         Called by views.data_relationships() """
     log.debug( 'starting manage_relationships_post()' )
-    session = make_session()
-    data: dict = json.loads( payload )
-    section: int = data['section']  # seems to be the 'reference-id'
-    rfrnc = session.query( models_alch.Reference ).get( section )
-    rfrnc_id = rfrnc.id
-    existing = session.query( models_alch.ReferentRelationship ).filter_by(
-        subject_id=data['sbj'], role_id=data['rel'],
-        object_id=data['obj']).first()
-    if not existing:
-        add_posted_relationships( data, request_user_id, session )
+    try:
+        session = make_session()
+        data: dict = json.loads( payload )
+        section: int = data['section']  # seems to be the 'reference-id'
+        rfrnc = session.query( models_alch.Reference ).get( section )
+        rfrnc_id = rfrnc.id
+        existing = session.query( models_alch.ReferentRelationship ).filter_by(
+            subject_id=data['sbj'], role_id=data['rel'],
+            object_id=data['obj']).first()
+        if not existing:
+            add_posted_relationships( data, request_user_id, rfrnc, session )
+    except:
+        log.exception( 'problem with post...' )
     log.debug( 'returning rfrnc_id for redirect, `{rfrnc_id}`' )
     return rfrnc_id
 
 
-def add_posted_relationships( data: dict, request_user_id: int, session: sqlalchemy.orm.session.Session ) -> None:
+def add_posted_relationships( data: dict, request_user_id: int, rfrnc: models_alch.Reference, session: sqlalchemy.orm.session.Session ) -> None:
     """ Creates relationship data, and implied inverse relationship data.
         Called by manage_relationships_post() """
     relt = models_alch.ReferentRelationship(
@@ -92,16 +95,19 @@ def manage_relationships_delete( rltnshp_id, payload: bytes, request_user_id: in
     """ Handles ajax api call; deletes relationship entry.
         Called by views.data_relationships() """
     log.debug( 'starting manage_relationships_delete()' )
-    session = make_session()
-    data: dict = json.loads( payload )
-    section: int = data['section']  # seems to be the 'reference-id'
-    rfrnc = session.query( models_alch.Reference ).get( section )
-    rfrnc_id = rfrnc.id
-    existing = session.query( models_alch.ReferentRelationship ).get( rltnshp_id )
-    if existing:
-        session.delete( existing )
-        session.commit()
-        stamp_edit( request_user_id, rfrnc )
+    try:
+        session = make_session()
+        data: dict = json.loads( payload )
+        section: int = data['section']  # seems to be the 'reference-id'
+        rfrnc = session.query( models_alch.Reference ).get( section )
+        rfrnc_id = rfrnc.id
+        existing = session.query( models_alch.ReferentRelationship ).get( rltnshp_id )
+        if existing:
+            session.delete( existing )
+            session.commit()
+            stamp_edit( request_user_id, rfrnc, session )
+    except:
+        log.exception( 'problem with delete...' )
     log.debug( 'returning rfrnc_id for redirect, `{rfrnc_id}`' )
     return rfrnc_id
 
