@@ -27,33 +27,27 @@ def prepare_relationships_by_reference_data( rfrnc_id: str ):
         """
     log.debug( f'rfrnc_id, ```{rfrnc_id}```' )
     session = make_session()
-    data = {}
     rfrnc = session.query( models_alch.Reference ).get( rfrnc_id )
     referents = [ { 'id': e.id, 'name': e.display_name() }
         for e in rfrnc.referents ]
     relationships = [ { 'id': r.id, 'name': r.name_as_relationship }
-        for r in session.query( models_alch.Role ).all() if r.name_as_relationship is not None
-        ]
+        for r in session.query( models_alch.Role ).all() if r.name_as_relationship is not None ]
     rnt_map = { f['id']: f['name'] for f in referents }
     rel_map = { r['id']: r['name'] for r in relationships }
-    store = [
-        {
+    store = [ {
         'id': r.id,
-        'data':
-            {
+        'data': {
             'sbj': { 'name': rnt_map[r.subject_id], 'id': r.subject_id },
             'rel': { 'name': rel_map[r.role_id], 'id': r.role_id },
             'obj': { 'name': rnt_map[r.object_id], 'id': r.object_id }
-            }
-        }
+            } }
         for f in rfrnc.referents
-            for r in f.as_subject
-    ]
-    data = { 'store': store, 'people': referents,
-        'relationships': relationships }
+            for r in f.as_subject ]
+    data = { 'store': store, 'people': referents, 'relationships': relationships }
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     return data
 
+    ## end prepare_relationships_by_reference_data()
 
 
 def manage_relationships_post( payload: bytes, request_user_id: int ) -> str:
@@ -61,48 +55,59 @@ def manage_relationships_post( payload: bytes, request_user_id: int ) -> str:
         Called by views.data_relationships() """
     log.debug( 'starting manage_relationships_post()' )
     session = make_session()
-    # self.common = Common()
     data: dict = json.loads( payload )
-
-    rfrnc_id = ''
-    try:
-        section: int = data['section']  # seems to be the 'reference-id'
-        rfrnc = session.query( models_alch.Reference ).get( section )
-        rfrnc_id = rfrnc.id
-
-        existing = session.query( models_alch.ReferentRelationship ).filter_by(
-            subject_id=data['sbj'], role_id=data['rel'],
-            object_id=data['obj']).first()
-
-        if not existing:
-            relt = models_alch.ReferentRelationship(
-                subject_id=data['sbj'], role_id=data['rel'],
-                object_id=data['obj'])
-            session.add(relt)
-            implied = relt.entailed_relationships()
-            for i in implied:
-                existing = session.query( models_alch.ReferentRelationship ).filter_by(
-                    subject_id=i.subject_id, role_id=i.role_id,
-                    object_id=i.object_id).first()
-                if not existing:
-                    session.add(i)
-            session.commit()
-            stamp_edit( request_user_id, rfrnc, session )
-
-    except:
-        log.exception( 'problem creating relationship...' )
-
+    section: int = data['section']  # seems to be the 'reference-id'
+    rfrnc = session.query( models_alch.Reference ).get( section )
+    rfrnc_id = rfrnc.id
+    existing = session.query( models_alch.ReferentRelationship ).filter_by(
+        subject_id=data['sbj'], role_id=data['rel'],
+        object_id=data['obj']).first()
+    if not existing:
+        add_posted_relationships( data, request_user_id, session )
+    log.debug( 'returning rfrnc_id for redirect, `{rfrnc_id}`' )
     return rfrnc_id
 
-    ## end manage_relationships_post()
+
+def add_posted_relationships( data: dict, request_user_id: int, session: sqlalchemy.orm.session.Session ) -> None:
+    """ Creates relationship data, and implied inverse relationship data.
+        Called by manage_relationships_post() """
+    relt = models_alch.ReferentRelationship(
+        subject_id=data['sbj'], role_id=data['rel'],
+        object_id=data['obj'])
+    session.add(relt)
+    implied = relt.entailed_relationships()
+    for i in implied:
+        existing = session.query( models_alch.ReferentRelationship ).filter_by(
+            subject_id=i.subject_id, role_id=i.role_id,
+            object_id=i.object_id).first()
+        if not existing:
+            session.add(i)
+    session.commit()
+    stamp_edit( request_user_id, rfrnc, session )
+    log.debug( 'relationship entry(s) created.' )
+    return
 
 
-def manage_relationships_delete( rltnshp_id, request.body, request.user.id ):
-    1/0
-    pass
+def manage_relationships_delete( rltnshp_id, payload: bytes, request_user_id: int ) -> str:
+    """ Handles ajax api call; deletes relationship entry.
+        Called by views.data_relationships() """
+    log.debug( 'starting manage_relationships_delete()' )
+    session = make_session()
+    data: dict = json.loads( payload )
+    section: int = data['section']  # seems to be the 'reference-id'
+    rfrnc = session.query( models_alch.Reference ).get( section )
+    rfrnc_id = rfrnc.id
+    existing = session.query( models_alch.ReferentRelationship ).get( rltnshp_id )
+    if existing:
+        session.delete( existing )
+        session.commit()
+        stamp_edit( request_user_id, rfrnc )
+    log.debug( 'returning rfrnc_id for redirect, `{rfrnc_id}`' )
+    return rfrnc_id
 
 
 ## common
+
 
 def stamp_edit( request_user_id: int, reference_obj: models_alch.Reference, session: sqlalchemy.orm.session.Session ) -> None:
     """ Updates when the Reference-object was last edited and by whom.
@@ -114,7 +119,26 @@ def stamp_edit( request_user_id: int, reference_obj: models_alch.Reference, sess
     return
 
 
+# -------------
+# for reference
+# -------------
 
+
+## from DISA -- DELETE
+# @app.route('/data/relationships/<relId>', methods=['DELETE'])
+# @login_required
+# def delete_relationship(relId):
+#     log.debug( 'starting delete_relationship()' )
+#     data = request.get_json()
+#     ref = models.Reference.query.get(data['section'])
+#     existing = models.ReferentRelationship.query.get(relId)
+#     if existing:
+#         db.session.delete(existing)
+#         db.session.commit()
+#         stamp_edit(current_user, ref)
+#     return redirect(
+#         url_for('relationships_by_reference', refId = ref.id),
+#         code=303 )
 
 
 ## from DISA -- POST
@@ -144,7 +168,6 @@ def stamp_edit( request_user_id: int, reference_obj: models_alch.Reference, sess
 #     return redirect(
 #         url_for('relationships_by_reference', refId = ref.id),
 #         code=303 )
-
 
 
 ## from DISA -- GET
