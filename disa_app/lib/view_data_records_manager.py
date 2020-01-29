@@ -79,6 +79,8 @@ def manage_post( payload: bytes, request_user_id: int ) -> dict:
     except:
         log.exception( '\n\nexception...' )
 
+    return
+
 
 ## from DISA -- POST/PUT
 # @app.route('/data/records/', methods=['POST'])
@@ -146,7 +148,7 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-def get_or_create_type( typeData: dict, typeModel: models_sqlalchemy.ReferenceType, session: sqlalchemy.orm.session.Session ) -> models_sqlalchemy.ReferenceType:
+def get_or_create_type( typeData: dict, typeModel: models_alch.ReferenceType, session: sqlalchemy.orm.session.Session ) -> models_alch.ReferenceType:
     """ Gets or creates a ReferenceType instance.
         Called by manage_post() """
     log.debug( f'typeData, ```{pprint.pformat(typeData)}```' )
@@ -167,7 +169,12 @@ def get_or_create_type( typeData: dict, typeModel: models_sqlalchemy.ReferenceTy
     return typ
 
 
-def process_record_locations( locData, recObj ):
+def process_record_locations( locData: list, recObj: models_alch.Reference, session: sqlalchemy.orm.session.Session ) -> models_alch.Reference:
+    """ Creates additional Location records if necessary...
+        Updates ReferenceLocation records if necessary...
+        Creates a linkage between the Reference record and the ReferenceLocation record if necessary.
+        Called by manage_post() """
+    log.debug( f'locData, ```{pprint.pformat(locData)}```' )
     locations = []
     for loc in locData:
         if loc['id'] == -1:
@@ -179,20 +186,27 @@ def process_record_locations( locData, recObj ):
         else:
             location = models.Location.query.get(loc['id'])
         locations.append(location)
-    clny_state = models.LocationType.query.filter_by(name='Colony/State').first()
-    city = models.LocationType.query.filter_by(name='City').first()
-    locale = models.LocationType.query.filter_by(name='Locale').first()
+    # clny_state = models.LocationType.query.filter_by(name='Colony/State').first()
+    clny_state = session.query( models_alch.LocationType ).filter_by( name='Colony/State' ).first()
+
+    # city = models.LocationType.query.filter_by(name='City').first()
+    city = session.query( models_alch.LocationType ).filter_by( name='City' ).first()
+
+    # locale = models.LocationType.query.filter_by(name='Locale').first()
+    locale = session.query( models_alch.LocationType ).filter_by( name='Locale' ).first()
+
     loc_types = [ clny_state, city, locale ]
     for loc in locations:
-        rec_loc = models.ReferenceLocation()
+        rec_loc = models_alch.ReferenceLocation()
         rec_loc.reference = recObj
         rec_loc.location = loc
-        idx = locations.index(loc)
+        idx = locations.index( loc )
         rec_loc.location_rank = idx
         if idx < len(loc_types):
             rec_loc.location_type = loc_types[idx]
-        db.session.add(rec_loc)
-    db.session.commit()
+        session.add(rec_loc)
+    session.commit()
+    log.debug( 'returning reference-instance' )
     return recObj
 
 
