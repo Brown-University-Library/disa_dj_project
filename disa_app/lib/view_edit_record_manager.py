@@ -36,9 +36,6 @@ def prep_doc_id_context( doc_id: str, usr_first_name: str, usr_is_authenticated:
     return context
 
 
-    # redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
-
-
 def prep_rec_id_context( rec_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
     """ Preps context for template when a rec_id (meaning a `Reference` id) is included.
         Called by views.edit_record() """

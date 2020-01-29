@@ -7,6 +7,7 @@ from disa_app import settings_app
 from disa_app import models_sqlalchemy as models_alch
 from disa_app.lib import person_common
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -76,10 +77,26 @@ def manage_post( payload: bytes, request_user_id: int ) -> dict:
         rfrnc.locations = []
         rfrnc = process_record_locations( data['locations'], rfrnc, session )
 
+        try:
+            rfrnc.date = datetime.datetime.strptime(data['date'], '%m/%d/%Y')
+        except:
+            rfrnc.date = None
+        rfrnc.reference_type_id = reference_type.id
+        rfrnc.national_context_id = data['national_context']
+        rfrnc.transcription = data['transcription']
+        session.add( rfrnc )
+        session.commit()
+
+        stamp_edit( request_user_id, rfrnc, session )
+
+        # context =  { 'redirect': url_for('edit_record', recId=ref.id) }
+        context =  { 'redirect': reverse( 'edit_record_url', kwargs={'rec_id': rfrnc.id} ) }
+        log.debug( f'context, ```{context}```' )
     except:
         log.exception( '\n\nexception...' )
+        raise Exception( 'problem; see logs' )
 
-    return
+    return context
 
 
 ## from DISA -- POST/PUT
@@ -121,7 +138,7 @@ def manage_post( payload: bytes, request_user_id: int ) -> dict:
 #     if ref.date:
 #         data['rec']['date'] = '{}/{}/{}'.format(ref.date.month,
 #             ref.date.day, ref.date.year)
-#     if request.method == 'POST':
+#     if request.method == 'POST':  # odd -- doesn't look like we'd ever get here
 #         data['entrants'] = []
 #         data['rec']['header'] = '{}'.format(
 #             ref.reference_type.name or '').strip()
@@ -178,13 +195,14 @@ def process_record_locations( locData: list, recObj: models_alch.Reference, sess
     locations = []
     for loc in locData:
         if loc['id'] == -1:
-            location = models.Location(name=loc['value'])
-            db.session.add(location)
-            db.session.commit()
+            location = models_alch.Location(name=loc['value'])
+            session.add(location)
+            session.commit()
         elif loc['id'] == 0:
             continue
         else:
-            location = models.Location.query.get(loc['id'])
+            # location = models.Location.query.get(loc['id'])
+            location = session.query( models_alch.Location ).get( loc['id'] )
         locations.append(location)
     # clny_state = models.LocationType.query.filter_by(name='Colony/State').first()
     clny_state = session.query( models_alch.LocationType ).filter_by( name='Colony/State' ).first()
@@ -210,33 +228,14 @@ def process_record_locations( locData: list, recObj: models_alch.Reference, sess
     return recObj
 
 
-# def process_record_locations(locData, recObj):
-#     locations = []
-#     for loc in locData:
-#         if loc['id'] == -1:
-#             location = models.Location(name=loc['value'])
-#             db.session.add(location)
-#             db.session.commit()
-#         elif loc['id'] == 0:
-#             continue
-#         else:
-#             location = models.Location.query.get(loc['id'])
-#         locations.append(location)
-#     clny_state = models.LocationType.query.filter_by(name='Colony/State').first()
-#     city = models.LocationType.query.filter_by(name='City').first()
-#     locale = models.LocationType.query.filter_by(name='Locale').first()
-#     loc_types = [ clny_state, city, locale ]
-#     for loc in locations:
-#         rec_loc = models.ReferenceLocation()
-#         rec_loc.reference = recObj
-#         rec_loc.location = loc
-#         idx = locations.index(loc)
-#         rec_loc.location_rank = idx
-#         if idx < len(loc_types):
-#             rec_loc.location_type = loc_types[idx]
-#         db.session.add(rec_loc)
-#     db.session.commit()
-#     return recObj
+def stamp_edit( request_user_id: int, reference_obj: models_alch.Reference, session: sqlalchemy.orm.session.Session ) -> None:
+    """ Updates when the Reference-object was last edited and by whom.
+        Called by Updater.execute_update() and Poster.manage_post() """
+    log.debug( 'starting stamp_edit()' )
+    edit = models_alch.ReferenceEdit( reference_id=reference_obj.id, user_id=request_user_id, timestamp=datetime.datetime.utcnow() )
+    session.add( edit )
+    session.commit()
+    return
 
 
 # -------------
