@@ -308,6 +308,15 @@ class ReferenceLocation(Base):
         backref='references')
 
 
+class LocationType(Base):
+    __tablename__ = '1_location_types'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    locations = relationship( ReferenceLocation,
+        backref='location_type', lazy=True )
+
+
 class Person(Base):
     __tablename__ = '1_people'
 
