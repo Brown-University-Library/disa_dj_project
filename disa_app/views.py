@@ -207,17 +207,6 @@ def edit_record( request, rec_id=None ):
         resp = render( request, 'disa_app_templates/record_edit.html', context )
     return resp
 
-# @shib_login
-# def edit_record( request, rec_id ):
-#     """ Url: '/editor/records/<rec_id>/' -- 'edit_record_url' """
-#     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
-#     context: dict = view_edit_record_manager.prep_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
-#     if request.GET.get('format', '') == 'json':
-#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     else:
-#         resp = render( request, 'disa_app_templates/record_edit.html', context )
-#     return resp
-
 
 @shib_login
 def edit_relationships( request, rec_id: str ):
@@ -293,7 +282,7 @@ def data_records( request, rec_id=None ):
         elif request.method == 'GET':
             context = { 'rec': {}, 'entrants': [] }
         elif request.method == 'POST':
-            context: dict = view_data_records_manager.manage_post()
+            context: dict = view_data_records_manager.manage_post( request.body, request.user.id )
         else:
             log.warning( 'shouldn\'t get here' )
     except:
