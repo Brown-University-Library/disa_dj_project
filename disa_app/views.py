@@ -292,6 +292,16 @@ def data_records( request, rec_id=None ):
 
 
 @shib_login
+def data_reference( request, rfrnc_id ):
+    """ Called via ajax by views.edit_citation()
+        Url: '/data/reference/<rfrnc_id>/' -- 'data_reference_url' """
+    log.debug( f'\n\nstarting data_reference, with rfrnc_id, `{rfrnc_id}`; with method, ```{request.method}```' )
+    rspns = view_data_records_manager.manage_delete( rfrnc_id )
+    return rspns
+    # return HttpResponse( 'data_reference_url handling coming' )
+
+
+@shib_login
 def read_document_data( request, docId ):
     """ Called via ajax by views.edit_citation()
         Url: '/data/documents/<docId>/' -- 'data_documents_url' """
