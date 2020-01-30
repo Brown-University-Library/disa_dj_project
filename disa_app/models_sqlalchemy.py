@@ -6,7 +6,7 @@ Resources...
 - <https://stackoverflow.com/questions/2828248/sqlalchemy-returns-tuple-not-dictionary>
 """
 
-import datetime, logging, operator
+import datetime, logging, operator, pprint
 from typing import List
 
 import sqlalchemy
@@ -220,16 +220,48 @@ class Reference(Base):
     referents = relationship(
         'Referent', backref='reference', lazy=True, cascade="delete")
 
+    # def last_edit(self):
+    #     edits = sorted([ (e.timestamp, e) for e in self.edits ],
+    #          key=operator.itemgetter(0), reverse=True)
+    #     log.debug( f'edits, ```{pprint.pformat(edits)}```' )
+    #     return edits[0][1]
+
     def last_edit(self):
-        edits = sorted([ (e.timestamp, e) for e in self.edits ],
+        edits: List(tuple) = sorted([ (e.timestamp, e) for e in self.edits ],
              key=operator.itemgetter(0), reverse=True)
-        return edits[0][1]
+        log.debug( f'edits, ```{pprint.pformat(edits)}```' )
+        if edits:
+            return_edits = edits[0][1]
+        else:
+            return_edits = []
+        return return_edits
 
     def display_date(self):
         if self.date:
             return self.date.strftime('%Y %B %d')
         else:
             return ''
+
+    # def dictify( self ):
+    #     if self.date:
+    #         isodate = datetime.date.isoformat( self.date )
+    #     else:
+    #         isodate = ''
+    #     jsn_referents = []
+    #     for rfrnt in self.referents:
+    #         jsn_referents.append( {'id': rfrnt.id, 'age': rfrnt.age, 'sex': rfrnt.sex} )
+    #     data = {
+    #         'id': self.id,
+    #         'citation_id': self.citation_id,
+    #         'reference_type_id': self.reference_type_id,
+    #         'reference_type_name': self.reference_type.name,  # NB: this appears to be an sqlalchemy convention -- that if there is a ForeignKey, I can just go ahead and refernce the property name.
+    #         'national_context_id': self.national_context_id,
+    #         'date': isodate,
+    #         'transcription': self.transcription,
+    #         'referents': jsn_referents,
+    #         'last_edit': self.last_edit().timestamp.strftime('%Y-%m-%d')
+    #         }
+    #     return data
 
     def dictify( self ):
         if self.date:
@@ -239,6 +271,9 @@ class Reference(Base):
         jsn_referents = []
         for rfrnt in self.referents:
             jsn_referents.append( {'id': rfrnt.id, 'age': rfrnt.age, 'sex': rfrnt.sex} )
+        last_edit = self.last_edit()
+        if last_edit:
+            last_edit = last_edit.timestamp.strftime( '%Y-%m-%d' )
         data = {
             'id': self.id,
             'citation_id': self.citation_id,
@@ -248,7 +283,7 @@ class Reference(Base):
             'date': isodate,
             'transcription': self.transcription,
             'referents': jsn_referents,
-            'last_edit': self.last_edit().timestamp.strftime('%Y-%m-%d')
+            'last_edit': last_edit
             }
         return data
 
