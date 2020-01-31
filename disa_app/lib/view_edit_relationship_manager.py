@@ -21,7 +21,7 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-def prep_context( rec_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
+def prep_context( rec_id: str, project_url_root: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
     """ Queries and massages data.
         Called by views.edit_relationships() """
     context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
@@ -30,7 +30,7 @@ def prep_context( rec_id: str, usr_first_name: str, usr_is_authenticated: bool )
     rec = session.query( models_alch.Reference ).get( rec_id )
 
     context['rfrnc'] = rec.dictify()
-    context['base_url_segment'] = ''
+    context['base_url_segment'] = project_url_root
 
     log.debug( f'context, ```{pprint.pformat(context)}```' )
     return context

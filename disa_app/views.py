@@ -210,9 +210,12 @@ def edit_record( request, rec_id=None ):
 
 @shib_login
 def edit_relationships( request, rec_id: str ):
-    """ Note: though this is in the 'editor' section here, the url is `/record/relationships/`. """
+    """ Note: though this is in the 'editor' section here, the url doesn't contain `editor` -- possible TODO.
+        Url: '/record/relationships/<rec_id>/' -- 'edit_relationships_url' """
     log.debug( f'\n\nstarting edit_relationships(), with rec_id, `{rec_id}`' )
-    context: dict = view_edit_relationship_manager.prep_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
+    # log.debug( f'\nrequest.__dict__, ```{pprint.pformat(request.__dict__)}```' )
+    context: dict = view_edit_relationship_manager.prep_context(
+        rec_id, request.META['SCRIPT_NAME'],request.user.first_name, bool(request.user.is_authenticated) )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
