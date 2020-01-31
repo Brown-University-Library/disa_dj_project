@@ -101,7 +101,8 @@ def manage_post( payload: bytes, request_user_id: int ) -> dict:
 
 
 def manage_delete( rfrnc_id: str ) -> HttpResponseRedirect:  # or, much less likely, HttpResponseNotFound
-    """ Handles api call when red `x` button is clicked in, eg, <http://127.0.0.1:8000/editor/documents/(123)/>
+    """ Handles api call when red `x` button is clicked...
+        ...and then the 'Confirm delete' button is clicked in, eg, <http://127.0.0.1:8000/editor/documents/(123)/>.
         Called by views.data_reference() """
     log.debug( 'starting manage_delete()' )
     session = make_session()
@@ -110,7 +111,9 @@ def manage_delete( rfrnc_id: str ) -> HttpResponseRedirect:  # or, much less lik
         cite = existing.citation
         session.delete( existing )
         session.commit()
-        rsp = HttpResponseRedirect reverse( 'data_documents_url', kwargs={'docId': cite.id} )  ## if this doesn't work, i can just hit this url with requests and return the output.
+        redirect_url = reverse( 'data_documents_url', kwargs={'docId': cite.id} )
+        log.debug( f'redirect_url, ```{redirect_url}```' )
+        rsp = HttpResponseRedirect( redirect_url )  # if this doesn't work, i can just hit this url with requests and return the output.
     else:
         rsp = HttpResponseNotFound
     log.debug( f'returning rsp, ```{rsp}```' )
