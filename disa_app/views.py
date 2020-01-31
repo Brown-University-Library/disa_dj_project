@@ -293,12 +293,12 @@ def data_records( request, rec_id=None ):
 
 @shib_login
 def data_reference( request, rfrnc_id ):
-    """ Called via ajax by views.edit_citation()
+    """ Called via ajax by views.edit_citation() on DELETE
+        Handles api call when red `x` button is clicked in, eg, <http://127.0.0.1:8000/editor/documents/(123)/>
         Url: '/data/reference/<rfrnc_id>/' -- 'data_reference_url' """
     log.debug( f'\n\nstarting data_reference, with rfrnc_id, `{rfrnc_id}`; with method, ```{request.method}```' )
-    rspns = view_data_records_manager.manage_delete( rfrnc_id )
+    rspns: HttpResponseRedirect = view_data_records_manager.manage_delete( rfrnc_id )  # much less likely, HttpResponseNotFound will be returned.
     return rspns
-    # return HttpResponse( 'data_reference_url handling coming' )
 
 
 @shib_login
@@ -321,8 +321,6 @@ def relationships_by_reference( request, rfrnc_id ):
     return resp
 
 
-
-
 @shib_login
 def data_relationships( request, rltnshp_id=None ):
     """ Called via ajax by views.edit_relationships() when `+` buton is clicked.
@@ -341,8 +339,6 @@ def data_relationships( request, rltnshp_id=None ):
         log.warning( f'we shouldn\'t get here' )
         resp = HttpResponse( 'problem; see logs' )
     return resp
-
-
 
 
 # ===========================
