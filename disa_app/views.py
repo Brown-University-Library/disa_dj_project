@@ -8,12 +8,13 @@ from disa_app import settings_app
 from disa_app.lib import view_data_entrant_manager  # api/people
 from disa_app.lib import view_data_records_manager  # api/items
 from disa_app.lib import v_data_relationships_manager  # api/relationship-by-reference
+from disa_app.lib import v_data_document_manager  # api/documents
 from disa_app.lib import view_edit_record_manager
 from disa_app.lib import view_edit_relationship_manager
 from disa_app.lib import view_editor_index_manager, view_edit_citation_manager  # documents
 from disa_app.lib import view_info_manager
 from disa_app.lib import view_people_manager, view_person_manager, view_edit_referent_manager  # people
-from disa_app.lib import view_read_document_data_manager
+# from disa_app.lib import view_read_document_data_manager
 from disa_app.lib import view_search_results_manager
 from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
@@ -304,12 +305,44 @@ def data_reference( request, rfrnc_id ):
     return rspns
 
 
+# @shib_login
+# def read_document_data( request, docId ):
+#     """ Called via ajax by views.edit_citation()
+#         Url: '/data/documents/<docId>/' -- 'data_documents_url' """
+#     log.debug( f'\n\nstarting read_document_data(), with docId, `{docId}`' )
+#     context: dict = view_read_document_data_manager.query_document( docId, request.user.profile.old_db_id )
+#     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     return resp
+
 @shib_login
-def read_document_data( request, docId ):
+def data_documents( request, doc_id ):
     """ Called via ajax by views.edit_citation()
         Url: '/data/documents/<docId>/' -- 'data_documents_url' """
-    log.debug( f'\n\nstarting read_document_data(), with docId, `{docId}`' )
-    context: dict = view_read_document_data_manager.query_document( docId, request.user.profile.old_db_id )
+    log.debug( f'\n\nstarting data_documents, with doc_id, `{doc_id}`; with method, ```{request.method}```, with a payload of, `{request.body}`' )
+    log.debug( f'request.user.id, ```{request.user.id}```; request.user.profile.old_db_id, ```{request.user.profile.old_db_id}```,' )
+    log.debug( f'type(request.user.id), ```{type(request.user.id)}```; type(request.user.profile.old_db_id), ```{type(request.user.profile.old_db_id)}```,' )
+    user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+    log.debug( f'user_id, ```{user_id}```' )
+    if request.method == 'GET':
+        context: dict = v_data_document_manager.manage_get( doc_id, user_id )
+    elif request.method == 'PUT':
+        1/0
+        data_entrant_updater = view_data_entrant_manager.Updater()
+        resp = data_entrant_updater.manage_put( request.body, request.user.id, rfrnt_id )
+    elif request.method == 'POST':
+        1/0
+        data_entrant_poster = view_data_entrant_manager.Poster()
+        resp = data_entrant_poster.manage_post( request.body, request.user.id, rfrnt_id )
+    elif request.method == 'DELETE':
+        1/0
+        log.debug( 'DELETE detected' )
+        data_entrant_deleter = view_data_entrant_manager.Deleter()
+        resp = data_entrant_deleter.manage_delete( request.user.id, rfrnt_id )
+    else:
+        1/0
+        msg = 'data_entrants() other request.method handling coming'
+        log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
+        resp = HttpResponse( msg )
     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
 

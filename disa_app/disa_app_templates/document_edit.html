@@ -273,7 +273,7 @@ var readDocumentData = function(docId, ctMap, copy) {
     } else {
         //{# var doc_data_api = "{% url 'data_documents_url' None %}" + docId; #}
         console.log( 'hereB' );
-        var doc_data_api = "{% url 'data_documents_url' 'STUB' %}".replace( "STUB", docId );  {#  odd; created urls in `record_edit.html can be created with variables` #}
+        var doc_data_api = "{% url 'data_documents_url' 'STUB' %}".replace( "STUB", docId );  {#  odd; created urls in `record_edit.html` can be created with variables #}
     }
     console.log( "docId, ", docId );
     console.log( "copy, ", copy );
@@ -285,7 +285,7 @@ var readDocumentData = function(docId, ctMap, copy) {
 
 var updateDocumentData = function(docId, ctMap) {
     {# var doc_data_api = "{% url 'update_citation_data' None %}" + docId; #}
-    var doc_data_api = "{% url 'data_documents_url' docId %}";
+    var doc_data_api = "{% url 'data_documents_url' 'STUB' %}".replace( "STUB", docId);
     var data = collectInputValues();
     var method = (docId ? "PUT" : "POST");
     $.ajax({

@@ -27,18 +27,15 @@ def query_data( cite_id: str ) -> dict:
     session = make_session()
     data = {}
     citation_type_data = build_ct_js_data( session )
-
     cite = session.query( models_alch.Citation ).get( cite_id )
     log.debug( f'cite.references, ```{cite.references}```' )
     log.debug( f'cite.references[0].dictify(), ```{cite.references[0].dictify()}```' )
-
     cite_dct = cite.dictify()
-
     data['ct_fields'] = citation_type_data
     data['ct_fields_json'] = json.dumps( citation_type_data )
     data['doc'] = cite_dct
-
-    log.debug( f'data, ```{pprint.pformat(data)}```' )
+    # log.debug( f'data, ```{pprint.pformat(data)}```' )
+    log.debug( f'data, ```{data}```' )
     return data
 
 
@@ -70,7 +67,7 @@ def build_ct_js_data( session ) -> dict:
                     f['rank'] += 1
             ct_fields[c.id].append(pages)
 
-    log.debug( f'ct_fields, ```{pprint.pformat(ct_fields)}```' )
+    log.debug( f'ct_fields, ```{ct_fields}```' )
     return ct_fields
 
 

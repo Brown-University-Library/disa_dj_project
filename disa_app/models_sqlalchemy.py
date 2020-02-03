@@ -229,7 +229,7 @@ class Reference(Base):
     def last_edit(self):
         edits: List(tuple) = sorted([ (e.timestamp, e) for e in self.edits ],
              key=operator.itemgetter(0), reverse=True)
-        log.debug( f'edits, ```{pprint.pformat(edits)}```' )
+        log.debug( f'edits, ```{edits}```' )
         if edits:
             return_edits = edits[0][1]
         else:
