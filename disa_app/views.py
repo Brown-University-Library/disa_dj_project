@@ -269,8 +269,9 @@ def data_entrants_details( request, rfrnt_id ):
         Url: 'data/entrants/details/<rfrnt_id>' -- 'data_entrants_details_url' """
     log.debug( f'\n\nstarting data_entrants_details(), with rfrnt_id, `{rfrnt_id}`' )
     log.debug( f'payload, ```{pprint.pformat(request.body)}```' )
+    user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     data_entrant_details_updater = view_data_entrant_manager.Details_Updater()
-    context: dict = data_entrant_details_updater.manage_details_put( request.body, request.user.id, rfrnt_id )
+    context: dict = data_entrant_details_updater.manage_details_put( request.body, user_id, rfrnt_id )
     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
 
@@ -280,6 +281,7 @@ def data_records( request, rec_id=None ):
     """ Called via ajax by views.edit_record()
         Url: '/data/records/<rec_id>/' -- 'data_record_url' """
     log.debug( f'\n\nstarting data_records, with rec_id, `{rec_id}`; with method, ```{request.method}```, with a payload of, `{request.body}`' )
+    user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     try:
         if rec_id:
             log.debug( f'here, because rec_id is, `{rec_id}`; and is type, `{type(rec_id)}`' )
@@ -287,7 +289,7 @@ def data_records( request, rec_id=None ):
         elif request.method == 'GET':
             context = { 'rec': {}, 'entrants': [] }
         elif request.method == 'POST':
-            context: dict = view_data_records_manager.manage_post( request.body, request.user.id )
+            context: dict = view_data_records_manager.manage_post( request.body, user_id )
         else:
             log.warning( 'shouldn\'t get here' )
     except:
@@ -331,12 +333,12 @@ def data_documents( request, doc_id ):
     elif request.method == 'POST':
         1/0
         data_entrant_poster = view_data_entrant_manager.Poster()
-        resp = data_entrant_poster.manage_post( request.body, request.user.id, rfrnt_id )
+        resp = data_entrant_poster.manage_post( request.body, user_id, rfrnt_id )
     elif request.method == 'DELETE':
         1/0
         log.debug( 'DELETE detected' )
         data_entrant_deleter = view_data_entrant_manager.Deleter()
-        resp = data_entrant_deleter.manage_delete( request.user.id, rfrnt_id )
+        resp = data_entrant_deleter.manage_delete( user_id, rfrnt_id )
     else:
         1/0
         msg = 'data_entrants() other request.method handling coming'
@@ -361,13 +363,14 @@ def data_relationships( request, rltnshp_id=None ):
     """ Called via ajax by views.edit_relationships() when `+` buton is clicked.
         Url: '/data/relationships/' -- 'data_relationships_url' """
     log.debug( f'\n\nstarting data_relationships(), with method, ```{request.method}```, with a payload of, `{request.body}`' )
+    user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     if request.method == 'POST':
-        rfrnc_id: str = v_data_relationships_manager.manage_relationships_post( request.body, request.user.id )
+        rfrnc_id: str = v_data_relationships_manager.manage_relationships_post( request.body, user_id )
         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
         log.debug( f'redirect_url, ```{redirect_url}```' )
         resp = HttpResponseRedirect( redirect_url )
     elif request.method == 'DELETE':
-        rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, request.body, request.user.id )
+        rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, request.body, user_id )
         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
         resp = HttpResponseRedirect( redirect_url )
     else:
