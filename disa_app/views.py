@@ -93,7 +93,8 @@ def source( request, src_id ):
 def editor_index( request ):
     ## TODO: rename this url from `/editor/` to `/documents/`?
     log.debug( '\n\nstarting editor_index()' )
-    context: dict = view_editor_index_manager.query_documents( request.user.username, request.user.profile.old_db_id )
+    user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+    context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
         context['user_first_name'] = request.user.first_name
@@ -167,11 +168,29 @@ def logout( request ):
 # ===========================
 
 
+# @shib_login
+# def edit_citation( request, cite_id ):
+#     """ Url: 'editor/documents/<cite_id>/' -- 'edit_citation_url' """
+#     log.debug( '\n\nstarting edit_citation()' )
+#     context: dict = view_edit_citation_manager.query_data( cite_id )
+#     if request.user.is_authenticated:
+#         context['user_is_authenticated'] = True
+#         context['user_first_name'] = request.user.first_name
+#     if request.GET.get('format', '') == 'json':
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         resp = render( request, 'disa_app_templates/document_edit.html', context )
+#     return resp
+
 @shib_login
 def edit_citation( request, cite_id ):
     """ Url: 'editor/documents/<cite_id>/' -- 'edit_citation_url' """
     log.debug( '\n\nstarting edit_citation()' )
-    context: dict = view_edit_citation_manager.query_data( cite_id )
+    if cite_id == 'new':
+        user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+        context: dict = view_edit_citation_manager.manage_create( user_id )
+    else:
+        context: dict = view_edit_citation_manager.query_data( cite_id )
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
         context['user_first_name'] = request.user.first_name
@@ -224,9 +243,9 @@ def edit_relationships( request, rec_id: str ):
     return resp
 
 
-@shib_login
-def new_citation( request ):
-    return HttpResponse( 'new-citation (new-document) coming' )
+# @shib_login
+# def new_citation( request ):
+#     return HttpResponse( 'new-citation (new-document) coming' )
 
 
 # ===========================

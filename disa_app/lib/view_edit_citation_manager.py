@@ -23,7 +23,7 @@ def make_session() -> sqlalchemy.orm.session.Session:
 
 def query_data( cite_id: str ) -> dict:
     """ Queries and massages data.
-        Called by views.editor_index() """
+        Called by views.edit_citation() """
     session = make_session()
     data = {}
     citation_type_data = build_ct_js_data( session )
@@ -37,6 +37,24 @@ def query_data( cite_id: str ) -> dict:
     # log.debug( f'data, ```{pprint.pformat(data)}```' )
     log.debug( f'data, ```{data}```' )
     return data
+
+
+def manage_create( user_id: int ) -> dict:
+    """ Creates new document.
+        Called by views.edit_citation() """
+    session = make_session()
+    data = {}
+    citation_type_data = build_ct_js_data( session )
+    data['ct_fields'] = citation_type_data
+    data['ct_fields_json'] = json.dumps( citation_type_data )
+    data['doc']: {}
+    log.debug( f'data, ```{data}```' )
+    return data
+
+
+# ----------
+# helpers
+# ----------
 
 
 def build_ct_js_data( session ) -> dict:
