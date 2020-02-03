@@ -73,8 +73,76 @@ def manage_get( doc_id: str, user_id: int ) -> dict:
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     return data
 
+    ## end def manage_get()
 
-## from DISA
+
+def manage_put( cite_id: str, user_id: int, payload: bytes ):
+    """ Updates document.
+        Called by views.data_documents() on PUT """
+    session = make_session()
+    data: dict = json.loads( payload )
+    try:  # temp; remove after debugging
+        unspec = session.query( models_alch.CitationType ).filter_by( name='Document' ).first()
+
+        data['citation_type_id'] = data['citation_type_id'] or unspec.id
+
+        cite = session.query( models_alch.Citation ).get( cite_id )
+
+        cite.citation_type_id = data['citation_type_id']
+        # doc.zotero_id = data['zotero_id']
+        cite.comments = data['comments']
+        cite.acknowledgements = data['acknowledgements']
+        field_order_map = { f.zotero_field.name: f.rank
+            for f in cite.citation_type.zotero_type.template_fields }
+        citation_display = []
+        cite.citation_data = []
+        addendums = []
+        for field, val in data['fields'].items():
+            if val == '':
+                continue
+
+            zfield = session.query( models_alch.ZoteroField ).filter_by( name=field ).first()
+
+            cfield = models_alch.CitationField(citation_id=cite.id,
+                field_id=zfield.id, field_data=val)
+            try:
+                citation_display.append( (field_order_map[zfield.name], val) )
+            except KeyError:
+                addendums.append(val)
+            session.add(cfield)
+        if len(citation_display) == 0:
+            now = datetime.datetime.utcnow()
+            cite.display = 'Document :: {}'.format(now.strftime('%Y %B %d'))
+        else:
+            vals = [ v[1] for v in sorted(citation_display) ]
+            cite.display = ', '.join(vals + addendums)
+        session.add( cite )
+        session.commit()
+
+        data = { 'doc': {} }
+        included = [ 'Book', 'Book Section', 'Document', 'Interview',
+            'Journal Article', 'Magazine Article', 'Manuscript',
+            'Newspaper Article', 'Thesis', 'Webpage' ]
+
+        ct = session.query( models_alch.CitationType ).filter( models_alch.CitationType.name.in_(included) ).all()
+
+        data['doc_types'] = [ { 'id': c.id, 'name': c.name } for c in ct ]
+        data['doc']['id'] = cite.id
+        data['doc']['citation'] = cite.display
+        # data['doc']['zotero_id'] = doc.zotero_id
+        data['doc']['comments'] = cite.comments
+        data['doc']['acknowledgements'] = cite.acknowledgements
+        data['doc']['citation_type_id'] = cite.citation_type_id
+        log.debug( f'data, ```{pprint.pformat(data)}```' )
+
+    except:
+        log.exception( 'problem on api PUT; traceback follows...' )
+    return data
+
+    ## end def manage_put()
+
+
+## from DISA -- GET
 # @app.route('/data/documents/', methods=['GET'])
 # @app.route('/data/documents/<docId>', methods=['GET'])
 # @login_required
@@ -114,4 +182,60 @@ def manage_get( doc_id: str, user_id: int ) -> dict:
 #         data['doc']['citation_type_id'] = doc.citation_type_id
 #     data['doc']['fields'] = { f.field.name: f.field_data for f in doc.citation_data }
 #     log.debug( f'returning data for given docID, ```{pprint.pformat(data)}```' )
+#     return jsonify(data)
+
+
+## from DISA -- PUT
+# @app.route('/data/documents/', methods=['PUT'])
+# @app.route('/data/documents/<citeId>', methods=['PUT'])
+# @login_required
+# def update_citation_data(citeId):
+#     data = request.get_json()
+#     if citeId is None:
+#         return jsonify({})
+#     unspec = models.CitationType.query.filter_by(name='Document').first()
+#     data['citation_type_id'] = data['citation_type_id'] or unspec.id
+#     cite = models.Citation.query.get(citeId)
+#     cite.citation_type_id = data['citation_type_id']
+#     # doc.zotero_id = data['zotero_id']
+#     cite.comments = data['comments']
+#     cite.acknowledgements = data['acknowledgements']
+#     field_order_map = { f.zotero_field.name: f.rank
+#         for f in cite.citation_type.zotero_type.template_fields }
+#     citation_display = []
+#     cite.citation_data = []
+#     addendums = []
+#     for field, val in data['fields'].items():
+#         if val == '':
+#             continue
+#         zfield = models.ZoteroField.query.filter_by(name=field).first()
+#         cfield = models.CitationField(citation_id=cite.id,
+#             field_id=zfield.id, field_data=val)
+#         try:
+#             citation_display.append( (field_order_map[zfield.name], val) )
+#         except KeyError:
+#             addendums.append(val)
+#         db.session.add(cfield)
+#     if len(citation_display) == 0:
+#         now = datetime.datetime.utcnow()
+#         cite.display = 'Document :: {}'.format(now.strftime('%Y %B %d'))
+#     else:
+#         vals = [ v[1] for v in sorted(citation_display) ]
+#         cite.display = ', '.join(vals + addendums)
+#     db.session.add(cite)
+#     db.session.commit()
+
+#     data = { 'doc': {} }
+#     included = [ 'Book', 'Book Section', 'Document', 'Interview',
+#         'Journal Article', 'Magazine Article', 'Manuscript',
+#         'Newspaper Article', 'Thesis', 'Webpage' ]
+#     ct = models.CitationType.query.filter(
+#         models.CitationType.name.in_(included)).all()
+#     data['doc_types'] = [ { 'id': c.id, 'name': c.name } for c in ct ]
+#     data['doc']['id'] = cite.id
+#     data['doc']['citation'] = cite.display
+#     # data['doc']['zotero_id'] = doc.zotero_id
+#     data['doc']['comments'] = cite.comments
+#     data['doc']['acknowledgements'] = cite.acknowledgements
+#     data['doc']['citation_type_id'] = cite.citation_type_id
 #     return jsonify(data)

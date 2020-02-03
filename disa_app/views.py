@@ -241,19 +241,20 @@ def data_entrants( request, rfrnt_id: str ):
     log.debug( 'starting data_entrants()' )
     log.debug( f'rfrnt_id, ```{rfrnt_id}```' )
     log.debug( f'request.method, ```{request.method}```' )
+    user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     if request.method == 'GET':
         data_entrant_getter = view_data_entrant_manager.Getter()
         resp = data_entrant_getter.manage_get( rfrnt_id )
     elif request.method == 'PUT':
         data_entrant_updater = view_data_entrant_manager.Updater()
-        resp = data_entrant_updater.manage_put( request.body, request.user.id, rfrnt_id )
+        resp = data_entrant_updater.manage_put( request.body, user_id, rfrnt_id )
     elif request.method == 'POST':
         data_entrant_poster = view_data_entrant_manager.Poster()
-        resp = data_entrant_poster.manage_post( request.body, request.user.id, rfrnt_id )
+        resp = data_entrant_poster.manage_post( request.body, user_id, rfrnt_id )
     elif request.method == 'DELETE':
         log.debug( 'DELETE detected' )
         data_entrant_deleter = view_data_entrant_manager.Deleter()
-        resp = data_entrant_deleter.manage_delete( request.user.id, rfrnt_id )
+        resp = data_entrant_deleter.manage_delete( user_id, rfrnt_id )
     else:
         msg = 'data_entrants() other request.method handling coming'
         log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
@@ -326,9 +327,7 @@ def data_documents( request, doc_id ):
     if request.method == 'GET':
         context: dict = v_data_document_manager.manage_get( doc_id, user_id )
     elif request.method == 'PUT':
-        1/0
-        data_entrant_updater = view_data_entrant_manager.Updater()
-        resp = data_entrant_updater.manage_put( request.body, request.user.id, rfrnt_id )
+        context: dict = v_data_document_manager.manage_put( doc_id, user_id, request.body )
     elif request.method == 'POST':
         1/0
         data_entrant_poster = view_data_entrant_manager.Poster()
