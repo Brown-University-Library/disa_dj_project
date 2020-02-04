@@ -33,7 +33,7 @@ def make_session() -> sqlalchemy.orm.session.Session:
 
 
 def manage_get( doc_id: str, user_id: int ) -> dict:
-    """ Queries and massages data.
+    """ Queries and massages data for given doc_id.
         Called by views.data_documents() on GET """
     session = make_session()
     data = { 'doc': {} }
@@ -43,9 +43,9 @@ def manage_get( doc_id: str, user_id: int ) -> dict:
     log.debug( f'ct, ```{ct}```' )
     data['doc_types'] = [ { 'id': c.id, 'name': c.name } for c in ct ]
 
-    if doc_id == None:
-        log.debug( f'returning data for docID equals None, ```{pprint.pformat(data)}```' )
-        return jsonify(data)
+    # if doc_id == None:
+    #     log.debug( f'returning data for docID equals None, ```{pprint.pformat(data)}```' )
+    #     return jsonify(data)
     if doc_id == 'copy':
 
         last_edit = edit = session.query( models_alch.ReferenceEdit ).filter_by( user_id=user_id ).order_by( models_alch.ReferenceEdit.timestamp.desc() ).first()
@@ -74,6 +74,20 @@ def manage_get( doc_id: str, user_id: int ) -> dict:
     return data
 
     ## end def manage_get()
+
+
+def manage_get_all( user_id: int ) -> dict:
+    """ Queries and massages data for new-document.
+        Called by views.data_documents() on GET, with no doc_id """
+    session = make_session()
+    data = { 'doc': {} }
+    included: list = CITATION_TYPES
+    # ct = models.CitationType.query.filter( models.CitationType.name.in_(included) ).all()
+    ct = session.query( models_alch.CitationType ).filter( models_alch.CitationType.name.in_(included) ).all()
+    log.debug( f'ct, ```{ct}```' )
+    data['doc_types'] = [ { 'id': c.id, 'name': c.name } for c in ct ]
+    log.debug( f'data, ```{pprint.pformat(data)}```' )
+    return data
 
 
 def manage_put( cite_id: str, user_id: int, payload: bytes ):
