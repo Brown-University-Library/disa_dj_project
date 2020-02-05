@@ -50,11 +50,33 @@ def search_people( srch_text, session ):
             models_alch.Person.comments.contains( srch_text )
             ) ).all()
     for person in qset_people:
-        people.append( person.dictify() )
+        prsn_dct = person.dictify()
+        rfrncs = person.references
+        log.debug( f'type(rfrncs), ' ) 1/0
+        prsn_dct['enslavements'] = [ e.name for e in person.enslavements ]
+        people.append( prsn_dct )
     people_info = {
         'count': len(people), 'people': people, 'fields_searched': ['first_name', 'last_name', 'comments'] }
     log.debug( f'people_info, ```{pprint.pformat( people_info )}```' )
     return people_info
+
+
+# def search_people( srch_text, session ):
+#     """ Searches `Person` table.
+#         Called by run_search() """
+#     people = []
+#     qset_people = session.query( models_alch.Person ).filter(
+#         or_(
+#             models_alch.Person.first_name.contains( srch_text ),
+#             models_alch.Person.last_name.contains( srch_text ),
+#             models_alch.Person.comments.contains( srch_text )
+#             ) ).all()
+#     for person in qset_people:
+#         people.append( person.dictify() )
+#     people_info = {
+#         'count': len(people), 'people': people, 'fields_searched': ['first_name', 'last_name', 'comments'] }
+#     log.debug( f'people_info, ```{pprint.pformat( people_info )}```' )
+#     return people_info
 
 
 def search_citations( srch_text, session ):
