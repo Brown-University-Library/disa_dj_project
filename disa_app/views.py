@@ -169,7 +169,7 @@ def logout( request ):
 
 
 @shib_login
-def edit_citation( request, cite_id ):
+def edit_citation( request, cite_id=None ):
     """ Url: 'editor/documents/<cite_id>/' -- 'edit_citation_url' """
     log.debug( '\n\nstarting edit_citation()' )
     if cite_id == 'new':
