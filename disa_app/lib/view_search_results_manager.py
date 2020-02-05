@@ -52,8 +52,14 @@ def search_people( srch_text, session ):
     for person in qset_people:
         prsn_dct = person.dictify()
         rfrncs = person.references
-        log.debug( f'type(rfrncs), ' ) 1/0
-        prsn_dct['enslavements'] = [ e.name for e in person.enslavements ]
+        log.debug( f'type(rfrncs), ```{type(rfrncs)}```' )
+        enslavements = []
+        for rfrnc in rfrncs:
+            rfrnc_enslavements = [ e.name for e in rfrnc.enslavements ]
+            if rfrnc_enslavements:
+                # enslavements.append( rfrnc_enslavements )
+                enslavements = list( set(enslavements + rfrnc_enslavements) )
+        prsn_dct['enslavements'] = enslavements
         people.append( prsn_dct )
     people_info = {
         'count': len(people), 'people': people, 'fields_searched': ['first_name', 'last_name', 'comments'] }
