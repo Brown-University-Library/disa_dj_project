@@ -131,14 +131,15 @@
         <h2>People...</h2>
         <p>(Count: {{ people_results.count }})</p>
         <p>(Fields searched: {{ people_results.fields_searched|join:', ' }})</p>
+        <p>(Explanation: "enslavement-statuses" come from the `person` data-entry form; "relationship-roles" come from the `relationships` data-entry form.)</p>
         {% for pers in people_results.people %}
         <ul>
-            <li>person-id, {{ pers.id }}</li>
-            <li>first-name, {{ pers.first_name }}</li>
-            <li>last-name, {{ pers.last_name }}</li>
-            <li>comments, {{ pers.comments }}</li>
-            <li>enslavements, {{ pers.enslavements }}</li>
-            <li>roles, {{ pers.roles }}</li>
+            <li>person-id: {{ pers.id }}</li>
+            <li>first-name: {{ pers.first_name }}</li>
+            <li>last-name: {{ pers.last_name }}</li>
+            <li>comments: {{ pers.comments }}</li>
+            <li>enslavement-statuses: {{ pers.enslavements|join:', ' }}</li>
+            <li>relationship-roles: {{ pers.roles|join:', ' }}</li>
             <li><a href="{% url 'person_url' pers.id  %}">view person</a></li>
         </ul>
         {% endfor %}
@@ -156,9 +157,9 @@
       <p>(Fields searched: {{ citation_results.fields_searched|join:', ' }})</p>
       {% for cite in citation_results.citations %}
       <ul>
-          <li>citation-id, {{ cite.id }}</li>
-          <li>display, {{ cite.display }}</li>
-          <li>comments, {{ cite.comments }}</li>
+          <li>citation-id: {{ cite.id }}</li>
+          <li>display: {{ cite.display }}</li>
+          <li>comments: {{ cite.comments }}</li>
           <li><a href="{% url 'edit_citation_url' cite.id  %}">view document</a></li>
       </ul>
       {% endfor %}
@@ -176,8 +177,8 @@
       <p>(Fields searched: {{ item_results.fields_searched|join:', ' }})</p>
       {% for rfrnc in item_results.references %}
       <ul>
-          <li>reference-id, {{ rfrnc.id }}</li>
-          <li>transcription, {{ rfrnc.transcription }}</li>
+          <li>reference-id: {{ rfrnc.id }}</li>
+          <li>transcription: {{ rfrnc.transcription }}</li>
           <li><a href="{% url 'edit_record_url' rfrnc.id  %}">view item</a></li>
           <li><a href="{% url 'edit_citation_url' rfrnc.citation_id  %}">view item's document</a></li>
       </ul>
