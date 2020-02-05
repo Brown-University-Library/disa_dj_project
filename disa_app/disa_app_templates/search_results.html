@@ -137,6 +137,7 @@
             <li>first-name, {{ pers.first_name }}</li>
             <li>last-name, {{ pers.last_name }}</li>
             <li>comments, {{ pers.comments }}</li>
+            <li><a href="{% url 'person_url' pers.id  %}">view person</a></li>
         </ul>
         {% endfor %}
         </div>
@@ -156,6 +157,7 @@
           <li>citation-id, {{ cite.id }}</li>
           <li>display, {{ cite.display }}</li>
           <li>comments, {{ cite.comments }}</li>
+          <li><a href="{% url 'edit_citation_url' cite.id  %}">view document</a></li>
       </ul>
       {% endfor %}
       </div>
@@ -174,6 +176,7 @@
       <ul>
           <li>reference-id, {{ rfrnc.id }}</li>
           <li>transcription, {{ rfrnc.transcription }}</li>
+          <li><a href="{% url 'edit_record_url' rfrnc.id  %}">view item</a></li>
       </ul>
       {% endfor %}
       </div>
