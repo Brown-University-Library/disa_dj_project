@@ -156,6 +156,75 @@ def manage_put( cite_id: str, user_id: int, payload: bytes ):
     ## end def manage_put()
 
 
+def manage_post( user_id, payload ):
+    """ Updates document.
+        Called by views.data_documents() on POST """
+    session = make_session()
+    data: dict = json.loads( payload )
+    try:  # temp; remove after debugging
+        unspec = session.query( models_alch.CitationType ).filter_by( name='Document' ).first()
+
+        data['citation_type_id'] = data['citation_type_id'] or unspec.id
+
+        cite = models.Citation(citation_type_id=data['citation_type_id'],
+            comments=data['comments'], acknowledgements=data['acknowledgements'])
+
+        cite = session.query( models_alch.Citation(
+            citation_type_id=data['citation_type_id'],
+            comments=data['comments'],
+            acknowledgements=data['acknowledgements']
+            ) )
+
+        session.add(cite)
+        session.commit()
+
+        field_order_map = { f.zotero_field.name: f.rank
+            for f in cite.citation_type.zotero_type.template_fields }
+
+        citation_display = []
+        for field, val in data['fields'].items():
+            if val == '':
+                continue
+
+            # zfield = models.ZoteroField.query.filter_by(name=field).first()
+            zfield = session.query( models_alch.ZoteroField ).filter_by( name=field ).first()
+
+            # cfield = models.CitationField(citation_id=cite.id,
+            #     field_id=zfield.id, field_data=val)
+            cfield = models_alch.CitationField(
+                citation_id=cite.id,
+                field_id=zfield.id,
+                field_data=val )
+
+            citation_display.append( (field_order_map[zfield.name], val) )
+            session.add(cfield)
+        if len(citation_display) == 0:
+            now = datetime.datetime.utcnow()
+            cite.display = 'Document :: {}'.format(now.strftime('%Y %B %d'))
+        else:
+            vals = [ v[1] for v in sorted(citation_display) ]
+            cite.display = ' '.join(vals)
+
+        session.add(cite)
+        session.commit()
+
+        context = { 'redirect': reverse( 'edit_citation_url', kwargs={'cite_id': cite.id} ) }
+
+    except:
+        log.exception( 'problem on api POST; traceback follows...' )
+        context = {}
+
+    log.debug( f'context, ```{context}```' )
+    return context
+
+    ## end def manage_post()
+
+
+# ----------------
+# for reference...
+# ----------------
+
+
 ## from DISA -- GET
 # @app.route('/data/documents/', methods=['GET'])
 # @app.route('/data/documents/<docId>', methods=['GET'])
@@ -253,3 +322,36 @@ def manage_put( cite_id: str, user_id: int, payload: bytes ):
 #     data['doc']['acknowledgements'] = cite.acknowledgements
 #     data['doc']['citation_type_id'] = cite.citation_type_id
 #     return jsonify(data)
+
+
+# @app.route('/data/documents/', methods=['POST'])
+# @login_required
+# def create_citation():
+#     data = request.get_json()
+#     unspec = models.CitationType.query.filter_by(name='Document').first()
+#     data['citation_type_id'] = data['citation_type_id'] or unspec.id
+#     cite = models.Citation(citation_type_id=data['citation_type_id'],
+#         comments=data['comments'], acknowledgements=data['acknowledgements'])
+#     db.session.add(cite)
+#     db.session.commit()
+#     field_order_map = { f.zotero_field.name: f.rank
+#         for f in cite.citation_type.zotero_type.template_fields }
+#     citation_display = []
+#     for field, val in data['fields'].items():
+#         if val == '':
+#             continue
+#         zfield = models.ZoteroField.query.filter_by(name=field).first()
+#         cfield = models.CitationField(citation_id=cite.id,
+#             field_id=zfield.id, field_data=val)
+#         citation_display.append( (field_order_map[zfield.name], val) )
+#         db.session.add(cfield)
+#     if len(citation_display) == 0:
+#         now = datetime.datetime.utcnow()
+#         cite.display = 'Document :: {}'.format(now.strftime('%Y %B %d'))
+#     else:
+#         vals = [ v[1] for v in sorted(citation_display) ]
+#         cite.display = ' '.join(vals)
+#     db.session.add(cite)
+#     db.session.commit()
+#     return jsonify(
+#         { 'redirect': url_for('edit_citation', citeId=cite.id) })

@@ -308,36 +308,6 @@ def data_reference( request, rfrnc_id ):
     return rspns
 
 
-# @shib_login
-# def data_documents( request, doc_id ):
-#     """ Called via ajax by views.edit_citation()
-#         Url: '/data/documents/<docId>/' -- 'data_documents_url' """
-#     log.debug( f'\n\nstarting data_documents, with doc_id, `{doc_id}`; with method, ```{request.method}```, with a payload of, `{request.body}`' )
-#     log.debug( f'request.user.id, ```{request.user.id}```; request.user.profile.old_db_id, ```{request.user.profile.old_db_id}```,' )
-#     log.debug( f'type(request.user.id), ```{type(request.user.id)}```; type(request.user.profile.old_db_id), ```{type(request.user.profile.old_db_id)}```,' )
-#     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
-#     log.debug( f'user_id, ```{user_id}```' )
-#     if request.method == 'GET':
-#         context: dict = v_data_document_manager.manage_get( doc_id, user_id )
-#     elif request.method == 'PUT':
-#         context: dict = v_data_document_manager.manage_put( doc_id, user_id, request.body )
-#     elif request.method == 'POST':
-#         1/0
-#         data_entrant_poster = view_data_entrant_manager.Poster()
-#         resp = data_entrant_poster.manage_post( request.body, user_id, rfrnt_id )
-#     elif request.method == 'DELETE':
-#         1/0
-#         log.debug( 'DELETE detected' )
-#         data_entrant_deleter = view_data_entrant_manager.Deleter()
-#         resp = data_entrant_deleter.manage_delete( user_id, rfrnt_id )
-#     else:
-#         1/0
-#         msg = 'data_entrants() other request.method handling coming'
-#         log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
-#         resp = HttpResponse( msg )
-#     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     return resp
-
 @shib_login
 def data_documents( request, doc_id=None ):
     """ Called via ajax by views.edit_citation()
@@ -354,20 +324,20 @@ def data_documents( request, doc_id=None ):
     elif request.method == 'PUT':
         context: dict = v_data_document_manager.manage_put( doc_id, user_id, request.body )
     elif request.method == 'POST':
-        1/0
-        data_entrant_poster = view_data_entrant_manager.Poster()
-        resp = data_entrant_poster.manage_post( request.body, user_id, rfrnt_id )
+        context: dict = v_data_document_manager.manage_post( user_id, request.body )
     elif request.method == 'DELETE':
-        1/0
         log.debug( 'DELETE detected' )
-        data_entrant_deleter = view_data_entrant_manager.Deleter()
-        resp = data_entrant_deleter.manage_delete( user_id, rfrnt_id )
+        context: dict = v_data_document_manager.manage_delete( doc_id, user_id )
     else:
-        1/0
-        msg = 'data_entrants() other request.method handling coming'
+        msg = 'data_documents() other request.method handling coming'
         log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
         resp = HttpResponse( msg )
-    resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    if 'redirect' in context.keys():
+        redirect_url = context['redirect']
+        log.debug( f'redirecting to, ```{redirect_url}```' )
+        resp = HttpResponseRedirect( redirect_url )
+    else:
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
 
 
