@@ -54,12 +54,16 @@ def search_people( srch_text, session ):
         rfrncs = person.references
         log.debug( f'type(rfrncs), ```{type(rfrncs)}```' )
         enslavements = []
+        roles = []
         for rfrnc in rfrncs:
             rfrnc_enslavements = [ e.name for e in rfrnc.enslavements ]
             if rfrnc_enslavements:
-                # enslavements.append( rfrnc_enslavements )
                 enslavements = list( set(enslavements + rfrnc_enslavements) )
+            rfrnc_roles = [ r.name for r in rfrnc.roles ]
+            if rfrnc_roles:
+                roles = list( set(roles + rfrnc_roles) )
         prsn_dct['enslavements'] = enslavements
+        prsn_dct['roles'] = roles
         people.append( prsn_dct )
     people_info = {
         'count': len(people), 'people': people, 'fields_searched': ['first_name', 'last_name', 'comments'] }

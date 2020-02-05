@@ -138,6 +138,7 @@
             <li>last-name, {{ pers.last_name }}</li>
             <li>comments, {{ pers.comments }}</li>
             <li>enslavements, {{ pers.enslavements }}</li>
+            <li>roles, {{ pers.roles }}</li>
             <li><a href="{% url 'person_url' pers.id  %}">view person</a></li>
         </ul>
         {% endfor %}
