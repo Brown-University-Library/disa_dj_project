@@ -352,12 +352,13 @@ def data_documents( request, doc_id=None ):
         msg = 'data_documents() other request.method handling coming'
         log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
         resp = HttpResponse( msg )
-    if 'redirect' in context.keys():
-        redirect_url = context['redirect']
-        log.debug( f'redirecting to, ```{redirect_url}```' )
-        resp = HttpResponseRedirect( redirect_url )
-    else:
-        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    # if 'redirect' in context.keys():
+    #     redirect_url = context['redirect']
+    #     log.debug( f'redirecting to, ```{redirect_url}```' )
+    #     resp = HttpResponseRedirect( redirect_url )
+    # else:
+    #     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
 
 
