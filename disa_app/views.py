@@ -172,11 +172,13 @@ def logout( request ):
 def edit_citation( request, cite_id=None ):
     """ Url: 'editor/documents/<cite_id>/' -- 'edit_citation_url' """
     log.debug( '\n\nstarting edit_citation()' )
-    if cite_id == 'new':
+    if cite_id:
+        log.debug( f'will hit citation-manager with cite_id, ```{cite_id}```' )
+        context: dict = view_edit_citation_manager.query_data( cite_id )
+    else:
+        log.debug( 'will hit citation-manager with no cite_id' )
         user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
         context: dict = view_edit_citation_manager.manage_create( user_id )
-    else:
-        context: dict = view_edit_citation_manager.query_data( cite_id )
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
         context['user_first_name'] = request.user.first_name
@@ -185,6 +187,24 @@ def edit_citation( request, cite_id=None ):
     else:
         resp = render( request, 'disa_app_templates/document_edit.html', context )
     return resp
+
+# @shib_login
+# def edit_citation( request, cite_id=None ):
+#     """ Url: 'editor/documents/<cite_id>/' -- 'edit_citation_url' """
+#     log.debug( '\n\nstarting edit_citation()' )
+#     if cite_id == 'new':
+#         user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+#         context: dict = view_edit_citation_manager.manage_create( user_id )
+#     else:
+#         context: dict = view_edit_citation_manager.query_data( cite_id )
+#     if request.user.is_authenticated:
+#         context['user_is_authenticated'] = True
+#         context['user_first_name'] = request.user.first_name
+#     if request.GET.get('format', '') == 'json':
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         resp = render( request, 'disa_app_templates/document_edit.html', context )
+#     return resp
 
 
 @shib_login

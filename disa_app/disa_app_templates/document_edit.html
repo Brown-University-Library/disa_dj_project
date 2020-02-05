@@ -164,6 +164,7 @@
 var getDocumentId = function () {
     {# var doc_id = "{{ doc.id or '' }}"; #}
     var doc_id = "{{ doc.id }}";
+    console.log( "in getDocumentId; doc_id, ", doc_id );
     return doc_id;
 }
 
@@ -245,6 +246,7 @@ var addTypeOptions = function(opts) {
 
 var setFormHeader = function (docData) {
     var header = $('#document_header');
+    console.log( "in setFormHeader; header, ", header );
     if ( $.isEmptyObject(docData) ) {
         header.text('Add a document');
         header.append(`<div style="font-size: 50%"><em>Fill out this form only when entering a document for the first time.
@@ -304,8 +306,13 @@ var readDocumentData = function(docId, ctMap, copy) {
 
 var updateDocumentData = function(docId, ctMap) {
     {# var doc_data_api = "{% url 'update_citation_data' None %}" + docId; #}
-    var doc_data_api = "{% url 'data_documents_url' 'STUB' %}".replace( "STUB", docId);
-    console.log( 'in updateDocumentData; doc_data_api, ', doc_data_api );
+    if (docId) {
+        var doc_data_api = "{% url 'data_documents_url' 'STUB' %}".replace( "STUB", docId);
+        console.log( 'in updateDocumentData; doc_data_api with `docId`, ', doc_data_api );
+    } else {
+        var doc_data_api = "{% url 'data_documents_url' %}";
+        console.log( 'in updateDocumentData; doc_data_api with NO `docId`, ', doc_data_api );
+    }
     var data = collectInputValues();
     var method = (docId ? "PUT" : "POST");
     $.ajax({
@@ -323,6 +330,28 @@ var updateDocumentData = function(docId, ctMap) {
         }
     });
 }
+
+// var updateDocumentData = function(docId, ctMap) {
+//     {# var doc_data_api = "{% url 'update_citation_data' None %}" + docId; #}
+//     var doc_data_api = "{% url 'data_documents_url' 'STUB' %}".replace( "STUB", docId);
+//     console.log( 'in updateDocumentData; doc_data_api, ', doc_data_api );
+//     var data = collectInputValues();
+//     var method = (docId ? "PUT" : "POST");
+//     $.ajax({
+//         type: method,
+//         url: doc_data_api,
+//         contentType: "application/json",
+//         data: JSON.stringify(data),
+//         success: function(data) {
+//             if ( method === 'POST' ) {
+//                 window.location.href = data.redirect;
+//             } else {
+//                 initializeForm(data, ctMap);
+//                 $('#document_form').accordion('option','active', false );
+//             }
+//         }
+//     });
+// }
 
 var activateReferenceDelete = function($delBtn) {
   var $cancel_btn = $('<button/>', {
@@ -360,6 +389,7 @@ var deleteReference = function($refRow, ctMap) {
 
 $( document ).ready(function() {
     var doc_id = getDocumentId();
+    console.log( "in document.ready(); doc_id, ", doc_id );
     // {# var cite_type_fields = JSON.parse('{{ ct_fields | tojson | safe}}'); #}
     var cite_type_fields = JSON.parse( '{{ ct_fields_json | safe }}' );
     readDocumentData(doc_id, cite_type_fields, false);
