@@ -177,6 +177,7 @@
           <li>reference-id, {{ rfrnc.id }}</li>
           <li>transcription, {{ rfrnc.transcription }}</li>
           <li><a href="{% url 'edit_record_url' rfrnc.id  %}">view item</a></li>
+          <li><a href="{% url 'edit_citation_url' rfrnc.citation_id  %}">view item's document</a></li>
       </ul>
       {% endfor %}
       </div>
