@@ -38,7 +38,7 @@ urlpatterns = [
 
     ## apis...
 
-    # url( r'^data/documents/(?P<docId>.*)/$', views.read_document_data, name='data_documents_url' ),  # note, 'citeID', above, is passed on a PUT.
+    url( r'^data/documents/$', views.data_documents, name='data_documents_url' ),
     url( r'^data/documents/(?P<doc_id>.*)/$', views.data_documents, name='data_documents_url' ),
 
     url( r'^data/records/$', views.data_records, name='data_record_url' ),  # note, 'refID' is passed on a PUT.

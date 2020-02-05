@@ -7,6 +7,7 @@ from disa_app import settings_app
 from disa_app import models_sqlalchemy as models_alch
 from disa_app.lib import person_common
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -166,14 +167,14 @@ def manage_post( user_id, payload ):
 
         data['citation_type_id'] = data['citation_type_id'] or unspec.id
 
-        cite = models.Citation(citation_type_id=data['citation_type_id'],
-            comments=data['comments'], acknowledgements=data['acknowledgements'])
+        # cite = models.Citation(citation_type_id=data['citation_type_id'],
+        #     comments=data['comments'], acknowledgements=data['acknowledgements'])
 
-        cite = session.query( models_alch.Citation(
+        cite = models_alch.Citation(
             citation_type_id=data['citation_type_id'],
             comments=data['comments'],
             acknowledgements=data['acknowledgements']
-            ) )
+            )
 
         session.add(cite)
         session.commit()
