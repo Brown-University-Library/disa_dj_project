@@ -57,6 +57,61 @@ def query_record( rec_id: str ) -> dict:
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     return data
 
+    ## end def query_record()
+
+
+def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int ) -> dict:
+    """ Handles api call when 'Create' button is hit in `/editor/records/?doc_id=(123)`.
+        Called by views.data_records() """
+    log.debug( 'starting manage_reference_put()' )
+    session = make_session()
+    data: dict = json.loads( payload )
+    log.debug( f'data, ```{pprint.pformat(data)}```' )
+    try:  # for debugging; remove afterwards
+
+        reference_type: models_sqlalchemy.ReferenceType = get_or_create_type( data['record_type'], models_alch.ReferenceType, session )
+
+        # ref = models.Reference.query.get(refId)
+        rfrnc = session.query( models_alch.Reference ).get( rec_id )
+
+        rfrnc.locations = []
+        rfrnc = process_record_locations( data['locations'], rfrnc, session )
+
+        try:
+            rfrnc.date = datetime.datetime.strptime(data['date'], '%m/%d/%Y')
+        except:
+            rfrnc.date = None
+        rfrnc.reference_type_id = reference_type.id
+        rfrnc.national_context_id = data['national_context']
+        rfrnc.transcription = data['transcription']
+        session.add( rfrnc )
+        session.commit()
+
+        stamp_edit( request_user_id, rfrnc, session )
+
+        data = { 'rec': {} }
+        data['rec']['id'] = rfrnc.id
+        data['rec']['date'] = ''
+        if rfrnc.date:
+            data['rec']['date'] = '{}/{}/{}'.format(rfrnc.date.month,
+                rfrnc.date.day, rfrnc.date.year)
+        data['rec']['citation'] = rfrnc.citation.id
+        data['rec']['transcription'] = rfrnc.transcription
+        data['rec']['national_context'] = rfrnc.national_context_id
+        data['rec']['locations'] = [
+            { 'label':l.location.name, 'value':l.location.name,
+                'id': l.location.id } for l in rfrnc.locations ]
+        data['rec']['record_type'] = {'label': rfrnc.reference_type.name,
+            'value': rfrnc.reference_type.name, 'id':rfrnc.reference_type.id }
+
+        # context =  { 'redirect': reverse( 'edit_record_url', kwargs={'rec_id': rfrnc.id} ) }
+        log.debug( f'data, ```{data}```' )
+    except:
+        log.exception( '\n\nexception...' )
+        raise Exception( 'problem; see logs' )
+
+    return data
+
 
 def manage_post( payload: bytes, request_user_id: int ) -> dict:
     """ Handles api call when 'Create' button is hit in `/editor/records/?doc_id=(123)`.
