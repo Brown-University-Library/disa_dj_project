@@ -331,28 +331,6 @@ var updateDocumentData = function(docId, ctMap) {
     });
 }
 
-// var updateDocumentData = function(docId, ctMap) {
-//     {# var doc_data_api = "{% url 'update_citation_data' None %}" + docId; #}
-//     var doc_data_api = "{% url 'data_documents_url' 'STUB' %}".replace( "STUB", docId);
-//     console.log( 'in updateDocumentData; doc_data_api, ', doc_data_api );
-//     var data = collectInputValues();
-//     var method = (docId ? "PUT" : "POST");
-//     $.ajax({
-//         type: method,
-//         url: doc_data_api,
-//         contentType: "application/json",
-//         data: JSON.stringify(data),
-//         success: function(data) {
-//             if ( method === 'POST' ) {
-//                 window.location.href = data.redirect;
-//             } else {
-//                 initializeForm(data, ctMap);
-//                 $('#document_form').accordion('option','active', false );
-//             }
-//         }
-//     });
-// }
-
 var activateReferenceDelete = function($delBtn) {
   var $cancel_btn = $('<button/>', {
     'class': 'btn btn-secondary deactivate-delete',
@@ -373,19 +351,49 @@ var deactivateReferenceDelete = function($cancelBtn) {
   return true;
 }
 
+// var deleteReference = function($refRow, ctMap) {
+//     var ref_del_api = "{% url 'data_reference_url' 'STUB' %}"
+//         .replace('STUB', $refRow.attr('data-reference'));
+//     console.log( 'in deleteReference; ref_del_api, ', ref_del_api );
+//     $.ajax({
+//         type: "DELETE",
+//         url: ref_del_api,
+//         success: function(data) {
+//           $refRow.remove();
+//           initializeForm(data, ctMap);
+//           $('#document_form').accordion('option','active', false );
+//         }
+//     });
+// }
+
 var deleteReference = function($refRow, ctMap) {
     var ref_del_api = "{% url 'data_reference_url' 'STUB' %}"
         .replace('STUB', $refRow.attr('data-reference'));
+    console.log( 'in deleteReference; ref_del_api, ', ref_del_api );
     $.ajax({
         type: "DELETE",
         url: ref_del_api,
         success: function(data) {
-          $refRow.remove();
-          initializeForm(data, ctMap);
-          $('#document_form').accordion('option','active', false );
+          window.location.href = data.redirect;
         }
     });
 }
+
+    // $.ajax({
+    //     type: method,
+    //     url: doc_data_api,
+    //     contentType: "application/json",
+    //     data: JSON.stringify(data),
+    //     success: function(data) {
+    //         if ( method === 'POST' ) {
+    //             window.location.href = data.redirect;
+    //         } else {
+    //             initializeForm(data, ctMap);
+    //             $('#document_form').accordion('option','active', false );
+    //         }
+    //     }
+    // });
+
 
 $( document ).ready(function() {
     var doc_id = getDocumentId();

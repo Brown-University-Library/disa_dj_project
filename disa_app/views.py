@@ -188,24 +188,6 @@ def edit_citation( request, cite_id=None ):
         resp = render( request, 'disa_app_templates/document_edit.html', context )
     return resp
 
-# @shib_login
-# def edit_citation( request, cite_id=None ):
-#     """ Url: 'editor/documents/<cite_id>/' -- 'edit_citation_url' """
-#     log.debug( '\n\nstarting edit_citation()' )
-#     if cite_id == 'new':
-#         user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
-#         context: dict = view_edit_citation_manager.manage_create( user_id )
-#     else:
-#         context: dict = view_edit_citation_manager.query_data( cite_id )
-#     if request.user.is_authenticated:
-#         context['user_is_authenticated'] = True
-#         context['user_first_name'] = request.user.first_name
-#     if request.GET.get('format', '') == 'json':
-#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     else:
-#         resp = render( request, 'disa_app_templates/document_edit.html', context )
-#     return resp
-
 
 @shib_login
 def edit_person( request, rfrnt_id=None ):
@@ -324,8 +306,19 @@ def data_reference( request, rfrnc_id ):
         Handles api call when red `x` button is clicked in, eg, <http://127.0.0.1:8000/editor/documents/(123)/>
         Url: '/data/reference/<rfrnc_id>/' -- 'data_reference_url' """
     log.debug( f'\n\nstarting data_reference, with rfrnc_id, `{rfrnc_id}`; with method, ```{request.method}```' )
-    rspns: HttpResponseRedirect = view_data_records_manager.manage_delete( rfrnc_id )  # much less likely, HttpResponseNotFound will be returned.
+    context: dict = view_data_records_manager.manage_reference_delete( rfrnc_id )
+    rspns = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return rspns
+
+
+# @shib_login
+# def data_reference( request, rfrnc_id ):
+#     """ Called via ajax by views.edit_citation() on DELETE
+#         Handles api call when red `x` button is clicked in, eg, <http://127.0.0.1:8000/editor/documents/(123)/>
+#         Url: '/data/reference/<rfrnc_id>/' -- 'data_reference_url' """
+#     log.debug( f'\n\nstarting data_reference, with rfrnc_id, `{rfrnc_id}`; with method, ```{request.method}```' )
+#     rspns: HttpResponseRedirect = view_data_records_manager.manage_reference_delete( rfrnc_id )  # much less likely, HttpResponseNotFound will be returned.
+#     return rspns
 
 
 @shib_login

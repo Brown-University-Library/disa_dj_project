@@ -100,7 +100,7 @@ def manage_post( payload: bytes, request_user_id: int ) -> dict:
     return context
 
 
-def manage_delete( rfrnc_id: str ) -> HttpResponseRedirect:  # or, much less likely, HttpResponseNotFound
+def manage_reference_delete( rfrnc_id: str ) -> HttpResponseRedirect:  # or, much less likely, HttpResponseNotFound
     """ Handles api call when red `x` button is clicked...
         ...and then the 'Confirm delete' button is clicked in, eg, <http://127.0.0.1:8000/editor/documents/(123)/>.
         Called by views.data_reference()
@@ -114,13 +114,35 @@ def manage_delete( rfrnc_id: str ) -> HttpResponseRedirect:  # or, much less lik
         cite = existing.citation
         session.delete( existing )
         session.commit()
-        redirect_url = reverse( 'data_documents_url', kwargs={'docId': cite.id} )
-        log.debug( f'redirect_url, ```{redirect_url}```' )
-        rsp = HttpResponseRedirect( redirect_url )  # if this doesn't work, i can just hit this url with requests and return the output.
+        # rsp = HttpResponseRedirect( redirect_url )  # if this doesn't work, i can just hit this url with requests and return the output.
     else:
-        rsp = HttpResponseNotFound
-    log.debug( f'returning rsp, ```{rsp}```' )
-    return rsp
+        pass
+    redirect_url = reverse( 'edit_citation_url', kwargs={'cite_id': cite.id} )
+    log.debug( f'redirect_url, ```{redirect_url}```' )
+    context =  { 'redirect': redirect_url }
+    return context
+
+# def manage_reference_delete( rfrnc_id: str ) -> HttpResponseRedirect:  # or, much less likely, HttpResponseNotFound
+#     """ Handles api call when red `x` button is clicked...
+#         ...and then the 'Confirm delete' button is clicked in, eg, <http://127.0.0.1:8000/editor/documents/(123)/>.
+#         Called by views.data_reference()
+#         Note: this function is short enough that I could simply put this code directly into the views.data_reference()...
+#               ...but a good TODO would be to refactor that view and have a general views.data_record() url...
+#               ...handle the full CRUD set of methods -- which would all call this data_records_manager.py file """
+#     log.debug( 'starting manage_delete()' )
+#     session = make_session()
+#     existing = session.query( models_alch.Reference ).get( rfrnc_id )
+#     if existing:
+#         cite = existing.citation
+#         session.delete( existing )
+#         session.commit()
+#         redirect_url = reverse( 'edit_citation_url', kwargs={'cite_id': cite.id} )
+#         log.debug( f'redirect_url, ```{redirect_url}```' )
+#         rsp = HttpResponseRedirect( redirect_url )  # if this doesn't work, i can just hit this url with requests and return the output.
+#     else:
+#         rsp = HttpResponseNotFound
+#     log.debug( f'returning rsp, ```{rsp}```' )
+#     return rsp
 
 
 # -------------
