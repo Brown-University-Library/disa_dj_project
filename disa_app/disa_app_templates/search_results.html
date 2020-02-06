@@ -132,6 +132,7 @@
         <p>(Count: {{ people_results.count }})</p>
         <p>(Fields searched: {{ people_results.fields_searched|join:', ' }})</p>
         <p>(Explanation: "enslavement-statuses" come from the `person` data-entry form; "relationship-roles" come from the `relationships` data-entry form.)</p>
+        {% comment %}
         {% for pers in people_results.people %}
         <ul>
             <li>person-id: {{ pers.id }}</li>
@@ -143,6 +144,43 @@
             <li><a href="{% url 'person_url' pers.id  %}">view person</a></li>
         </ul>
         {% endfor %}
+        {% endcomment %}
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="tbl_id">id</th>
+              <th class="tbl_name">first-name</th>
+              <th class="tbl_fixed">last-name</th>
+              <th class="tbl_fixed">comments</th>
+              <th class="tbl_fixed">enslavement-statuses</th>
+              <th class="tbl_fixed">relationship-roles</th>
+              <th class="tbl_view">view-person</th>
+            </tr>
+          </thead>
+          <tbody id="people">
+              {% for pers in people_results.people %}
+              <tr>
+                <td>{{ pers.id }}</td>
+
+                <td>{{ pers.first_name }}</td>
+
+                <td>{{ pers.last_name }}</td>
+
+                <td>{{ pers.comments }}</td>
+
+                <td>{{ pers.enslavements|join:', ' }}</td>
+
+                <td>{{ pers.roles|join:', ' }}</td>
+
+                <td><a href="{% url 'person_url' pers.id  %}">link</a></td>
+              </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+
+
+
         </div>
     </div>
     <hr/>
