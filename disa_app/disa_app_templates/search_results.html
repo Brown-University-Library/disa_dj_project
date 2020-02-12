@@ -117,6 +117,21 @@
     }
 </style>
 
+<script type="text/javascript" src="{% static 'js/hilitor.js' %}"></script>
+
+<!--
+<script type="text/javascript">
+    var myHilitor = new Hilitor("search_results_id"); // id of the element to parse
+    console.log( "myHilitor, ", myHilitor );
+    {% if search_query %}
+        var search_term = "{{ search_query}}";
+        console.log( "search_term, ", search_term );
+        // myHilitor.setMatchType("right");
+        myHilitor.apply( "comments" );
+    {% endif %}
+</script>
+-->
+
 {% endblock header_other %}
 
 
@@ -134,7 +149,7 @@
    </div>
 </div>
  -->
-<div class="search_results">
+<div id="search_results_id" class="search_results">
     <h1 id="list_heading">Search Results</h1>
     <hr/>
 
@@ -262,6 +277,20 @@
         </div>
 
     </div>  <!-- end of ```<div class="bul_pl_accordion-group">``` -->
+
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            var myHilitor = new Hilitor("search_results_id"); // id of the element to parse
+            console.log( "myHilitor, ", myHilitor );
+            {% if search_query %}
+                var search_term = "{{ search_query}}";
+                console.log( "search_term, ", search_term );
+                myHilitor.setMatchType("open");
+                // myHilitor.apply( "comments" );
+                myHilitor.apply( search_term );
+            {% endif %}
+        });
+    </script>
 
 </div>
 {% endblock content %}
