@@ -109,6 +109,12 @@
         text-align : right ;
         font-weight : bold ;
     }
+    td.transcription {
+        font-size: smaller;
+    }
+    td.nbsp {
+        white-space: nowrap;
+    }
 </style>
 
 {% endblock header_other %}
@@ -182,8 +188,6 @@
                 <h2>Citations...</h2>
                 <p>(Count: {{ citation_results.count }})</p>
                 <p>(Fields searched: {{ citation_results.fields_searched|join:', ' }})</p>
-
-
                 <table class="table">
                     <thead>
                         <tr>
@@ -204,18 +208,6 @@
                         {% endfor %}
                     </tbody>
                 </table>
-
-
-                {% comment %}
-                {% for cite in citation_results.citations %}
-                <ul>
-                    <li>citation-id: {{ cite.id }}</li>
-                    <li>display: {{ cite.display }}</li>
-                    <li>comments: {{ cite.comments }}</li>
-                    <li><a href="{% url 'edit_citation_url' cite.id  %}">view document</a></li>
-                </ul>
-                {% endfor %}
-                {% endcomment %}
             </div>
         </div>
 
@@ -225,19 +217,48 @@
             <div class="bul_pl_accordion-toggle-container">
                 <a id=content_3_a_element href="#content-3" class="bul_pl_accordion-toggle">more</a>
             </div>
-          <div class="bul_pl_accordion-content" id="content-3">
-          <h2>Items...</h2>
-          <p>(Count: {{ item_results.count }})</p>
-          <p>(Fields searched: {{ item_results.fields_searched|join:', ' }})</p>
-          {% for rfrnc in item_results.references %}
-          <ul>
-              <li>reference-id: {{ rfrnc.id }}</li>
-              <li>transcription: {{ rfrnc.transcription }}</li>
-              <li><a href="{% url 'edit_record_url' rfrnc.id  %}">view item</a></li>
-              <li><a href="{% url 'edit_citation_url' rfrnc.citation_id  %}">view item's document</a></li>
-          </ul>
-          {% endfor %}
-          </div>
+            <div class="bul_pl_accordion-content" id="content-3">
+                <h2>Items...</h2>
+                <p>(Count: {{ item_results.count }})</p>
+                <p>(Fields searched: {{ item_results.fields_searched|join:', ' }})</p>
+
+
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="tbl_id">reference_id</th>
+                            <th class="tbl_fixed">transcription</th>
+                            <th class="tbl_view">links</th>
+                        </tr>
+                    </thead>
+                    <tbody id="citation">
+                        {% for rfrnc in item_results.references %}
+                        <tr>
+                            <td>{{ rfrnc.id }}</td>
+                            <td class="transcription">{{ rfrnc.transcription }}</td>
+
+                            <td class="nbsp">
+                                <a href="{% url 'edit_record_url' rfrnc.id  %}">item</a> / <a href="{% url 'edit_citation_url' rfrnc.citation_id  %}">document</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+
+                {% comment %}
+                {% for rfrnc in item_results.references %}
+                <ul>
+                    <li>reference-id: {{ rfrnc.id }}</li>
+                    <li>transcription: {{ rfrnc.transcription }}</li>
+                    <li><a href="{% url 'edit_record_url' rfrnc.id  %}">view item</a></li>
+                    <li><a href="{% url 'edit_citation_url' rfrnc.citation_id  %}">view item's document</a></li>
+                </ul>
+                {% endfor %}
+                {% endcomment %}
+            </div>
         </div>
 
     </div>  <!-- end of ```<div class="bul_pl_accordion-group">``` -->
