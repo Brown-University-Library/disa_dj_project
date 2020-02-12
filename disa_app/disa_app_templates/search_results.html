@@ -134,106 +134,87 @@
 
     <div class="bul_pl_accordion-group">
 
-    <div class="people bul_pl_accordion-container">
-        <div class="bul_pl_accordion-toggle-container">
-            <a id=content_1_a_element href="#content-1" class="bul_pl_accordion-toggle">more</a>
+        <div class="people bul_pl_accordion-container">
+
+            <div class="bul_pl_accordion-toggle-container">
+                <a id=content_1_a_element href="#content-1" class="bul_pl_accordion-toggle">more</a>
+            </div>
+
+            <div class="bul_pl_accordion-content" id="content-1">
+                <h2>People...</h2>
+                <p>(Count: {{ people_results.count }})</p>
+                <p>(Fields searched: {{ people_results.fields_searched|join:', ' }})</p>
+                <p>(Explanation: "enslavement-statuses" come from the `person` data-entry form; "relationship-roles" come from the `relationships` data-entry form.)</p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="tbl_id">id</th>
+                            <th class="tbl_name">first-name</th>
+                            <th class="tbl_fixed">last-name</th>
+                            <th class="tbl_fixed">comments</th>
+                            <th class="tbl_fixed">enslavement-statuses</th>
+                            <th class="tbl_fixed">relationship-roles</th>
+                            <th class="tbl_view">link</th>
+                        </tr>
+                    </thead>
+                    <tbody id="people">
+                        {% for pers in people_results.people %}
+                        <tr>
+                            <td>{{ pers.id }}</td>
+                            <td>{{ pers.first_name }}</td>
+                            <td>{{ pers.last_name }}</td>
+                            <td>{{ pers.comments }}</td>
+                            <td>{{ pers.enslavements|join:', ' }}</td>
+                            <td>{{ pers.roles|join:', ' }}</td>
+                            <td><a href="{% url 'person_url' pers.id  %}">view-person</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>  <!-- end of ```<div class="bul_pl_accordion-content" id="content-1">``` -->
+        </div>  <!-- end of ```<div class="people bul_pl_accordion-container">``` -->
+
+        <hr/>
+
+        <div class="citations bul_pl_accordion-container">
+            <div class="bul_pl_accordion-toggle-container">
+                <a id=content_2_a_element href="#content-2" class="bul_pl_accordion-toggle">more</a>
+            </div>
+          <div class="bul_pl_accordion-content" id="content-2">
+          <h2>Citations...</h2>
+          <p>(Count: {{ citation_results.count }})</p>
+          <p>(Fields searched: {{ citation_results.fields_searched|join:', ' }})</p>
+          {% for cite in citation_results.citations %}
+          <ul>
+              <li>citation-id: {{ cite.id }}</li>
+              <li>display: {{ cite.display }}</li>
+              <li>comments: {{ cite.comments }}</li>
+              <li><a href="{% url 'edit_citation_url' cite.id  %}">view document</a></li>
+          </ul>
+          {% endfor %}
+          </div>
         </div>
-        <div class="bul_pl_accordion-content" id="content-1">
-        <h2>People...</h2>
-        <p>(Count: {{ people_results.count }})</p>
-        <p>(Fields searched: {{ people_results.fields_searched|join:', ' }})</p>
-        <p>(Explanation: "enslavement-statuses" come from the `person` data-entry form; "relationship-roles" come from the `relationships` data-entry form.)</p>
-        {% comment %}
-        {% for pers in people_results.people %}
-        <ul>
-            <li>person-id: {{ pers.id }}</li>
-            <li>first-name: {{ pers.first_name }}</li>
-            <li>last-name: {{ pers.last_name }}</li>
-            <li>comments: {{ pers.comments }}</li>
-            <li>enslavement-statuses: {{ pers.enslavements|join:', ' }}</li>
-            <li>relationship-roles: {{ pers.roles|join:', ' }}</li>
-            <li><a href="{% url 'person_url' pers.id  %}">view person</a></li>
-        </ul>
-        {% endfor %}
-        {% endcomment %}
 
-        <table class="table">
-          <thead>
-            <tr>
-              <th class="tbl_id">id</th>
-              <th class="tbl_name">first-name</th>
-              <th class="tbl_fixed">last-name</th>
-              <th class="tbl_fixed">comments</th>
-              <th class="tbl_fixed">enslavement-statuses</th>
-              <th class="tbl_fixed">relationship-roles</th>
-              <th class="tbl_view">view-person</th>
-            </tr>
-          </thead>
-          <tbody id="people">
-              {% for pers in people_results.people %}
-              <tr>
-                <td>{{ pers.id }}</td>
+        <hr/>
 
-                <td>{{ pers.first_name }}</td>
-
-                <td>{{ pers.last_name }}</td>
-
-                <td>{{ pers.comments }}</td>
-
-                <td>{{ pers.enslavements|join:', ' }}</td>
-
-                <td>{{ pers.roles|join:', ' }}</td>
-
-                <td><a href="{% url 'person_url' pers.id  %}">link</a></td>
-              </tr>
-              {% endfor %}
-          </tbody>
-        </table>
-
-
-
+        <div class="items bul_pl_accordion-container">
+            <div class="bul_pl_accordion-toggle-container">
+                <a id=content_3_a_element href="#content-3" class="bul_pl_accordion-toggle">more</a>
+            </div>
+          <div class="bul_pl_accordion-content" id="content-3">
+          <h2>Items...</h2>
+          <p>(Count: {{ item_results.count }})</p>
+          <p>(Fields searched: {{ item_results.fields_searched|join:', ' }})</p>
+          {% for rfrnc in item_results.references %}
+          <ul>
+              <li>reference-id: {{ rfrnc.id }}</li>
+              <li>transcription: {{ rfrnc.transcription }}</li>
+              <li><a href="{% url 'edit_record_url' rfrnc.id  %}">view item</a></li>
+              <li><a href="{% url 'edit_citation_url' rfrnc.citation_id  %}">view item's document</a></li>
+          </ul>
+          {% endfor %}
+          </div>
         </div>
-    </div>
-    <hr/>
-
-    <div class="citations bul_pl_accordion-container">
-        <div class="bul_pl_accordion-toggle-container">
-            <a id=content_2_a_element href="#content-2" class="bul_pl_accordion-toggle">more</a>
-        </div>
-      <div class="bul_pl_accordion-content" id="content-2">
-      <h2>Citations...</h2>
-      <p>(Count: {{ citation_results.count }})</p>
-      <p>(Fields searched: {{ citation_results.fields_searched|join:', ' }})</p>
-      {% for cite in citation_results.citations %}
-      <ul>
-          <li>citation-id: {{ cite.id }}</li>
-          <li>display: {{ cite.display }}</li>
-          <li>comments: {{ cite.comments }}</li>
-          <li><a href="{% url 'edit_citation_url' cite.id  %}">view document</a></li>
-      </ul>
-      {% endfor %}
-      </div>
-    </div>
-    <hr/>
-
-    <div class="items bul_pl_accordion-container">
-        <div class="bul_pl_accordion-toggle-container">
-            <a id=content_3_a_element href="#content-3" class="bul_pl_accordion-toggle">more</a>
-        </div>
-      <div class="bul_pl_accordion-content" id="content-3">
-      <h2>Items...</h2>
-      <p>(Count: {{ item_results.count }})</p>
-      <p>(Fields searched: {{ item_results.fields_searched|join:', ' }})</p>
-      {% for rfrnc in item_results.references %}
-      <ul>
-          <li>reference-id: {{ rfrnc.id }}</li>
-          <li>transcription: {{ rfrnc.transcription }}</li>
-          <li><a href="{% url 'edit_record_url' rfrnc.id  %}">view item</a></li>
-          <li><a href="{% url 'edit_citation_url' rfrnc.citation_id  %}">view item's document</a></li>
-      </ul>
-      {% endfor %}
-      </div>
-    </div>
 
     </div>  <!-- end of ```<div class="bul_pl_accordion-group">``` -->
 
