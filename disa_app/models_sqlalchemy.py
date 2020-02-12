@@ -388,6 +388,14 @@ class Person(Base):
             }
         return data
 
+    def __repr__(self):
+        display_repr = f'<Person {self.id}: {self.display_name()}>'
+        return display_repr
+
+    # def __repr__(self):
+    #     return '<Referent {0}: {1}>'.format(
+    #         self.id, self.display_name() )
+
     ## end class Person
 
 
