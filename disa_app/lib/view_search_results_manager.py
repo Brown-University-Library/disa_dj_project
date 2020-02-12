@@ -33,7 +33,7 @@ def run_search( srch_text: str ) -> dict:
     item_results = search_items( srch_text, session )
 
     data = {
-        'people_results': people_results, 'citation_results': citation_results, 'item_results': item_results }
+        'people_results': people_results, 'citation_results': citation_results, 'item_results': item_results, 'search_query': srch_text }
 
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     return data

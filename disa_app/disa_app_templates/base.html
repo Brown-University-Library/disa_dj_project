@@ -15,17 +15,32 @@
         <link rel="stylesheet" type="text/css" href="{% static 'lib/select2-dist/css/select2.min.css' %}">
 
         <style type="text/css">
-            .navbar-nav > li{
-              margin-right:30px;
+            .navbar-nav > li {
+                margin-right:30px;
             }
-
             div.container {
                 width: 100%;
                 padding-right: 15px;
                 padding-left: 15px;
                 margin-right: 7.5em;
                 margin-left: 7.5em;
-                }
+            }
+            /*input.searchTerm {*/
+            input#query {
+                padding-left: 10px;
+                font-size: 12px;
+                height: 25px;
+                padding-top: 0;
+                padding-bottom: 0;
+                border: 0;
+            }
+            button.searchButton {
+                cursor: pointer;
+                font-size: 13px;
+                line-height: inherit;
+                text-transform: none;
+                border-radius: 0;
+            }
         </style>
 
         <script src="{% static 'lib/jquery/jquery-3.3.1.min.js' %}"></script>
@@ -44,6 +59,31 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-secondary">
             <a class="navbar-brand text-white" href="{% url 'browse_url' %}">Database of Indigenous Slavery in the Americas</a>
             <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item">
+                    <!--
+                    ***********************************************************************
+                    search box
+                    (based on <https://codepen.io/huange/pen/rbqsD>...
+                    ...from <https://www.mockplus.com/blog/post/search-bar-design>)
+                    ***********************************************************************/
+                    -->
+                    <div class="search_wrap nav-link text-white">
+                        <div class="search">
+                            <form action="/search_results/" method="get">
+                                {% if search_query %}
+                                <input type="text" class="searchTerm" placeholder="searched: `{{ search_query }}`" id="query" name="query">
+                                {% else %}
+                                <input type="text" class="searchTerm" placeholder="enter search-term" id="query" name="query">
+                                {% endif %}
+                                <button type="submit" class="searchButton">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link text-white" href="{% url 'people_url' %}">index</a>
                 </li>
