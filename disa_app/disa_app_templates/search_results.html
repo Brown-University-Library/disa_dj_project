@@ -135,11 +135,9 @@
     <div class="bul_pl_accordion-group">
 
         <div class="people bul_pl_accordion-container">
-
             <div class="bul_pl_accordion-toggle-container">
                 <a id=content_1_a_element href="#content-1" class="bul_pl_accordion-toggle">more</a>
             </div>
-
             <div class="bul_pl_accordion-content" id="content-1">
                 <h2>People...</h2>
                 <p>(Count: {{ people_results.count }})</p>
@@ -180,19 +178,45 @@
             <div class="bul_pl_accordion-toggle-container">
                 <a id=content_2_a_element href="#content-2" class="bul_pl_accordion-toggle">more</a>
             </div>
-          <div class="bul_pl_accordion-content" id="content-2">
-          <h2>Citations...</h2>
-          <p>(Count: {{ citation_results.count }})</p>
-          <p>(Fields searched: {{ citation_results.fields_searched|join:', ' }})</p>
-          {% for cite in citation_results.citations %}
-          <ul>
-              <li>citation-id: {{ cite.id }}</li>
-              <li>display: {{ cite.display }}</li>
-              <li>comments: {{ cite.comments }}</li>
-              <li><a href="{% url 'edit_citation_url' cite.id  %}">view document</a></li>
-          </ul>
-          {% endfor %}
-          </div>
+            <div class="bul_pl_accordion-content" id="content-2">
+                <h2>Citations...</h2>
+                <p>(Count: {{ citation_results.count }})</p>
+                <p>(Fields searched: {{ citation_results.fields_searched|join:', ' }})</p>
+
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="tbl_id">doc_id</th>
+                            <th class="tbl_fixed">display</th>
+                            <th class="tbl_fixed">comments</th>
+                            <th class="tbl_view">link</th>
+                        </tr>
+                    </thead>
+                    <tbody id="citation">
+                        {% for cite in citation_results.citations %}
+                        <tr>
+                            <td>{{ cite.id }}</td>
+                            <td>{{ cite.display }}</td>
+                            <td>{{ cite.comments }}</td>
+                            <td><a href="{% url 'edit_citation_url' cite.id  %}">view-document</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+                {% comment %}
+                {% for cite in citation_results.citations %}
+                <ul>
+                    <li>citation-id: {{ cite.id }}</li>
+                    <li>display: {{ cite.display }}</li>
+                    <li>comments: {{ cite.comments }}</li>
+                    <li><a href="{% url 'edit_citation_url' cite.id  %}">view document</a></li>
+                </ul>
+                {% endfor %}
+                {% endcomment %}
+            </div>
         </div>
 
         <hr/>
