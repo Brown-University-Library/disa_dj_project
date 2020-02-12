@@ -70,7 +70,7 @@
                     -->
                     <div class="search_wrap nav-link text-white">
                         <div class="search">
-                            <form action="/search_results/" method="get">
+                            <form action="{% url 'search_results_url' %}" method="get">
                                 {% if search_query %}
                                 <input type="text" class="searchTerm" placeholder="searched: `{{ search_query }}`" id="query" name="query">
                                 {% else %}
