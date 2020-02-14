@@ -112,7 +112,7 @@ def search_results( request ):
     if srch_txt is None:
         context = {}
     else:
-        context: dict = view_search_results_manager.run_search( srch_txt[0:50] )
+        context: dict = view_search_results_manager.run_search( srch_txt[0:50], datetime.datetime.now() )
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
         context['user_first_name'] = request.user.first_name
@@ -128,12 +128,9 @@ def search_results( request ):
 #     srch_txt = request.GET.get( 'query', None )
 #     log.debug( f'query, ```{srch_txt}```'  )
 #     if srch_txt is None:
-#         redirect_url = request.META.get( 'HTTP_REFERER', reverse('people_url') )
-#         log.debug( f'empty search, redirecting back to, ```{redirect_url}```' )
-#         return HttpResponseRedirect( redirect_url )
-#     context: dict = view_search_results_manager.run_search( srch_txt[0:50] )
-#     # return HttpResponse( 'search_results coming' )
-
+#         context = {}
+#     else:
+#         context: dict = view_search_results_manager.run_search( srch_txt[0:50] )
 #     if request.user.is_authenticated:
 #         context['user_is_authenticated'] = True
 #         context['user_first_name'] = request.user.first_name

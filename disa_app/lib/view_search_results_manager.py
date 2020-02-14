@@ -7,6 +7,7 @@ from disa_app import settings_app
 from disa_app import models_sqlalchemy as models_alch
 from disa_app.lib import person_common
 from django.conf import settings
+from django.core.cache import cache
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
 
@@ -21,22 +22,75 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-def run_search( srch_text: str ) -> dict:
+# def run_search( srch_text: str, start_time: datetime.datetime ) -> dict:
+#     """ Queries people, citations, and items for search-text.
+#         Called by views.search_results() """
+#     log.debug( f'srch_text, ```{srch_text}```' )
+#     session = make_session()
+#     data = {}
+#     people_results = search_people( srch_text, session )
+#     citation_results = search_citations( srch_text, session )
+#     item_results = search_items( srch_text, session )
+#     data = {
+#         'people_results': people_results,
+#         'citation_results': citation_results,
+#         'item_results': item_results,
+#         'search_query': srch_text,
+#         'time_taken': str( datetime.datetime.now() - start_time )
+#         }
+#     log.debug( f'data, ```{pprint.pformat(data)}```' )
+#     return data
+
+
+def run_search( srch_text: str, start_time: datetime.datetime ) -> dict:
     """ Queries people, citations, and items for search-text.
         Called by views.search_results() """
     log.debug( f'srch_text, ```{srch_text}```' )
     session = make_session()
-    data = {}
 
+    cache_key = srch_text
+    query_results: dict = cache.get( cache_key )
+    if query_results is None:
+         log.debug( 'query_results were not in cache' )
+         query_results = run_query( srch_text, session )
+         cache.set( cache_key, query_results )
+    data = {
+        'people_results': query_results['people_results'],
+        'citation_results': query_results['citation_results'],
+        'item_results': query_results['item_results'],
+        'search_query': srch_text,
+        'time_taken': str( datetime.datetime.now() - start_time )
+        }
+    log.debug( f'data, ```{pprint.pformat(data)}```' )
+    return data
+
+
+def run_query( srch_text, session ) -> dict:
+    """ Caller of individual queries.
+        Called by run_search()
+        Makes caching easier; TODO: consider async db calls. """
     people_results = search_people( srch_text, session )
     citation_results = search_citations( srch_text, session )
     item_results = search_items( srch_text, session )
+    query_dct = {
+        'people_results': people_results, 'citation_results': citation_results, 'item_results': item_results }
+    log.debug( 'returning query_dct' )
+    return query_dct
 
-    data = {
-        'people_results': people_results, 'citation_results': citation_results, 'item_results': item_results, 'search_query': srch_text }
 
-    log.debug( f'data, ```{pprint.pformat(data)}```' )
-    return data
+## caching example
+# def grab_z3950_data( self, key, value, show_marc_param ):
+#     """ Returns data from cache if available; otherwise calls sierra.
+#         Called by build_data_dct() """
+#     cache_key = '%s_%s' % (key, value)
+#     pickled_data = cache.get( cache_key )
+#     if pickled_data is None:
+#         log.debug( 'pickled_data was not in cache' )
+#         pickled_data = self.query_josiah( key, value, show_marc_param )
+#         cache.set( cache_key, pickled_data )  # time could be last argument; defaults to settings.py entry
+#     else:
+#         log.debug( 'pickled_data was in cache' )
+#     return pickled_data
 
 
 def search_people( srch_text, session ):
