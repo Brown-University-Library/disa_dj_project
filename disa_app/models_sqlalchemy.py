@@ -117,6 +117,9 @@ class Citation(Base):
     __tablename__ = '3_citations'
 
     id = Column(Integer, primary_key=True)
+
+    uuid = Column( String(32) )
+
     citation_type_id = Column(Integer, ForeignKey('2_citation_types.id'),
         nullable=False)
     display = Column(String(500))
