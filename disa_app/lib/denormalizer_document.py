@@ -78,11 +78,21 @@ def denormalize():
 
             rfrnts = []
             for rfrnt in rfrnc.referents:
+
+                rfrnt_roles = []
+                for role in rfrnt.roles:
+                    role_dct = {
+                        'role_name': role.name,
+                        'name_as_relationship': role.name_as_relationship
+                        }
+                    rfrnt_roles.append( role_dct )
+
                 rfrnt_dct = {
                     'referent_id': rfrnt.id,
                     'referent_display_name': rfrnt.display_name(),
                     'referent_age': rfrnt.age,
                     'referent_sex': rfrnt.sex,
+                    'referent_roles': rfrnt_roles
                     }
                 rfrnts.append( rfrnt_dct )
 
