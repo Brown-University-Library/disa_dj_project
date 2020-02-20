@@ -118,7 +118,7 @@ class Citation(Base):
 
     id = Column(Integer, primary_key=True)
 
-    uuid = Column( String(32) )
+    # uuid = Column( String(32) )
 
     citation_type_id = Column(Integer, ForeignKey('2_citation_types.id'),
         nullable=False)
