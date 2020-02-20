@@ -44,9 +44,57 @@ def denormalize():
 
         rfrncs = []
         for rfrnc in cite.references:
+            # temp_rfrnc_dct: dict = rfrnc.dictify()
+
+            # rfrnc_roles = []
+            # for role in rfrnc.reference_type.roles:
+            #     role_dct = {
+            #         'role_id_TEMP': role.id,
+            #         'role_name': role.name,
+            #         'role_name_as_relationship': role.name_as_relationship
+            #         }
+            #     rfrnc_roles.append( role_dct )
+
+            # rfrnc_roles = []
+            # for role in rfrnc.reference_type.roles:
+
+            #     rfrnc_role_rfrnts = []
+            #     for rfrnt in role.referents:
+            #         rfrnt_dct = {
+            #             'referent_id': rfrnt.id,
+            #             'referent_age': rfrnt.age,
+            #             'referent_sex': rfrnt.sex,
+            #             # 'referent_display_name': rfrnt.display_name
+            #             }
+            #         rfrnc_role_rfrnts.append( rfrnt_dct )
+
+            #     role_dct = {
+            #         'role_id_TEMP': role.id,
+            #         'role_name': role.name,
+            #         'role_name_as_relationship': role.name_as_relationship,
+            #         'role_referents': rfrnc_role_rfrnts
+            #         }
+            #     rfrnc_roles.append( role_dct )
+
+            rfrnts = []
+            for rfrnt in rfrnc.referents:
+                rfrnt_dct = {
+                    'referent_id': rfrnt.id,
+                    'referent_display_name': rfrnt.display_name(),
+                    'referent_age': rfrnt.age,
+                    'referent_sex': rfrnt.sex,
+                    }
+                rfrnts.append( rfrnt_dct )
+
             rfrnc_dct = {
                 'reference_id': rfrnc.id,
                 'reference_transcription': rfrnc.transcription,
+
+                # 'reference_type_id_TEMP': rfrnc.reference_type_id,
+                'reference_type_name': rfrnc.reference_type.name,
+                # 'reference_type_roles': rfrnc_roles,
+
+                'reference_referents': rfrnts
                 }
             rfrncs.append( rfrnc_dct )
 
