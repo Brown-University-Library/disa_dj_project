@@ -5,16 +5,16 @@ from typing import List
 
 import requests
 from disa_app import settings_app
+from disa_app.lib import denormalizer_document
+from disa_app.lib import v_data_document_manager  # api/documents
+from disa_app.lib import v_data_relationships_manager  # api/relationship-by-reference
 from disa_app.lib import view_data_entrant_manager  # api/people
 from disa_app.lib import view_data_records_manager  # api/items
-from disa_app.lib import v_data_relationships_manager  # api/relationship-by-reference
-from disa_app.lib import v_data_document_manager  # api/documents
 from disa_app.lib import view_edit_record_manager
 from disa_app.lib import view_edit_relationship_manager
 from disa_app.lib import view_editor_index_manager, view_edit_citation_manager  # documents
 from disa_app.lib import view_info_manager
 from disa_app.lib import view_people_manager, view_person_manager, view_edit_referent_manager  # people
-# from disa_app.lib import view_read_document_data_manager
 from disa_app.lib import view_search_results_manager
 from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
@@ -123,22 +123,18 @@ def search_results( request ):
     return resp
 
 
-# def search_results( request ):
-#     log.debug( '\n\nstarting search_results()' )
-#     srch_txt = request.GET.get( 'query', None )
-#     log.debug( f'query, ```{srch_txt}```'  )
-#     if srch_txt is None:
-#         context = {}
-#     else:
-#         context: dict = view_search_results_manager.run_search( srch_txt[0:50] )
-#     if request.user.is_authenticated:
-#         context['user_is_authenticated'] = True
-#         context['user_first_name'] = request.user.first_name
-#     if request.GET.get('format', '') == 'json':
-#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     else:
-#         resp = render( request, 'disa_app_templates/search_results.html', context )
-#     return resp
+@shib_login
+def datafile( request ):
+    """ Prepares complete denormalized datafile. """
+    log.debug( '\n\nstarting datafile()' )
+    srch_txt = request.GET.get( 'query', None )
+    data: dict = denormalizer_document.denormalize()
+    j_string = json.dumps(data, sort_keys=True, indent=2)
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( jstring, content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/denormalized_document.html', {'j_string': j_string, 'search_query': srch_txt} )
+    return resp
 
 
 # ===========================
@@ -317,27 +313,6 @@ def data_records( request, rec_id=None ):
     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
 
-# @shib_login
-# def data_records( request, rec_id=None ):
-#     """ Called via ajax by views.edit_record()
-#         Url: '/data/records/<rec_id>/' -- 'data_record_url' """
-#     log.debug( f'\n\nstarting data_records, with rec_id, `{rec_id}`; with method, ```{request.method}```, with a payload of, `{request.body}`' )
-#     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
-#     try:
-#         if rec_id:
-#             log.debug( f'here, because rec_id is, `{rec_id}`; and is type, `{type(rec_id)}`' )
-#             context: dict = view_data_records_manager.query_record( rec_id )
-#         elif request.method == 'GET':
-#             context = { 'rec': {}, 'entrants': [] }
-#         elif request.method == 'POST':
-#             context: dict = view_data_records_manager.manage_post( request.body, user_id )
-#         else:
-#             log.warning( 'shouldn\'t get here' )
-#     except:
-#         log.exception( 'problem handling request' )
-#     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     return resp
-
 
 @shib_login
 def data_reference( request, rfrnc_id ):
@@ -348,16 +323,6 @@ def data_reference( request, rfrnc_id ):
     context: dict = view_data_records_manager.manage_reference_delete( rfrnc_id )
     rspns = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return rspns
-
-
-# @shib_login
-# def data_reference( request, rfrnc_id ):
-#     """ Called via ajax by views.edit_citation() on DELETE
-#         Handles api call when red `x` button is clicked in, eg, <http://127.0.0.1:8000/editor/documents/(123)/>
-#         Url: '/data/reference/<rfrnc_id>/' -- 'data_reference_url' """
-#     log.debug( f'\n\nstarting data_reference, with rfrnc_id, `{rfrnc_id}`; with method, ```{request.method}```' )
-#     rspns: HttpResponseRedirect = view_data_records_manager.manage_reference_delete( rfrnc_id )  # much less likely, HttpResponseNotFound will be returned.
-#     return rspns
 
 
 @shib_login

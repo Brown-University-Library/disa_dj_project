@@ -56,7 +56,7 @@ def denormalize():
             'citation_zotero_id': cite.zotero_id,
             'citation_comments': cite.comments,
             'citation_acknowledgements': cite.acknowledgements,
-            'citation_references': cite.references
+            # 'citation_references': cite.references
             }
         output.append( cite_dct )
         if i > 9:

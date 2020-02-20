@@ -55,6 +55,7 @@ urlpatterns = [
     ## misc...
 
     url( r'^admin/', admin.site.urls ),
+    url( r'^datafile/$', views.datafile, name='datafile_url' ),
 
     ## support urls...
 
