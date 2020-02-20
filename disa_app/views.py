@@ -131,7 +131,7 @@ def datafile( request ):
     data: dict = denormalizer_document.denormalize()
     j_string = json.dumps(data, sort_keys=True, indent=2)
     if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( jstring, content_type='application/json; charset=utf-8' )
+        resp = HttpResponse( j_string, content_type='application/json; charset=utf-8' )
     else:
         resp = render( request, 'disa_app_templates/denormalized_document.html', {'j_string': j_string, 'search_query': srch_txt} )
     return resp

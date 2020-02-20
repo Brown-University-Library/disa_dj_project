@@ -34,17 +34,26 @@ def denormalize():
     for ( i, cite ) in enumerate( cites):
 
         # log.debug( f'len( cite.uuid ), ```{len( cite.uuid )}```' )
-        if cite.uuid == None:
-            log.debug( 'adding uuid' )
-            cite.uuid = uuid.uuid4().hex
-            session.add( cite )
-            session.commit()
-        else:
-            log.debug( 'found existing uuid' )
+        # if cite.uuid == None:
+        #     log.debug( 'adding uuid' )
+        #     cite.uuid = uuid.uuid4().hex
+        #     session.add( cite )
+        #     session.commit()
+        # else:
+        #     log.debug( 'found existing uuid' )
+
+        rfrncs = []
+        for rfrnc in cite.references:
+            rfrnc_dct = {
+                'reference_id': rfrnc.id,
+                'reference_transcription': rfrnc.transcription,
+                }
+            rfrncs.append( rfrnc_dct )
+
 
         cite_dct = {
             'citation_id': cite.id,
-            'citation_uuid': cite.uuid,
+            # 'citation_uuid': cite.uuid,
 
             'citation_type_id_TEMP': cite.citation_type_id,
             'citation_type_name': cite.citation_type.name,
@@ -56,7 +65,7 @@ def denormalize():
             'citation_zotero_id': cite.zotero_id,
             'citation_comments': cite.comments,
             'citation_acknowledgements': cite.acknowledgements,
-            # 'citation_references': cite.references
+            'citation_references': rfrncs
             }
         output.append( cite_dct )
         if i > 9:
