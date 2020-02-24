@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import datetime, json, logging, os, pprint
+import datetime, json, logging, os, pprint, uuid
 from django.conf import settings as project_settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -21,7 +21,9 @@ class UserProfile( models.Model ):
       `users = User.objects.all().select_related('profile')`
       ...to minimize extra db queries.
     """
-    user = models.OneToOneField( User, on_delete=models.CASCADE, related_name='profile' )
+    # user = models.OneToOneField( User, on_delete=models.CASCADE, related_name='profile' )
+    user = models.OneToOneField( User, on_delete=models.CASCADE, related_name='profile', null=True, blank=True )  # null=True so I can pre-create the user-profile entries if desired
+    uu_id = models.UUIDField( default=uuid.uuid4, editable=False )
     old_db_id = models.IntegerField( blank=True, null=True )
 
 
@@ -29,9 +31,12 @@ class UserProfile( models.Model ):
 
 @receiver( post_save, sender=User )
 def create_user_profile(sender, instance, created, **kwargs):
+    log.debug( 'starting create_user_profile()' )
     if created:
+        log.debug( '`created` was True' )
         UserProfile.objects.create(user=instance)
 
 @receiver( post_save, sender=User )
 def save_user_profile(sender, instance, **kwargs):
+    log.debug( 'starting save_user_profile()' )
     instance.profile.save()
