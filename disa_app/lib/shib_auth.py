@@ -145,7 +145,10 @@ class LoginDecoratorHelper(object):
         usr.first_name = meta_dct.get( 'Shibboleth-givenName', '' )
         usr.last_name = meta_dct.get( 'Shibboleth-sn', '' )
         # usr.email = meta_dct['Shibboleth-mail']
-        usr.email = meta_dct.get( 'Shibboleth-mail', '' )
+        email = meta_dct.get( 'Shibboleth-mail', None )
+        if email == None:
+            email = 'no_email_eppn_%s' % meta_dct['Shibboleth-eppn']
+        usr.email = email
         usr.set_unusable_password()
         # usr.save()  # no need here; save happens above
         # grp = Group.objects.get( name=settings_app.STAFF_GROUP )  # group must exist; TODO: autocreate if it doesn't
