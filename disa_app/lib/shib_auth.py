@@ -112,12 +112,17 @@ class LoginDecoratorHelper(object):
             msg = 'exception, ```%s```' % e
             log.debug( msg )
             # raise Exception( msg )
-        netid = meta_dct['Shibboleth-brownNetId']
-        if netid in settings_app.SUPER_USERS:
+        # netid = meta_dct['Shibboleth-brownNetId']
+        # if netid in settings_app.SUPER_USERS:
+        #     usr.is_superuser = True
+        # if netid in settings_app.STAFF_USERS:
+        #     usr.is_staff = True
+        eppn = meta_dct['Shibboleth-eppn']
+        if eppn in settings_app.SUPER_USERS:
             usr.is_superuser = True
-        if netid in settings_app.STAFF_USERS:
+        if eppn in settings_app.STAFF_USERS:
             usr.is_staff = True
-        # usr.is_staff = True  # use this and comment out the two lines above if, say, you define a shib-group to be able to log-in
+        # usr.is_staff = True  # use this and comment out the lines above if, say, you define a shib-group to be able to log-in
         try:
             usr = self.update_user( usr, meta_dct )
         except Exception as e:
@@ -139,11 +144,12 @@ class LoginDecoratorHelper(object):
             Called by update_userobj() """
         usr.first_name = meta_dct.get( 'Shibboleth-givenName', '' )
         usr.last_name = meta_dct.get( 'Shibboleth-sn', '' )
-        usr.email = meta_dct['Shibboleth-mail']
+        # usr.email = meta_dct['Shibboleth-mail']
+        usr.email = meta_dct.get( 'Shibboleth-mail', '' )
         usr.set_unusable_password()
-        usr.save()
-        grp = Group.objects.get( name=settings_app.STAFF_GROUP )  # group must exist; TODO: autocreate if it doesn't
-        grp.user_set.add( usr )
+        # usr.save()  # no need here; save happens above
+        # grp = Group.objects.get( name=settings_app.STAFF_GROUP )  # group must exist; TODO: autocreate if it doesn't
+        # grp.user_set.add( usr )
         log.debug( 'user updated' )
         return usr
 
