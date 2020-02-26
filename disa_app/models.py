@@ -21,22 +21,14 @@ class UserProfile( models.Model ):
       `users = User.objects.all().select_related('profile')`
       ...to minimize extra db queries.
     """
-    # user = models.OneToOneField( User, on_delete=models.CASCADE, related_name='profile', null=True, blank=True )  # null=True so I can pre-create the user-profile entries if desired
     user = models.OneToOneField( User, on_delete=models.SET_NULL, related_name='profile', null=True, blank=True )  # null=True so I can pre-create the user-profile entries if desired
     uu_id = models.UUIDField( default=uuid.uuid4, editable=False )
     email = models.EmailField( default='', blank=True )
     old_db_id = models.IntegerField( null=True, blank=True )
-    last_logged_in = models.DateTimeField( auto_now=True )
+    last_logged_in = models.DateTimeField( null=True, blank=True )
 
 
 ## auto create and save UserProfile entries
-
-# @receiver( post_save, sender=User )
-# def create_user_profile(sender, instance, created, **kwargs):
-#     log.debug( f'starting create_user_profile(); created, ```{created}```; kwargs, ```{kwargs}```' )
-#     if created:  # meaning a User object was created
-#         log.debug( '`created` was True' )
-#         UserProfile.objects.create( user=instance )
 
 @receiver( post_save, sender=User )
 def create_user_profile(sender, instance, created, **kwargs):
@@ -59,4 +51,5 @@ def save_user_profile(sender, instance, **kwargs):
     log.debug( f'starting save_user_profile(); kwargs, ```{kwargs}```' )
     log.debug( f'instance, ```{pprint.pformat(instance.__dict__)}```' )
     instance.profile.email = instance.email  # in case preferred shib email is updated.
+    instance.profile.last_logged_in = datetime.datetime.now()
     instance.profile.save()
