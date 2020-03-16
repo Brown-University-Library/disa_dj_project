@@ -173,6 +173,7 @@
                             <th class="tbl_fixed">comments</th>
                             <th class="tbl_fixed">enslavement-statuses</th>
                             <th class="tbl_fixed">relationship-roles</th>
+                            <th class="tbl_fixed">tribes</th>
                             <th class="tbl_view">link</th>
                         </tr>
                     </thead>
@@ -185,6 +186,7 @@
                             <td>{{ pers.comments }}</td>
                             <td>{{ pers.enslavements|join:', ' }}</td>
                             <td>{{ pers.roles|join:', ' }}</td>
+                            <td>{{ pers.tribes|join:', ' }}</td>
                             <td><a href="{% url 'person_url' pers.id  %}">view-person</a></td>
                         </tr>
                         {% endfor %}

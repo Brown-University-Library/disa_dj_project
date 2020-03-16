@@ -110,6 +110,7 @@ def search_people( srch_text, session ):
         rfrnts: List[models_alch.Referent] = person.references  # strange-but-true: this yields Referent records
         enslavements = []
         roles = []
+        tribes = []
         for rfrnt in rfrnts:
             rfrnt_enslavements = [ e.name for e in rfrnt.enslavements ]
             if rfrnt_enslavements:
@@ -117,8 +118,12 @@ def search_people( srch_text, session ):
             rfrnt_roles = [ r.name for r in rfrnt.roles ]
             if rfrnt_roles:
                 roles = list( set(roles + rfrnt_roles) )
+            rfrnt_tribes = [ t.name for t in rfrnt.tribes ]
+            if rfrnt_tribes:
+                tribes = list( set(tribes + rfrnt_tribes) )
         prsn_dct['enslavements'] = enslavements
         prsn_dct['roles'] = roles
+        prsn_dct['tribes'] = tribes
         people.append( prsn_dct )
     people_info = {
         'count': len(people), 'people': people, 'fields_searched': ['first_name', 'last_name', 'comments'] }
@@ -138,38 +143,21 @@ def search_people( srch_text, session ):
 #             ) ).all()
 #     for person in qset_people:
 #         prsn_dct = person.dictify()
-#         rfrncs = person.references
-#         log.debug( f'type(rfrncs), ```{type(rfrncs)}```' )
+#         if not prsn_dct['comments']:
+#             prsn_dct['comments'] = '(None)'
+#         rfrnts: List[models_alch.Referent] = person.references  # strange-but-true: this yields Referent records
 #         enslavements = []
 #         roles = []
-#         for rfrnc in rfrncs:
-#             rfrnc_enslavements = [ e.name for e in rfrnc.enslavements ]
-#             if rfrnc_enslavements:
-#                 enslavements = list( set(enslavements + rfrnc_enslavements) )
-#             rfrnc_roles = [ r.name for r in rfrnc.roles ]
-#             if rfrnc_roles:
-#                 roles = list( set(roles + rfrnc_roles) )
+#         for rfrnt in rfrnts:
+#             rfrnt_enslavements = [ e.name for e in rfrnt.enslavements ]
+#             if rfrnt_enslavements:
+#                 enslavements = list( set(enslavements + rfrnt_enslavements) )
+#             rfrnt_roles = [ r.name for r in rfrnt.roles ]
+#             if rfrnt_roles:
+#                 roles = list( set(roles + rfrnt_roles) )
 #         prsn_dct['enslavements'] = enslavements
 #         prsn_dct['roles'] = roles
 #         people.append( prsn_dct )
-#     people_info = {
-#         'count': len(people), 'people': people, 'fields_searched': ['first_name', 'last_name', 'comments'] }
-#     log.debug( f'people_info, ```{pprint.pformat( people_info )}```' )
-#     return people_info
-
-
-# def search_people( srch_text, session ):
-#     """ Searches `Person` table.
-#         Called by run_search() """
-#     people = []
-#     qset_people = session.query( models_alch.Person ).filter(
-#         or_(
-#             models_alch.Person.first_name.contains( srch_text ),
-#             models_alch.Person.last_name.contains( srch_text ),
-#             models_alch.Person.comments.contains( srch_text )
-#             ) ).all()
-#     for person in qset_people:
-#         people.append( person.dictify() )
 #     people_info = {
 #         'count': len(people), 'people': people, 'fields_searched': ['first_name', 'last_name', 'comments'] }
 #     log.debug( f'people_info, ```{pprint.pformat( people_info )}```' )
