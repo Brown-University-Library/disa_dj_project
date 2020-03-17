@@ -137,7 +137,7 @@ def process_persons( all_persons, session ):
         prsn_dct['tribes'] = tribes
         people.append( prsn_dct )
     people_info = {
-        'count': len(people), 'people': people, 'fields_searched': ['first_name', 'last_name', 'comments'] }
+        'count': len(people), 'people': people, 'fields_searched': ['first_name', 'last_name', 'comments', 'tribe.name'] }
     log.debug( f'people_info, ```{pprint.pformat( people_info )}```' )
     return people_info
 
