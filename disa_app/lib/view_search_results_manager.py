@@ -22,34 +22,13 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-# def run_search( srch_text: str, start_time: datetime.datetime ) -> dict:
-#     """ Queries people, citations, and items for search-text.
-#         Called by views.search_results() """
-#     log.debug( f'srch_text, ```{srch_text}```' )
-#     session = make_session()
-#     data = {}
-#     people_results = search_people( srch_text, session )
-#     citation_results = search_citations( srch_text, session )
-#     item_results = search_items( srch_text, session )
-#     data = {
-#         'people_results': people_results,
-#         'citation_results': citation_results,
-#         'item_results': item_results,
-#         'search_query': srch_text,
-#         'time_taken': str( datetime.datetime.now() - start_time )
-#         }
-#     log.debug( f'data, ```{pprint.pformat(data)}```' )
-#     return data
-
-
 def run_search( srch_text: str, start_time: datetime.datetime ) -> dict:
     """ Queries people, citations, and items for search-text.
         Called by views.search_results() """
     log.debug( f'srch_text, ```{srch_text}```' )
     session = make_session()
-
     cache_key = srch_text
-    query_results: dict = cache.get( cache_key )
+    query_results: dict = cache.get( cache_key )  # see CACHE envar-settings for timeout
     if query_results is None:
          log.debug( 'query_results were not in cache' )
          query_results = run_query( srch_text, session )
@@ -69,7 +48,13 @@ def run_query( srch_text, session ) -> dict:
     """ Caller of individual queries.
         Called by run_search()
         Makes caching easier; TODO: consider async db calls. """
-    people_results = search_people( srch_text, session )
+    queried_persons: list = query_persons( srch_text, session )
+    queried_persons_via_tribes: list = query_persons_via_tribes( srch_text, session )
+    all_persons = list( set(queried_persons + queried_persons_via_tribes) )
+
+    # people_results = search_people( srch_text, session )
+    people_results = process_persons( all_persons, session )
+
     citation_results = search_citations( srch_text, session )
     item_results = search_items( srch_text, session )
     query_dct = {
@@ -78,32 +63,58 @@ def run_query( srch_text, session ) -> dict:
     return query_dct
 
 
-## caching example
-# def grab_z3950_data( self, key, value, show_marc_param ):
-#     """ Returns data from cache if available; otherwise calls sierra.
-#         Called by build_data_dct() """
-#     cache_key = '%s_%s' % (key, value)
-#     pickled_data = cache.get( cache_key )
-#     if pickled_data is None:
-#         log.debug( 'pickled_data was not in cache' )
-#         pickled_data = self.query_josiah( key, value, show_marc_param )
-#         cache.set( cache_key, pickled_data )  # time could be last argument; defaults to settings.py entry
-#     else:
-#         log.debug( 'pickled_data was in cache' )
-#     return pickled_data
-
-
-def search_people( srch_text, session ):
+def query_persons( srch_text, session ) -> list:
     """ Searches `Person` table.
-        Called by run_search() """
-    people = []
-    qset_people = session.query( models_alch.Person ).filter(
+        Called by run_query() """
+    persons = []
+    qset_persons = session.query( models_alch.Person ).filter(
         or_(
             models_alch.Person.first_name.contains( srch_text ),
             models_alch.Person.last_name.contains( srch_text ),
             models_alch.Person.comments.contains( srch_text )
             ) ).all()
-    for person in qset_people:
+    for person in qset_persons:
+        persons.append( person )
+    log.debug( f'persons, ```{pprint.pformat(persons)}```' )
+    return persons
+
+
+def query_persons_via_tribes( srch_text, session ) -> list:
+    """ Searches tribes table.
+        Finds all referents for each tribe entry.
+        Finds all persons for each referent and returns them.
+        Called by run_query() """
+    tribes = []
+    referents = []
+    persons = []
+    qset_tribes = session.query( models_alch.Tribe ).filter(
+        or_(
+            models_alch.Tribe.name.contains( srch_text ),
+            ) ).all()
+    log.debug( f'qset_tribes, ```{pprint.pformat(qset_tribes)}```' )
+    for tribe in qset_tribes:
+        log.debug( f'name, ```{tribe.name}```' )
+        tribes.append( tribe )
+        log.debug( f'tribe_referents, ```{pprint.pformat(tribe.referents)}```' )
+        for referent in tribe.referents:
+            if referent not in referents:
+                referents.append( referent )
+    log.debug( f'referents, ```{pprint.pformat(referents)}```' )
+    for referent in referents:
+        log.debug( f'referent primary_name, ```{referent.primary_name}```' )
+        person = referent.person
+        log.debug( f'person display_name, ```{person.display_name()}```' )
+        if person not in persons:
+            persons.append( person )
+    log.debug( f'persons, ```{pprint.pformat(persons)}```' )
+    return persons
+
+
+def process_persons( all_persons, session ):
+    """ Searches `Person` table.
+        Called by run_search() """
+    people = []
+    for person in all_persons:
         prsn_dct = person.dictify()
         if not prsn_dct['comments']:
             prsn_dct['comments'] = '(None)'
@@ -131,39 +142,6 @@ def search_people( srch_text, session ):
     return people_info
 
 
-# def search_people( srch_text, session ):
-#     """ Searches `Person` table.
-#         Called by run_search() """
-#     people = []
-#     qset_people = session.query( models_alch.Person ).filter(
-#         or_(
-#             models_alch.Person.first_name.contains( srch_text ),
-#             models_alch.Person.last_name.contains( srch_text ),
-#             models_alch.Person.comments.contains( srch_text )
-#             ) ).all()
-#     for person in qset_people:
-#         prsn_dct = person.dictify()
-#         if not prsn_dct['comments']:
-#             prsn_dct['comments'] = '(None)'
-#         rfrnts: List[models_alch.Referent] = person.references  # strange-but-true: this yields Referent records
-#         enslavements = []
-#         roles = []
-#         for rfrnt in rfrnts:
-#             rfrnt_enslavements = [ e.name for e in rfrnt.enslavements ]
-#             if rfrnt_enslavements:
-#                 enslavements = list( set(enslavements + rfrnt_enslavements) )
-#             rfrnt_roles = [ r.name for r in rfrnt.roles ]
-#             if rfrnt_roles:
-#                 roles = list( set(roles + rfrnt_roles) )
-#         prsn_dct['enslavements'] = enslavements
-#         prsn_dct['roles'] = roles
-#         people.append( prsn_dct )
-#     people_info = {
-#         'count': len(people), 'people': people, 'fields_searched': ['first_name', 'last_name', 'comments'] }
-#     log.debug( f'people_info, ```{pprint.pformat( people_info )}```' )
-#     return people_info
-
-
 def search_citations( srch_text, session ):
     """ Searches `Citation` table.
         Called by run_search() """
@@ -183,22 +161,6 @@ def search_citations( srch_text, session ):
     log.debug( f'citations_info, ```{pprint.pformat( citations_info )}```' )
     return citations_info
 
-# def search_citations( srch_text, session ):
-#     """ Searches `Citation` table.
-#         Called by run_search() """
-#     citations = []
-#     qset_citations = session.query( models_alch.Citation ).filter(
-#         or_(
-#             models_alch.Citation.display.contains( srch_text ),
-#             models_alch.Citation.comments.contains( srch_text )
-#             ) ).all()
-#     for cite in qset_citations:
-#         citations.append( cite.dictify() )
-#     citations_info = {
-#         'count': len(citations), 'citations': citations, 'fields_searched': ['display', 'comments'] }
-#     log.debug( f'citations_info, ```{pprint.pformat( citations_info )}```' )
-#     return citations_info
-
 
 def search_items( srch_text, session ):
     """ Searches `Reference` table.
@@ -214,7 +176,6 @@ def search_items( srch_text, session ):
         'count': len(rfrncs), 'references': rfrncs, 'fields_searched': ['transcription'] }
     log.debug( f'rfrncs_info, ```{pprint.pformat( rfrncs_info )}```' )
     return rfrncs_info
-
 
 
 def experiment():
