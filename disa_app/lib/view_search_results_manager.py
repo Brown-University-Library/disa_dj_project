@@ -52,11 +52,13 @@ def run_query( srch_text, session ) -> dict:
     queried_persons_via_tribes: list = query_persons_via_tribes( srch_text, session )
     all_persons = list( set(queried_persons + queried_persons_via_tribes) )
 
-    # people_results = search_people( srch_text, session )
-    people_results = process_persons( all_persons, session )
+    # people_results = process_persons( all_persons, session )
 
-    citation_results = search_citations( srch_text, session )
-    item_results = search_items( srch_text, session )
+    # citation_results = search_citations( srch_text, session )
+
+    # item_results = search_items( srch_text, session )
+    item_results = search_items_by_location( srch_text, session )
+
     query_dct = {
         'people_results': people_results, 'citation_results': citation_results, 'item_results': item_results }
     log.debug( 'returning query_dct' )
@@ -163,7 +165,7 @@ def search_citations( srch_text, session ):
 
 
 def search_items( srch_text, session ):
-    """ Searches `Reference` table.
+    """ Searches `Reference` table on transcription.
         Called by run_search() """
     rfrncs = []
     qset_rfrncs = session.query( models_alch.Reference ).filter(
@@ -176,6 +178,102 @@ def search_items( srch_text, session ):
         'count': len(rfrncs), 'references': rfrncs, 'fields_searched': ['transcription'] }
     log.debug( f'rfrncs_info, ```{pprint.pformat( rfrncs_info )}```' )
     return rfrncs_info
+
+
+def search_items_by_location( srch_text, session ):
+    """ Searches `Reference` table on location.
+        Called by run_search() """
+    rfrncs = []
+    qset_ref_locations = session.query( models_alch.ReferenceLocation ).all()
+    # qset_ref_locations = session.query( models_alch.ReferenceLocation ).filter(
+    #     or_(
+    #         models_alch.ReferenceLocation.location.name.contains( srch_text ),
+    #         ) ).all()
+    log.debug( f'len(qset_ref_locations), ```{len(qset_ref_locations)}```' )
+    matches = []
+    for qset_ref_location in qset_ref_locations:
+        log.debug( f'qset_ref_location.__dict__, ```{qset_ref_location.__dict__}```' )
+        log.debug( f'qset_ref_location.location.name, ```{qset_ref_location.location.name}```' )
+        log.debug( f'qset_ref_location.reference, ```{qset_ref_location.reference}```' )
+        location_name_lowercase = qset_ref_location.location.name.lower()
+        location_type_name = None
+        try:
+            log.debug( f'qset_ref_location.location_type.name, ```{qset_ref_location.location_type.name}```' )
+            location_type_name = qset_ref_location.location_type.name
+        except:
+            log.exception( 'problem with name' )
+            pass
+        log.debug( f'srch_text, ```{srch_text}```' )
+        log.debug( f'location_name_lowercase, ```{location_name_lowercase}```' )
+        if srch_text in location_name_lowercase:
+            matches.append( qset_ref_location.reference )
+    log.debug( f'len(matches), ```{len(matches)}```' )
+    log.debug( f'matches, ```{pprint.pformat(matches)}```' )
+    ## TODO - return matches, and then in the display, return location info for all references
+    for rfrnc_match in matches:
+        if rfrnc_match is None:
+            continue
+        try:
+            log.debug( f'rfrnc_match.__dict__, ```{rfrnc_match.__dict__}```' )
+            log.debug( f'rfrnc_match.locations, ```{rfrnc_match.locations}```' )
+            # log.debug( f'rfrnc_match.location.name, ```{rfrnc_match.location.name}```' )
+            # log.debug( f'rfrnc_match.location_type.name, ```{rfrnc_match.location_type.name}```' )
+        except:
+            log.exception( 'problem accessing __dict__' )
+            pass
+        # break
+
+        """
+        """
+    1/0
+    return
+
+
+# def search_items_by_location( srch_text, session ):
+#     """ Searches `Reference` table on location.
+#         Called by run_search() """
+#     rfrncs = []
+#     qset_location_types = session.query( models_alch.LocationType ).all()
+#     for qset_location_type in qset_location_types:
+#         log.debug( f'qset_location_type.name, ```{qset_location_type.name}```' )
+#         """
+#         This yields a list of all the collection-type names
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Colony/State```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Location```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Locale```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```City```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Colony```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```State```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Town```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```County```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Region```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Church```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Ship```
+#         """
+#     1/0
+#     return
+
+
+# def search_items_by_location( srch_text, session ):
+#     """ Searches `Reference` table on location.
+#         Called by run_search() """
+#     rfrncs = []
+#     qset_rfrncs = session.query( models_alch.Reference ).all()
+#     log.debug( f'len(qset_rfrncs), ```{len(qset_rfrncs)}```' )
+
+#     rfrnc = qset_rfrncs[0]
+#     log.debug( f'rfrnc.__dict__, ```{pprint.pformat(rfrnc.__dict__)}```' )
+#     log.debug( f'rfrnc.locations, ```{pprint.pformat(rfrnc.locations)}```' )
+
+#     rfrnc_locations = rfrnc.locations
+#     for rfrnc_location in rfrnc_locations:
+#         log.debug( f'rfrnc_location.location.name, ```{rfrnc_location.location.name}```' )
+#         log.debug( f'rfrnc_location.location_type.name, ```{rfrnc_location.location_type.name}```' )
+#     """
+#     This yields New-London (reference-town) and Connecticut (reference-colony/state)
+#     """
+    # 1/0
+    # return
 
 
 def experiment():
