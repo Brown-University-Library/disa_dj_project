@@ -44,6 +44,26 @@ def run_search( srch_text: str, start_time: datetime.datetime ) -> dict:
     return data
 
 
+# def run_query( srch_text, session ) -> dict:
+#     """ Caller of individual queries.
+#         Called by run_search()
+#         Makes caching easier; TODO: consider async db calls. """
+#     queried_persons: list = query_persons( srch_text, session )
+#     queried_persons_via_tribes: list = query_persons_via_tribes( srch_text, session )
+#     all_persons = list( set(queried_persons + queried_persons_via_tribes) )
+
+#     people_results = process_persons( all_persons, session )
+
+#     citation_results = search_citations( srch_text, session )
+
+#     item_results = search_items( srch_text, session )
+
+#     query_dct = {
+#         'people_results': people_results, 'citation_results': citation_results, 'item_results': item_results }
+#     log.debug( 'returning query_dct' )
+#     return query_dct
+
+
 def run_query( srch_text, session ) -> dict:
     """ Caller of individual queries.
         Called by run_search()
@@ -52,12 +72,15 @@ def run_query( srch_text, session ) -> dict:
     queried_persons_via_tribes: list = query_persons_via_tribes( srch_text, session )
     all_persons = list( set(queried_persons + queried_persons_via_tribes) )
 
-    # people_results = process_persons( all_persons, session )
+    people_results = process_persons( all_persons, session )
 
-    # citation_results = search_citations( srch_text, session )
+    citation_results = search_citations( srch_text, session )
 
-    # item_results = search_items( srch_text, session )
-    item_results = search_items_by_location( srch_text, session )
+    queried_items_via_transcription: list = query_items_via_transcription( srch_text, session  )
+    queried_items_via_location: list = query_items_via_location( srch_text, session  )
+    all_items = list( set(queried_items_via_transcription + queried_items_via_location) )
+
+    item_results = process_items( all_items, session )
 
     query_dct = {
         'people_results': people_results, 'citation_results': citation_results, 'item_results': item_results }
@@ -164,7 +187,23 @@ def search_citations( srch_text, session ):
     return citations_info
 
 
-def search_items( srch_text, session ):
+# def search_items( srch_text, session ):
+#     """ Searches `Reference` table on transcription.
+#         Called by run_search() """
+#     rfrncs = []
+#     qset_rfrncs = session.query( models_alch.Reference ).filter(
+#         or_(
+#             models_alch.Reference.transcription.contains( srch_text ),
+#             ) ).all()
+#     for rfrnc in qset_rfrncs:
+#         rfrncs.append( rfrnc.dictify() )
+#     rfrncs_info = {
+#         'count': len(rfrncs), 'references': rfrncs, 'fields_searched': ['transcription'] }
+#     log.debug( f'rfrncs_info, ```{pprint.pformat( rfrncs_info )}```' )
+#     return rfrncs_info
+
+
+def query_items_via_transcription( srch_text, session  ) -> list:
     """ Searches `Reference` table on transcription.
         Called by run_search() """
     rfrncs = []
@@ -173,48 +212,67 @@ def search_items( srch_text, session ):
             models_alch.Reference.transcription.contains( srch_text ),
             ) ).all()
     for rfrnc in qset_rfrncs:
-        rfrncs.append( rfrnc.dictify() )
-    rfrncs_info = {
-        'count': len(rfrncs), 'references': rfrncs, 'fields_searched': ['transcription'] }
-    log.debug( f'rfrncs_info, ```{pprint.pformat( rfrncs_info )}```' )
-    return rfrncs_info
+        rfrncs.append( rfrnc )
+    log.debug( f'transcription-references count, ```{len(rfrncs)}```' )
+    return rfrncs
 
 
-def search_items_by_location( srch_text, session ):
-    """ Searches `Reference` table on location.
+def query_items_via_location( srch_text, session  ) -> list:
+    """ Searches `ReferenceLocation` table.
         Called by run_search() """
     rfrncs = []
     qset_ref_locations = session.query( models_alch.ReferenceLocation ).all()
-    # qset_ref_locations = session.query( models_alch.ReferenceLocation ).filter(
-    #     or_(
-    #         models_alch.ReferenceLocation.location.name.contains( srch_text ),
-    #         ) ).all()
     log.debug( f'len(qset_ref_locations), ```{len(qset_ref_locations)}```' )
-    matches = []
     for qset_ref_location in qset_ref_locations:
-        log.debug( f'qset_ref_location.__dict__, ```{qset_ref_location.__dict__}```' )
-        log.debug( f'qset_ref_location.location.name, ```{qset_ref_location.location.name}```' )
-        log.debug( f'qset_ref_location.reference, ```{qset_ref_location.reference}```' )
+        # log.debug( f'qset_ref_location.__dict__, ```{qset_ref_location.__dict__}```' )
+        # log.debug( f'qset_ref_location.location.name, ```{qset_ref_location.location.name}```' )
+        # log.debug( f'qset_ref_location.reference, ```{qset_ref_location.reference}```' )
         location_name_lowercase = qset_ref_location.location.name.lower()
         location_type_name = None
         try:
             log.debug( f'qset_ref_location.location_type.name, ```{qset_ref_location.location_type.name}```' )
             location_type_name = qset_ref_location.location_type.name
         except:
-            log.exception( 'problem with name' )
+            log.exception( 'problem with name, traceback follows, followed by __dict__...' )
+            log.debug( f'qset_ref_location.__dict__, ```{qset_ref_location.__dict__}```' )
             pass
         log.debug( f'srch_text, ```{srch_text}```' )
         log.debug( f'location_name_lowercase, ```{location_name_lowercase}```' )
         if srch_text in location_name_lowercase:
-            matches.append( qset_ref_location.reference )
-    log.debug( f'len(matches), ```{len(matches)}```' )
-    log.debug( f'matches, ```{pprint.pformat(matches)}```' )
+            rfrncs.append( qset_ref_location.reference )
+    log.debug( f'len(rfrncs), ```{len(rfrncs)}```' )
+    return rfrncs
+    # log.debug( f'rfrncs, ```{pprint.pformat(rfrncs)}```' )
     ## TODO - return matches, and then in the display, return location info for all references
-    for rfrnc_match in matches:
+    # for rfrnc_match in matches:
+    #     if rfrnc_match is None:
+    #         continue
+    #     log.debug( f'rfrnc_match.__dict__, ```{rfrnc_match.__dict__}```' )
+    #     for location in
+    #     try:
+    #         log.debug( f'rfrnc_match.locations, ```{rfrnc_match.locations}```' )
+    #         # log.debug( f'rfrnc_match.location.name, ```{rfrnc_match.location.name}```' )
+    #         # log.debug( f'rfrnc_match.location_type.name, ```{rfrnc_match.location_type.name}```' )
+    #     except:
+    #         log.exception( 'problem accessing __dict__' )
+    #         pass
+    #     # break
+
+    #     """
+    #     """
+    # 1/0
+    # return
+
+
+def process_items( all_items, session ) -> list:
+    """ Prepares item-display data.
+        Called by run_search() """
+    for rfrnc in all_items:
         if rfrnc_match is None:
             continue
+        log.debug( f'rfrnc_match.__dict__, ```{rfrnc_match.__dict__}```' )
+        for location in
         try:
-            log.debug( f'rfrnc_match.__dict__, ```{rfrnc_match.__dict__}```' )
             log.debug( f'rfrnc_match.locations, ```{rfrnc_match.locations}```' )
             # log.debug( f'rfrnc_match.location.name, ```{rfrnc_match.location.name}```' )
             # log.debug( f'rfrnc_match.location_type.name, ```{rfrnc_match.location_type.name}```' )
@@ -222,11 +280,6 @@ def search_items_by_location( srch_text, session ):
             log.exception( 'problem accessing __dict__' )
             pass
         # break
-
-        """
-        """
-    1/0
-    return
 
 
 # def search_items_by_location( srch_text, session ):
