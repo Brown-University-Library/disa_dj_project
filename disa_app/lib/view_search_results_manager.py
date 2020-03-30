@@ -267,19 +267,22 @@ def query_items_via_location( srch_text, session  ) -> list:
 def process_items( all_items, session ) -> list:
     """ Prepares item-display data.
         Called by run_search() """
+    rfrncs = []
     for rfrnc in all_items:
-        if rfrnc_match is None:
-            continue
-        log.debug( f'rfrnc_match.__dict__, ```{rfrnc_match.__dict__}```' )
-        for location in
         try:
-            log.debug( f'rfrnc_match.locations, ```{rfrnc_match.locations}```' )
-            # log.debug( f'rfrnc_match.location.name, ```{rfrnc_match.location.name}```' )
-            # log.debug( f'rfrnc_match.location_type.name, ```{rfrnc_match.location_type.name}```' )
+            rfrnc_dct = rfrnc.dictify()
+            rfrncs.append( rfrnc_dct )
         except:
-            log.exception( 'problem accessing __dict__' )
-            pass
-        # break
+            log.exception( f'problem with reference, ```{rfrnc}```' )
+
+        # try:
+        #     log.debug( f'rfrnc.display_location_info(), ```{rfrnc.display_location_info()}```' )
+        # except:
+        #     log.exception( f'problem processing location info for rfrnc, ```{rfrnc}```' )
+    rfrncs_info = {
+        'count': len(rfrncs), 'references': rfrncs, 'fields_searched': ['transcription'] }
+    log.debug( f'rfrncs_info, ```{pprint.pformat( rfrncs_info )}```' )
+    return rfrncs_info
 
 
 # def search_items_by_location( srch_text, session ):
