@@ -239,6 +239,24 @@ class Reference(Base):
         else:
             return ''
 
+    def display_location_info( self ):
+        # session = make_session()
+        locations_lst = []
+        rfrnc_locations = self.locations
+        log.debug( f'rfrnc_locations, ```{rfrnc_locations}```' )
+        for rfrnc_location in rfrnc_locations:
+            location_name = rfrnc_location.location.name
+            location_type = None
+            try:
+                location_type = rfrnc_location.location_type.name
+            except:
+                log.exception( f'problem parsing rfrnc_location, ```{rfrnc_location.__dict__}```; traceback follows; processing will continue' )
+            loc_dct = { 'location_name': location_name, 'location_type': location_type }
+            log.debug( f'loc_dct, ```{loc_dct}```' )
+            locations_lst.append( loc_dct )
+        return locations_lst
+
+
     def dictify( self ):
         if self.date:
             isodate = datetime.date.isoformat( self.date )
@@ -259,7 +277,8 @@ class Reference(Base):
             'date': isodate,
             'transcription': self.transcription,
             'referents': jsn_referents,
-            'last_edit': last_edit
+            'last_edit': last_edit,
+            'location_info': self.display_location_info()
             }
         return data
 
