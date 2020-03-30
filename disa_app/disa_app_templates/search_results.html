@@ -246,6 +246,7 @@
                         <tr>
                             <th class="tbl_id">reference_id</th>
                             <th class="tbl_fixed">transcription</th>
+                            <th class="tbl_fixed">location</th>
                             <th class="tbl_view">links</th>
                         </tr>
                     </thead>
@@ -254,7 +255,14 @@
                         <tr>
                             <td>{{ rfrnc.id }}</td>
                             <td class="transcription">{{ rfrnc.transcription }}</td>
-
+                            <!-- <td>location_info: {{ rfrnc.location_info }}</td> -->
+                            <td>
+                                <ul>
+                                    {% for loc in rfrnc.location_info %}
+                                    <li>{{ loc.location_name }} {% if loc.location_type %} ({{ loc.location_type}}) {% endif %} </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
                             <td class="nbsp">
                                 <a href="{% url 'edit_record_url' rfrnc.id  %}">item</a> / <a href="{% url 'edit_citation_url' rfrnc.citation_id  %}">document</a>
                             </td>
@@ -263,18 +271,6 @@
                     </tbody>
                 </table>
 
-
-
-                {% comment %}
-                {% for rfrnc in item_results.references %}
-                <ul>
-                    <li>reference-id: {{ rfrnc.id }}</li>
-                    <li>transcription: {{ rfrnc.transcription }}</li>
-                    <li><a href="{% url 'edit_record_url' rfrnc.id  %}">view item</a></li>
-                    <li><a href="{% url 'edit_citation_url' rfrnc.citation_id  %}">view item's document</a></li>
-                </ul>
-                {% endfor %}
-                {% endcomment %}
             </div>
         </div>
 
