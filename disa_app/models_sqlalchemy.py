@@ -223,12 +223,6 @@ class Reference(Base):
     referents = relationship(
         'Referent', backref='reference', lazy=True, cascade="delete")
 
-    # def last_edit(self):
-    #     edits = sorted([ (e.timestamp, e) for e in self.edits ],
-    #          key=operator.itemgetter(0), reverse=True)
-    #     log.debug( f'edits, ```{pprint.pformat(edits)}```' )
-    #     return edits[0][1]
-
     def last_edit(self):
         edits: List(tuple) = sorted([ (e.timestamp, e) for e in self.edits ],
              key=operator.itemgetter(0), reverse=True)
@@ -244,27 +238,6 @@ class Reference(Base):
             return self.date.strftime('%Y %B %d')
         else:
             return ''
-
-    # def dictify( self ):
-    #     if self.date:
-    #         isodate = datetime.date.isoformat( self.date )
-    #     else:
-    #         isodate = ''
-    #     jsn_referents = []
-    #     for rfrnt in self.referents:
-    #         jsn_referents.append( {'id': rfrnt.id, 'age': rfrnt.age, 'sex': rfrnt.sex} )
-    #     data = {
-    #         'id': self.id,
-    #         'citation_id': self.citation_id,
-    #         'reference_type_id': self.reference_type_id,
-    #         'reference_type_name': self.reference_type.name,  # NB: this appears to be an sqlalchemy convention -- that if there is a ForeignKey, I can just go ahead and refernce the property name.
-    #         'national_context_id': self.national_context_id,
-    #         'date': isodate,
-    #         'transcription': self.transcription,
-    #         'referents': jsn_referents,
-    #         'last_edit': self.last_edit().timestamp.strftime('%Y-%m-%d')
-    #         }
-    #     return data
 
     def dictify( self ):
         if self.date:
