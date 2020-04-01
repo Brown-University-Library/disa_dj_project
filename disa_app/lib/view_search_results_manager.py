@@ -280,7 +280,7 @@ def process_items( all_items, session ) -> list:
         # except:
         #     log.exception( f'problem processing location info for rfrnc, ```{rfrnc}```' )
     rfrncs_info = {
-        'count': len(rfrncs), 'references': rfrncs, 'fields_searched': ['transcription'] }
+        'count': len(rfrncs), 'references': rfrncs, 'fields_searched': ['transcription (display truncated)', 'location-fields'] }
     log.debug( f'rfrncs_info, ```{pprint.pformat( rfrncs_info )}```' )
     return rfrncs_info
 
