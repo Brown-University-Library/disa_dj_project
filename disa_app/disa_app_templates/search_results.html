@@ -254,7 +254,7 @@
                         {% for rfrnc in item_results.references %}
                         <tr>
                             <td>{{ rfrnc.id }}</td>
-                            <td class="transcription">{{ rfrnc.transcription }}</td>
+                            <td class="transcription">{{ rfrnc.transcription|truncatewords_html:3000 }}</td>
                             <!-- <td>location_info: {{ rfrnc.location_info }}</td> -->
                             <td>
                                 <ul>
