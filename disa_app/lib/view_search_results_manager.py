@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime, json, logging, os, pprint
-from operator import itemgetter
+# from operator import itemgetter
 
 import django, sqlalchemy
 from disa_app import settings_app
@@ -119,6 +119,9 @@ def query_persons_via_tribes( srch_text, session ) -> list:
 def process_persons( all_persons, session ):
     """ Searches `Person` table.
         Called by run_search() """
+    log.debug( f'all_persons before sort, ```{pprint.pformat(all_persons)}```' )
+    all_persons.sort( key=lambda prsn: prsn.display_name() )
+    log.debug( f'all_persons after sort, ```{pprint.pformat(all_persons)}```' )
     people = []
     for person in all_persons:
         prsn_dct = person.dictify()
@@ -232,6 +235,9 @@ def query_items_via_location( srch_text, session  ) -> list:
 def process_items( all_items, session ) -> list:
     """ Prepares item-display data.
         Called by run_search() """
+    log.debug( f'all_items before sort, ```{pprint.pformat(all_items)}```' )
+    all_items.sort( key=lambda rfrnc: rfrnc.id )
+    log.debug( f'all_items after sort, ```{pprint.pformat(all_items)}```' )
     rfrncs = []
     for rfrnc in all_items:
         try:
