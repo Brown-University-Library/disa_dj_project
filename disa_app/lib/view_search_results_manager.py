@@ -236,8 +236,6 @@ def process_items( all_items, session ) -> list:
     """ Prepares item-display data.
         Called by run_search() """
     log.debug( f'all_items before sort, ```{pprint.pformat(all_items)}```' )
-    all_items.sort( key=lambda rfrnc: rfrnc.id )
-    log.debug( f'all_items after sort, ```{pprint.pformat(all_items)}```' )
     rfrncs = []
     for rfrnc in all_items:
         try:
@@ -250,6 +248,10 @@ def process_items( all_items, session ) -> list:
         #     log.debug( f'rfrnc.display_location_info(), ```{rfrnc.display_location_info()}```' )
         # except:
         #     log.exception( f'problem processing location info for rfrnc, ```{rfrnc}```' )
+
+    rfrncs.sort( key=lambda entry: entry['id'] )
+    log.debug( f'rfrncs after sort, ```{pprint.pformat(rfrncs)}```' )
+
     rfrncs_info = {
         'count': len(rfrncs), 'references': rfrncs, 'fields_searched': ['transcription (display truncated)', 'location-fields'] }
     log.debug( f'rfrncs_info, ```{pprint.pformat( rfrncs_info )}```' )
