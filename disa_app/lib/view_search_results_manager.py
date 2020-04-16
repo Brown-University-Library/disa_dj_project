@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime, json, logging, os, pprint
+from operator import itemgetter
 
 import django, sqlalchemy
 from disa_app import settings_app
@@ -42,26 +43,6 @@ def run_search( srch_text: str, start_time: datetime.datetime ) -> dict:
         }
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     return data
-
-
-# def run_query( srch_text, session ) -> dict:
-#     """ Caller of individual queries.
-#         Called by run_search()
-#         Makes caching easier; TODO: consider async db calls. """
-#     queried_persons: list = query_persons( srch_text, session )
-#     queried_persons_via_tribes: list = query_persons_via_tribes( srch_text, session )
-#     all_persons = list( set(queried_persons + queried_persons_via_tribes) )
-
-#     people_results = process_persons( all_persons, session )
-
-#     citation_results = search_citations( srch_text, session )
-
-#     item_results = search_items( srch_text, session )
-
-#     query_dct = {
-#         'people_results': people_results, 'citation_results': citation_results, 'item_results': item_results }
-#     log.debug( 'returning query_dct' )
-#     return query_dct
 
 
 def run_query( srch_text, session ) -> dict:
@@ -187,22 +168,6 @@ def search_citations( srch_text, session ):
     return citations_info
 
 
-# def search_items( srch_text, session ):
-#     """ Searches `Reference` table on transcription.
-#         Called by run_search() """
-#     rfrncs = []
-#     qset_rfrncs = session.query( models_alch.Reference ).filter(
-#         or_(
-#             models_alch.Reference.transcription.contains( srch_text ),
-#             ) ).all()
-#     for rfrnc in qset_rfrncs:
-#         rfrncs.append( rfrnc.dictify() )
-#     rfrncs_info = {
-#         'count': len(rfrncs), 'references': rfrncs, 'fields_searched': ['transcription'] }
-#     log.debug( f'rfrncs_info, ```{pprint.pformat( rfrncs_info )}```' )
-#     return rfrncs_info
-
-
 def query_items_via_transcription( srch_text, session  ) -> list:
     """ Searches `Reference` table on transcription.
         Called by run_search() """
@@ -310,26 +275,7 @@ def process_items( all_items, session ) -> list:
 #     return
 
 
-# def search_items_by_location( srch_text, session ):
-#     """ Searches `Reference` table on location.
-#         Called by run_search() """
-#     rfrncs = []
-#     qset_rfrncs = session.query( models_alch.Reference ).all()
-#     log.debug( f'len(qset_rfrncs), ```{len(qset_rfrncs)}```' )
-
-#     rfrnc = qset_rfrncs[0]
-#     log.debug( f'rfrnc.__dict__, ```{pprint.pformat(rfrnc.__dict__)}```' )
-#     log.debug( f'rfrnc.locations, ```{pprint.pformat(rfrnc.locations)}```' )
-
-#     rfrnc_locations = rfrnc.locations
-#     for rfrnc_location in rfrnc_locations:
-#         log.debug( f'rfrnc_location.location.name, ```{rfrnc_location.location.name}```' )
-#         log.debug( f'rfrnc_location.location_type.name, ```{rfrnc_location.location_type.name}```' )
-#     """
-#     This yields New-London (reference-town) and Connecticut (reference-colony/state)
-#     """
-    # 1/0
-    # return
+# ====================
 
 
 def experiment():
