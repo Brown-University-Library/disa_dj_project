@@ -44,26 +44,6 @@ def run_search( srch_text: str, start_time: datetime.datetime ) -> dict:
     return data
 
 
-# def run_query( srch_text, session ) -> dict:
-#     """ Caller of individual queries.
-#         Called by run_search()
-#         Makes caching easier; TODO: consider async db calls. """
-#     queried_persons: list = query_persons( srch_text, session )
-#     queried_persons_via_tribes: list = query_persons_via_tribes( srch_text, session )
-#     all_persons = list( set(queried_persons + queried_persons_via_tribes) )
-
-#     people_results = process_persons( all_persons, session )
-
-#     citation_results = search_citations( srch_text, session )
-
-#     item_results = search_items( srch_text, session )
-
-#     query_dct = {
-#         'people_results': people_results, 'citation_results': citation_results, 'item_results': item_results }
-#     log.debug( 'returning query_dct' )
-#     return query_dct
-
-
 def run_query( srch_text, session ) -> dict:
     """ Caller of individual queries.
         Called by run_search()
@@ -138,6 +118,8 @@ def query_persons_via_tribes( srch_text, session ) -> list:
 def process_persons( all_persons, session ):
     """ Searches `Person` table.
         Called by run_search() """
+    log.debug( f'all_persons before sort, ```{pprint.pformat(all_persons)}```' )
+    all_persons = sorted( all_persons, key=itemgetter('age') )
     people = []
     for person in all_persons:
         prsn_dct = person.dictify()
@@ -185,22 +167,6 @@ def search_citations( srch_text, session ):
         'count': len(citations), 'citations': citations, 'fields_searched': ['display', 'comments'] }
     log.debug( f'citations_info, ```{pprint.pformat( citations_info )}```' )
     return citations_info
-
-
-# def search_items( srch_text, session ):
-#     """ Searches `Reference` table on transcription.
-#         Called by run_search() """
-#     rfrncs = []
-#     qset_rfrncs = session.query( models_alch.Reference ).filter(
-#         or_(
-#             models_alch.Reference.transcription.contains( srch_text ),
-#             ) ).all()
-#     for rfrnc in qset_rfrncs:
-#         rfrncs.append( rfrnc.dictify() )
-#     rfrncs_info = {
-#         'count': len(rfrncs), 'references': rfrncs, 'fields_searched': ['transcription'] }
-#     log.debug( f'rfrncs_info, ```{pprint.pformat( rfrncs_info )}```' )
-#     return rfrncs_info
 
 
 def query_items_via_transcription( srch_text, session  ) -> list:
@@ -285,51 +251,7 @@ def process_items( all_items, session ) -> list:
     return rfrncs_info
 
 
-# def search_items_by_location( srch_text, session ):
-#     """ Searches `Reference` table on location.
-#         Called by run_search() """
-#     rfrncs = []
-#     qset_location_types = session.query( models_alch.LocationType ).all()
-#     for qset_location_type in qset_location_types:
-#         log.debug( f'qset_location_type.name, ```{qset_location_type.name}```' )
-#         """
-#         This yields a list of all the collection-type names
-#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Colony/State```
-#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Location```
-#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Locale```
-#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```City```
-#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Colony```
-#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```State```
-#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Town```
-#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```County```
-#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Region```
-#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Church```
-#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Ship```
-#         """
-#     1/0
-#     return
-
-
-# def search_items_by_location( srch_text, session ):
-#     """ Searches `Reference` table on location.
-#         Called by run_search() """
-#     rfrncs = []
-#     qset_rfrncs = session.query( models_alch.Reference ).all()
-#     log.debug( f'len(qset_rfrncs), ```{len(qset_rfrncs)}```' )
-
-#     rfrnc = qset_rfrncs[0]
-#     log.debug( f'rfrnc.__dict__, ```{pprint.pformat(rfrnc.__dict__)}```' )
-#     log.debug( f'rfrnc.locations, ```{pprint.pformat(rfrnc.locations)}```' )
-
-#     rfrnc_locations = rfrnc.locations
-#     for rfrnc_location in rfrnc_locations:
-#         log.debug( f'rfrnc_location.location.name, ```{rfrnc_location.location.name}```' )
-#         log.debug( f'rfrnc_location.location_type.name, ```{rfrnc_location.location_type.name}```' )
-#     """
-#     This yields New-London (reference-town) and Connecticut (reference-colony/state)
-#     """
-    # 1/0
-    # return
+# ====================
 
 
 def experiment():
