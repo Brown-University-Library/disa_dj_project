@@ -215,38 +215,35 @@ def query_items_via_location( srch_text, session  ) -> list:
 def process_items( all_items, srch_text ) -> list:
     """ Prepares item-display data.
         Called by run_query() """
-    log.debug( f'all_items before sort, ```{pprint.pformat(all_items)}```' )
+    # log.debug( f'all_items before sort, ```{pprint.pformat(all_items)}```' )
     rfrncs = []
     for rfrnc in all_items:
         try:
             rfrnc_dct = rfrnc.dictify()
-            # rfrnc_dct['transcription'] = update_transcription( rfrnc_dct.get('transcription', '').lower(), srch_text )
             rfrnc_dct['transcription'] = update_transcription( rfrnc_dct.get('transcription', ''), srch_text )
             rfrncs.append( rfrnc_dct )
         except:
-            log.exception( f'problem with reference, ```{rfrnc}```' )
+            log.exception( f'problem with reference, ```{rfrnc}```; traceback follows but processing will continue' )  # occasionally a reference in the list is None; TODO- determine why that is.
     rfrncs.sort( key=lambda entry: entry['id'] )
-    log.debug( f'rfrncs after sort, ```{pprint.pformat(rfrncs)}```' )
-
+    # log.debug( f'rfrncs after sort, ```{pprint.pformat(rfrncs)}```' )
     rfrncs_info = {
         'count': len(rfrncs), 'references': rfrncs, 'fields_searched': ['transcription (display truncated)', 'location-fields'] }
-    log.debug( f'rfrncs_info, ```{pprint.pformat( rfrncs_info )}```' )
+    log.debug( f'rfrncs_info (first 1000 characters), ```{pprint.pformat( rfrncs_info )[0:1000]}```...' )
     return rfrncs_info
 
 
 def update_transcription( transcription, srch_text ) -> str:
     """ Replaces transcription with transcription segments.
         Called by process_items() """
-    log.debug( f'transcription, ```{transcription[0:100]}```' )
-    log.debug( f'srch_text, ``{srch_text}``')
+    srch_text = srch_text.lower()
+    extra_characters = 40
     finds = []
     transcription_lowercase = transcription.lower()
     for match in re.finditer( srch_text, transcription_lowercase ):
-        log.debug( f'match found: start, ``{match.start()}``; end, ``{match.end()}``' )
-        extra_characters = 40
+        # log.debug( f'match found: start, ``{match.start()}``; end, ``{match.end()}``' )
         start_slice = (match.start() - extra_characters) if (match.start() - extra_characters) >= 0 else 0
-        end_slice = (match.end() + 40) if (match.end() + 40) <= len(transcription) else len(transcription)
-        big_slice = f'…{transcription[start_slice: end_slice]}…'
+        end_slice = (match.end() + extra_characters) if (match.end() + extra_characters) <= len(transcription) else len(transcription)
+        big_slice = f'…{transcription[start_slice: end_slice].strip()}…'
         finds.append( big_slice )
     log.debug( f'finds, ```{pprint.pformat(finds)}```' )
     return finds
