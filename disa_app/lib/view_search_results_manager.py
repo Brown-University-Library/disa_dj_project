@@ -232,14 +232,14 @@ def process_items( all_items, srch_text ) -> list:
     return rfrncs_info
 
 
-def update_transcription( transcription, srch_text ) -> str:
+def update_transcription( transcription, srch_text ) -> list:
     """ Replaces transcription with transcription segments.
         Called by process_items() """
-    srch_text = srch_text.lower()
+    transcription_lowercase = transcription.lower()
+    srch_text_lowercase = srch_text.lower()
     extra_characters = 40
     finds = []
-    transcription_lowercase = transcription.lower()
-    for match in re.finditer( srch_text, transcription_lowercase ):
+    for match in re.finditer( srch_text_lowercase, transcription_lowercase ):
         # log.debug( f'match found: start, ``{match.start()}``; end, ``{match.end()}``' )
         start_slice = (match.start() - extra_characters) if (match.start() - extra_characters) >= 0 else 0
         end_slice = (match.end() + extra_characters) if (match.end() + extra_characters) <= len(transcription) else len(transcription)
@@ -247,32 +247,6 @@ def update_transcription( transcription, srch_text ) -> str:
         finds.append( big_slice )
     log.debug( f'finds, ```{pprint.pformat(finds)}```' )
     return finds
-
-
-# def process_items( all_items, session ) -> list:
-#     """ Prepares item-display data.
-#         Called by run_search() """
-#     log.debug( f'all_items before sort, ```{pprint.pformat(all_items)}```' )
-#     rfrncs = []
-#     for rfrnc in all_items:
-#         try:
-#             rfrnc_dct = rfrnc.dictify()
-#             rfrncs.append( rfrnc_dct )
-#         except:
-#             log.exception( f'problem with reference, ```{rfrnc}```' )
-
-#         # try:
-#         #     log.debug( f'rfrnc.display_location_info(), ```{rfrnc.display_location_info()}```' )
-#         # except:
-#         #     log.exception( f'problem processing location info for rfrnc, ```{rfrnc}```' )
-
-#     rfrncs.sort( key=lambda entry: entry['id'] )
-#     log.debug( f'rfrncs after sort, ```{pprint.pformat(rfrncs)}```' )
-
-#     rfrncs_info = {
-#         'count': len(rfrncs), 'references': rfrncs, 'fields_searched': ['transcription (display truncated)', 'location-fields'] }
-#     log.debug( f'rfrncs_info, ```{pprint.pformat( rfrncs_info )}```' )
-#     return rfrncs_info
 
 
 # def search_items_by_location( srch_text, session ):
