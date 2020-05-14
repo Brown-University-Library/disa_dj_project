@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 
-import logging
+import logging, pprint
 
 from disa_app.lib import view_search_results_manager
+from django.conf import settings as project_settings
 from django.test import TestCase  # from django.test import SimpleTestCase as TestCase    ## TestCase requires db, so if you're not using a db, and want tests, try this
+from django.test.utils import override_settings
 
 
 log = logging.getLogger(__name__)
 TestCase.maxDiff = 1000
 
 
-class RootUrlTest( TestCase ):
-    """ Checks root urls. """
+class Client_Misc_Test( TestCase ):
+    """ Checks url responses. """
 
     def test_root_url_no_slash(self):
         """ Checks '/root_url' (with no slash). """
@@ -27,7 +29,32 @@ class RootUrlTest( TestCase ):
         redirect_url = response._headers['location'][1]
         self.assertEqual(  '/browse/', redirect_url )
 
+    @override_settings(DEBUG=True)
+    def test_error_url_on_dev(self):
+        """ Checks that '/error_check/' url generates an exception in development.
+            Note: for tests, django sets settings.DEBUG to False, thus this override.
+            Note: for tests, django will not trigger the email, so setting another terminal window to:
+                  python3 -m smtpd -n -c DebuggingServer localhost:1026
+                  ...will not show a sent email (it will on a localhost web-hit of the url, though)
+            Thanks to B.C. and <https://stackoverflow.com/a/13596201> for figuring out how to test for an exception. """
+        log.debug( f'project_settings.DEBUG, ``{project_settings.DEBUG}``' )
+        result = 'init'
+        try:
+            response = self.client.get( '/error_check/' )
+        except Exception as e:
+            log.debug( f'e, ``{e}``' )
+            result = repr(e)
+        self.assertEqual( "Exception('error-check triggered; admin emailed')", result )  # web-hit returns standard 500 http-status
+
+    def test_error_url_on_production(self):
+        """ Checks '/error_check/' url.
+            Note: for testing, django defaults settings.DEBUG to False """
+        log.debug( f'project_settings.DEBUG, ``{project_settings.DEBUG}``' )
+        response = self.client.get( '/error_check/' )
+        self.assertEqual( 404, response.status_code )
+
     # end class RootUrlTest()
+
 
 
 class SearchTest( TestCase ):
