@@ -53,7 +53,7 @@ class Client_Misc_Test( TestCase ):
         response = self.client.get( '/error_check/' )
         self.assertEqual( 404, response.status_code )
 
-    # end class RootUrlTest()
+    # end class Client_Misc_Test()
 
 
 
