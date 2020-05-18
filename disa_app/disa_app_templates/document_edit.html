@@ -65,6 +65,13 @@
       margin-right: 10%;
     }
 
+
+    /*deletion-confirmation*/
+    p#confirmation-line-2 {
+        margin-top: -1em;
+    }
+
+
 </style>
 {% endblock %}
 
@@ -112,7 +119,51 @@
                     <textarea class="form-control" id="acknowledgements"></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary" id="doc_update">Update</button>
-                <button type="submit" class="btn btn-danger" id="doc_delete">Update</button>
+
+
+
+
+
+
+
+
+                <!-- Button to Open the Modal -->
+                <!-- <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#myModal"> -->
+
+                <!-- <button class="btn btn-danger del-reference"><span class="fas fa-times-circle"></span></button> -->
+
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
+                    <span class="fas fa-times-circle"></span> Delete Document
+                </button>
+                <!-- The Modal -->
+                <div class="modal" id="myModal">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+                      <!-- Modal body -->
+                      <div class="modal-body text-center mb-5">
+                        <!-- <img src="right.png" class="img-responsive"> -->
+                        <h1>Confirming...</h1>
+                        <p>Do you really want to delete this document?</p><p id="confirmation-line-2">This process cannot be undone.</p>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-secondary btn-lg mr-2 rounded-lg" data-dismiss="modal">Cancel</button>
+                          <button type="button" class="btn btn-danger btn-lg rounded-lg del-document" id="confirm-delete-button">Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+
+
+
+
             </form>
         </div>
         <div class='col-md-1'>
@@ -399,9 +450,14 @@ var deleteReference = function($refRow, ctMap) {
 $( document ).ready(function() {
     var doc_id = getDocumentId();
     console.log( "in document.ready(); doc_id, ", doc_id );
-    // {# var cite_type_fields = JSON.parse('{{ ct_fields | tojson | safe}}'); #}
+    //
     var cite_type_fields = JSON.parse( '{{ ct_fields_json | safe }}' );
     readDocumentData(doc_id, cite_type_fields, false);
+    //
+    // var documents_url = "{{ documents_url }}";
+    var documents_url = "{% url 'editor_index_url' %}";
+    console.log( "in document.ready(); documents_url, ", documents_url );
+    //
     $( "#document_form" ).accordion({
         collapsible: true,
         header: "h2",
@@ -442,6 +498,28 @@ $( document ).ready(function() {
       $(this).parent().remove();
       readDocumentData(doc_id, cite_type_fields, true);
     });
+
+
+
+
+
+
+
+
+    $( "#confirm-delete-button" ).on('click', function(e) {
+      e.preventDefault();
+      // updateDocumentData(doc_id, cite_type_fields);
+      alert( "put deletion code here." );
+      window.location.replace( documents_url );
+    });
+
+
+
+
+
+
+
+
 });
 </script>
 {% endblock %}
