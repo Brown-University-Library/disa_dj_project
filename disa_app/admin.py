@@ -5,7 +5,7 @@ from disa_app.models import UserProfile
 
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = [ 'id', 'user', 'uu_id', 'email', 'old_db_id', 'last_logged_in' ]
+    list_display = [ 'id', 'user', 'uu_id', 'email', 'old_db_id', 'can_delete_doc', 'last_logged_in' ]
     readonly_fields = [ 'uu_id' ]
     search_fields = [ 'uu_id', 'email', 'old_db_id' ]
 
