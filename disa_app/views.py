@@ -193,6 +193,7 @@ def edit_citation( request, cite_id=None ):
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
         context['user_first_name'] = request.user.first_name
+        context['can_delete_doc'] = request.user.profile.can_delete_doc
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:

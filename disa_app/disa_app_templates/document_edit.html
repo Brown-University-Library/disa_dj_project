@@ -127,6 +127,7 @@
 
 
 
+                {% if can_delete_doc %}
                 <!-- Button to Open the Modal -->
                 <!-- <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#myModal"> -->
 
@@ -159,6 +160,7 @@
                     </div>
                   </div>
                 </div>
+                {% endif %}
 
 
 
@@ -509,12 +511,14 @@ $( document ).ready(function() {
 
 
 
+    {% if can_delete_doc %}
     $( "#confirm-delete-button" ).on('click', function(e) {
       e.preventDefault();
       // updateDocumentData(doc_id, cite_type_fields);
       alert( "put deletion code here." );
       window.location.replace( documents_url );
     });
+    {% endif %}
 
 
 
