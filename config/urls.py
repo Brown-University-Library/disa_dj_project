@@ -64,7 +64,7 @@ urlpatterns = [
     url( r'^error_check/$', views.error_check, name='error_check_url' ),
 
     url( r'^$', RedirectView.as_view(pattern_name='browse_url') ),
-    url( r'^$', views.temp_response, name='temp_name_url' ),
+    # url( r'^$', views.temp_response, name='temp_name_url' ),
 
     ]
 
