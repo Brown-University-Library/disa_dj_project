@@ -201,7 +201,7 @@ def query_items_via_location( srch_text, session  ) -> list:
             log.debug( f'qset_ref_location.location_type.name, ```{qset_ref_location.location_type.name}```' )
             location_type_name = qset_ref_location.location_type.name
         except:
-            log.exception( 'problem with name, traceback follows, followed by __dict__...' )
+            log.exception( 'non-stopping problem with qset_ref_location.location.name, traceback follows, followed by __dict__...' )
             log.debug( f'qset_ref_location.__dict__, ```{qset_ref_location.__dict__}```' )
             pass
         log.debug( f'srch_text, ```{srch_text}```' )
