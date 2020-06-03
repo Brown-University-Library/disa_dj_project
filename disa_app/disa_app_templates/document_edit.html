@@ -326,23 +326,6 @@ var initializeForm = function (data, ctMap) {
     }
 }
 
-// var readDocumentData = function(docId, ctMap, copy) {
-//     if (copy) {
-//         var doc_data_api = "{% url 'data_documents_url' 'copy' %}";
-//         console.log( 'in readDocumentData; doc_data_api for `copy`, ', doc_data_api );
-//     } else {
-//         //{# var doc_data_api = "{% url 'data_documents_url' None %}" + docId; #}
-//         console.log( 'hereB' );
-//         var doc_data_api = "{% url 'data_documents_url' 'STUB' %}".replace( "STUB", docId );  {#  odd; created urls in `record_edit.html` can be created with variables #}
-//         console.log( 'in readDocumentData; doc_data_api, ', doc_data_api );
-//     }
-//     console.log( "docId, ", docId );
-//     console.log( "copy, ", copy );
-//     $.get(doc_data_api, function(data) {
-//         initializeForm(data, ctMap);
-//     });
-// }
-
 var readDocumentData = function(docId, ctMap, copy) {
     if (copy) {
         var doc_data_api = "{% url 'data_documents_url' 'copy' %}";
@@ -408,21 +391,6 @@ var deactivateReferenceDelete = function($cancelBtn) {
   return true;
 }
 
-// var deleteReference = function($refRow, ctMap) {
-//     var ref_del_api = "{% url 'data_reference_url' 'STUB' %}"
-//         .replace('STUB', $refRow.attr('data-reference'));
-//     console.log( 'in deleteReference; ref_del_api, ', ref_del_api );
-//     $.ajax({
-//         type: "DELETE",
-//         url: ref_del_api,
-//         success: function(data) {
-//           $refRow.remove();
-//           initializeForm(data, ctMap);
-//           $('#document_form').accordion('option','active', false );
-//         }
-//     });
-// }
-
 var deleteReference = function($refRow, ctMap) {
     var ref_del_api = "{% url 'data_reference_url' 'STUB' %}"
         .replace('STUB', $refRow.attr('data-reference'));
@@ -435,6 +403,8 @@ var deleteReference = function($refRow, ctMap) {
         }
     });
 }
+
+// var deleteDocument =
 
     // $.ajax({
     //     type: method,
@@ -506,11 +476,6 @@ $( document ).ready(function() {
 
 
 
-
-
-
-
-
     {% if can_delete_doc %}
     $( "#confirm-delete-button" ).on('click', function(e) {
       e.preventDefault();
@@ -519,11 +484,6 @@ $( document ).ready(function() {
       window.location.replace( documents_url );
     });
     {% endif %}
-
-
-
-
-
 
 
 
