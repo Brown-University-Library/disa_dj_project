@@ -224,6 +224,7 @@ class Reference(Base):
         'Referent', backref='reference', lazy=True, cascade="delete")
 
     def last_edit(self):
+        """ Note: self.edits is possible because of ReferenceEdit() """
         edits: List(tuple) = sorted([ (e.timestamp, e) for e in self.edits ],
              key=operator.itemgetter(0), reverse=True)
         log.debug( f'edits, ```{edits}```' )
@@ -565,8 +566,6 @@ class ReferentRelationship(Base):
         return implied
 
 
-
-
 class RoleRelationship(Base):
     __tablename__ = '2_role_relationships'
 
@@ -590,6 +589,7 @@ class RoleRelationship(Base):
         else:
             return
 
+
 class RoleRelationshipType(Base):
     __tablename__ = '1_role_relationship_types'
 
@@ -597,11 +597,6 @@ class RoleRelationshipType(Base):
     name = Column(String(255))
     relationships = relationship(
         'RoleRelationship', backref='related_as', lazy=True)
-
-
-
-
-
 
 
 class Tribe(Base):
@@ -613,8 +608,6 @@ class Tribe(Base):
         'Referent',
         secondary=has_tribe,
         back_populates='tribes' )
-
-
 
 
 class User(Base):
@@ -664,8 +657,6 @@ class User(Base):
 #     return User.query.get(int(id))
 
 
-
-
 class ReferenceEdit(Base):
     __tablename__ = '5_reference_edits'
 
@@ -679,6 +670,10 @@ class ReferenceEdit(Base):
     edited_by = relationship(User,
         primaryjoin=(user_id == User.id),
         backref='edits')
+
+    def __repr__(self):
+        return f'<ReferenceEdit {self.id}>'
+
 
 # class ReferenceEdit(db.Model):
 #     __tablename__ = '5_reference_edits'

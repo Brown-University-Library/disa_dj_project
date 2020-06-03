@@ -24,6 +24,7 @@ def make_session() -> sqlalchemy.orm.session.Session:
 def query_documents( username: str, old_usr_db_id: int ) -> dict:
     """ Queries and massages data.
         Called by views.editor_index() """
+    log.debug( f'username, ``{username}``; old_usr_db_id, ``{old_usr_db_id}``' )
     session = make_session()
     data = {}
     all_cites = session.query( models_alch.Citation ).all()
@@ -42,6 +43,24 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
     return data
 
 
+# def make_wrapped_refs( has_refs ):
+#     """ Takes list of citation-objects,
+#         Returns list of tuples, with each tuple comprised of a citation-object, the (last?) editor-id, the (last?) editor-timestamp, and the (last?) editor-email.
+#         Making this into a function instead of a list comprehension for clarity.
+#         Called by query_documents() """
+#     # wrapped_refs = [ (cite, edit.user_id, edit.timestamp, edit.edited_by.email)
+#     #                     for cite in has_refs
+#     #                         for ref in cite.references
+#     #                             for edit in ref.edits ]
+#     wrapped_refs = []
+#     for cite in has_refs:
+#         for ref in cite.references:
+#             for edit in ref.edits:
+#                 wrapped_refs.append( (cite, edit.user_id, edit.timestamp, edit.edited_by.email) )
+#     log.debug( f'wrapped_refs (first 5) of `{len(wrapped_refs)}`, ```{pprint.pformat(wrapped_refs[0:5])}...```' )
+#     return wrapped_refs
+
+
 def make_wrapped_refs( has_refs ):
     """ Takes list of citation-objects,
         Returns list of tuples, with each tuple comprised of a citation-object, the (last?) editor-id, the (last?) editor-timestamp, and the (last?) editor-email.
@@ -55,7 +74,11 @@ def make_wrapped_refs( has_refs ):
     for cite in has_refs:
         for ref in cite.references:
             for edit in ref.edits:
-                wrapped_refs.append( (cite, edit.user_id, edit.timestamp, edit.edited_by.email) )
+                try:
+                    wrapped_refs.append( (cite, edit.user_id, edit.timestamp, edit.edited_by.email) )
+                except:
+                    log.warning( f'problem in cite, ``{cite}``; edit, ``{edit}``' )
+                    log.exception( f'problem creating tuple with multiple info elements; traceback follows; processing continues' )
     log.debug( f'wrapped_refs (first 5) of `{len(wrapped_refs)}`, ```{pprint.pformat(wrapped_refs[0:5])}...```' )
     return wrapped_refs
 
