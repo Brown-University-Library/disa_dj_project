@@ -71,18 +71,18 @@ class ClientDocDataTest( TestCase ):
         redirect_url = response._headers['location'][1]
         self.assertEqual(  '/login/', redirect_url )
 
-    def test_doc_get_logged_in(self):
-        """ Checks GET. """
-        user = User.objects.create(username='test_user')
-        user.set_password('test_password')
-        user.save()
-        client = Client()
-        logged_in = client.login( username='test_user', password='test_password' )
-        self.assertEqual( True, logged_in )
-        response = self.client.get( '/data/documents/1/' )
-        log.debug( f'response, ``{response}``' )
-        log.debug( f'response.__dict__, ``{response.__dict__}``' )
-        self.assertEqual( 1, 2 )
+    # def test_doc_get_logged_in(self):
+    #     """ Checks GET. """
+    #     user = User.objects.create(username='test_user')
+    #     user.set_password('test_password')
+    #     user.save()
+    #     client = Client()
+    #     logged_in = client.login( username='test_user', password='test_password' )
+    #     self.assertEqual( True, logged_in )
+    #     response = self.client.get( '/data/documents/1/' )
+    #     log.debug( f'response, ``{response}``' )
+    #     log.debug( f'response.__dict__, ``{response.__dict__}``' )
+    #     self.assertEqual( 1, 2 )
 
 
 class SearchTest( TestCase ):
