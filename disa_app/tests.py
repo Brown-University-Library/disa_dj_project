@@ -2,8 +2,11 @@
 
 import logging, pprint
 
+from disa_app import settings_app
 from disa_app.lib import view_search_results_manager
 from django.conf import settings as project_settings
+from django.contrib.auth.models import User
+from django.test import Client
 from django.test import TestCase  # from django.test import SimpleTestCase as TestCase    ## TestCase requires db, so if you're not using a db, and want tests, try this
 from django.test.utils import override_settings
 
@@ -13,7 +16,7 @@ TestCase.maxDiff = 1000
 
 
 class Client_Misc_Test( TestCase ):
-    """ Checks url responses. """
+    """ Checks miscellaneous url responses. """
 
     def test_root_url_no_slash(self):
         """ Checks '/root_url' (with no slash). """
@@ -55,6 +58,31 @@ class Client_Misc_Test( TestCase ):
 
     # end class Client_Misc_Test()
 
+
+class ClientDocDataTest( TestCase ):
+    """ Checks document-data url responses. """
+
+    def test_doc_get_not_logged_in(self):
+        """ Checks GET. """
+        response = self.client.get( '/data/documents/1/' )
+        log.debug( f'response, ``{response}``' )
+        log.debug( f'response.__dict__, ``{response.__dict__}``' )
+        self.assertEqual( 302, response.status_code )  # permanent redirect
+        redirect_url = response._headers['location'][1]
+        self.assertEqual(  '/login/', redirect_url )
+
+    def test_doc_get_logged_in(self):
+        """ Checks GET. """
+        user = User.objects.create(username='test_user')
+        user.set_password('test_password')
+        user.save()
+        client = Client()
+        logged_in = client.login( username='test_user', password='test_password' )
+        self.assertEqual( True, logged_in )
+        response = self.client.get( '/data/documents/1/' )
+        log.debug( f'response, ``{response}``' )
+        log.debug( f'response.__dict__, ``{response.__dict__}``' )
+        self.assertEqual( 1, 2 )
 
 
 class SearchTest( TestCase ):

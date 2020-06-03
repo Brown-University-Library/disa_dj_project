@@ -221,6 +221,14 @@ def manage_post( user_id, payload ):
     ## end def manage_post()
 
 
+def manage_delete( doc_id, user_id ):
+    """ Adds mark-for-deletion entry to django-db table.
+        Called by: views.data_documents() when request.method is 'DELETE'. """
+    context = { 'status': 'foo' }
+    log.debug( f'context, ``{context}``' )
+    return context
+
+
 # ----------------
 # for reference...
 # ----------------
