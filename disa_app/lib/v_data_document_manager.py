@@ -3,9 +3,10 @@
 import datetime, json, logging, os, pprint
 
 import django, sqlalchemy
-from disa_app import settings_app
 from disa_app import models_sqlalchemy as models_alch
+from disa_app import settings_app
 from disa_app.lib import person_common
+from disa_app.models import MarkedForDeletion
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from sqlalchemy import create_engine
@@ -224,9 +225,13 @@ def manage_post( user_id, payload ):
 def manage_delete( doc_id, user_id ):
     """ Adds mark-for-deletion entry to django-db table.
         Called by: views.data_documents() when request.method is 'DELETE'. """
-    context = { 'status': 'foo' }
-    log.debug( f'context, ``{context}``' )
-    return context
+    log.debug( f'doc_id, ``{doc_id}``' )
+    markedfordeletion_entry = MarkedForDeletion( old_db_id=doc_id )
+    markedfordeletion_entry.save()
+    # context = { 'status': 'foo' }
+    # log.debug( f'context, ``{context}``' )
+    # return context
+    return
 
 
 # ----------------
