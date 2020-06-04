@@ -404,22 +404,18 @@ var deleteReference = function($refRow, ctMap) {
     });
 }
 
-// var deleteDocument =
-
-    // $.ajax({
-    //     type: method,
-    //     url: doc_data_api,
-    //     contentType: "application/json",
-    //     data: JSON.stringify(data),
-    //     success: function(data) {
-    //         if ( method === 'POST' ) {
-    //             window.location.href = data.redirect;
-    //         } else {
-    //             initializeForm(data, ctMap);
-    //             $('#document_form').accordion('option','active', false );
-    //         }
-    //     }
-    // });
+var deleteDocument = function( doc_id ) {
+    /*  This only passes the doc_id; think about passing more identifying info
+        ...so the server doesn't have to do a lookup for more document info. */
+    console.log( "in `var deleteDocument`; `doc_id`, ", doc_id );
+    var doc_data_api_root = "{% url 'data_documents_url' %}";
+    var full_doc_data_api = doc_data_api_root + doc_id + "/";
+    $.ajax({
+        type: "DELETE",
+        url: full_doc_data_api,
+    });
+    console.log( "ajax call done" );
+}
 
 
 $( document ).ready(function() {
@@ -477,12 +473,21 @@ $( document ).ready(function() {
 
 
     {% if can_delete_doc %}
+
     $( "#confirm-delete-button" ).on('click', function(e) {
       e.preventDefault();
-      // updateDocumentData(doc_id, cite_type_fields);
-      alert( "put deletion code here." );
+      deleteDocument(doc_id);
+      // alert( "put deletion code here." );
       window.location.replace( documents_url );
     });
+
+    // $( "#confirm-delete-button" ).on('click', function(e) {
+    //   e.preventDefault();
+    //   // updateDocumentData(doc_id, cite_type_fields);
+    //   alert( "put deletion code here." );
+    //   window.location.replace( documents_url );
+    // });
+
     {% endif %}
 
 
