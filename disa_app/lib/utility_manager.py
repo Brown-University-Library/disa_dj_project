@@ -33,12 +33,22 @@ def prep_referents_data() -> dict:
             'db_id': rfrnt.id,
             'db_age': rfrnt.age,
             'db_sex': rfrnt.sex,
+            'db_reference_id': rfrnt.reference_id,
+            'db_person_id': rfrnt.person_id,
             'display_name': rfrnt.display_name()
-
         }
         rfrnts_lst.append( rfrnt_dct )
     data = {
-        'info': 'a `referent` is a person associated with an item-record',
+        'info': [
+            '- a `referent` is a person associated with an item-record',
+            '  ...as opposed to a `person`-record, which I suspect was designed to allow multiple-referents to be identified as the same-person',
+            '- see the glossary at <https://github.com/Brown-University-Library/disa_dj_project/blob/master/README.md> for terms...',
+            '  ...that mean the same thing but can cause confusion when one is used in the entry-form and another is used in the database',
+            '- this list is sorted by referent.id',
+            '- the `display_name` is constructed by the related-fields `primary_name.first` + `primary_name.last`',
+            '- other referent-table db-fields (all foreign-keys to other tables): names, primary_name, roles, tribes, races, titles, vocations, origins, enslavements',
+            '  ...so a todo would be to list both the db-ids, as well as the associated text, for those fields'
+            ],
         'referents': rfrnts_lst
     }
     log.debug( 'returning' )
