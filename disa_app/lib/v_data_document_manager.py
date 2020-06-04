@@ -81,6 +81,7 @@ def manage_get( doc_id: str, user_id: int ) -> dict:
 def manage_get_all( user_id: int ) -> dict:
     """ Queries and massages data for new-document.
         Called by views.data_documents() on GET, with no doc_id """
+    log.debug( f'\n\nstarting manage_get_all()' )
     session = make_session()
     data = { 'doc': {} }
     included: list = CITATION_TYPES
