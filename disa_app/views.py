@@ -6,6 +6,7 @@ from typing import List
 import requests
 from disa_app import settings_app
 from disa_app.lib import denormalizer_document
+from disa_app.lib import utility_manager
 from disa_app.lib import v_data_document_manager  # api/documents
 from disa_app.lib import v_data_relationships_manager  # api/relationship-by-reference
 from disa_app.lib import view_data_entrant_manager  # api/people
@@ -388,6 +389,20 @@ def data_relationships( request, rltnshp_id=None ):
         log.warning( f'we shouldn\'t get here' )
         resp = HttpResponse( 'problem; see logs' )
     return resp
+
+
+# ===========================
+# utility urls -- act as viewable integrity checks
+# ===========================
+
+
+@shib_login
+def utility_referents( request ):
+    """ Called manually to check data.
+        Url: '/utility/referents/' -- 'utility_referents_url' """
+    referents: dict = utility_manager.prep_referents_data()
+    output = json.dumps( referents, sort_keys=True, indent=2 )
+    return HttpResponse( output, content_type='application/json; charset=utf-8' )
 
 
 # ===========================

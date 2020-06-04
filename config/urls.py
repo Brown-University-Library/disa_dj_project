@@ -52,6 +52,13 @@ urlpatterns = [
     url( r'^data/relationships/$', views.data_relationships, name='data_relationships_url' ),
     url( r'^data/relationships/(?P<rltnshp_id>.*)/$', views.data_relationships, name='data_relationships_url' ),
 
+    ## utility-urls (protected, act as viewable integrity checks)...
+
+    # url( r'^utility/documents/$', views.utility_documents, name='utility_documents_url' ),
+    # url( r'^utility/items/$', views.utility_items, name='utility_items_url' ),
+    url( r'^utility/referents/$', views.utility_referents, name='utility_referents_url' ),
+    # url( r'^utility/people/$', views.utility_people, name='utility_people_url' ),
+
     ## misc...
 
     url( r'^admin/', admin.site.urls ),
