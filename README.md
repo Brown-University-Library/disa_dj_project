@@ -23,5 +23,3 @@
     - The interface currently allows for relationships to be defined between `Referent` entries.
 
 ---
-
----
