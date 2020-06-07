@@ -9,6 +9,7 @@ from disa_app.lib import person_common
 from django.conf import settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from disa_app.models import MarkedForDeletion
 
 
 log = logging.getLogger(__name__)
@@ -25,9 +26,36 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
     """ Queries and massages data.
         Called by views.editor_index() """
     log.debug( f'username, ``{username}``; old_usr_db_id, ``{old_usr_db_id}``' )
+    marked = MarkedForDeletion.objects.all()
+    marked_ids = []
+    all_cites = []
     session = make_session()
+    cites_result_set = session.query( models_alch.Citation ).all()
+    if marked:
+        for entry in marked:
+            marked_ids.append( entry.old_db_id )
+        for cite in cites_result_set:
+            if cite.id not in marked_ids:
+                all_cites.append( cite )
+            else:
+                log.debug( f'skipping site, ``{cite}``' )
+    else:
+        all_cites = cites_result_set
+
     data = {}
-    all_cites = session.query( models_alch.Citation ).all()
+
+    # all_cites = session.query( models_alch.Citation ).filter( models_alch.Citation.id != 714 )  # works
+    # log.debug( f'all_cites.count(), ``{all_cites.count()}``' )
+    log.debug( f'type(all_cites), ``{type(all_cites)}``')
+    # q = session.query( models_alch.Citation ).all()
+    # if marked:
+    #     log.debug( f'len(marked), ``{len(marked)}``' )
+    #     for entry in marked:
+    #         q.filter( models_alch.Citation.id != entry.old_db_id )
+    #         log.debug( f'q.count(), ``{q.count()}``' )
+    # all_cites = q
+    # log.debug( f'len(all_cites), ``{len(all_cites)}``' )
+    # log.debug( f'cite, ``{pprint.pformat( all_cites[0] )}``' )
     no_refs = [ (cite, old_usr_db_id, datetime.datetime.now(), '')
         for cite in all_cites if len(cite.references) == 0 ]
     has_refs = [ cite
@@ -43,22 +71,26 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
     return data
 
 
-# def make_wrapped_refs( has_refs ):
-#     """ Takes list of citation-objects,
-#         Returns list of tuples, with each tuple comprised of a citation-object, the (last?) editor-id, the (last?) editor-timestamp, and the (last?) editor-email.
-#         Making this into a function instead of a list comprehension for clarity.
-#         Called by query_documents() """
-#     # wrapped_refs = [ (cite, edit.user_id, edit.timestamp, edit.edited_by.email)
-#     #                     for cite in has_refs
-#     #                         for ref in cite.references
-#     #                             for edit in ref.edits ]
-#     wrapped_refs = []
-#     for cite in has_refs:
-#         for ref in cite.references:
-#             for edit in ref.edits:
-#                 wrapped_refs.append( (cite, edit.user_id, edit.timestamp, edit.edited_by.email) )
-#     log.debug( f'wrapped_refs (first 5) of `{len(wrapped_refs)}`, ```{pprint.pformat(wrapped_refs[0:5])}...```' )
-#     return wrapped_refs
+# def query_documents( username: str, old_usr_db_id: int ) -> dict:
+#     """ Queries and massages data.
+#         Called by views.editor_index() """
+#     log.debug( f'username, ``{username}``; old_usr_db_id, ``{old_usr_db_id}``' )
+#     session = make_session()
+#     data = {}
+#     all_cites = session.query( models_alch.Citation ).all()
+#     no_refs = [ (cite, old_usr_db_id, datetime.datetime.now(), '')
+#         for cite in all_cites if len(cite.references) == 0 ]
+#     has_refs = [ cite
+#         for cite in all_cites if len(cite.references) > 0 ]
+#     wrapped_refs = make_wrapped_refs( has_refs )
+#     user_cites = [ wrapped
+#         for wrapped in wrapped_refs if wrapped[1] == old_usr_db_id ]
+#     srtd_all = sort_documents( wrapped_refs )  # was ```srtd_all = sort_documents(no_refs + wrapped_refs)```
+#     srtd_user = sort_documents( user_cites )
+#     data['user_documents'] = jsonify_entries( srtd_user[0:10] )
+#     data['documents'] = jsonify_entries( srtd_all )
+#     log.debug( f'data (first 1K chars), ```{pprint.pformat(data)[0:1000]}...```' )
+#     return data
 
 
 def make_wrapped_refs( has_refs ):
