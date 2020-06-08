@@ -43,19 +43,7 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
         all_cites = cites_result_set
 
     data = {}
-
-    # all_cites = session.query( models_alch.Citation ).filter( models_alch.Citation.id != 714 )  # works
-    # log.debug( f'all_cites.count(), ``{all_cites.count()}``' )
     log.debug( f'type(all_cites), ``{type(all_cites)}``')
-    # q = session.query( models_alch.Citation ).all()
-    # if marked:
-    #     log.debug( f'len(marked), ``{len(marked)}``' )
-    #     for entry in marked:
-    #         q.filter( models_alch.Citation.id != entry.old_db_id )
-    #         log.debug( f'q.count(), ``{q.count()}``' )
-    # all_cites = q
-    # log.debug( f'len(all_cites), ``{len(all_cites)}``' )
-    # log.debug( f'cite, ``{pprint.pformat( all_cites[0] )}``' )
     no_refs = [ (cite, old_usr_db_id, datetime.datetime.now(), '')
         for cite in all_cites if len(cite.references) == 0 ]
     has_refs = [ cite

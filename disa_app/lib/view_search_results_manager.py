@@ -4,9 +4,10 @@ import datetime, json, logging, os, pprint, re
 # from operator import itemgetter
 
 import django, sqlalchemy
-from disa_app import settings_app
 from disa_app import models_sqlalchemy as models_alch
+from disa_app import settings_app
 from disa_app.lib import person_common
+from disa_app.models import MarkedForDeletion
 from django.conf import settings
 from django.core.cache import cache
 from sqlalchemy import create_engine, or_
@@ -151,9 +152,35 @@ def process_persons( all_persons, session ):
     return people_info
 
 
+# def search_citations( srch_text, session ):
+#     """ Searches `Citation` table.
+#         Called by run_search() """
+#     citations = []
+#     qset_citations = session.query( models_alch.Citation ).filter(
+#         or_(
+#             models_alch.Citation.display.contains( srch_text ),
+#             models_alch.Citation.comments.contains( srch_text )
+#             ) ).all()
+#     for cite in qset_citations:
+#         cite_dct = cite.dictify()
+#         if not cite_dct['comments']:
+#             cite_dct['comments'] = '(None)'
+#         citations.append( cite_dct )
+#     citations_info = {
+#         'count': len(citations), 'citations': citations, 'fields_searched': ['display', 'comments'] }
+#     log.debug( f'citations_info, ```{pprint.pformat( citations_info )}```' )
+#     return citations_info
+
+
 def search_citations( srch_text, session ):
     """ Searches `Citation` table.
         Called by run_search() """
+    marked_ids = []
+    marked = MarkedForDeletion.objects.all()
+    if marked:
+        for entry in marked:
+            marked_ids.append( entry.old_db_id )
+
     citations = []
     qset_citations = session.query( models_alch.Citation ).filter(
         or_(
@@ -161,10 +188,11 @@ def search_citations( srch_text, session ):
             models_alch.Citation.comments.contains( srch_text )
             ) ).all()
     for cite in qset_citations:
-        cite_dct = cite.dictify()
-        if not cite_dct['comments']:
-            cite_dct['comments'] = '(None)'
-        citations.append( cite_dct )
+        if cite.id not in marked_ids:
+            cite_dct = cite.dictify()
+            if not cite_dct['comments']:
+                cite_dct['comments'] = '(None)'
+            citations.append( cite_dct )
     citations_info = {
         'count': len(citations), 'citations': citations, 'fields_searched': ['display', 'comments'] }
     log.debug( f'citations_info, ```{pprint.pformat( citations_info )}```' )
