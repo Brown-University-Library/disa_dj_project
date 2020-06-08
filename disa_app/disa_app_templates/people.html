@@ -85,41 +85,42 @@
               </tr>
             </thead>
             <tbody id="people">
-                {% for pers in people %}
+                {% for rfrnt in people %}
                 <tr>
-                  <td>{{ pers.db_id }}</td>
+                  {# <td>{{ rfrnt.db_id }}</td> #}
+                  <td>{{ rfrnt.person_id }}</td>
 
-                  {% if pers.calc_name == "Not Listed" %}
-                  <td><span class="not_listed">({{ pers.calc_name }})<span></td>
+                  {% if rfrnt.calc_name == "Not Listed" %}
+                  <td><span class="not_listed">({{ rfrnt.calc_name }})<span></td>
                   {% else %}
-                  <td>{{ pers.calc_name }}</td>
+                  <td>{{ rfrnt.calc_name }}</td>
                   {% endif %}
 
-                  {% if pers.calc_age == "Not Listed" %}
-                  <td><span class="not_listed">({{ pers.calc_age }})<span></td>
+                  {% if rfrnt.calc_age == "Not Listed" %}
+                  <td><span class="not_listed">({{ rfrnt.calc_age }})<span></td>
                   {% else %}
-                  <td>{{ pers.calc_age }}</td>
+                  <td>{{ rfrnt.calc_age }}</td>
                   {% endif %}
 
-                  {% if pers.calc_sex == "Not Listed" %}
-                  <td><span class="not_listed">({{ pers.calc_sex }})<span></td>
+                  {% if rfrnt.calc_sex == "Not Listed" %}
+                  <td><span class="not_listed">({{ rfrnt.calc_sex }})<span></td>
                   {% else %}
-                  <td>{{ pers.calc_sex }}</td>
+                  <td>{{ rfrnt.calc_sex }}</td>
                   {% endif %}
 
-                  {% if pers.calc_race == "Not Listed" %}
-                  <td><span class="not_listed">({{ pers.calc_race }})<span></td>
+                  {% if rfrnt.calc_race == "Not Listed" %}
+                  <td><span class="not_listed">({{ rfrnt.calc_race }})<span></td>
                   {% else %}
-                  <td>{{ pers.calc_race }}</td>
+                  <td>{{ rfrnt.calc_race }}</td>
                   {% endif %}
 
-                  {% if pers.calc_status == "Not Listed" %}
+                  {% if rfrnt.calc_status == "Not Listed" %}
                   <td><span class="not_listed">(Not Listed)<span></td>
                   {% else %}
-                  <td>{{ pers.calc_status }}</td>
+                  <td>{{ rfrnt.calc_status }}</td>
                   {% endif %}
 
-                  <td><a href="{% url 'person_url' pers.db_id  %}">View</a></td>
+                  <td><a href="{% url 'person_url' rfrnt.person_id  %}">View</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

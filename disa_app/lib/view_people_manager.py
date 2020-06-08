@@ -68,6 +68,7 @@ def query_people():
         entry['calc_sex'] = rfrnt.sex if rfrnt.sex else 'Not Listed'
         entry['db_age'] = rfrnt.age
         entry['calc_age'] = rfrnt.age if rfrnt.age else 'Not Listed'
+        entry['person_id'] = rfrnt.person_id
         prep_race( entry, rfrnt )
         prep_status( entry, rfrnt )
         # prep_name( entry, prsn )

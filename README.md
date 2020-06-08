@@ -2,7 +2,7 @@
 
 
 
-### Glossary
+### Glossary...
 
 (terms sometimes used interchangeably in code, with clarifications)
 
@@ -23,3 +23,4 @@
     - The interface currently allows for relationships to be defined between `Referent` entries.
 
 ---
+
