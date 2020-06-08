@@ -413,9 +413,25 @@ var deleteDocument = function( doc_id ) {
     $.ajax({
         type: "DELETE",
         url: full_doc_data_api,
+        success: function(data) {
+          console.log( 'in deleteDocument; data, ', data );
+        }
     });
     console.log( "ajax call done" );
 }
+
+// var deleteDocument = function( doc_id ) {
+//     /*  This only passes the doc_id; think about passing more identifying info
+//         ...so the server doesn't have to do a lookup for more document info. */
+//     console.log( "in `var deleteDocument`; `doc_id`, ", doc_id );
+//     var doc_data_api_root = "{% url 'data_documents_url' %}";
+//     var full_doc_data_api = doc_data_api_root + doc_id + "/";
+//     $.ajax({
+//         type: "DELETE",
+//         url: full_doc_data_api,
+//     });
+//     console.log( "ajax call done" );
+// }
 
 
 $( document ).ready(function() {
