@@ -398,6 +398,15 @@ def data_relationships( request, rltnshp_id=None ):
 
 
 @shib_login
+def utility_citations( request ):
+    """ Called manually to check data.
+        Url: '/utility/documents/' -- 'utility_documents_url' """
+    cites: dict = utility_manager.prep_citations_data()
+    output = json.dumps( cites, sort_keys=True, indent=2 )
+    return HttpResponse( output, content_type='application/json; charset=utf-8' )
+
+
+@shib_login
 def utility_referents( request ):
     """ Called manually to check data.
         Url: '/utility/referents/' -- 'utility_referents_url' """

@@ -20,6 +20,24 @@ def make_session() -> sqlalchemy.orm.session.Session:
     session = Session()
     return session
 
+
+def prep_citations_data() -> dict:
+    """ Builds citations listing.
+        Called by views.utility_citations() """
+    session = make_session()
+    citations_qset = session.query( models_alch.Citation ).order_by( 'id' ).all()
+    log.debug( f'citations, ``{pprint.pformat(citations_qset)}``' )
+    citation_lst = []
+    for cite in citations_qset:
+        citation_lst.append( cite.dictify() )
+    data = {
+        'info': [ 'coming' ],
+        'citations': citation_lst
+    }
+    log.debug( 'returning' )
+    return data
+
+
 def prep_referents_data() -> dict:
     """ Builds referents listing.
         Called by views.utility_referents() """
@@ -57,7 +75,10 @@ def prep_referents_data() -> dict:
 
 
 
+## --------------------------------------------------
 ## from DISA
+## --------------------------------------------------
+
 # @app.route('/editor/person')
 # @app.route('/editor/person/<entId>')
 # @login_required
