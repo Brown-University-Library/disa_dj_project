@@ -2,7 +2,7 @@
 
 
 
-### Glossary
+### Glossary...
 
 (terms sometimes used interchangeably in code, with clarifications)
 
@@ -24,4 +24,3 @@
 
 ---
 
----
