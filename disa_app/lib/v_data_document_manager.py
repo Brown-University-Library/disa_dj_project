@@ -223,10 +223,11 @@ def manage_post( user_id, payload ):
     ## end def manage_post()
 
 
-def manage_delete( doc_id, user_id ):
+def manage_delete( doc_id, user_uuid_str, user_email ):
     """ Adds mark-for-deletion entry to django-db table.
         Called by: views.data_documents() when request.method is 'DELETE'. """
-    log.debug( f'doc_id, ``{doc_id}``' )
+    log.debug( f'doc_id, ``{doc_id}``; user_uuid_str, ``{user_uuid_str}``; user_email, ``{user_email}``' )
+    log.debug( f'type(user_uuid_str), ``{type(user_uuid_str)}``' )
     session = make_session()
     log.debug( f'session, ``{session}``' )
     citation_result = session.query( models_alch.Citation ).get( doc_id )
@@ -235,21 +236,22 @@ def manage_delete( doc_id, user_id ):
     citaton_dct = citation_result.dictify()
     log.debug( f'citaton_dct, ``{citaton_dct}``' )
 
-    # try:
-    #     citaton_dct = citation_result.dictify()
-    #     log.debug( f'citaton_dct, ``{citaton_dct}``' )
-    # except:
-    #     log.exception( 'problem getting citaton_dct' )
-
     try:
         citation_jsn = json.dumps( citaton_dct, sort_keys=True, indent=2 )
         log.debug( f'citation_jsn, ``{citation_jsn}``' )
     except:
-        log.exception( 'problem getting json' )
+        log.exception( 'problem getting citation json' )
+
+    try:
+        usr_dct = { 'user_uuid': user_uuid_str, 'user_email': user_email }
+        user_jsn = json.dumps( usr_dct, sort_keys=True, indent=2 )
+    except:
+        log.exception( 'problem getting user json' )
 
     try:
         log.debug( 'saving markedfordeletion_entry' )
-        markedfordeletion_entry = MarkedForDeletion( old_db_id=doc_id, doc_json_data=citation_jsn )
+        markedfordeletion_entry = MarkedForDeletion(
+            old_db_id=doc_id, doc_json_data=citation_jsn, patron_json_data=user_jsn )
         markedfordeletion_entry.save()
         log.debug( 'markedfordeletion_entry seems to have worked' )
     except:

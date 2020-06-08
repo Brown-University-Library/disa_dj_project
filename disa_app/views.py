@@ -335,6 +335,8 @@ def data_documents( request, doc_id=None ):
     log.debug( f'request.user.id, ```{request.user.id}```; request.user.profile.old_db_id, ```{request.user.profile.old_db_id}```,' )
     log.debug( f'type(request.user.id), ```{type(request.user.id)}```; type(request.user.profile.old_db_id), ```{type(request.user.profile.old_db_id)}```,' )
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+    user_uuid = request.user.profile.uu_id
+    user_email = request.user.profile.email
     log.debug( f'user_id, ```{user_id}```' )
     if request.method == 'GET' and doc_id:
         context: dict = v_data_document_manager.manage_get( doc_id, user_id )
@@ -346,7 +348,7 @@ def data_documents( request, doc_id=None ):
         context: dict = v_data_document_manager.manage_post( user_id, request.body )
     elif request.method == 'DELETE':
         log.debug( 'DELETE detected' )
-        context: dict = v_data_document_manager.manage_delete( doc_id, user_id )
+        context: dict = v_data_document_manager.manage_delete( doc_id, user_uuid.hex, user_email )
     else:
         msg = 'data_documents() other request.method handling coming'
         log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
