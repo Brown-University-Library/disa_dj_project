@@ -16,6 +16,12 @@ urlpatterns = [
     url( r'^login/$', views.login, name='login_url' ),
     url( r'^logout/$', views.logout, name='logout_url' ),
 
+
+
+    url( r'^login2/$', views.login2, name='login2_url' ),
+    url( r'^user_pass_handler/$', views.user_pass_handler, name='user_pass_handler_url' ),
+
+
     url( r'^browse/$', views.browse, name='browse_url' ),
 
     url( r'^editor/documents/$', views.edit_citation, name='edit_citation_url' ),

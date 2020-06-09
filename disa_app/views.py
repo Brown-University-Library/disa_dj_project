@@ -175,6 +175,31 @@ def logout( request ):
     return HttpResponseRedirect( redirect_url )
 
 
+
+
+def login2( request ):
+    """ Displays form offering shib & non-shib logins.
+        Called by click on shib-login button. """
+    log.debug( '\n\nstarting login2()' )
+    context = {
+        'login_then_citations_url': '%s?next=%s' % ( reverse('login_url'), reverse('edit_citation_url') ),
+        'user_pass_handler_url': reverse('user_pass_handler_url')
+    }
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/login_form.html', context )
+    return resp
+
+def user_pass_handler( request ):
+    """ Handles user/pass login.
+        Called by form displayed by login2() """
+    context = {}
+    return HttpResponse( 'coming' )
+
+
+
+
 # ===========================
 # editor urls
 # ===========================
