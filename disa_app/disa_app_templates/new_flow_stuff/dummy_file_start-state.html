@@ -39,6 +39,40 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
   </head>
   <body>
+
+<div class="wrapper" style="margin-top: 3.5em;">
+
+    <div id="sidebar">
+
+            <div class="sidebar-header">
+
+                <div>
+                    <div style="float: right;">
+
+                        <button type="button" id="sidebarCollapse" class="btn btn-info">
+                            <i class="fas fa-times fa-2x"></i>
+                            <!--<span>Close</span>-->
+                        </button>
+                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="fas fa-align-justify"></i>
+                        </button>
+
+                    </div>
+                </div>
+
+                <h1>Welcome to the Database of Indigenous Slavery</h1>
+                <p>This project, housed at Brown University, is a collaborative effort to build a database record of enslaved indigenous people throughout time, all across the Americas. Thank you for contributing to this project.</p>
+                <p>Here's how to start adding information.</p>
+                <p><i class="fas fa-arrow-right"></i> Click <strong>"Add document"</strong> if you are entering people from a document that has not previously been added.</p>
+                <p><i class="fas fa-arrow-right"></i> Search under <strong>"Your recent"</strong> or <strong>"All recent"</strong> if you are opening a document that you or someone else previously created.</p>
+                <p><i class="fas fa-arrow-right"></i> The documents listed under <strong>"Your recent"</strong> offer the last fifteen documents you worked on.</p>
+                <p><i class="fas fa-arrow-right"></i> The documents under <strong>"All recent"</strong> list the documents that anyone entering information into DISA have created.</p>
+                <p><i class="fas fa-arrow-right"></i> Click <strong>"Show details"</strong> to see a timestamp and the username of the person who last edited each document.</p>
+            </div>
+
+    </div>
+
+<div id="content">
   
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
   <a class="navbar-brand" style="margin-right:4%;" href="#">Database of Indigenous Slavery in the Americas</a>
@@ -81,40 +115,8 @@
 
 <main role="main" class="container">
 
-  <div style="margin-top:5em;width:100%;">
+  <div>
 
-    <div id="sidebar">
-
-            <div class="sidebar-header">
-
-                <div>
-                    <div style="float: right;">
-
-                        <button type="button" id="sidebarCollapse" class="btn btn-info">
-                            <i class="fas fa-times fa-2x"></i>
-                            <!--<span>Close</span>-->
-                        </button>
-                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <i class="fas fa-align-justify"></i>
-                        </button>
-
-                    </div>
-                </div>
-
-                <h1 style="clear: right;">Welcome to the Database of Indigenous Slavery</h1>
-                <p>This project, housed at Brown University, is a collaborative effort to build a database record of enslaved indigenous people throughout time, all across the Americas. Thank you for contributing to this project.</p>
-                <p>Here's how to start adding information.</p>
-                <p><i class="fas fa-arrow-right"></i> Click <strong>"Add document"</strong> if you are entering people from a document that has not previously been added.</p>
-                <p><i class="fas fa-arrow-right"></i> Search under <strong>"Your recent"</strong> or <strong>"All recent"</strong> if you are opening a document that you or someone else previously created.</p>
-                <p><i class="fas fa-arrow-right"></i> The documents listed under <strong>"Your recent"</strong> offer the last fifteen documents you worked on.</p>
-                <p><i class="fas fa-arrow-right"></i> The documents under <strong>"All recent"</strong> list the documents that anyone entering information into DISA have created.</p>
-                <p><i class="fas fa-arrow-right"></i> Click <strong>"Show details"</strong> to see a timestamp and the username of the person who last edited each document.</p>
-            </div>
-
-    </div>
-
-
-    <div id="content">
         <ul class="nav nav-tabs" role="tablist"> 
             <li class="nav-item"> 
                 <a class="nav-link active" href="#tab1" data-toggle="tab" role="tab" aria-controls="tab1" aria-expanded="true">Bibliographic information</a> 
@@ -175,9 +177,12 @@
             </div>
         </div>
     </div>
+</main>
+
   </div>
 
-</main><!-- /.container -->
+</div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script>window.jQuery || document.write('<script src="../../static/lib/bootstrap-4.5.0-dist/js/bootstrap.min.js"><\/script>')</script><script src="../../static/lib/bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
     <!-- jQuery CDN - Slim version (=without AJAX) -->

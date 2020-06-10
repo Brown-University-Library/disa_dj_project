@@ -61,8 +61,8 @@ a:focus {
 }
 
 #sidebar {
-    min-width: 43%;
-    max-width: 50%;
+    min-width: 25%;
+    max-width: 25%;
     background: #6c757d;
     color: #fff;
     transition: all 0.3s;
@@ -150,7 +150,7 @@ a.article:hover {
 ----------------------------------------------------- */
 
 #content {
-    width: auto;
+    width: 100%;
     padding: 20px;
     min-height: 100vh;
     transition: all 0.3s;
