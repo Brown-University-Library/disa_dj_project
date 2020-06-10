@@ -6,6 +6,7 @@ from typing import List
 import requests
 from disa_app import settings_app
 from disa_app.lib import denormalizer_document
+from disa_app.lib import user_pass_auth
 from disa_app.lib import utility_manager
 from disa_app.lib import v_data_document_manager  # api/documents
 from disa_app.lib import v_data_relationships_manager  # api/relationship-by-reference
@@ -192,9 +193,23 @@ def logout( request ):
 
 def user_pass_handler( request ):
     """ Handles user/pass login.
-        Called by form displayed by login2() """
+        On auth success, redirects user to citations-list
+        On auth failure, redirects back to views.login() """
+    log.debug( 'starting user_pass_handler()' )
     context = {}
-    return HttpResponse( 'coming' )
+    return HttpResponse( 'user-pass-auth handling coming' )
+
+    # user_pass_auth
+
+    if barcode_handler_helper.validate_params(request) is not True:  # puts param values in session
+        return barcode_handler_helper.prep_login_redirect( request )
+    if barcode_handler_helper.authenticate( request.session['barcode_login_name'], request.session['barcode_login_barcode'] ) is False:  # if login fails, redirect user back to login page with error messages that will display
+        return barcode_handler_helper.prep_login_redirect( request )
+    patron_info_dct = barcode_handler_helper.authorize( request.session['barcode_login_barcode'] )
+    if patron_info_dct is False:
+        return barcode_handler_helper.prep_login_redirect( request )
+    barcode_handler_helper.update_session( request, patron_info_dct )
+    return barcode_handler_helper.prep_processor_redirect( request )
 
 
 # ===========================
