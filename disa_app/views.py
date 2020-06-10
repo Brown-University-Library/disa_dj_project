@@ -143,11 +143,26 @@ def datafile( request ):
 # ===========================
 
 
-@shib_login
 def login( request ):
-    """ Handles authNZ, & redirects to admin.
-        Called by click on login or admin link. """
+    """ Displays form offering shib & non-shib logins.
+        Called by click on header login link. """
     log.debug( '\n\nstarting login()' )
+    context = {
+        'login_then_citations_url': '%s?next=%s' % ( reverse('shib_login_url'), reverse('edit_citation_url') ),
+        'user_pass_handler_url': reverse('user_pass_handler_url')
+    }
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/login_form.html', context )
+    return resp
+
+
+@shib_login
+def handle_shib_login( request ):
+    """ Handles authNZ, & redirects to citation-list.
+        Called by click on login, and clicking shib-login button. """
+    log.debug( '\n\nstarting shib_login()' )
     next_url = request.GET.get( 'next', None )
     log.debug( f'next_url, ```{next_url}```' )
     if not next_url:
@@ -175,29 +190,11 @@ def logout( request ):
     return HttpResponseRedirect( redirect_url )
 
 
-
-
-def login2( request ):
-    """ Displays form offering shib & non-shib logins.
-        Called by click on shib-login button. """
-    log.debug( '\n\nstarting login2()' )
-    context = {
-        'login_then_citations_url': '%s?next=%s' % ( reverse('login_url'), reverse('edit_citation_url') ),
-        'user_pass_handler_url': reverse('user_pass_handler_url')
-    }
-    if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    else:
-        resp = render( request, 'disa_app_templates/login_form.html', context )
-    return resp
-
 def user_pass_handler( request ):
     """ Handles user/pass login.
         Called by form displayed by login2() """
     context = {}
     return HttpResponse( 'coming' )
-
-
 
 
 # ===========================
