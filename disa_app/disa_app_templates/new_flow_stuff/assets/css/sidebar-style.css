@@ -69,7 +69,7 @@ a:focus {
 }
 
 #sidebar.active {
-    margin-left: -250px;
+    margin-left: -28%;
 }
 
 #sidebar .sidebar-header {
@@ -163,12 +163,15 @@ a.article:hover {
 
 @media (max-width: 768px) {
     #sidebar {
-        margin-left: -250px;
+        margin-left: 0;
+        min-width: 100%;
+        max-width: 100%;
+        clear: right;
     }
     #sidebar.active {
-        margin-left: 0;
+        margin-left: -90%;
     }
     #sidebarCollapse span {
-        display: none;
+        display: none !important;
     }
 }
