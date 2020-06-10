@@ -196,20 +196,13 @@ def user_pass_handler( request ):
         On auth success, redirects user to citations-list
         On auth failure, redirects back to views.login() """
     log.debug( 'starting user_pass_handler()' )
-    context = {}
-    return HttpResponse( 'user-pass-auth handling coming' )
-
-    # user_pass_auth
-
-    if barcode_handler_helper.validate_params(request) is not True:  # puts param values in session
+    # context = {}
+    # return HttpResponse( 'user-pass-auth handling coming' )
+    if user_pass_auth.validate_params(request) is not True:  # puts param values in session
+        return user_pass_auth.prep_login_redirect( request )
+    if user_pass_auth.authenticate( request.session['manual_login_name'], request.session['manual_login_password'] ) is False:  # if login fails, redirect user back to login page with error messages that will display
         return barcode_handler_helper.prep_login_redirect( request )
-    if barcode_handler_helper.authenticate( request.session['barcode_login_name'], request.session['barcode_login_barcode'] ) is False:  # if login fails, redirect user back to login page with error messages that will display
-        return barcode_handler_helper.prep_login_redirect( request )
-    patron_info_dct = barcode_handler_helper.authorize( request.session['barcode_login_barcode'] )
-    if patron_info_dct is False:
-        return barcode_handler_helper.prep_login_redirect( request )
-    barcode_handler_helper.update_session( request, patron_info_dct )
-    return barcode_handler_helper.prep_processor_redirect( request )
+    return user_pass_auth.prep_citations_redirect( request )
 
 
 # ===========================

@@ -75,8 +75,8 @@
         <p id="username_field_label">username:</p>
         <input id="username_field_input" type="text" name="manual_login_username" value="{{ manual_login_username }}">
         <p id="password_field_label">password:</p>
-        <input id="password_field_input" type="text" name="manual_login_pasword" value="{{ manual_login_password }}">
-        {% if barcode_login_error %}
+        <input id="password_field_input" type="text" name="manual_login_password" value="{{ manual_login_password }}">
+        {% if manual_login_error %}
         <p class="login_error">Problem: based on your login, it appears you're not authorized to use this requesting service.</p>
         <p class="login_error">If you believe you should be able to login to this system, please contact {{ EMAIL_AUTH_HELP|urlize }} for assistance.</p>
         {% endif %}
