@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import datetime, json, logging, os, pprint
+import datetime, json, logging, os, pprint, time
 from typing import List
 
 import requests
@@ -92,8 +92,19 @@ def source( request, src_id ):
 
 @shib_login
 def editor_index( request ):
-    ## TODO: rename this url from `/editor/` to `/documents/`?
+    ## TODO: rename this url from `/editor/` to `/citations/`?
     log.debug( '\n\nstarting editor_index()' )
+
+    start_time = datetime.datetime.now()
+    log.debug( f'start_time, ``{start_time}``' )
+    target_time = start_time + datetime.timedelta(seconds=2)
+    log.debug( f'target_time, ``{target_time}``' )
+    while datetime.datetime.now() < target_time:
+        log.debug( f'now_time is, ``{datetime.datetime.now()}``' )
+        time.sleep( 1 )
+        log.debug( 'slept' )
+    log.debug( 'proceeding' )
+
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
     if request.user.is_authenticated:
@@ -104,6 +115,23 @@ def editor_index( request ):
     else:
         resp = render( request, 'disa_app_templates/document_index.html', context )
     return resp
+
+
+# @shib_login
+# def editor_index( request ):
+#     ## TODO: rename this url from `/editor/` to `/citations/`?
+#     log.debug( '\n\nstarting editor_index()' )
+#     log.debug( 'slept' )
+#     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+#     context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
+#     if request.user.is_authenticated:
+#         context['user_is_authenticated'] = True
+#         context['user_first_name'] = request.user.first_name
+#     if request.GET.get('format', '') == 'json':
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         resp = render( request, 'disa_app_templates/document_index.html', context )
+#     return resp
 
 
 def search_results( request ):

@@ -414,7 +414,10 @@ var deleteDocument = function( doc_id ) {
         type: "DELETE",
         url: full_doc_data_api,
         success: function(data) {
+          // setTimeout( () => {console.log("waiting two seconds");}, 5000 );
           console.log( 'in deleteDocument; data, ', data );
+          window.location.href = data.redirect;
+          // alert( "Citation " + doc_id + " marked for deletion." );
         }
     });
     console.log( "ajax call done" );
