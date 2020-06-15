@@ -55,7 +55,7 @@ def prep_login_redirect( request ):
 def prep_citations_redirect( request ):
     """ Prepares redirect response-object to citations-list on good login.
         Called by views.user_pass_handler() """
-    redirect_url = reverse( 'edit_citation_url' )
+    redirect_url = reverse( 'editor_index_url' )
     log.debug( 'redirect_url, `%s`' % redirect_url )
     resp = HttpResponseRedirect( redirect_url )
     log.debug( 'returning user_pass_handler response' )
