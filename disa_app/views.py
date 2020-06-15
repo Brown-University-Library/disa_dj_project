@@ -155,9 +155,14 @@ def login( request ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        context['manual_login_username'] = request.session.get( 'manual_login_username', None )
-        context['manual_login_password'] = request.session.get( 'manual_login_password', None )
+        pre_entered_username = request.session.get( 'manual_login_username', None )
+        if pre_entered_username:
+            context['manual_login_username'] = request.session.get( 'manual_login_username', None )
+        pre_entered_password = request.session.get( 'manual_login_password', None )
+        if pre_entered_password:
+            context['manual_login_password'] = request.session.get( 'manual_login_password', None )
         context['manual_login_error'] = request.session.get( 'manual_login_error', None )
+        context['LOGIN_PROBLEM_EMAIL'] = settings_app.LOGIN_PROBLEM_EMAIL
         log.debug( f'context, ``{pprint.pformat(context)}``' )
         resp = render( request, 'disa_app_templates/login_form.html', context )
     return resp
@@ -202,11 +207,12 @@ def user_pass_handler( request ):
     log.debug( 'starting user_pass_handler()' )
     # context = {}
     # return HttpResponse( 'user-pass-auth handling coming' )
-    if user_pass_auth.validate_params(request) is not True:  # puts param values in session
-        return user_pass_auth.prep_login_redirect( request )
-    if user_pass_auth.authenticate( request.session['manual_login_name'], request.session['manual_login_password'] ) is False:  # if login fails, redirect user back to login page with error messages that will display
-        return barcode_handler_helper.prep_login_redirect( request )
-    return user_pass_auth.prep_citations_redirect( request )
+    if user_pass_auth.authenticate(request) is not True:  # puts param values in session
+        resp =  user_pass_auth.prep_login_redirect( request )
+    else:
+        resp = user_pass_auth.prep_citations_redirect( request )
+    return resp
+
 
 
 # ===========================
