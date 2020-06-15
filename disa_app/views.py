@@ -155,6 +155,10 @@ def login( request ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
+        context['manual_login_username'] = request.session.get( 'manual_login_username', None )
+        context['manual_login_password'] = request.session.get( 'manual_login_password', None )
+        context['manual_login_error'] = request.session.get( 'manual_login_error', None )
+        log.debug( f'context, ``{pprint.pformat(context)}``' )
         resp = render( request, 'disa_app_templates/login_form.html', context )
     return resp
 

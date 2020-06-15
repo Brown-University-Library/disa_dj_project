@@ -12,6 +12,7 @@ def validate_params( request ):
     """ Validates params.
         Returns boolean.
         Called by views.user_pass_handler() """
+    log.debug( f'initial request.session.__dict__, ``{pprint.pformat(request.session.__dict__)}``' )
     return_val = False
     log.debug( 'request.POST, `%s`' % pprint.pformat(request.POST) )
     if sorted( request.POST.keys() ) == [ 'csrfmiddlewaretoken', 'manual_login_password', 'manual_login_username' ]:
@@ -25,6 +26,7 @@ def validate_params( request ):
                 return_val = True
         except:
             log.exception( f'username, ``{received_username}`` not found; traceback follows, but processing continues' )
+    log.debug( f'updated request.session.__dict__, ``{pprint.pformat(request.session.__dict__)}``' )
     log.debug( 'return_val, `%s`' % return_val )
     return return_val
 
