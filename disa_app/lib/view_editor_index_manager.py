@@ -42,6 +42,24 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
     return data
 
 
+# def make_wrapped_refs( has_refs ):
+#     """ Takes list of citation-objects,
+#         Returns list of tuples, with each tuple comprised of a citation-object, the (last?) editor-id, the (last?) editor-timestamp, and the (last?) editor-email.
+#         Making this into a function instead of a list comprehension for clarity.
+#         Called by query_documents() """
+#     # wrapped_refs = [ (cite, edit.user_id, edit.timestamp, edit.edited_by.email)
+#     #                     for cite in has_refs
+#     #                         for ref in cite.references
+#     #                             for edit in ref.edits ]
+#     wrapped_refs = []
+#     for cite in has_refs:
+#         for ref in cite.references:
+#             for edit in ref.edits:
+#                 wrapped_refs.append( (cite, edit.user_id, edit.timestamp, edit.edited_by.email) )
+#     log.debug( f'wrapped_refs (first 5) of `{len(wrapped_refs)}`, ```{pprint.pformat(wrapped_refs[0:5])}...```' )
+#     return wrapped_refs
+
+
 def make_wrapped_refs( has_refs ):
     """ Takes list of citation-objects,
         Returns list of tuples, with each tuple comprised of a citation-object, the (last?) editor-id, the (last?) editor-timestamp, and the (last?) editor-email.
@@ -55,7 +73,12 @@ def make_wrapped_refs( has_refs ):
     for cite in has_refs:
         for ref in cite.references:
             for edit in ref.edits:
-                wrapped_refs.append( (cite, edit.user_id, edit.timestamp, edit.edited_by.email) )
+                try:
+                    email = edit.edited_by.email
+                except:
+                    log.warning( 'email unavailable' )
+                    email = 'not_available'
+                wrapped_refs.append( (cite, edit.user_id, edit.timestamp, email) )
     log.debug( f'wrapped_refs (first 5) of `{len(wrapped_refs)}`, ```{pprint.pformat(wrapped_refs[0:5])}...```' )
     return wrapped_refs
 
