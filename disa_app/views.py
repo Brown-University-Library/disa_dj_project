@@ -207,7 +207,7 @@ def user_pass_handler( request ):
     log.debug( 'starting user_pass_handler()' )
     # context = {}
     # return HttpResponse( 'user-pass-auth handling coming' )
-    if user_pass_auth.authenticate(request) is not True:  # puts param values in session
+    if user_pass_auth.run_authentication(request) is not True:  # puts param values in session
         resp =  user_pass_auth.prep_login_redirect( request )
     else:
         resp = user_pass_auth.prep_citations_redirect( request )

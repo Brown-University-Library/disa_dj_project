@@ -1,6 +1,9 @@
 import logging, pprint
 
 from disa_app.models import UserProfile
+# from django.contrib.auth import get_backends, login
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 
@@ -8,7 +11,7 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 log = logging.getLogger(__name__)
 
 
-def authenticate( request ):
+def run_authentication( request ):
     """ Validates params.
         Returns boolean.
         Called by views.user_pass_handler() """
@@ -21,11 +24,13 @@ def authenticate( request ):
         received_password = request.POST['manual_login_password']
         request.session['manual_login_password'] = None
         try:
-            found_user = UserProfile.objects.get( email=received_username, password=received_password )
-            log.debug( 'login legit' )
-            request.session['manual_login_username'] = 'foo'
-            request.session['manual_login_password'] = 'foo'
-            if found_user:
+            usr = authenticate(request, username=received_username, password=received_password)
+            if usr is not None:
+                log.debug( 'login legit' )
+                login( request, usr )
+                log.debug( 'user logged in' )
+                request.session['manual_login_username'] = None
+                request.session['manual_login_password'] = None
                 return_val = True
         except:
             request.session['manual_login_username'] = received_username
