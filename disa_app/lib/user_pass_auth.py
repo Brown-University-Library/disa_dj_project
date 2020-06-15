@@ -22,16 +22,20 @@ def run_authentication( request ):
         log.debug( 'keys good' )
         received_username = request.POST['manual_login_username']
         received_password = request.POST['manual_login_password']
-        request.session['manual_login_password'] = None
+        log.debug( 'about to start try block' )
         try:
             usr = authenticate(request, username=received_username, password=received_password)
-            if usr is not None:
+            log.debug( f'usr, ``{usr}``' )
+            if usr is not None:  # usr found
                 log.debug( 'login legit' )
                 login( request, usr )
                 log.debug( 'user logged in' )
                 request.session['manual_login_username'] = None
                 request.session['manual_login_password'] = None
                 return_val = True
+            else:  # usr not found
+                request.session['manual_login_username'] = received_username
+                request.session['manual_login_password'] = received_password
         except:
             request.session['manual_login_username'] = received_username
             request.session['manual_login_password'] = received_password
