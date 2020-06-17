@@ -27,12 +27,19 @@
       }
 
       .action-highlight {
-        background-color: #eeeeee;
+        background-color: #b3d9fb;
         color: black;
         padding: 3px;
+        padding-left: 6px;
+        padding-right: 6px;
         font-weight: bold;
-        opacity: .55;
+        opacity: .83;
       }
+
+	  .table-striped>tbody>tr:nth-child(odd)>td,  
+	  .table-striped>tbody>tr:nth-child(odd)>th {    
+		    background-color: #eff8fa;  
+	  }
 
       @media (min-width: 768px) {
         .bd-placeholder-img-lg {
@@ -69,11 +76,11 @@
                 <h1>Welcome to the Database of Indigenous Slavery</h1>
                 <p style="font-weight: bold;">This project, housed at Brown University, is a collaborative effort to build a database record of enslaved indigenous people throughout time, all across the Americas. Thank you for contributing to this project.</p>
                 <p style="font-weight: bold;">Here's how to start adding information.</p>
-                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> CLICK <span class="action-highlight">"Add document"</span> if you are entering people from a document that has not previously been added.</p>
-                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> SEARCH under <span class="action-highlight">"Your recent"</span> or <span class="action-highlight">"All recent"</span> if you are opening a document that you or someone else previously created.</p>
-                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> The documents listed under <span class="action-highlight">"Your recent"</span> offer the last fifteen documents you worked on.</p>
-                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> The documents under <span class="action-highlight">"All recent"</span> list the documents that anyone entering information into DISA have created.</p>
-                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> CLICK <span class="action-highlight">"Show details"</span> to see a timestamp and the username of the person who last edited each document.</p>
+                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> CLICK <span class="action-highlight">Add document</span> if you are entering people from a document that has not previously been added.</p>
+                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> SEARCH under <span class="action-highlight">Your recent</span> or <span class="action-highlight">All recent</span> if you are opening a document that you or someone else previously created.</p>
+                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> The documents listed under <span class="action-highlight">Your recent</span> offer the last fifteen documents you worked on.</p>
+                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> The documents under <span class="action-highlight">All recent</span> list the documents that anyone entering information into DISA have created.</p>
+                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> CLICK <span class="action-highlight">Show details</span> to see a timestamp and the username of the person who last edited each document.</p>
             </div>
     </div> <!-- /#sidebar -->
 
@@ -122,6 +129,78 @@
 
     <div>
 
+    	<h1 class="text-secondary">Choose a source document:</h1><br><br>
+    	<h3>Starting with a new document?</h3>
+    	<button type="button" class="btn btn-primary btn-lg" style="font-weight: bold;">ADD DOCUMENT</button><br><br><br>
+    	<h3>Returning to a previously added document?</h3><br>
+    	<h5 class="text-primary col-lg-5 col-sm-11" style="letter-spacing: .5px; padding: 0;">YOUR RECENT</h5>
+
+    		<table class="table table-striped col-lg-5 col-sm-11" style="background-color: white;">
+			    <thead style="background-color: #eeeeee;">
+			        <tr>
+			            <th>ID</th>
+			            <th>Document Title</th>
+			            <th></th>
+			            <!--<th>X</th>-->
+			        </tr>
+			    </thead>
+			    <tbody>
+			        <tr>
+			            <td>1</td>
+			            <td>The South Carolina Gazette, Sept. 6, 1734</td>
+			            <td style="background-color: #eeeeee;">
+			            	<button type="button" class="close text-info" aria-label="Close">
+  								<span aria-hidden="true">&times;</span>
+							</button>
+						</td>
+			        </tr>
+			        <tr>
+			            <td>2</td>
+			            <td>The South Carolina Gazette, Sept. 7, 1734</td>
+			            <td style="background-color: #eeeeee;">
+			            	<button type="button" class="close text-info" aria-label="Close">
+  								<span aria-hidden="true">&times;</span>
+							</button>
+						</td>
+			        </tr>
+			        <tr>
+			            <td>3</td>
+			            <td>The South Carolina Gazette, Sept. 8, 1734</td>
+			            <td style="background-color: #eeeeee;">
+			            	<button type="button" class="close text-info" aria-label="Close">
+  								<span aria-hidden="true">&times;</span>
+							</button>
+						</td>
+					</tr>            
+			    </tbody>
+			</table>
+
+    	<br><h5 class="text-primary col-lg-5 col-sm-11" style="letter-spacing: .5px; padding: 0;">ALL RECENT <span style="float: right;">Show details ></span></h5>
+
+    		<table class="table table-striped col-lg-5 col-sm-11" style="background-color: white;">
+			    <thead style="background-color: #eeeeee;">
+			        <tr>
+			            <th>ID</th>
+			            <th>Document Title</th>
+			            <!--<th>X</th>
+			            <th>X</th>-->
+			        </tr>
+			    </thead>
+			    <tbody>
+			        <tr>
+			            <td>1</td>
+			            <td>The South Carolina Gazette, Sept. 6, 1734</td>
+			        </tr>
+			        <tr>
+			            <td>2</td>
+			            <td>The South Carolina Gazette, Sept. 7, 1734</td>
+			        </tr>
+			        <tr>
+			            <td>3</td>
+			            <td>The South Carolina Gazette, Sept. 8, 1734</td>
+			        </tr>            
+			    </tbody>
+			</table>    	
 
     </div>
 
