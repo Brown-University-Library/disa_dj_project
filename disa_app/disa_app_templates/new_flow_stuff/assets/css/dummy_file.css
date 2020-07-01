@@ -14,7 +14,7 @@
 }
 
 .sidebar-info-highlight {
-	background-color: #b3d9fb;
+	background-color: #d0e9fe;
 	color: black;
 	padding: 3px;
 	padding-left: 6px;
@@ -24,7 +24,7 @@
 }
 
 div.tab-content {
-	background-color: #bfdeff;
+	background-color: #d0e9fe;
 }
 
 .table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
@@ -32,8 +32,8 @@ div.tab-content {
 }
 
 #tabs_bibinfoanditems a.active.nav-link {
-	background-color: #bfdeff!important;
-	border-color:#bfdeff;
+	background-color: #d0e9fe!important;
+	border-color:#d0e9fe;
 	border-width:2px;
 	font-weight: bold;
 }
