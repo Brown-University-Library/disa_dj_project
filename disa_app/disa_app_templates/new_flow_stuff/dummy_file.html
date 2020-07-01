@@ -231,11 +231,11 @@
                                 <p>&nbsp;</p>
                                 <p>&nbsp;</p>
                                 <div class="form-group" style="clear:both;"> 
-                                    <label for="formInputDISAResearcherNotes" style="padding-left:0%;">Researcher notes
+                                    <label for="formInputDISABiblioResearcherNotes" style="padding-left:0%;">Researcher notes
                                         <br>
                                         <span style="font-size:85%;"><a href="#">Report problems or ask for help</a></span>
                                     </label>                                     
-                                    <textarea style="width:75%;float:right;" class="form-control" rows="3" id="formInputDISAResearcherNotes"></textarea> 
+                                    <textarea style="width:75%;float:right;" class="form-control" rows="3" id="formInputDISABiblioResearcherNotes"></textarea> 
                                 </div>
                                 <p>&nbsp;</p>
                                 <p>&nbsp;</p>
@@ -247,7 +247,7 @@
                                 <div style="padding: 0px; padding-top: 0px;">
                                     <ul class="nav nav-tabs" role="tablist" style="padding: 20px;"> 
                                         <li class="nav-item"> 
-                                            <a class="nav-link active" href="#tab3" data-toggle="tab" role="tab" aria-controls="tab3" aria-expanded="true">New Item</a> 
+                                            <a class="nav-link" href="#tab3" data-toggle="tab" role="tab" aria-controls="tab3" aria-expanded="true">New Item</a> 
                                         </li>
                                         <!-- hide Discuss tab
                                         <li class="nav-item"> 
@@ -257,36 +257,82 @@
                                         <li class="nav-item"></li> 
 										-->
                                     </ul>
-                                    <div class="tab-content">
+                                    <div class="tab-content" style="background-color: white!important;opacity:1;">
                                         <div class="active tab-pane" role="tabpanel" aria-labelledby="tab3" id="tab3" style="margin-top:-20px;padding-top:0px;">
-                                            <!--
+                                            
                                             <div class="row" style="padding-top:40px;padding-right:20px;">
                                                 <div class="col-md-5" style="margin-left: 20px;">
-                                                    <div style="text-align:right;">
-                                                        <input type="text" class="form-control" placeholder="Page # in source doc" style="width:50%;">
+                                                    <h5 class="text-dark" style="float:left;">Location in source document</h5>
+                                                    <p>&nbsp;</p>
+                                                    <div class="form-group text-dark"> 
+                                                        <label for="formInputDISAItemVolume" style="padding-left:5%;">Volume</label>                                     
+                                                        <input style="width:50%;float:right;margin-right:15%;" type="text" class="form-control" id="formInputDISAItemVolume" placeholder="Volume #"> 
                                                     </div>
-                                                    <p></p>
-                                                    <select class="custom-select"> 
-                                                        <option selected>Select an item type...</option>                                                         
-                                                        <option value="1">One</option>                                                         
-                                                        <option value="2">Two</option>                                                         
-                                                        <option value="3">Three</option>                                                         
-                                                    </select>                                                     
+                                                    <!--<div style="text-align:right;">
+                                                        <input type="text" class="form-control" placeholder="Page # in source doc" style="width:50%;">
+                                                    </div>-->
+                                                    <p></p>                                                  
                                                 </div>
-                                                <div class="col-md-6"> 
-                                                    <div class="form-group" style="margin-left: 20px;margin-top:20px;"> 
-                                                        <label for="formInput156">Transcription</label>
-                                                        <a href="" style="margin-left:40px;font-size:79%;margin-top:4px;" class="float-right">Open in new window</a> 
-                                                        <textarea class="form-control" rows="3" id="formInput156"></textarea> 
-                                                    </div>                                                     
+                                                <div class="col-md-6">
+                                                    <h5 class="text-dark" style="float:left;">Item content</h5>
+                                                    <p>&nbsp;</p>
+
+                                                    <div class="form-group text-dark"> 
+                                                        <label for="formInputDISAItemType" style="padding-left:5%;">Item type:</label>                                     
+                                                        <select style="width:70%;float:right;" class="custom-select" id="formInputDISAItemType"> 
+                                                            <option selected>Select an item type...</option>                                                         
+                                                            <option value="1">One</option>                                                         
+                                                            <option value="2">Two</option>                                                         
+                                                            <option value="3">Three</option>                                                         
+                                                        </select>
+                                                    </div>
+
+                                                    <div style="text-align:left;">
+                                                        <div class="form-group" style="margin-top:20px;">
+                                                            <label for="formInputDISAItemTranscription" style="padding-left:5%;float:left;">Transcription</label>
+                                                            <br><a href="" style="margin-left:0%;font-size:85%;margin-top:0;width:70%;float:right;">Open in new window</a> 
+                                                            <textarea style="width:70%;float:right;" class="form-control" rows="3" id="formInputDISAItemTranscription"></textarea> 
+                                                        </div>                                                     
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <!-- /.row -->
+
                                             <hr>
-                                            <p style="padding: 20px;">Time and place<br></p>
-                                            -->
+
+                                            <div class="row" style="padding-top:40px;padding-right:20px;">
+                                                <div class="col-md-5" style="margin-left: 20px;">
+                                                    <h5 class="text-dark" style="float:left;">Event date</h5>
+                                                    <p>&nbsp;</p>
+                                                    <p></p>                                                  
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h5 class="text-dark" style="float:left;">Place</h5>
+                                                    <p>&nbsp;</p>
+                                                </div>
+                                            </div>
+
+                                            <hr>
+
+                                            <div class="row" style="padding-top:40px;padding-right:20px;">
+                                                <div class="col-md-12" style="margin-left: 20px;">
+                                                    <h5 class="text-dark" style="float:left;">People</h5>
+                                                    <p>&nbsp;</p>
+                                                    <p></p>                                                  
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12" style="padding-top:40px;padding:40px;">
+                                                <div class="form-group" style="margin-top:20px;">
+                                                    <label for="formInputDISAPeopleResearcherNotes">Researcher notes</label>
+                                                    <textarea class="form-control" rows="3" id="formInputDISAPeopleResearcherNotes"></textarea> 
+                                                </div>                                                     
+                                            </div>
+
                                         </div>                                         
                                         <!-- /.tab-pane for items -->
                                     </div>
+                                    <!-- /.tab-content for items -->
                                 </div>
                             </div>
                         </div>
