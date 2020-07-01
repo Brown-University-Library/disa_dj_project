@@ -1,230 +1,327 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="DISA database entry form">
-    <meta name="author" content="Brown University Library">
-    <title>DISA</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="../../static/lib/bootstrap-4.5.0-dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/css/sidebar-style.css" rel="stylesheet">
-
-    <!-- Favicons -->
-
-
-
-    <style>
-
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      .sidebar-info-highlight {
-        background-color: #b3d9fb;
-        color: black;
-        padding: 3px;
-        padding-left: 6px;
-        padding-right: 6px;
-        font-weight: bold;
-        opacity: .83;
-      }
-
-	  .table-striped>tbody>tr:nth-child(odd)>td,  
-	  .table-striped>tbody>tr:nth-child(odd)>th {    
-		    background-color: #eff8fa;  
-	  }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="DISA database entry form">
+        <meta name="author" content="Brown University Library">
+        <title>DISA</title>
+        <!-- Bootstrap core CSS -->
+        <link href="../../static/lib/bootstrap-4.5.0-dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="assets/css/sidebar-style.css" rel="stylesheet">
+        <!-- Favicons -->
+        <style>
+            .bd-placeholder-img { font-size: 1.125rem; text-anchor: middle; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+            .sidebar-info-highlight { background-color: #b3d9fb; color: black; padding: 3px; padding-left: 6px; padding-right: 6px; font-weight: bold; opacity: .83; }
+            .table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th { background-color: #eff8fa; } @media (min-width: 768px) { .bd-placeholder-img-lg { font-size: 3.5rem; }
+            div.tab-content { background-color: #bfdeff; }
+            #tabs_bibinfoanditems a.active.nav-link{background-color: #bfdeff!important;border-color:#bfdeff;border-width:2px;font-weight: bold;}
+            #tabs_bibinfoanditems a.nav-link{background-color: white!important;color:grey;}
         }
-      }
-
-    </style>
-    <!-- Custom styles for this template -->
-    <!--<link href="starter-template.css" rel="stylesheet">-->
-
-    <!-- Font Awesome JS -->
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-  </head>
-
-<body>
-
-<div class="wrapper" style="margin-top: 3.5em;">
-
-    <div id="sidebar">
-            <div class="sidebar-header">
-                <div>
-                    <div style="float: right;">
-                        <button type="button" id="sidebarCollapse" class="btn btn-info">
-                            <i class="fas fa-times fa-2x"></i>
-                            <!--<span>Close</span>-->
-                        </button>
-                        <!-- <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        </style>
+        <!-- Custom styles for this template -->
+        <!--<link href="starter-template.css" rel="stylesheet">-->
+        <!-- Font Awesome JS -->
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div class="wrapper" style="margin-top: 3.5em;">
+            <div id="sidebar">
+                <div class="sidebar-header">
+                    <div>
+                        <div style="float: right;">
+                            <button type="button" id="sidebarCollapse" class="btn btn-info">
+                                <i class="fas fa-times fa-2x"></i>
+                                <!--<span>Close</span>-->
+                            </button>
+                            <!-- <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <i class="fas fa-align-justify"></i>
                         </button> -->
+                        </div>
                     </div>
+                    <h1>Welcome to the Database of Indigenous Slavery</h1>
+                    <p style="font-weight: bold;">This project, housed at Brown University, is a collaborative effort to build a database record of enslaved indigenous people throughout time, all across the Americas. Thank you for contributing to this project.</p>
+                    <p style="font-weight: bold;">Here's how to start adding information.</p>
+                    <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> CLICK <span class="sidebar-info-highlight">Add document</span> if you are entering people from a document that has not previously been added.</p>
+                    <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> SEARCH under <span class="sidebar-info-highlight">Your recent</span> or <span class="action-highlight">All recent</span> if you are opening a document that you or someone else previously created.</p>
+                    <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> The documents listed under <span class="sidebar-info-highlight">Your recent</span> offer the last fifteen documents you worked on.</p>
+                    <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> The documents under <span class="sidebar-info-highlight">All recent</span> list the documents that anyone entering information into DISA have created.</p>
+                    <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> CLICK <span class="sidebar-info-highlight">Show details</span> to see a timestamp and the username of the person who last edited each document.</p>
                 </div>
-                <h1>Welcome to the Database of Indigenous Slavery</h1>
-                <p style="font-weight: bold;">This project, housed at Brown University, is a collaborative effort to build a database record of enslaved indigenous people throughout time, all across the Americas. Thank you for contributing to this project.</p>
-                <p style="font-weight: bold;">Here's how to start adding information.</p>
-                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> CLICK <span class="sidebar-info-highlight">Add document</span> if you are entering people from a document that has not previously been added.</p>
-                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> SEARCH under <span class="sidebar-info-highlight">Your recent</span> or <span class="action-highlight">All recent</span> if you are opening a document that you or someone else previously created.</p>
-                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> The documents listed under <span class="sidebar-info-highlight">Your recent</span> offer the last fifteen documents you worked on.</p>
-                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> The documents under <span class="sidebar-info-highlight">All recent</span> list the documents that anyone entering information into DISA have created.</p>
-                <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> CLICK <span class="sidebar-info-highlight">Show details</span> to see a timestamp and the username of the person who last edited each document.</p>
-            </div>
-    </div> <!-- /#sidebar -->
+            </div>             
+            <!-- /#sidebar -->
+            <div id="content">
+                <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+                    <a class="navbar-brand" style="margin-right:4%;" href="#">Database of Indigenous Slavery in the Americas</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                        <ul class="navbar-nav mr-auto nav-fill w-100">
+                            <form class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2" type="text" placeholder="enter search-term" aria-label="Search">
+                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">
+                                    <i class="fas fa-search fa-lg"></i>
+                                </button>
+                            </form>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">People</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Documents</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Login / (Welcome, User)</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Logout</a>
+                            </li>
+                            <!--
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">[Dropdown]</a>
+                                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                            </li>
+                            -->
+                        </ul>
+                    </div>
+                </nav>
+                <main class="container">
+                    <div id="startpanel">
+                        <h1 class="text-secondary">Choose a source document:</h1>
+                        <br>
+                        <br>
+                        <h3>Starting with a new document?</h3>
+                        <button type="button" class="btn btn-primary btn-lg" style="font-weight: bold;">ADD DOCUMENT</button>
+                        <br>
+                        <br>
+                        <br>
+                        <h3>Returning to a previously added document?</h3>
+                        <br>
+                        <h5 class="text-primary col-lg-5 col-sm-11" style="letter-spacing: .5px; padding: 0;">YOUR RECENT</h5>
+                        <table class="table table-striped col-lg-5 col-sm-11" style="background-color: white;">
+                            <thead style="background-color: #eeeeee;">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Document Title</th>
+                                    <th></th>
+                                    <!--<th>X</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td class="table-info">The South Carolina Gazette, Sept. 6, 1734</td>
+                                    <td style="background-color: #eeeeee;">
+                                        <button type="button" class="close text-primary" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>The South Carolina Gazette, Sept. 7, 1734</td>
+                                    <td style="background-color: #eeeeee;">
+                                        <button type="button" class="close text-primary" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>The South Carolina Gazette, Sept. 8, 1734</td>
+                                    <td style="background-color: #eeeeee;">
+                                        <button type="button" class="close text-primary" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </td>
+                                </tr>                                 
+                            </tbody>
+                        </table>
+                        <br>
+                        <h5 class="text-primary col-lg-5 col-sm-11" style="letter-spacing: .5px; padding: 0;">ALL RECENT <span style="float: right;">Show details ></span></h5>
+                        <table class="table table-striped col-lg-5 col-sm-11" style="background-color: white;">
+                            <thead style="background-color: #eeeeee;">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Document Title</th>
+                                    <!--<th>X</th>
+			                         <th>X</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td class="table-info">The South Carolina Gazette, Sept. 6, 1734</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>The South Carolina Gazette, Sept. 7, 1734</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>The South Carolina Gazette, Sept. 8, 1734</td>
+                                </tr>                                 
+                            </tbody>
+                        </table>                         
+                    </div>                     
+                    <!-- /#startpanel -->
 
-<div id="content">
-  
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" style="margin-right:4%;" href="#">Database of Indigenous Slavery in the Americas</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+                    <!-- JavaScript-savvy URL control to toggle div display between #startpanel above & tabs_bibinfo+items below -->
+                    <div id="tabs_bibinfoanditems" style="margin-top:10em;">
+                        <ul class="nav nav-tabs" role="tablist"> 
+                            <li class="nav-item"> 
+                                <a class="nav-link active" href="#tab1" data-toggle="tab" role="tab" aria-controls="tab1" aria-expanded="true">Bibliographic information</a> 
+                            </li>                             
+                            <li class="nav-item"> 
+                                <a class="nav-link" href="#tab2" data-toggle="tab" role="tab" aria-controls="tab2" aria-expanded="true">Items</a> 
+                            </li>                             
+                        </ul>
+                        <div class="tab-content">
+                            <div class="active tab-pane" style="padding: 20px;" role="tabpanel" aria-labelledby="tab1" id="tab1">
+                                <h5 class="text-dark" style="width:25%;float:left;">Document type:</h5>
+                                <p style="width:75%;float:right;"> <select class="custom-select"> 
+                                        <option selected>Newspaper Article</option>                                         
+                                        <option value="1">[Other doc format]</option>                                         
+                                        <option value="2">[Other doc format]</option>                                         
+                                        <option value="3">[Other doc format]</option>                                         
+                                    </select> </p>
+                                <p>&nbsp;</p>
+                                <h5>Priority information</h5>
+                                <div class="form-group text-dark"> 
+                                    <label for="formInput206" style="padding-left:10%;">Title
+                                        <span style="font-size:85%;" class="text-danger"><a href="#">(required)</a></span>
+                                    </label>                                     
+                                    <input style="width:75%;float:right;" type="text" class="form-control" id="formInput206" placeholder="Enter Title"> 
+                                </div>
+                                <div class="form-group text-dark"> 
+                                    <label for="formInput207" style="padding-left:15%;">Place</label>                                     
+                                    <input style="width:75%;float:right;" type="text" class="form-control" id="formInput207" placeholder="Enter Place"> 
+                                </div>
+                                <p class="text-dark" style="width:auto;float:left;padding-left:15%;">Date</p>
+                                <div style="width:75%;float:right;">
+                                    <p style="width:25%;float:left;padding-right:10px;"> <select class="custom-select"> 
+                                            <option selected>Year</option>                                             
+                                            <option value="1">[Year values?]</option>                                             
+                                            <option value="2">[Year values?]</option>                                             
+                                            <option value="3">[Year values?]</option>                                             
+                                        </select> </p>
+                                    <p style="width:25%;float:left;padding-right:10px;"> <select class="custom-select"> 
+                                            <option selected>Month</option>                                             
+                                            <option value="1">[Month values?]</option>                                             
+                                            <option value="2">[Month values?]</option>                                             
+                                            <option value="3">[Month values?]</option>                                             
+                                        </select> </p>
+                                    <p style="width:25%;float:left;padding-right:0px;"> <select class="custom-select"> 
+                                            <option selected>[Day]</option>                                             
+                                            <option value="1">[Day values?]</option>                                             
+                                            <option value="2">[Day values?]</option>                                             
+                                            <option value="3">[Day values?]</option>                                             
+                                        </select> </p>
+                                </div>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <h5>Additional information</h5>
+                                <div class="form-group text-dark"> 
+                                    <label for="formInput208" style="padding-left:15%;">Field A</label>                                     
+                                    <input style="width:75%;float:right;" type="text" class="form-control" id="formInput208" placeholder="[Placeholder text]"> 
+                                </div>
+                                <div class="form-group text-dark"> 
+                                    <label for="formInput209" style="padding-left:15%;">Field B</label>                                     
+                                    <input style="width:75%;float:right;" type="text" class="form-control" id="formInput209" placeholder="[Placeholder text]">
+                                </div>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <div class="form-group"> 
+                                    <label for="formInput348" style="padding-left:0%;">Acknowledgements</label>                                     
+                                    <textarea style="width:75%;float:right;" class="form-control" rows="3" id="formInput348"></textarea> 
+                                </div>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <div class="form-group" style="clear:both;"> 
+                                    <label for="formInput349" style="padding-left:0%;">Researcher notes
+                                        <br>
+                                        <span style="font-size:85%;"><a href="#">Report problems or ask for help</a></span>
+                                    </label>                                     
+                                    <textarea style="width:75%;float:right;" class="form-control" rows="3" id="formInput349"></textarea> 
+                                </div>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <button type="button" class="btn btn-primary btn-lg" style="font-weight: bold;">SAVE AND CONTINUE TO ENTER ITEMS</button>
+                            </div>                             
+                            <!-- /.tab-pane for bibinfo -->
 
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto nav-fill w-100">
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="enter search-term" aria-label="Search">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit"><i class="fas fa-search fa-lg"></i></button>
-          </form>
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">People</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Documents</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Login / (Welcome, User)</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Logout</a>
-          </li>
-          <!--<li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">[Dropdown]</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>-->
-        </ul>
-      </div>
-    </nav>
-
-  <main role="main" class="container">
-
-    <div>
-
-    	<h1 class="text-secondary">Choose a source document:</h1><br><br>
-    	<h3>Starting with a new document?</h3>
-    	<button type="button" class="btn btn-primary btn-lg" style="font-weight: bold;">ADD DOCUMENT</button><br><br><br>
-    	<h3>Returning to a previously added document?</h3><br>
-    	<h5 class="text-primary col-lg-5 col-sm-11" style="letter-spacing: .5px; padding: 0;">YOUR RECENT</h5>
-
-    		<table class="table table-striped col-lg-5 col-sm-11" style="background-color: white;">
-			    <thead style="background-color: #eeeeee;">
-			        <tr>
-			            <th>ID</th>
-			            <th>Document Title</th>
-			            <th></th>
-			            <!--<th>X</th>-->
-			        </tr>
-			    </thead>
-			    <tbody>
-			        <tr>
-			            <td>1</td>
-			            <td>The South Carolina Gazette, Sept. 6, 1734</td>
-			            <td style="background-color: #eeeeee;">
-			            	<button type="button" class="close text-primary" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-							</button>
-						</td>
-			        </tr>
-			        <tr>
-			            <td>2</td>
-			            <td>The South Carolina Gazette, Sept. 7, 1734</td>
-			            <td style="background-color: #eeeeee;">
-			            	<button type="button" class="close text-primary" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-							</button>
-						</td>
-			        </tr>
-			        <tr>
-			            <td>3</td>
-			            <td>The South Carolina Gazette, Sept. 8, 1734</td>
-			            <td style="background-color: #eeeeee;">
-			            	<button type="button" class="close text-primary" aria-label="Close">
-  								<span aria-hidden="true">&times;</span>
-							</button>
-						</td>
-					</tr>            
-			    </tbody>
-			</table>
-
-    	<br><h5 class="text-primary col-lg-5 col-sm-11" style="letter-spacing: .5px; padding: 0;">ALL RECENT <span style="float: right;">Show details ></span></h5>
-
-    		<table class="table table-striped col-lg-5 col-sm-11" style="background-color: white;">
-			    <thead style="background-color: #eeeeee;">
-			        <tr>
-			            <th>ID</th>
-			            <th>Document Title</th>
-			            <!--<th>X</th>
-			            <th>X</th>-->
-			        </tr>
-			    </thead>
-			    <tbody>
-			        <tr>
-			            <td>1</td>
-			            <td>The South Carolina Gazette, Sept. 6, 1734</td>
-			        </tr>
-			        <tr>
-			            <td>2</td>
-			            <td>The South Carolina Gazette, Sept. 7, 1734</td>
-			        </tr>
-			        <tr>
-			            <td>3</td>
-			            <td>The South Carolina Gazette, Sept. 8, 1734</td>
-			        </tr>            
-			    </tbody>
-			</table>    	
-
-    </div>
-
-  </main>
-
-</div> <!-- /#content -->
-
-</div> <!-- /.wrapper -->
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script>window.jQuery || document.write('<script src="../../static/lib/bootstrap-4.5.0-dist/js/bootstrap.min.js"><\/script>')</script><script src="../../static/lib/bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
-    <!-- jQuery CDN - Slim version (=without AJAX) -->
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
-    <!-- Popper.JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-    <!-- Bootstrap JS -->
-    <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>-->
-
-    <script type="text/javascript">
+                            <div class="tab-pane" role="tabpanel" aria-labelledby="tab2" id="tab2">
+                                <div style="padding: 0px; padding-top: 0px;">
+                                    <ul class="nav nav-tabs" role="tablist" style="padding: 20px;"> 
+                                        <li class="nav-item"> 
+                                            <a class="nav-link active" href="#tab3" data-toggle="tab" role="tab" aria-controls="tab3" aria-expanded="true">New Item</a> 
+                                        </li>
+                                        <!-- hide Discuss tab
+                                        <li class="nav-item"> 
+                                            <a class="nav-link" href="#tab4" data-toggle="tab" role="tab" aria-controls="tab4" aria-expanded="true">Discuss</a> 
+                                        </li>                                         
+                                        <li class="nav-item"></li>                                         
+                                        <li class="nav-item"></li> 
+										-->
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="active tab-pane" role="tabpanel" aria-labelledby="tab3" id="tab3" style="margin-top:-20px;padding-top:0px;">
+                                            <!--
+                                            <div class="row" style="padding-top:40px;padding-right:20px;">
+                                                <div class="col-md-5" style="margin-left: 20px;">
+                                                    <div style="text-align:right;">
+                                                        <input type="text" class="form-control" placeholder="Page # in source doc" style="width:50%;">
+                                                    </div>
+                                                    <p></p>
+                                                    <select class="custom-select"> 
+                                                        <option selected>Select an item type...</option>                                                         
+                                                        <option value="1">One</option>                                                         
+                                                        <option value="2">Two</option>                                                         
+                                                        <option value="3">Three</option>                                                         
+                                                    </select>                                                     
+                                                </div>
+                                                <div class="col-md-6"> 
+                                                    <div class="form-group" style="margin-left: 20px;margin-top:20px;"> 
+                                                        <label for="formInput156">Transcription</label>
+                                                        <a href="" style="margin-left:40px;font-size:79%;margin-top:4px;" class="float-right">Open in new window</a> 
+                                                        <textarea class="form-control" rows="3" id="formInput156"></textarea> 
+                                                    </div>                                                     
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <p style="padding: 20px;">Time and place<br></p>
+                                            -->
+                                        </div>                                         
+                                        <!-- /.tab-pane for items -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                     
+                    <!-- /#tabs_bibinfoanditems -->
+                </main>
+            </div>             
+            <!-- /#content -->
+        </div>         
+        <!-- /.wrapper -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../static/lib/bootstrap-4.5.0-dist/js/bootstrap.min.js"><\/script>')</script>
+        <script src="../../static/lib/bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <script>
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });
         });
     </script>
-</body>
+    </body>
 </html>
