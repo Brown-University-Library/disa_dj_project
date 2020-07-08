@@ -42,3 +42,15 @@ div.tab-content {
 	background-color: white!important;
 	color: grey;
 }
+
+h5 {
+	font-weight: bold;
+}
+
+label {
+	padding-top: 7px;
+}
+
+.col-md-6 a, label a, .form-group a {
+	color: #007bff;
+}
