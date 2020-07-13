@@ -15,6 +15,8 @@ urlpatterns = [
 
     url( r'^login/$', views.login, name='login_url' ),
     url( r'^logout/$', views.logout, name='logout_url' ),
+    url( r'^shib_login/$', views.handle_shib_login, name='shib_login_url' ),
+    url( r'^user_pass_handler/$', views.user_pass_handler, name='user_pass_handler_url' ),
 
     url( r'^browse/$', views.browse, name='browse_url' ),
 

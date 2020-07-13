@@ -6,6 +6,7 @@ from typing import List
 import requests
 from disa_app import settings_app
 from disa_app.lib import denormalizer_document
+from disa_app.lib import user_pass_auth
 from disa_app.lib import utility_manager
 from disa_app.lib import v_data_document_manager  # api/documents
 from disa_app.lib import v_data_relationships_manager  # api/relationship-by-reference
@@ -171,11 +172,35 @@ def datafile( request ):
 # ===========================
 
 
-@shib_login
 def login( request ):
-    """ Handles authNZ, & redirects to admin.
-        Called by click on login or admin link. """
+    """ Displays form offering shib & non-shib logins.
+        Called by click on header login link. """
     log.debug( '\n\nstarting login()' )
+    context = {
+        'login_then_citations_url': '%s?next=%s' % ( reverse('shib_login_url'), reverse('edit_citation_url') ),
+        'user_pass_handler_url': reverse('user_pass_handler_url')
+    }
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        pre_entered_username = request.session.get( 'manual_login_username', None )
+        if pre_entered_username:
+            context['manual_login_username'] = request.session.get( 'manual_login_username', None )
+        pre_entered_password = request.session.get( 'manual_login_password', None )
+        if pre_entered_password:
+            context['manual_login_password'] = request.session.get( 'manual_login_password', None )
+        context['manual_login_error'] = request.session.get( 'manual_login_error', None )
+        context['LOGIN_PROBLEM_EMAIL'] = settings_app.LOGIN_PROBLEM_EMAIL
+        log.debug( f'context, ``{pprint.pformat(context)}``' )
+        resp = render( request, 'disa_app_templates/login_form.html', context )
+    return resp
+
+
+@shib_login
+def handle_shib_login( request ):
+    """ Handles authNZ, & redirects to citation-list.
+        Called by click on login, and clicking shib-login button. """
+    log.debug( '\n\nstarting shib_login()' )
     next_url = request.GET.get( 'next', None )
     log.debug( f'next_url, ```{next_url}```' )
     if not next_url:
@@ -201,6 +226,21 @@ def logout( request ):
     django_logout( request )
     log.debug( 'redirect_url, ```%s```' % redirect_url )
     return HttpResponseRedirect( redirect_url )
+
+
+def user_pass_handler( request ):
+    """ Handles user/pass login.
+        On auth success, redirects user to citations-list
+        On auth failure, redirects back to views.login() """
+    log.debug( 'starting user_pass_handler()' )
+    # context = {}
+    # return HttpResponse( 'user-pass-auth handling coming' )
+    if user_pass_auth.run_authentication(request) is not True:  # puts param values in session
+        resp =  user_pass_auth.prep_login_redirect( request )
+    else:
+        resp = user_pass_auth.prep_citations_redirect( request )
+    return resp
+
 
 
 # ===========================

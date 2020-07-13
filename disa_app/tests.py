@@ -47,7 +47,10 @@ class Client_Misc_Test( TestCase ):
         except Exception as e:
             log.debug( f'e, ``{e}``' )
             result = repr(e)
-        self.assertEqual( "Exception('error-check triggered; admin emailed')", result )  # web-hit returns standard 500 http-status
+            # log.debug( f'result, ``{result}``' )
+        # self.assertEqual( "Exception('error-check triggered; admin emailed')", result )  # web-hit returns standard 500 http-status
+        self.assertTrue( 'Exception' in result )  # web-hit returns standard 500 http-status
+        self.assertTrue( 'error-check triggered; admin emailed' in result )
 
     def test_error_url_on_production(self):
         """ Checks '/error_check/' url.
