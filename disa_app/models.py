@@ -28,6 +28,10 @@ class UserProfile( models.Model ):
     can_delete_doc = models.BooleanField( default=False )
     last_logged_in = models.DateTimeField( null=True, blank=True )
 
+    class Meta:
+        managed = False
+
+
 
 ## auto create and save UserProfile entries
 
