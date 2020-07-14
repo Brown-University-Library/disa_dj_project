@@ -31,8 +31,6 @@ class UserProfile( models.Model ):
     class Meta:
         managed = False
 
-
-
 ## auto create and save UserProfile entries
 
 @receiver( post_save, sender=User )
@@ -93,3 +91,6 @@ class MarkedForDeletion( models.Model ):
             log.exception( f'{message}; traceback follows; processing will halt' )
             raise Exception( message )
         super( MarkedForDeletion, self ).save()
+
+    class Meta:
+        managed = False
