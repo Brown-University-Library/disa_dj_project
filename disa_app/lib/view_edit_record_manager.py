@@ -25,6 +25,7 @@ def prep_doc_id_context( doc_id: str, usr_first_name: str, usr_is_authenticated:
     """ Preps context for template when a doc_id (meaning a `Citation` id) is included.
         Called by views.edit_record() """
     log.debug( '\n\nstarting prep_doc_id_context()' )
+    log.debug( f'doc_id, ``{doc_id}``' )
     context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
     session = make_session()
     common_data: dict = prepare_common_data( session )
@@ -35,9 +36,13 @@ def prep_doc_id_context( doc_id: str, usr_first_name: str, usr_is_authenticated:
         context['doc_display'] = doc.display
     except:
         log.exception( 'doc.display not available; traceback follows; processing will continue' )
-        context['doc_display'] = 'display not avilable'
-    context['doc_id'] = doc.id
-    log.debug( 'context prepared' )
+        context['doc_display'] = 'display not available'
+    try:
+        context['doc_id'] = doc.id
+    except:
+        log.exception( 'doc.id not available; traceback follows; processing will continue' )
+        context['doc_id'] = doc_id
+    log.debug( f'context, ``{pprint.pformat(context)}``' )
     return context
 
 
