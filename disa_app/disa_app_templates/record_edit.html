@@ -622,6 +622,7 @@ var updateRecordData = function(recId, docId) {
         data: JSON.stringify(data),
         success: function(data) {
             if ( method === 'POST' ) {
+                console.log( "in var updateRecordData; redirecting to: ", data.redirect );
                 window.location.href = data.redirect;
             } else {
                 setInputValues(data.rec);
