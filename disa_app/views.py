@@ -86,9 +86,15 @@ def person( request, prsn_id ):
 
 def source( request, src_id ):
     log.debug( f'\n\nstarting source(), with src_id, `{src_id}`' )
-    redirect_url = reverse( 'edit_record_url', kwargs={'rec_id': src_id} )
+    redirect_url = reverse( 'edit_record_w_recid_url', kwargs={'rec_id': src_id} )
     log.debug( f'redirect_url, ```{redirect_url}```' )
     return HttpResponseRedirect( redirect_url )
+
+# def source( request, src_id ):
+#     log.debug( f'\n\nstarting source(), with src_id, `{src_id}`' )
+#     redirect_url = reverse( 'edit_record_url', kwargs={'rec_id': src_id} )
+#     log.debug( f'redirect_url, ```{redirect_url}```' )
+#     return HttpResponseRedirect( redirect_url )
 
 
 @shib_login
@@ -282,19 +288,70 @@ def edit_person( request, rfrnt_id=None ):
     return resp
 
 
+# @shib_login
+# def edit_record( request, rec_id=None ):
+#     """ Url: '/editor/records/<rec_id>/' -- 'edit_record_url' """
+#     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
+#     if rec_id:  # normal case
+#         log.debug( 'handling rec_id exists' )
+#         context: dict = view_edit_record_manager.prep_rec_id_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
+#     elif request.GET.get('doc_id', None):
+#         log.debug( 'handling doc_id parameter exists' )
+#         context: dict = view_edit_record_manager.prep_doc_id_context( request.GET.get('doc_id', None), request.user.first_name, bool(request.user.is_authenticated) )
+#     else:
+#         log.debug( f'strange, not found; request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
+#         return HttpResponseNotFound( '404 / Not Found' )
+#     if request.GET.get('format', '') == 'json':
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         resp = render( request, 'disa_app_templates/record_edit.html', context )
+#     return resp
+
 @shib_login
 def edit_record( request, rec_id=None ):
     """ Url: '/editor/records/<rec_id>/' -- 'edit_record_url' """
     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
     if rec_id:
+        log.debug( 'handling rec_id exists' )
         context: dict = view_edit_record_manager.prep_rec_id_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
     else:
+        log.debug( 'handling no rec_id' )
         context: dict = view_edit_record_manager.prep_doc_id_context( request.GET.get('doc_id', None), request.user.first_name, bool(request.user.is_authenticated) )
+    log.debug( f'context, ``{context}``' )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
         resp = render( request, 'disa_app_templates/record_edit.html', context )
     return resp
+
+
+@shib_login
+def edit_record_w_recid( request, rec_id=None ):
+    """ Url: '/editor/records/<rec_id>/' -- 'edit_record_w_recid_url' """
+    log.debug( f'\n\nstarting edit_record_w_recid(), with rec_id, `{rec_id}`' )
+    context: dict = view_edit_record_manager.prep_rec_id_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
+    log.debug( f'context, ``{context}``' )
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/record_edit.html', context )
+    return resp
+
+
+## -- original that seemed to have been working for a while...
+# @shib_login
+# def edit_record( request, rec_id=None ):
+#     """ Url: '/editor/records/<rec_id>/' -- 'edit_record_url' """
+#     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
+#     if rec_id:
+#         context: dict = view_edit_record_manager.prep_rec_id_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
+#     else:
+#         context: dict = view_edit_record_manager.prep_doc_id_context( request.GET.get('doc_id', None), request.user.first_name, bool(request.user.is_authenticated) )
+#     if request.GET.get('format', '') == 'json':
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         resp = render( request, 'disa_app_templates/record_edit.html', context )
+#     return resp
 
 
 @shib_login
