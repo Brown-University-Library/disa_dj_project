@@ -13,6 +13,25 @@
         <!-- Font Awesome JS -->
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+        <script defer src="assets/js/dummy_file.js"></script>
+        <!-- The CCS below can be moved into an external file eventually -->
+        <style>
+        
+            /* Display toggle for the age field */
+
+            #formInputDISAPersonAge_number {
+                display: none;
+            }
+
+            .age-as-number #formInputDISAPersonAge_text {
+                display: none;    
+            }
+
+            .age-as-number #formInputDISAPersonAge_number {
+                display: initial;    
+            }
+        
+        </style>
     </head>
     <body>
         <div class="wrapper" style="margin-top: 3.5em;">
@@ -424,15 +443,17 @@
                                                                 </div>
                                                                 <div class="form-group text-dark"> 
                                                                     <label for="formInputDISAPersonAge" style="padding-left:5%;">Age</label>
-                                                                    <select style="width:auto;float:right;margin-right:5%;clear: left;" class="custom-select" id="formInputDISAPersonAge">
-                                                                        <option selected>&nbsp;</option>                                                                         
-                                                                        <option value="1">&nbsp;</option>                                                                         
-                                                                        <option value="2">&nbsp;</option>                                                                         
-                                                                        <option value="3">&nbsp;</option>                                                                         
+                                                                    <select style="width:auto;float:right;margin-right:5%;clear: left;" class="custom-select" id="formInputDISAPersonAge_number">
+                                                                        <option selected>&nbsp;</option>
+                                                                        <option value="-1">Unspecified</option>                                                                         
+                                                                        <option value="1">1 year</option>                                                                         
+                                                                        <option value="2">2 years</option>                                                                         
+                                                                        <option value="3">3 years</option>                                                                         
                                                                     </select>
+                                                                    <input style="width:60%;float:right;margin-right:5%;" type="text" class="form-control" id="formInputDISAPersonAge_text" placeholder=""> 
                                                                     <div class="form-check" style="float:right;clear:none;margin-right:10%;padding-left: 10%;"> 
                                                                         <input class="form-check-input" type="checkbox" id="formInputSpecifiedByNumber" value="option1"> 
-                                                                        <label style="font-size: 85%;margin-top: -6px;" class="form-check-label" for="formInputSpecifiedByNumber">SPECIFIED BY A NUMBER<br>Age in years:</label>
+                                                                        <label style="font-size: 85%;margin-top: -6px;" class="form-check-label" for="formInputSpecifiedByNumber">SPECIFIED BY A NUMBER</label>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group text-dark"> 
