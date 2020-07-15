@@ -190,18 +190,19 @@
                         <div class="tab-content">
                             <div class="active tab-pane" style="padding: 20px;" role="tabpanel" aria-labelledby="Bibliographic-information" id="Bibliographic-information">
                                 <h5 class="text-dark" style="width:25%;float:left;">Document type:</h5>
-                                <p style="width:75%;float:right;"> <select class="custom-select"> 
+                                <div style="clear: left;">
+                                    <label for="formInputDISADocType" style="padding-left:12%;">Item type:</label>
+                                    <select style="width:75%;float:right;" class="custom-select" id="formInputDISADocType"> 
                                         <option selected>Newspaper Article</option>                                         
                                         <option value="1">[Other doc format]</option>                                         
                                         <option value="2">[Other doc format]</option>                                         
                                         <option value="3">[Other doc format]</option>                                         
-                                    </select> </p>
+                                    </select>
+                                </div>    
                                 <p>&nbsp;</p>
                                 <h5>Priority information</h5>
                                 <div class="form-group text-dark"> 
-                                    <label for="formInputDISATitle" style="padding-left:10%;">Title
-                                        <span style="font-size:85%;" class="text-danger">(required)</span>
-                                    </label>                                     
+                                    <label for="formInputDISATitle" style="padding-left:10%;">Title<span style="font-size:85%;" class="text-danger">(required)</span></label>
                                     <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISATitle" placeholder="Enter Title"> 
                                 </div>
                                 <div class="form-group text-dark"> 
@@ -215,19 +216,22 @@
                                             <option value="1">[Year values?]</option>                                             
                                             <option value="2">[Year values?]</option>                                             
                                             <option value="3">[Year values?]</option>                                             
-                                        </select> </p>
+                                        </select>
+                                    </p>
                                     <p style="width:25%;float:left;padding-right:10px;"> <select class="custom-select" id="formInputDISABiblioDateMonth"> 
                                             <option selected>Month</option>                                             
                                             <option value="1">[Month values?]</option>                                             
                                             <option value="2">[Month values?]</option>                                             
                                             <option value="3">[Month values?]</option>                                             
-                                        </select> </p>
+                                        </select>
+                                    </p>
                                     <p style="width:25%;float:left;padding-right:0px;"> <select class="custom-select" id="formInputDISABiblioDateDay"> 
                                             <option selected>[Day]</option>                                             
                                             <option value="1">[Day values?]</option>                                             
                                             <option value="2">[Day values?]</option>                                             
                                             <option value="3">[Day values?]</option>                                             
-                                        </select> </p>
+                                        </select>
+                                    </p>
                                 </div>
                                 <p>&nbsp;</p>
                                 <p>&nbsp;</p>
