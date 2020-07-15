@@ -599,7 +599,10 @@ var readRecordData = function(recId, roles, edit_url) {
 }
 
 var updateRecordData = function(recId, docId) {
-    {% comment %} var rec_data_api = "{{ url_for('update_reference_data', recId=None )}}" + recId; {% endcomment %}
+
+    console.log( "in var updateRecordData, recId: ", recId );
+    console.log( "in var updateRecordData, docId: ", docId );
+
     var rec_id = recId;
     var rec_data_api = "{% url 'data_record_url' rec_id %}";
 
@@ -625,6 +628,7 @@ var updateRecordData = function(recId, docId) {
                 console.log( "in var updateRecordData; redirecting to: ", data.redirect );
                 window.location.href = data.redirect;
             } else {
+                console.log( "in var updateRecordData; about to call setInputValues()" );
                 setInputValues(data.rec);
                 $('#record_form').accordion('option','active', false );
             }
@@ -1001,7 +1005,7 @@ $( document ).ready(function() {
 
     $("#rec_update").on('click', function(e) {
         console.log( "starting rec_update handling" );
-        // e.preventDefault();
+        e.preventDefault();
         console.log( "hereA" );
         if ( $(this).attr('data-clicked') == 1 ) {
             console.log( "hereB" );

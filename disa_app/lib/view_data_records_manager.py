@@ -204,8 +204,8 @@ def manage_post( payload: bytes, request_user_id: int ) -> dict:
 
         stamp_edit( request_user_id, rfrnc, session )
 
-        # context =  { 'redirect': url_for('edit_record', recId=ref.id) }
-        context =  { 'redirect': reverse( 'edit_record_url', kwargs={'rec_id': rfrnc.id} ) }
+        # context =  { 'redirect': reverse( 'edit_record_url', kwargs={'rec_id': rfrnc.id} ) }
+        context =  { 'redirect': reverse( 'edit_record_w_recid_url', kwargs={'rec_id': rfrnc.id} ) }
         log.debug( f'context, ```{context}```' )
     except:
         log.exception( '\n\nexception...' )
