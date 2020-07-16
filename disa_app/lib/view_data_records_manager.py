@@ -338,9 +338,13 @@ def stamp_edit( request_user_id: int, reference_obj: models_alch.Reference, sess
     """ Updates when the Reference-object was last edited and by whom.
         Called by manage_post() """
     log.debug( 'starting stamp_edit()' )
-    edit = models_alch.ReferenceEdit( reference_id=reference_obj.id, user_id=request_user_id, timestamp=datetime.datetime.utcnow() )
-    session.add( edit )
-    session.commit()
+    try:
+        edit = models_alch.ReferenceEdit( reference_id=reference_obj.id, user_id=request_user_id, timestamp=datetime.datetime.utcnow() )
+        session.add( edit )
+        session.commit()
+    except:
+        message = 'problem updating when Reference-object was last updated and by whom'
+        log.exception( f'{message}; traceback follows; processing will continue' )
     return
 
 
