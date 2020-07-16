@@ -121,7 +121,6 @@
             <div>
                 <p id="items_header_label">Item summary...</p>
                 <p id="record_summary"><span class="record_summary_label">Type:</span> <span class="record_summary_value">{{ reference.reference_type_name }}</span><span class="spacer"> -- </span><span class="record_summary_label">Date:</span> <span class="record_summary_value">{{ reference.date }}</span> <span class="spacer"> -- </span> <span class="record_summary_label">Transcription:</span> <span class="record_summary_value">{{ reference.brief_transcription }}</span> </p>
-                <!-- <a id="to_record_link" href="{% url 'edit_record_url' reference.id %}">(to item-record)</a> -->
                 <a id="to_record_link" href="{% url 'edit_record_w_recid_url' reference.id %}">(to item-record)</a>
             </div>
             <hr id="post_item_summary"/>
@@ -130,7 +129,6 @@
         </div>
         {% comment %}
         <div class='col-md-1'>
-            <!-- <a href="{% url 'edit_record_url' rec_id=rec.id %}">(to record)</a> -->
             <a href="{% url 'edit_record_w_recid_url' rec_id=rec.id %}">(to record)</a>
         </div>
         {% endcomment %}
