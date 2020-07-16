@@ -74,7 +74,8 @@ tfoot.rel-adder {
   <div class="row">
     <div class='col-md-11'>
       <h2 id="rec_header">Relationships <span class="small_explanation">(for item/record id: "{{rfrnc.id}}")</span></h2>
-      <a id="to_record_link" href="{% url 'edit_record_url' rfrnc.id %}">(to item-record)</a>
+      <!-- <a id="to_record_link" href="{% url 'edit_record_url' rfrnc.id %}">(to item-record)</a> -->
+      <a id="to_record_link" href="{% url 'edit_record_w_recid_url' rfrnc.id %}">(to item-record)</a>
     </div>
 
 <!--

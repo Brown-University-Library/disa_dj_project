@@ -195,7 +195,8 @@
                 <tr data-reference="{{ item.id }}">
                     <th scope="row">{{ item.id }}</th>
                     <td>
-                        <a href="{% url 'edit_record_url' item.id %}">{{ item.reference_type_name }}</a>
+                        <!-- <a href="{% url 'edit_record_url' item.id %}">{{ item.reference_type_name }}</a> -->
+                        <a href="{% url 'edit_record_w_recid_url' item.id %}">{{ item.reference_type_name }}</a>
                     </td>
                     {# <td>{{ item.last_edit().timestamp.strftime("%Y-%m-%d") }}</td> #}
                     <td>{{ item.last_edit }}</td>
