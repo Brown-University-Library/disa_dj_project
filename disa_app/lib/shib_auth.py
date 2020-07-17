@@ -62,13 +62,15 @@ class LoginDecoratorHelper(object):
         """ Returns dct from shib-info.
             Called by shib_login() """
         log.debug( 'starting prep_shib_dct()' )
+        log.debug( f'host, ``{host}``' )
         new_dct = copy.copy( request_meta_dct )
         for (key, val) in request_meta_dct.items():  # get rid of some dictionary items not serializable
             if 'passenger' in key:
                 new_dct.pop( key )
             elif 'wsgi.' in key:
                 new_dct.pop( key )
-        if host == '127.0.0.1' or host == '127.0.0.1:8000':
+        if host == '127.0.0.1' or host == '127.0.0.1:8000' or host == 'testserver':
+        # if host == '127.0.0.1' or host == '127.0.0.1:8000':
             new_dct = settings_app.TEST_META_DCT
         # log.debug( 'new_dct, ```{}```'.format(pprint.pformat(new_dct)) )
         log.debug( f'new_dct, ```{pprint.pformat(new_dct)[0:1000]}```' )
