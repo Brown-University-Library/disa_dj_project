@@ -261,6 +261,8 @@ def edit_citation( request, cite_id=None ):
     if cite_id:
         log.debug( f'will hit citation-manager with cite_id, ```{cite_id}```' )
         context: dict = view_edit_citation_manager.query_data( cite_id )
+        if context == None:
+            return HttpResponseNotFound( '404 / Not Found' )
     else:
         log.debug( 'will hit citation-manager with no cite_id' )
         user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id

@@ -28,15 +28,15 @@ def query_data( cite_id: str ) -> dict:
     data = {}
     citation_type_data = build_ct_js_data( session )
     cite = session.query( models_alch.Citation ).get( cite_id )
-    log.debug( f'cite, ``{cite}``' )
-    try:
+    if cite:
+        log.debug( f'cite, ``{cite}``' )
         log.debug( f'cite.references, ```{cite.references}```' )
-    except:
-        log.debug( 'cite has no references' )
-    cite_dct = cite.dictify()
-    data['ct_fields'] = citation_type_data
-    data['ct_fields_json'] = json.dumps( citation_type_data )
-    data['doc'] = cite_dct
+        cite_dct = cite.dictify()
+        data['ct_fields'] = citation_type_data
+        data['ct_fields_json'] = json.dumps( citation_type_data )
+        data['doc'] = cite_dct
+    else:
+        data = None
     log.debug( f'data, ```{data}```' )
     return data
 
