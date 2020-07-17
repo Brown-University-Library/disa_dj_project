@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import datetime, json, logging, os, pprint, uuid
+import pytz
+
 from django.conf import settings as project_settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.http import HttpResponseRedirect
+from django.utils import timezone
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -29,7 +32,7 @@ class UserProfile( models.Model ):
     last_logged_in = models.DateTimeField( null=True, blank=True )
 
     class Meta:
-        managed = False
+        managed = True
 
 ## auto create and save UserProfile entries
 
@@ -61,7 +64,8 @@ def save_user_profile(sender, instance, **kwargs):
     log.debug( f'instance, ``{pprint.pformat(instance.__dict__)}``' )
     log.debug( f'kwargs, ``{kwargs}``' )
     instance.profile.email = instance.email  # in case preferred shib email is updated.
-    instance.profile.last_logged_in = datetime.datetime.now()
+    # instance.profile.last_logged_in = datetime.datetime.now()
+    instance.profile.last_logged_in = timezone.now()
     instance.profile.save()
     log.debug( 'looks like save worked' )
 
@@ -93,4 +97,4 @@ class MarkedForDeletion( models.Model ):
         super( MarkedForDeletion, self ).save()
 
     class Meta:
-        managed = False
+        managed = True
