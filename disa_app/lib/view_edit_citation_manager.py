@@ -28,15 +28,33 @@ def query_data( cite_id: str ) -> dict:
     data = {}
     citation_type_data = build_ct_js_data( session )
     cite = session.query( models_alch.Citation ).get( cite_id )
-    log.debug( f'cite.references, ```{cite.references}```' )
-    # log.debug( f'cite.references[0].dictify(), ```{cite.references[0].dictify()}```' )
+    log.debug( f'cite, ``{cite}``' )
+    try:
+        log.debug( f'cite.references, ```{cite.references}```' )
+    except:
+        log.debug( 'cite has no references' )
     cite_dct = cite.dictify()
     data['ct_fields'] = citation_type_data
     data['ct_fields_json'] = json.dumps( citation_type_data )
     data['doc'] = cite_dct
-    # log.debug( f'data, ```{pprint.pformat(data)}```' )
     log.debug( f'data, ```{data}```' )
     return data
+
+
+# def query_data( cite_id: str ) -> dict:
+#     """ Queries and massages data.
+#         Called by views.edit_citation() """
+#     session = make_session()
+#     data = {}
+#     citation_type_data = build_ct_js_data( session )
+#     cite = session.query( models_alch.Citation ).get( cite_id )
+#     log.debug( f'cite.references, ```{cite.references}```' )
+#     cite_dct = cite.dictify()
+#     data['ct_fields'] = citation_type_data
+#     data['ct_fields_json'] = json.dumps( citation_type_data )
+#     data['doc'] = cite_dct
+#     log.debug( f'data, ```{data}```' )
+#     return data
 
 
 def manage_create( user_id: int ) -> dict:

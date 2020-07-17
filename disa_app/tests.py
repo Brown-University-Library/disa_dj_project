@@ -4,6 +4,7 @@ import logging, pprint
 
 from disa_app import settings_app
 from disa_app.lib import view_search_results_manager
+from disa_app.models import UserProfile
 from django.conf import settings as project_settings
 from django.contrib.auth.models import User
 from django.test import Client
@@ -74,18 +75,18 @@ class ClientDocDataTest( TestCase ):
         redirect_url = response._headers['location'][1]
         self.assertEqual(  '/login/', redirect_url )
 
-    # def test_doc_get_logged_in(self):
-    #     """ Checks GET. """
-    #     user = User.objects.create(username='test_user')
-    #     user.set_password('test_password')
-    #     user.save()
-    #     client = Client()
-    #     logged_in = client.login( username='test_user', password='test_password' )
-    #     self.assertEqual( True, logged_in )
-    #     response = self.client.get( '/data/documents/1/' )
-    #     log.debug( f'response, ``{response}``' )
-    #     log.debug( f'response.__dict__, ``{response.__dict__}``' )
-    #     self.assertEqual( 1, 2 )
+    def test_doc_get_logged_in(self):
+        """ Checks GET. """
+        usr = User.objects.create( username='test_user' )
+        usr.set_password('test_password')
+        usr.save()  # creates a UserProfile object
+        client = Client()
+        logged_in = client.login( username='test_user', password='test_password' )
+        self.assertEqual( True, logged_in )
+        response = self.client.get( '/data/documents/1/' )
+        log.debug( f'response, ``{response}``' )
+        log.debug( f'response.__dict__, ``{response.__dict__}``' )
+        self.assertEqual( 999, response.status_code )  # not yet working -- should be 200, but redirects to login
 
 
 class SearchTest( TestCase ):
