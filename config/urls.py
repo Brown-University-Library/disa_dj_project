@@ -40,6 +40,14 @@ urlpatterns = [
 
     url( r'^search_results/$', views.search_results, name='search_results_url' ),
 
+
+    # --------------------
+    # redesign...
+    # --------------------
+
+    url( r'^redesign_citations/$', views.redesign_citations, name='redesign_citations_url' ),
+
+
     ## apis...
 
     url( r'^data/documents/$', views.data_documents, name='data_documents_url' ),
@@ -56,6 +64,7 @@ urlpatterns = [
     url( r'^data/relationships/$', views.data_relationships, name='data_relationships_url' ),
     url( r'^data/relationships/(?P<rltnshp_id>.*)/$', views.data_relationships, name='data_relationships_url' ),
 
+
     ## utility-urls (protected, act as viewable integrity checks)...
 
     url( r'^utility/citations/$', views.utility_citations, name='utility_citations_url' ),
@@ -63,10 +72,12 @@ urlpatterns = [
     url( r'^utility/referents/$', views.utility_referents, name='utility_referents_url' ),
     # url( r'^utility/people/$', views.utility_people, name='utility_people_url' ),
 
+
     ## misc...
 
     url( r'^admin/', admin.site.urls ),
     url( r'^datafile/$', views.datafile, name='datafile_url' ),
+
 
     ## support urls...
 
