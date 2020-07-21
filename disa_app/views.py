@@ -30,14 +30,27 @@ log = logging.getLogger(__name__)
 
 
 # ===========================
-# main urls
+# redesign urls
 # ===========================
 
 
-# def temp_response( request ):
-#     requested_path = request.META.get( 'PATH_INFO', 'path_unknown' )
-#     log.debug( f'requested_path, ```{requested_path}```' )
-#     return HttpResponse( f'`{requested_path}` handling coming' )
+@shib_login
+def redesign_citations( request ):
+    """ Displays main landing page of citations, with user's recently-edited citations first. """
+    context = {}
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/redesign_citations.html', context )
+    return resp
+
+    # return HttpResponse( 'redesign_citations coming' )
+
+
+
+# ===========================
+# main urls
+# ===========================
 
 
 def browse( request ):
