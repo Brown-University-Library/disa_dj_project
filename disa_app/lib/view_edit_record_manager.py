@@ -22,23 +22,46 @@ def make_session() -> sqlalchemy.orm.session.Session:
 
 
 def prep_doc_id_context( doc_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
-    """ Preps context for template when a doc_id (meaning a `Citation` id) is included.
+    """ Preps context for record_edit.html template when a doc_id (meaning a `Citation` id) is included.
         Called by views.edit_record() """
+    log.debug( 'starting prep_doc_id_context()' )
+    log.debug( f'doc_id, ``{doc_id}``' )
     context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
     session = make_session()
     common_data: dict = prepare_common_data( session )
     context.update( common_data )  # merges common_data key-vals into context
     doc = session.query( models_alch.Citation ).get( doc_id )
+    log.debug( f'doc, ``{pprint.pformat(doc.__dict__)}``' )
     context['rec_id'] = None
-    context['doc_display'] = doc.display
+    try:
+        context['doc_display'] = doc.display
+    except:
+        log.exception( 'doc.display not available; traceback follows; processing will continue' )
+        context['doc_display'] = 'display not available'
     context['doc_id'] = doc.id
-    log.debug( 'context prepared' )
+    log.debug( f'context (first 1000 characters), ``{pprint.pformat(context)[0:1000]}``' )
     return context
 
 
+# def prep_doc_id_context( doc_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
+#     """ Preps context for template when a doc_id (meaning a `Citation` id) is included.
+#         Called by views.edit_record() """
+#     context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
+#     session = make_session()
+#     common_data: dict = prepare_common_data( session )
+#     context.update( common_data )  # merges common_data key-vals into context
+#     doc = session.query( models_alch.Citation ).get( doc_id )
+#     context['rec_id'] = None
+#     context['doc_display'] = doc.display
+#     context['doc_id'] = doc.id
+#     log.debug( 'context prepared' )
+#     return context
+
+
 def prep_rec_id_context( rec_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
-    """ Preps context for template when a rec_id (meaning a `Reference` id) is included.
+    """ Preps context for record_edit.html template when a rec_id (meaning a `Reference` id) is included.
         Called by views.edit_record() """
+    log.debug( 'starting prep_rec_id_context()' )
     context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
     session = make_session()
     common_data: dict = prepare_common_data( session )
@@ -47,13 +70,14 @@ def prep_rec_id_context( rec_id: str, usr_first_name: str, usr_is_authenticated:
     context['rec_id'] = rec.id
     context['doc_display'] = rec.citation.display
     context['doc_id'] = rec.citation.id
-    log.debug( 'context prepared' )
+    log.debug( f'context (first 1000 characters), ``{pprint.pformat(context)[0:1000]}``' )
     return context
 
 
 def prepare_common_data( session: sqlalchemy.orm.session.Session ):
     """ Prepares data used for both the rec_id and doc_id calls.
         Called by prep_rec_id_context() and prep_doc_id_context() """
+    log.debug( 'starting prepare_common_data()' )
 
     locs = session.query( models_alch.ReferenceLocation ).all()
 

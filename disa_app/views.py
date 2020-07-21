@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import datetime, json, logging, os, pprint
+import datetime, json, logging, os, pprint, time
 from typing import List
 
 import requests
 from disa_app import settings_app
 from disa_app.lib import denormalizer_document
+from disa_app.lib import user_pass_auth
+from disa_app.lib import utility_manager
 from disa_app.lib import v_data_document_manager  # api/documents
 from disa_app.lib import v_data_relationships_manager  # api/relationship-by-reference
 from disa_app.lib import view_data_entrant_manager  # api/people
@@ -32,10 +34,10 @@ log = logging.getLogger(__name__)
 # ===========================
 
 
-def temp_response( request ):
-    requested_path = request.META.get( 'PATH_INFO', 'path_unknown' )
-    log.debug( f'requested_path, ```{requested_path}```' )
-    return HttpResponse( f'`{requested_path}` handling coming' )
+# def temp_response( request ):
+#     requested_path = request.META.get( 'PATH_INFO', 'path_unknown' )
+#     log.debug( f'requested_path, ```{requested_path}```' )
+#     return HttpResponse( f'`{requested_path}` handling coming' )
 
 
 def browse( request ):
@@ -84,15 +86,32 @@ def person( request, prsn_id ):
 
 def source( request, src_id ):
     log.debug( f'\n\nstarting source(), with src_id, `{src_id}`' )
-    redirect_url = reverse( 'edit_record_url', kwargs={'rec_id': src_id} )
+    redirect_url = reverse( 'edit_record_w_recid_url', kwargs={'rec_id': src_id} )
     log.debug( f'redirect_url, ```{redirect_url}```' )
     return HttpResponseRedirect( redirect_url )
+
+# def source( request, src_id ):
+#     log.debug( f'\n\nstarting source(), with src_id, `{src_id}`' )
+#     redirect_url = reverse( 'edit_record_url', kwargs={'rec_id': src_id} )
+#     log.debug( f'redirect_url, ```{redirect_url}```' )
+#     return HttpResponseRedirect( redirect_url )
 
 
 @shib_login
 def editor_index( request ):
-    ## TODO: rename this url from `/editor/` to `/documents/`?
+    ## TODO: rename this url from `/editor/` to `/citations/`?
     log.debug( '\n\nstarting editor_index()' )
+
+    start_time = datetime.datetime.now()
+    log.debug( f'start_time, ``{start_time}``' )
+    target_time = start_time + datetime.timedelta(seconds=2)
+    log.debug( f'target_time, ``{target_time}``' )
+    while datetime.datetime.now() < target_time:
+        log.debug( f'now_time is, ``{datetime.datetime.now()}``' )
+        time.sleep( 1 )
+        log.debug( 'slept' )
+    log.debug( 'proceeding' )
+
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
     if request.user.is_authenticated:
@@ -103,6 +122,23 @@ def editor_index( request ):
     else:
         resp = render( request, 'disa_app_templates/document_index.html', context )
     return resp
+
+
+# @shib_login
+# def editor_index( request ):
+#     ## TODO: rename this url from `/editor/` to `/citations/`?
+#     log.debug( '\n\nstarting editor_index()' )
+#     log.debug( 'slept' )
+#     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+#     context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
+#     if request.user.is_authenticated:
+#         context['user_is_authenticated'] = True
+#         context['user_first_name'] = request.user.first_name
+#     if request.GET.get('format', '') == 'json':
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         resp = render( request, 'disa_app_templates/document_index.html', context )
+#     return resp
 
 
 def search_results( request ):
@@ -142,11 +178,35 @@ def datafile( request ):
 # ===========================
 
 
-@shib_login
 def login( request ):
-    """ Handles authNZ, & redirects to admin.
-        Called by click on login or admin link. """
+    """ Displays form offering shib & non-shib logins.
+        Called by click on header login link. """
     log.debug( '\n\nstarting login()' )
+    context = {
+        'login_then_citations_url': '%s?next=%s' % ( reverse('shib_login_url'), reverse('edit_citation_url') ),
+        'user_pass_handler_url': reverse('user_pass_handler_url')
+    }
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        pre_entered_username = request.session.get( 'manual_login_username', None )
+        if pre_entered_username:
+            context['manual_login_username'] = request.session.get( 'manual_login_username', None )
+        pre_entered_password = request.session.get( 'manual_login_password', None )
+        if pre_entered_password:
+            context['manual_login_password'] = request.session.get( 'manual_login_password', None )
+        context['manual_login_error'] = request.session.get( 'manual_login_error', None )
+        context['LOGIN_PROBLEM_EMAIL'] = settings_app.LOGIN_PROBLEM_EMAIL
+        log.debug( f'context, ``{pprint.pformat(context)}``' )
+        resp = render( request, 'disa_app_templates/login_form.html', context )
+    return resp
+
+
+@shib_login
+def handle_shib_login( request ):
+    """ Handles authNZ, & redirects to citation-list.
+        Called by click on login, and clicking shib-login button. """
+    log.debug( '\n\nstarting shib_login()' )
     next_url = request.GET.get( 'next', None )
     log.debug( f'next_url, ```{next_url}```' )
     if not next_url:
@@ -174,6 +234,21 @@ def logout( request ):
     return HttpResponseRedirect( redirect_url )
 
 
+def user_pass_handler( request ):
+    """ Handles user/pass login.
+        On auth success, redirects user to citations-list
+        On auth failure, redirects back to views.login() """
+    log.debug( 'starting user_pass_handler()' )
+    # context = {}
+    # return HttpResponse( 'user-pass-auth handling coming' )
+    if user_pass_auth.run_authentication(request) is not True:  # puts param values in session
+        resp =  user_pass_auth.prep_login_redirect( request )
+    else:
+        resp = user_pass_auth.prep_citations_redirect( request )
+    return resp
+
+
+
 # ===========================
 # editor urls
 # ===========================
@@ -186,6 +261,8 @@ def edit_citation( request, cite_id=None ):
     if cite_id:
         log.debug( f'will hit citation-manager with cite_id, ```{cite_id}```' )
         context: dict = view_edit_citation_manager.query_data( cite_id )
+        if context == None:
+            return HttpResponseNotFound( '404 / Not Found' )
     else:
         log.debug( 'will hit citation-manager with no cite_id' )
         user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
@@ -193,6 +270,7 @@ def edit_citation( request, cite_id=None ):
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
         context['user_first_name'] = request.user.first_name
+        context['can_delete_doc'] = request.user.profile.can_delete_doc
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
@@ -212,19 +290,70 @@ def edit_person( request, rfrnt_id=None ):
     return resp
 
 
+# @shib_login
+# def edit_record( request, rec_id=None ):
+#     """ Url: '/editor/records/<rec_id>/' -- 'edit_record_url' """
+#     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
+#     if rec_id:  # normal case
+#         log.debug( 'handling rec_id exists' )
+#         context: dict = view_edit_record_manager.prep_rec_id_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
+#     elif request.GET.get('doc_id', None):
+#         log.debug( 'handling doc_id parameter exists' )
+#         context: dict = view_edit_record_manager.prep_doc_id_context( request.GET.get('doc_id', None), request.user.first_name, bool(request.user.is_authenticated) )
+#     else:
+#         log.debug( f'strange, not found; request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
+#         return HttpResponseNotFound( '404 / Not Found' )
+#     if request.GET.get('format', '') == 'json':
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         resp = render( request, 'disa_app_templates/record_edit.html', context )
+#     return resp
+
 @shib_login
 def edit_record( request, rec_id=None ):
     """ Url: '/editor/records/<rec_id>/' -- 'edit_record_url' """
     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
     if rec_id:
+        log.debug( 'handling rec_id exists' )
         context: dict = view_edit_record_manager.prep_rec_id_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
     else:
+        log.debug( 'handling no rec_id' )
         context: dict = view_edit_record_manager.prep_doc_id_context( request.GET.get('doc_id', None), request.user.first_name, bool(request.user.is_authenticated) )
+    log.debug( f'context, ``{context}``' )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
         resp = render( request, 'disa_app_templates/record_edit.html', context )
     return resp
+
+
+@shib_login
+def edit_record_w_recid( request, rec_id=None ):
+    """ Url: '/editor/records/<rec_id>/' -- 'edit_record_w_recid_url' """
+    log.debug( f'\n\nstarting edit_record_w_recid(), with rec_id, `{rec_id}`' )
+    context: dict = view_edit_record_manager.prep_rec_id_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
+    log.debug( f'context, ``{context}``' )
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/record_edit.html', context )
+    return resp
+
+
+## -- original that seemed to have been working for a while...
+# @shib_login
+# def edit_record( request, rec_id=None ):
+#     """ Url: '/editor/records/<rec_id>/' -- 'edit_record_url' """
+#     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
+#     if rec_id:
+#         context: dict = view_edit_record_manager.prep_rec_id_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
+#     else:
+#         context: dict = view_edit_record_manager.prep_doc_id_context( request.GET.get('doc_id', None), request.user.first_name, bool(request.user.is_authenticated) )
+#     if request.GET.get('format', '') == 'json':
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         resp = render( request, 'disa_app_templates/record_edit.html', context )
+#     return resp
 
 
 @shib_login
@@ -333,6 +462,8 @@ def data_documents( request, doc_id=None ):
     log.debug( f'request.user.id, ```{request.user.id}```; request.user.profile.old_db_id, ```{request.user.profile.old_db_id}```,' )
     log.debug( f'type(request.user.id), ```{type(request.user.id)}```; type(request.user.profile.old_db_id), ```{type(request.user.profile.old_db_id)}```,' )
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+    user_uuid = request.user.profile.uu_id
+    user_email = request.user.profile.email
     log.debug( f'user_id, ```{user_id}```' )
     if request.method == 'GET' and doc_id:
         context: dict = v_data_document_manager.manage_get( doc_id, user_id )
@@ -344,7 +475,7 @@ def data_documents( request, doc_id=None ):
         context: dict = v_data_document_manager.manage_post( user_id, request.body )
     elif request.method == 'DELETE':
         log.debug( 'DELETE detected' )
-        context: dict = v_data_document_manager.manage_delete( doc_id, user_id )
+        context: dict = v_data_document_manager.manage_delete( doc_id, user_uuid.hex, user_email )
     else:
         msg = 'data_documents() other request.method handling coming'
         log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
@@ -388,6 +519,29 @@ def data_relationships( request, rltnshp_id=None ):
         log.warning( f'we shouldn\'t get here' )
         resp = HttpResponse( 'problem; see logs' )
     return resp
+
+
+# ===========================
+# utility urls -- act as viewable integrity checks
+# ===========================
+
+
+@shib_login
+def utility_citations( request ):
+    """ Called manually to check data.
+        Url: '/utility/documents/' -- 'utility_documents_url' """
+    cites: dict = utility_manager.prep_citations_data()
+    output = json.dumps( cites, sort_keys=True, indent=2 )
+    return HttpResponse( output, content_type='application/json; charset=utf-8' )
+
+
+@shib_login
+def utility_referents( request ):
+    """ Called manually to check data.
+        Url: '/utility/referents/' -- 'utility_referents_url' """
+    referents: dict = utility_manager.prep_referents_data()
+    output = json.dumps( referents, sort_keys=True, indent=2 )
+    return HttpResponse( output, content_type='application/json; charset=utf-8' )
 
 
 # ===========================

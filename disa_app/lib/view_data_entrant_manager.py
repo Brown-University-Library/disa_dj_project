@@ -170,7 +170,7 @@ class Details_Updater():
         self.session.add( rfrnt )
         self.session.commit()
         self.common.stamp_edit( user_id, rfrnt.reference, self.session )
-        data = { 'redirect': reverse( 'edit_record_url', kwargs={'rec_id': rfrnt.reference_id} ) }
+        data = { 'redirect': reverse( 'edit_record_w_recid_url', kwargs={'rec_id': rfrnt.reference_id} ) }
         log.debug( f'returning data, ```{pprint.pformat(data)}```' )
         return data
 

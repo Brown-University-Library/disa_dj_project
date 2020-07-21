@@ -15,6 +15,8 @@ urlpatterns = [
 
     url( r'^login/$', views.login, name='login_url' ),
     url( r'^logout/$', views.logout, name='logout_url' ),
+    url( r'^shib_login/$', views.handle_shib_login, name='shib_login_url' ),
+    url( r'^user_pass_handler/$', views.user_pass_handler, name='user_pass_handler_url' ),
 
     url( r'^browse/$', views.browse, name='browse_url' ),
 
@@ -22,7 +24,9 @@ urlpatterns = [
     url( r'^editor/documents/(?P<cite_id>.*)/$', views.edit_citation, name='edit_citation_url' ),
 
     url( r'^editor/records/$', views.edit_record, name='edit_record_url' ),
-    url( r'^editor/records/(?P<rec_id>.*)/$', views.edit_record, name='edit_record_url' ),
+    # url( r'^editor/records/(?P<rec_id>.*)/$', views.edit_record, name='edit_record_url' ),
+    url( r'^editor/records/(?P<rec_id>.*)/$', views.edit_record_w_recid, name='edit_record_w_recid_url' ),
+
 
     url( r'^editor/person/$', views.edit_person, name='edit_person_root_url' ),
     url( r'^editor/person/(?P<rfrnt_id>.*)/$', views.edit_person, name='edit_person_url' ),
@@ -52,6 +56,13 @@ urlpatterns = [
     url( r'^data/relationships/$', views.data_relationships, name='data_relationships_url' ),
     url( r'^data/relationships/(?P<rltnshp_id>.*)/$', views.data_relationships, name='data_relationships_url' ),
 
+    ## utility-urls (protected, act as viewable integrity checks)...
+
+    url( r'^utility/citations/$', views.utility_citations, name='utility_citations_url' ),
+    # url( r'^utility/items/$', views.utility_items, name='utility_items_url' ),
+    url( r'^utility/referents/$', views.utility_referents, name='utility_referents_url' ),
+    # url( r'^utility/people/$', views.utility_people, name='utility_people_url' ),
+
     ## misc...
 
     url( r'^admin/', admin.site.urls ),
@@ -64,7 +75,7 @@ urlpatterns = [
     url( r'^error_check/$', views.error_check, name='error_check_url' ),
 
     url( r'^$', RedirectView.as_view(pattern_name='browse_url') ),
-    url( r'^$', views.temp_response, name='temp_name_url' ),
+    # url( r'^$', views.temp_response, name='temp_name_url' ),
 
     ]
 

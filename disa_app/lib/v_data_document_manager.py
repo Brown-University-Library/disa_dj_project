@@ -3,9 +3,10 @@
 import datetime, json, logging, os, pprint
 
 import django, sqlalchemy
-from disa_app import settings_app
 from disa_app import models_sqlalchemy as models_alch
+from disa_app import settings_app
 from disa_app.lib import person_common
+from disa_app.models import MarkedForDeletion
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from sqlalchemy import create_engine
@@ -80,6 +81,7 @@ def manage_get( doc_id: str, user_id: int ) -> dict:
 def manage_get_all( user_id: int ) -> dict:
     """ Queries and massages data for new-document.
         Called by views.data_documents() on GET, with no doc_id """
+    log.debug( f'\n\nstarting manage_get_all()' )
     session = make_session()
     data = { 'doc': {} }
     included: list = CITATION_TYPES
@@ -219,6 +221,57 @@ def manage_post( user_id, payload ):
     return context
 
     ## end def manage_post()
+
+
+def manage_delete( doc_id, user_uuid_str, user_email ):
+    """ Adds mark-for-deletion entry to django-db table.
+        Called by: views.data_documents() when request.method is 'DELETE'. """
+    log.debug( f'doc_id, ``{doc_id}``; user_uuid_str, ``{user_uuid_str}``; user_email, ``{user_email}``' )
+    log.debug( f'type(user_uuid_str), ``{type(user_uuid_str)}``' )
+    session = make_session()
+    log.debug( f'session, ``{session}``' )
+    citation_result = session.query( models_alch.Citation ).get( doc_id )
+    log.debug( f'citation_result, ``{citation_result}``' )
+
+    citaton_dct = citation_result.dictify()
+    log.debug( f'citaton_dct, ``{citaton_dct}``' )
+
+    try:
+        citation_jsn = json.dumps( citaton_dct, sort_keys=True, indent=2 )
+        log.debug( f'citation_jsn, ``{citation_jsn}``' )
+    except:
+        log.exception( 'problem getting citation json' )
+
+    try:
+        usr_dct = { 'user_uuid': user_uuid_str, 'user_email': user_email }
+        user_jsn = json.dumps( usr_dct, sort_keys=True, indent=2 )
+    except:
+        log.exception( 'problem getting user json' )
+
+    try:
+        log.debug( 'saving markedfordeletion_entry' )
+        markedfordeletion_entry = MarkedForDeletion(
+            old_db_id=doc_id, doc_json_data=citation_jsn, patron_json_data=user_jsn )
+        markedfordeletion_entry.save()
+        log.debug( 'markedfordeletion_entry seems to have worked' )
+    except:
+        log.exception( 'problem saving markedfordeletion_entry' )
+    # context = { 'status': 'foo' }
+    # log.debug( f'context, ``{context}``' )
+    # return context
+    return
+
+
+# def manage_delete( doc_id, user_id ):
+#     """ Adds mark-for-deletion entry to django-db table.
+#         Called by: views.data_documents() when request.method is 'DELETE'. """
+#     log.debug( f'doc_id, ``{doc_id}``' )
+#     markedfordeletion_entry = MarkedForDeletion( old_db_id=doc_id )
+#     markedfordeletion_entry.save()
+#     # context = { 'status': 'foo' }
+#     # log.debug( f'context, ``{context}``' )
+#     # return context
+#     return
 
 
 # ----------------

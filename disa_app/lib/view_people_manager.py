@@ -20,6 +20,34 @@ def make_session():
     return session
 
 
+# def query_people():
+#     """ Queries db for people.
+#         Called by views.people()
+#         Resources:
+#         - <https://stackoverflow.com/questions/19406859/sqlalchemy-convert-select-query-result-to-a-list-of-dicts/20078977>
+#         - <https://stackoverflow.com/questions/2828248/sqlalchemy-returns-tuple-not-dictionary>
+#         """
+#     log.debug( 'starting query_people()' )
+#     session = make_session()
+#     resultset: List(sqlalchemy.util._collections.result) = session.query(
+#         models_alch.Person, models_alch.Referent ).filter( models_alch.Person.id == models_alch.Referent.id ).all()
+#     log.debug( f'type(resultset), `{type(resultset)}`' )
+#     log.debug( f'resultset[0], ```{resultset[0]}```' )
+#     people = []
+#     for ( prsn, rfrnt ) in resultset:
+#         entry = { 'db_id': prsn.id }
+#         entry['db_sex'] = rfrnt.sex
+#         entry['calc_sex'] = rfrnt.sex if rfrnt.sex else 'Not Listed'
+#         entry['db_age'] = rfrnt.age
+#         entry['calc_age'] = rfrnt.age if rfrnt.age else 'Not Listed'
+#         prep_race( entry, rfrnt )
+#         prep_status( entry, rfrnt )
+#         prep_name( entry, prsn )
+#         people.append( entry )
+#     log.debug( f'people (first 3), ```{pprint.pformat(people[0:3])}```...' )
+#     return people
+
+
 def query_people():
     """ Queries db for people.
         Called by views.people()
@@ -30,19 +58,21 @@ def query_people():
     log.debug( 'starting query_people()' )
     session = make_session()
     resultset: List(sqlalchemy.util._collections.result) = session.query(
-        models_alch.Person, models_alch.Referent ).filter( models_alch.Person.id == models_alch.Referent.id ).all()
+        models_alch.Referent ).all()
     log.debug( f'type(resultset), `{type(resultset)}`' )
     log.debug( f'resultset[0], ```{resultset[0]}```' )
     people = []
-    for ( prsn, rfrnt ) in resultset:
-        entry = { 'db_id': prsn.id }
+    for rfrnt in resultset:
+        entry = { 'db_id': rfrnt.id }
         entry['db_sex'] = rfrnt.sex
         entry['calc_sex'] = rfrnt.sex if rfrnt.sex else 'Not Listed'
         entry['db_age'] = rfrnt.age
         entry['calc_age'] = rfrnt.age if rfrnt.age else 'Not Listed'
+        entry['person_id'] = rfrnt.person_id
         prep_race( entry, rfrnt )
         prep_status( entry, rfrnt )
-        prep_name( entry, prsn )
+        # prep_name( entry, prsn )
+        prep_name( entry, rfrnt )
         people.append( entry )
     log.debug( f'people (first 3), ```{pprint.pformat(people[0:3])}```...' )
     return people
@@ -78,14 +108,23 @@ def prep_status( entry: dict, rfrnt: models_alch.Referent ) -> None:
     return
 
 
-def prep_name( entry: dict, prsn: models_alch.Person ) -> None:
+def prep_name( entry: dict, rfrnt: models_alch.Referent ) -> None:
     """ Updates entry with name data.
         Called by query_people() """
-    entry['db_name_first'] = prsn.first_name  # first_name: str
-    entry['db_name_last'] = prsn.last_name  # last_name: str
-    calc_name: str = f'{prsn.first_name} {prsn.last_name}'.strip()
-    calc_name: str = calc_name if calc_name else 'Not Listed'
-    entry['calc_name'] = calc_name
+    # display = rfrnt.display_name()
+    # calc_name: str = f'{prsn.first_name} {prsn.last_name}'.strip()
+    # calc_name: str = calc_name if calc_name else 'Not Listed'
+    entry['calc_name'] = rfrnt.display_name()
+
+
+# def prep_name( entry: dict, prsn: models_alch.Person ) -> None:
+#     """ Updates entry with name data.
+#         Called by query_people() """
+#     entry['db_name_first'] = prsn.first_name  # first_name: str
+#     entry['db_name_last'] = prsn.last_name  # last_name: str
+#     calc_name: str = f'{prsn.first_name} {prsn.last_name}'.strip()
+#     calc_name: str = calc_name if calc_name else 'Not Listed'
+#     entry['calc_name'] = calc_name
 
 
 # db = SQLAlchemy(app)

@@ -515,7 +515,9 @@ var collectLocations = function() {
 
 var collectInputValues = function(docId) {
     var data = {};
+    console.log( "about to log perceived transcription" );
     data['transcription'] = $('#transcription').val();
+    console.log( "perceived transcription, ", data['transcription'] );
     data['record_type'] =  {
         'id': Number( $('#recordtype_autocomplete').attr('data-rectype-id') ),
         'value': $('#recordtype_autocomplete').val(),
@@ -597,7 +599,10 @@ var readRecordData = function(recId, roles, edit_url) {
 }
 
 var updateRecordData = function(recId, docId) {
-    {% comment %} var rec_data_api = "{{ url_for('update_reference_data', recId=None )}}" + recId; {% endcomment %}
+
+    console.log( "in var updateRecordData, recId: ", recId );
+    console.log( "in var updateRecordData, docId: ", docId );
+
     var rec_id = recId;
     var rec_data_api = "{% url 'data_record_url' rec_id %}";
 
@@ -612,6 +617,7 @@ var updateRecordData = function(recId, docId) {
     var data = collectInputValues(docId);
     console.log( "collectInputValues data: ", data );
     var method = (recId ? "PUT" : "POST");
+    console.log( "method: ", method );
     $.ajax({
         type: method,
         url: rec_data_api,
@@ -619,8 +625,10 @@ var updateRecordData = function(recId, docId) {
         data: JSON.stringify(data),
         success: function(data) {
             if ( method === 'POST' ) {
+                console.log( "in var updateRecordData; redirecting to: ", data.redirect );
                 window.location.href = data.redirect;
             } else {
+                console.log( "in var updateRecordData; about to call setInputValues()" );
                 setInputValues(data.rec);
                 $('#record_form').accordion('option','active', false );
             }
@@ -982,14 +990,34 @@ $( document ).ready(function() {
       yearRange: "1491:2000"
     });
 
+    // $("#rec_update").on('click', function(e) {
+    //     console.log( "starting rec_update handling" );
+    //     e.preventDefault();
+    //     if ($(this).attr('data-clicked') == 1) {
+    //         $(this).attr('data-clicked', 0);
+    //         return true;
+    //     } else {
+    //         $(this).attr('data-clicked', 1);
+    //         tinymce.triggerSave();
+    //         updateRecordData(rec_id, doc_id);
+    //     }
+    // });
+
     $("#rec_update").on('click', function(e) {
+        console.log( "starting rec_update handling" );
         e.preventDefault();
-        if ($(this).attr('data-clicked') == 1) {
+        console.log( "hereA" );
+        if ( $(this).attr('data-clicked') == 1 ) {
+            console.log( "hereB" );
             $(this).attr('data-clicked', 0);
+            console.log( "hereC" );
             return true;
         } else {
+            console.log( "hereD" );
             $(this).attr('data-clicked', 1);
+            console.log( "hereE" );
             tinymce.triggerSave();
+            console.log( "hereF" );
             updateRecordData(rec_id, doc_id);
         }
     });

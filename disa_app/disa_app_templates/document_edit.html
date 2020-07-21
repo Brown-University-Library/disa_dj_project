@@ -65,6 +65,13 @@
       margin-right: 10%;
     }
 
+
+    /*deletion-confirmation*/
+    p#confirmation-line-2 {
+        margin-top: -1em;
+    }
+
+
 </style>
 {% endblock %}
 
@@ -112,6 +119,56 @@
                     <textarea class="form-control" id="acknowledgements"></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary" id="doc_update">Update</button>
+
+
+
+
+
+
+
+
+                {% if can_delete_doc %}
+                <!-- Button to Open the Modal -->
+                <!-- <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#myModal"> -->
+
+                <!-- <button class="btn btn-danger del-reference"><span class="fas fa-times-circle"></span></button> -->
+
+                <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#myModal">
+                    <span class="fas fa-times-circle"></span> Delete Document
+                </button>
+
+                <!-- <span class="float-right">Contact</span> -->
+
+                <!-- The Modal -->
+                <div class="modal" id="myModal">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+                      <!-- Modal body -->
+                      <div class="modal-body text-center mb-5">
+                        <!-- <img src="right.png" class="img-responsive"> -->
+                        <h1>Confirming...</h1>
+                        <p>Do you really want to delete this document?</p><p id="confirmation-line-2">This process cannot be undone.</p>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-secondary btn-lg mr-2 rounded-lg" data-dismiss="modal">Cancel</button>
+                          <button type="button" class="btn btn-danger btn-lg rounded-lg del-document" id="confirm-delete-button">Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+
+
+
+
+
+
+
+
             </form>
         </div>
         <div class='col-md-1'>
@@ -138,9 +195,8 @@
                 <tr data-reference="{{ item.id }}">
                     <th scope="row">{{ item.id }}</th>
                     <td>
-                        <a href="{% url 'edit_record_url' item.id %}">{{ item.reference_type_name }}</a>
+                        <a href="{% url 'edit_record_w_recid_url' item.id %}">{{ item.reference_type_name }}</a>
                     </td>
-                    {# <td>{{ item.last_edit().timestamp.strftime("%Y-%m-%d") }}</td> #}
                     <td>{{ item.last_edit }}</td>
                     <td><button class="btn btn-danger del-reference"><span class="fas fa-times-circle"></span></button>
                     </td>
@@ -150,7 +206,6 @@
         </table>
         {% endif %}
         <div id="new_document_button" class="d-flex flex-row-reverse">
-            {# <a class="btn btn-primary" href="{% url 'edit_record_url' doc.id %}">Add an item</a> #}
             <a class="btn btn-primary" href="{% url 'edit_record_url' %}?doc_id={{doc.id}}">Add an item</a>
         </div>
     {% endif %}
@@ -269,23 +324,6 @@ var initializeForm = function (data, ctMap) {
     }
 }
 
-// var readDocumentData = function(docId, ctMap, copy) {
-//     if (copy) {
-//         var doc_data_api = "{% url 'data_documents_url' 'copy' %}";
-//         console.log( 'in readDocumentData; doc_data_api for `copy`, ', doc_data_api );
-//     } else {
-//         //{# var doc_data_api = "{% url 'data_documents_url' None %}" + docId; #}
-//         console.log( 'hereB' );
-//         var doc_data_api = "{% url 'data_documents_url' 'STUB' %}".replace( "STUB", docId );  {#  odd; created urls in `record_edit.html` can be created with variables #}
-//         console.log( 'in readDocumentData; doc_data_api, ', doc_data_api );
-//     }
-//     console.log( "docId, ", docId );
-//     console.log( "copy, ", copy );
-//     $.get(doc_data_api, function(data) {
-//         initializeForm(data, ctMap);
-//     });
-// }
-
 var readDocumentData = function(docId, ctMap, copy) {
     if (copy) {
         var doc_data_api = "{% url 'data_documents_url' 'copy' %}";
@@ -351,21 +389,6 @@ var deactivateReferenceDelete = function($cancelBtn) {
   return true;
 }
 
-// var deleteReference = function($refRow, ctMap) {
-//     var ref_del_api = "{% url 'data_reference_url' 'STUB' %}"
-//         .replace('STUB', $refRow.attr('data-reference'));
-//     console.log( 'in deleteReference; ref_del_api, ', ref_del_api );
-//     $.ajax({
-//         type: "DELETE",
-//         url: ref_del_api,
-//         success: function(data) {
-//           $refRow.remove();
-//           initializeForm(data, ctMap);
-//           $('#document_form').accordion('option','active', false );
-//         }
-//     });
-// }
-
 var deleteReference = function($refRow, ctMap) {
     var ref_del_api = "{% url 'data_reference_url' 'STUB' %}"
         .replace('STUB', $refRow.attr('data-reference'));
@@ -379,28 +402,50 @@ var deleteReference = function($refRow, ctMap) {
     });
 }
 
-    // $.ajax({
-    //     type: method,
-    //     url: doc_data_api,
-    //     contentType: "application/json",
-    //     data: JSON.stringify(data),
-    //     success: function(data) {
-    //         if ( method === 'POST' ) {
-    //             window.location.href = data.redirect;
-    //         } else {
-    //             initializeForm(data, ctMap);
-    //             $('#document_form').accordion('option','active', false );
-    //         }
-    //     }
-    // });
+var deleteDocument = function( doc_id ) {
+    /*  This only passes the doc_id; think about passing more identifying info
+        ...so the server doesn't have to do a lookup for more document info. */
+    console.log( "in `var deleteDocument`; `doc_id`, ", doc_id );
+    var doc_data_api_root = "{% url 'data_documents_url' %}";
+    var full_doc_data_api = doc_data_api_root + doc_id + "/";
+    $.ajax({
+        type: "DELETE",
+        url: full_doc_data_api,
+        success: function(data) {
+          // setTimeout( () => {console.log("waiting two seconds");}, 5000 );
+          console.log( 'in deleteDocument; data, ', data );
+          window.location.href = data.redirect;
+          // alert( "Citation " + doc_id + " marked for deletion." );
+        }
+    });
+    console.log( "ajax call done" );
+}
+
+// var deleteDocument = function( doc_id ) {
+//     /*  This only passes the doc_id; think about passing more identifying info
+//         ...so the server doesn't have to do a lookup for more document info. */
+//     console.log( "in `var deleteDocument`; `doc_id`, ", doc_id );
+//     var doc_data_api_root = "{% url 'data_documents_url' %}";
+//     var full_doc_data_api = doc_data_api_root + doc_id + "/";
+//     $.ajax({
+//         type: "DELETE",
+//         url: full_doc_data_api,
+//     });
+//     console.log( "ajax call done" );
+// }
 
 
 $( document ).ready(function() {
     var doc_id = getDocumentId();
     console.log( "in document.ready(); doc_id, ", doc_id );
-    // {# var cite_type_fields = JSON.parse('{{ ct_fields | tojson | safe}}'); #}
+    //
     var cite_type_fields = JSON.parse( '{{ ct_fields_json | safe }}' );
     readDocumentData(doc_id, cite_type_fields, false);
+    //
+    // var documents_url = "{{ documents_url }}";
+    var documents_url = "{% url 'editor_index_url' %}";
+    console.log( "in document.ready(); documents_url, ", documents_url );
+    //
     $( "#document_form" ).accordion({
         collapsible: true,
         header: "h2",
@@ -441,6 +486,29 @@ $( document ).ready(function() {
       $(this).parent().remove();
       readDocumentData(doc_id, cite_type_fields, true);
     });
+
+
+
+    {% if can_delete_doc %}
+
+    $( "#confirm-delete-button" ).on('click', function(e) {
+      e.preventDefault();
+      deleteDocument(doc_id);
+      // alert( "put deletion code here." );
+      window.location.replace( documents_url );
+    });
+
+    // $( "#confirm-delete-button" ).on('click', function(e) {
+    //   e.preventDefault();
+    //   // updateDocumentData(doc_id, cite_type_fields);
+    //   alert( "put deletion code here." );
+    //   window.location.replace( documents_url );
+    // });
+
+    {% endif %}
+
+
+
 });
 </script>
 {% endblock %}
