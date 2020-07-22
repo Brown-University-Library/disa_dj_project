@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import datetime, json, logging, os, pprint
+import datetime, json, logging, os, pprint, re
+# from operator import itemgetter
 
 import django, sqlalchemy
 from disa_app import models_sqlalchemy as models_alch
@@ -61,7 +62,7 @@ def run_query( srch_text, session ) -> dict:
     queried_items_via_location: list = query_items_via_location( srch_text, session  )
     all_items = list( set(queried_items_via_transcription + queried_items_via_location) )
 
-    item_results = process_items( all_items, session )
+    item_results = process_items( all_items, srch_text )
 
     query_dct = {
         'people_results': people_results, 'citation_results': citation_results, 'item_results': item_results }
@@ -120,7 +121,8 @@ def process_persons( all_persons, session ):
     """ Searches `Person` table.
         Called by run_search() """
     log.debug( f'all_persons before sort, ```{pprint.pformat(all_persons)}```' )
-    all_persons = sorted( all_persons, key=itemgetter('age') )
+    all_persons.sort( key=lambda prsn: prsn.display_name() )
+    log.debug( f'all_persons after sort, ```{pprint.pformat(all_persons)}```' )
     people = []
     for person in all_persons:
         prsn_dct = person.dictify()
@@ -236,47 +238,68 @@ def query_items_via_location( srch_text, session  ) -> list:
             rfrncs.append( qset_ref_location.reference )
     log.debug( f'len(rfrncs), ```{len(rfrncs)}```' )
     return rfrncs
-    # log.debug( f'rfrncs, ```{pprint.pformat(rfrncs)}```' )
-    ## TODO - return matches, and then in the display, return location info for all references
-    # for rfrnc_match in matches:
-    #     if rfrnc_match is None:
-    #         continue
-    #     log.debug( f'rfrnc_match.__dict__, ```{rfrnc_match.__dict__}```' )
-    #     for location in
-    #     try:
-    #         log.debug( f'rfrnc_match.locations, ```{rfrnc_match.locations}```' )
-    #         # log.debug( f'rfrnc_match.location.name, ```{rfrnc_match.location.name}```' )
-    #         # log.debug( f'rfrnc_match.location_type.name, ```{rfrnc_match.location_type.name}```' )
-    #     except:
-    #         log.exception( 'problem accessing __dict__' )
-    #         pass
-    #     # break
-
-    #     """
-    #     """
-    # 1/0
-    # return
 
 
-def process_items( all_items, session ) -> list:
+def process_items( all_items, srch_text ) -> list:
     """ Prepares item-display data.
-        Called by run_search() """
+        Called by run_query() """
+    # log.debug( f'all_items before sort, ```{pprint.pformat(all_items)}```' )
     rfrncs = []
     for rfrnc in all_items:
         try:
             rfrnc_dct = rfrnc.dictify()
+            rfrnc_dct['transcription'] = update_transcription( rfrnc_dct.get('transcription', ''), srch_text )
             rfrncs.append( rfrnc_dct )
         except:
-            log.exception( f'problem with reference, ```{rfrnc}```' )
-
-        # try:
-        #     log.debug( f'rfrnc.display_location_info(), ```{rfrnc.display_location_info()}```' )
-        # except:
-        #     log.exception( f'problem processing location info for rfrnc, ```{rfrnc}```' )
+            log.exception( f'problem with reference, ```{rfrnc}```; traceback follows but processing will continue' )  # occasionally a reference in the list is None; TODO- determine why that is.
+    rfrncs.sort( key=lambda entry: entry['id'] )
+    # log.debug( f'rfrncs after sort, ```{pprint.pformat(rfrncs)}```' )
     rfrncs_info = {
         'count': len(rfrncs), 'references': rfrncs, 'fields_searched': ['transcription (display truncated)', 'location-fields'] }
-    log.debug( f'rfrncs_info, ```{pprint.pformat( rfrncs_info )}```' )
+    log.debug( f'rfrncs_info (first 1000 characters), ```{pprint.pformat( rfrncs_info )[0:1000]}```...' )
     return rfrncs_info
+
+
+def update_transcription( transcription, srch_text ) -> list:
+    """ Replaces transcription with transcription segments.
+        Called by process_items() """
+    transcription_lowercase = transcription.lower()
+    srch_text_lowercase = srch_text.lower()
+    extra_characters = 40
+    finds = []
+    for match in re.finditer( srch_text_lowercase, transcription_lowercase ):
+        # log.debug( f'match found: start, ``{match.start()}``; end, ``{match.end()}``' )
+        start_slice = (match.start() - extra_characters) if (match.start() - extra_characters) >= 0 else 0
+        end_slice = (match.end() + extra_characters) if (match.end() + extra_characters) <= len(transcription) else len(transcription)
+        big_slice = f'…{transcription[start_slice: end_slice].strip()}…'
+        finds.append( big_slice )
+    log.debug( f'finds, ```{pprint.pformat(finds)}```' )
+    return finds
+
+
+# def search_items_by_location( srch_text, session ):
+#     """ Searches `Reference` table on location.
+#         Called by run_search() """
+#     rfrncs = []
+#     qset_location_types = session.query( models_alch.LocationType ).all()
+#     for qset_location_type in qset_location_types:
+#         log.debug( f'qset_location_type.name, ```{qset_location_type.name}```' )
+#         """
+#         This yields a list of all the collection-type names
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Colony/State```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Location```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Locale```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```City```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Colony```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```State```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Town```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```County```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Region```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Church```
+#         [30/Mar/2020 10:18:32] DEBUG [view_search_results_manager-search_items_by_location()::190] qset_location_type.name, ```Ship```
+#         """
+#     1/0
+#     return
 
 
 # ====================
