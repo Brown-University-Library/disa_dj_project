@@ -122,18 +122,52 @@
                                 <!-- <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> -->
                                 <a class="nav-link" href="{% url 'redesign_home_url' %}">Home <span class="sr-only">(current)</span></a>
                             </li>
+
+                            <!--
                             <li class="nav-item">
                                 <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">People</a>
                             </li>
+                            -->
+
+                            <!--
                             <li class="nav-item">
                                 <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Documents</a>
                             </li>
+                            -->
+
+                            <!--
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Login / (Welcome, User)</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Logout</a>
                             </li>
+                            -->
+
+                            {% if user_is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'people_url' %}" tabindex="-1" aria-disabled="false">People</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'redesign_citations_url' %}" tabindex="-1" aria-disabled="true">Citations</a>
+                            </li>
+                            <li class="nav-item">
+                                <span class="navbar-text text-white">(Welcome {{ user_first_name }})</span>
+                            </li>
+                            <li class="nav-item">
+                                {% if logout_next %}
+                                <a class="nav-link" href="{% url 'logout_url' %}?next={{ logout_next }}">Logout</a>
+                                {% else %}
+                                <a class="nav-link" href="{% url 'logout_url' %}?next={% url 'login_url' %}">Logout</a>
+                                {% endif %}
+                            </li>
+                            {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login_url' %}">Login</a>
+                            </li>
+                            {% endif %}
+
+
                             <!--
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">[Dropdown]</a>
@@ -144,6 +178,7 @@
                                 </div>
                             </li>
                             -->
+
                         </ul>
                     </div>
                 </nav>
