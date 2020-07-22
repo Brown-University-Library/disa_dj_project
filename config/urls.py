@@ -45,6 +45,7 @@ urlpatterns = [
     # redesign...
     # --------------------
 
+    url( r'^redesign_home/$', views.redesign_home, name='redesign_home_url' ),
     url( r'^redesign_citations/$', views.redesign_citations, name='redesign_citations_url' ),
 
 

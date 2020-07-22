@@ -34,6 +34,11 @@ log = logging.getLogger(__name__)
 # ===========================
 
 
+def redesign_home( request ):
+    """ ? """
+    return HttpResponse( "What should be displayed here?" )
+
+
 @shib_login
 def redesign_citations( request ):
     """ Displays main landing page of citations, with user's recently-edited citations first. """
