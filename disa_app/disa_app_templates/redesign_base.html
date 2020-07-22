@@ -91,12 +91,32 @@
                     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                         <ul class="navbar-nav mr-auto nav-fill w-100">
                             <li>
+
+                            <!--
                             <form class="form-inline my-2 my-lg-0">
                                 <input class="form-control mr-sm-2" type="text" placeholder="enter search-term" aria-label="Search">
                                 <button class="btn btn-secondary my-2 my-sm-0" type="submit">
                                     <i class="fas fa-search fa-lg"></i>
                                 </button>
                             </form>
+                            -->
+
+                            <form class="form-inline my-2 my-lg-0" action="{% url 'search_results_url' %}" method="get">
+
+                                {% if search_query %}
+                                <input class="form-control mr-sm-2" type="text" placeholder="searched: `{{ search_query }}`" aria-label="Search" id="query" name="query">
+                                <!-- <input type="text" class="searchTerm" placeholder="searched: `{{ search_query }}`" id="query" name="query"> -->
+                                {% else %}
+                                <input class="form-control mr-sm-2" type="text" placeholder="enter search-term" aria-label="Search" id="query" name="query">
+                                <!-- <input type="text" class="searchTerm" placeholder="enter search-term" id="query" name="query"> -->
+                                {% endif %}
+
+                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">
+                                    <i class="fas fa-search fa-lg"></i>
+                                </button>
+                            </form>
+
+
                             </li>
                             <li class="nav-item active">
                                 <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
