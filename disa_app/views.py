@@ -37,15 +37,17 @@ log = logging.getLogger(__name__)
 @shib_login
 def redesign_citations( request ):
     """ Displays main landing page of citations, with user's recently-edited citations first. """
-    context = {}
+    log.debug( '\n\nstarting redesign_citations()' )
+    user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+    context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
+    if request.user.is_authenticated:
+        context['user_is_authenticated'] = True
+        context['user_first_name'] = request.user.first_name
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
         resp = render( request, 'disa_app_templates/redesign_citations.html', context )
     return resp
-
-    # return HttpResponse( 'redesign_citations coming' )
-
 
 
 # ===========================
