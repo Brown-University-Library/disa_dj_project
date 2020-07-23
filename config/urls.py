@@ -47,7 +47,7 @@ urlpatterns = [
 
     url( r'^redesign_home/$', views.redesign_home, name='redesign_home_url' ),
     url( r'^redesign_citations/$', views.redesign_citations, name='redesign_citations_url' ),
-    url( r'^redesign_citation/(?P<cite_id>.*)/$', views.redesign_citation, name='redesign_citation_url' ),
+    url( r'^redesign_citations/(?P<cite_id>.*)/$', views.redesign_citation, name='redesign_citation_url' ),
 
 
 
