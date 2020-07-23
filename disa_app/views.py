@@ -55,6 +55,26 @@ def redesign_citations( request ):
     return resp
 
 
+@shib_login
+def redesign_citation( request, cite_id ):
+    """ Displays specific citation. """
+    log.debug( '\n\nstarting redesign_citation()' )
+    return HttpResponse( f'redesign-citation coming for cite-id, ``{cite_id}``' )
+
+    user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+
+    context: dict = {}
+
+    if request.user.is_authenticated:
+        context['user_is_authenticated'] = True
+        context['user_first_name'] = request.user.first_name
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/redesign_citation.html', context )
+    return resp
+
+
 # ===========================
 # main urls
 # ===========================
