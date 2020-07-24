@@ -16,6 +16,8 @@
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" href="#Bibliographic-information" data-toggle="tab" role="tab" aria-controls="Bibliographic-information" aria-expanded="true">Bibliographic information</a>
+            <!-- Ben, help!!  :)  Note: the citation-id doesn't have to go here. -->
+            <p style="font-size: 50%; line-height: 100%; margin-top: -1.5em; margin-left: 2em;">(for Citation ID "{{ doc.id }}")</p>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#Items" data-toggle="tab" role="tab" aria-controls="Items" aria-expanded="true">Items</a>
@@ -23,7 +25,7 @@
     </ul>
     <div class="tab-content">
         <div class="active tab-pane" style="padding: 20px;" role="tabpanel" aria-labelledby="Bibliographic-information" id="Bibliographic-information">
-            <h5 class="text-dark" style="width:25%;float:left;">Document type:</h5>
+            <h5 class="text-dark" style="width:25%;float:left;">Citation type:</h5>
             <div style="clear: left;">
                 <label for="formInputDISADocType" style="padding-left:12%;">Item type:</label>
                 <select style="width:75%;float:right;" class="custom-select" id="formInputDISADocType">
@@ -116,7 +118,7 @@
                     <div class="active tab-pane" role="tabpanel" aria-labelledby="New-Item" id="New-Item" style="margin-top:-20px;padding-top:0px;">
                         <div class="row col-lg-12" style="padding-top:40px;">
                             <div class="col-md-6">
-                                <h5 class="text-dark" style="float:left;margin-left:20px;">Location in source document</h5>
+                                <h5 class="text-dark" style="float:left;margin-left:20px;">Location in source citation</h5>
                                 <p>&nbsp;</p>
                                 <div class="form-group text-dark">
                                     <label for="formInputDISAItemVolume" style="padding-left:15%;">Volume</label>
@@ -357,7 +359,7 @@
                                 <textarea class="form-control" rows="3" id="formInputDISAPeopleResearcherNotes"></textarea>
                             </div>
                             <button type="button" class="btn btn-secondary btn-md" style="font-weight: bold;margin-top: 20px;">ALL CHANGES SAVED</button>
-                            <button type="button" class="btn btn-primary btn-md" style="font-weight: bold;margin-top: 20px;margin-left: 15px;">SAVE ITEM AND EXIT THIS SOURCE DOCUMENT</button>
+                            <button type="button" class="btn btn-primary btn-md" style="font-weight: bold;margin-top: 20px;margin-left: 15px;">SAVE ITEM AND EXIT THIS SOURCE CITATION</button>
                         </div>
                     </div> <!-- /.tab-pane for items -->
                 </div> <!-- /.tab-content for items -->
