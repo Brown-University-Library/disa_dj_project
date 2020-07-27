@@ -60,7 +60,12 @@
             {% for entry in user_documents %}
             <tr>
                 <!-- <td>{{ entry.doc.id }}</td> -->
-                <td><a href="{% url 'edit_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
+                {% if entry.doc.id|divisibleby:"2" is True %} {# temporary if, for easy comparison #}
+                    <td><a href="{% url 'redesign_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
+                }
+                {% else %}
+                    <td><a href="{% url 'edit_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
+                {% endif %}
                 <td class="table-info">{{ entry.doc.display }}</td>
                 <td style="background-color: #eeeeee;">
                     <button type="button" class="close text-primary" aria-label="Close">
@@ -88,7 +93,11 @@
             {% for entry in documents %}
             <tr>
                 <!-- <td>{{ entry.doc.id }}</td> -->
-                <td><a href="{% url 'edit_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
+                {% if entry.doc.id|divisibleby:"2" is True %} {# temporary if, for easy comparison #}
+                    <td><a href="{% url 'redesign_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
+                {% else %}
+                    <td><a href="{% url 'edit_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
+                {% endif %}
                 <td class="table-info">{{ entry.doc.display }}</td>
             </tr>
             {% endfor %}
