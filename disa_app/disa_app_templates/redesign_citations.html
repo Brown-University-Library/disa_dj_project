@@ -106,3 +106,14 @@
 </div> <!-- /#startpanel -->
 
 {% endblock content %}
+
+
+{% block page_specific_js %}
+<script>
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    });
+</script>
+{% endblock page_specific_js %}
