@@ -11,6 +11,20 @@
 
 {% block content %}
 
+
+<!-- PATRICK STYLES -->
+
+<style>
+
+    /* For hiding citation fields when they're not needed */
+
+    #hidden-fields {
+        display: none;
+    }
+
+</style>
+
+
 <!-- JavaScript-savvy URL control to toggle div display between #startpanel above & #tabs_bibinfoanditems below -->
 <div id="tabs_bibinfoanditems" style="margin-top:10em;">
     <ul class="nav nav-tabs" role="tablist">
@@ -28,7 +42,9 @@
             <h5 class="text-dark" style="width:25%;float:left;">Citation type:</h5>
             <div style="clear: left;">
 
-                <label for="formInputDISADocType" style="padding-left:12%;">Citation type:</label>
+                <!-- CITATION TYPE DROPDOWN SELECTOR -->
+
+                <!-- <label for="formInputDISADocType" style="padding-left:12%;">Citation type:</label> -->
 
                 <!-- hardcoded -->
                 <!-- Ben, I'm going to soon comment-out the select style block below.
@@ -39,6 +55,9 @@
                     (I like the explicitness of your id name.)
                     Eventually I'm going to rename it anyway, working to unify 'doc' references to 'cite' or 'citation' references.
                     -->
+                
+                <!--
+
                 <select style="width:75%;float:right;" class="custom-select" id="formInputDISADocType">
                     <option selected>Newspaper Article</option>
                     <option value="1">[Other doc format]</option>
@@ -46,14 +65,121 @@
                     <option value="3">[Other doc format]</option>
                 </select>
 
+                -->
+
                 <!-- dynamic -->
                 <!-- populated by js readDocumentData() -> initializeForm() -->
                 <!-- <select class="form-control" id="document_type"> -->
-                <select style="width:75%;float:right;" class="custom-select" id="document_type">
+
+                <select style="" class="custom-select" id="document_type">
+                    <!-- (Patrick) This option is only to be shown if citation type has not been selected -->
+                    <option value="0" class="initMessage">
+                        [Select a document type]
+                    </option> 
                 </select>
             </div>
-            <p>&nbsp;</p>
+
+            <!-- CITATION FIELDS (REQUIRED, OPTIONAL, AND HIDDEN) -->
+
             <h5>Priority information</h5>
+            <div id="required-fields"></div>
+            <h5>Additional information</h5>
+            <div id="optional-fields"></div>
+            <div id="hidden-fields">
+                <div class="citation-field form-group text-dark" id="abstractNote">
+                <label for="abstractNote-value" style="padding-left:15%;">Abstract Note:</label>
+                <input id="abstractNote-value" name="abstractNote-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="accessDate">
+                <label for="accessDate-value" style="padding-left:15%;">Access Date:</label>
+                <input id="accessDate-value" name="accessDate-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="archive">
+                <label for="archive-value" style="padding-left:15%;">Archive:</label>
+                <input id="archive-value" name="archive-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="archiveLocation">
+                <label for="archiveLocation-value" style="padding-left:15%;">Archive Location:</label>
+                <input id="archiveLocation-value" name="archiveLocation-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="author">
+                <label for="author-value" style="padding-left:15%;">Author:</label>
+                <input id="author-value" name="author-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="callNumber">
+                <label for="callNumber-value" style="padding-left:15%;">Call Number:</label>
+                <input id="callNumber-value" name="callNumber-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="date">
+                <label for="date-value" style="padding-left:15%;">Date:</label>
+                <input id="date-value" name="date-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="edition">
+                <label for="edition-value" style="padding-left:15%;">Edition:</label>
+                <input id="edition-value" name="edition-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="extra">
+                <label for="extra-value" style="padding-left:15%;">Extra:</label>
+                <input id="extra-value" name="extra-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="ISBN">
+                <label for="ISBN-value" style="padding-left:15%;">ISBN:</label>
+                <input id="ISBN-value" name="ISBN-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="ISSN">
+                <label for="ISSN-value" style="padding-left:15%;">ISSN:</label>
+                <input id="ISSN-value" name="ISSN-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="language">
+                <label for="language-value" style="padding-left:15%;">Language:</label>
+                <input id="language-value" name="language-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="libraryCatalog">
+                <label for="libraryCatalog-value" style="padding-left:15%;">Library Catalog:</label>
+                <input id="libraryCatalog-value" name="libraryCatalog-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="pages">
+                <label for="pages-value" style="padding-left:15%;">Pages:</label>
+                <input id="pages-value" name="pages-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="place">
+                <label for="place-value" style="padding-left:15%;">Place:</label>
+                <input id="place-value" name="place-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="publicationTitle">
+                <label for="publicationTitle-value" style="padding-left:15%;">Publication Title:</label>
+                <input id="publicationTitle-value" name="publicationTitle-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="rights">
+                <label for="rights-value" style="padding-left:15%;">Rights:</label>
+                <input id="rights-value" name="rights-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="section">
+                <label for="section-value" style="padding-left:15%;">Section:</label>
+                <input id="section-value" name="section-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="series">
+                <label for="series-value" style="padding-left:15%;">Series:</label>
+                <input id="series-value" name="series-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="seriesNumber">
+                <label for="seriesNumber-value" style="padding-left:15%;">Series Number:</label>
+                <input id="seriesNumber-value" name="seriesNumber-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="shortTitle">
+                <label for="shortTitle-value" style="padding-left:15%;">Short Title:</label>
+                <input id="shortTitle-value" name="shortTitle-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="title">
+                <label for="title-value" style="padding-left:15%;">Title:</label>
+                <input id="title-value" name="title-value" />
+                </div>
+                <div class="citation-field form-group text-dark" id="url">
+                <label for="url-value" style="padding-left:15%;">URL:</label>
+                <input id="url-value" name="url-value" />
+                </div>
+            </div>
+            <!--
             <div class="form-group text-dark">
                 <label for="formInputDISATitle" style="padding-left:10%;">Title<span style="font-size:85%;" class="text-danger">(required)</span></label>
                 <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISATitle" placeholder="Enter Title">
@@ -86,9 +212,9 @@
                     </select>
                 </p>
             </div>
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            <h5>Additional information</h5>
+            -->
+
+            <!--
             <div class="form-group text-dark">
                 <label for="formInputDISAFieldA" style="padding-left:15%;">Field A</label>
                 <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISAFieldA" placeholder="[Placeholder text]">
@@ -96,9 +222,8 @@
             <div class="form-group text-dark">
                 <label for="formInputDISAFieldB" style="padding-left:15%;">Field B</label>
                 <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISAFieldB" placeholder="[Placeholder text]">
-            </div>
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
+            </div> -->
+
             <div class="form-group">
                 <label for="formInputDISAAcknowledgements" style="padding-left:0%;">Acknowledgements</label>
                 <textarea style="width:75%;float:right;" class="form-control" rows="3" id="formInputDISAAcknowledgements"></textarea>
@@ -465,7 +590,7 @@
 
     var addTypeOptions = function(opts) {
         var dtype_select = $('#document_type');
-        dtype_select.empty();
+        // dtype_select.empty();
         for (var i = 0; i < opts.length; i++) {
             var opt = opts[i];
             var opt_elem = $("<option/>", { 'value': opt.id ,
@@ -668,6 +793,149 @@
         {% endif %}
 
     } );  // end of `$( document ).ready(function() {`
+
+
+    // PATRICK'S CODE STARTS HERE
+
+    // Data structure for showing / hiding citation fields
+
+    const fieldsByDocType = {
+        20: {
+          required: ["author", "date", "pages", "place", "title"],
+          optional: [
+            "abstractNote",
+            "edition",
+            "language",
+            "series",
+            "seriesNumber",
+            "shortTitle",
+            "url"
+          ]
+        },
+        21: {
+          required: ["author", "date", "pages", "place", "title"],
+          optional: [
+            "abstractNote",
+            "edition",
+            "language",
+            "section",
+            "series",
+            "seriesNumber",
+            "shortTitle",
+            "url"
+          ]
+        },
+        26: {
+          required: ["author", "date", "pages", "place", "title"],
+          optional: [
+            "abstractNote",
+            "archive",
+            "archiveLocation",
+            "language",
+            "url"
+          ]
+        },
+        33: {
+          required: ["author", "date", "place", "rights", "title"],
+          optional: [
+            "abstractNote",
+            "archive",
+            "archiveLocation",
+            "language",
+            "url"
+          ]
+        },
+        34: {
+          required: ["author", "date", "pages", "title"],
+          optional: ["abstractNote", "language", "url"]
+        },
+        36: {
+          required: ["author", "date", "pages", "title"],
+          optional: ["abstractNote", "language", "url"]
+        },
+        37: {
+          required: [
+            "archive",
+            "archiveLocation",
+            "author",
+            "date",
+            "pages",
+            "title"
+          ],
+          optional: ["abstractNote", "language", "place", "url"]
+        },
+        39: {
+          required: ["date", "edition", "place", "title"],
+          optional: [
+            "abstractNote",
+            "archive",
+            "archiveLocation",
+            "author",
+            "language",
+            "pages",
+            "section",
+            "url"
+          ]
+        },
+        46: {
+          required: ["author", "date", "rights", "title"],
+          optional: [
+            "abstractNote",
+            "archive",
+            "archiveLocation",
+            "language",
+            "url"
+          ]
+        },
+        47: {
+          required: ["date", "pages", "place", "rights", "title"],
+          optional: ["abstractNote", "language", "url"]
+        },
+        49: {
+          required: ["accessDate", "date", "title", "url"],
+          optional: ["author", "language"]
+        }
+      };
+
+      // On load ...
+
+      document.addEventListener("DOMContentLoaded", () => {
+
+        const requiredFieldsContainer = document.getElementById("required-fields"),
+          optionalFieldsContainer = document.getElementById("optional-fields"),
+          hiddenFieldsContainer = document.getElementById("hidden-fields"),
+          citationTypeSelector = document.getElementById("document_type"),
+          citationFields = Array.from(document.getElementsByClassName("citation-field"));
+
+        // Called when the citation type dropdown changes
+
+        function updateCitationFieldVisibility() {
+
+          const citationTypeId = parseInt(this.value);
+
+          citationFields.forEach(citationField => {
+            const fieldStatus = fieldsByDocType[citationTypeId];
+            citationFields.forEach(citationField => {
+              const citationFieldId = citationField.id;
+              if (fieldStatus.required.includes(citationFieldId)) {
+                requiredFieldsContainer.appendChild(citationField);
+              } else if (fieldStatus.optional.includes(citationFieldId)) {
+                optionalFieldsContainer.appendChild(citationField);
+              } else {
+                hiddenFieldsContainer.appendChild(citationField);
+              }
+            });
+          });
+        }
+
+        // Listeners for citation type dropdown selector
+
+        citationTypeSelector.addEventListener(
+            'change', updateCitationFieldVisibility
+        );
+      })  
+
+    // PATRICK'S CODE ENDS HERE
 
 
 </script>
