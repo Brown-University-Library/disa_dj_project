@@ -1,6 +1,36 @@
 {% extends "disa_app_templates/redesign_base.html" %}
 
 
+<!-- The sidebar-block html below is within the redesign_base.html template's `<div class="wrapper" style="margin-top: 3.5em;">` element. -->
+
+{% block sidebar %}
+
+<div id="sidebar">
+    <div class="sidebar-header">
+        <div style="margin-right: -1.25em!important;">
+            <div style="float: right;margin-top: .33em;">
+                <button type="button" id="sidebarCollapse" class="btn btn-info">
+                    <span style="font-weight: bold;">Toggle&nbsp;<br></span>
+                    <i class="fas fa-info-circle fa-3x"></i>
+                </button>
+            </div>
+        </div>
+        <h1>Welcome to the Database of Indigenous Slavery</h1>
+        <p style="font-weight: bold;">This project, housed at Brown University, is a collaborative effort to build a database record of enslaved indigenous people throughout time, all across the Americas. Thank you for contributing to this project.</p>
+        <p style="font-weight: bold;">Here's how to start adding information.</p>
+        <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> CLICK <span class="sidebar-info-highlight">Add document</span> if you are entering people from a document that has not previously been added.</p>
+        <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> SEARCH under <span class="sidebar-info-highlight">Your recent</span> or <span class="action-highlight">All recent</span> if you are opening a document that you or someone else previously created.</p>
+        <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> The documents listed under <span class="sidebar-info-highlight">Your recent</span> offer the last fifteen documents you worked on.</p>
+        <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> The documents under <span class="sidebar-info-highlight">All recent</span> list the documents that anyone entering information into DISA have created.</p>
+        <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> CLICK <span class="sidebar-info-highlight">Show details</span> to see a timestamp and the username of the person who last edited each document.</p>
+    </div>
+</div> <!-- /#sidebar -->
+
+{% endblock sidebar %}
+
+
+<!-- The content-block html below is within the redesign_base.html template's `<main class="container">` element. -->
+
 {% block content %}
 
 <div id="startpanel">
@@ -29,7 +59,13 @@
         <tbody>
             {% for entry in user_documents %}
             <tr>
-                <td>{{ entry.doc.id }}</td>
+                <!-- <td>{{ entry.doc.id }}</td> -->
+                {% if entry.doc.id|divisibleby:"2" is True %} {# temporary if, for easy comparison #}
+                    <td><a href="{% url 'redesign_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
+                }
+                {% else %}
+                    <td><a href="{% url 'edit_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
+                {% endif %}
                 <td class="table-info">{{ entry.doc.display }}</td>
                 <td style="background-color: #eeeeee;">
                     <button type="button" class="close text-primary" aria-label="Close">
@@ -56,7 +92,12 @@
         <tbody>
             {% for entry in documents %}
             <tr>
-                <td>{{ entry.doc.id }}</td>
+                <!-- <td>{{ entry.doc.id }}</td> -->
+                {% if entry.doc.id|divisibleby:"2" is True %} {# temporary if, for easy comparison #}
+                    <td><a href="{% url 'redesign_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
+                {% else %}
+                    <td><a href="{% url 'edit_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
+                {% endif %}
                 <td class="table-info">{{ entry.doc.display }}</td>
             </tr>
             {% endfor %}
@@ -65,3 +106,14 @@
 </div> <!-- /#startpanel -->
 
 {% endblock content %}
+
+
+{% block page_specific_js %}
+<script>
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    });
+</script>
+{% endblock page_specific_js %}

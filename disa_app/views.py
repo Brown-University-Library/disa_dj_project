@@ -22,7 +22,7 @@ from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 
 
@@ -32,6 +32,11 @@ log = logging.getLogger(__name__)
 # ===========================
 # redesign urls
 # ===========================
+
+
+def redesign_home( request ):
+    """ ? """
+    return HttpResponse( "What should be displayed here?" )
 
 
 @shib_login
@@ -48,6 +53,51 @@ def redesign_citations( request ):
     else:
         resp = render( request, 'disa_app_templates/redesign_citations.html', context )
     return resp
+
+
+@shib_login
+def redesign_citation( request, cite_id=None ):
+    """ Displays specific citation. """
+    log.debug( '\n\nstarting redesign_citation()' )
+    # return HttpResponse( f'redesign-citation coming for cite-id, ``{cite_id}``' )
+
+    if cite_id == None:
+        return HttpResponseNotFound( '4040 / Not Found' )
+
+    context: dict = view_edit_citation_manager.query_data( cite_id )
+
+    if request.user.is_authenticated:
+        context['user_is_authenticated'] = True
+        context['user_first_name'] = request.user.first_name
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/redesign_citation.html', context )
+    return resp
+
+
+# @shib_login
+# def edit_citation( request, cite_id=None ):
+#     """ Url: 'editor/documents/<cite_id>/' -- 'edit_citation_url' """
+#     log.debug( '\n\nstarting edit_citation()' )
+#     if cite_id:
+#         log.debug( f'will hit citation-manager with cite_id, ```{cite_id}```' )
+#         context: dict = view_edit_citation_manager.query_data( cite_id )
+#         if context == None:
+#             return HttpResponseNotFound( '404 / Not Found' )
+#     else:
+#         log.debug( 'will hit citation-manager with no cite_id' )
+#         user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+#         context: dict = view_edit_citation_manager.manage_create( user_id )
+#     if request.user.is_authenticated:
+#         context['user_is_authenticated'] = True
+#         context['user_first_name'] = request.user.first_name
+#         context['can_delete_doc'] = request.user.profile.can_delete_doc
+#     if request.GET.get('format', '') == 'json':
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         resp = render( request, 'disa_app_templates/document_edit.html', context )
+#     return resp
 
 
 # ===========================
