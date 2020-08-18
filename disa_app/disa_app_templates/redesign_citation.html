@@ -940,6 +940,11 @@
         citationTypeSelector.addEventListener(
             'change', updateCitationFieldVisibility
         );
+
+        // Initialize display based on current citation type selection
+
+        updateCitationFieldVisibility();
+
       })  
 
     // PATRICK'S CODE ENDS HERE
