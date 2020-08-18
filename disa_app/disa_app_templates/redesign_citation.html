@@ -25,9 +25,11 @@
 <div id="tabs_bibinfoanditems" style="margin-top:10em;">
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" href="#Bibliographic-information" data-toggle="tab" role="tab" aria-controls="Bibliographic-information" aria-expanded="true">Bibliographic information</a>
-            <!-- Ben, help!!  :)  Note: the citation-id doesn't have to go here. -->
-            <p style="font-size: 50%; line-height: 100%; margin-top: -1.5em; margin-left: 2em;">(for Citation ID "{{ doc.id }}")</p>
+            <a  class="nav-link active" href="#Bibliographic-information" 
+                data-toggle="tab" role="tab" 
+                aria-controls="Bibliographic-information" aria-expanded="true">
+                Bibliographic information
+            </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#Items" data-toggle="tab" role="tab" aria-controls="Items" aria-expanded="true">Items</a>
@@ -35,6 +37,7 @@
     </ul>
     <div class="tab-content">
         <div class="active tab-pane" style="padding: 20px;" role="tabpanel" aria-labelledby="Bibliographic-information" id="Bibliographic-information">
+            <span class="badge badge-primary float-right">ID {{ doc.id }}</span>
             <h5 class="text-dark" style="width:25%;float:left;">Citation type:</h5>
             <div style="clear: left;">
 
