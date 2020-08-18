@@ -83,9 +83,9 @@
 
             <!-- CITATION FIELDS (REQUIRED, OPTIONAL, AND HIDDEN) -->
 
-            <h5>Priority information</h5>
+            <h5 id="required-fields-header" hidden>Priority information</h5>
             <div id="required-fields"></div>
-            <h5>Additional information</h5>
+            <h5 id="optional-fields-header" hidden>Additional information</h5>
             <div id="optional-fields"></div>
             <div id="hidden-fields" hidden>
                 <div class="citation-field form-group text-dark" id="abstractNote">
@@ -901,33 +901,38 @@
 
       // On load ...
 
-      document.addEventListener("DOMContentLoaded", () => {
+      document.addEventListener('DOMContentLoaded', () => {
 
-        const requiredFieldsContainer = document.getElementById("required-fields"),
-          optionalFieldsContainer = document.getElementById("optional-fields"),
-          hiddenFieldsContainer = document.getElementById("hidden-fields"),
-          citationTypeSelector = document.getElementById("document_type"),
-          citationFields = Array.from(document.getElementsByClassName("citation-field"));
+        const   requiredFieldsContainer = document.getElementById('required-fields'),
+                requiredFieldsHeader = document.getElementById('required-fields-header'),
+                optionalFieldsContainer = document.getElementById('optional-fields'),
+                optionalFieldsHeader = document.getElementById('optional-fields-header'),
+                hiddenFieldsContainer = document.getElementById('hidden-fields'),
+                citationTypeSelector = document.getElementById('document_type'),
+                citationFields = Array.from(document.getElementsByClassName('citation-field'));
 
         // Called when the citation type dropdown changes
 
         function updateCitationFieldVisibility() {
 
-          const citationTypeId = parseInt(this.value);
+            const citationTypeId = parseInt(this.value);
 
-          citationFields.forEach(citationField => {
-            const fieldStatus = fieldsByDocType[citationTypeId];
             citationFields.forEach(citationField => {
-              const citationFieldId = citationField.id;
-              if (fieldStatus.required.includes(citationFieldId)) {
-                requiredFieldsContainer.appendChild(citationField);
-              } else if (fieldStatus.optional.includes(citationFieldId)) {
-                optionalFieldsContainer.appendChild(citationField);
-              } else {
-                hiddenFieldsContainer.appendChild(citationField);
-              }
+                const fieldStatus = fieldsByDocType[citationTypeId];
+                citationFields.forEach(citationField => {
+                    const citationFieldId = citationField.id;
+                    if (fieldStatus.required.includes(citationFieldId)) {
+                        requiredFieldsContainer.appendChild(citationField);
+                    } else if (fieldStatus.optional.includes(citationFieldId)) {
+                        optionalFieldsContainer.appendChild(citationField);
+                    } else {
+                        hiddenFieldsContainer.appendChild(citationField);
+                    }
+                });
             });
-          });
+
+            requiredFieldsHeader.removeAttribute('hidden');
+            optionalFieldsHeader.removeAttribute('hidden');
         }
 
         // Listeners for citation type dropdown selector
