@@ -28,211 +28,208 @@
     </ul>
     <div class="tab-content">
         <div class="active tab-pane" style="padding: 20px;" role="tabpanel" aria-labelledby="Bibliographic-information" id="Bibliographic-information">
-            <span   class="badge badge-primary float-right" 
-                    title="Unique identifier for this citation">
-                    ID {{ doc.id }}
-            </span>
-            <h5 class="text-dark" style="width:25%;float:left;">Citation type:</h5>
-            <div style="clear: left;">
 
-                <!-- CITATION TYPE DROPDOWN SELECTOR -->
+            <!-- These are citation fields that are unused by the current citation type -->
 
-                <!-- <label for="formInputDISADocType" style="padding-left:12%;">Citation type:</label> -->
+            <div id="hidden-fields" hidden></div>
+            <form>
+                <span   class="badge badge-primary float-right" 
+                        title="Unique identifier for this citation">
+                        ID {{ doc.id }}
+                </span>
+                <h5 class="text-dark" style="width:25%;float:left;">Citation type</h5>
+                <div style="clear: left;">
 
-                <!-- hardcoded -->
-                <!-- Ben, I'm going to soon comment-out the select style block below.
-                    Just a note that the (dynamic) replacement code below uses a different id.
-                    I _could_ change it to match `formInputDISADocType`, but would have to change it in
-                    5 or so places in the javascript at the bottom of this page.
-                    If your styling depends on the `formInputDISADocType`, I'll go ahead and change it.
-                    (I like the explicitness of your id name.)
-                    Eventually I'm going to rename it anyway, working to unify 'doc' references to 'cite' or 'citation' references.
+                    <!-- CITATION TYPE DROPDOWN SELECTOR -->
+
+                    <!-- <label for="formInputDISADocType" style="padding-left:12%;">Citation type:</label> -->
+
+                    <!-- hardcoded -->
+                    <!-- Ben, I'm going to soon comment-out the select style block below.
+                        Just a note that the (dynamic) replacement code below uses a different id.
+                        I _could_ change it to match `formInputDISADocType`, but would have to change it in
+                        5 or so places in the javascript at the bottom of this page.
+                        If your styling depends on the `formInputDISADocType`, I'll go ahead and change it.
+                        (I like the explicitness of your id name.)
+                        Eventually I'm going to rename it anyway, working to unify 'doc' references to 'cite' or 'citation' references.
+                        -->
+                    
+                    <!--
+
+                    <select style="width:75%;float:right;" class="custom-select" id="formInputDISADocType">
+                        <option selected>Newspaper Article</option>
+                        <option value="1">[Other doc format]</option>
+                        <option value="2">[Other doc format]</option>
+                        <option value="3">[Other doc format]</option>
+                    </select>
+
                     -->
-                
+
+                    <!-- dynamic -->
+                    <!-- populated by js readDocumentData() -> initializeForm() -->
+                    <!-- <select class="form-control" id="document_type"> -->
+
+                    <select style="" class="custom-select" id="document_type">
+                        <!-- (Patrick) This option is only to be shown if citation type has not been selected -->
+                        <option value="0" class="initMessage">
+                            [Select a document type]
+                        </option> 
+                    </select>
+                </div>
+
+                <!-- CITATION FIELDS (REQUIRED and OPTIONAL). 
+                     Unused fields are moved to #hidden-fields outside of the form element, above -->
+
+                <h5 id="required-fields-header" hidden>Priority information</h5>
+                <div id="required-fields"></div>
+                <h5 id="optional-fields-header" hidden>Additional information</h5>
+                <div id="optional-fields">
+                    <div class="citation-field form-group text-dark" id="abstractNote">
+                    <label for="abstractNote-value" style="padding-left:15%;">Abstract Note</label>
+                    <input id="abstractNote-value" name="abstractNote-value" placeholder="Abstract Note" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="accessDate">
+                    <label for="accessDate-value" style="padding-left:15%;">Access Date</label>
+                    <input id="accessDate-value" name="accessDate-value" placeholder="Access Date" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="archive">
+                    <label for="archive-value" style="padding-left:15%;">Archive</label>
+                    <input id="archive-value" name="archive-value"  placeholder="Archive" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="archiveLocation">
+                    <label for="archiveLocation-value" style="padding-left:15%;">Archive Location</label>
+                    <input id="archiveLocation-value" name="archiveLocation-value"  placeholder="Archive Location" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="author">
+                    <label for="author-value" style="padding-left:15%;">Author</label>
+                    <input id="author-value" name="author-value"  placeholder="Author (last name comes first)" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="callNumber">
+                    <label for="callNumber-value" style="padding-left:15%;">Call Number</label>
+                    <input id="callNumber-value" name="callNumber-value"  placeholder="Call Number" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="date">
+                    <label for="date-value" style="padding-left:15%;">Date</label>
+                    <input id="date-value" name="date-value" placeholder="Date" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="edition">
+                    <label for="edition-value" style="padding-left:15%;">Edition</label>
+                    <input id="edition-value" name="edition-value" placeholder="Edition" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="extra">
+                    <label for="extra-value" style="padding-left:15%;">Extra</label>
+                    <input id="extra-value" name="extra-value" placeholder="Extra" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="ISBN">
+                    <label for="ISBN-value" style="padding-left:15%;">ISBN</label>
+                    <input id="ISBN-value" name="ISBN-value" placeholder="ISBN" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="ISSN">
+                    <label for="ISSN-value" style="padding-left:15%;">ISSN</label>
+                    <input id="ISSN-value" name="ISSN-value" placeholder="ISSN" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="language">
+                    <label for="language-value" style="padding-left:15%;">Language</label>
+                    <input id="language-value" name="language-value" placeholder="Language" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="libraryCatalog">
+                    <label for="libraryCatalog-value" style="padding-left:15%;">Library Catalog</label>
+                    <input id="libraryCatalog-value" name="libraryCatalog-value" placeholder="Library Catalog" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="pages">
+                    <label for="pages-value" style="padding-left:15%;">Pages</label>
+                    <input id="pages-value" name="pages-value" placeholder="Pages" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="place">
+                    <label for="place-value" style="padding-left:15%;">Place</label>
+                    <input id="place-value" name="place-value" placeholder="Place" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="publicationTitle">
+                    <label for="publicationTitle-value" style="padding-left:15%;">Publication Title</label>
+                    <input id="publicationTitle-value" name="publicationTitle-value" placeholder="Publication Title" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="rights">
+                    <label for="rights-value" style="padding-left:15%;">Rights</label>
+                    <input id="rights-value" name="rights-value" placeholder="Rights" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="section">
+                    <label for="section-value" style="padding-left:15%;">Section</label>
+                    <input id="section-value" name="section-value" placeholder="Section" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="series">
+                    <label for="series-value" style="padding-left:15%;">Series</label>
+                    <input id="series-value" name="series-value" placeholder="Series" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="seriesNumber">
+                    <label for="seriesNumber-value" style="padding-left:15%;">Series Number</label>
+                    <input id="seriesNumber-value" name="seriesNumber-value" placeholder="Series Number" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="shortTitle">
+                    <label for="shortTitle-value" style="padding-left:15%;">Short Title</label>
+                    <input id="shortTitle-value" name="shortTitle-value" placeholder="Short Title" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="title">
+                    <label for="title-value" style="padding-left:15%;">Title</label>
+                    <input id="title-value" name="title-value" placeholder="Title" />
+                    </div>
+                    <div class="citation-field form-group text-dark" id="url">
+                    <label for="url-value" style="padding-left:15%;">URL</label>
+                    <input id="url-value" name="url-value" placeholder="http://..." />
+                    </div>
+                </div>
+
                 <!--
-
-                <select style="width:75%;float:right;" class="custom-select" id="formInputDISADocType">
-                    <option selected>Newspaper Article</option>
-                    <option value="1">[Other doc format]</option>
-                    <option value="2">[Other doc format]</option>
-                    <option value="3">[Other doc format]</option>
-                </select>
-
+                <div class="form-group text-dark">
+                    <label for="formInputDISATitle" style="padding-left:10%;">Title<span style="font-size:85%;" class="text-danger">(required)</span></label>
+                    <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISATitle" placeholder="Enter Title">
+                </div>
+                <div class="form-group text-dark">
+                    <label for="formInputDISAPlace" style="padding-left:15%;">Place</label>
+                    <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISAPlace" placeholder="Enter Place">
+                </div>
+                <label for="formInputDISABiblioDateYear" style="padding-left:15%;">Date</label>
+                <div style="width:75%;float:right;">
+                    <p style="width:25%;float:left;padding-right:10px;"> <select class="custom-select" id="formInputDISABiblioDateYear">
+                            <option selected>Year</option>
+                            <option value="1">[Year values?]</option>
+                            <option value="2">[Year values?]</option>
+                            <option value="3">[Year values?]</option>
+                        </select>
+                    </p>
+                    <p style="width:25%;float:left;padding-right:10px;"> <select class="custom-select" id="formInputDISABiblioDateMonth">
+                            <option selected>Month</option>
+                            <option value="1">[Month values?]</option>
+                            <option value="2">[Month values?]</option>
+                            <option value="3">[Month values?]</option>
+                        </select>
+                    </p>
+                    <p style="width:25%;float:left;padding-right:0px;"> <select class="custom-select" id="formInputDISABiblioDateDay">
+                            <option selected>[Day]</option>
+                            <option value="1">[Day values?]</option>
+                            <option value="2">[Day values?]</option>
+                            <option value="3">[Day values?]</option>
+                        </select>
+                    </p>
+                </div>
                 -->
 
-                <!-- dynamic -->
-                <!-- populated by js readDocumentData() -> initializeForm() -->
-                <!-- <select class="form-control" id="document_type"> -->
-
-                <select style="" class="custom-select" id="document_type">
-                    <!-- (Patrick) This option is only to be shown if citation type has not been selected -->
-                    <option value="0" class="initMessage">
-                        [Select a document type]
-                    </option> 
-                </select>
-            </div>
-
-            <!-- CITATION FIELDS (REQUIRED, OPTIONAL, AND HIDDEN) -->
-
-            <h5 id="required-fields-header" hidden>Priority information</h5>
-            <div id="required-fields"></div>
-            <h5 id="optional-fields-header" hidden>Additional information</h5>
-            <div id="optional-fields"></div>
-            <div id="hidden-fields" hidden>
-                <div class="citation-field form-group text-dark" id="abstractNote">
-                <label for="abstractNote-value" style="padding-left:15%;">Abstract Note</label>
-                <input id="abstractNote-value" name="abstractNote-value" />
+                <div class="form-group">
+                    <label for="formInputDISAAcknowledgements" style="padding-left:0%;">Acknowledgements</label>
+                    <textarea style="width:75%;float:right;" class="form-control" rows="3" id="formInputDISAAcknowledgements"></textarea>
                 </div>
-                <div class="citation-field form-group text-dark" id="accessDate">
-                <label for="accessDate-value" style="padding-left:15%;">Access Date</label>
-                <input id="accessDate-value" name="accessDate-value" />
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <div class="form-group" style="clear:both;">
+                    <label for="formInputDISABiblioResearcherNotes" style="padding-left:0%;">Researcher notes
+                        <br>
+                        <span style="font-size:85%;"><a href="#">Report problems or ask for help</a></span>
+                    </label>
+                    <textarea style="width:75%;float:right;" class="form-control" rows="3" id="formInputDISABiblioResearcherNotes"></textarea>
                 </div>
-                <div class="citation-field form-group text-dark" id="archive">
-                <label for="archive-value" style="padding-left:15%;">Archive</label>
-                <input id="archive-value" name="archive-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="archiveLocation">
-                <label for="archiveLocation-value" style="padding-left:15%;">Archive Location</label>
-                <input id="archiveLocation-value" name="archiveLocation-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="author">
-                <label for="author-value" style="padding-left:15%;">Author</label>
-                <input id="author-value" name="author-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="callNumber">
-                <label for="callNumber-value" style="padding-left:15%;">Call Number</label>
-                <input id="callNumber-value" name="callNumber-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="date">
-                <label for="date-value" style="padding-left:15%;">Date</label>
-                <input id="date-value" name="date-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="edition">
-                <label for="edition-value" style="padding-left:15%;">Edition</label>
-                <input id="edition-value" name="edition-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="extra">
-                <label for="extra-value" style="padding-left:15%;">Extra</label>
-                <input id="extra-value" name="extra-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="ISBN">
-                <label for="ISBN-value" style="padding-left:15%;">ISBN</label>
-                <input id="ISBN-value" name="ISBN-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="ISSN">
-                <label for="ISSN-value" style="padding-left:15%;">ISSN</label>
-                <input id="ISSN-value" name="ISSN-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="language">
-                <label for="language-value" style="padding-left:15%;">Language</label>
-                <input id="language-value" name="language-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="libraryCatalog">
-                <label for="libraryCatalog-value" style="padding-left:15%;">Library Catalog</label>
-                <input id="libraryCatalog-value" name="libraryCatalog-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="pages">
-                <label for="pages-value" style="padding-left:15%;">Pages</label>
-                <input id="pages-value" name="pages-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="place">
-                <label for="place-value" style="padding-left:15%;">Place</label>
-                <input id="place-value" name="place-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="publicationTitle">
-                <label for="publicationTitle-value" style="padding-left:15%;">Publication Title</label>
-                <input id="publicationTitle-value" name="publicationTitle-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="rights">
-                <label for="rights-value" style="padding-left:15%;">Rights</label>
-                <input id="rights-value" name="rights-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="section">
-                <label for="section-value" style="padding-left:15%;">Section</label>
-                <input id="section-value" name="section-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="series">
-                <label for="series-value" style="padding-left:15%;">Series</label>
-                <input id="series-value" name="series-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="seriesNumber">
-                <label for="seriesNumber-value" style="padding-left:15%;">Series Number</label>
-                <input id="seriesNumber-value" name="seriesNumber-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="shortTitle">
-                <label for="shortTitle-value" style="padding-left:15%;">Short Title</label>
-                <input id="shortTitle-value" name="shortTitle-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="title">
-                <label for="title-value" style="padding-left:15%;">Title</label>
-                <input id="title-value" name="title-value" />
-                </div>
-                <div class="citation-field form-group text-dark" id="url">
-                <label for="url-value" style="padding-left:15%;">URL</label>
-                <input id="url-value" name="url-value" />
-                </div>
-            </div>
-            <!--
-            <div class="form-group text-dark">
-                <label for="formInputDISATitle" style="padding-left:10%;">Title<span style="font-size:85%;" class="text-danger">(required)</span></label>
-                <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISATitle" placeholder="Enter Title">
-            </div>
-            <div class="form-group text-dark">
-                <label for="formInputDISAPlace" style="padding-left:15%;">Place</label>
-                <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISAPlace" placeholder="Enter Place">
-            </div>
-            <label for="formInputDISABiblioDateYear" style="padding-left:15%;">Date</label>
-            <div style="width:75%;float:right;">
-                <p style="width:25%;float:left;padding-right:10px;"> <select class="custom-select" id="formInputDISABiblioDateYear">
-                        <option selected>Year</option>
-                        <option value="1">[Year values?]</option>
-                        <option value="2">[Year values?]</option>
-                        <option value="3">[Year values?]</option>
-                    </select>
-                </p>
-                <p style="width:25%;float:left;padding-right:10px;"> <select class="custom-select" id="formInputDISABiblioDateMonth">
-                        <option selected>Month</option>
-                        <option value="1">[Month values?]</option>
-                        <option value="2">[Month values?]</option>
-                        <option value="3">[Month values?]</option>
-                    </select>
-                </p>
-                <p style="width:25%;float:left;padding-right:0px;"> <select class="custom-select" id="formInputDISABiblioDateDay">
-                        <option selected>[Day]</option>
-                        <option value="1">[Day values?]</option>
-                        <option value="2">[Day values?]</option>
-                        <option value="3">[Day values?]</option>
-                    </select>
-                </p>
-            </div>
-            -->
-
-            <!--
-            <div class="form-group text-dark">
-                <label for="formInputDISAFieldA" style="padding-left:15%;">Field A</label>
-                <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISAFieldA" placeholder="[Placeholder text]">
-            </div>
-            <div class="form-group text-dark">
-                <label for="formInputDISAFieldB" style="padding-left:15%;">Field B</label>
-                <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISAFieldB" placeholder="[Placeholder text]">
-            </div> -->
-
-            <div class="form-group">
-                <label for="formInputDISAAcknowledgements" style="padding-left:0%;">Acknowledgements</label>
-                <textarea style="width:75%;float:right;" class="form-control" rows="3" id="formInputDISAAcknowledgements"></textarea>
-            </div>
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            <div class="form-group" style="clear:both;">
-                <label for="formInputDISABiblioResearcherNotes" style="padding-left:0%;">Researcher notes
-                    <br>
-                    <span style="font-size:85%;"><a href="#">Report problems or ask for help</a></span>
-                </label>
-                <textarea style="width:75%;float:right;" class="form-control" rows="3" id="formInputDISABiblioResearcherNotes"></textarea>
-            </div>
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            <button type="button" class="btn btn-primary btn-md" style="font-weight: bold;">SAVE AND CONTINUE TO ENTER ITEMS</button>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <button type="button" class="btn btn-primary btn-md" style="font-weight: bold;">SAVE AND CONTINUE TO ENTER ITEMS</button>
+            </form>
         </div> <!-- /.tab-pane for bibinfo -->
         <div class="tab-pane" role="tabpanel" aria-labelledby="Items" id="Items">
             <div style="padding: 0px; padding-top: 0px;">
@@ -975,3 +972,6 @@
 </script>
 
 {% endblock page_specific_js %}
+
+
+ 
