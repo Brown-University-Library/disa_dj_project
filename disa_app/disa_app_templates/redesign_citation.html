@@ -11,16 +11,6 @@
 
 {% block content %}
 
-
-<!-- PATRICK STYLES -->
-
-<style>
-
-
-
-</style>
-
-
 <!-- JavaScript-savvy URL control to toggle div display between #startpanel above & #tabs_bibinfoanditems below -->
 
 <div id="tabs_bibinfoanditems" style="margin-top:10em;">
@@ -261,6 +251,7 @@
                 </ul>
                 <div class="tab-content" style="background-color: white!important;opacity:1;">
                     <div class="active tab-pane" role="tabpanel" aria-labelledby="New-Item" id="New-Item" style="margin-top:-20px;padding-top:0px;">
+
                         <div class="row col-lg-12" style="padding-top:40px;">
                             <div class="col-md-6">
                                 <h5 class="text-dark" style="float:left;margin-left:20px;">Location in source citation</h5>
@@ -803,6 +794,9 @@
     // Data structure for showing / hiding citation fields
 
     const fieldsByDocType = {
+
+        // Book
+
         20: {
           required: ["author", "date", "pages", "place", "title"],
           optional: [
@@ -815,6 +809,9 @@
             "url"
           ]
         },
+
+        // Book Section
+
         21: {
           required: ["author", "date", "pages", "place", "title"],
           optional: [
@@ -828,6 +825,9 @@
             "url"
           ]
         },
+
+        // Document
+
         26: {
           required: ["author", "date", "pages", "place", "title"],
           optional: [
@@ -838,6 +838,9 @@
             "url"
           ]
         },
+
+        // Interview
+
         33: {
           required: ["author", "date", "place", "rights", "title"],
           optional: [
@@ -848,14 +851,23 @@
             "url"
           ]
         },
+
+        // Journal Article
+
         34: {
           required: ["author", "date", "pages", "title"],
           optional: ["abstractNote", "language", "url"]
         },
+
+        // Magazine Article
+
         36: {
           required: ["author", "date", "pages", "title"],
           optional: ["abstractNote", "language", "url"]
         },
+
+        // Manuscript
+
         37: {
           required: [
             "archive",
@@ -867,6 +879,9 @@
           ],
           optional: ["abstractNote", "language", "place", "url"]
         },
+
+        // Newspaper Article
+
         39: {
           required: ["date", "edition", "place", "title"],
           optional: [
@@ -880,6 +895,9 @@
             "url"
           ]
         },
+
+        // Thesis
+
         46: {
           required: ["author", "date", "rights", "title"],
           optional: [
@@ -890,10 +908,9 @@
             "url"
           ]
         },
-        47: {
-          required: ["date", "pages", "place", "rights", "title"],
-          optional: ["abstractNote", "language", "url"]
-        },
+
+        // Webpage
+
         49: {
           required: ["accessDate", "date", "title", "url"],
           optional: ["author", "language"]
