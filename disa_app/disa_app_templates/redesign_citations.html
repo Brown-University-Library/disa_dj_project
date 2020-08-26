@@ -35,11 +35,11 @@
 
 <div id="startpanel">
     <h1 class="text-secondary">Choose a source</h1>
-    <h3>Starting with a new document?</h3>
-    <button type="button" class="btn btn-primary btn-lg" style="font-weight: bold;">ADD DOCUMENT</button>
+    <h3>Starting with a new source?</h3>
+    <button type="button" class="btn btn-primary btn-lg" style="font-weight: bold">Add source</button>
     <h3>Returning to a previously added document?</h3>
     {% if user_documents %}
-    <h5 class="text-primary col-lg-5 col-sm-11" style="letter-spacing: .5px; padding: 0;">YOUR RECENT</h5>
+    <h5 class="text-primary col-lg-5 col-sm-11" style="letter-spacing: .5px; padding: 0;">Your recent sources</h5>
     <table class="table table-striped col-lg-5 col-sm-11" style="background-color: white;">
         <thead style="background-color: #eeeeee;">
             <tr>
@@ -69,11 +69,20 @@
             {% endfor %}
         </tbody>
     </table>
-    <br>
+
+    <h5 class="text-primary col-lg-5 col-sm-11" style="letter-spacing: .5px; padding: 0;">
+        All recent sources 
+    </h5>
+
     {% endif %}
 
-    <h5 class="text-primary col-lg-5 col-sm-11" style="letter-spacing: .5px; padding: 0;">ALL RECENT <a href="#" style="float: right;">Show details ></a></h5>
-    <table class="table table-striped col-lg-5 col-sm-11" style="background-color: white;">
+    <!-- HIDE UNTIL IMPLEMENTED 
+        <a href="#" style="float: right;">Show details ></a> 
+    -->
+
+    <table id="all-recent-citations" 
+            class="table table-striped col-lg-5-OFF col-sm-11-OFF" 
+            style="background-color: white;">
         <thead style="background-color: #eeeeee;">
             <tr>
                 <th>ID</th>
