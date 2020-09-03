@@ -122,6 +122,23 @@ def browse( request ):
     return resp
 
 
+def browse_tabulator( request ):
+    """ Displays ALTERNATE home page. """
+    log.debug( '\n\nstarting browse()' )
+    context = {
+        'denormalized_json_url': reverse('dnrmlzd_jsn_prx_url_url'),
+        'info_image_url': f'{project_settings.STATIC_URL}images/info.png',
+        'logout_next': reverse( 'browse_url' ) }
+    if request.user.is_authenticated:
+        context['user_is_authenticated'] = True
+        context['user_first_name'] = request.user.first_name
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/browse_tabulator.html', context )
+    return resp
+
+
 def people( request ):
     log.debug( '\n\nstarting people()' )
     people: List(dict) = view_people_manager.query_people()
