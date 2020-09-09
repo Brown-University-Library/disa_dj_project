@@ -1,12 +1,21 @@
 # -*- coding: utf-8 -*-
 
-import collections, datetime, json, logging, os, pprint
-import sqlalchemy
+import collections, datetime, json, logging, os, pprint, sys
+import django, sqlalchemy
 
-from disa_app import models_sqlalchemy as models_alch
-from disa_app import settings_app
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+## configure django paths
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+cwd = os.getcwd()  # assumes the cwd is the project directory
+if cwd not in sys.path:
+    sys.path.append( cwd )
+django.setup()
+
+## ok, now django-related imports will work
+from disa_app import models_sqlalchemy as models_alch
+from disa_app import settings_app
 
 
 log = logging.getLogger(__name__)
@@ -223,3 +232,15 @@ def merge_ref_roles(o,n):
             o['roles'][k] = list(set(
                 o['roles'][k] + n['roles'][k]))
     return o
+
+
+
+if __name__ == "__main__":
+    output = json_for_browse()
+    # output = [ 'aa', 'bb', 'cc' ]
+    print( f'type(output), ``{type(output)}``' )
+    # pprint.pprint( output )
+    log.debug( f'output, ``{pprint.pformat(output)}``' )
+    jsn = json.dumps( output )
+    with open( './denormalized_temp.json', 'w' ) as f:
+        f.write( jsn )
