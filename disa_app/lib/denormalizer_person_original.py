@@ -237,10 +237,12 @@ def merge_ref_roles(o,n):
 
 if __name__ == "__main__":
     output = json_for_browse()
-    # output = [ 'aa', 'bb', 'cc' ]
+    # output = ['aa', 'bb']
+    print( f'output-file-path, ``{settings_app.DENORMALIZED_JSON_PATH}``' )
     print( f'type(output), ``{type(output)}``' )
     # pprint.pprint( output )
-    log.debug( f'output, ``{pprint.pformat(output)}``' )
+    # log.debug( f'output, ``{pprint.pformat(output)}``' )
     jsn = json.dumps( output )
-    with open( './denormalized_temp.json', 'w' ) as f:
+    pretty_jsn = json.dumps( output, sort_keys=True, indent=2 )
+    with open( './denormalized.json', 'w' ) as f:
         f.write( jsn )
