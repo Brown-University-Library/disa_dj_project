@@ -3,5 +3,6 @@
 .hg
 .svn
 denormalized.json
+denormalized_formatted.json
 env
 migrations

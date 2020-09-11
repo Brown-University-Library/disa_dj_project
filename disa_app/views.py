@@ -549,9 +549,16 @@ def utility_referents( request ):
 # ===========================
 
 
+# def dnrmlzd_jsn_prx_url( request ):
+#     """ Allows ajax loading of json from browse() view. """
+#     r = requests.get( settings_app.DENORMALIZED_JSON_URL )
+#     return HttpResponse( r.content, content_type='application/json; charset=utf-8' )
+
 def dnrmlzd_jsn_prx_url( request ):
     """ Allows ajax loading of json from browse() view. """
-    r = requests.get( settings_app.DENORMALIZED_JSON_URL )
+    url = settings_app.DENORMALIZED_JSON_URL
+    log.debug( f'url, ``{url}``' )
+    r = requests.get( url )
     return HttpResponse( r.content, content_type='application/json; charset=utf-8' )
 
 

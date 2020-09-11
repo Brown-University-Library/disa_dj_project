@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import collections, datetime, json, logging, os, pprint, sys
+"""
+Creates the json file used by the browse-table javascript library.
+
+Usage...
+- called by cron script in practice.
+- can be called manually by cd-ing to the project directory and running:
+  $ python3 ./disa_app/lib/denormalizer_person_original.py
+"""
+
+import collections, datetime, json, logging, os, pathlib, pprint, sys
 import django, sqlalchemy
 
 from sqlalchemy import create_engine
@@ -237,12 +246,14 @@ def merge_ref_roles(o,n):
 
 if __name__ == "__main__":
     output = json_for_browse()
-    # output = ['aa', 'bb']
-    print( f'output-file-path, ``{settings_app.DENORMALIZED_JSON_PATH}``' )
-    print( f'type(output), ``{type(output)}``' )
-    # pprint.pprint( output )
-    # log.debug( f'output, ``{pprint.pformat(output)}``' )
+    unformatted_output_path = settings_app.DENORMALIZED_JSON_PATH
+    log.debug( f'unformatted_output_path, ``{unformatted_output_path}``' )  # logging not currently working
+    formatted_output_path = f'%s/denormalized_formatted.json' % pathlib.Path( settings_app.DENORMALIZED_JSON_PATH ).parent  # arguably it'd make more sense to have the DENORMALIZED_JSON_PATH be to a directory, and then build each full-path with the unformatted and formatted json file name. But I didn't want to tweak the settings right now.
+    log.debug( f'formatted_output_path, ``{formatted_output_path}``' )
+    log.debug( f'type(output), ``{type(output)}``' )
     jsn = json.dumps( output )
     pretty_jsn = json.dumps( output, sort_keys=True, indent=2 )
-    with open( './denormalized.json', 'w' ) as f:
+    with open( unformatted_output_path, 'w' ) as f:
         f.write( jsn )
+    with open( formatted_output_path, 'w' ) as f2:
+        f2.write( pretty_jsn )
