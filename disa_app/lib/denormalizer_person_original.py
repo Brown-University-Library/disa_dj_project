@@ -1,12 +1,30 @@
 # -*- coding: utf-8 -*-
 
-import collections, datetime, json, logging, os, pprint
-import sqlalchemy
+"""
+Creates the json file used by the browse-table javascript library.
 
-from disa_app import models_sqlalchemy as models_alch
-from disa_app import settings_app
+Usage...
+- called by cron script in practice.
+- can be called manually by cd-ing to the project directory and running:
+  $ python3 ./disa_app/lib/denormalizer_person_original.py
+"""
+
+import collections, datetime, json, logging, os, pathlib, pprint, sys
+import django, sqlalchemy
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+## configure django paths
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+cwd = os.getcwd()  # assumes the cwd is the project directory
+if cwd not in sys.path:
+    sys.path.append( cwd )
+django.setup()
+
+## ok, now django-related imports will work
+from disa_app import models_sqlalchemy as models_alch
+from disa_app import settings_app
 
 
 log = logging.getLogger(__name__)
@@ -223,3 +241,19 @@ def merge_ref_roles(o,n):
             o['roles'][k] = list(set(
                 o['roles'][k] + n['roles'][k]))
     return o
+
+
+
+if __name__ == "__main__":
+    output = json_for_browse()
+    unformatted_output_path = settings_app.DENORMALIZED_JSON_PATH
+    log.debug( f'unformatted_output_path, ``{unformatted_output_path}``' )  # logging not currently working
+    formatted_output_path = f'%s/denormalized_formatted.json' % pathlib.Path( settings_app.DENORMALIZED_JSON_PATH ).parent  # arguably it'd make more sense to have the DENORMALIZED_JSON_PATH be to a directory, and then build each full-path with the unformatted and formatted json file name. But I didn't want to tweak the settings right now.
+    log.debug( f'formatted_output_path, ``{formatted_output_path}``' )
+    log.debug( f'type(output), ``{type(output)}``' )
+    jsn = json.dumps( output )
+    pretty_jsn = json.dumps( output, sort_keys=True, indent=2 )
+    with open( unformatted_output_path, 'w' ) as f:
+        f.write( jsn )
+    with open( formatted_output_path, 'w' ) as f2:
+        f2.write( pretty_jsn )
