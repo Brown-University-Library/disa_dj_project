@@ -59,12 +59,11 @@ def redesign_citations( request ):
 def redesign_citation( request, cite_id=None ):
     """ Displays specific citation. """
     log.debug( '\n\nstarting redesign_citation()' )
-    # return HttpResponse( f'redesign-citation coming for cite-id, ``{cite_id}``' )
 
     if cite_id == None:
-        return HttpResponseNotFound( '4040 / Not Found' )
+        return HttpResponseNotFound( '404 / Not Found' )
 
-    context: dict = view_edit_citation_manager.query_data( cite_id )
+    context: dict = view_edit_citation_manager.redesign_query_data( cite_id )
 
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
