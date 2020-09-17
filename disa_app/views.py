@@ -64,6 +64,8 @@ def redesign_citation( request, cite_id=None ):
         return HttpResponseNotFound( '404 / Not Found' )
 
     context: dict = view_edit_citation_manager.redesign_query_data( cite_id )
+    if context == None:
+        return HttpResponseNotFound( '404 / Not Found' )
 
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
