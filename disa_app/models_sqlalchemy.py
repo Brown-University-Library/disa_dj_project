@@ -138,7 +138,9 @@ class Citation(Base):
             'display': self.display,
             'zotero_id': self.zotero_id,
             'comments': self.comments,
-            'references': jsn_references
+            'acknowledgements': self.acknowledgements,
+            'references': jsn_references,
+            'fields': { f.field.name: f.field_data for f in self.citation_data }
             }
         return data
 
