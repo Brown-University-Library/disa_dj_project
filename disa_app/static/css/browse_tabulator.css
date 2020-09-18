@@ -190,6 +190,10 @@ nav {
   font-size: 75%;
 }
 
+.info-box.acknowledgements a {
+  white-space: nowrap;
+}
+
 .tabulator-row {
   padding: 0.5em;
 }
