@@ -29,6 +29,36 @@
     window.table.setHeaderFilterValue('all_locations', locationSearchText);
   }
 
+  // Called when "details" button pressed
+
+  let detailsModal;
+
+  window.showDetails = function(id) {
+
+    const data = window.disa.jsonData.find(x => x.id === id);
+
+    if (detailsModal === undefined) {
+      detailsModal = {
+        show: () => $('#details-modal').modal('show'),
+        id: x => this.document.getElementById('details-id').innerText = x,
+        name: x => document.getElementById('details-name').innerText = x,
+        titleName: x => document.getElementById('details-title-name').innerText = x,
+        docTitle: x => document.getElementById('details-doc').innerText = x,
+        transcription: x => document.getElementById('details-transcription').innerHTML = x
+      }
+    }
+
+    if (data) {
+      detailsModal.titleName(data.all_name);
+      // detailsModal.name(data.all_name);
+      // detailsModal.id(data.id);
+      //detailsModal.transcription(data.comments.replace(/http[^\s]+/,''));
+      detailsModal.transcription(data.comments);
+      detailsModal.docTitle(data.docTitle.replace(/http[^\s]+/,''));
+      detailsModal.show();
+    }
+  }
+
   // Main onload routine
   
   window.addEventListener('DOMContentLoaded', () => {
