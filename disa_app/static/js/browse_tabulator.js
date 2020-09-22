@@ -81,7 +81,7 @@
     // Run the JSON through this when it comes back from the
     //  server. Save the data.
   
-    let jsonData;
+    // let window.disa.jsonData;
   
     const jsonProcessor = function(_, __, response) {
   
@@ -102,11 +102,15 @@
 
         entry.locations = docWithLocation ? docWithLocation.locations : [];
         entry.all_locations = entry.locations.join(', ');
+
+        entry.docTitle = Object.keys(entry.documents)[0];
+
+        entry.comments = entry.comments.replace(/ style="[^"]*"/g,'');
       });
 
       // Save this data for later & return to Tabulator
 
-      jsonData = response; 
+      window.disa.jsonData = response; 
       return response;
     }
   
@@ -196,7 +200,7 @@
         pagination: 'local',
         paginationSize: 20,
         paginationSizeSelector:[20,50,100],
-        data: jsonData,
+        data: window.disa.jsonData,
         columns: columnDefinitions,
         rowFormatter: !bioOption.checked ? rowFormatter : undefined
       });
