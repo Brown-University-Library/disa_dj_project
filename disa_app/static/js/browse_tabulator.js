@@ -7,9 +7,12 @@
         NAME_DISPLAY_OVERRIDES = {
           'unrecorded': 'No name is recorded ',
           'Unknown': 'No name is known '
-        };
+        },
+        BIO_THEME_CLASSNAME = 'biographical';
 
   // Event handlers
+
+  window.disa = {};
 
   window.populateTribeFilter = function(tribeName) {
     console.log(tribeName);
@@ -109,7 +112,9 @@
             age_text = (data.description.age === 'Not Mentioned' ? undefined : data.description.age)
             year = data.date.year;
             
-      const html = `<strong class='referent-name'>${name_text}</strong> ${name_forOrIs} an ` + 
+      const html = `<a  class="details-button float-right" 
+      type="button" onclick="showDetails(${data.id})">Details</a>` +
+                   `<strong class='referent-name'>${name_text}</strong> ${name_forOrIs} an ` + 
                    statusDisplay[data.status] + ' ' + 
                    (data.description.tribe ? ` <a href="#" onclick="populateTribeFilter('${data.description.tribe}')">${data.description.tribe}</a> ` : '') +
                    sexDisplay[ageStatus][data.description.sex] +
@@ -148,10 +153,12 @@
       ajaxResponse: jsonProcessor
     });
     
-    const bioOption = document.getElementById('biographical-view');
+    const bioOption = document.getElementById('biographical-view'),
+          tableContainer = document.getElementById('data-display');
   
     bioOption.addEventListener('change', (elem, p) => {
       table.destroy();
+      tableContainer.classList.toggle(BIO_THEME_CLASSNAME, !bioOption.checked);
       table = new Tabulator('#data-display', {
         height:'611px',
         layout:'fitColumns',
