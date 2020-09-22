@@ -156,7 +156,6 @@
                    ` in ${locationDisplay}` + 
                    (year ? ` who lived in ${year}` : '') +
                    '.';
-  
       return html;
     }
   
