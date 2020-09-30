@@ -16,8 +16,8 @@
 <div id="tabs_bibinfoanditems" style="margin-top:10em;">
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-            <a  class="nav-link active" href="#Bibliographic-information" 
-                data-toggle="tab" role="tab" 
+            <a  class="nav-link active" href="#Bibliographic-information"
+                data-toggle="tab" role="tab"
                 aria-controls="Bibliographic-information" aria-expanded="true">
                 Bibliographic information
             </a>
@@ -33,7 +33,7 @@
 
             <div id="hidden-fields" hidden></div>
             <form>
-                <span   class="badge badge-primary float-right" 
+                <span   class="badge badge-primary float-right"
                         title="Unique identifier for this citation">
                         ID {{ doc.id }}
                 </span>
@@ -53,7 +53,7 @@
                         (I like the explicitness of your id name.)
                         Eventually I'm going to rename it anyway, working to unify 'doc' references to 'cite' or 'citation' references.
                         -->
-                    
+
                     <!--
 
                     <select style="width:75%;float:right;" class="custom-select" id="formInputDISADocType">
@@ -73,11 +73,11 @@
                         <!-- (Patrick) This option is only to be shown if citation type has not been selected -->
                         <option value="0" class="initMessage">
                             [Select a document type]
-                        </option> 
+                        </option>
                     </select>
                 </div>
 
-                <!-- CITATION FIELDS (REQUIRED and OPTIONAL). 
+                <!-- CITATION FIELDS (REQUIRED and OPTIONAL).
                      Unused fields are moved to #hidden-fields outside of the form element, above -->
 
                 <h5 id="required-fields-header" hidden>Priority information</h5>
@@ -86,7 +86,7 @@
                 <div id="optional-fields">
                     <div class="citation-field form-group text-dark" id="abstractNote">
                     <label for="abstractNote-value" style="padding-left:15%;">Abstract Note</label>
-                    <input id="abstractNote-value" name="abstractNote-value" placeholder="Abstract Note" 
+                    <input id="abstractNote-value" name="abstractNote-value" placeholder="Abstract Note"
                             value="ABCD" />
                     </div>
                     <div class="citation-field form-group text-dark" id="accessDate">
@@ -102,16 +102,18 @@
                     <input id="archiveLocation-value" name="archiveLocation-value"  placeholder="Archive Location" />
                     </div>
                     <div class="citation-field form-group text-dark" id="author">
-                    <label for="author-value" style="padding-left:15%;">Author</label>
-                    <input id="author-value" name="author-value"  placeholder="Author (last name comes first)" />
+                        <label for="author-value" style="padding-left:15%;">Author</label>
+                        <!-- <input id="author-value" name="author-value"  placeholder="Author (last name comes first)" /> -->
+                        <input id="author-value" name="author-value"  placeholder="{{ doc.fields.author }}" />
                     </div>
                     <div class="citation-field form-group text-dark" id="callNumber">
                     <label for="callNumber-value" style="padding-left:15%;">Call Number</label>
                     <input id="callNumber-value" name="callNumber-value"  placeholder="Call Number" />
                     </div>
                     <div class="citation-field form-group text-dark" id="date">
-                    <label for="date-value" style="padding-left:15%;">Date</label>
-                    <input id="date-value" name="date-value" placeholder="Date" />
+                        <label for="date-value" style="padding-left:15%;">Date</label>
+                        <!-- <input id="date-value" name="date-value" placeholder="Date" /> -->
+                        <input id="date-value" name="date-value" placeholder="{{ doc.fields.date }}" />
                     </div>
                     <div class="citation-field form-group text-dark" id="edition">
                     <label for="edition-value" style="padding-left:15%;">Edition</label>
@@ -949,7 +951,7 @@
                 });
             });
 
-            // Unhide 
+            // Unhide
 
             requiredFieldsHeader.removeAttribute('hidden');
             optionalFieldsHeader.removeAttribute('hidden');
@@ -963,9 +965,9 @@
 
         // Initialize display based on current citation type selection
         // TEMPORARY WORKAROUND - wait for Birkin's code to run
-        
+
         window.setTimeout(updateCitationFieldVisibility, 500);
-      })  
+      })
 
     // PATRICK'S CODE ENDS HERE
 
@@ -975,4 +977,4 @@
 {% endblock page_specific_js %}
 
 
- 
+
