@@ -653,12 +653,11 @@ def error_check( request ):
         - run, in another terminal window: `python -m smtpd -n -c DebuggingServer localhost:1026`,
         - (or substitue your own settings for localhost:1026)
     """
+    log.debug( f'project_settings.DEBUG, ``{project_settings.DEBUG}``' )
     if project_settings.DEBUG == True:
-        1/0
+        raise Exception( 'error-check triggered; admin emailed' )
     else:
         return HttpResponseNotFound( '<div>404 / Not Found</div>' )
-
-
 
 
 
