@@ -260,10 +260,14 @@
     const columnDefinitions = [
       { title:'Name',      field:'all_name',          sorter:'string', headerFilter: true }, // mutator: combineNames_mutator },
       { title:'Last name', field:'last_name',         sorter:'string', headerFilter: true, visible: false },
-      { title:'Sex',       field:'description.sex',   sorter:'string', headerFilter: 'select', headerFilterParams:{ values: ['Male','Female'] } },
+      { title:'Status',    field:'status',            sorter:'string', headerFilter: true },
+      { title:'Sex',       field:'description.sex',   sorter:'string', headerFilter: 'select', 
+        headerFilterParams:{ values: ['Male','Female', 'Other'] } },
       { title:'Tribe',     field:'description.tribe', sorter:'string', headerFilter: true },
-      { title:'Age',       field:'description.age',   sorter:'string', headerFilter: true },
-      { title:'Location',  field:'all_locations',     sorter:'string', headerFilter: true }
+      { title:'Race',      field:'description.race',  sorter:'string', headerFilter: true },
+      // { title:'Age',       field:'description.age',   sorter:'string', headerFilter: true },
+      { title:'Location',  field:'all_locations',     sorter:'string', headerFilter: true },
+      { title:'Year',      field:'date.year',         sorter:'string', headerFilter: true }
     ];
   
     let table = new Tabulator('#data-display', {
