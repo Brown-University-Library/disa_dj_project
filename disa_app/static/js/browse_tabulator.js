@@ -224,11 +224,13 @@
               'child': {
                 'Female' : 'girl',
                 'Male': 'boy',
+                'Other': 'child',
                 '': 'child'
               },
               'adult': {
                 'Female': 'woman',
                 'Male': 'man',
+                'Other': 'person',
                 '': 'person'
               }
             },
