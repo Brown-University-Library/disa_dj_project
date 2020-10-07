@@ -299,17 +299,11 @@
         paginationSizeSelector:[20,50,100],
         data: window.disa.jsonData,
         columns: columnDefinitions,
-        rowFormatter: !bioOption.checked ? rowFormatter : undefined
-      });
+        rowFormatter: bioOption ? rowFormatter : undefined
+      })
     });
-  
-    // trigger AJAX load on 'Load Data via AJAX' button click
-  
+
     window.table = table;
-  
   });
 
-
-
 })() // Closing IIFE
-
