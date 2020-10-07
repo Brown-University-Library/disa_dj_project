@@ -16,17 +16,17 @@
   window.disa = {};
 
   window.populateTribeFilter = function(tribeName) {
-    console.log(tribeName);
+    // console.log(tribeName);
     window.table.setHeaderFilterValue('description.tribe', tribeName);
   }
 
   window.populateNameFilter = function(nameSearchText) {
-    console.log(nameSearchText);
+    // console.log(nameSearchText);
     window.table.setHeaderFilterValue('all_name', nameSearchText);
   }
 
   window.populateLocationFilter = function(locationSearchText) {
-    console.log(locationSearchText);
+    // console.log(locationSearchText);
     window.table.setHeaderFilterValue('all_locations', locationSearchText);
   }
 
