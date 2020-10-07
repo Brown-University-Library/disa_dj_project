@@ -217,9 +217,9 @@
               'enslaved': 'enslaved'
             },
             locSearchTerms = data.locations.map((_, i, locArr) => locArr.slice(i).join(', ')),
-            locationDisplay = data.locations.map((loc, i) => 
-              `<a href="#" onclick="populateLocationFilter('${locSearchTerms[i]}')">${loc}</a>`
-            ).join(', '),
+            locationDisplay = data.locations.map((loc, i) => {
+              return `<a href="#" onclick="populateLocationFilter('${locSearchTerms[i]}')">${uncleanString(loc)}</a>`
+            }).join(', '),
             sexDisplay = {
               'child': {
                 'Female' : 'girl',
