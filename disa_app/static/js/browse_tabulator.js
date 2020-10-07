@@ -8,7 +8,8 @@
           'unrecorded': 'No name is recorded ',
           'Unknown': 'No name is known '
         },
-        BIO_THEME_CLASSNAME = 'biographical';
+        BIO_THEME_CLASSNAME = 'biographical',
+        VIEW_OPTIONS_RADIO_BUTTONS_ID = 'view-options';
 
   // Event handlers
 
@@ -276,13 +277,14 @@
       rowFormatter: rowFormatter,
       ajaxResponse: jsonProcessor
     });
-    
-    const bioOption = document.getElementById('biographical-view'),
-          tableContainer = document.getElementById('data-display');
   
-    bioOption.addEventListener('change', (elem, p) => {
+    const bioViewOptionInputElem = document.getElementById('biographical-view-option'),
+          tableContainer = document.getElementById('data-display');
+
+    document.getElementById(VIEW_OPTIONS_RADIO_BUTTONS_ID).addEventListener('click', () => {
+      const bioOption = bioViewOptionInputElem.checked;
       table.destroy();
-      tableContainer.classList.toggle(BIO_THEME_CLASSNAME, !bioOption.checked);
+      tableContainer.classList.toggle(BIO_THEME_CLASSNAME, bioOption);
       table = new Tabulator('#data-display', {
         height:'611px',
         layout:'fitColumns',
