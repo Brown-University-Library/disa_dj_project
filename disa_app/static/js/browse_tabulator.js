@@ -240,8 +240,7 @@
             age_text = (data.description.age === 'Not Mentioned' ? undefined : data.description.age)
             year = data.date.year;
             
-      const html = `<a  class="details-button float-right" 
-      type="button" onclick="showDetails(${data.id})">Details</a>` +
+      const html = `<a  class="details-button float-right" type="button" onclick="showDetails(${data.id})">Details</a>` +
                    `<strong class='referent-name'>${name_text}</strong> ${name_forOrIs} an ` + 
                    statusDisplay[data.status] + ' ' + 
                    (data.description.tribe ? ` <a href="#" onclick="populateTribeFilter('${data.description.tribe}')">${data.description.tribe}</a> ` : '') +
