@@ -221,15 +221,16 @@
   
       const nameDisplay = NAME_DISPLAY_OVERRIDES[data.first_name] || data.first_name,
             name_text = data.description.title 
-                        + `<a href="#" onclick="populateNameFilter('${nameDisplay}')">${nameDisplay}</a>`
-                        + (data.last_name ? ` <a href="#" onclick="populateNameFilter('${data.last_name}')">${data.last_name}</a>` : ''),
+                        + `<a href="#" onclick="populateNameFilter('${nameDisplay}')" title="Filter for people named '${nameDisplay}'">${nameDisplay}</a>`
+                        + (data.last_name ? ` <a href="#" onclick="populateNameFilter('${data.last_name}') title="Filter for people with last name ${data.last_name}">${data.last_name}</a>` : ''),
             name_forOrIs = NAME_DISPLAY_OVERRIDES[data.first_name] ? 'for' : 'is',
             statusDisplay = {
               'enslaved': 'enslaved'
             },
             locSearchTerms = data.locations.map((_, i, locArr) => locArr.slice(i).join(', ')),
             locationDisplay = data.locations.map((loc, i) => {
-              return `<a href="#" onclick="populateLocationFilter('${locSearchTerms[i]}')">${uncleanString(loc)}</a>`
+              return `<a  href="#" onclick="populateLocationFilter('${locSearchTerms[i]}')" 
+                          title="Show only people located in ${locSearchTerms[i]}">${uncleanString(loc)}</a>`
             }).join(', '),
             sexDisplay = {
               'child': {
@@ -248,14 +249,15 @@
             n = parseInt(data.description.age),
             age_number = (isNaN(n) ? undefined : n),
             ageStatus = (age_number && age_number <= 16 ? 'child' : 'adult'),
-            age_text = (data.description.age === 'Not Mentioned' ? undefined : data.description.age)
+            age_text = (data.description.age === 'Not Mentioned' ? undefined : data.description.age),
             race_text = (data.description.race ? `, who is described as &ldquo;${data.description.race}&rdquo;,` : ''),
             year = data.date.year;
             
-      const html = `<a  class="details-button float-right" type="button" onclick="showDetails(${data.id})">Details</a>` +
+      const html = `<a  class="details-button float-right" type="button" onclick="showDetails(${data.id})" 
+                        title="Show source document and details for ${data.all_name}">Details</a>` +
                    `<strong class='referent-name'>${name_text}</strong> ${name_forOrIs} an ` + 
                    statusDisplay[data.status] + ' ' + 
-                   (data.description.tribe ? ` <a href="#" onclick="populateTribeFilter('${data.description.tribe}')">${data.description.tribe}</a> ` : '') +
+                   (data.description.tribe ? ` <a href="#" title="Show only ${data.description.tribe} people" onclick="populateTribeFilter('${data.description.tribe}')">${data.description.tribe}</a> ` : '') +
                    sexDisplay[ageStatus][data.description.sex] +
                    (age_text ? `, age ${age_text}` : '') +
                    race_text +
