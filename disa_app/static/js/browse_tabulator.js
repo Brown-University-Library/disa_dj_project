@@ -249,6 +249,7 @@
             age_number = (isNaN(n) ? undefined : n),
             ageStatus = (age_number && age_number <= 16 ? 'child' : 'adult'),
             age_text = (data.description.age === 'Not Mentioned' ? undefined : data.description.age)
+            race_text = (data.description.race ? `, who is described as &ldquo;${data.description.race}&rdquo;,` : ''),
             year = data.date.year;
             
       const html = `<a  class="details-button float-right" type="button" onclick="showDetails(${data.id})">Details</a>` +
@@ -257,8 +258,10 @@
                    (data.description.tribe ? ` <a href="#" onclick="populateTribeFilter('${data.description.tribe}')">${data.description.tribe}</a> ` : '') +
                    sexDisplay[ageStatus][data.description.sex] +
                    (age_text ? `, age ${age_text}` : '') +
+                   race_text +
+                   ' who lived' +
                    ` in ${locationDisplay}` + 
-                   (year ? ` who lived in ${year}` : '') +
+                   (year ? ` in ${year}` : '') +
                    '.';
       return html;
     }
