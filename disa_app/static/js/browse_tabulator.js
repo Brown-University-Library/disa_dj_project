@@ -222,7 +222,7 @@
       const nameDisplay = NAME_DISPLAY_OVERRIDES[data.first_name] || data.first_name,
             name_text = data.description.title 
                         + `<a href="#" onclick="populateNameFilter('${nameDisplay}')" title="Filter for people named '${nameDisplay}'">${nameDisplay}</a>`
-                        + (data.last_name ? ` <a href="#" onclick="populateNameFilter('${data.last_name}') title="Filter for people with last name ${data.last_name}">${data.last_name}</a>` : ''),
+                        + (data.last_name ? ` <a href="#" onclick="populateNameFilter('${data.last_name}')" title="Filter for people with last name '${data.last_name}'">${data.last_name}</a>` : ''),
             name_forOrIs = NAME_DISPLAY_OVERRIDES[data.first_name] ? 'for' : 'is',
             statusDisplay = {
               'enslaved': 'enslaved'
@@ -250,7 +250,7 @@
             age_number = (isNaN(n) ? undefined : n),
             ageStatus = (age_number && age_number <= 16 ? 'child' : 'adult'),
             age_text = (data.description.age === 'Not Mentioned' ? undefined : data.description.age),
-            race_text = (data.description.race ? `, who is described as &ldquo;${data.description.race}&rdquo;,` : ''),
+            race_text = (data.description.race ? `, described as &ldquo;${data.description.race}&rdquo;,` : ''),
             year = data.date.year;
             
       const html = `<a  class="details-button float-right" type="button" onclick="showDetails(${data.id})" 
