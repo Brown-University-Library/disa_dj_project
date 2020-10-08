@@ -22,7 +22,7 @@ log = logging.getLogger(__name__)
 def shib_login(func):
     """ Decorator to create a user object for the Shib user, if necessary, and log the user into Django.
         Called by views.py decorators. """
-    log.debug( 'starting shib_login() decorator' )
+    # log.debug( 'starting shib_login() decorator' )
     def decorator(request, *args, **kwargs):
         log.debug( f'coming from, ```{request.META.get("HTTP_REFERER", "referrer_unknown")}```' )
         log.debug( f'heading to, ```{request.META["PATH_INFO"]}```' )
