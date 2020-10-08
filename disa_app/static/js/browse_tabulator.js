@@ -40,18 +40,25 @@
 
     // Initialize modal
 
+    function getModalContentSetter(idOrClass, textOrHTML) {
+      const elems = document.querySelectorAll(`#${idOrClass},.${idOrClass}`);
+      return function(content) {
+        elems.forEach(elem => elem[`inner${textOrHTML}`] = content);
+      }
+    }
+
+    const setDetailsTable = getModalContentSetter('details-table', 'HTML');
+
     if (detailsModal === undefined) {
       detailsModal = {
         show: () => $('#details-modal').modal('show'),
-        setId: x => this.document.getElementById('details-id').innerText = x,
-        name: x => document.getElementById('details-name').innerText = uncleanString(x),
-        setTitleName: x => document.getElementById('details-title-name').innerHTML = uncleanString(x),
-        setDocTitle: x => document.getElementById('details-doc').innerText = uncleanString(x),
-        setTranscription: x => document.getElementById('details-transcription').innerHTML = x,
-        clearDetailsTable: () => document.getElementById('details-table').innerHTML = '',
+        setId: getModalContentSetter('details-id', 'Text'),
+        setName: getModalContentSetter('details-title-name', 'Text'),
+        setDocTitle: getModalContentSetter('details-doc', 'Text'),
+        setTranscription: getModalContentSetter('details-transcription', 'HTML'),
+        clearDetailsTable: () => setDetailsTable(''),
         addToDetailsTable: (label, value) => {
-          document.getElementById('details-table').innerHTML = 
-            document.getElementById('details-table').innerHTML +
+          document.getElementById('details-table').innerHTML += 
             `<tr><th>${label}</th><td>${value}</td></tr>`;
         }
       }
@@ -60,17 +67,17 @@
     // Populate modal
 
     if (data) {
-      detailsModal.setTitleName(data.all_name);
-      // detailsModal.name(data.all_name);
+      //detailsModal.setTitleName(data.all_name);
+      detailsModal.setName(data.all_name);
       detailsModal.setId(id);
       // detailsModal.transcription(data.comments.replace(/http[^\s]+/,''));
       detailsModal.setTranscription(data.comments);
       detailsModal.setDocTitle(data.docTitle.replace(/http[^\s]+/,''));
-      detailsModal.show();
       detailsModal.clearDetailsTable();
-      [
+      
+      const detailsTableContent = [
         ['Location', data.all_locations],
-        ['First name', data.first_name],,
+        ['First name', data.first_name],
         ['Last name', data.last_name],
         ['Status', data.status],
         ['Date', new Date(data.date.year, data.date.month, data.date.day).toDateString()],
@@ -83,11 +90,15 @@
         ['Has a mother?', data.has_mother],
         ['Owner', data.owner],
         ['Spouse', data.spouse]
-      ].forEach(
+      ];
+      
+      detailsTableContent.forEach(
         ([label, value]) => {
           if (value) { detailsModal.addToDetailsTable(label, value) }
         }
       );
+
+      detailsModal.show();
     }
   }
 
