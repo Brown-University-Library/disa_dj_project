@@ -30,14 +30,79 @@ log = logging.getLogger(__name__)
 
 
 # ===========================
-# main urls
+# redesign urls
 # ===========================
 
 
-# def temp_response( request ):
-#     requested_path = request.META.get( 'PATH_INFO', 'path_unknown' )
-#     log.debug( f'requested_path, ```{requested_path}```' )
-#     return HttpResponse( f'`{requested_path}` handling coming' )
+def redesign_home( request ):
+    """ ? """
+    return HttpResponse( "What should be displayed here?" )
+
+
+@shib_login
+def redesign_citations( request ):
+    """ Displays main landing page of citations, with user's recently-edited citations first. """
+    log.debug( '\n\nstarting redesign_citations()' )
+    user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+    context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
+    if request.user.is_authenticated:
+        context['user_is_authenticated'] = True
+        context['user_first_name'] = request.user.first_name
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/redesign_citations.html', context )
+    return resp
+
+
+@shib_login
+def redesign_citation( request, cite_id=None ):
+    """ Displays specific citation. """
+    log.debug( '\n\nstarting redesign_citation()' )
+    # return HttpResponse( f'redesign-citation coming for cite-id, ``{cite_id}``' )
+
+    if cite_id == None:
+        return HttpResponseNotFound( '4040 / Not Found' )
+
+    context: dict = view_edit_citation_manager.query_data( cite_id )
+
+    if request.user.is_authenticated:
+        context['user_is_authenticated'] = True
+        context['user_first_name'] = request.user.first_name
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/redesign_citation.html', context )
+    return resp
+
+
+# @shib_login
+# def edit_citation( request, cite_id=None ):
+#     """ Url: 'editor/documents/<cite_id>/' -- 'edit_citation_url' """
+#     log.debug( '\n\nstarting edit_citation()' )
+#     if cite_id:
+#         log.debug( f'will hit citation-manager with cite_id, ```{cite_id}```' )
+#         context: dict = view_edit_citation_manager.query_data( cite_id )
+#         if context == None:
+#             return HttpResponseNotFound( '404 / Not Found' )
+#     else:
+#         log.debug( 'will hit citation-manager with no cite_id' )
+#         user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+#         context: dict = view_edit_citation_manager.manage_create( user_id )
+#     if request.user.is_authenticated:
+#         context['user_is_authenticated'] = True
+#         context['user_first_name'] = request.user.first_name
+#         context['can_delete_doc'] = request.user.profile.can_delete_doc
+#     if request.GET.get('format', '') == 'json':
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         resp = render( request, 'disa_app_templates/document_edit.html', context )
+#     return resp
+
+
+# ===========================
+# main urls
+# ===========================
 
 
 def browse( request ):
@@ -54,6 +119,23 @@ def browse( request ):
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
         resp = render( request, 'disa_app_templates/browse.html', context )
+    return resp
+
+
+def browse_tabulator( request ):
+    """ Displays ALTERNATE home page. """
+    log.debug( '\n\nstarting browse()' )
+    context = {
+        'denormalized_json_url': reverse('dnrmlzd_jsn_prx_url_url'),
+        'info_image_url': f'{project_settings.STATIC_URL}images/info.png',
+        'logout_next': reverse( 'browse_url' ) }
+    if request.user.is_authenticated:
+        context['user_is_authenticated'] = True
+        context['user_first_name'] = request.user.first_name
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/browse_tabulator.html', context )
     return resp
 
 
@@ -570,8 +652,6 @@ def dnrmlzd_jsn_prx_url( request ):
 def version( request ):
     """ Returns basic data including branch & commit. """
     # log.debug( 'request.__dict__, ```%s```' % pprint.pformat(request.__dict__) )
-    log.debug( f'project_settings, ``{pprint.pformat(project_settings)}``' )
-    log.debug( f'debug-setting, ``{project_settings.DEBUG}``' )
     rq_now = datetime.datetime.now()
     commit = view_info_manager.get_commit()
     branch = view_info_manager.get_branch()
@@ -589,9 +669,8 @@ def error_check( request ):
         - run, in another terminal window: `python -m smtpd -n -c DebuggingServer localhost:1026`,
         - (or substitue your own settings for localhost:1026)
     """
-    log.debug( f'project_settings.DEBUG, ``{project_settings.DEBUG}``' )
     if project_settings.DEBUG == True:
-        raise Exception( 'error-check triggered; admin emailed' )
+        1/0
     else:
         return HttpResponseNotFound( '<div>404 / Not Found</div>' )
 

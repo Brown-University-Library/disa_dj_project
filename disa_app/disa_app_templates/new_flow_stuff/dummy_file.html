@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="DISA database entry form">
+        <meta name="author" content="Brown University Library">
+        <title>DISA</title>
+        <!-- Bootstrap core CSS -->
+        <link href="../../static/lib/bootstrap-4.5.0-dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="assets/css/sidebar-style.css" rel="stylesheet">
+        <link href="assets/css/dummy_file.css" rel="stylesheet">
+        <!-- Font Awesome JS -->
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+        <script defer src="assets/js/dummy_file.js"></script>
+        <!-- The CCS below can be moved into an external file eventually -->
+        <style>
+        
+            /* Display toggle for the age field */
+
+            #formInputDISAPersonAge_number {
+                display: none;
+            }
+
+            .age-as-number #formInputDISAPersonAge_text {
+                display: none;    
+            }
+
+            .age-as-number #formInputDISAPersonAge_number {
+                display: initial;    
+            }
+        
+        </style>
+    </head>
+    <body>
+        <div class="wrapper" style="margin-top: 3.5em;">
+            <div id="sidebar">
+                <div class="sidebar-header">
+                    <div style="margin-right: -1.25em!important;">
+                        <div style="float: right;margin-top: .33em;">
+                            <button type="button" id="sidebarCollapse" class="btn btn-info">
+                                <span style="font-weight: bold;">Toggle&nbsp;<br></span> 
+                                <i class="fas fa-info-circle fa-3x"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <h1>Welcome to the Database of Indigenous Slavery</h1>
+                    <p style="font-weight: bold;">This project, housed at Brown University, is a collaborative effort to build a database record of enslaved indigenous people throughout time, all across the Americas. Thank you for contributing to this project.</p>
+                    <p style="font-weight: bold;">Here's how to start adding information.</p>
+                    <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> CLICK <span class="sidebar-info-highlight">Add document</span> if you are entering people from a document that has not previously been added.</p>
+                    <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> SEARCH under <span class="sidebar-info-highlight">Your recent</span> or <span class="action-highlight">All recent</span> if you are opening a document that you or someone else previously created.</p>
+                    <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> The documents listed under <span class="sidebar-info-highlight">Your recent</span> offer the last fifteen documents you worked on.</p>
+                    <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> The documents under <span class="sidebar-info-highlight">All recent</span> list the documents that anyone entering information into DISA have created.</p>
+                    <p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> CLICK <span class="sidebar-info-highlight">Show details</span> to see a timestamp and the username of the person who last edited each document.</p>
+                </div>
+            </div> <!-- /#sidebar -->
+            <div id="content">
+                <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+                    <a class="navbar-brand" style="margin-right:4%;" href="#">Database of Indigenous Slavery in the Americas</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                        <ul class="navbar-nav mr-auto nav-fill w-100">
+                            <li>
+                            <form class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2" type="text" placeholder="enter search-term" aria-label="Search">
+                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">
+                                    <i class="fas fa-search fa-lg"></i>
+                                </button>
+                            </form>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">People</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Documents</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Login / (Welcome, User)</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Logout</a>
+                            </li>
+                            <!--
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">[Dropdown]</a>
+                                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                            </li>
+                            -->
+                        </ul>
+                    </div>
+                </nav>
+                <main class="container">
+                    <div id="startpanel">
+                        <h1 class="text-secondary">Choose a source document:</h1>
+                        <br>
+                        <br>
+                        <h3>Starting with a new document?</h3>
+                        <button type="button" class="btn btn-primary btn-lg" style="font-weight: bold;">ADD DOCUMENT</button>
+                        <br>
+                        <br>
+                        <br>
+                        <h3>Returning to a previously added document?</h3>
+                        <br>
+                        <h5 class="text-primary col-lg-5 col-sm-11" style="letter-spacing: .5px; padding: 0;">YOUR RECENT</h5>
+                        <table class="table table-striped col-lg-5 col-sm-11" style="background-color: white;">
+                            <thead style="background-color: #eeeeee;">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Document Title</th>
+                                    <th></th>
+                                    <!--<th>X</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td class="table-info">The South Carolina Gazette, Sept. 6, 1734</td>
+                                    <td style="background-color: #eeeeee;">
+                                        <button type="button" class="close text-primary" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>The South Carolina Gazette, Sept. 7, 1734</td>
+                                    <td style="background-color: #eeeeee;">
+                                        <button type="button" class="close text-primary" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>The South Carolina Gazette, Sept. 8, 1734</td>
+                                    <td style="background-color: #eeeeee;">
+                                        <button type="button" class="close text-primary" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </td>
+                                </tr>                                 
+                            </tbody>
+                        </table>
+                        <br>
+                        <h5 class="text-primary col-lg-5 col-sm-11" style="letter-spacing: .5px; padding: 0;">ALL RECENT <a href="#" style="float: right;">Show details ></a></h5>
+                        <table class="table table-striped col-lg-5 col-sm-11" style="background-color: white;">
+                            <thead style="background-color: #eeeeee;">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Document Title</th>
+                                    <!--<th>X</th>
+			                         <th>X</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td class="table-info">The South Carolina Gazette, Sept. 6, 1734</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>The South Carolina Gazette, Sept. 7, 1734</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>The South Carolina Gazette, Sept. 8, 1734</td>
+                                </tr>                                 
+                            </tbody>
+                        </table>                         
+                    </div> <!-- /#startpanel -->
+
+                    <!-- JavaScript-savvy URL control to toggle div display between #startpanel above & #tabs_bibinfoanditems below -->
+                    <div id="tabs_bibinfoanditems" style="margin-top:10em;">
+                        <ul class="nav nav-tabs" role="tablist"> 
+                            <li class="nav-item"> 
+                                <a class="nav-link active" href="#Bibliographic-information" data-toggle="tab" role="tab" aria-controls="Bibliographic-information" aria-expanded="true">Bibliographic information</a> 
+                            </li>                             
+                            <li class="nav-item"> 
+                                <a class="nav-link" href="#Items" data-toggle="tab" role="tab" aria-controls="Items" aria-expanded="true">Items</a> 
+                            </li>                             
+                        </ul>
+                        <div class="tab-content">
+                            <div class="active tab-pane" style="padding: 20px;" role="tabpanel" aria-labelledby="Bibliographic-information" id="Bibliographic-information">
+                                <h5 class="text-dark" style="width:25%;float:left;">Document type:</h5>
+                                <div style="clear: left;">
+                                    <label for="formInputDISADocType" style="padding-left:12%;">Item type:</label>
+                                    <select style="width:75%;float:right;" class="custom-select" id="formInputDISADocType"> 
+                                        <option selected>Newspaper Article</option>                                         
+                                        <option value="1">[Other doc format]</option>                                         
+                                        <option value="2">[Other doc format]</option>                                         
+                                        <option value="3">[Other doc format]</option>                                         
+                                    </select>
+                                </div>    
+                                <p>&nbsp;</p>
+                                <h5>Priority information</h5>
+                                <div class="form-group text-dark"> 
+                                    <label for="formInputDISATitle" style="padding-left:10%;">Title<span style="font-size:85%;" class="text-danger">(required)</span></label>
+                                    <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISATitle" placeholder="Enter Title"> 
+                                </div>
+                                <div class="form-group text-dark"> 
+                                    <label for="formInputDISAPlace" style="padding-left:15%;">Place</label>                                     
+                                    <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISAPlace" placeholder="Enter Place"> 
+                                </div>
+                                <label for="formInputDISABiblioDateYear" style="padding-left:15%;">Date</label>
+                                <div style="width:75%;float:right;">
+                                    <p style="width:25%;float:left;padding-right:10px;"> <select class="custom-select" id="formInputDISABiblioDateYear"> 
+                                            <option selected>Year</option>                                             
+                                            <option value="1">[Year values?]</option>                                             
+                                            <option value="2">[Year values?]</option>                                             
+                                            <option value="3">[Year values?]</option>                                             
+                                        </select>
+                                    </p>
+                                    <p style="width:25%;float:left;padding-right:10px;"> <select class="custom-select" id="formInputDISABiblioDateMonth"> 
+                                            <option selected>Month</option>                                             
+                                            <option value="1">[Month values?]</option>                                             
+                                            <option value="2">[Month values?]</option>                                             
+                                            <option value="3">[Month values?]</option>                                             
+                                        </select>
+                                    </p>
+                                    <p style="width:25%;float:left;padding-right:0px;"> <select class="custom-select" id="formInputDISABiblioDateDay"> 
+                                            <option selected>[Day]</option>                                             
+                                            <option value="1">[Day values?]</option>                                             
+                                            <option value="2">[Day values?]</option>                                             
+                                            <option value="3">[Day values?]</option>                                             
+                                        </select>
+                                    </p>
+                                </div>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <h5>Additional information</h5>
+                                <div class="form-group text-dark"> 
+                                    <label for="formInputDISAFieldA" style="padding-left:15%;">Field A</label>                                     
+                                    <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISAFieldA" placeholder="[Placeholder text]"> 
+                                </div>
+                                <div class="form-group text-dark"> 
+                                    <label for="formInputDISAFieldB" style="padding-left:15%;">Field B</label>                                     
+                                    <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISAFieldB" placeholder="[Placeholder text]">
+                                </div>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <div class="form-group"> 
+                                    <label for="formInputDISAAcknowledgements" style="padding-left:0%;">Acknowledgements</label>                                     
+                                    <textarea style="width:75%;float:right;" class="form-control" rows="3" id="formInputDISAAcknowledgements"></textarea> 
+                                </div>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <div class="form-group" style="clear:both;"> 
+                                    <label for="formInputDISABiblioResearcherNotes" style="padding-left:0%;">Researcher notes
+                                        <br>
+                                        <span style="font-size:85%;"><a href="#">Report problems or ask for help</a></span>
+                                    </label>                                     
+                                    <textarea style="width:75%;float:right;" class="form-control" rows="3" id="formInputDISABiblioResearcherNotes"></textarea> 
+                                </div>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <button type="button" class="btn btn-primary btn-md" style="font-weight: bold;">SAVE AND CONTINUE TO ENTER ITEMS</button>
+                            </div> <!-- /.tab-pane for bibinfo -->
+                            <div class="tab-pane" role="tabpanel" aria-labelledby="Items" id="Items">
+                                <div style="padding: 0px; padding-top: 0px;">
+                                    <ul class="nav nav-tabs" role="tablist" style="padding: 20px;"> 
+                                        <li class="nav-item"> 
+                                            <a class="nav-link" href="#New-Item" data-toggle="tab" role="tab" aria-controls="New-Item" aria-expanded="true">New Item</a> 
+                                        </li>
+                                        <!-- hide Discuss tab
+                                        <li class="nav-item"> 
+                                            <a class="nav-link" href="#tab4" data-toggle="tab" role="tab" aria-controls="tab4" aria-expanded="true">Discuss</a> 
+                                        </li>                                         
+                                        <li class="nav-item"></li>                                         
+                                        <li class="nav-item"></li> 
+										-->
+                                        <li style="font-weight: bold;padding-left: 25px;padding-top: 9px;" class="text-success">All changes saved</li>
+                                    </ul>
+                                    <div class="tab-content" style="background-color: white!important;opacity:1;">
+                                        <div class="active tab-pane" role="tabpanel" aria-labelledby="New-Item" id="New-Item" style="margin-top:-20px;padding-top:0px;">
+                                            <div class="row col-lg-12" style="padding-top:40px;">
+                                                <div class="col-md-6">
+                                                    <h5 class="text-dark" style="float:left;margin-left:20px;">Location in source document</h5>
+                                                    <p>&nbsp;</p>
+                                                    <div class="form-group text-dark"> 
+                                                        <label for="formInputDISAItemVolume" style="padding-left:15%;">Volume</label>
+                                                        <input style="width:60%;float:right;margin-right:5%;" type="text" class="form-control" id="formInputDISAItemVolume" placeholder="Volume #"> 
+                                                    </div>
+                                                    <p></p> 
+                                                    <div class="form-group text-dark"> 
+                                                        <label for="formInputDISASourcePageStart" style="padding-left:15%;">Page number, from</label>
+                                                        <input style="width:40%;float:right;margin-right:5%;" type="text" class="form-control" id="formInputDISASourcePageStart" placeholder="start pg. #">
+                                                        <p></p>
+                                                        <label for="formInputDISASourcePageEnd" style="padding-left:43%;clear:left;">to</label>
+                                                        <input style="width:40%;float:right;margin-right:5%;" type="text" class="form-control" id="formInputDISASourcePageEnd" placeholder="end pg. #">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h5 class="text-dark" style="float:left;margin-left: 20px;">Item content</h5>
+                                                    <p>&nbsp;</p>
+                                                    <div class="form-group text-dark"> 
+                                                        <label for="formInputDISAItemType" style="padding-left:5%;">Item type:</label>
+                                                        <select style="width:70%;float:right;" class="custom-select" id="formInputDISAItemType"> 
+                                                            <option selected>Select an item type...</option>                                                             
+                                                            <option value="1">One</option>                                                             
+                                                            <option value="2">Two</option>                                                             
+                                                            <option value="3">Three</option>                                                             
+                                                        </select>
+                                                    </div>
+                                                    <div style="text-align:left;">
+                                                        <div class="form-group" style="margin-top:20px;">
+                                                            <label for="formInputDISAItemTranscription" style="padding-left:5%;float:left;">Transcription</label>
+                                                            <br>
+                                                            <a href="#" style="margin-left:0%;font-size:80%;margin-top:-7px;clear:left;float:left;">Open in new window</a> 
+                                                            <textarea style="margin-top:-25px;margin-bottom:20px;width:70%;float:right;" class="form-control" rows="3" id="formInputDISAItemTranscription"></textarea> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- /.row -->
+                                            <hr>
+                                            <div class="row" style="padding-top:20px;padding-right:20px;">
+                                                <div class="col-md-6">
+                                                    <h5 class="text-dark" style="float:left;margin-left:40px;">Event date</h5>
+                                                    <p>&nbsp;</p>
+                                                    <div class="form-group text-dark"> 
+                                                        <label for="formInputDISAEventDateMonth" style="padding-left:10%;">Month</label>
+                                                        <select style="width:60%;float:right;margin-right:5%;" class="custom-select" id="formInputDISAEventDateMonth"> 
+                                                            <option selected>Unspecified</option>                                                             
+                                                            <option value="1">Unspecified 1</option>                                                             
+                                                            <option value="2">Unspecified 2</option>                                                             
+                                                            <option value="3">Unspecified 3</option>                                                             
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group text-dark"> 
+                                                        <label for="formInputDISAEventDateDay" style="padding-left:10%;">Day</label>
+                                                        <select style="width:60%;float:right;margin-right:5%;" class="custom-select" id="formInputDISAEventDateDay"> 
+                                                            <option selected>Unspecified</option>                                                             
+                                                            <option value="1">Unspecified 1</option>                                                             
+                                                            <option value="2">Unspecified 2</option>                                                             
+                                                            <option value="3">Unspecified 3</option>                                                             
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group text-dark"> 
+                                                        <label for="formInputDISAEventDateYear" style="padding-left:10%;">Year</label>
+                                                        <select style="width:60%;float:right;margin-right:5%;" class="custom-select" id="formInputDISAEventDateYear"> 
+                                                            <option selected>Unspecified</option>                                                             
+                                                            <option value="1">Unspecified 1</option>                                                             
+                                                            <option value="2">Unspecified 2</option>                                                             
+                                                            <option value="3">Unspecified 3</option>                                                             
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group text-dark"> 
+                                                        <label for="formInputDISAEventDateInfo" style="padding-left:10%;">Additional date info</label>
+                                                        <input style="width:50%;float:right;margin-right:5%;" type="text" class="form-control" id="formInputDISAEventDateInfo" placeholder=""> 
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h5 class="text-dark" style="float:left;margin-left: 20px;">Place</h5>
+                                                    <p>&nbsp;</p>
+                                                    <div class="form-group text-dark"> 
+                                                        <label for="formInputDISAColonialContext" style="padding-left:5%;">Colonial context</label>
+                                                        <select style="width:60%;float:right;margin-right:5%;" class="custom-select" id="formInputDISAColonialContext"> 
+                                                            <option selected>[context option]</option>                                                             
+                                                            <option value="1">[context option 1]</option>                                                             
+                                                            <option value="2">[context option 2]</option>                                                             
+                                                            <option value="3">[context option 3]</option>                                                             
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group text-dark"> 
+                                                        <label for="formInputDISAColonyState" style="padding-left:5%;">Colony/State</label>
+                                                        <input style="width:60%;float:right;margin-right:5%;" type="text" class="form-control" id="formInputDISAColonyState" placeholder=""> 
+                                                    </div>
+                                                    <div class="form-group text-dark"> 
+                                                        <label for="formInputDISATown" style="padding-left:5%;">Town</label>
+                                                        <input style="width:60%;float:right;margin-right:5%;" type="text" class="form-control" id="formInputDISATown" placeholder=""> 
+                                                    </div>
+                                                    <div class="form-group text-dark"> 
+                                                        <label for="formInputDISAPlaceInfo" style="padding-left:5%;">Additional location info</label>
+                                                        <input style="width:50%;float:right;margin-right:5%;" type="text" class="form-control" id="formInputDISAPlaceInfo" placeholder=""> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row" style="padding-top:20px;padding-right:20px;">
+                                                <div class="col-md-12" style="margin-left: 40px;">
+                                                    <h5 class="text-dark" style="float:left;">People</h5>
+                                                    <a href="#" class="text-primary" style="padding-left: 25px;font-size: 107%;">ADD PERSON</a>
+                                                    <p>&nbsp;</p>
+                                                    <p></p> 
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12" style="padding: 40px;padding-top: 0px">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <a href="#">NEW PERSON</a>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div style="padding-left:20px;padding-top:20px;width:auto;position: relative;">
+                                                            <div>
+                                                                Name(s)
+                                                            </div>
+                                                        </div>
+                                                        <div style="float:right;width:87%;margin-bottom: 0;padding-bottom: 0;">
+                                                            <div style="padding: 20px;clear:none;margin-top:-20px;border:1px;border-color:LightGray;border-style: solid;clear: none;position: relative;margin-right:40px;">
+                                                                <div class="form-group text-dark">
+                                                                    <div class="custom-control custom-switch" style="clear: none;float:right;padding-top: 5px;"> 
+                                                                        <input type="checkbox" class="custom-control-input" id="formCustomSwitchForAdvancedNames"> 
+                                                                        <label style="font-size: 85%;padding-top: 2px;" class="custom-control-label" for="formCustomSwitchForAdvancedNames">Advanced name options</label>
+                                                                    </div>
+                                                                    <label for="formInputDISAItemPersonNameType" style="padding-left:0%;">Name type</label>
+                                                                    <select style="width:42%;float:right;margin-right:5%;" class="custom-select" id="formInputDISAItemPersonNameType"> 
+                                                                        <option selected>[context option]</option>
+                                                                        <option value="1">[context option 1]</option>
+                                                                        <option value="2">[context option 2]</option>
+                                                                        <option value="3">[context option 3]</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group text-dark"> 
+                                                                    <label for="formInputDISAItemPersonNameTranscription" style="padding-left:0%;">Full name transcription</label>
+                                                                    <input style="width:70%;float:right;" type="text" class="form-control" id="formInputDISAItemPersonNameTranscription" placeholder=""> 
+                                                                </div>
+                                                                <div class="form-group text-dark"> 
+                                                                    <label for="formInputDISAItemPersonFirstName" style="padding-left:0%;">First name</label>
+                                                                    <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISAItemPersonFirstName" placeholder=""> 
+                                                                </div>
+                                                                <div class="form-group text-dark"> 
+                                                                    <label for="formInputDISAItemPersonLastName" style="padding-left:0%;">Last name</label>
+                                                                    <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISAItemPersonLastName" placeholder=""> 
+                                                                </div>
+                                                            </div>
+                                                            <p style="clear:both;float:left;padding-top: 10px;"><i class="fas fa-plus-circle text-primary"></i>&nbsp;<a href="#" class="text-primary">ADD ANOTHER NAME</a></p>
+                                                        </div>
+                                                        <div class="row" style="padding-top:0px;padding-right:20px;clear: both;">
+                                                            <div class="col-md-6" style="margin-left: 0px;">
+                                                                <!-- <h5 class="text-dark" style="float:left;"></h5> -->
+                                                                <p>&nbsp;</p>
+                                                                <div class="form-group text-dark"> 
+                                                                    <label for="formInputDISAPersonGender" style="padding-left:5%;">Gender</label>
+                                                                    <select style="width:60%;float:right;margin-right:5%;" class="custom-select" id="formInputDISAPersonGender"> 
+                                                                        <option selected>&nbsp;</option>                                                                         
+                                                                        <option value="1">&nbsp;</option>                                                                         
+                                                                        <option value="2">&nbsp;</option>                                                                         
+                                                                        <option value="3">&nbsp;</option>                                                                         
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group text-dark"> 
+                                                                    <label for="formInputDISAPersonAge_number" style="padding-left:5%;">Age</label>
+                                                                    <select style="width:auto;float:right;margin-right:5%;clear: left;" class="custom-select" id="formInputDISAPersonAge_number">
+                                                                        <option selected>&nbsp;</option>
+                                                                        <option value="-1">Unspecified</option>                                                                         
+                                                                        <option value="1">1 year</option>                                                                         
+                                                                        <option value="2">2 years</option>                                                                         
+                                                                        <option value="3">3 years</option>                                                                         
+                                                                    </select>
+                                                                    <input style="width:60%;float:right;margin-right:5%;" type="text" class="form-control" id="formInputDISAPersonAge_text" placeholder=""> 
+                                                                    <div class="form-check" style="float:right;clear:none;margin-right:10%;padding-left: 10%;"> 
+                                                                        <input class="form-check-input" type="checkbox" id="formInputSpecifiedByNumber" value="option1"> 
+                                                                        <label style="font-size: 85%;margin-top: -6px;" class="form-check-label" for="formInputSpecifiedByNumber">SPECIFIED BY A NUMBER</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group text-dark"> 
+                                                                    <label for="formInputDISAPersonStatus" style="padding-left:5%;">Status</label>
+                                                                    <select style="width:60%;float:right;margin-right:5%;" class="custom-select" id="formInputDISAPersonStatus"> 
+                                                                        <option selected>&nbsp;</option>                                                                         
+                                                                        <option value="1">&nbsp;</option>                                                                         
+                                                                        <option value="2">&nbsp;</option>                                                                         
+                                                                        <option value="3">&nbsp;</option>                                                                         
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group text-dark"> 
+                                                                    <label for="formInputDISAStatusInfo" style="padding-left:5%;font-size:82%;">Additional status information</label>
+                                                                    <input style="width:50%;float:right;margin-right:5%;" type="text" class="form-control" id="formInputDISAStatusInfo" placeholder=""> 
+                                                                </div>
+                                                                <div class="form-group text-dark"> 
+                                                                    <label for="formInputDISAPersonVocation" style="padding-left:5%;">Vocation</label>
+                                                                    <input style="width:60%;float:right;margin-right:5%;" type="text" class="form-control" id="formInputDISAPersonVocation" placeholder=""> 
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <!-- <h5 class="text-dark" style="float:left;margin-left: 20px;"></h5> -->
+                                                                <p>&nbsp;</p>
+                                                                <div class="form-group text-dark"> 
+                                                                    <label for="formInputDISAPersonRace" style="padding-left:5%;">Race</label>                                                                     
+                                                                    <select style="width:60%;float:right;margin-right:5%;" class="custom-select" id="formInputDISAPersonRace"> 
+                                                                        <option selected>&nbsp;</option>                                                                         
+                                                                        <option value="1">&nbsp;</option>                                                                         
+                                                                        <option value="2">&nbsp;</option>                                                                         
+                                                                        <option value="3">&nbsp;</option>                                                                         
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group text-dark"> 
+                                                                    <label for="formInputDISAPersonRaceTerms" style="padding-left:5%;">Exact racial terms used</label>
+                                                                    <input style="width:40%;float:right;margin-right:5%;" type="text" class="form-control" id="formInputDISAPersonRaceTerms" placeholder=""> 
+                                                                </div>
+                                                                <div class="form-group text-dark"> 
+                                                                    <label for="formInputDISAPersonTribe" style="padding-left:5%;">Tribe</label>
+                                                                    <select style="width:60%;float:right;margin-right:5%;" class="custom-select" id="formInputDISAPersonTribe"> 
+                                                                        <option selected>&nbsp;</option>                                                                         
+                                                                        <option value="1">&nbsp;</option>                                                                         
+                                                                        <option value="2">&nbsp;</option>                                                                         
+                                                                        <option value="3">&nbsp;</option>                                                                         
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group text-dark"> 
+                                                                    <label for="formInputDISAPersonTribeTerms" style="padding-left:5%;font-size:77%;">Exact identity/geographical terms used</label>
+                                                                    <input style="width:40%;float:right;margin-right:5%;" type="text" class="form-control" id="formInputDISAPersonTribeTerms" placeholder=""> 
+                                                                </div>
+                                                                <div class="form-group text-dark"> 
+                                                                    <label for="formInputDISAPersonGeoOrigins" style="padding-left:5%;">Geographic origins</label>
+                                                                    <input style="width:50%;float:right;margin-right:5%;" type="text" class="form-control" id="formInputDISAPersonGeoOrigins" placeholder=""> 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>  <!-- /.card-body for a new person -->
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12" style="padding-top:0px;padding:40px;">
+                                                <div class="form-group" style="margin-top:-30px;">
+                                                    <label for="formInputDISAPeopleResearcherNotes">Researcher notes</label>
+                                                    <a href="#" style="font-size:80%;margin-top:-7px;padding-left: 25px;clear: none;">Report problems or ask for help</a>
+                                                    <textarea class="form-control" rows="3" id="formInputDISAPeopleResearcherNotes"></textarea> 
+                                                </div>
+                                                <button type="button" class="btn btn-secondary btn-md" style="font-weight: bold;margin-top: 20px;">ALL CHANGES SAVED</button>
+                                                <button type="button" class="btn btn-primary btn-md" style="font-weight: bold;margin-top: 20px;margin-left: 15px;">SAVE ITEM AND EXIT THIS SOURCE DOCUMENT</button>
+                                            </div>
+                                        </div> <!-- /.tab-pane for items -->
+                                    </div> <!-- /.tab-content for items -->
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- /#tabs_bibinfoanditems -->
+                </main>
+            </div>  <!-- /#content -->
+        </div>  <!-- /.wrapper -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../static/lib/bootstrap-4.5.0-dist/js/bootstrap.min.js"><\/script>')</script>
+        <script src="../../static/lib/bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+    </body>
+</html>

@@ -19,6 +19,7 @@ urlpatterns = [
     url( r'^user_pass_handler/$', views.user_pass_handler, name='user_pass_handler_url' ),
 
     url( r'^browse/$', views.browse, name='browse_url' ),
+    url( r'^browse_tabulator/$', views.browse_tabulator, name='browse_url_tabulator' ),
 
     url( r'^editor/documents/$', views.edit_citation, name='edit_citation_url' ),
     url( r'^editor/documents/(?P<cite_id>.*)/$', views.edit_citation, name='edit_citation_url' ),
@@ -40,6 +41,17 @@ urlpatterns = [
 
     url( r'^search_results/$', views.search_results, name='search_results_url' ),
 
+
+    # --------------------
+    # redesign...
+    # --------------------
+
+    url( r'^redesign_home/$', views.redesign_home, name='redesign_home_url' ),
+    url( r'^redesign_citations/$', views.redesign_citations, name='redesign_citations_url' ),
+    url( r'^redesign_citations/(?P<cite_id>.*)/$', views.redesign_citation, name='redesign_citation_url' ),
+
+
+
     ## apis...
 
     url( r'^data/documents/$', views.data_documents, name='data_documents_url' ),
@@ -56,6 +68,7 @@ urlpatterns = [
     url( r'^data/relationships/$', views.data_relationships, name='data_relationships_url' ),
     url( r'^data/relationships/(?P<rltnshp_id>.*)/$', views.data_relationships, name='data_relationships_url' ),
 
+
     ## utility-urls (protected, act as viewable integrity checks)...
 
     url( r'^utility/citations/$', views.utility_citations, name='utility_citations_url' ),
@@ -63,10 +76,12 @@ urlpatterns = [
     url( r'^utility/referents/$', views.utility_referents, name='utility_referents_url' ),
     # url( r'^utility/people/$', views.utility_people, name='utility_people_url' ),
 
+
     ## misc...
 
     url( r'^admin/', admin.site.urls ),
     url( r'^datafile/$', views.datafile, name='datafile_url' ),
+
 
     ## support urls...
 

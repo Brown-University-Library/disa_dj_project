@@ -315,6 +315,7 @@ var setFormHeader = function (docData) {
 }
 
 var initializeForm = function (data, ctMap) {
+    console.log( "starting initializeForm()" );
     setFormHeader(data['doc']);
     addTypeOptions(data['doc_types']);
     setInputValues(data['doc']);
@@ -325,6 +326,7 @@ var initializeForm = function (data, ctMap) {
 }
 
 var readDocumentData = function(docId, ctMap, copy) {
+    console.log( "starting readDocumentData()" );
     if (copy) {
         var doc_data_api = "{% url 'data_documents_url' 'copy' %}";
         console.log( 'in readDocumentData; doc_data_api for `copy`, ', doc_data_api );
@@ -335,8 +337,8 @@ var readDocumentData = function(docId, ctMap, copy) {
         var doc_data_api = "{% url 'data_documents_url' %}";
         console.log( 'in readDocumentData; doc_data_api with NO `docId`, ', doc_data_api );
     }
-    console.log( "docId, ", docId );
-    console.log( "copy, ", copy );
+    console.log( "in readDocumentData; docId, ", docId );
+    console.log( "in readDocumentData; copy, ", copy );
     $.get(doc_data_api, function(data) {
         initializeForm(data, ctMap);
     });
@@ -421,26 +423,16 @@ var deleteDocument = function( doc_id ) {
     console.log( "ajax call done" );
 }
 
-// var deleteDocument = function( doc_id ) {
-//     /*  This only passes the doc_id; think about passing more identifying info
-//         ...so the server doesn't have to do a lookup for more document info. */
-//     console.log( "in `var deleteDocument`; `doc_id`, ", doc_id );
-//     var doc_data_api_root = "{% url 'data_documents_url' %}";
-//     var full_doc_data_api = doc_data_api_root + doc_id + "/";
-//     $.ajax({
-//         type: "DELETE",
-//         url: full_doc_data_api,
-//     });
-//     console.log( "ajax call done" );
-// }
-
-
 $( document ).ready(function() {
     var doc_id = getDocumentId();
     console.log( "in document.ready(); doc_id, ", doc_id );
     //
     var cite_type_fields = JSON.parse( '{{ ct_fields_json | safe }}' );
+    console.log( "in document.ready(); cite_type_fields, ", cite_type_fields );
+
+    console.log( "in document.ready(); about to call readDocumentData()" );
     readDocumentData(doc_id, cite_type_fields, false);
+    console.log( "in document.ready(); called readDocumentData()" );
     //
     // var documents_url = "{{ documents_url }}";
     var documents_url = "{% url 'editor_index_url' %}";
