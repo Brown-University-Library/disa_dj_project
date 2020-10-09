@@ -106,6 +106,12 @@ input[type=text] {
 
 }
 
+.container {
+	align-content: center;
+	margin-left: auto!important;
+	margin-right: auto!important;
+}
+
 header {
 
 }
