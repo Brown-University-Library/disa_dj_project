@@ -16,17 +16,14 @@
   window.disa = {};
 
   window.populateTribeFilter = function(tribeName) {
-    // console.log(tribeName);
     window.table.setHeaderFilterValue('description.tribe', tribeName);
   }
 
   window.populateNameFilter = function(nameSearchText) {
-    // console.log(nameSearchText);
     window.table.setHeaderFilterValue('all_name', nameSearchText);
   }
 
   window.populateLocationFilter = function(locationSearchText) {
-    // console.log(locationSearchText);
     window.table.setHeaderFilterValue('all_locations', locationSearchText);
   }
 
@@ -67,7 +64,6 @@
     // Populate modal
 
     if (data) {
-      //detailsModal.setTitleName(data.all_name);
       detailsModal.setName(data.all_name);
       detailsModal.setId(id);
       // detailsModal.transcription(data.comments.replace(/http[^\s]+/,''));
@@ -101,28 +97,6 @@
       detailsModal.show();
     }
   }
-
-  /*
-
-    all_locations: "Mosquito Coast, British Honduras"
-    all_name: "Margaritta"
-    comments: "Same Owner as Dublin, Simon, Cillia, Juana, & Cillia"
-    date: {year: 1777, month: 2, day: 26}
-    description: {tribe: "", sex: "Female", origin: "", vocation: "", age: "Not Mentioned", …}
-    docTitle: "“Return of the Registry of Indians on the Mosquito Shore in the year 1777.” TNA, CO 123/31/123-132."
-    documents: {“Return of the Registry of Indians on the Mosquito Shore in the year 1777.” TNA, CO 123/31/123-132.: Array(1)}
-    first_name: "Margaritta"
-    has_father: ""
-    has_mother: ""
-    id: 309
-    last_name: ""
-    locations: (2) ["Mosquito Coast", "British Honduras"]
-    owner: ""
-    spouse: ""
-    status: "enslaved"
-    transcription: ""
-
-  */
 
   // Global functions
 
@@ -172,7 +146,7 @@
   
     const jsonProcessor = function(_, __, response) {
   
-      console.log(response);
+      console.log('JSON response', response);
 
       // Create an 'all_names' field
       // Create an 'all_locations' field
@@ -221,8 +195,8 @@
   
       const nameDisplay = NAME_DISPLAY_OVERRIDES[data.first_name] || data.first_name,
             name_text = data.description.title 
-                        + `<a href="#" onclick="populateNameFilter('${nameDisplay}')" title="Filter for people named '${nameDisplay}'">${nameDisplay}</a>`
-                        + (data.last_name ? ` <a href="#" onclick="populateNameFilter('${data.last_name}')" title="Filter for people with last name '${data.last_name}'">${data.last_name}</a>` : ''),
+                        + `<a href="#" onclick="populateNameFilter('${nameDisplay}')" title="Show only people named '${nameDisplay}'">${nameDisplay}</a>`
+                        + (data.last_name ? ` <a href="#" onclick="populateNameFilter('${data.last_name}')" title="Show only people with last name '${data.last_name}'">${data.last_name}</a>` : ''),
             name_forOrIs = NAME_DISPLAY_OVERRIDES[data.first_name] ? 'for' : 'is',
             statusDisplay = {
               'enslaved': 'enslaved'
@@ -246,8 +220,8 @@
                 '': 'person'
               }
             },
-            n = parseInt(data.description.age),
-            age_number = (isNaN(n) ? undefined : n),
+            ageAsNumber = parseInt(data.description.age),
+            age_number = (isNaN(ageAsNumber) ? undefined : ageAsNumber),
             ageStatus = (age_number && age_number <= 16 ? 'child' : 'adult'),
             age_text = (data.description.age === 'Not Mentioned' ? undefined : data.description.age),
             race_text = (data.description.race ? `, described as &ldquo;${data.description.race}&rdquo;,` : ''),
@@ -277,8 +251,8 @@
       { title:'Name',      field:'all_name',          sorter:'string', headerFilter: true }, // mutator: combineNames_mutator },
       { title:'Last name', field:'last_name',         sorter:'string', headerFilter: true, visible: false },
       { title:'Status',    field:'status',            sorter:'string', headerFilter: true },
-      { title:'Sex',       field:'description.sex',   sorter:'string', headerFilter: 'select', 
-        headerFilterParams:{ values: ['Male','Female', 'Other'] } },
+      { title:'Sex',       field:'description.sex',   sorter:'string', 
+        headerFilter: 'select', headerFilterParams:{ values: ['Male','Female', 'Other'] } },
       { title:'Tribe',     field:'description.tribe', sorter:'string', headerFilter: true },
       { title:'Race',      field:'description.race',  sorter:'string', headerFilter: true },
       // { title:'Age',       field:'description.age',   sorter:'string', headerFilter: true },
