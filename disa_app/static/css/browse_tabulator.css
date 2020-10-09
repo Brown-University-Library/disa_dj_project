@@ -42,7 +42,7 @@ input[type=text] {
 	width: 100%;
 	max-width: 800px;
 	min-height: 200px;
-	flex-shrink: none;
+	flex-shrink: 0;
 	border-radius: 3px;
 	padding: 20px;
 	position: relative;
