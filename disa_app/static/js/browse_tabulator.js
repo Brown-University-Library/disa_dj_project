@@ -9,7 +9,8 @@
           'Unknown': 'No name is known '
         },
         BIO_THEME_CLASSNAME = 'biographical',
-        VIEW_OPTIONS_RADIO_BUTTONS_ID = 'view-options';
+        VIEW_OPTIONS_RADIO_BUTTONS_ID = 'view-options',
+        MIN_TIME_BETWEEN_LUNR_INDEXES = 1000;
 
   // Event handlers
 
@@ -123,23 +124,59 @@
               .replace(ampersandRegex_reverse, '&amp;');
   }
 
+  // Lunr index function
+
+  let lunrIndex, currLunrSelection;
+
+  function indexInLunr(data) {
+
+    // Create a list of documents with ID
+    //   and text (which combines all the DISA fields to search)
+
+    const docList = data.map(entry => {
+
+      const indexableText = [ 
+        entry.first_name, entry.last_name,
+        entry.comments, Object.keys(entry.documents).join(' '),
+        entry.locations.join(' '),
+        Object.values(entry.description).join(' ') 
+      ].join(' ');
+  
+      const indexableText_noHTML = indexableText.replace(/\<[^>]+>/g, '');
+
+      return {
+        id: entry.id,
+        text: indexableText_noHTML
+      }
+    });
+
+    // Create lunr index from the documents
+
+    const index = lunr( function () {
+      this.ref('id');
+      this.field('text');
+    
+      docList.forEach(function (document) {
+        this.add(document)
+      }, this);
+    });
+
+    return index;
+  }
+
+  function checkAgainstGeneralSearch(data) {
+    return currLunrSelection.includes(data.id);
+  }
+
   // Main onload routine
   
   window.addEventListener('DOMContentLoaded', () => {
-  
-    // Lunr index function
 
-    function indexInLunr(data) {
-      return lunr(function () {
+    // General search box listener
+    //   When user inputs something, trigger a re-indexing
 
-        this.ref('id');
-        this.field('comments');
-      
-        data.forEach(function (entry) {
-          this.add(entry)
-        }, this);
-      })
-    }
+    document.getElementById('general-search')
+            .addEventListener('input', searchAgainstIndex);
 
     // Run the JSON through this when it comes back from the
     //  server. Save the data.
@@ -184,6 +221,7 @@
 
       lunrIndex = indexInLunr(response);
       window.disa.lunrIndex = lunrIndex; // For testing
+      searchAgainstIndex(); // Initialize results array for general search
 
       // Save this data for later & return to Tabulator
 
@@ -272,6 +310,10 @@
       rowFormatter: rowFormatter,
       ajaxResponse: jsonProcessor
     });
+
+    table.addFilter(data => {
+      return currLunrSelection.includes(data.id)
+    });
   
     const bioViewOptionInputElem = document.getElementById('biographical-view-option'),
           tableContainer = document.getElementById('data-display');
@@ -290,10 +332,53 @@
         data: window.disa.jsonData,
         columns: columnDefinitions,
         rowFormatter: bioOption ? rowFormatter : undefined
-      })
+      });
+
+      // table.setFilter(data => currLunrSelection.includes(data.id));
     });
 
     window.table = table;
+
+    // This is called every time a user changes the content of the
+    //   general search box
+
+    let lastSearchTimestamp = 0, timeOutId;
+    const generalSearchInput = document.getElementById('general-search');
+
+    function searchAgainstIndex(x) {
+
+      const searchTextChanged = (x !== false);
+
+      // If enough time has passed ...
+
+      if (Date.now() - lastSearchTimestamp > MIN_TIME_BETWEEN_LUNR_INDEXES) {
+
+        // Do a search against index & force Tabulator to reapply filters
+
+        currLunrSelection = lunrIndex.search(generalSearchInput.value).map(x => parseInt(x.ref));
+        console.log(`Searching for ${generalSearchInput.value}`, 'Results:', currLunrSelection);
+        table.setFilter(table.getFilters());
+
+        // Update times
+
+        lastSearchTimestamp = Date.now();
+
+        // If this update is becuase of a change in the 
+        //   search field, then schedule a future
+        //   search to catch any changes
+
+        if (searchTextChanged) {
+          window.clearTimeout(timeOutId);
+          timeOutId = window.setTimeout(
+            () => { searchAgainstIndex(false) }, 
+            MIN_TIME_BETWEEN_LUNR_INDEXES + 100
+          );
+        }
+      }
+    }
+
+    // searchAgainstIndex(); // Initialize results array for general search
+
   });
 
 })() // Closing IIFE
