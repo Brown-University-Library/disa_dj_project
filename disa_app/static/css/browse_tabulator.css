@@ -42,7 +42,7 @@ input[type=text] {
 	width: 100%;
 	max-width: 800px;
 	min-height: 200px;
-	flex-shrink: none;
+	flex-shrink: 0;
 	border-radius: 3px;
 	padding: 20px;
 	position: relative;
@@ -221,4 +221,9 @@ nav {
   font-weight: bold;
   text-transform: uppercase;
   padding: 0 0.6em;
+}
+
+.badge {
+	margin-left: 2em!important;
+	margin-top: 2em!important;
 }
