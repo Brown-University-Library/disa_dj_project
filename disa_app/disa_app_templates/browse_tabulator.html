@@ -74,26 +74,26 @@
 
 <div class="col-12">
 
-    <label for="general-search" style="margin-top: 2.5em; font-weight: bold;">
-        Search in any field for
-        <input type="text" id="general-search" style="margin: 0 1em; height: 2.25em;"></input>
-    </label>
-    <em>&nbsp;(to focus your search, use the fields below)</em>
+    <div class="top-search-div">
+        <label for="general-search" style="font-weight: bold;">
+            Search in any field for
+            <input type="text" id="general-search" style="margin: 0 1em; height: 2.25em;"></input>
+        </label>
+        <em>&nbsp;(to focus your search, use the fields below)</em>
 
-    <p id="view-options">View results as 
-        <input type="radio" id="biographical-view-option" name="view-type" value="biographical" checked>
-        <label for="biographical-view-option">biographies</label>
-        <input type="radio" id="tabular-view-option" name="view-type" value="tabular">
-        <label for="tabular-view-option">a table</label>
-    </p>
+        <p id="view-options">View results as 
+            <input type="radio" id="biographical-view-option" name="view-type" value="biographical" checked>
+            <label for="biographical-view-option">biographies</label>
+            <input type="radio" id="tabular-view-option" name="view-type" value="tabular">
+            <label for="tabular-view-option">a table</label>
+        </p>
+    </div>
 <!--
     <input type="checkbox" id="biographical-view" style="margin: 1em 0">
         Tabular view
     </input><br/> -->
     
     <!-- Main data table -->
-
-    <hr>
 
     <div id="data-display" class="table-borderless biographical">
         &nbsp;

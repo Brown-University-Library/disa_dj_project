@@ -106,6 +106,12 @@ input[type=text] {
 
 }
 
+.top-search-div {
+	background-color: #f0f0fc!important;
+	padding: 1em 1em .07em 1em;
+	margin-top: 1.5em;
+}
+
 .container {
 	align-content: center;
 	margin-left: auto!important;
