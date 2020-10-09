@@ -227,6 +227,7 @@ nav {
   font-weight: bold;
   text-transform: uppercase;
   padding: 0 0.6em;
+  margin-top:.4em;
 }
 
 .badge {
