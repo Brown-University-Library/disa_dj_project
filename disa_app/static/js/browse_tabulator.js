@@ -164,10 +164,6 @@
     return index;
   }
 
-  function checkAgainstGeneralSearch(data) {
-    return currLunrSelection.includes(data.id);
-  }
-
   // Main onload routine
   
   window.addEventListener('DOMContentLoaded', () => {
