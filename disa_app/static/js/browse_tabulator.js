@@ -308,7 +308,10 @@
       ajaxURL: DATA_ENDPOINT_URL,
       columns: columnDefinitions,
       rowFormatter: rowFormatter,
-      ajaxResponse: jsonProcessor
+      ajaxResponse: jsonProcessor,
+      rowClick: function(_, row) { 
+        showDetails(row.getData().id);
+      }
     });
 
     table.addFilter(data => {
@@ -332,7 +335,10 @@
         paginationSizeSelector:[20,50,100],
         data: window.disa.jsonData,
         columns: columnDefinitions,
-        rowFormatter: bioOption ? rowFormatter : undefined
+        rowFormatter: bioOption ? rowFormatter : undefined,
+        rowClick: function(_, row) { 
+          showDetails(row.getData().id);
+        }
       });
 
       table.addFilter(data => {
