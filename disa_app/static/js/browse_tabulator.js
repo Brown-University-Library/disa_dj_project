@@ -280,6 +280,12 @@
       var data = row.getData();
       row.getElement().innerHTML = getPersonEntryHTML(data);
     };
+
+    const generateDropDownOptions = function(data, selectorFn) {
+      const values = data.map(x => selectorFn(x)),
+            uniqueValues = Array.from(new Set(values));
+      return uniqueValues.keys();
+    }
   
     const columnDefinitions = [
       { title:'Name',      field:'all_name',          sorter:'string', headerFilter: true }, // mutator: combineNames_mutator },
