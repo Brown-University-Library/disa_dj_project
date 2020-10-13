@@ -56,7 +56,7 @@
         setTranscription: getModalContentSetter('details-transcription', 'HTML'),
         clearDetailsTable: () => setDetailsTable(''),
         addToDetailsTable: (label, value) => {
-          document.getElementById('details-table').innerHTML += 
+          document.getElementById('details-table').innerHTML +=
             `<tr><th>${label}</th><td>${value}</td></tr>`;
         }
       }
@@ -71,7 +71,7 @@
       detailsModal.setTranscription(data.comments);
       detailsModal.setDocTitle(data.docTitle.replace(/http[^\s]+/,''));
       detailsModal.clearDetailsTable();
-      
+
       const detailsTableContent = [
         ['Location', data.all_locations],
         ['First name', data.first_name],
@@ -88,7 +88,7 @@
         ['Owner', data.owner],
         ['Spouse', data.spouse]
       ];
-      
+
       detailsTableContent.forEach(
         ([label, value]) => {
           if (value) { detailsModal.addToDetailsTable(label, value) }
@@ -111,7 +111,7 @@
         aposRegEx_reverse = /\[APOS]/g,
         quotRegEx_reverse = /\[QUOT]/g,
         ampersandRegex_reverse = /\[AMP]/g;
-        
+
   function cleanString(str) {
     return str.replace(aposRegEx, '[APOS]')
               .replace(quotRegEx, '[QUOT]')
@@ -135,13 +135,13 @@
 
     const docList = data.map(entry => {
 
-      const indexableText = [ 
+      const indexableText = [
         entry.first_name, entry.last_name,
         entry.comments, Object.keys(entry.documents).join(' '),
         entry.locations.join(' '),
-        Object.values(entry.description).join(' ') 
+        Object.values(entry.description).join(' ')
       ].join(' ');
-  
+
       const indexableText_noHTML = indexableText.replace(/\<[^>]+>/g, '');
 
       return {
@@ -155,7 +155,7 @@
     const index = lunr( function () {
       this.ref('id');
       this.field('text');
-    
+
       docList.forEach(function (document) {
         this.add(document)
       }, this);
@@ -165,7 +165,7 @@
   }
 
   // Main onload routine
-  
+
   window.addEventListener('DOMContentLoaded', () => {
 
     // General search box listener
@@ -176,9 +176,9 @@
 
     // Run the JSON through this when it comes back from the
     //  server. Save the data.
-  
+
     const jsonProcessor = function(_, __, response) {
-  
+
       console.log('JSON response', response);
 
       // Create an 'all_names' field
@@ -186,7 +186,7 @@
       // Clean up data for apostrophes, ampersands
 
       response.forEach(entry => {
-
+        console.log( "entry id, ", entry.id )
         // Name
 
         entry.first_name = cleanString(entry.first_name);
@@ -200,7 +200,7 @@
         const docWithLocation = Object.values(entry.documents)[0]
           .find(doc => doc.locations && doc.locations.length);
 
-        entry.locations = docWithLocation 
+        entry.locations = docWithLocation
           ? docWithLocation.locations.map(loc => cleanString(loc))
           : [];
         // console.log('AFTER', entry.locations);
@@ -221,14 +221,14 @@
 
       // Save this data for later & return to Tabulator
 
-      window.disa.jsonData = response; 
+      window.disa.jsonData = response;
       return response;
     }
-  
+
     const getPersonEntryHTML = function(data) {
-  
+
       const nameDisplay = NAME_DISPLAY_OVERRIDES[data.first_name] || data.first_name,
-            name_text = data.description.title 
+            name_text = data.description.title
                         + `<a href="#" onclick="populateNameFilter('${nameDisplay}')" title="Show only people named '${nameDisplay}'">${nameDisplay}</a>`
                         + (data.last_name ? ` <a href="#" onclick="populateNameFilter('${data.last_name}')" title="Show only people with last name '${data.last_name}'">${data.last_name}</a>` : ''),
             name_forOrIs = NAME_DISPLAY_OVERRIDES[data.first_name] ? 'for' : 'is',
@@ -237,7 +237,7 @@
             },
             locSearchTerms = data.locations.map((_, i, locArr) => locArr.slice(i).join(', ')),
             locationDisplay = data.locations.map((loc, i) => {
-              return `<a  href="#" onclick="populateLocationFilter('${locSearchTerms[i]}')" 
+              return `<a  href="#" onclick="populateLocationFilter('${locSearchTerms[i]}')"
                           title="Show only people located in ${locSearchTerms[i]}">${uncleanString(loc)}</a>`
             }).join(', '),
             sexDisplay = {
@@ -260,32 +260,32 @@
             age_text = (data.description.age === 'Not Mentioned' ? undefined : data.description.age),
             race_text = (data.description.race ? `, described as &ldquo;${data.description.race}&rdquo;,` : ''),
             year = data.date.year;
-            
-      const html = `<a  class="details-button float-right" type="button" onclick="showDetails(${data.id})" 
+
+      const html = `<a  class="details-button float-right" type="button" onclick="showDetails(${data.id})"
                         title="Show source document and details for ${data.all_name}">Details</a>` +
-                   `<strong class='referent-name'>${name_text}</strong> ${name_forOrIs} an ` + 
-                   statusDisplay[data.status] + ' ' + 
+                   `<strong class='referent-name'>${name_text}</strong> ${name_forOrIs} an ` +
+                   statusDisplay[data.status] + ' ' +
                    (data.description.tribe ? ` <a href="#" title="Show only ${data.description.tribe} people" onclick="populateTribeFilter('${data.description.tribe}')">${data.description.tribe}</a> ` : '') +
                    sexDisplay[ageStatus][data.description.sex] +
                    (age_text ? `, age ${age_text}` : '') +
                    race_text +
                    ' who lived' +
-                   ` in ${locationDisplay}` + 
+                   ` in ${locationDisplay}` +
                    (year ? ` in ${year}` : '') +
                    '.';
       return html;
     }
-  
+
     const rowFormatter = function(row) {
       var data = row.getData();
       row.getElement().innerHTML = getPersonEntryHTML(data);
     };
-  
+
     const columnDefinitions = [
       { title:'Name',      field:'all_name',          sorter:'string', headerFilter: true }, // mutator: combineNames_mutator },
       { title:'Last name', field:'last_name',         sorter:'string', headerFilter: true, visible: false },
       { title:'Status',    field:'status',            sorter:'string', headerFilter: true },
-      { title:'Sex',       field:'description.sex',   sorter:'string', 
+      { title:'Sex',       field:'description.sex',   sorter:'string',
         headerFilter: 'select', headerFilterParams:{ values: ['Male','Female', 'Other'] } },
       { title:'Tribe',     field:'description.tribe', sorter:'string', headerFilter: true },
       { title:'Race',      field:'description.race',  sorter:'string', headerFilter: true },
@@ -294,10 +294,10 @@
       { title:'Year',      field:'date.year',         sorter:'string', headerFilter: true }
     ];
 
-    const rowClick = function(_, row) { 
+    const rowClick = function(_, row) {
       showDetails(row.getData().id);
     };
-  
+
     let table = new Tabulator('#data-display', {
       height:'611px',
       layout:'fitColumns',
@@ -315,7 +315,7 @@
     table.addFilter(data => {
       return currLunrSelection.includes(data.id);
     });
-  
+
     const bioViewOptionInputElem = document.getElementById('biographical-view-option'),
           tableContainer = document.getElementById('data-display');
 
@@ -368,14 +368,14 @@
 
         lastSearchTimestamp = Date.now();
 
-        // If this update is becuase of a change in the 
+        // If this update is becuase of a change in the
         //   search field, then schedule a future
         //   search to catch any changes
 
         if (searchTextChanged) {
           window.clearTimeout(timeOutId);
           timeOutId = window.setTimeout(
-            () => { searchAgainstIndex(false) }, 
+            () => { searchAgainstIndex(false) },
             MIN_TIME_BETWEEN_LUNR_INDEXES + 100
           );
         }

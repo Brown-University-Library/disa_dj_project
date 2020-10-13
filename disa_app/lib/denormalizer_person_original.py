@@ -103,7 +103,9 @@ def json_for_browse():
 
             new_ref_data = process_reference(ref)
             print( f'new_ref_data, ``{pprint.pformat( new_ref_data )}``' )
-            data['roles_for_tabulator'] = new_ref_data['roles_tabulator']
+            # data['roles_for_tabulator'] = new_ref_data['roles_tabulator']  # no, it needs to be in the document section, because a document can have more than one item
+            # del new_ref_data['roles_tabulator']   # no need to display it twice
+            print( f'data id, ``{data["id"]}``' )
             # break
 
             data['documents'][citation] = merge_ref_data(
