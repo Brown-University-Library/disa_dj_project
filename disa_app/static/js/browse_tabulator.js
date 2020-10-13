@@ -297,6 +297,10 @@
       { title:'Location',  field:'all_locations',     sorter:'string', headerFilter: true },
       { title:'Year',      field:'date.year',         sorter:'string', headerFilter: true }
     ];
+
+    const rowClick = function(_, row) { 
+      showDetails(row.getData().id);
+    };
   
     let table = new Tabulator('#data-display', {
       height:'611px',
@@ -308,17 +312,19 @@
       ajaxURL: DATA_ENDPOINT_URL,
       columns: columnDefinitions,
       rowFormatter: rowFormatter,
-      ajaxResponse: jsonProcessor
+      ajaxResponse: jsonProcessor,
+      rowClick: undefined
     });
 
     table.addFilter(data => {
-      return currLunrSelection.includes(data.id)
+      return currLunrSelection.includes(data.id);
     });
   
     const bioViewOptionInputElem = document.getElementById('biographical-view-option'),
           tableContainer = document.getElementById('data-display');
 
     document.getElementById(VIEW_OPTIONS_RADIO_BUTTONS_ID).addEventListener('click', () => {
+
       const bioOption = bioViewOptionInputElem.checked;
       table.destroy();
       tableContainer.classList.toggle(BIO_THEME_CLASSNAME, bioOption);
@@ -331,10 +337,13 @@
         paginationSizeSelector:[20,50,100],
         data: window.disa.jsonData,
         columns: columnDefinitions,
-        rowFormatter: bioOption ? rowFormatter : undefined
+        rowFormatter: bioOption ? rowFormatter : undefined,
+        rowClick: bioOption ? undefined : rowClick
       });
 
-      // table.setFilter(data => currLunrSelection.includes(data.id));
+      table.addFilter(data => {
+        return currLunrSelection.includes(data.id);
+      });
     });
 
     window.table = table;
