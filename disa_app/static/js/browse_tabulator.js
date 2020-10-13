@@ -297,6 +297,10 @@
       { title:'Location',  field:'all_locations',     sorter:'string', headerFilter: true },
       { title:'Year',      field:'date.year',         sorter:'string', headerFilter: true }
     ];
+
+    const rowClick = function(_, row) { 
+      showDetails(row.getData().id);
+    };
   
     let table = new Tabulator('#data-display', {
       height:'611px',
@@ -309,9 +313,7 @@
       columns: columnDefinitions,
       rowFormatter: rowFormatter,
       ajaxResponse: jsonProcessor,
-      rowClick: function(_, row) { 
-        showDetails(row.getData().id);
-      }
+      rowClick: undefined
     });
 
     table.addFilter(data => {
@@ -336,9 +338,7 @@
         data: window.disa.jsonData,
         columns: columnDefinitions,
         rowFormatter: bioOption ? rowFormatter : undefined,
-        rowClick: function(_, row) { 
-          showDetails(row.getData().id);
-        }
+        rowClick: bioOption ? undefined : rowClick
       });
 
       table.addFilter(data => {
