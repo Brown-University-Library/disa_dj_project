@@ -28,11 +28,26 @@ from disa_app import models_sqlalchemy as models_alch
 from disa_app import settings_app
 
 
+
+
+## set up file logger
+LOG_PATH = os.environ['DISA_DJ__LOG_PATH']
+LOG_LEVEL = os.environ['DISA_DJ__LOG_LEVEL']
+level_dct = { 'DEBUG': logging.DEBUG, 'INFO': logging.INFO }
+logging.basicConfig(
+    filename=LOG_PATH, level=level_dct[LOG_LEVEL],
+    format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s', datefmt='%d/%b/%Y %H:%M:%S' )
 log = logging.getLogger(__name__)
+log.info( '\n\ndenormalizer log ready' )
+
+
+
+
+# log = logging.getLogger(__name__)
 
 
 def make_session() -> sqlalchemy.orm.session.Session:
-    engine = create_engine( settings_app.DB_URL, echo=True )
+    engine = create_engine( settings_app.DB_URL, echo=False )
     Session = sessionmaker( bind=engine )
     session = Session()
     return session
@@ -47,19 +62,26 @@ def json_for_browse():
     session = make_session()
 
     persons = session.query( models_alch.Person ).all()
+    log.debug( f'persons count, ``{len(persons)}``' )
 
     # owner_role = session.query( models_alch.Role ).filter_by( name='owner' ).first()
 
     # ensl = list({ p for p in persons
     #     for r in p.references if owner_role not in r.roles })
+
+    persons_subset = list(
+        { p for p in persons for r in p.references if None not in r.roles }
+        )
+    log.debug( f'ensl persons_subset count, ``{len(persons_subset)}``' )
+
     out = []
     # for p in ensl:
     # for ( p, i ) in enumerate( persons ):
 
     counter = 0
-    for p in persons:
+    for p in persons_subset:
 
-        print( f'p.id, ``{p.id}``' )
+        log.debug( f'p.id, ``{p.id}``' )
 
         counter += 1
         data = {}
@@ -67,7 +89,7 @@ def json_for_browse():
         data['first_name'] = p.first_name
         data['last_name'] = p.last_name
 
-        print( f'last_name, ``{data["last_name"]}``' )
+        log.debug( f'last_name, ``{data["last_name"]}``' )
 
         if data['first_name'] == '' and data['last_name'] == '':
             data['first_name'] = 'unrecorded'
@@ -99,13 +121,13 @@ def json_for_browse():
                 first_date = new_date
 
             existing_ref_data = data['documents'][citation]  # 2020-Oct-13 -- weird -- this _always_ appears to return an empty list
-            print( f'existing_ref_data, ``{pprint.pformat( existing_ref_data )}``' )
+            log.debug( f'existing_ref_data, ``{pprint.pformat( existing_ref_data )}``' )
 
             new_ref_data = process_reference(ref)
-            print( f'new_ref_data, ``{pprint.pformat( new_ref_data )}``' )
+            log.debug( f'new_ref_data, ``{pprint.pformat( new_ref_data )}``' )
             # data['roles_for_tabulator'] = new_ref_data['roles_tabulator']  # no, it needs to be in the document section, because a document can have more than one item
             # del new_ref_data['roles_tabulator']   # no need to display it twice
-            print( f'data id, ``{data["id"]}``' )
+            log.debug( f'data id, ``{data["id"]}``' )
             # break
 
             data['documents'][citation] = merge_ref_data(
@@ -167,8 +189,7 @@ def json_for_browse():
 def process_reference(entrant):
     """ Called by json_for_browse() """
 
-    log.debug( 'starting process_reference()' )
-    print( f'\n\nentrant, ``{entrant}``' )
+    log.debug( f'\n\nentrant, ``{entrant}``' )
     start_time = datetime.datetime.now()
 
     rec = entrant.reference
@@ -195,8 +216,8 @@ def process_reference(entrant):
         'race': merge_entrant_attributes(entrant.races)
     }
     for role in entrant.roles:
-        print( f'role, ``{role}``' )
-        print( f'role.__dict__, ``{role.__dict__}``' )
+        log.debug( f'role, ``{role}``' )
+        log.debug( f'role.__dict__, ``{role.__dict__}``' )
         # 1/0
         ref_data['roles'][role.name] = []
         ref_data['roles_tabulator'][role.name] = []
@@ -205,7 +226,7 @@ def process_reference(entrant):
         #     'name_as_relationship': role.name_as_relationship,
         #     'people': []
         #     }
-        # print( f'roles-tabulator-entry, ``{ref_data["roles_tabulator"][role.name]}``' )
+        # log.debug( f'roles-tabulator-entry, ``{ref_data["roles_tabulator"][role.name]}``' )
 
     ers = entrant.as_subject
     for er in ers:
@@ -245,11 +266,11 @@ def process_reference(entrant):
 
         ref_data['roles_tabulator'][role].append( tabulator_other )
 
-        # print( 'people, ``%s``' % ref_data["roles_tabulator"][role] )
+        # log.debug( 'people, ``%s``' % ref_data["roles_tabulator"][role] )
         # try:
         #     ref_data['roles_tabulator'][role]['people'].append( tabulator_other )
         # except Exception as e:
-        #     print( f'WARNING -- before error, ref_data-roles_tabulator was, ``{ref_data["roles_tabulator"]}``' )
+        #     log.debug( f'WARNING -- before error, ref_data-roles_tabulator was, ``{ref_data["roles_tabulator"]}``' )
         #     # raise Exception( e )
 
 
@@ -265,7 +286,6 @@ def process_reference(entrant):
             del ref_data['roles']['parent']
 
     elapsed_time = str( datetime.datetime.now() - start_time )
-    log.debug( 'elapsed time, ```%s```' % elapsed_time )
 
     return ref_data
 
