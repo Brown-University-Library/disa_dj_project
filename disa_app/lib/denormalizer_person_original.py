@@ -146,7 +146,7 @@ def json_for_browse():
         }
         out.append(data)
 
-        if counter > 100:  # for development
+        if counter > 5000:  # for development
             break
 
     elapsed_time = str( datetime.datetime.now() - start_time )
