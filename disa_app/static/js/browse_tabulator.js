@@ -381,9 +381,6 @@
         }
       }
     }
-
-    // searchAgainstIndex(); // Initialize results array for general search
-
   });
 
 })() // Closing IIFE
