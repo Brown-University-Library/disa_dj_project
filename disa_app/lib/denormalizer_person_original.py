@@ -104,7 +104,7 @@ def json_for_browse():
             new_ref_data = process_reference(ref)
             print( f'new_ref_data, ``{pprint.pformat( new_ref_data )}``' )
             data['roles_for_tabulator'] = new_ref_data['roles_tabulator']
-            break
+            # break
 
             data['documents'][citation] = merge_ref_data(
                 existing_ref_data, new_ref_data)
