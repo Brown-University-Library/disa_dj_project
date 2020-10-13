@@ -334,7 +334,9 @@
         rowFormatter: bioOption ? rowFormatter : undefined
       });
 
-      // table.setFilter(data => currLunrSelection.includes(data.id));
+      table.addFilter(data => {
+        return currLunrSelection.includes(data.id);
+      });
     });
 
     window.table = table;
