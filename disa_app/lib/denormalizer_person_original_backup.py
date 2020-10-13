@@ -5,14 +5,13 @@ Creates the json file used by the browse-table javascript library.
 
 Usage...
 - called by cron script in practice.
-- can be called manually by cd-ing to the project directory (with virtual-environment activated) and running:
+- can be called manually by cd-ing to the project directory and running:
   $ python3 ./disa_app/lib/denormalizer_person_original.py
 """
 
 import collections, datetime, json, logging, os, pathlib, pprint, sys
 import django, sqlalchemy
 
-from django.core.urlresolvers import reverse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -46,29 +45,20 @@ def json_for_browse():
 
     session = make_session()
 
+    # persons = models.Person.query.all()
     persons = session.query( models_alch.Person ).all()
 
-    # owner_role = session.query( models_alch.Role ).filter_by( name='owner' ).first()
+    # owner_role = models.Role.query.filter_by(name='owner').first()
+    owner_role = session.query( models_alch.Role ).filter_by( name='owner' ).first()
 
-    # ensl = list({ p for p in persons
-    #     for r in p.references if owner_role not in r.roles })
+    ensl = list({ p for p in persons
+        for r in p.references if owner_role not in r.roles })
     out = []
-    # for p in ensl:
-    # for ( p, i ) in enumerate( persons ):
-
-    counter = 0
-    for p in persons:
-
-        print( f'p.id, ``{p.id}``' )
-
-        counter += 1
+    for p in ensl:
         data = {}
         data['id'] = p.id
         data['first_name'] = p.first_name
         data['last_name'] = p.last_name
-
-        print( f'last_name, ``{data["last_name"]}``' )
-
         if data['first_name'] == '' and data['last_name'] == '':
             data['first_name'] = 'unrecorded'
         data['documents'] = collections.defaultdict(list)
@@ -97,15 +87,8 @@ def json_for_browse():
 
             if new_date < first_date:
                 first_date = new_date
-
-            existing_ref_data = data['documents'][citation]  # 2020-Oct-13 -- weird -- this _always_ appears to return an empty list
-            print( f'existing_ref_data, ``{pprint.pformat( existing_ref_data )}``' )
-
+            existing_ref_data = data['documents'][citation]
             new_ref_data = process_reference(ref)
-            print( f'new_ref_data, ``{pprint.pformat( new_ref_data )}``' )
-            data['roles_for_tabulator'] = new_ref_data['roles_tabulator']
-            break
-
             data['documents'][citation] = merge_ref_data(
                 existing_ref_data, new_ref_data)
             for d in data['documents'][citation]:
@@ -146,9 +129,6 @@ def json_for_browse():
         }
         out.append(data)
 
-        if counter > 100:  # for development
-            break
-
     elapsed_time = str( datetime.datetime.now() - start_time )
     log.debug( 'elapsed time, ```%s```' % elapsed_time )
 
@@ -166,7 +146,6 @@ def process_reference(entrant):
     """ Called by json_for_browse() """
 
     log.debug( 'starting process_reference()' )
-    print( f'\n\nentrant, ``{entrant}``' )
     start_time = datetime.datetime.now()
 
     rec = entrant.reference
@@ -175,7 +154,6 @@ def process_reference(entrant):
     date = rec.date or datetime.datetime(year=1492,day=1,month=1)
     ref_data = {
         'roles': collections.defaultdict(list),
-        'roles_tabulator': collections.defaultdict( list ),
         'date': {
             'year': date.year,
             'month': date.month,
@@ -193,18 +171,7 @@ def process_reference(entrant):
         'race': merge_entrant_attributes(entrant.races)
     }
     for role in entrant.roles:
-        print( f'role, ``{role}``' )
-        print( f'role.__dict__, ``{role.__dict__}``' )
-        # 1/0
         ref_data['roles'][role.name] = []
-        ref_data['roles_tabulator'][role.name] = []
-
-        # ref_data['roles_tabulator'][role.name] = {
-        #     'name_as_relationship': role.name_as_relationship,
-        #     'people': []
-        #     }
-        # print( f'roles-tabulator-entry, ``{ref_data["roles_tabulator"][role.name]}``' )
-
     ers = entrant.as_subject
     for er in ers:
         obj = er.obj
@@ -224,37 +191,12 @@ def process_reference(entrant):
             inv = [ i for i in invs if i.related_as.name in {'mother', 'father'}]
             if len(inv) > 0:
                 role = 'has_' + inv[0].related_as.name
-
         other = "{} {}".format(
             obj.primary_name.first, obj.primary_name.last).strip()
-
-        # tabulator_other = "{} {} {}".format(
-        #     obj.primary_name.first, obj.primary_name.last, obj.id ).strip()
-
-        tabulator_other = {
-            'primary_first_name': obj.primary_name.first.strip(),
-            'primary_last_name': obj.primary_name.last.strip(),
-            'link': f'%s%s' % ( reverse('edit_person_root_url'), obj.id )
-        }
-
         if other == '':
             other = 'unrecorded'
         ref_data['roles'][role].append(other)
-
-        ref_data['roles_tabulator'][role].append( tabulator_other )
-
-        # print( 'people, ``%s``' % ref_data["roles_tabulator"][role] )
-        # try:
-        #     ref_data['roles_tabulator'][role]['people'].append( tabulator_other )
-        # except Exception as e:
-        #     print( f'WARNING -- before error, ref_data-roles_tabulator was, ``{ref_data["roles_tabulator"]}``' )
-        #     # raise Exception( e )
-
-
     ref_data['roles'] = dict(ref_data['roles'])
-
-    ref_data['roles_tabulator'] = dict( ref_data['roles_tabulator'] )
-
     if 'has_mother' in ref_data['roles'] or 'has_father' in ref_data['roles']:
         if 'child' in ref_data['roles'] and ref_data['roles']['child']==[]:
             del ref_data['roles']['child']
