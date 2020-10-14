@@ -26,6 +26,7 @@ django.setup()
 ## ok, now django-related imports will work
 from disa_app import models_sqlalchemy as models_alch
 from disa_app import settings_app
+from disa_app.models import MarkedForDeletion
 
 
 ## set up file logger
