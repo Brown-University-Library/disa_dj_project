@@ -15,6 +15,7 @@ django.setup()
 ## ok, now django-related imports will work
 from disa_app import models_sqlalchemy as models_alch
 from disa_app import settings_app
+from disa_app.models import MarkedForDeletion
 
 
 ## set up file logger
@@ -84,7 +85,21 @@ def get_deleted_referent_objs( deleted_referent_ids, session ):
 
 
 def get_deleted_referent_ids():
-    return [ 1819, 1820 ]
+    referent_ids = []
+    marked_entries = MarkedForDeletion.objects.all()
+    for entry in marked_entries:
+        doc = json.loads( entry.doc_json_data )
+        references = doc.get( 'references', None )
+        if references:
+            for reference in references:
+                referents = reference.get( 'referents', None )
+                if referents:
+                    for referent in referents:
+                        referent_ids.append( referent['id'] )
+    sorted_referent_ids = sorted( referent_ids )
+    log.debug( f'referent_ids, ``{sorted_referent_ids}``' )
+    return sorted_referent_ids
+    # return [ 1819, 1820 ]
 
 
 def make_session() -> sqlalchemy.orm.session.Session:
