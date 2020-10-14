@@ -187,8 +187,6 @@
 
       response.forEach(entry => {
 
-        // console.log( "entry id, ", entry.id );
-
         // Name
 
         entry.first_name = cleanString(entry.first_name);
@@ -360,24 +358,20 @@
       showDetails(row.getData().id);
     };
 
-    let table = new Tabulator('#data-display', {
     const doFilter = function(e) {
       const funcName = e.target.getAttribute('data-filter-function'),
             funcArg = e.target.getAttribute('data-filter-arg');
       
     }
+
+    const tabulatorOptions_global = {
       height:'611px',
       layout:'fitColumns',
-      placeholder:'No Data Set',
+      placeholder:'No records match these criteria<br />Try removing filters to broaden your search',
       pagination: 'local',
       paginationSize: 20,
       paginationSizeSelector:[20,50,100],
-      ajaxURL: DATA_ENDPOINT_URL,
       columns: columnDefinitions,
-      rowFormatter: rowFormatter,
-      ajaxResponse: jsonProcessor,
-      rowClick: undefined
-    });
       renderComplete: () => {
         console.log('RENDER COMPLETE');
         document.querySelectorAll("*[data-filter-function]").forEach(
@@ -390,6 +384,20 @@
           }
         )
       }
+      //groupBy:'status'
+    }
+
+    const tabulatorOptions_init = Object.assign(
+      [], 
+      tabulatorOptions_global, 
+      {
+        ajaxURL: DATA_ENDPOINT_URL,
+        ajaxResponse: jsonProcessor,
+        rowFormatter: rowFormatter
+      }
+    );
+
+    let table = new Tabulator('#data-display', tabulatorOptions_init);
 
     table.addFilter(data => {
       return currLunrSelection.includes(data.id);
@@ -412,22 +420,23 @@
 
       table.destroy();
       tableContainer.classList.toggle(BIO_THEME_CLASSNAME, bioOption);
-      table = new Tabulator('#data-display', {
-        height:'611px',
-        layout:'fitColumns',
-        placeholder:'No Data Set',
-        pagination: 'local',
-        paginationSize: 20,
-        paginationSizeSelector:[20,50,100],
-        data: window.disa.jsonData,
-        columns: columnDefinitions,
-        rowFormatter: bioOption ? rowFormatter : undefined,
-        rowClick: bioOption ? undefined : rowClick
-      });
+
+      let t = document.getElementById('data-display');
+
+      table = new Tabulator(
+        '#data-display',
+        Object.assign({}, 
+          tabulatorOptions_global, 
+          tabulatorOptions_dataLoaded,
+          tabulatorOptions_view
+        ) 
+      );
 
       table.addFilter(data => {
         return currLunrSelection.includes(data.id);
       });
+
+      window.table = table;
     });
 
     window.table = table;
