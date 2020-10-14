@@ -327,8 +327,30 @@
       // { title:'Roles',    field:'roles',              sorter:'string', headerFilter: true },
       { title:'Sex',       field:'description.sex',   sorter:'string',
         headerFilter: 'select', headerFilterParams:{ values: ['Male','Female', 'Other'] } },
-      { title:'Tribe',     field:'description.tribe', sorter:'string', headerFilter: true },
-      { title:'Race',      field:'description.race',  sorter:'string', headerFilter: true },
+      { title:'Tribe',     field:'description.tribe', sorter:'string',
+        headerFilter: 'select', 
+        headerFilterParams: { 
+          values: [ "\"daughter of a Spanish Squaw\"", "Apalachee", "Blanco", "Blanea", "Bocotora", 
+                    "Bousora", "Boustora", "Chaliba", "Cherokee", "Codira", "Cookra", "Creek", 
+                    "Cuol", "Curero", "Eastern Pequot", "Eastern Tribes", "Mashantucket Pequot", 
+                    "Mohegan", "Naragansett", "Natchez", "Nidwa", "Nipmuc", "Noleva", "Nome Lackee", 
+                    "Nomi Lackee", "Oquelonex", "Pequot", "Portoback", "Rocotora", "Sambo", "Shaliba", 
+                    "Shalliba", "Shangina", "Shargana", "Shatyana", "Souix,Sioux", "Spanish", "Talusky", 
+                    "Tanybec", "Tenebec", "Tenybec", "Terriby", "Thalliba", "Toluskey", "Unspecified", 
+                    "Valiante", "Valience", "Wackaway", "Wampanoag", "Warao", "Weanoke,Weanock,Powhatan", 
+                    "Weyanoke", "Woolwa", "de Nacion Caribe Cuchibero" ]
+        } 
+      },
+      { title:'Race',      field:'description.race',  sorter:'string', 
+        headerFilter: 'select', 
+        headerFilterParams: { 
+          values: [ "Asiatic", "Black", "Carolina Indian", "Creole", "Creole", "Dark melattress", 
+                    "Dark mulatto", "East India Negro", "East-India Indian", "East-Indian", "Griffon", 
+                    "Half Indian", "Half Indian", "Half Negro", "Indian", "Indian Mulatto", "Irish", 
+                    "Martha's Vineyard Indian", "Mulatto", "Mustee", "Negro", "Sambo", "Spanish Indian", 
+                    "Surinam Indian", "White" ]
+        }
+      },
       // { title:'Age',       field:'description.age',   sorter:'string', headerFilter: true },
       { title:'Location',  field:'all_locations',     sorter:'string', headerFilter: true },
       { title:'Year',      field:'date.year',         sorter:'string', headerFilter: true }
