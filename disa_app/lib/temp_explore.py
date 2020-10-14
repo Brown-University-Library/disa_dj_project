@@ -37,17 +37,8 @@ def main():
     persons = session.query( models_alch.Person ).all()
     log.debug( f'persons count, ``{len(persons)}``' )
 
-    # deleted_referent_ids = filter_deleted.get_deleted_referent_ids()
-
-    # deleted_referent_objs = filter_deleted.get_deleted_referent_objs( deleted_referent_ids, session )
-
-    # persons_to_ignore = filter_deleted.get_persons_to_ignore( deleted_referent_objs, session )
-
-    # filtered_persons = filter_deleted.apply_filter( persons, persons_to_ignore, session )
-    # log.debug( f'filtered_persons count, ``{len(filtered_persons)}``' )
-
-    filtered_persons = filter_deleted.manage_filtration( persons, session )
-    log.debug( f'filtered_persons count, ``{len(filtered_persons)}``' )
+    filtered_out_deleted_persons = filter_deleted.manage_filtration( persons, session )
+    log.debug( f'filtered_out_deleted_persons count, ``{len(filtered_out_deleted_persons)}``' )
 
     ## end def main()
 
