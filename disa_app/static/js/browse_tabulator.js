@@ -218,10 +218,27 @@
 
         const nonUniqueRoles = Object.values(entry.documents)
                             .map(doc => Object.keys(doc[0].roles))
-                            .reduce((acc, docKeysArr) => acc.concat(docKeys));
+                            .reduce((acc, docKeysArr) => acc.concat(docKeysArr));
 
         entry.roles = Array.from(new Set(nonUniqueRoles)).join(', ');
 
+        function includesAny(compareArr1, compareArr2) {
+          return compareArr1.reduce(
+            (acc, role) => acc || compareArr2.includes(role), 
+            false
+          );
+        }
+
+        const enslavedRoles = ['Enslaved','Bought','Sold','Shipped','Arrived','Escaped','Captured','Emancipated'],
+              enslaverRoles = ['Owner','Captor','Buyer','Seller','Master'];
+
+        if (includesAny(nonUniqueRoles, enslavedRoles)) {
+          entry.status = 'Enslaved';
+        } else if (includesAny(nonUniqueRoles, enslaverRoles)) {
+          entry.status = 'Enslaver';
+        } else {
+          entry.status = 'Neither';
+        }
       });
 
       // Index this in Lunr
@@ -244,7 +261,9 @@
                         + (data.last_name ? ` <a href="#" onclick="populateNameFilter('${data.last_name}')" title="Show only people with last name '${data.last_name}'">${data.last_name}</a>` : ''),
             name_forOrIs = NAME_DISPLAY_OVERRIDES[data.first_name] ? 'for' : 'is',
             statusDisplay = {
-              'enslaved': 'enslaved'
+              'Enslaved': 'enslaved',
+              'Enslaver': 'slave-owning',
+              'Neither': ''
             },
             locSearchTerms = data.locations.map((_, i, locArr) => locArr.slice(i).join(', ')),
             locationDisplay = data.locations.map((loc, i) => {
@@ -274,7 +293,8 @@
 
       const html = `<a  class="details-button float-right" type="button" onclick="showDetails(${data.id})"
                         title="Show source document and details for ${data.all_name}">Details</a>` +
-                   `<strong class='referent-name'>${name_text}</strong> ${name_forOrIs} an ` +
+                   `<strong class='referent-name'>${name_text}</strong> ${name_forOrIs} ` +
+                   (statusDisplay[data.status][0] === 'e' ? 'an ' : 'a ') +
                    statusDisplay[data.status] + ' ' +
                    (data.description.tribe ? ` <a href="#" title="Show only ${data.description.tribe} people" onclick="populateTribeFilter('${data.description.tribe}')">${data.description.tribe}</a> ` : '') +
                    sexDisplay[ageStatus][data.description.sex] +
@@ -301,8 +321,9 @@
     const columnDefinitions = [
       { title:'Name',      field:'all_name',          sorter:'string', headerFilter: true }, // mutator: combineNames_mutator },
       { title:'Last name', field:'last_name',         sorter:'string', headerFilter: true, visible: false },
-      // { title:'Status',    field:'status',            sorter:'string', headerFilter: true },
-      { title:'Roles',    field:'roles',              sorter:'string', headerFilter: true },
+      { title:'Status',    field:'status',            sorter:'string', headerFilter: true,
+        headerFilter: 'select', headerFilterParams:{ values: ['Enslaved','Enslaver','Neither'] } },
+      // { title:'Roles',    field:'roles',              sorter:'string', headerFilter: true },
       { title:'Sex',       field:'description.sex',   sorter:'string',
         headerFilter: 'select', headerFilterParams:{ values: ['Male','Female', 'Other'] } },
       { title:'Tribe',     field:'description.tribe', sorter:'string', headerFilter: true },
