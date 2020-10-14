@@ -257,8 +257,8 @@
 
       const nameDisplay = NAME_DISPLAY_OVERRIDES[data.first_name] || data.first_name,
             name_text = data.description.title
-                        + `<a href="#" onclick="populateNameFilter('${nameDisplay}')" title="Show only people named '${nameDisplay}'">${nameDisplay}</a>`
-                        + (data.last_name ? ` <a href="#" onclick="populateNameFilter('${data.last_name}')" title="Show only people with last name '${data.last_name}'">${data.last_name}</a>` : ''),
+                        + `<a href="#" onclick="populateNameFilter('${nameDisplay}')" title="Show only people named '${nameDisplay}'">${uncleanString(nameDisplay)}</a>`
+                        + (data.last_name ? ` <a href="#" onclick="populateNameFilter('${data.last_name}')" title="Show only people with last name '${data.last_name}'">${uncleanString(data.last_name)}</a>` : ''),
             name_forOrIs = NAME_DISPLAY_OVERRIDES[data.first_name] ? 'for' : 'is',
             statusDisplay = {
               'Enslaved': 'enslaved',
@@ -296,7 +296,8 @@
                    `<strong class='referent-name'>${name_text}</strong> ${name_forOrIs} ` +
                    (statusDisplay[data.status][0] === 'e' ? 'an ' : 'a ') +
                    statusDisplay[data.status] + ' ' +
-                   (data.description.tribe ? ` <a href="#" title="Show only ${data.description.tribe} people" onclick="populateTribeFilter('${data.description.tribe}')">${data.description.tribe}</a> ` : '') +
+                   // (data.description.tribe ? ` <a href="#" title="Show only ${data.description.tribe} people" data-filter-function='populateTribeFilter' data-filter-arg="${data.description.tribe}" onclick="populateTribeFilter('${data.description.tribe}')">${data.description.tribe}</a> ` : '') +
+                   (data.description.tribe ? ` <a href="#" title="Show only ${data.description.tribe} people" data-filter-function='populateTribeFilter' data-filter-arg="${data.description.tribe}">${data.description.tribe}</a> ` : '') +
                    sexDisplay[ageStatus][data.description.sex] +
                    (age_text ? `, age ${age_text}` : '') +
                    race_text +
@@ -338,6 +339,11 @@
     };
 
     let table = new Tabulator('#data-display', {
+    const doFilter = function(e) {
+      const funcName = e.target.getAttribute('data-filter-function'),
+            funcArg = e.target.getAttribute('data-filter-arg');
+      
+    }
       height:'611px',
       layout:'fitColumns',
       placeholder:'No Data Set',
@@ -350,6 +356,18 @@
       ajaxResponse: jsonProcessor,
       rowClick: undefined
     });
+      renderComplete: () => {
+        console.log('RENDER COMPLETE');
+        document.querySelectorAll("*[data-filter-function]").forEach(
+          x => {
+            // const onclickFunction = () => window[x.getAttribute('data-filter-function')](x.getAttribute('data-filter-arg'));
+            const onclickFunctionName = x.getAttribute('data-filter-function'),
+                  onclickFunctionArg = x.getAttribute('data-filter-arg'),
+                  onclickFunction = () => window[onclickFunctionName](onclickFunctionArg);
+            x.addEventListener('click', onclickFunction, true);
+          }
+        )
+      }
 
     table.addFilter(data => {
       return currLunrSelection.includes(data.id);
@@ -361,6 +379,15 @@
     document.getElementById(VIEW_OPTIONS_RADIO_BUTTONS_ID).addEventListener('click', () => {
 
       const bioOption = bioViewOptionInputElem.checked;
+
+      const tabulatorOptions_view = bioOption 
+        ? { rowFormatter } 
+        : { rowClick };
+
+      const tabulatorOptions_dataLoaded = {
+        data: window.disa.jsonData
+      }
+
       table.destroy();
       tableContainer.classList.toggle(BIO_THEME_CLASSNAME, bioOption);
       table = new Tabulator('#data-display', {
