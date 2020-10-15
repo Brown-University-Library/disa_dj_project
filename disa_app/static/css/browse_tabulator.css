@@ -225,7 +225,7 @@ nav {
   white-space: normal;
 }
 
-.tabulator.biographical a.details-button {
+.tabulator.biographical .details-button {
   display: block;
   background-color: #00c;
   color: white;

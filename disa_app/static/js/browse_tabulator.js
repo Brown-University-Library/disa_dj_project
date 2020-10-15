@@ -289,7 +289,7 @@
             race_text = (data.description.race ? `, described as &ldquo;${data.description.race}&rdquo;,` : ''),
             year = data.date.year;
 
-      const html = `<a  class="details-button float-right" type="button" onclick="showDetails(${data.id})"
+      const html = `<a  class="details-button float-right" onclick="showDetails(${data.id})"
                         title="Show source document and details for ${data.all_name}">Details</a>` +
                    `<strong class='referent-name'>${name_text}</strong> ${name_forOrIs} ` +
                    (statusDisplay[data.status][0] === 'e' ? 'an ' : 'a ') +
