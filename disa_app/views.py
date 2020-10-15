@@ -34,7 +34,8 @@ log = logging.getLogger(__name__)
 # ===========================
 
 
-def browse( request ):
+# def browse( request ):
+def browse_old( request ):
     """ Displays home page. """
     log.debug( '\n\nstarting browse()' )
     context = {
