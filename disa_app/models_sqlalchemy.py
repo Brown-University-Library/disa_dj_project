@@ -422,6 +422,9 @@ class ReferentName(Base):
         'NameType',
         primaryjoin=(name_type_id == NameType.id) )
 
+    def __repr__(self):
+        return f'<Referent id, ``{self.referent_id}``; first, ``{self.first}``; last, ``{self.last}``>'
+
 
 class Referent(Base):
     __tablename__ = '5_referents'
