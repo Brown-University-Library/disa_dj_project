@@ -43,7 +43,7 @@ log.info( '\n\ngenerate-browse-data log ready' )
 def manage_generation():
     """ Produces json used by 'browse'.
         Called by ```if __name__ == "__main__":``` """
-    log.debug( 'starting json_for_browse()' )
+    log.debug( 'starting manage_generation()' )
     start_time = datetime.datetime.now()
     session = make_session()
 
