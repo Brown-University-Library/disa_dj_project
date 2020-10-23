@@ -54,26 +54,12 @@ def manage_generation():
     referents = filter_deleted.manage_filtration( referents_all, session )
     log.debug( f'referents after deletion-removal, ``{len(referents)}``' )
 
-    output = {
-        'meta': {
-            'date_produced': str( datetime.datetime.now() ),
-            'referent_count': len( referents ),
-            'excluded_referent_counts': len( filter_deleted.deleted_referent_ids ),
-        },
-        'referent_list': [
-        ]
-    }
+    ( output_dct, initialized_referent_dct ) = initialize_output()
+    for referent in referent:
+        populate_output( referent, output_dct, initialized_referent_dct )
 
-    referent_output = {
-        'id': '',
-        'uuid': '',
-        'name_first': '',
-        'name_last': '',
-        'citation_data': {},
-        'reference_data': {},
-    }
-
-    log.debug( f'output, ``{pprint.pformat(output)}``' )
+    log.debug( f'output_dct, ``{pprint.pformat(output_dct)}``' )
+    return output_dct
 
     ## end manage_generation()
 
@@ -83,6 +69,43 @@ def make_session() -> sqlalchemy.orm.session.Session:
     Session = sessionmaker( bind=engine )
     session = Session()
     return session
+
+
+def initialize_output() -> tuple:
+    """ Sets up structs for ouput.
+        Listed here for visual clarity.
+        Called by manage_generation() """
+    initialized_output_dct = {
+        'meta': {
+            'date_produced': str( datetime.datetime.now() ),
+            'referent_count': len( referents ),
+            'excluded_referent_counts': len( filter_deleted.deleted_referent_ids ),
+        },
+        'referent_list': [
+        ]
+    }
+    initialized_referent_dct = {
+        'id': '',
+        'uuid': '',
+        'name_first': '',
+        'name_last': '',
+
+        'tribe': '',
+        'sex': '',
+        'origin': '',
+        'vocation': '',
+        'age': '',
+        'race': '',
+        'title': '',
+
+        'citation_data': {},
+        'reference_data': {},
+    }
+    return ( initialized_output_dct, initialized_referent_dct )
+
+def populate_output( referent, output_dct, initialized_referent_dct ):
+    pass
+
 
 
 class FilterDeleted():
