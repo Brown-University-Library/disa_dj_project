@@ -55,7 +55,7 @@ def manage_generation():
     log.debug( f'referents after deletion-removal, ``{len(referents)}``' )
 
     ( output_dct, initialized_referent_dct ) = initialize_output()
-    for referent in referent:
+    for referent in referents:
         populate_output( referent, output_dct, initialized_referent_dct )
 
     log.debug( f'output_dct, ``{pprint.pformat(output_dct)}``' )
@@ -78,8 +78,8 @@ def initialize_output() -> tuple:
     initialized_output_dct = {
         'meta': {
             'date_produced': str( datetime.datetime.now() ),
-            'referent_count': len( referents ),
-            'excluded_referent_counts': len( filter_deleted.deleted_referent_ids ),
+            'referent_count': None,
+            'excluded_referent_counts': None,
         },
         'referent_list': [
         ]
@@ -104,7 +104,14 @@ def initialize_output() -> tuple:
     return ( initialized_output_dct, initialized_referent_dct )
 
 def populate_output( referent, output_dct, initialized_referent_dct ):
-    pass
+    if len( output_dct['referent_list'] ) > 5:
+        1/0
+    referent_dct = initialized_referent_dct.copy()
+    referent_dct['id'] = referent.id
+    referent_dct['uuid'] = '(unavailable)'
+    log.debug( f'referent.names, ``{referent.names}``' )
+    output_dct['referent_list'].append( referent_dct )
+    return
 
 
 
