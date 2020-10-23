@@ -109,9 +109,23 @@ def populate_output( referent, output_dct, initialized_referent_dct ):
     referent_dct = initialized_referent_dct.copy()
     referent_dct['id'] = referent.id
     referent_dct['uuid'] = '(unavailable)'
-    log.debug( f'referent.names, ``{referent.names}``' )
+    ( first_name, last_name ) = get_name( referent )
+    referent_dct['name_first'] = first_name
+    referent_dct['name_last'] = last_name
     output_dct['referent_list'].append( referent_dct )
     return
+
+def get_name( referent ):
+    log.debug( f'referent.names, ``{referent.names}``' )
+
+    for name in referent.names:
+        log.debug( f'referent-name.name_type, ``{name.name_type}``')
+
+    name = referent.names[0]
+    name_tuple = ( name.first, name.last )
+    log.debug( f'name_tuple, ``{name_tuple}``' )
+    return name_tuple
+
 
 
 
