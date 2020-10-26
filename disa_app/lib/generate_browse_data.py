@@ -12,7 +12,7 @@ Usage...
 import collections, datetime, json, logging, os, pathlib, pprint, sys
 import django, sqlalchemy
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -85,8 +85,8 @@ def initialize_output() -> tuple:
         ]
     }
     initialized_referent_dct = {
-        'id': '',
-        'uuid': '',
+        'referent_db_id': '',
+        'referent_uuid': '',
         'name_first': '',
         'name_last': '',
 
@@ -104,11 +104,11 @@ def initialize_output() -> tuple:
 
 
 def populate_output( referent, output_dct, initialized_referent_dct ):
-    if len( output_dct['referent_list'] ) > 1000:
-        return
+    # if len( output_dct['referent_list'] ) > 1000:
+    #     return
     referent_dct = initialized_referent_dct.copy()
-    referent_dct['id'] = referent.id
-    referent_dct['uuid'] = '(not-recorded)'
+    referent_dct['referent_db_id'] = referent.id
+    referent_dct['referent_uuid'] = '(not-recorded)'
     ( first_name, last_name ) = get_name( referent )
     referent_dct['name_first'] = first_name
     referent_dct['name_last'] = last_name
@@ -126,31 +126,6 @@ def populate_output( referent, output_dct, initialized_referent_dct ):
 
     output_dct['referent_list'].append( referent_dct )
     return
-
-
-def get_citation_and_reference_data( referent ):
-    refrnc = referent.reference
-    cite = refrnc.citation
-    citation_data = {
-        'citation_id': cite.id,
-        # 'citation_type_id': cite.citation_type_id,
-        'citation_type': cite.citation_type.name,
-        'display': cite.display,
-        'zotero_id': cite.zotero_id,
-        'comments': cite.comments,
-    }
-    reference_data = {
-        'reference_id': refrnc.id,
-        'reference_type':refrnc.reference_type.name,
-        'national_context': refrnc.national_context.name,
-        'date': refrnc.date,
-        'transcription': refrnc.transcription,
-        'locations': refrnc.display_location_info()
-    }
-
-    refrnc.dictify()
-    # citation_data = referent.reference.citation.dictify()
-    return ( citation_data, reference_data )
 
 
 def get_name( referent ):
@@ -206,6 +181,36 @@ def get_races( referent ):
     for race in referent.races:
         races.append( race.name )
     return races
+
+
+def get_citation_and_reference_data( referent ):
+    refrnc = referent.reference
+    cite = refrnc.citation
+    citation_data = {
+        'citation_db_id': cite.id,
+        'citation_uuid': '(not-recorded)',
+        'citation_type': cite.citation_type.name,
+        'display': cite.display,
+        # 'zotero_id': cite.zotero_id,
+        'comments': cite.comments,
+    }
+    if refrnc.date:
+        isodate = datetime.date.isoformat( refrnc.date )
+    else:
+        isodate = ''
+    reference_data = {
+        'reference_db_id': refrnc.id,
+        'reference_uuid': '(not-recorded)',
+        'reference_type':refrnc.reference_type.name,
+        'national_context': refrnc.national_context.name,
+        'date_db': str( refrnc.date ),
+        'date_display': refrnc.display_date(),
+        'transcription': refrnc.transcription,
+        'locations': refrnc.display_location_info()
+    }
+    # refrnc.dictify()
+    # citation_data = referent.reference.citation.dictify()
+    return ( citation_data, reference_data )
 
 
 class FilterDeleted():
@@ -266,8 +271,8 @@ class FilterDeleted():
 if __name__ == '__main__':
     output = manage_generation()
     unformatted_output_path = os.environ[ 'DISA_DJ__BROWSE_JSON_PATH' ]
-    log.debug( f'unformatted_output_path, ``{unformatted_output_path}``' )  # logging not currently working
-    formatted_output_path = f'%s/browse_data_formatted.json' % pathlib.Path( settings_app.DISA_DJ__BROWSE_JSON_PATH ).parent
+    log.debug( f'unformatted_output_path, ``{unformatted_output_path}``' )
+    formatted_output_path = f'%s/browse_formatted.json' % pathlib.Path( unformatted_output_path ).parent
     log.debug( f'formatted_output_path, ``{formatted_output_path}``' )
     log.debug( f'type(output), ``{type(output)}``' )
     jsn = json.dumps( output )
