@@ -101,6 +101,10 @@ def initialize_output() -> tuple:
         'age': '',
         'races': '',
 
+        'roles': '',
+        'titles': '',
+        'enslavements': '',
+
         'citation_data': {},
         'reference_data': {},
     }
@@ -108,8 +112,8 @@ def initialize_output() -> tuple:
 
 
 def populate_output( referent, output_dct, initialized_referent_dct ):
-    # if len( output_dct['referent_list'] ) > 1000:
-    #     return
+    if len( output_dct['referent_list'] ) > 1000:
+        return
     referent_dct = initialized_referent_dct.copy()
     referent_dct['referent_db_id'] = referent.id
     referent_dct['referent_uuid'] = '(not-recorded)'
@@ -124,12 +128,35 @@ def populate_output( referent, output_dct, initialized_referent_dct ):
     referent_dct['age'] = get_age( referent )
     referent_dct['races'] = get_races( referent )
 
+    # referent_dct['roles'] = get_roles( referent )
+    referent_dct['titles'] = get_titles( referent )
+    referent_dct['enslavements'] = get_enslavements( referent )
+
     ( citation_data, reference_data ) = get_citation_and_reference_data( referent )
     referent_dct['citation_data'] = citation_data
     referent_dct['reference_data'] = reference_data
 
     output_dct['referent_list'].append( referent_dct )
     return
+
+
+def get_roles( referent ):
+    pass
+
+
+def get_titles( referent ):
+    titles = []
+    for title in referent.titles:
+        titles.append( title.name )
+    return titles
+
+
+def get_enslavements( referent ):
+    enslavements = []
+    for enslavement in referent.enslavements:
+        enslavements.append( enslavement.name )
+    return enslavements
+
 
 
 def get_name( referent ):
