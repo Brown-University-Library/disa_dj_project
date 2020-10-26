@@ -75,7 +75,28 @@
 
 <!-- Main content container: search and results -->
 
-<div class="col-12">
+<div class="col-12 mt-4" id="main-content">
+
+    <!-- Title and information header -->
+
+    <h1>Welcome to the Database for Indigenous Slavery <span class="badge badge-secondary">prototype</span></h1>
+
+    <div class="row">
+        <p class="col-12">
+            This is a preliminary, experimental search of the database of individuals drawn from 
+            archival records regarding the enslavement of indigenous populations in the United States,
+            from the 17<sup>th</sup> to the 19<sup>th</sup> centuries.
+        </p>
+        <p class="col-6">
+            You are welcome to explore, but please understand that <em>this document 
+            is very much under development and may contain errors, and may change at any time</em>.
+        </p>
+        <p class="col-6">
+            
+            Having said that, if you find this project interesting, please feel free 
+            to reach out and send us comments at <a href="mailto:abc@def.com">disa@example.com</a>.
+        </p>
+    </div>
 
     <!-- Search query area -->
 
@@ -84,7 +105,9 @@
             Search in any field for
             <input type="text" id="general-search"></input>
         </label>
-        <em>&nbsp;(to focus your search, use the fields below)</em>
+        <em class="text-nowrap">
+            &nbsp;(to focus your search, use the fields below)
+        </em>
 
         <p id="view-options">View results as 
             <input type="radio" id="biographical-view-option" name="view-type" value="biographical" checked>
