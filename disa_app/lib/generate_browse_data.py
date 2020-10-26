@@ -103,7 +103,7 @@ def initialize_output() -> tuple:
 
         'roles': '',
         'titles': '',
-        'enslavements': '',
+        'statuses': '',
 
         'citation_data': {},
         'reference_data': {},
@@ -128,9 +128,11 @@ def populate_output( referent, output_dct, initialized_referent_dct ):
     referent_dct['age'] = get_age( referent )
     referent_dct['races'] = get_races( referent )
 
-    # referent_dct['roles'] = get_roles( referent )
     referent_dct['titles'] = get_titles( referent )
-    referent_dct['enslavements'] = get_enslavements( referent )
+    referent_dct['statuses'] = get_statuses( referent )
+
+    referent_dct['roles'] = get_roles( referent )
+    referent_dct['relationships'] = get_relationships( referent )
 
     ( citation_data, reference_data ) = get_citation_and_reference_data( referent )
     referent_dct['citation_data'] = citation_data
@@ -141,21 +143,33 @@ def populate_output( referent, output_dct, initialized_referent_dct ):
 
 
 def get_roles( referent ):
-    pass
+    roles = []
+    for role in referent.roles:
+        roles.append( role.name )
+    return roles
 
 
-def get_titles( referent ):
-    titles = []
-    for title in referent.titles:
-        titles.append( title.name )
-    return titles
+def get_relationships( referent ):
+    relationships = []
+    referent_relationships = referent.as_subject
+    for relationship in referent_relationships:
+        log.debug( f'relationship, ``{relationship}``' )
+        other = relationship.obj
+        if other == None:
+            log.debug( 'other was `None`, so skipping' )
+            continue
+        relationship_data = {
+            'description': relationship.related_as.name_as_relationship,
+            'related_referent_info': {
+                'related_referent_db_id': other.id,
+                'related_referent_first_name': other.primary_name.first.strip(),
+                'related_referent_last_name': other.primary_name.last.strip(),
+            }
+        }
+        relationships.append( relationship_data )
+    return relationships
 
 
-def get_enslavements( referent ):
-    enslavements = []
-    for enslavement in referent.enslavements:
-        enslavements.append( enslavement.name )
-    return enslavements
 
 
 
@@ -212,6 +226,20 @@ def get_races( referent ):
     for race in referent.races:
         races.append( race.name )
     return races
+
+
+def get_titles( referent ):
+    titles = []
+    for title in referent.titles:
+        titles.append( title.name )
+    return titles
+
+
+def get_statuses( referent ):
+    statuses = []
+    for status in referent.enslavements:  # yes, the data-entry form says 'status'; the db stores these as enslavements.
+        statuses.append( status.name )
+    return statuses
 
 
 def get_citation_and_reference_data( referent ):
