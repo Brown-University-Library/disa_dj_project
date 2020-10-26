@@ -240,3 +240,12 @@ nav {
 	margin-left: 2em!important;
 	margin-top: 2em!important;
 }
+
+.top-search-div label {
+	font-weight: bold;
+}
+
+#general-search {
+	margin: 0 1em; 
+	height: 2.25em;
+}
