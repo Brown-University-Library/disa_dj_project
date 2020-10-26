@@ -112,8 +112,8 @@ def initialize_output() -> tuple:
 
 
 def populate_output( referent, output_dct, initialized_referent_dct ):
-    if len( output_dct['referent_list'] ) > 1000:
-        return
+    # if len( output_dct['referent_list'] ) > 1000:
+    #     return
     referent_dct = initialized_referent_dct.copy()
     referent_dct['referent_db_id'] = referent.id
     referent_dct['referent_uuid'] = '(not-recorded)'
