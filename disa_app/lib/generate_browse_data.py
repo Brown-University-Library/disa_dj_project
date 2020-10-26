@@ -90,43 +90,122 @@ def initialize_output() -> tuple:
         'name_first': '',
         'name_last': '',
 
-        'tribe': '',
+        'tribes': '',
         'sex': '',
-        'origin': '',
-        'vocation': '',
+        'origins': '',
+        'vocations': '',
         'age': '',
-        'race': '',
-        'title': '',
+        'races': '',
 
         'citation_data': {},
         'reference_data': {},
     }
     return ( initialized_output_dct, initialized_referent_dct )
 
+
 def populate_output( referent, output_dct, initialized_referent_dct ):
-    if len( output_dct['referent_list'] ) > 5:
-        1/0
+    if len( output_dct['referent_list'] ) > 1000:
+        return
     referent_dct = initialized_referent_dct.copy()
     referent_dct['id'] = referent.id
-    referent_dct['uuid'] = '(unavailable)'
+    referent_dct['uuid'] = '(not-recorded)'
     ( first_name, last_name ) = get_name( referent )
     referent_dct['name_first'] = first_name
     referent_dct['name_last'] = last_name
+
+    referent_dct['tribes'] = get_tribes( referent )
+    referent_dct['sex'] = get_sex( referent )
+    referent_dct['origins'] = get_origins( referent )
+    referent_dct['vocations'] = get_vocations( referent )
+    referent_dct['age'] = get_age( referent )
+    referent_dct['races'] = get_races( referent )
+
+    ( citation_data, reference_data ) = get_citation_and_reference_data( referent )
+    referent_dct['citation_data'] = citation_data
+    referent_dct['reference_data'] = reference_data
+
     output_dct['referent_list'].append( referent_dct )
     return
 
+
+def get_citation_and_reference_data( referent ):
+    refrnc = referent.reference
+    cite = refrnc.citation
+    citation_data = {
+        'citation_id': cite.id,
+        # 'citation_type_id': cite.citation_type_id,
+        'citation_type': cite.citation_type.name,
+        'display': cite.display,
+        'zotero_id': cite.zotero_id,
+        'comments': cite.comments,
+    }
+    reference_data = {
+        'reference_id': refrnc.id,
+        'reference_type':refrnc.reference_type.name,
+        'national_context': refrnc.national_context.name,
+        'date': refrnc.date,
+        'transcription': refrnc.transcription,
+        'locations': refrnc.display_location_info()
+    }
+
+    refrnc.dictify()
+    # citation_data = referent.reference.citation.dictify()
+    return ( citation_data, reference_data )
+
+
 def get_name( referent ):
     log.debug( f'referent.names, ``{referent.names}``' )
-
     for name in referent.names:
         log.debug( f'referent-name.name_type, ``{name.name_type}``')
-
     name = referent.names[0]
     name_tuple = ( name.first, name.last )
     log.debug( f'name_tuple, ``{name_tuple}``' )
     return name_tuple
 
 
+def get_tribes( referent ):
+    tribes = []
+    for tribe in referent.tribes:
+        tribes.append( tribe.name )
+    return tribes
+
+
+def get_sex( referent ):
+    sex = referent.sex
+    if sex:
+        if len( sex.strip() ) == 0:
+            sex = '(not-recorded)'
+    else:
+        sex = '(not-recorded)'
+    return sex
+
+
+def get_origins( referent ):
+    origins = []
+    for origin in referent.origins:
+        origins.append( origin.name )
+    return origins
+
+
+def get_vocations( referent ):
+    vocations = []
+    for vocation in referent.vocations:
+        vocations.append( vocation.name )
+    return vocations
+
+
+def get_age( referent ):
+    age = '(not-recorded)'
+    if referent.age:
+        age = referent.age
+    return age
+
+
+def get_races( referent ):
+    races = []
+    for race in referent.races:
+        races.append( race.name )
+    return races
 
 
 class FilterDeleted():
