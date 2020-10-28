@@ -91,7 +91,9 @@
 
       detailsTableContent.forEach(
         ([label, value]) => {
-          if (value) { detailsModal.addToDetailsTable(label, value) }
+          if (value) { 
+            detailsModal.addToDetailsTable(label, value) 
+          }
         }
       );
 
@@ -252,6 +254,8 @@
       return response;
     }
 
+    // Given a row of data, create a biographical sketch in HTML
+
     const getPersonEntryHTML = function(data) {
 
       const nameDisplay = NAME_DISPLAY_OVERRIDES[data.first_name] || data.first_name,
@@ -404,6 +408,8 @@
     table.addFilter(data => {
       return currLunrSelection.includes(data.id);
     });
+
+    // Listener for the biographical/tabular view selector
 
     const bioViewOptionInputElem = document.getElementById('biographical-view-option'),
           tableContainer = document.getElementById('data-display');
