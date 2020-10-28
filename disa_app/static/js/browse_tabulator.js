@@ -211,6 +211,7 @@
         entry.docTitle = Object.keys(entry.documents)[0];
         entry.docTitle = cleanString(entry.docTitle);
         entry.comments = entry.comments.replace(/ style="[^"]*"/g,'');
+        entry.commentsNoHTML = entry.comments.replaceAll(/<[^>]+>/g,'');
 
         // Roles
 
@@ -351,7 +352,8 @@
       },
       // { title:'Age',       field:'description.age',   sorter:'string', headerFilter: true },
       { title:'Location',  field:'all_locations',     sorter:'string', headerFilter: true },
-      { title:'Year',      field:'date.year',         sorter:'string', headerFilter: true }
+      { title:'Year',      field:'date.year',         sorter:'string', headerFilter: true },
+      { title:'Source transcription', field:'commentsNoHTML', visible: false, download: true }
     ];
 
     const rowClick = function(_, row) {
@@ -440,6 +442,9 @@
     });
 
     window.table = table;
+
+    document.getElementById('download-data')
+            .addEventListener('click', () => window.table.download('csv', `disa-data-export_${Date.now()}.csv`));
 
     // This is called every time a user changes the content of the
     //   general search box

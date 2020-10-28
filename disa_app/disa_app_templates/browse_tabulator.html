@@ -100,21 +100,29 @@
 
     <!-- Search query area -->
 
-    <div class="top-search-div">
-        <label for="general-search">
-            Search in any field for
-            <input type="text" id="general-search"></input>
-        </label>
-        <em class="text-nowrap">
-            &nbsp;(to focus your search, use the fields below)
-        </em>
-
-        <p id="view-options">View results as 
-            <input type="radio" id="biographical-view-option" name="view-type" value="biographical" checked>
-            <label for="biographical-view-option">biographies</label>
-            <input type="radio" id="tabular-view-option" name="view-type" value="tabular">
-            <label for="tabular-view-option">a table</label>
-        </p>
+    <div class="top-search-div row">
+        <div class="col-6">
+            <label for="general-search">
+                Search in any field for
+                <input type="text" id="general-search"></input>
+            </label>
+            <em class="text-nowrap">
+                &nbsp;(to focus your search, use the fields below)
+            </em>
+        </div>
+        <div class="col-6">
+            <p id="view-options">View results as 
+                <input type="radio" id="biographical-view-option" name="view-type" value="biographical" checked>
+                <label for="biographical-view-option">biographies</label>
+                <input type="radio" id="tabular-view-option" name="view-type" value="tabular">
+                <label for="tabular-view-option">a table</label>
+            </p>                        
+            <p>
+                <button id="download-data" title="Download the results as a CSV file">
+                    Download results
+                </button>
+            </p>
+        </div>
     </div>
     
     <!-- Container for data table (tabulator library output) -->
