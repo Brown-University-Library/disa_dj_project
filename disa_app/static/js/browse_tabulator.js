@@ -10,7 +10,8 @@
         },
         BIO_THEME_CLASSNAME = 'biographical',
         VIEW_OPTIONS_RADIO_BUTTONS_ID = 'view-options',
-        MIN_TIME_BETWEEN_LUNR_INDEXES = 1000;
+        MIN_TIME_BETWEEN_LUNR_INDEXES = 1000,
+        ADULT_CHILD_CUTOFF_AGE = 16;
 
   // Event handlers
 
@@ -289,7 +290,7 @@
             },
             ageAsNumber = parseInt(data.description.age),
             age_number = (isNaN(ageAsNumber) ? undefined : ageAsNumber),
-            ageStatus = (age_number && age_number <= 16 ? 'child' : 'adult'),
+            ageStatus = (age_number && age_number <= ADULT_CHILD_CUTOFF_AGE ? 'child' : 'adult'),
             age_text = (data.description.age === 'Not Mentioned' ? undefined : data.description.age),
             race_text = (data.description.race ? `, described as &ldquo;${data.description.race}&rdquo;,` : ''),
             year = data.date.year;
