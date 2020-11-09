@@ -52,9 +52,18 @@ def redesign_query_data( cite_id: str ) -> dict:
         log.debug( f'cite, ``{cite}``' )
         log.debug( f'cite.references, ```{cite.references}```' )
         cite_dct = cite.dictify()
+        log.debug( f'cite_dct, ``{pprint.pformat(cite_dct)}``' )
         data['ct_fields'] = citation_type_data
         data['ct_fields_json'] = json.dumps( citation_type_data )
         data['doc'] = cite_dct
+        ## create json object
+        cite_obj = cite_dct.copy()
+        del cite_obj['references']
+        cite_obj['db_id'] = cite_obj.pop('id')
+        cite_obj['citation_type_fields'] = cite_obj.pop('fields')
+        cite_obj['uuid'] = 'not-yet-implemented'
+        data['citation_json'] = json.dumps( cite_obj )
+        log.debug( f'data, ``{pprint.pformat(data)}``' )
     else:
         data = None
     log.debug( f'data, ```{data}```' )
