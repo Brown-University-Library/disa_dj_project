@@ -1,6 +1,13 @@
 {% extends "disa_app_templates/redesign_base.html" %}
 
 
+{% block header_other %}
+<script type="text/javascript">
+    var citation_data = JSON.parse( '{{ citation_json | safe }}' );
+</script>
+{% endblock header_other %}
+
+
 <!-- Just a note that we could have page-specific sidebar documentation here, if desired. -->
 
 {% block sidebar %}
