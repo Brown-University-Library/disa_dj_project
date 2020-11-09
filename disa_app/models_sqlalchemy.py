@@ -135,12 +135,13 @@ class Citation(Base):
         data = {
             'id': self.id,
             'citation_type_id': self.citation_type_id,
+            'citation_type_name': self.citation_type.name,
             'display': self.display,
             'zotero_id': self.zotero_id,
             'comments': self.comments,
             'acknowledgements': self.acknowledgements,
             'references': jsn_references,
-            'fields': { f.field.name: f.field_data for f in self.citation_data }
+            'fields': { f.field.name: f.field_data for f in self.citation_data }  # note: `citation_data` is the "backref" from class CitationField() `citation` (whew!).
             }
         return data
 
