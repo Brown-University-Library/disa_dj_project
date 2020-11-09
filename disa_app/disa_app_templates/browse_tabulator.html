@@ -51,22 +51,25 @@
                 </button>
             </div>
             <div class="modal-body">
-                    <div class="card">
-                        <div class="card-header">
-                            From <em id="details-doc"></em>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text" id="details-transcription"></p>
-                        </div>
+                <div class="card">
+                    <div class="card-header">
+                        From <em id="details-doc"></em>
                     </div>
-                    <h2>Information entered for <span class="details-title-name"></span></h2>
-                    <table id="details-table" class="table">
-                    </table>
+                    <div class="card-body">
+                        <p class="card-text" id="details-transcription"></p>
+                    </div>
+                </div>
+                <h2>Personal details</h2>
+                <table id="details-table" class="table">
+                </table>
                 <h2>About the source</h2>
                 <p style="font-style: italic">
                     A note on terminology: information about individuals are recorded from "items" (such as an advertisement announcing a person fleeing enslavement) 
                     that are contained in "documents" (such as a newspaper).
                 </p>
+                <table id="source-details-table" class="table">
+                </table>
+
                     <!-- 
                 <p id="details-introduction">
                     We know about <span id="details-name"></span> from a document titled 
@@ -161,9 +164,11 @@
                 href="http://cds.library.brown.edu/">the Center for
                 Digital Scholarship</a> (Brown&nbsp;University&nbsp;Library)</p>
     </div>
-    
+    <!--
     <input type="hidden" id="denormalized_json_url"
-        name="variable" value="{{ denormalized_json_url }}" />
+        name="variable" value="{{ denormalized_json_url }}" />-->
+    <input type="hidden" id="denormalized_json_url"
+        name="variable" value="/static/data/browse.json" />
     <input type="hidden" id="info_image_url" name="variable"
         value="{{ info_image_url }}" />
 </div>
