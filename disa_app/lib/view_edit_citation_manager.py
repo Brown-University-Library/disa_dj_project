@@ -59,9 +59,9 @@ def redesign_query_data( cite_id: str ) -> dict:
         ## create json object
         cite_obj = cite_dct.copy()
         del cite_obj['references']
-        cite_obj['db_id'] = cite_obj.pop('id')
+        cite_obj['citation_db_id'] = cite_obj.pop('id')
         cite_obj['citation_type_fields'] = cite_obj.pop('fields')
-        cite_obj['uuid'] = 'not-yet-implemented'
+        cite_obj['citation_uuid'] = 'not-yet-implemented'
         data['citation_json'] = json.dumps( cite_obj )
         log.debug( f'data, ``{pprint.pformat(data)}``' )
     else:
