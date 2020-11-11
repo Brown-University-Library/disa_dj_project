@@ -104,7 +104,7 @@
                     <div class="citation-field form-group text-dark" id="archive">
                         <label for="archive-value" style="padding-left:15%;">Archive</label>
                         <!-- <input id="archive-value" name="archive-value"  placeholder="Archive" /> -->
-                        <input id="archive-value" name="archive-value"  placeholder="Archive" value="{{ doc.fields.archive }}" />
+                        <input id="archive-value" name="archive-value"  placeholder="Archive" value="" />
                     </div>
                     <div class="citation-field form-group text-dark" id="archiveLocation">
                     <label for="archiveLocation-value" style="padding-left:15%;">Archive Location</label>
@@ -113,7 +113,7 @@
                     <div class="citation-field form-group text-dark" id="author">
                         <label for="author-value" style="padding-left:15%;">Author</label>
                         <!-- <input id="author-value" name="author-value"  placeholder="Author (last name comes first)" /> -->
-                        <input id="author-value" name="author-value" placeholder="Author (last name comes first)" value="{{ doc.fields.author }}" />
+                        <input id="author-value" name="author-value" placeholder="Author (last name comes first)" value="" />
                     </div>
                     <div class="citation-field form-group text-dark" id="callNumber">
                     <label for="callNumber-value" style="padding-left:15%;">Call Number</label>
@@ -122,7 +122,7 @@
                     <div class="citation-field form-group text-dark" id="date">
                         <label for="date-value" style="padding-left:15%;">Date</label>
                         <!-- <input id="date-value" name="date-value" placeholder="Date" /> -->
-                        <input id="date-value" name="date-value" placeholder="Date" value="{{ doc.fields.date }}" />
+                        <input id="date-value" name="date-value" placeholder="Date" value="" />
                     </div>
                     <div class="citation-field form-group text-dark" id="edition">
                     <label for="edition-value" style="padding-left:15%;">Edition</label>
@@ -155,7 +155,7 @@
                     <div class="citation-field form-group text-dark" id="place">
                         <label for="place-value" style="padding-left:15%;">Place</label>
                         <!-- <input id="place-value" name="place-value" placeholder="Place" /> -->
-                        <input id="place-value" name="place-value" placeholder="Place" value="{{ doc.fields.place }}" />
+                        <input id="place-value" name="place-value" placeholder="Place" value="" />
                     </div>
                     <div class="citation-field form-group text-dark" id="publicationTitle">
                     <label for="publicationTitle-value" style="padding-left:15%;">Publication Title</label>
@@ -184,12 +184,11 @@
                     <div class="citation-field form-group text-dark" id="title">
                         <label for="title-value" style="padding-left:15%;">Title</label>
                         <!-- <input id="title-value" name="title-value" placeholder="Title" /> -->
-                        <input id="title-value" name="title-value" placeholder="Title" value="{{ doc.fields.title }}" />
+                        <input id="title-value" name="title-value" placeholder="Title" value="" />
                     </div>
                     <div class="citation-field form-group text-dark" id="url">
                         <label for="url-value" style="padding-left:15%;">URL</label>
                         <input id="url-value" name="url-value" placeholder="https://..." />
-                        <input id="url-value" name="url-value" placeholder="https://..." value="{{ doc.fields.url }}" />
                     </div>
                 </div>  <!-- end <div id="optional-fields"> -->
 
@@ -803,6 +802,19 @@
 
     // PATRICK'S CODE STARTS HERE
 
+    // Initialize form fields with DB values
+
+    function initFormFields(citationData) {
+
+        // Citation bib fields
+
+        Object.keys(citationData.citation_type_fields).forEach(fieldId =>
+            document.getElementById(`${fieldId}-value`).value = citationData.citation_type_fields[fieldId]
+        );
+
+        // MORE TO COME ...
+    }
+
     // Data structure for showing / hiding citation fields
 
     const fieldsByDocType = {
@@ -940,6 +952,8 @@
                 hiddenFieldsContainer = document.getElementById('hidden-fields'),
                 citationTypeSelector = document.getElementById('document_type'),
                 citationFields = Array.from(document.getElementsByClassName('citation-field'));
+
+        initFormFields(citation_data);
 
         // Called when the citation type dropdown changes
 
