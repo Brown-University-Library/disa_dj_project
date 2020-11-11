@@ -3,7 +3,9 @@
 
 {% block header_other %}
 <script type="text/javascript">
-    var citation_data = JSON.parse( '{{ citation_json | safe }}' );
+    const citation_data = JSON.parse( 
+        '{{ citation_json | safe }}'
+    );
 </script>
 {% endblock header_other %}
 
