@@ -812,6 +812,11 @@
             document.getElementById(`${fieldId}-value`).value = citationData.citation_type_fields[fieldId]
         );
 
+        // Acknowledgements
+
+        document.getElementById('formInputDISAAcknowledgements')
+            .value = citationData.acknowledgements;
+
         // MORE TO COME ...
     }
 
