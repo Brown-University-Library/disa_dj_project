@@ -161,6 +161,7 @@
   
     const jsonProcessor = function(_, __, response) {
   
+      console.log('JSON RESPONSE');
       console.log(response);
 
       // Create an 'all_names' field
@@ -192,7 +193,7 @@
 
         entry.docTitle = Object.keys(entry.documents)[0];
         entry.docTitle = cleanString(entry.docTitle);
-        entry.comments = entry.comments.replace(/ style="[^"]*"/g,'');
+        entry.comments = entry.comments ? entry.comments.replace(/ style="[^"]*"/g,'') : '';
       });
 
       // Index this in Lunr
