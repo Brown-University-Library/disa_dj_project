@@ -3,7 +3,7 @@
 
   // Constants
 
-  const DATA_ENDPOINT_URL = document.getElementById('denormalized_json_url').value,
+  const DATA_ENDPOINT_URL = document.getElementById('browse_json_url').value,
         NAME_DISPLAY_OVERRIDES = {
           'unrecorded': 'No name is recorded ',
           'Unknown': 'No name is known '
@@ -146,7 +146,7 @@
         inlineCssRegex = /\s+style="[^"]*"/g;
 
   function cleanString(str) {
-    if (typeof str !== 'string') { 
+    if (typeof str !== 'string') {
       return '';
     } else {
       return str.replace(aposRegEx, '[APOS]')
@@ -260,7 +260,7 @@
 
         function includesAny(compareArr1, compareArr2) {
           return compareArr1.reduce(
-            (acc, role) => acc || compareArr2.includes(role), 
+            (acc, role) => acc || compareArr2.includes(role),
             false
           )
         }
@@ -365,7 +365,7 @@
             uniqueValues = Array.from(new Set(values));
       return uniqueValues.keys();
     }
-  
+
     const columnDefinitions = [
       { title:'Name',      field:'all_name',          sorter:'string', headerFilter: true }, // mutator: combineNames_mutator },
       { title:'Last name', field:'name_last',         sorter:'string', headerFilter: true, visible: false },
@@ -375,26 +375,26 @@
       { title:'Sex',       field:'sex',   sorter:'string',
         headerFilter: 'select', headerFilterParams:{ values: ['Male','Female', 'Other'] } },
       { title:'Tribe',     field:'all_tribes', sorter:'string',
-        headerFilter: 'select', 
-        headerFilterParams: { 
-          values: [ "\"daughter of a Spanish Squaw\"", "Apalachee", "Blanco", "Blanea", "Bocotora", 
-                    "Bousora", "Boustora", "Chaliba", "Cherokee", "Codira", "Cookra", "Creek", 
-                    "Cuol", "Curero", "Eastern Pequot", "Eastern Tribes", "Mashantucket Pequot", 
-                    "Mohegan", "Naragansett", "Natchez", "Nidwa", "Nipmuc", "Noleva", "Nome Lackee", 
-                    "Nomi Lackee", "Oquelonex", "Pequot", "Portoback", "Rocotora", "Sambo", "Shaliba", 
-                    "Shalliba", "Shangina", "Shargana", "Shatyana", "Souix,Sioux", "Spanish", "Talusky", 
-                    "Tanybec", "Tenebec", "Tenybec", "Terriby", "Thalliba", "Toluskey", "Unspecified", 
-                    "Valiante", "Valience", "Wackaway", "Wampanoag", "Warao", "Weanoke,Weanock,Powhatan", 
+        headerFilter: 'select',
+        headerFilterParams: {
+          values: [ "\"daughter of a Spanish Squaw\"", "Apalachee", "Blanco", "Blanea", "Bocotora",
+                    "Bousora", "Boustora", "Chaliba", "Cherokee", "Codira", "Cookra", "Creek",
+                    "Cuol", "Curero", "Eastern Pequot", "Eastern Tribes", "Mashantucket Pequot",
+                    "Mohegan", "Naragansett", "Natchez", "Nidwa", "Nipmuc", "Noleva", "Nome Lackee",
+                    "Nomi Lackee", "Oquelonex", "Pequot", "Portoback", "Rocotora", "Sambo", "Shaliba",
+                    "Shalliba", "Shangina", "Shargana", "Shatyana", "Souix,Sioux", "Spanish", "Talusky",
+                    "Tanybec", "Tenebec", "Tenybec", "Terriby", "Thalliba", "Toluskey", "Unspecified",
+                    "Valiante", "Valience", "Wackaway", "Wampanoag", "Warao", "Weanoke,Weanock,Powhatan",
                     "Weyanoke", "Woolwa", "de Nacion Caribe Cuchibero" ]
-        } 
+        }
       },
-      { title:'Race',      field:'all_races',  sorter:'string', 
-        headerFilter: 'select', 
-        headerFilterParams: { 
-          values: [ "Asiatic", "Black", "Carolina Indian", "Creole", "Creole", "Dark melattress", 
-                    "Dark mulatto", "East India Negro", "East-India Indian", "East-Indian", "Griffon", 
-                    "Half Indian", "Half Indian", "Half Negro", "Indian", "Indian Mulatto", "Irish", 
-                    "Martha's Vineyard Indian", "Mulatto", "Mustee", "Negro", "Sambo", "Spanish Indian", 
+      { title:'Race',      field:'all_races',  sorter:'string',
+        headerFilter: 'select',
+        headerFilterParams: {
+          values: [ "Asiatic", "Black", "Carolina Indian", "Creole", "Creole", "Dark melattress",
+                    "Dark mulatto", "East India Negro", "East-India Indian", "East-Indian", "Griffon",
+                    "Half Indian", "Half Indian", "Half Negro", "Indian", "Indian Mulatto", "Irish",
+                    "Martha's Vineyard Indian", "Mulatto", "Mustee", "Negro", "Sambo", "Spanish Indian",
                     "Surinam Indian", "White" ]
         }
       },
@@ -411,7 +411,7 @@
     const doFilter = function(e) {
       const funcName = e.target.getAttribute('data-filter-function'),
             funcArg = e.target.getAttribute('data-filter-arg');
-      
+
     }
 
     const tabulatorOptions_global = {
@@ -438,8 +438,8 @@
     }
 
     const tabulatorOptions_init = Object.assign(
-      [], 
-      tabulatorOptions_global, 
+      [],
+      tabulatorOptions_global,
       {
         ajaxURL: DATA_ENDPOINT_URL,
         ajaxResponse: jsonProcessor,
@@ -462,8 +462,8 @@
 
       const bioOption = bioViewOptionInputElem.checked;
 
-      const tabulatorOptions_view = bioOption 
-        ? { rowFormatter } 
+      const tabulatorOptions_view = bioOption
+        ? { rowFormatter }
         : { rowClick };
 
       const tabulatorOptions_dataLoaded = {
@@ -477,11 +477,11 @@
 
       table = new Tabulator(
         '#data-display',
-        Object.assign({}, 
-          tabulatorOptions_global, 
+        Object.assign({},
+          tabulatorOptions_global,
           tabulatorOptions_dataLoaded,
           tabulatorOptions_view
-        ) 
+        )
       );
 
       table.addFilter(data => {
