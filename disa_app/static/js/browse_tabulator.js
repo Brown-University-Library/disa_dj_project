@@ -146,11 +146,14 @@
         inlineCssRegex = /\s+style="[^"]*"/g;
 
   function cleanString(str) {
-    if (typeof str !== 'string') { console.log(str)}
-    return str.replace(aposRegEx, '[APOS]')
-              .replace(quotRegEx, '[QUOT]')
-              .replace(ampersandRegex, '[AMP]')
-              .replace(inlineCssRegex,'');
+    if (typeof str !== 'string') { 
+      return '';
+    } else {
+      return str.replace(aposRegEx, '[APOS]')
+      .replace(quotRegEx, '[QUOT]')
+      .replace(ampersandRegex, '[AMP]')
+      .replace(inlineCssRegex,'');
+    }
   }
 
   function uncleanString(str) {
