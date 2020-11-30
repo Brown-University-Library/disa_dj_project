@@ -20,7 +20,8 @@
 
 {% block content %}
 
-<!-- JavaScript-savvy URL control to toggle div display between #startpanel above & #tabs_bibinfoanditems below -->
+<!-- JavaScript-savvy URL control to toggle div display between 
+     #startpanel above & #tabs_bibinfoanditems below -->
 
 <div id="tabs_bibinfoanditems" style="margin-top:10em;">
   <ul class="nav nav-tabs" role="tablist">
@@ -43,16 +44,19 @@
       role="tabpanel"
       aria-labelledby="Bibliographic-information"
       id="Bibliographic-information">
+
       <!-- These are citation fields that are unused by the current citation type -->
       <div id="hidden-fields" hidden></div>
+
       <form>
         <span class="badge badge-primary float-right"
           title="Unique identifier for this citation">
           ID {{ doc.id }}
         </span>
         <h5 class="text-dark" style="width:25%;float:left;">
-          Citation type</h5>
-  <div style="clear: left;">
+          Citation type
+        </h5>
+        <div style="clear: left;">
      <!-- CITATION TYPE DROPDOWN SELECTOR -->
      <!-- <label for="formInputDISADocType" style="padding-left:12%;">Citation type:</label> -->
      <!-- hardcoded -->
@@ -91,7 +95,7 @@
     information</h5>
   <div id="optional-fields">
     <div class="citation-field form-group text-dark"
-      id="abstractNote">
+         id="abstractNote">
       <label for="abstractNote-value"
         style="padding-left:15%;">Abstract Note</label>
       <input id="abstractNote-value" name="abstractNote-value"
@@ -301,9 +305,7 @@
       class="form-control" rows="3"
       id="formInputDISAAcknowledgements"></textarea>
   </div>
-  <p>&nbsp;</p>
-  <p>&nbsp;</p>
-  <div class="form-group" style="clear:both;">
+  <div class="form-group" style="clear:both; margin-top: 3em">
     <label for="formInputDISABiblioResearcherNotes"
       style="padding-left:0%;">Researcher notes
       <br>
@@ -813,6 +815,7 @@
 {% block page_specific_js %}
 
 <script type="text/javascript">
+
     var getDocumentId = function () {
       {# var doc_id = "{{ doc.id or '' }}"; #}
       var doc_id = "{{ doc.id }}";
@@ -897,9 +900,14 @@
       console.log("in setFormHeader; header, ", header);
       if ($.isEmptyObject(docData)) {
         header.text('Add a document');
-        header.append(`<div style="font-size: 50%"><em>Fill out this form only when entering a document for the first time.
-  If your document has been already entered, find your document in the
-  <a href="/editor">recent document list</a> and add an item.</em></div>`);
+        header.append(`
+          <div style="font-size: 50%">
+            <em>
+                Fill out this form only when entering a document for the first time.
+                If your document has been already entered, find your document in the
+                <a href="/editor">recent document list</a> and add an item. 
+            </em>
+          </div>`);
         $('#doc_update').text('Create');
         $('#citation_fields').siblings('label').hide();
       } else {
