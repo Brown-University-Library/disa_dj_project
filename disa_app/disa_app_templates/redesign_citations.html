@@ -113,11 +113,11 @@
 {% block page_specific_js %}
 <script>
 
-    window.addEventListener('DOMContentLoaded', () => {
-        const sidebarClassList = document.getElementById('sidebar').classList;
-        document.getElementById('sidebarCollapse')
-                .addEventListener('click', () => sidebarClassList.toggle('active'));
-    });
+  window.addEventListener('DOMContentLoaded', () => {
+    const sidebarClassList = document.getElementById('sidebar').classList;
+    document.getElementById('sidebarCollapse')
+      .addEventListener('click', () => sidebarClassList.toggle('active'));
+  });
 
 </script>
 {% endblock page_specific_js %}
