@@ -35,7 +35,7 @@ div.tab-content {
 	background-color: #d0e9fe!important;
 	border-color:#d0e9fe;
 	border-width:2px;
-	font-weight: bold;
+	/* font-weight: bold; */
 }
 
 #tabs_bibinfoanditems a.nav-link {
