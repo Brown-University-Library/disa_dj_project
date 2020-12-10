@@ -359,11 +359,11 @@
                 <label for="image_url">Image<br />
                     <em class="small">
                       Paste the full URL of the image associated with this item. The image should be
-                      located in <a href="https://drive.google.com/drive/u/1/folders/1iEoQGjFo6ft-Vhzs9yaJytpt4KNmZv_L">this Google Drive folder</a>. 
+                      located in <a href="https://drive.google.com/drive/u/1/folders/1iEoQGjFo6ft-Vhzs9yaJytpt4KNmZv_L">this Google Drive folder</a>.
                       In Google Drive, right-click on the file and select "Get link," and in the pop-up, clock on "Copy link." Then paste into the field below.
                     </em></label>
                     <br />
-                <input class="form-control" id="image_url" 
+                <input class="form-control" id="image_url"
                        placeholder="https://drive.google.com/file/d/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/view?usp=sharing"></input>
                  <div class="alert alert-danger" id="url-error-message" role="alert" hidden>
                     Not a valid URL!
@@ -556,12 +556,14 @@ var collectInputValues = function(docId) {
     data['citation_id'] = Number(docId);
 
     try { // Only load image_url if it's a valid URL
+      console.log( "in collectInputValues(); image-url, ", $("#image_url").val() );
       data['image_url'] = (new URL($('#image_url').val())).href;
       document.getElementById('url-error-message').setAttribute('hidden', 'hidden');
-    } catch (_) { 
+    } catch (_) {
+      console.log( "in collectInputValues(); catch triggered." );
       document.getElementById('url-error-message').removeAttribute('hidden');
     }
-    
+
     return data;
 }
 
