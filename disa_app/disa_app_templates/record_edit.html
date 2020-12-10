@@ -359,11 +359,11 @@
                 <label for="image_url">Image<br />
                     <em class="small">
                       Paste the full URL of the image associated with this item. The image should be
-                      located in <a href="https://drive.google.com/drive/u/1/folders/1iEoQGjFo6ft-Vhzs9yaJytpt4KNmZv_L">this Google Drive folder</a>.
+                      located in <a href="https://drive.google.com/drive/u/1/folders/1iEoQGjFo6ft-Vhzs9yaJytpt4KNmZv_L">this Google Drive folder</a>. 
                       In Google Drive, right-click on the file and select "Get link," and in the pop-up, clock on "Copy link." Then paste into the field below.
                     </em></label>
                     <br />
-                <input class="form-control" id="image_url"
+                <input class="form-control" id="image_url" 
                        placeholder="https://drive.google.com/file/d/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/view?usp=sharing"></input>
                  <div class="alert alert-danger" id="url-error-message" role="alert" hidden>
                     Not a valid URL!
@@ -468,8 +468,15 @@ var updateLocationInputs = function (locsArray) {
 }
 
 var setInputValues = function(recData) {
-    /*  Updates input fields from readRecordData() api call when initializing form, and from ajax-update from when data is updated.
-        Called by initializeForm() and updateRecordData() */
+
+    /*  
+      Updates input fields from readRecordData() api call 
+      when initializing form, and from ajax-update from when 
+      data is updated.
+
+      Called by initializeForm() and updateRecordData() 
+    */
+
     console.log( "in setInputValues; will update item fields." )
     if ( $.isEmptyObject(recData) ) {
         return;
