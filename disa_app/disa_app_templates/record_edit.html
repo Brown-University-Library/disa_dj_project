@@ -480,6 +480,18 @@ var setInputValues = function(recData) {
     updateLocationInputs(recData['locations']);
     updateRecordType($('#recordtype_autocomplete'), recData['record_type']);
     updateNationalContext($('#national_context'), recData['national_context']);
+    updateImageUrl(document.getElementById('image_url'), recData['image_url']);
+}
+
+const updateImageUrl = function(input, data) {
+  if (data) {
+    try {
+      const validUrl = (new URL(new String(data))).href;
+      input.value = validUrl;
+    } catch (_) { 
+      console.error(`WARNING: provided image URL ${dataAsString} is not valid`);
+    }
+  }
 }
 
 var updateRecordType = function ($input, data) {
