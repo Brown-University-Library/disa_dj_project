@@ -563,14 +563,12 @@ var collectInputValues = function(docId) {
     data['citation_id'] = Number(docId);
 
     try { // Only load image_url if it's a valid URL
-      console.log( "in collectInputValues(); image-url, ", $("#image_url").val() );
       data['image_url'] = (new URL($('#image_url').val())).href;
       document.getElementById('url-error-message').setAttribute('hidden', 'hidden');
-    } catch (_) {
-      console.log( "in collectInputValues(); catch triggered." );
+    } catch (_) { 
       document.getElementById('url-error-message').removeAttribute('hidden');
     }
-
+    
     return data;
 }
 
