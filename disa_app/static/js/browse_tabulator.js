@@ -278,6 +278,26 @@
         newEntry.all_races = newEntry.races.join(', ');
         newEntry.year = (new Date(entry.reference_data.date_db)).getFullYear();
 
+        // Some additional fields for Maiah's download
+
+        newEntry.vocation = newEntry.vocations.join(',');
+
+        newEntry.enslaved_by = newEntry.relationships.filter(
+          rel => (rel.description === 'enslaved by')
+        ).map(
+          rel => rel.related_referent_info.related_referent_first_name + ' ' +
+                 rel.related_referent_info.related_referent_last_name
+        ).join('; ');
+
+        newEntry.enslaved = newEntry.relationships.filter(
+          rel => (rel.description === 'owner of')
+        ).map(
+          rel => rel.related_referent_info.related_referent_first_name + ' ' +
+                  rel.related_referent_info.related_referent_last_name
+        ).join('; ');
+
+
+
         return newEntry;
       });
 
@@ -401,7 +421,16 @@
       // { title:'Age',       field:'description.age',   sorter:'string', headerFilter: true },
       { title:'Location',  field:'reference_data.all_locations',     sorter:'string', headerFilter: true },
       { title:'Year',      field:'year',         sorter:'string', headerFilter: true },
-      { title:'Source transcription', field:'reference_data.transcription', visible: false, download: true }
+
+      // Some hidden fields just for downloading and general search
+
+      { title:'Source transcription', field:'reference_data.transcription', visible: false, download: true },
+      { title:'Referent_ID', field:'referent_db_id', visible: false, download: true },
+      { title:'Vocation', field:'vocation', visible: false, download: true },
+      { title:'Age', field:'age', visible: false, download: true },
+      { title:'Reference_ID', field:'reference_data.reference_db_id', visible: false, download: true },
+      { title:'Enslaved_by', field:'enslaved_by', visible: false, download: true },
+      { title:'Enslaved', field:'enslaved', visible: false, download: true }
     ];
 
     const rowClick = function(_, row) {
