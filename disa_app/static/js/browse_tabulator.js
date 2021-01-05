@@ -346,6 +346,12 @@
                 'Male': 'man',
                 'Other': 'individual',
                 '': 'individual'
+              },
+              'pronoun': {
+                'Female': { cap: 'She', nocap: 'she', be_conj: 'was'},
+                'Male': { cap: 'He', nocap: 'he', be_conj: 'was'},
+                'Other': { cap: 'They', nocap: 'they', be_conj: 'were'},
+                '': { cap: 'They', nocap: 'they', be_conj: 'were'}
               }
             },
             ageAsNumber = parseInt(entry.age.replaceAll(/[^\d]/g, '')),
@@ -353,7 +359,51 @@
             ageStatus = (age_number && age_number <= ADULT_CHILD_CUTOFF_AGE ? 'child' : 'adult'),
             age_text = (entry.age === '(not-recorded)' ? undefined : entry.age),
             race_text = (entry.all_races ? `, described as &ldquo;${entry.all_races}&rdquo;,` : ''),
-            year = entry.year;
+            year = entry.year,
+            proNounCap = sexDisplay.pronoun[entry.sex].cap,
+            toBe_conj = sexDisplay.pronoun[entry.sex].be_conj;
+
+
+      // GENERATE RELATIONSHIPS DESCRIPTION
+      
+      // console.log('RELATIONSHIPS:' + entry.relationships.map(r => r.description).join(','));
+      // console.log(`RELATIONSHIPS FOR ${nameDisplay} (${entry.relationships.length}):`, entry.relationships);
+
+      const relationshipsArrayHTML = entry.relationships.map(relationship => {
+        let html;
+        const relRefInfo = relationship.related_referent_info,
+              relRefName = [relRefInfo.related_referent_first_name, relRefInfo.related_referent_last_name]
+                            .filter(x => x.length)
+                            .join(' '),
+              relRefNameLink = `<a href='#' onclick='showDetails(${relRefInfo.related_referent_db_id})'>${relRefName}</a>`;
+        if (relationship.description === 'enslaved by') {
+          html = `${toBe_conj} enslaved by ${relRefNameLink}`;
+        } else if (relationship.description === 'owner of') {
+          html = `enslaved ${relRefNameLink}`;
+        } else if (relationship.description === 'escaped from') {
+          html = `escaped from ${relRefNameLink}`;
+        } else if (relationship.description === 'sold by') {
+          html = `${toBe_conj} sold by ${relRefNameLink}`;
+        } else {
+          html = undefined;
+        }
+        return html;
+      }).filter(r => r !== undefined);
+
+      let relationshipsHTML;
+
+      if (relationshipsArrayHTML.length) {
+        const lastRel = relationshipsArrayHTML.pop();
+        relationshipsHTML = ' ' + proNounCap + ' ' +
+                            (relationshipsArrayHTML.length 
+                              ? `${relationshipsArrayHTML.join(', ')}, and ` 
+                              : '') +
+                            lastRel + '.';
+      } else {
+        relationshipsHTML = ''
+      }
+      
+      // COMPILE FINAL HTML
 
       const html = `<a  class="details-button float-right" onclick="showDetails(${entry.referent_db_id})"
                         title="Show source document and details for ${entry.all_name}">Details</a>` +
@@ -369,7 +419,9 @@
                    ' who lived' +
                    ` in ${locationDisplay}` +
                    (year ? ` in ${year}` : '') +
-                   '.';
+                   '.' + 
+                   relationshipsHTML;
+
       return html;
     }
 
