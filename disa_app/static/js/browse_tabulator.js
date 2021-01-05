@@ -18,7 +18,8 @@
           ENSLAVED: 'Enslaved',
           ENSLAVER: 'Enslaver',
           DEFAULT: 'Neither or unknown'
-        };
+        },
+        MAX_NUMBER_OF_ENTRIES = 100000;
 
   // Event handlers
 
@@ -505,8 +506,9 @@
       placeholder:'No records match these criteria<br />Try removing filters to broaden your search',
       pagination: 'local',
       paginationSize: 20,
-      paginationSizeSelector:[20,50,100],
+      paginationSizeSelector:[20,50,100,10000],
       columns: columnDefinitions,
+      downloadRowRange: 'active',
       renderComplete: () => {
         console.log('RENDER COMPLETE');
         document.querySelectorAll("*[data-filter-function]").forEach(
@@ -579,7 +581,12 @@
     window.table = table;
 
     document.getElementById('download-data')
-            .addEventListener('click', () => window.table.download('csv', `disa-data-export_${Date.now()}.csv`));
+            .addEventListener('click', () => {
+              const oldPageSize = window.table.getPageSize();
+              window.table.setPageSize(MAX_NUMBER_OF_ENTRIES);
+              window.table.download('csv', `disa-data-export_${Date.now()}.csv`);
+              window.table.setPageSize(oldPageSize);
+            });
 
     // This is called every time a user changes the content of the
     //   general search box
