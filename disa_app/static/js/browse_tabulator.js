@@ -454,7 +454,7 @@
       { title:'Tribe',     field:'all_tribes', sorter:'string',
         headerFilter: 'select',
         headerFilterParams: {
-          values: [ "\"daughter of a Spanish Squaw\"", "Apalachee", "Blanco", "Blanea", "Bocotora",
+          values: [ '"daughter of a Spanish Squaw"', "Apalachee", "Blanco", "Blanea", "Bocotora",
                     "Bousora", "Boustora", "Chaliba", "Cherokee", "Codira", "Cookra", "Creek",
                     "Cuol", "Curero", "Eastern Pequot", "Eastern Tribes", "Mashantucket Pequot",
                     "Mohegan", "Naragansett", "Natchez", "Nidwa", "Nipmuc", "Noleva", "Nome Lackee",
