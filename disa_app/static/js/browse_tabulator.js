@@ -375,7 +375,8 @@
               relRefName = [relRefInfo.related_referent_first_name, relRefInfo.related_referent_last_name]
                             .filter(x => x.length)
                             .join(' '),
-              relRefNameLink = `<a href='#' onclick='showDetails(${relRefInfo.related_referent_db_id})'>${relRefName}</a>`;
+              relRefNameLink = `<a href='#' onclick='showDetails(${relRefInfo.related_referent_db_id})' 
+                                   title='Details about ${relRefName}'>${relRefName}</a>`;
         if (relationship.description === 'enslaved by') {
           html = `${toBe_conj} enslaved by ${relRefNameLink}`;
         } else if (relationship.description === 'owner of') {
