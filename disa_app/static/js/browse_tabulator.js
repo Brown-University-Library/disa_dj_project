@@ -436,6 +436,10 @@
       row.getElement().innerHTML = getPersonEntryHTML(entry);
     };
 
+    const transcriptionDownloadAccessor = function(value) {
+      return value.replace(/(<([^>]+)>)/gi, '');
+    }
+
     const generateDropDownOptions = function(data, selectorFn) {
       const values = data.map(x => selectorFn(x)),
             uniqueValues = Array.from(new Set(values));
@@ -481,7 +485,7 @@
 
       // Some hidden fields just for downloading and general search
 
-      { title:'Source transcription', field:'reference_data.transcription', visible: false, download: true },
+      { title:'Source transcription', field:'reference_data.transcription', visible: false, download: true, accessorDownload:transcriptionDownloadAccessor },
       { title:'Referent_ID', field:'referent_db_id', visible: false, download: true },
       { title:'Vocation', field:'vocation', visible: false, download: true },
       { title:'Age', field:'age', visible: false, download: true },
