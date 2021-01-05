@@ -12,8 +12,23 @@
         VIEW_OPTIONS_RADIO_BUTTONS_ID = 'view-options',
         MIN_TIME_BETWEEN_LUNR_INDEXES = 1000,
         ADULT_CHILD_CUTOFF_AGE = 16,
-        ENSLAVED_ROLES = ['Enslaved','Bought','Sold','Shipped','Arrived','Escaped','Captured','Emancipated'],
-        ENSLAVER_ROLES = ['Owner','Captor','Buyer','Seller','Master'],
+        ENSLAVED_ROLES = [
+          'Enslaved',
+          'Bought',
+          'Sold',
+          'Shipped',
+          'Arrived',
+          'Escaped',
+          'Captured',
+          'Emancipated'
+        ],
+        ENSLAVER_ROLES = [
+          'Owner',
+          'Captor',
+          'Buyer',
+          'Seller',
+          'Master'
+        ],
         ENSLAVEMENT_STATUS = {
           ENSLAVED: 'Enslaved',
           ENSLAVER: 'Enslaver',
