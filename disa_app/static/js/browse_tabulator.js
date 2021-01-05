@@ -385,6 +385,10 @@
           html = `escaped from ${relRefNameLink}`;
         } else if (relationship.description === 'sold by') {
           html = `${toBe_conj} sold by ${relRefNameLink}`;
+        } else if (relationship.description === 'mother of' || relationship.description === 'father of') {
+          html = `had a child, ${relRefNameLink}`;
+        } else if (relationship.description === 'child of') {
+          html = `${toBe_conj} the child of ${relRefNameLink}`;
         } else {
           html = undefined;
         }
