@@ -296,8 +296,6 @@
                   rel.related_referent_info.related_referent_last_name
         ).join('; ');
 
-
-
         return newEntry;
       });
 
@@ -387,10 +385,11 @@
     }
 
     const columnDefinitions = [
+
       { title:'Name',      field:'all_name',          sorter:'string', headerFilter: true }, // mutator: combineNames_mutator },
       { title:'Last name', field:'name_last',         sorter:'string', headerFilter: true, visible: false },
       { title:'Status',    field:'enslavement_status',            sorter:'string', headerFilter: true,
-        headerFilter: 'select', headerFilterParams:{ values: ['Enslaved','Enslaver','Neither'] } },
+        headerFilter: 'select', headerFilterParams:{ values: ['Enslaved','Enslaver','Neither'] }, download: true },
       // { title:'Roles',    field:'roles',              sorter:'string', headerFilter: true },
       { title:'Sex',       field:'sex',   sorter:'string',
         headerFilter: 'select', headerFilterParams:{ values: ['Male','Female', 'Other'] } },
