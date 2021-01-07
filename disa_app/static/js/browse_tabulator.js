@@ -121,6 +121,8 @@
         ['Age', data.age]
       ];
 
+      // Load relationships into details table
+
       data.relationships.forEach(r => {
         detailsTableContent.push([
           r.description.charAt(0).toUpperCase() + r.description.slice(1),
@@ -132,6 +134,8 @@
 
       detailsTableContent.filter(x => x[1])
         .forEach(([label, value]) => detailsModal.addToDetailsTable(label, value));
+
+      // Load document details into a table
 
       const docDetailsTable = [
         ['Item type', data.reference_data.reference_type],
