@@ -79,6 +79,7 @@
         setName: getModalContentSetter('details-title-name', 'Text'),
         setDocTitle: getModalContentSetter('details-doc', 'Text'),
         setTranscription: getModalContentSetter('details-transcription', 'HTML'),
+        setItemImageLink: imgUrl => document.getElementById('item-facsimile').setAttribute('href', imgUrl || ''),
         clearDetailsTable: () => setDetailsTable(''),
         addToDetailsTable: (label, value) => {
           document.getElementById('details-table').innerHTML +=
@@ -100,9 +101,12 @@
       detailsModal.setId(id);
       // detailsModal.transcription(data.comments.replace(/http[^\s]+/,''));
       detailsModal.setTranscription(data.reference_data.transcription);
+      detailsModal.setItemImageLink(data.reference_data.image_url);
       detailsModal.setDocTitle(uncleanString(data.citation_data.display.replace(/http[^\s]+/,'')));
       detailsModal.clearDetailsTable();
       detailsModal.clearDocDetailsTable();
+
+      // Load referent data into details table
 
       const detailsTableContent = [
         ['Location', data.reference_data.all_locations],
