@@ -459,8 +459,15 @@
       row.getElement().innerHTML = getPersonEntryHTML(entry);
     };
 
+    // Clean the cruft (mostly MSOffice markup) out of the transcription
+    //  before download
+
     const transcriptionDownloadAccessor = function(value) {
-      return value.replace(/(<([^>]+)>)/gi, '');
+      const noStyle = value.replace(/<style>.*<\/style>/gis, ''),
+            noMSOfficeGarbage = noStyle.replace(/<([wmo]:\w+)[^>]*>.*?<\/\1[^>]*>/gis, ''),
+            noHTML = noMSOfficeGarbage.replace(/<[^>]+>/g, ''),
+            cleanSpaces = noHTML.replace(/(\s\s+|\n)/gs, ' ');
+      return cleanSpaces;
     }
 
     const generateDropDownOptions = function(data, selectorFn) {
