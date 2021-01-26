@@ -34,6 +34,20 @@ log = logging.getLogger(__name__)
 # ===========================
 
 
+def info( request ):
+    """ Displays temporary home page which will redirect to the public disa page.
+        TODO: implement auto-redirect after a few seconds. """
+    log.debug( '\n\nstarting info()' )
+    context = {
+        'redirect_url': 'https://indigenousslavery.org'
+        }
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/info.html', context )
+    return resp
+
+
 # def browse( request ):  ## TODO: delete this function
 def browse_old( request ):
     """ Displays home page. """
