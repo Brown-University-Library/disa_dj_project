@@ -1,7 +1,22 @@
 
-(function () {
 
-// USER SETTINGS
+let SETTINGS,
+    LOCAL_SETTINGS = {
+      AGE_BY_NUMBER_CHECKBOX_ID: 'formInputSpecifiedByNumber',
+      AGE_BY_NUMBER_DISPLAY_CSS_CLASS: 'age-as-number'
+    };
+
+
+// BIRKIN'S CODE
+
+
+
+
+
+
+// PATRICK'S CODE
+
+
 
 // MARKUP IDs
 
@@ -178,24 +193,39 @@ console.log('HELOO HE::P', elem.document_type);
     // MORE TO COME ...
   }
 
-  // On load ...
+  // Set on load ...
 
-  document.addEventListener('DOMContentLoaded', () => {
+  function main(SERVER_SETTINGS) {
 
-    // Initialize the form fields with data from the DB
+    SETTINGS = Object.assign({}, LOCAL_SETTINGS, SERVER_SETTINGS);
 
-    initFormFields(citation_data);
+    document.addEventListener('DOMContentLoaded', () => {
 
-    // Add listener for citation type dropdown selector
+      const ageByNumberCheckbox = document.getElementById(SETTINGS.AGE_BY_NUMBER_CHECKBOX_ID);
+  
+      if (ageByNumberCheckbox) {
+        ageByNumberCheckbox.onchange = function(e) {
+          const classOp = this.checked ? 'add' : 'remove';
+          document.body.classList[classOp](SETTINGS.AGE_BY_NUMBER_DISPLAY_CSS_CLASS);
+        };
+      }
+  
+      // Initialize the form fields with data from the DB
+  
+      initFormFields(SERVER_SETTINGS.citation_data);
+  
+      // Add listener for citation type dropdown selector
+  
+      const updateCitationFieldVisibility = getCitationFieldUpdateCallback();
+      elem.document_type.addEventListener(
+        'change', updateCitationFieldVisibility
+      );
+  
+      // Initialize display based on current citation type selection
+      // TEMPORARY WORKAROUND - wait for Birkin's code to run
+  
+      window.setTimeout(updateCitationFieldVisibility, 500);
+    });  
+  }
 
-    const updateCitationFieldVisibility = getCitationFieldUpdateCallback();
-    elem.document_type.addEventListener(
-      'change', updateCitationFieldVisibility
-    );
-
-    // Initialize display based on current citation type selection
-    // TEMPORARY WORKAROUND - wait for Birkin's code to run
-
-    window.setTimeout(updateCitationFieldVisibility, 500);
-  });
-})();
+  export { main };

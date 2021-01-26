@@ -1,14 +1,32 @@
 {% extends "disa_app_templates/redesign_base.html" %}
 
-
 {% block header_other %}
 
-<script src="/static/js/redesign_citation.js" defer></script>
-<script type="text/javascript">
-  const citation_data = JSON.parse(
-    '{{ citation_json | safe }}'
-  );
+<script type="module">
+
+  import {main} from '/static/js/redesign_citation.js';
+
+  const SERVER_SETTINGS = {
+    citation_data: JSON.parse(
+    `{{ citation_json | safe }}`
+    ),
+    doc_id: '{{ doc.id }}',
+    cite_type_fields: JSON.parse(
+      `{{ ct_fields_json | safe }}`
+    ),
+    docDataApi: {
+      copy: "{% url 'data_documents_url' 'copy' %}",
+      docId: "{% url 'data_documents_url' 'STUB' %}",
+      noDocId: "{% url 'data_documents_url' %}"
+    },
+    doc_data_api_root: "{% url 'data_documents_url' %}",
+    documents_url: "{% url 'editor_index_url' %}"
+  };
+
+  main(SERVER_SETTINGS);
+
 </script>
+
 {% endblock header_other %}
 
 
@@ -1030,7 +1048,10 @@
       });
       console.log("ajax call done");
     }
-    $(document).ready(function () {
+
+    // MAIN
+
+    const main = function(SERVER_SETTINGS) {
       var doc_id = getDocumentId();
       console.log("in document.ready(); doc_id, ", doc_id);
       //
@@ -1092,7 +1113,9 @@
         window.location.replace(documents_url);
       });
       {% endif %}
-    });  // end of `$( document ).ready(function() {`
+    }
+
+    $(document).ready(main);
 
 
 </script>
