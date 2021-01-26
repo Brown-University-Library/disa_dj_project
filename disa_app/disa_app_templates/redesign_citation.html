@@ -944,13 +944,14 @@
         initializeForm(data, ctMap);
       });
     }
+
     var updateDocumentData = function (docId, ctMap) {
-      {# var doc_data_api = "{% url 'update_citation_data' None %}" + docId; #}
+      let doc_data_api;
       if (docId) {
-        var doc_data_api = "{% url 'data_documents_url' 'STUB' %}".replace("STUB", docId);
+        doc_data_api = "{% url 'data_documents_url' 'STUB' %}".replace("STUB", docId);
         console.log('in updateDocumentData; doc_data_api with `docId`, ', doc_data_api);
       } else {
-        var doc_data_api = "{% url 'data_documents_url' %}";
+        doc_data_api = "{% url 'data_documents_url' %}";
         console.log('in updateDocumentData; doc_data_api with NO `docId`, ', doc_data_api);
       }
       var data = collectInputValues();
