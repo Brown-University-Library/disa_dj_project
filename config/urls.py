@@ -13,13 +13,12 @@ urlpatterns = [
 
     ## primary app urls...
 
+    url( r'^info/$', views.info, name='info_url' ),
+
     url( r'^login/$', views.login, name='login_url' ),
     url( r'^logout/$', views.logout, name='logout_url' ),
     url( r'^shib_login/$', views.handle_shib_login, name='shib_login_url' ),
     url( r'^user_pass_handler/$', views.user_pass_handler, name='user_pass_handler_url' ),
-
-    # url( r'^browse/$', views.browse, name='browse_url' ),
-    # url( r'^browse_tabulator/$', views.browse_tabulator, name='browse_url_tabulator' ),
 
     url( r'^browse/$', views.browse_tabulator, name='browse_url' ),
     url( r'^browse_old/$', views.browse_old, name='browse_old_url' ),
@@ -43,9 +42,6 @@ urlpatterns = [
     url( r'^source/(?P<src_id>.*)/$', views.source, name='source_url' ),
 
     url( r'^search_results/$', views.search_results, name='search_results_url' ),
-
-
-    ## redesign work not in tabulator-merge
 
 
     ## apis...
@@ -86,8 +82,8 @@ urlpatterns = [
     url( r'^version/$', views.version, name='version_url' ),
     url( r'^error_check/$', views.error_check, name='error_check_url' ),
 
-    url( r'^$', RedirectView.as_view(pattern_name='browse_url') ),
-    # url( r'^$', views.temp_response, name='temp_name_url' ),
+    # url( r'^$', RedirectView.as_view(pattern_name='browse_url') ),
+    url( r'^$', RedirectView.as_view(pattern_name='info_url') ),
 
     ]
 
