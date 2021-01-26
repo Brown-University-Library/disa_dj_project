@@ -819,11 +819,11 @@
 <script type="text/javascript">
 
     var getDocumentId = function () {
-      {# var doc_id = "{{ doc.id or '' }}"; #}
       var doc_id = "{{ doc.id }}";
       console.log("in getDocumentId; doc_id, ", doc_id);
       return doc_id;
     }
+
     var makeCitationFieldInput = function (fieldData) {
       var $input, $row, $label;
       $row = $('<li/>', {
@@ -841,6 +841,7 @@
       $row.append($input);
       return $row;
     }
+
     var updateCitationFields = function (citeData, citeType, ctMap) {
       var ct_fields = ctMap[citeType];
       $fg = $('#citation_fields');
@@ -856,6 +857,7 @@
         $fg.append(makeCitationFieldInput(field_data));
       }
     }
+
     var collectCitationFieldData = function (dataObj) {
       var cite_fields = $('.citation-field');
       dataObj['fields'] = {};
@@ -865,6 +867,7 @@
       })
       return dataObj
     }
+
     var setInputValues = function (docData) {
       if ($.isEmptyObject(docData)) {
         return;
@@ -875,6 +878,7 @@
       $('#comments').text(docData['comments']);
       $('#acknowledgements').text(docData['acknowledgements']);
     }
+
     var collectInputValues = function () {
       var data = {};
       // data['zotero_id'] = $('#zotero').val();
@@ -884,6 +888,7 @@
       data = collectCitationFieldData(data);
       return data;
     }
+
     var addTypeOptions = function (opts) {
       var dtype_select = $('#document_type');
       // dtype_select.empty();
@@ -897,6 +902,9 @@
       }
       dtype_select.val(null);
     }
+
+    // BELOW @todo - may want to move this message to a <template> element
+
     var setFormHeader = function (docData) {
       var header = $('#document_header');
       console.log("in setFormHeader; header, ", header);
@@ -916,6 +924,7 @@
         header.text(docData['citation']);
       }
     }
+
     var initializeForm = function (data, ctMap) {
       console.log("starting initializeForm()");
       setFormHeader(data['doc']);
@@ -926,6 +935,7 @@
           data['doc']['fields'], data['doc']['citation_type_id'], ctMap);
       }
     }
+
     var readDocumentData = function (docId, ctMap, copy) {
       console.log("starting readDocumentData()");
       if (copy) {
@@ -971,6 +981,7 @@
         }
       });
     }
+
     var activateReferenceDelete = function ($delBtn) {
       var $cancel_btn = $('<button/>', {
         'class': 'btn btn-secondary deactivate-delete',
