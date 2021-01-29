@@ -136,6 +136,11 @@ function readDocumentData(docId, ctMap, copy) {
   });
 }
 
+// FORM SAVING FUNCTIONS
+
+// Main save function
+// Called when #doc-update is clicked
+
 function updateDocumentData(docId, ctMap) {
   let doc_data_api;
   if (docId) {
@@ -296,6 +301,8 @@ function steve_main() {
 // PATRICK'S CODE
 
 // MARKUP IDs
+// FORM INITIALIZATION
+
 // Initialize citation type dropdown
 
 function initializeCitationTypeDropdown(SETTINGS) {
@@ -345,6 +352,7 @@ function getCitationFieldUpdateCallback() {
 
     citationFields.forEach((citationField) => {
       const citationFieldId = citationField.id;
+
       if (fieldStatus.required.includes(citationFieldId)) {
         requiredFieldsContainer.appendChild(citationField);
       } else if (fieldStatus.optional.includes(citationFieldId)) {
@@ -377,7 +385,7 @@ function initFormFields(citationData) {
   // MORE TO COME ...
 }
 
-// Set on load ...
+// FORM SUBMISSION
 
 function main(SERVER_SETTINGS) {
   SETTINGS = Object.assign({}, LOCAL_SETTINGS, SERVER_SETTINGS);
