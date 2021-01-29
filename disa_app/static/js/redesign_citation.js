@@ -73,20 +73,6 @@ function collectInputValues() {
   return data;
 }
 
-function addTypeOptions(opts) {
-  const dtype_select = $("#document_type");
-  // dtype_select.empty();
-  for (let i = 0; i < opts.length; i++) {
-    const opt = opts[i],
-      opt_elem = $("<option/>", {
-        value: opt.id,
-        text: opt.name,
-      });
-    dtype_select.append(opt_elem);
-  }
-  dtype_select.val(null);
-}
-
 // BELOW @todo - may want to move this message to
 //   a <template> element
 
@@ -310,6 +296,11 @@ function steve_main() {
 // PATRICK'S CODE
 
 // MARKUP IDs
+// Initialize citation type dropdown
+
+function initializeCitationTypeDropdown(SETTINGS) {
+  
+  const docTypeDropdownElem = document.getElementById(SETTINGS.DOC_TYPE_ELEM_ID);
 
 const elem = ["tabs_bibinfoanditems", "document_type"].reduce(
   (elemsById, id) => {
@@ -318,6 +309,16 @@ const elem = ["tabs_bibinfoanditems", "document_type"].reduce(
   },
   {}
 );
+  if (docTypeDropdownElem) {
+    for (const [name, index] of Object.entries(SETTINGS.DOC_TYPES)) {
+      const dropDownItem = document.createElement('option');
+      dropDownItem.value = index;
+      dropDownItem.text = name;
+      dropDownItem.selected = index === SETTINGS.citation_data.citation_type_id;
+      docTypeDropdownElem.append(dropDownItem);
+    }
+  }
+}
 
 // Get callback for when the citation type dropdown changes
 
