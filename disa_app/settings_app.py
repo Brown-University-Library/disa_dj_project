@@ -31,4 +31,4 @@ LOGIN_PROBLEM_EMAIL = os.environ['DISA_DJ__LOGIN_PROBLEM_EMAIL']
 
 ## basic-auth
 
-BASIC_AUTH_LIST = json.loads( os.environ['DISA_DJ__BASIC_AUTH_USERPASS_JSON'] )
+BROWSE_USERPASS_LIST = json.loads( os.environ['DISA_DJ__BROWSE_USERPASS_JSON'] )
