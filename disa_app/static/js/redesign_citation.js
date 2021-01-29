@@ -238,9 +238,9 @@ function deleteDocument(doc_id) {
   console.log("ajax call done");
 }
 
-// BIRKIN'S MAIN
+// STEVE'S MAIN
 
-function birkin_main() {
+function steve_main() {
   const doc_id = SETTINGS.doc_id;
   console.log("in document.ready(); doc_id, ", doc_id);
   const cite_type_fields = SETTINGS.cite_type_fields;
