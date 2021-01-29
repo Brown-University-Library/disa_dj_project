@@ -93,7 +93,7 @@
       <!-- These are citation fields that are unused by the current citation type -->
       <div id="hidden-fields" hidden></div>
 
-      <form>
+      <form id="citation-form">
         <span class="badge badge-primary float-right"
           title="Unique identifier for this citation">
           ID {{ doc.id }}
@@ -151,7 +151,7 @@
       <label for="accessDate-value"
         style="padding-left:15%;">Access Date</label>
       <input id="accessDate-value" name="accessDate-value"
-        placeholder="Access Date" />
+        type="date" placeholder="Access Date" />
     </div>
     <div class="citation-field form-group text-dark"
       id="archive">
@@ -190,8 +190,65 @@
       <label for="date-value"
         style="padding-left:15%;">Date</label>
       <!-- <input id="date-value" name="date-value" placeholder="Date" /> -->
+      <label for="date-year-value">Year 
+        <input id="date-year-value" name="date-year-value" type="number" />
+      </label>
+      <label for="date-month-value">Month
+        <select id="date-month-value" name="date-month-value">
+          <option value="0">Not specified</option>
+          <option value="1">January</option>
+          <option value="2">February</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">August</option>
+          <option value="9">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+      </label>
+      <label for="date-day-value">Day
+        <select id="date-day-value" name="date-day-value">
+          <option	value="0">	Not specified	</option>
+          <option	value="1">	1	</option>
+          <option	value="2">	2	</option>
+          <option	value="3">	3	</option>
+          <option	value="4">	4	</option>
+          <option	value="5">	5	</option>
+          <option	value="6">	6	</option>
+          <option	value="7">	7	</option>
+          <option	value="8">	8	</option>
+          <option	value="9">	9	</option>
+          <option	value="10">	10	</option>
+          <option	value="11">	11	</option>
+          <option	value="12">	12	</option>
+          <option	value="13">	13	</option>
+          <option	value="14">	14	</option>
+          <option	value="15">	15	</option>
+          <option	value="16">	16	</option>
+          <option	value="17">	17	</option>
+          <option	value="18">	18	</option>
+          <option	value="19">	19	</option>
+          <option	value="20">	20	</option>
+          <option	value="21">	21	</option>
+          <option	value="22">	22	</option>
+          <option	value="23">	23	</option>
+          <option	value="24">	24	</option>
+          <option	value="25">	25	</option>
+          <option	value="26">	26	</option>
+          <option	value="27">	27	</option>
+          <option	value="28">	28	</option>
+          <option	value="29">	29	</option>
+          <option	value="30">	30	</option>
+          <option	value="31">	31	</option>
+        </select>
+      </label>
+      <!--
       <input id="date-value" name="date-value"
-        placeholder="Date" value="" />
+        placeholder="Date" value="" />-->
     </div>
     <div class="citation-field form-group text-dark"
       id="edition">
@@ -225,6 +282,7 @@
       id="language">
       <label for="language-value"
         style="padding-left:15%;">Language</label>
+        <!-- DROPDOWN? -->
       <input id="language-value" name="language-value"
         placeholder="Language" />
     </div>
@@ -261,6 +319,7 @@
     </div>
     <div class="citation-field form-group text-dark"
       id="rights">
+      <!-- DROPDOWN? -->
       <label for="rights-value"
         style="padding-left:15%;">Rights</label>
       <input id="rights-value" name="rights-value"
@@ -306,7 +365,7 @@
       <label for="url-value"
         style="padding-left:15%;">URL</label>
       <input id="url-value" name="url-value"
-        placeholder="https://..." />
+        type="url" placeholder="https://..." />
     </div>
   </div>  <!-- end <div id="optional-fields"> -->
    <!--
@@ -363,9 +422,12 @@
   </div>
   <p>&nbsp;</p>
   <p>&nbsp;</p>
-  <button type="button" class="btn btn-primary btn-md"
-    style="font-weight: bold;">SAVE AND CONTINUE TO ENTER
-    ITEMS</button>
+    
+  <button type="button" 
+    class="btn btn-primary btn-md"
+    id="citation-form-submit">
+    SAVE AND CONTINUE TO ENTER ITEMS
+  </button>
   </form>
   </div> <!-- /.tab-pane for bibinfo -->
   <div class="tab-pane" role="tabpanel"
