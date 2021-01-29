@@ -384,6 +384,46 @@ function initFormFields(citationData) {
 
 function main(SERVER_SETTINGS) {
   SETTINGS = Object.assign({}, LOCAL_SETTINGS, SERVER_SETTINGS);
+// postData() from https://tinyurl.com/kd39rkq
+
+async function postData(url = '', data = {}) {
+  const response = await fetch(url, {
+    method: 'POST',
+    mode: 'same-origin', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: { 'Content-Type': 'application/json' },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
+  });
+  return response.json(); // parses JSON response into native JavaScript objects
+}
+
+function onCitationFormSubmit() {
+
+  const CITATION_API_URL = 'http://example.com', // Should be a setting
+        formFields = Array.from(
+          document.querySelectorAll(`#citation-form *[id$='-value']`)
+        );
+  
+  const citationData = formFields.reduce((citDataElem, currCitDataElem) => {
+    const citDataFieldName = currCitDataElem.id.replace('-value', ''),
+          citDataFieldValue = currCitDataElem.value;
+    citDataElem[citDataFieldName] = citDataFieldValue;
+    return citDataElem;
+  }, {});
+
+  console.log('SUBMITTING CITATION DATA', citationData);
+
+  /* AWAITING IMPLEMENTATION
+  postData(CITATION_API_URL, citationData)
+  .then(data => {
+    console.log(data);
+  }); */
+
+  return false;
+}
 
   document.addEventListener("DOMContentLoaded", () => {
     birkin_main();
