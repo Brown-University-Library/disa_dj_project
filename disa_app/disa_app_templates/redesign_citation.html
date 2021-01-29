@@ -5,11 +5,22 @@
 <script type="module">
 
   import {main} from '/static/js/redesign_citation.js';
+  import {LOCAL_SETTINGS} from '/static/js/redesign_settings.js';
+
+  function preprocessCitationData(data) {
+    // THIS IS A TEMP KLUDGE -- server should break this out
+    const date = new Date(data.citation_type_fields.date);
+    data.citation_type_fields['date-day'] = date.getDate();
+    data.citation_type_fields['date-month'] = date.getMonth() + 1;
+    data.citation_type_fields['date-year'] = date.getFullYear();
+    delete data.citation_type_fields.date;
+    return data;
+  }
 
   const SERVER_SETTINGS = {
-    citation_data: JSON.parse(
+    citation_data: preprocessCitationData(JSON.parse(
     `{{ citation_json | safe }}`
-    ),
+    )),
     doc_id: '{{ doc.id }}',
     cite_type_fields: JSON.parse(
       `{{ ct_fields_json | safe }}`
@@ -22,10 +33,23 @@
     },
     ref_del_api: "{% url 'data_reference_url' 'STUB' %}",
     documents_url: "{% url 'editor_index_url' %}",
-    can_delete_doc: {% if can_delete_doc %}true{% else %}false{% endif %}
+    can_delete_doc: {% if can_delete_doc %}true{% else %}false{% endif %},
+    DOC_TYPES: { // hard coded for now
+      'Book': 20,
+      'Book Section': 21,
+      'Document': 26,
+      'Interview': 33,
+      'Journal Article': 34,
+      'Magazine Article': 36,
+      'Manuscript': 37,
+      'Newspaper Article': 39,
+      'Thesis': 46,
+      'Webpage': 49
+    }
   };
 
-  main(SERVER_SETTINGS);
+  const SETTINGS = Object.assign({}, LOCAL_SETTINGS, SERVER_SETTINGS);
+  main(SETTINGS);
 
 </script>
 
