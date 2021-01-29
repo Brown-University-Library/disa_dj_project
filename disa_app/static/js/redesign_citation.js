@@ -382,8 +382,6 @@ function initFormFields(citationData) {
 
 // FORM SUBMISSION
 
-function main(SERVER_SETTINGS) {
-  SETTINGS = Object.assign({}, LOCAL_SETTINGS, SERVER_SETTINGS);
 // postData() from https://tinyurl.com/kd39rkq
 
 async function postData(url = '', data = {}) {
@@ -425,8 +423,13 @@ function onCitationFormSubmit() {
   return false;
 }
 
+// MAIN
+
+function main(S) {
+  
+  SETTINGS = S;
+
   document.addEventListener("DOMContentLoaded", () => {
-    birkin_main();
 
     const ageByNumberCheckbox = document.getElementById(
       SETTINGS.AGE_BY_NUMBER_CHECKBOX_ID
@@ -443,7 +446,8 @@ function onCitationFormSubmit() {
 
     // Initialize the form fields with data from the DB
 
-    initFormFields(SERVER_SETTINGS.citation_data);
+    initializeCitationTypeDropdown(SETTINGS);
+    initFormFields(SETTINGS.citation_data);
 
     // Add listener for citation type dropdown selector
 
@@ -453,10 +457,12 @@ function onCitationFormSubmit() {
       updateCitationFieldVisibility
     );
 
-    // Initialize display based on current citation type selection
-    // TEMPORARY WORKAROUND - wait for Birkin's code to run
+    updateCitationFieldVisibility();
 
-    window.setTimeout(updateCitationFieldVisibility, 500);
+    // Handlers for form submission
+    document.getElementById('citation-form-submit')
+            .addEventListener('click', onCitationFormSubmit);
+
   });
 }
 
