@@ -300,7 +300,6 @@ function steve_main() {
 
 // PATRICK'S CODE
 
-// MARKUP IDs
 // FORM INITIALIZATION
 
 // Initialize citation type dropdown
@@ -309,13 +308,6 @@ function initializeCitationTypeDropdown(SETTINGS) {
   
   const docTypeDropdownElem = document.getElementById(SETTINGS.DOC_TYPE_ELEM_ID);
 
-const elem = ["tabs_bibinfoanditems", "document_type"].reduce(
-  (elemsById, id) => {
-    elemsById[id] = document.getElementById(id);
-    return elemsById;
-  },
-  {}
-);
   if (docTypeDropdownElem) {
     for (const [name, index] of Object.entries(SETTINGS.DOC_TYPES)) {
       const dropDownItem = document.createElement('option');
@@ -337,7 +329,7 @@ function getCitationFieldUpdateCallback() {
     optionalFieldsContainer = document.getElementById("optional-fields"),
     optionalFieldsHeader = document.getElementById("optional-fields-header"),
     hiddenFieldsContainer = document.getElementById("hidden-fields"),
-    citationTypeSelector = elem.document_type, // document.getElementById('document_type'),
+    citationTypeSelector = document.getElementById('document_type'),
     citationFields = Array.from(
       document.getElementsByClassName("citation-field")
     );
@@ -413,7 +405,7 @@ function main(SERVER_SETTINGS) {
     // Add listener for citation type dropdown selector
 
     const updateCitationFieldVisibility = getCitationFieldUpdateCallback();
-    elem.document_type.addEventListener(
+    document.getElementById('document_type').addEventListener(
       "change",
       updateCitationFieldVisibility
     );
