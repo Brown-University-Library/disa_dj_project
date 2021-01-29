@@ -362,11 +362,14 @@ function getCitationFieldUpdateCallback() {
 }
 
 // Initialize form fields with DB values
+// Note that form IDs must match data object property
+//  names (e.g. for property 'abc', the input field would be
+//  'abc-value')
 
 function initFormFields(citationData) {
   // Citation bib fields
   Object.keys(citationData.citation_type_fields).forEach(
-    (fieldId) =>
+    (fieldId) => 
       (document.getElementById(`${fieldId}-value`).value =
         citationData.citation_type_fields[fieldId])
   );
