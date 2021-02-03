@@ -614,11 +614,19 @@ var initializeForm = function (data, tags, editUrl) {
     console.log( "in initializeForm(); editUrl: ", editUrl );
     setFormHeader(data['rec']);
     setInputValues(data['rec']);
-    for (var i=0; i < data['entrants'].length; i++ ) {
+
+    // Populate entrants table
+
+    if (data['entrants'].length > 0) {
+      document.getElementById('entrants-table').hidden = false;
+      for (var i=0; i < data['entrants'].length; i++ ) {
         console.log( "in initializeForm(); about to call addEntrantInput() with data: ", data['entrants'][i] );
         addEntrantInput(
-            $('#entrants'), data['entrants'][i], tags );
+          $('#entrants'), data['entrants'][i], tags 
+        );
+      }
     }
+
     initiateEntrantWorkflow( $('#entrant_component'), editUrl );
 }
 
