@@ -378,6 +378,14 @@
         -->
         {% endcomment %}
         <table class="table">
+
+        <div id="new_person_button" class="d-flex flex-row"
+              style="margin: 1em 0">
+            <button class="btn btn-primary" id="add-person">Add an individual</button>&nbsp;&nbsp;
+            <button class="btn btn-primary add-group-selector" id="add-group">Add a group</button>&nbsp;&nbsp;
+            {% comment %}<a class="btn btn-primary" href="{{ url_for('edit_relationships', recId=rec.id)}}">Identify connections between people</a>{% endcomment %}
+            <a class="btn btn-primary" href="{% url 'edit_relationships_url' rec_id %}">Identify connections between people</a>
+        </div>
             <thead>
                 <tr>
                   <th scope="col">ID</th>
@@ -390,11 +398,6 @@
             <tbody id="entrants">
             </tbody>
         </table>
-        <div id="new_person_button" class="d-flex flex-row-reverse">
-            <button class="btn btn-primary" id="add-person">Add a person</button>&nbsp;&nbsp;
-            {% comment %}<a class="btn btn-primary" href="{{ url_for('edit_relationships', recId=rec.id)}}">Identify connections between people</a>{% endcomment %}
-            <a class="btn btn-primary" href="{% url 'edit_relationships_url' rec_id %}">Identify connections between people</a>
-        </div>
     </div>
     {% endif %}
 </div>
