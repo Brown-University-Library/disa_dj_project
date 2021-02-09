@@ -19,19 +19,24 @@ TestCase.maxDiff = 1000
 class Client_Misc_Test( TestCase ):
     """ Checks miscellaneous url responses. """
 
+    def test_browse_url(self):
+        """ Checks '/browse/'. """
+        response = self.client.get( '/browse/' )  # project root part of url is assumed
+        self.assertEqual( 401, response.status_code )  # unauthorized
+
     def test_root_url_no_slash(self):
         """ Checks '/root_url' (with no slash). """
         response = self.client.get( '' )  # project root part of url is assumed
         self.assertEqual( 302, response.status_code )  # permanent redirect
         redirect_url = response._headers['location'][1]
-        self.assertEqual(  '/browse/', redirect_url )
+        self.assertEqual(  '/info/', redirect_url )
 
     def test_root_url_slash(self):
         """ Checks '/root_url/' (with slash). """
         response = self.client.get( '/' )  # project root part of url is assumed
         self.assertEqual( 302, response.status_code )  # permanent redirect
         redirect_url = response._headers['location'][1]
-        self.assertEqual(  '/browse/', redirect_url )
+        self.assertEqual(  '/info/', redirect_url )
 
     @override_settings(DEBUG=True)
     def test_error_url_on_dev(self):
