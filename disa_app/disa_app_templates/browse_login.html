@@ -2,102 +2,118 @@
 {% load staticfiles %}
 
 
-{% block header_other %}
-
 <!-- Patrick, I (bjd) based this on the `browse_tabulator.html` template,
      & stripped out what didn't seem to be needed.  -->
 
-<link rel="shortcut icon" type="image/ico" href="favicon.ico" />
 
-<!-- {# <link rel="stylesheet" href="{% static 'css/browse_tabulator.css' %}" /> #} -->
+{# in <head> #}
 
-<!-- Bootstrap -->
 
-<link   rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-        crossorigin="anonymous" />
+{% block header_other %}
 
-<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
- -->
+    <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
 
-<!--
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
- -->
+    <!-- {# <link rel="stylesheet" href="{% static 'css/browse_tabulator.css' %}" /> #} -->
 
-<!--
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
- -->
+    <!-- Bootstrap -->
 
-<!-- Tabulator library -->
+    <link   rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+            crossorigin="anonymous" />
 
-<!-- Lunr -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+     -->
 
-<!-- form css -->
-<style type="text/css">
-    h1 {
-        margin-top: .6em;
-        /*margin-bottom: .5em;*/
-        font-family: 'Source Sans Pro', sans-serif;
-        font-size: 3em;
-    }
+    <!--
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+     -->
 
-    div#two_boxes {
-        display: flex;
-    }
+    <!--
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+     -->
 
-    h2 {
-        margin-top: .6em;
-        /*margin-bottom: .5em;*/
-        font-family: 'Source Sans Pro', sans-serif;
-        font-size: 2em;
-    }
+    <!-- Tabulator library -->
 
-    form#non_shib_form {
-        padding-left: 1em;
-    }
-    p#username_field_label {
-        margin-top: 2em;
-        margin-bottom: .25em;
-    }
-    input#username_field_input {
-        margin-bottom: 1em;
-    }
-    p#password_field_label {
-        margin-bottom: .25em;
-    }
-    input#password_field_input {
-        margin-bottom: 2em;
-    }
+    <!-- Lunr -->
 
-</style>
+    <!-- form css -->
+    <style type="text/css">
+        h1 {
+            margin-top: .6em;
+            /*margin-bottom: .5em;*/
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 3em;
+        }
+
+        div#two_boxes {
+            display: flex;
+        }
+
+        h2 {
+            margin-top: .6em;
+            /*margin-bottom: .5em;*/
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 2em;
+        }
+
+        form#non_shib_form {
+            padding-left: 1em;
+        }
+        p#username_field_label {
+            margin-top: 2em;
+            margin-bottom: .25em;
+        }
+        input#username_field_input {
+            margin-bottom: 1em;
+        }
+        p#password_field_label {
+            margin-bottom: .25em;
+        }
+        input#password_field_input {
+            margin-bottom: 2em;
+        }
+
+    </style>
 
 {% endblock header_other %}
 
 
+{# in <body> #}
+
+
+{% block header_options %}
+
+    {% comment %}  {# TODO: delete this block -- no need for this block -- the only option is browse-logout, and that's in browse_tabulator.html #}
+    {% if browse_logged_in %}
+    <li class="nav-item">
+        <a class="nav-link text-white" href="{% url 'browse_logout_url' %}">browse-logout</a>
+    </li>
+    {% endif %}
+    {% endcomment %}
+
+{% endblock header_options %}
+
+
 {% block content %}
 
-<form id="non_shib_form" action={{ browse_url }} method="POST">{% csrf_token %}
-    <h1>Welcome community-partner!</h1>
-    <h2>please login with your username and password</h2>
-    <p id="username_field_label">username:</p>
-    <input id="username_field_input" type="text" name="manual_login_username" value="{{ manual_login_username }}">
-    <p id="password_field_label">password:</p>
-    <input id="password_field_input" type="password" name="manual_login_password" value="{{ manual_login_password }}">
-    {% if browse_login_error %}
-    <p class="login_error">Problem: based on your login, it appears you're not authorized to use this requesting service.</p>
-    <p class="login_error">If you believe you should be able to login to this system, please contact {{ LOGIN_PROBLEM_EMAIL|urlize }} for assistance.</p>
-    {% endif %}
-    <br /><input id="manual_login_button" type="submit" value="Log in">
-</form>
+    <form id="non_shib_form" action="{{ browse_url }}" method="POST">{% csrf_token %}
+        <h1>Welcome community-partner!</h1>
+        <h2>please login with your username and password</h2>
+        <p id="username_field_label">username:</p>
+        <input id="username_field_input" type="text" name="manual_login_username" value="{{ manual_login_username }}">
+        <p id="password_field_label">password:</p>
+        <input id="password_field_input" type="password" name="manual_login_password" value="{{ manual_login_password }}">
+        {% if browse_login_error %}
+        <p class="login_error">Problem: based on your login, it appears you're not authorized to use this requesting service.</p>
+        <p class="login_error">If you believe you should be able to login to this system, please contact {{ LOGIN_PROBLEM_EMAIL|urlize }} for assistance.</p>
+        {% endif %}
+        <br /><input id="manual_login_button" type="submit" value="Log in">
+    </form>
 
 {% endblock content %}
-
-
-{% block scripts%}
-{% endblock scripts %}
