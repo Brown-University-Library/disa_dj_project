@@ -11,6 +11,7 @@ from disa_app.lib import user_pass_auth
 from disa_app.lib import utility_manager
 from disa_app.lib import v_data_document_manager  # api/documents
 from disa_app.lib import v_data_relationships_manager  # api/relationship-by-reference
+from disa_app.lib import view_browse_manager
 from disa_app.lib import view_data_entrant_manager  # api/people
 from disa_app.lib import view_data_records_manager  # api/items
 from disa_app.lib import view_edit_record_manager
@@ -49,20 +50,23 @@ def info( request ):
     return resp
 
 
-# def browse_old( request ):
-#     """ Displays home page. """
-#     log.debug( '\n\nstarting old browse()' )
-#     context = {
-#         'denormalized_json_url': reverse('dnrmlzd_jsn_prx_url_url'),
-#         'info_image_url': f'{project_settings.STATIC_URL}images/info.png',
-#         'logout_next': reverse( 'browse_url' ) }
-#     if request.user.is_authenticated:
-#         context['user_is_authenticated'] = True
-#         context['user_first_name'] = request.user.first_name
-#     if request.GET.get('format', '') == 'json':
-#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+# def browse_tabulator( request ):
+#     """ Displays tabulator page. """
+#     log.debug( '\n\nstarting browse_tabulator()' )
+#     log.debug( f'request.__dict__, ``{request.__dict__}``' )
+#     basic_auth_helper = basic_auth.BasicAuthHelper()
+#     basic_auth_ok = basic_auth_helper.check_basic_auth( request )
+#     log.debug( f'basic_auth_ok, ``{basic_auth_ok}``' )
+#     if basic_auth_ok:
+#         context = {
+#             'browse_json_url': reverse( 'browse_json_proxy_url' ),
+#             'info_image_url': f'{project_settings.STATIC_URL}images/info.png', }
+#         if request.GET.get('format', '') == 'json':
+#             resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#         else:
+#             resp = render( request, 'disa_app_templates/browse_tabulator.html', context )
 #     else:
-#         resp = render( request, 'disa_app_templates/browse.html', context )
+#         resp = basic_auth_helper.display_prompt()
 #     return resp
 
 
@@ -70,37 +74,23 @@ def browse_tabulator( request ):
     """ Displays tabulator page. """
     log.debug( '\n\nstarting browse_tabulator()' )
     log.debug( f'request.__dict__, ``{request.__dict__}``' )
-    basic_auth_helper = basic_auth.BasicAuthHelper()
-    basic_auth_ok = basic_auth_helper.check_basic_auth( request )
-    log.debug( f'basic_auth_ok, ``{basic_auth_ok}``' )
-    if basic_auth_ok:
+    request.session['foo'] = 'bar'
+    is_browse_logged_in = view_browse_manager.check_browse_logged_in( request.session.items(), bool(request.user.is_authenticated) )
+    assert type( is_browse_logged_in ) == bool
+    if is_browse_logged_in:
         context = {
             'browse_json_url': reverse( 'browse_json_proxy_url' ),
-            'info_image_url': f'{project_settings.STATIC_URL}images/info.png', }
+            'info_image_url': f'{project_settings.STATIC_URL}images/info.png',
+            'browse_login': True
+            }
         if request.GET.get('format', '') == 'json':
             resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         else:
             resp = render( request, 'disa_app_templates/browse_tabulator.html', context )
     else:
-        resp = basic_auth_helper.display_prompt()
+        context = { 'browse_login': False }
+        resp = render( request, 'disa_app_templates/browse_login.html', context )
     return resp
-
-
-# def browse_tabulator( request ):
-#     """ Displays tabulator page. """
-#     log.debug( '\n\nstarting browse()' )
-#     context = {
-#         'browse_json_url': reverse( 'browse_json_proxy_url' ),
-#         'info_image_url': f'{project_settings.STATIC_URL}images/info.png',
-#         'logout_next': reverse( 'browse_url' ) }
-#     if request.user.is_authenticated:
-#         context['user_is_authenticated'] = True
-#         context['user_first_name'] = request.user.first_name
-#     if request.GET.get('format', '') == 'json':
-#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     else:
-#         resp = render( request, 'disa_app_templates/browse_tabulator.html', context )
-#     return resp
 
 
 def people( request ):
