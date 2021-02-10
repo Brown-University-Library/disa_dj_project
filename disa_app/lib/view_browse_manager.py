@@ -90,6 +90,7 @@ def prepare_non_logged_in_get_context( errant_submitted_username, errant_submitt
     assert type( errant_submitted_username ) == str
     assert type( errant_submitted_password ) == str
     context = {
+        'contact_url': 'https://indigenousslavery.org/people/',
         'browse_login_username': errant_submitted_username,
         'browse_login_password': errant_submitted_password,
         'LOGIN_PROBLEM_EMAIL': settings_app.LOGIN_PROBLEM_EMAIL,
