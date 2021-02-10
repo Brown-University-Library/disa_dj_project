@@ -73,24 +73,44 @@ def info( request ):
 def browse_tabulator( request ):
     """ Displays tabulator page. """
     log.debug( '\n\nstarting browse_tabulator()' )
+    # log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
     log.debug( f'request.__dict__, ``{request.__dict__}``' )
-    request.session['foo'] = 'bar'
-    is_browse_logged_in = view_browse_manager.check_browse_logged_in( request.session.items(), bool(request.user.is_authenticated) )
+    log.debug( f'request.session.items(), ``{pprint.pformat(request.session.items())}``' )
+    # request.session['browse_logged_in'] = 'yes'  # testing
+    is_browse_logged_in = view_browse_manager.check_browse_logged_in( dict(request.session), bool(request.user.is_authenticated) )
     assert type( is_browse_logged_in ) == bool
+    if request.method == 'POST':
+        request.session['browse_logged_in'] = 'yes'  # testing
+        redirect_url = reverse( 'browse_url' )
+        log.debug( f'redirect_url, ```{redirect_url}```' )
+        return HttpResponseRedirect( redirect_url )
+    #
     if is_browse_logged_in:
         context = {
             'browse_json_url': reverse( 'browse_json_proxy_url' ),
             'info_image_url': f'{project_settings.STATIC_URL}images/info.png',
-            'browse_login': True
+            'browse_logged_in': True,
+            'user_is_authenticated': bool(request.user.is_authenticated)
             }
         if request.GET.get('format', '') == 'json':
             resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         else:
             resp = render( request, 'disa_app_templates/browse_tabulator.html', context )
     else:
-        context = { 'browse_login': False }
+        context = { 'browse_logged_in': False }
         resp = render( request, 'disa_app_templates/browse_login.html', context )
     return resp
+
+
+def browse_logout( request ):
+    """ Logs user out of _browse_ view (only). """
+    log.debug( '\n\nstarting browse_logout()' )
+    log.debug( f'dict(request.session) start, ``{pprint.pformat(dict(request.session))}``' )
+    request.session['browse_logged_in'] = 'no'
+    log.debug( f'dict(request.session) end, ``{pprint.pformat(dict(request.session))}``' )
+    redirect_url = reverse( 'browse_url' )
+    log.debug( f'redirect_url, ```{redirect_url}```' )
+    return HttpResponseRedirect( redirect_url )
 
 
 def people( request ):

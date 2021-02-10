@@ -22,6 +22,7 @@ urlpatterns = [
 
     url( r'^browse/$', views.browse_tabulator, name='browse_url' ),
     # url( r'^browse_old/$', views.browse_old, name='browse_old_url' ),
+    url( r'^browse_logout/$', views.browse_logout, name='browse_logout_url' ),
 
     url( r'^editor/documents/$', views.edit_citation, name='edit_citation_url' ),
     url( r'^editor/documents/(?P<cite_id>.*)/$', views.edit_citation, name='edit_citation_url' ),
