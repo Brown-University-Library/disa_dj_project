@@ -1,6 +1,10 @@
 {% extends "disa_app_templates/base.html" %}
 {% load staticfiles %}
 
+
+{# in <head> #}
+
+
 {% block header_other %}
 <link rel="shortcut icon" type="image/ico"
     href="favicon.ico" />
@@ -32,7 +36,30 @@
 
 <script src="https://unpkg.com/lunr/lunr.js"></script>
 
-{% endblock %}
+{% endblock header_other %}
+
+
+{# in <body> #}
+
+
+{% block header_options %}
+
+    {% if user_is_authenticated %}
+        {% comment %}
+        <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'browse_logout_url' %}">FOO</a>
+        </li>
+        {% endcomment %}
+    {% else %}
+        {% if browse_logged_in %}
+        <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'browse_logout_url' %}">browse-logout</a>
+        </li>
+        {% endif %}
+    {% endif %}
+
+{% endblock header_options %}
+
 
 {% block content %}
 
@@ -178,7 +205,8 @@
         value="{{ info_image_url }}" />
 </div>
 
-{% endblock %}
+{% endblock content %}
+
 
 {% block scripts%}
     <script src="{% static 'js/browse_tabulator.js' %}"></script>

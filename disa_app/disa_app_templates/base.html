@@ -62,6 +62,8 @@
             <a class="navbar-brand text-white" href="{% url 'browse_url' %}">Database of Indigenous Slavery in the Americas</a>
             <ul class="navbar-nav ml-auto">
 
+                {% block header_options %}
+
                 {% if user_is_authenticated %}
                 <li class="nav-item">
                     <!--
@@ -131,6 +133,8 @@
                 </li>
                 {% endif %}
                 {% endcomment %}
+
+                {% endblock header_options %}
 
             </ul>
         </nav>
