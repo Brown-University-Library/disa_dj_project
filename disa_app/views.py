@@ -69,37 +69,44 @@ def info( request ):
 #         resp = basic_auth_helper.display_prompt()
 #     return resp
 
-
 def browse_tabulator( request ):
     """ Displays tabulator page. """
     log.debug( '\n\nstarting browse_tabulator()' )
-    # log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
     log.debug( f'request.__dict__, ``{request.__dict__}``' )
     log.debug( f'request.session.items(), ``{pprint.pformat(request.session.items())}``' )
-    # request.session['browse_logged_in'] = 'yes'  # testing
-    is_browse_logged_in = view_browse_manager.check_browse_logged_in( dict(request.session), bool(request.user.is_authenticated) )
-    assert type( is_browse_logged_in ) == bool
     if request.method == 'POST':
-        request.session['browse_logged_in'] = 'yes'  # testing
-        redirect_url = reverse( 'browse_url' )
-        log.debug( f'redirect_url, ```{redirect_url}```' )
-        return HttpResponseRedirect( redirect_url )
-    #
-    if is_browse_logged_in:
-        context = {
-            'browse_json_url': reverse( 'browse_json_proxy_url' ),
-            'info_image_url': f'{project_settings.STATIC_URL}images/info.png',
-            'browse_logged_in': True,
-            'user_is_authenticated': bool(request.user.is_authenticated)
-            }
-        if request.GET.get('format', '') == 'json':
-            resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+        credentials_valid = view_browse_manager.check_credentials_on_post( submitted_username, submitted_password )
+        assert type( credentials_valid ) == bool
+        if credentials_valid:
+            request.session['browse_logged_in'] = 'yes'
+            request.session.pop( 'errant_browse_login_username', None )  # <https://stackoverflow.com/questions/11277432/how-can-i-remove-a-key-from-a-python-dictionary/15206537#15206537>
+            request.session.pop( 'errant_browse_login_password', None )
         else:
-            resp = render( request, 'disa_app_templates/browse_tabulator.html', context )
-    else:
-        context = { 'browse_logged_in': False }
-        resp = render( request, 'disa_app_templates/browse_login.html', context )
-    return resp
+            request.session['errant_browse_login_username'] = submitted_username
+            request.session['errant_browse_login_password'] = submitted_password
+        request.session.modified = True
+        resp = view_browse_manager.prepare_self_redirect_on_post()
+    if request.method == 'GET':
+        is_browse_logged_in = view_browse_manager.check_browse_logged_in_on_get( dict(request.session), bool(request.user.is_authenticated) )
+        assert type(is_browse_logged_in) == bool
+        if is_browse_logged_in:
+            request.session.pop( 'browse_logged_in', None )
+            request.session.modified = True
+            context = view_browse_manager.prepare_logged_in_get_context()
+            resp = view_browse_manager.prepare_get_response(
+                context, request.GET.get('format', ''), 'disa_app_templates/browse_tabulator.html' )
+        else:
+            errant_submitted_username = request.session.get( 'errant_browse_login_username', '' )
+            errant_submitted_password = request.session.get( 'errant_browse_login_password', '' )
+            assert type( errant_submitted_username ) == str
+            assert type( errant_submitted_password ) == str
+            request.session.pop( 'errant_browse_login_username', None )
+            request.session.pop( 'errant_browse_login_password', None )
+            request.session.modified = True
+            context = view_browse_manager.prepare_non_logged_in_get_context( errant_submitted_username, errant_submitted_password )
+            resp = rview_browse_manager.prepare_get_response(
+                context, request.GET.get('format', ''), 'disa_app_templates/browse_login.html' )
+        return resp
 
 
 def browse_logout( request ):
@@ -274,7 +281,7 @@ def handle_shib_login( request ):
     else:
         redirect_url = request.GET['next']  # may be same page
     if request.session.get( 'redirect_url', None ):  # cleanup
-        del request.session['redirect_url']
+        request.session.pop( 'redirect_url', None )
     log.debug( 'redirect_url, ```%s```' % redirect_url )
     return HttpResponseRedirect( redirect_url )
 
