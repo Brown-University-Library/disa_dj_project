@@ -6,6 +6,7 @@ from disa_app import settings_app
 from django.conf import settings as project_settings
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 
 
 log = logging.getLogger(__name__)
@@ -18,11 +19,11 @@ def check_credentials_on_post( submitted_username, submitted_password ):
     assert type(submitted_username) == str
     assert type(submitted_password) == str
     credentials_valid = False
-    for user_pass in settings_app.BASIC_AUTH_LIST:
+    for user_pass in settings_app.BROWSE_USERPASS_LIST:
         ( good_username, good_password ) = list( user_pass.items() )[0]
         assert type(good_username) == str
         assert type(good_password) == str
-        if received_username == good_username and received_password == good_password:
+        if submitted_username == good_username and submitted_password == good_password:
             credentials_valid = True
             break
     return credentials_valid
@@ -71,16 +72,15 @@ def prepare_logged_in_get_context( django_is_authenticated ):
     return context
 
 
-def prepare_get_response( context, json_param, template_name ):
+def prepare_get_response( request, context, template_name ):
     """ Prepares response on get, whether logged-in or not-logged-in.
         Called by views.browse_tabulator() """
     assert type( context ) == dict
-    assert type( json_param ) == str
     assert type( template_name ) == str
-    if json_param == 'json':
+    if request.GET.get( 'format', '' ) == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/browse_tabulator.html', context )
+        resp = render( request, template_name, context )
     return resp
 
 
@@ -90,10 +90,11 @@ def prepare_non_logged_in_get_context( errant_submitted_username, errant_submitt
     assert type( errant_submitted_username ) == str
     assert type( errant_submitted_password ) == str
     context = {
-        'browse_login_error': True,
         'browse_login_username': errant_submitted_username,
         'browse_login_password': errant_submitted_password,
-        'LOGIN_PROBLEM_EMAIL': LOGIN_PROBLEM_EMAIL,
+        'LOGIN_PROBLEM_EMAIL': settings_app.LOGIN_PROBLEM_EMAIL,
     }
+    if errant_submitted_username or errant_submitted_password:
+        context['browse_login_error'] = True
     log.debug( f'context, ``{pprint.pformat(context)}``' )
     return context
