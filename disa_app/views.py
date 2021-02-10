@@ -74,6 +74,10 @@ def browse_tabulator( request ):
     log.debug( '\n\nstarting browse_tabulator()' )
     log.debug( f'request.__dict__, ``{request.__dict__}``' )
     log.debug( f'request.session.items(), ``{pprint.pformat(request.session.items())}``' )
+    submitted_username = request.POST.get( 'browse_login_username', '' )
+    submitted_password = request.POST.get( 'browse_login_password', '' )
+    assert type(submitted_username) == str
+    assert type(submitted_password) == str
     if request.method == 'POST':
         credentials_valid = view_browse_manager.check_credentials_on_post( submitted_username, submitted_password )
         assert type( credentials_valid ) == bool
@@ -86,16 +90,20 @@ def browse_tabulator( request ):
             request.session['errant_browse_login_password'] = submitted_password
         request.session.modified = True
         resp = view_browse_manager.prepare_self_redirect_on_post()
+        return resp
     if request.method == 'GET':
+        log.debug( 'handling GET' )
         is_browse_logged_in = view_browse_manager.check_browse_logged_in_on_get( dict(request.session), bool(request.user.is_authenticated) )
         assert type(is_browse_logged_in) == bool
         if is_browse_logged_in:
+            log.debug( 'logged-in path' )
             request.session.pop( 'browse_logged_in', None )
             request.session.modified = True
-            context = view_browse_manager.prepare_logged_in_get_context()
+            context = view_browse_manager.prepare_logged_in_get_context( bool(request.user.is_authenticated) )
             resp = view_browse_manager.prepare_get_response(
-                context, request.GET.get('format', ''), 'disa_app_templates/browse_tabulator.html' )
+                request, context, 'disa_app_templates/browse_tabulator.html' )
         else:
+            log.debug( 'not logged-in path' )
             errant_submitted_username = request.session.get( 'errant_browse_login_username', '' )
             errant_submitted_password = request.session.get( 'errant_browse_login_password', '' )
             assert type( errant_submitted_username ) == str
@@ -104,8 +112,9 @@ def browse_tabulator( request ):
             request.session.pop( 'errant_browse_login_password', None )
             request.session.modified = True
             context = view_browse_manager.prepare_non_logged_in_get_context( errant_submitted_username, errant_submitted_password )
-            resp = rview_browse_manager.prepare_get_response(
-                context, request.GET.get('format', ''), 'disa_app_templates/browse_login.html' )
+            resp = view_browse_manager.prepare_get_response(
+                request, context, 'disa_app_templates/browse_login.html' )
+            log.debug( 'ok should render the browse-login template' )
         return resp
 
 
