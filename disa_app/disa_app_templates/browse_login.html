@@ -110,8 +110,10 @@
         <p id="password_field_label">password:</p>
         <input id="password_field_input" type="password" name="browse_login_password" value="{{ browse_login_password }}">
         {% if browse_login_error %}
-            <p class="login_error">Problem: based on your login, it appears you're not authorized to use this requesting service.</p>
-            <p class="login_error">If you believe you should be able to login to this system, please contact {{ LOGIN_PROBLEM_EMAIL|urlize }} for assistance.</p>
+            <p class="login_error">Problem: based on your login, it appears you're not authorized to use this database-browser.</p>
+            <!-- {# <p class="login_error">If you believe you should be able to login to this system, please contact {{ LOGIN_PROBLEM_EMAIL|urlize }} for assistance.</p> #} -->
+            <p class="login_error">If you believe you should be able to login to this system, please contact someone one at this <a href="{{ contact_url }}">{{ contact_url }}</a> web-page for assistance.</p>
+
         {% endif %}
         <br />
         <input id="browse_login_button" type="submit" value="Log in">
