@@ -104,42 +104,27 @@
           Citation type
         </h5>
         <div style="clear: left;">
-     <!-- CITATION TYPE DROPDOWN SELECTOR -->
-     <!-- <label for="formInputDISADocType" style="padding-left:12%;">Citation type:</label> -->
-     <!-- hardcoded -->
-    <!-- Ben, I'm going to soon comment-out the select style block below.
-        Just a note that the (dynamic) replacement code below uses a different id.
-        I _could_ change it to match `formInputDISADocType`, but would have to change it in
-        5 or so places in the javascript at the bottom of this page.
-        If your styling depends on the `formInputDISADocType`, I'll go ahead and change it.
-        (I like the explicitness of your id name.)
-        Eventually I'm going to rename it anyway, working to unify 'doc' references to 'cite' or 'citation' references.
-        -->
-     <!--
-     <select style="width:75%;float:right;" class="custom-select" id="formInputDISADocType">
-        <option selected>Newspaper Article</option>
-        <option value="1">[Other doc format]</option>
-        <option value="2">[Other doc format]</option>
-        <option value="3">[Other doc format]</option>
-    </select>
-     -->
-     <!-- dynamic -->
-    <!-- populated by js readDocumentData() -> initializeForm() -->
-    <!-- <select class="form-control" id="document_type"> -->
-    <select style="" class="custom-select" id="document_type">
-      <!-- (Patrick) This option is only to be shown if citation type has not been selected -->
-      <option value="0" class="initMessage">
-        [Select a document type]
-      </option>
-    </select>
+          <select class="custom-select" id="document_type"
+                  v-model="citation_data.citation_type_id">
+            <option value="0" class="initMessage" 
+                    v-if="!citation_data.citation_type_id">
+              [Select a document type]
+            </option>
+            <option v-for="(docTypeId, docTypeName) in DOC_TYPES"
+                    v-bind:value="docTypeId">
+              v{ docTypeName }v
+            </option>
+          </select>
   </div>
    <!-- CITATION FIELDS (REQUIRED and OPTIONAL).
      Unused fields are moved to #hidden-fields outside of the form element, above -->
-  <h5 id="required-fields-header" hidden>Priority information
+  <h5 id="required-fields-header" hidden>
+    Priority information
   </h5>
   <div id="required-fields"></div>
-  <h5 id="optional-fields-header" hidden>Additional
-    information</h5>
+  <h5 id="optional-fields-header" hidden>
+    Additional information
+  </h5>
   <div id="optional-fields">
     <div class="citation-field form-group text-dark"
          id="abstractNote">
