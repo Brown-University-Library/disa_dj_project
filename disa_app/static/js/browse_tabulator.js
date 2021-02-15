@@ -341,9 +341,12 @@
       window.disa.lunrIndex = lunrIndex; // For testing
       searchAgainstIndex(); // Initialize results array for general search
 
-      // Save this data for later & return to Tabulator
+      // Save this data for later
 
       window.disa.jsonData = processedResponse;
+
+      // Return data to Tabulator
+
       return processedResponse;
     }
 
@@ -397,12 +400,8 @@
             proNounCap = sexDisplay.pronoun[entry.sex].cap,
             toBe_conj = sexDisplay.pronoun[entry.sex].be_conj;
 
-
       // GENERATE RELATIONSHIPS DESCRIPTION
       
-      // console.log('RELATIONSHIPS:' + entry.relationships.map(r => r.description).join(','));
-      // console.log(`RELATIONSHIPS FOR ${nameDisplay} (${entry.relationships.length}):`, entry.relationships);
-
       const relationshipsArrayHTML = entry.relationships.map(relationship => {
         let html;
         const relRefInfo = relationship.related_referent_info,
@@ -604,8 +603,6 @@
       table.destroy();
       tableContainer.classList.toggle(BIO_THEME_CLASSNAME, bioOption);
 
-      let t = document.getElementById('data-display');
-
       table = new Tabulator(
         '#data-display',
         Object.assign({},
@@ -671,10 +668,10 @@
     }
   });
 
-})() // Closing IIFE
+})() // Close IIFE
 
 
-/* DATA STRUCTURE
+/* DATA STRUCTURE FOR REFERENCE
 
 {
   "referent_db_id": 317,
