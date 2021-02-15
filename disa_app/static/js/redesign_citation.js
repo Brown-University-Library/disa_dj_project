@@ -49,9 +49,21 @@ function getCitationFieldUpdateCallback(DATA) {
 
 
 
+function main(DATA) {
 
+  const updateCitationFieldVisibility = getCitationFieldUpdateCallback(DATA);
 
+  const citationForm = new Vue({
+    el: '#citation-form',
+    data: DATA,
+    watch: {
+      'citation_data.citation_type_id': updateCitationFieldVisibility
+    },
+    mounted: updateCitationFieldVisibility(DATA.citation_data.citation_type_id),
+    delimiters: ['v{','}v'] // So as not to clash with Django templates
   });
+
+  const itemForm = new Vue();
 }
 
 export { main };
