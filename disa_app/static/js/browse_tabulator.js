@@ -34,7 +34,9 @@
           ENSLAVER: 'Enslaver',
           DEFAULT: 'Neither or unknown'
         },
-        MAX_NUMBER_OF_ENTRIES = 100000;
+        MAX_NUMBER_OF_ENTRIES = 100000,
+        REF_COUNT_ELEM_ID = 'ref-count',
+        ITEM_COUNT_ELEM_ID = 'item-count';
 
   // Event handlers
 
@@ -243,6 +245,14 @@
     const jsonProcessor = function(_, __, response) {
 
       console.log('JSON response', response);
+
+      // Update count stats
+
+      document.getElementById(REF_COUNT_ELEM_ID).innerText = response.meta.referents_count;
+      document.getElementById(ITEM_COUNT_ELEM_ID).innerText = response.referent_list.reduce(
+        (setOfRefs, currRef) => setOfRefs.add(currRef.reference_data.reference_db_id),
+        new Set()
+      ).size;
 
       // Create an 'all_names' field
       // Create an 'all_locations' field
