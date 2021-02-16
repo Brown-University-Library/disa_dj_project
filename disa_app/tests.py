@@ -22,7 +22,8 @@ class Client_Misc_Test( TestCase ):
     def test_browse_url(self):
         """ Checks '/browse/'. """
         response = self.client.get( '/browse/' )  # project root part of url is assumed
-        self.assertEqual( 401, response.status_code )  # unauthorized
+        self.assertEqual( 200, response.status_code )  # login landing page
+        self.assertEqual( True, b'login' in response.content )
 
     def test_root_url_no_slash(self):
         """ Checks '/root_url' (with no slash). """
