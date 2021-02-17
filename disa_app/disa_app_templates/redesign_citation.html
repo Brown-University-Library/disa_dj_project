@@ -58,6 +58,9 @@
   };
 
   const SETTINGS = Object.assign({}, LOCAL_SETTINGS, SERVER_SETTINGS);
+  console.log('SETTINGS', SETTINGS);
+  // @todo keep local/server settings separate so that server 
+  //  settings can be sent back to server?
   main(SETTINGS);
 
 </script>
@@ -331,7 +334,7 @@
     </div>
     <div class="citation-field form-group text-dark"
       id="rights">
-      <!-- DROPDOWN? -->
+      <!-- @todo DROPDOWN? -->
       <label for="rights-value"
         style="padding-left:15%;">Rights</label>
       <input id="rights-value" name="rights-value"
@@ -386,41 +389,8 @@
         type="url" placeholder="https://..." 
         v-model="citation_data.citation_type_fields.url" />
     </div>
-  </div>  <!-- end <div id="optional-fields"> -->
-   <!--
-  <div class="form-group text-dark">
-      <label for="formInputDISATitle" style="padding-left:10%;">Title<span style="font-size:85%;" class="text-danger">(required)</span></label>
-      <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISATitle" placeholder="Enter Title">
   </div>
-  <div class="form-group text-dark">
-      <label for="formInputDISAPlace" style="padding-left:15%;">Place</label>
-      <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISAPlace" placeholder="Enter Place">
-  </div>
-  <label for="formInputDISABiblioDateYear" style="padding-left:15%;">Date</label>
-  <div style="width:75%;float:right;">
-      <p style="width:25%;float:left;padding-right:10px;"> <select class="custom-select" id="formInputDISABiblioDateYear">
-              <option selected>Year</option>
-              <option value="1">[Year values?]</option>
-              <option value="2">[Year values?]</option>
-              <option value="3">[Year values?]</option>
-          </select>
-      </p>
-      <p style="width:25%;float:left;padding-right:10px;"> <select class="custom-select" id="formInputDISABiblioDateMonth">
-              <option selected>Month</option>
-              <option value="1">[Month values?]</option>
-              <option value="2">[Month values?]</option>
-              <option value="3">[Month values?]</option>
-          </select>
-      </p>
-      <p style="width:25%;float:left;padding-right:0px;"> <select class="custom-select" id="formInputDISABiblioDateDay">
-              <option selected>[Day]</option>
-              <option value="1">[Day values?]</option>
-              <option value="2">[Day values?]</option>
-              <option value="3">[Day values?]</option>
-          </select>
-      </p>
-  </div>
-  -->
+
   <div class="form-group">
     <label for="formInputDISAAcknowledgements"
       style="padding-left:0%;">Acknowledgements</label>
