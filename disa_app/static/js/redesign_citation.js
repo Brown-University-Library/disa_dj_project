@@ -1,57 +1,40 @@
 
+// Get callback for change in source type
+// (it's a callback in order to bake in the DATA object)
 
-// Get callback for when the citation type dropdown changes
+function getUpdateCitationFieldVisibilityCallback(FIELDS_BY_DOC_TYPE) {
 
-function getCitationFieldUpdateCallback(DATA) {
+  const requiredFieldsHeader = document.getElementById('required-fields-header'),
+        optionalFieldsHeader = document.getElementById('optional-fields-header');
 
-  // Load a bunch of form elements
+  return function(citationTypeId) {
 
-  const requiredFieldsContainer = document.getElementById("required-fields"),
-        requiredFieldsHeader    = document.getElementById("required-fields-header"),
-        optionalFieldsContainer = document.getElementById("optional-fields"),
-        optionalFieldsHeader    = document.getElementById("optional-fields-header"),
-        hiddenFieldsContainer   = document.getElementById("hidden-fields"),
-        citationFields = Array.from(
-          document.getElementsByClassName("citation-field")
-        );
+    const citationFields = document.querySelectorAll('#citation-fields > div'),
+          fieldStatus = FIELDS_BY_DOC_TYPE[citationTypeId];
 
-  // Return callback
+    requiredFieldsHeader.hidden = fieldStatus.required.length === 0;
+    optionalFieldsHeader.hidden = fieldStatus.optional.length === 0;
 
-  return function (citationTypeId) {
-
-    const fieldStatus = DATA.FIELDS_BY_DOC_TYPE[citationTypeId];
-
-    // Move citation fields to required / optional / hidden
-    // @todo this is not working with Vue - it's copying
-    //       Maybe it's moving it, but then re-rendering to create a copy?
-
-    citationFields.forEach((citationField) => { 
-      const citationFieldId = citationField.id;
-      console.log(citationFieldId, fieldStatus);
-      if (fieldStatus.required.includes(citationFieldId)) {
-        console.log('REQD');
-        requiredFieldsContainer.appendChild(citationField);
-      } else if (fieldStatus.optional.includes(citationFieldId)) {
-        optionalFieldsContainer.appendChild(citationField);
-        console.log('OPT');
+    citationFields.forEach((citationField, defaultOrderIndex) => { 
+      const fieldId = citationField.id;
+      if (fieldStatus.required.includes(fieldId)) {
+        citationField.hidden = false;
+        citationField.style.order = (100 + defaultOrderIndex);
+      } else if (fieldStatus.optional.includes(fieldId)) {
+        citationField.hidden = false;
+        citationField.style.order = (200 + defaultOrderIndex);
       } else {
-        hiddenFieldsContainer.appendChild(citationField);
-        console.log('HIDDEN', { hiddenFieldsContainer, citationField } );
+        citationField.hidden = true;
       }
     });
-
-    // Unhide headers
-
-    requiredFieldsHeader.removeAttribute("hidden");
-    optionalFieldsHeader.removeAttribute("hidden");
-  };
+  }
 }
-
-
 
 function main(DATA) {
 
-  const updateCitationFieldVisibility = getCitationFieldUpdateCallback(DATA);
+  // Citation form (tab 1)
+
+  const updateCitationFieldVisibility = getUpdateCitationFieldVisibilityCallback(DATA.FIELDS_BY_DOC_TYPE);
 
   const citationForm = new Vue({
     el: '#citation-form',
@@ -59,11 +42,24 @@ function main(DATA) {
     watch: {
       'citation_data.citation_type_id': updateCitationFieldVisibility
     },
-    mounted: updateCitationFieldVisibility(DATA.citation_data.citation_type_id),
-    delimiters: ['v{','}v'] // So as not to clash with Django templates
+    methods: {
+      onSubmitForm: function(x) { 
+        // @todo finish this
+        console.log({ 
+          submitEvent: x, 
+          data: JSON.parse(JSON.stringify(this._data))
+        })
+      }
+    },
+    mounted: updateCitationFieldVisibility(DATA.citation_data.citation_type_id)
   });
 
-  const itemForm = new Vue();
+  // Item form (tab 2)
+  // @todo finish item form
+
+  const itemForm = new Vue({
+    delimiters: ['v{','}v'] // So as not to clash with Django templates
+  });
 }
 
 export { main };
