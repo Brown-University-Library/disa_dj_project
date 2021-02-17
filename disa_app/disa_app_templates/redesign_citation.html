@@ -16,13 +16,21 @@
   import {main} from '/static/js/redesign_citation.js';
   import {LOCAL_SETTINGS} from '/static/js/redesign_settings.js';
 
-  function preprocessCitationData(data) {
-    // THIS IS A TEMP KLUDGE -- server should break this out
-    const date = new Date(data.citation_type_fields.date);
-    data.citation_type_fields['date-day'] = date.getDate();
-    data.citation_type_fields['date-month'] = date.getMonth() + 1;
-    data.citation_type_fields['date-year'] = date.getFullYear();
-    delete data.citation_type_fields.date;
+  function preprocessCitationData(data) { 
+
+    // Convert dates to YYYY-MM-DD format
+    // @todo should be done on server
+
+    data.citation_type_fields.date = 
+      (new Date(data.citation_type_fields.date))
+      .toISOString()
+      .slice(0,10);
+
+    data.citation_type_fields.accessDate = 
+      (new Date(data.citation_type_fields.accessDate))
+      .toISOString()
+      .slice(0,10);
+
     return data;
   }
 
@@ -192,7 +200,13 @@
       id="date">
       <label for="date-value"
         style="padding-left:15%;">Date</label>
-      <!-- <input id="date-value" name="date-value" placeholder="Date" /> -->
+      <input id="date-value" name="date-value" placeholder="Date"
+             type="date"
+             v-model="citation_data.citation_type_fields.date" /> 
+
+      <!--  BROKEN OUT WITH YEAR/MONTH/DAY FOR WHEN WE'RE IMPLEMENTING
+            THE NEW DATA MODEL
+
       <label for="date-year-value">Year 
         <input id="date-year-value" name="date-year-value" type="number" 
                 v-model="citation_data.citation_type_fields['date-year']" />
@@ -252,9 +266,7 @@
           <option	value="31">	31	</option>
         </select>
       </label>
-      <!--
-      <input id="date-value" name="date-value"
-        placeholder="Date" value="" />-->
+      -->
     </div>
     <div class="citation-field form-group text-dark"
       id="edition">
