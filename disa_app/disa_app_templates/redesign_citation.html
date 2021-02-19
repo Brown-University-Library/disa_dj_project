@@ -2,7 +2,7 @@
 
 {% block header_other %}
 
-<link href="/static/redesign_citation.css" rel="stylesheet"></link>
+<link href="/static/css/redesign_citation.css" rel="stylesheet"></link>
 
 <script type="module">
 
@@ -70,34 +70,43 @@
 <!-- JavaScript-savvy URL control to toggle div display between 
      #startpanel above & #tabs_bibinfoanditems below -->
 
+<!-- MAIN NAV TABS -->
+
 <div id="tabs_bibinfoanditems" style="margin-top:10em;">
   <ul class="nav nav-tabs" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link active"
-        href="#Bibliographic-information" data-toggle="tab"
-        role="tab" aria-controls="Bibliographic-information"
-        aria-expanded="true">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="bib-tab" 
+              data-bs-toggle="tab" 
+              data-bs-target="#Bibliographic-information" 
+              type="button" role="tab" aria-controls="Bibliographic-information" 
+              aria-selected="true">
         Bibliographic information
-      </a>
+      </button>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#Items" data-toggle="tab"
-        role="tab" aria-controls="Items"
-        aria-expanded="true">Items</a>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="item-tab" 
+              data-bs-toggle="tab" 
+              data-bs-target="#Items" 
+              type="button" role="tab" aria-controls="Items" 
+              aria-selected="false">
+        Items
+      </button>
     </li>
   </ul>
+
+  <!-- TAB CONTENT -->
+
   <div class="tab-content">
-    <div class="active tab-pane" style="padding: 20px;"
-      role="tabpanel"
-      aria-labelledby="Bibliographic-information"
-      id="Bibliographic-information">
+    <div class="tab-pane show active" style="padding: 20px;"
+         role="tabpanel" aria-labelledby="bib-tab"
+         id="Bibliographic-information">
 
       <!-- These are citation fields that are unused by the current citation type -->
       <div id="hidden-fields" hidden></div>
 
       <form id="citation-form">
-        <span class="badge badge-primary float-right"
-          title="Unique identifier for this citation">
+        <span class="badge bg-secondary float-right"
+              title="Unique identifier for this citation">
           ID {{ doc.id }}
         </span>
         <h5 class="text-dark" style="width:25%;float:left;">
@@ -431,490 +440,253 @@
     SAVE AND CONTINUE TO ENTER ITEMS
   </button>
   </form>
-  </div> <!-- /.tab-pane for bibinfo -->
-  <div class="tab-pane" role="tabpanel"
-    aria-labelledby="Items" id="Items">
-    <div style="padding: 0px; padding-top: 0px;">
-      <ul class="nav nav-tabs" role="tablist"
-        style="padding: 20px;">
-        <li class="nav-item">
-          <a class="nav-link" href="#New-Item"
-            data-toggle="tab" role="tab"
-            aria-controls="New-Item" aria-expanded="true">New
-            Item</a>
-        </li>
-        <!-- hide Discuss tab
-        <li class="nav-item">
-            <a class="nav-link" href="#tab4" data-toggle="tab" role="tab" aria-controls="tab4" aria-expanded="true">Discuss</a>
-        </li>
-        <li class="nav-item"></li>
-        <li class="nav-item"></li>
-        -->
-        <li
-          style="font-weight: bold;padding-left: 25px;padding-top: 9px;"
-          class="text-success">All changes saved</li>
+    </div> <!-- /.tab-pane for bibinfo -->
+    <!-- Items tab content, below, coded for Bootstrap v5 floating form fields -->
+    <div class="tab-pane" 
+         role="tabpanel" aria-labelledby="item-tab" id="Items">
+      <div style="padding: 0px; padding-top: 0px;">
+      <ul class="nav nav-tabs" role="tablist" style="padding: 20px;">
+        <li class="nav-item"> <a class="nav-link" href="#New-Item" data-toggle="tab" role="tab" aria-controls="New-Item" aria-expanded="true">New Item</a> </li>
+        <li style="font-weight: bold;padding-left: 25px;padding-top: 9px;" class="text-success">All changes saved</li>
       </ul>
-      <div class="tab-content"
-        style="background-color: white!important;opacity:1;">
-        <div class="active tab-pane" role="tabpanel"
-          aria-labelledby="New-Item" id="New-Item"
-          style="margin-top:-20px;padding-top:0px;">
-          <div class="row col-lg-12"
-            style="padding-top:40px;">
+      <div class="tab-content" style="background-color: white!important;opacity:1;">
+        <div class="active tab-pane" role="tabpanel" aria-labelledby="New-Item" id="New-Item" style="margin-top:-20px;padding-top:0px;">
+          <div class="row col-lg-12" style="padding-top:40px;padding-left:25px;">
             <div class="col-md-6">
-              <h5 class="text-dark"
-                style="float:left;margin-left:20px;">Location
-                in source citation</h5>
+              <h5 class="text-dark" style="float:left;">Location in source document</h5>
               <p>&nbsp;</p>
-              <div class="form-group text-dark">
-                <label for="formInputDISAItemVolume"
-                  style="padding-left:15%;">Volume</label>
-                <input
-                  style="width:60%;float:right;margin-right:5%;"
-                  type="text" class="form-control"
-                  id="formInputDISAItemVolume"
-                  placeholder="Volume #">
+              <div class="form-floating">
+                <input type="number" class="form-control" id="formInputDISAItemVolume" aria-label="Volume" placeholder="#">
+                <label for="formInputDISAItemVolume">Volume</label>
               </div>
-              <p></p>
-              <div class="form-group text-dark">
-                <label for="formInputDISASourcePageStart"
-                  style="padding-left:15%;">Page number,
-                  from</label>
-                <input
-                  style="width:40%;float:right;margin-right:5%;"
-                  type="text" class="form-control"
-                  id="formInputDISASourcePageStart"
-                  placeholder="start pg. #">
-                <p></p>
-                <label for="formInputDISASourcePageEnd"
-                  style="padding-left:43%;clear:left;">to</label>
-                <input
-                  style="width:40%;float:right;margin-right:5%;"
-                  type="text" class="form-control"
-                  id="formInputDISASourcePageEnd"
-                  placeholder="end pg. #">
+              <div class="form-floating">
+                <input type="number" class="form-control" id="formInputDISASourcePageStart" aria-label="starting page number" placeholder="#">
+                <label for="formInputDISASourcePageStart">Page number, from:</label>
+              </div>
+              <div class="form-floating">
+                <input type="number" class="form-control" id="formInputDISASourcePageEnd" aria-label="ending page number" placeholder="#">
+                <label for="formInputDISASourcePageEnd">to:</label>
               </div>
             </div>
             <div class="col-md-6">
-              <h5 class="text-dark"
-                style="float:left;margin-left: 20px;">Item
-                content</h5>
+              <h5 class="text-dark" style="float:left;">Item content</h5>
               <p>&nbsp;</p>
-              <div class="form-group text-dark">
-                <label for="formInputDISAItemType"
-                  style="padding-left:5%;">Item type</label>
-                <select style="width:70%;float:right;"
-                  class="custom-select"
-                  id="formInputDISAItemType">
-                  <option selected>Select an item type...
-                  </option>
+              <div class="form-floating">
+                <select class="form-select" id="formInputDISAItemType" aria-label="Event date: month">
+                  <option selected>Select an item type...</option>
                   <option value="1">One</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
                 </select>
+                <label for="formInputDISAItemType">Item type</label>
               </div>
-              <div style="text-align:left;">
-                <div class="form-group"
-                  style="margin-top:20px;">
-                  <label for="formInputDISAItemTranscription"
-                    style="padding-left:5%;float:left;">Transcription</label>
-                  <br>
-                  <a href="#"
-                    style="margin-left:0%;font-size:80%;margin-top:-7px;clear:left;float:left;">Open
-                    in new window</a>
-                  <textarea
-                    style="margin-top:-25px;margin-bottom:20px;width:70%;float:right;"
-                    class="form-control" rows="3"
-                    id="formInputDISAItemTranscription"></textarea>
-                </div>
-              </div>
+              <div class="form-floating">
+                <textarea class="form-control" placeholder="" id="formInputDISAItemTranscription" style="height: 128px"></textarea>
+                <label for="formInputDISAItemTranscription">Transcription</label>
+                <a href="#" style="font-size:80%;font-weight:bold;clear:left;">Open in new window</a> </div>
             </div>
           </div> <!-- /.row -->
           <hr>
-          <div class="row"
-            style="padding-top:20px;padding-right:20px;">
+          <div class="row" style="padding:25px;">
             <div class="col-md-6">
-              <h5 class="text-dark"
-                style="float:left;margin-left:40px;">Event
-                date</h5>
-              <p>&nbsp;</p>
-              <div class="form-group text-dark">
-                <label for="formInputDISAEventDateMonth"
-                  style="padding-left:10%;">Month</label>
-                <select
-                  style="width:60%;float:right;margin-right:5%;"
-                  class="custom-select"
-                  id="formInputDISAEventDateMonth">
+              <h5 class="text-dark">Event date</h5>
+              <div class="form-floating">
+                <select class="form-select" id="formInputDISAEventDateMonth" aria-label="Event date: month">
                   <option selected>Unspecified</option>
                   <option value="1">Unspecified 1</option>
                   <option value="2">Unspecified 2</option>
                   <option value="3">Unspecified 3</option>
                 </select>
+                <label for="formInputDISAEventDateMonth">Month</label>
               </div>
-              <div class="form-group text-dark">
-                <label for="formInputDISAEventDateDay"
-                  style="padding-left:10%;">Day</label>
-                <select
-                  style="width:60%;float:right;margin-right:5%;"
-                  class="custom-select"
-                  id="formInputDISAEventDateDay">
+              <div class="form-floating">
+                <select class="form-select" id="formInputDISAEventDateDay" aria-label="Event date: day">
                   <option selected>Unspecified</option>
                   <option value="1">Unspecified 1</option>
                   <option value="2">Unspecified 2</option>
                   <option value="3">Unspecified 3</option>
                 </select>
+                <label for="formInputDISAEventDateDay">Day</label>
               </div>
-              <div class="form-group text-dark">
-                <label for="formInputDISAEventDateYear"
-                  style="padding-left:10%;">Year</label>
-                <select
-                  style="width:60%;float:right;margin-right:5%;"
-                  class="custom-select"
-                  id="formInputDISAEventDateYear">
+              <div class="form-floating">
+                <select class="form-select" id="formInputDISAEventDateYear" aria-label="Event date: year">
                   <option selected>Unspecified</option>
                   <option value="1">Unspecified 1</option>
                   <option value="2">Unspecified 2</option>
                   <option value="3">Unspecified 3</option>
                 </select>
+                <label for="formInputDISAEventDateYear">Year</label>
               </div>
-              <div class="form-group text-dark">
-                <label for="formInputDISAEventDateInfo"
-                  style="padding-left:10%;">Additional date
-                  info</label>
-                <input
-                  style="width:50%;float:right;margin-right:5%;"
-                  type="text" class="form-control"
-                  id="formInputDISAEventDateInfo"
-                  placeholder="">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="formInputDISAEventDateInfo" aria-label="Additional date information" placeholder="">
+                <label for="formInputDISAEventDateInfo">Additional date info.</label>
               </div>
             </div>
             <div class="col-md-6">
-              <h5 class="text-dark"
-                style="float:left;margin-left: 20px;">Place
-              </h5>
-              <p>&nbsp;</p>
-              <div class="form-group text-dark">
-                <label for="formInputDISAColonialContext"
-                  style="padding-left:5%;">Colonial
-                  context</label>
-                <select
-                  style="width:60%;float:right;margin-right:5%;"
-                  class="custom-select"
-                  id="formInputDISAColonialContext">
-                  <option selected>[context option]</option>
-                  <option value="1">[context option 1]
-                  </option>
-                  <option value="2">[context option 2]
-                  </option>
-                  <option value="3">[context option 3]
-                  </option>
+              <h5 class="text-dark" style="">Place</h5>
+              <div class="form-floating">
+                <select class="form-select" id="formInputDISAColonialContext" aria-label="Colonial context">
+                  <option selected>Select a colonial context...</option>
+                  <option value="1">[context option 1]</option>
+                  <option value="2">[context option 2]</option>
+                  <option value="3">[context option 3]</option>
                 </select>
+                <label for="formInputDISAColonialContext">Colonial context</label>
               </div>
-              <div class="form-group text-dark">
-                <label for="formInputDISAColonyState"
-                  style="padding-left:5%;">Colony/State</label>
-                <input
-                  style="width:60%;float:right;margin-right:5%;"
-                  type="text" class="form-control"
-                  id="formInputDISAColonyState"
-                  placeholder="">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="formInputDISAColonyState" aria-label="Colony / State" placeholder="">
+                <label for="formInputDISAColonyState">Colony / State</label>
               </div>
-              <div class="form-group text-dark">
-                <label for="formInputDISATown"
-                  style="padding-left:5%;">Town</label>
-                <input
-                  style="width:60%;float:right;margin-right:5%;"
-                  type="text" class="form-control"
-                  id="formInputDISATown" placeholder="">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="formInputDISATown" aria-label="Town" placeholder="">
+                <label for="formInputDISATown">Town</label>
               </div>
-              <div class="form-group text-dark">
-                <label for="formInputDISAPlaceInfo"
-                  style="padding-left:5%;">Additional location
-                  info</label>
-                <input
-                  style="width:50%;float:right;margin-right:5%;"
-                  type="text" class="form-control"
-                  id="formInputDISAPlaceInfo" placeholder="">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="formInputDISAPlaceInfo" aria-label="Additional location information" placeholder="">
+                <label for="formInputDISAPlaceInfo">Additional location info.</label>
               </div>
             </div>
           </div>
           <hr>
-          <div class="row"
-            style="padding-top:20px;padding-right:20px;">
+          <div class="row" style="padding-top:20px;padding-right:20px;">
             <div class="col-md-12" style="margin-left: 40px;">
-              <h5 class="text-dark" style="float:left;">People
-              </h5>
-              <a href="#" class="text-primary"
-                style="padding-left: 25px;font-size: 107%;">ADD
-                PERSON</a>
+              <h5 class="text-dark" style="float:left;">People</h5>
+              <a href="#" class="text-primary" style="padding-left: 25px;font-size: 107%;">ADD PERSON</a>
               <p>&nbsp;</p>
               <p></p>
             </div>
           </div>
-          <div class="col-lg-12"
-            style="padding: 40px;padding-top: 0px">
+          <div class="col-lg-12" style="padding: 40px;padding-top: 0px">
             <div class="card">
-              <div class="card-header">
-                <a href="#">NEW PERSON</a>
-              </div>
+              <div class="card-header"> <a href="#">NEW PERSON</a> </div>
               <div class="card-body">
-                <div
-                  style="padding-left:20px;padding-top:20px;width:auto;position: relative;">
-                  <div>
-                    Name(s)
-                  </div>
+                <div style="padding-left:20px;padding-top:20px;width:auto;position: relative;">
+                  <div> Name(s) </div>
                 </div>
-                <div
-                  style="float:right;width:87%;margin-bottom: 0;padding-bottom: 0;">
-                  <div
-                    style="padding: 20px;clear:none;margin-top:-20px;border:1px;border-color:LightGray;border-style: solid;clear: none;position: relative;margin-right:40px;">
-                    <div class="form-group text-dark">
-                      <div
-                        class="custom-control custom-switch"
-                        style="clear: none;float:right;padding-top: 5px;">
-                        <input type="checkbox"
-                          class="custom-control-input"
-                          id="formCustomSwitchForAdvancedNames">
-                        <label
-                          style="font-size: 85%;padding-top: 2px;"
-                          class="custom-control-label"
-                          for="formCustomSwitchForAdvancedNames">Advanced
-                          name options</label>
-                      </div>
-                      <label
-                        for="formInputDISAItemPersonNameType"
-                        style="padding-left:0%;">Name
-                        type</label>
-                      <select
-                        style="width:42%;float:right;margin-right:5%;"
-                        class="custom-select"
-                        id="formInputDISAItemPersonNameType">
-                        <option selected>[context option]
-                        </option>
-                        <option value="1">[context option 1]
-                        </option>
-                        <option value="2">[context option 2]
-                        </option>
-                        <option value="3">[context option 3]
-                        </option>
+                <div style="float:right;width:87%;margin-bottom: 0;padding-bottom: 0;">
+                  <div style="padding: 20px;clear:none;margin-top:-20px;border:1px;border-color:LightGray;border-style: solid;clear: none;position: relative;margin-right:40px;">
+                    <div class="custom-control custom-switch" style="">
+                      <input type="checkbox" class="custom-control-input" id="formCustomSwitchForAdvancedNames">
+                      <label style="font-size: 85%;margin-top: -10px;font-weight:bold;" class="custom-control-label" for="formCustomSwitchForAdvancedNames">ADVANCED NAME OPTIONS</label>
+                    </div>
+                    <div class="form-floating">
+                      <select class="form-select" id="formInputDISAItemPersonNameType" aria-label="Name type">
+                        <option selected>[context option]</option>
+                        <option value="1">[context option 1]</option>
+                        <option value="2">[context option 2]</option>
+                        <option value="3">[context option 3]</option>
                       </select>
+                      <label for="formInputDISAItemPersonNameType">Name type</label>
                     </div>
-                    <div class="form-group text-dark">
-                      <label
-                        for="formInputDISAItemPersonNameTranscription"
-                        style="padding-left:0%;">Full name
-                        transcription</label>
-                      <input style="width:70%;float:right;"
-                        type="text" class="form-control"
-                        id="formInputDISAItemPersonNameTranscription"
-                        placeholder="">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="formInputDISAItemPersonNameTranscription" aria-label="Full name transcription" placeholder="">
+                      <label for="formInputDISAItemPersonNameTranscription">Full name transcription</label>
                     </div>
-                    <div class="form-group text-dark">
-                      <label
-                        for="formInputDISAItemPersonFirstName"
-                        style="padding-left:0%;">First
-                        name</label>
-                      <input style="width:75%;float:right;"
-                        type="text" class="form-control"
-                        id="formInputDISAItemPersonFirstName"
-                        placeholder="">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="formInputDISAItemPersonFirstName" aria-label="First name" placeholder="">
+                      <label for="formInputDISAItemPersonFirstName">First name</label>
                     </div>
-                    <div class="form-group text-dark">
-                      <label
-                        for="formInputDISAItemPersonLastName"
-                        style="padding-left:0%;">Last
-                        name</label>
-                      <input style="width:75%;float:right;"
-                        type="text" class="form-control"
-                        id="formInputDISAItemPersonLastName"
-                        placeholder="">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="formInputDISAItemPersonLastName" aria-label="Last name" placeholder="">
+                      <label for="formInputDISAItemPersonLastName">Last name</label>
                     </div>
                   </div>
-                  <p
-                    style="clear:both;float:left;padding-top: 10px;">
-                    <i
-                      class="fas fa-plus-circle text-primary"></i>&nbsp;<a
-                      href="#" class="text-primary">ADD
-                      ANOTHER NAME</a></p>
+                  <p style="clear:both;float:left;padding-top:10px;"><i class="fas fa-plus-circle text-primary"></i>&nbsp;<a href="#" class="text-primary">ADD ANOTHER NAME</a></p>
                 </div>
-                <div class="row"
-                  style="padding-top:0px;padding-right:20px;clear: both;">
-                  <div class="col-md-6"
-                    style="margin-left: 0px;">
-                    <!-- <h5 class="text-dark" style="float:left;"></h5> -->
-                    <p>&nbsp;</p>
-                    <div class="form-group text-dark">
-                      <label for="formInputDISAPersonGender"
-                        style="padding-left:5%;">Gender</label>
-                      <select
-                        style="width:60%;float:right;margin-right:5%;"
-                        class="custom-select"
-                        id="formInputDISAPersonGender">
+                <div class="row" style="padding-top:10px;clear: both;">
+                  <div class="col-md-6">
+                    <div class="form-floating">
+                      <select class="form-select" id="formInputDISAPersonGender" aria-label="New person's gender">
                         <option selected>&nbsp;</option>
                         <option value="1">&nbsp;</option>
                         <option value="2">&nbsp;</option>
                         <option value="3">&nbsp;</option>
                       </select>
+                      <label for="formInputDISAPersonGender">Gender</label>
                     </div>
-                    <div class="form-group text-dark">
-                      <label
-                        for="formInputDISAPersonAge_number"
-                        style="padding-left:5%;">Age</label>
-                      <select
-                        style="width:auto;float:right;margin-right:5%;clear: left;"
-                        class="custom-select"
-                        id="formInputDISAPersonAge_number">
-                        <option selected>&nbsp;</option>
-                        <option value="-1">Unspecified
-                        </option>
-                        <option value="1">1 year</option>
-                        <option value="2">2 years</option>
-                        <option value="3">3 years</option>
-                      </select>
-                      <input
-                        style="width:60%;float:right;margin-right:5%;"
-                        type="text" class="form-control"
-                        id="formInputDISAPersonAge_text"
-                        placeholder="">
-                      <div class="form-check"
-                        style="float:right;clear:none;margin-right:10%;padding-left: 10%;">
-                        <input class="form-check-input"
-                          type="checkbox"
-                          id="formInputSpecifiedByNumber"
-                          value="option1">
-                        <label
-                          style="font-size: 85%;margin-top: -6px;"
-                          class="form-check-label"
-                          for="formInputSpecifiedByNumber">SPECIFIED
-                          BY A NUMBER</label>
+                    <div class="form-group">
+                      <div class="form-floating">
+                        <select style="" class="form-select" id="formInputDISAPersonAge_number" aria-label="New person's age (number)">
+                          <option selected>&nbsp;</option>
+                          <option value="-1">Unspecified</option>
+                          <option value="1">1 year</option>
+                          <option value="2">2 years</option>
+                          <option value="3">3 years</option>
+                        </select>
+                        <label for="formInputDISAPersonAge_number">Age</label>
+                        <input type="text" class="form-control" id="formInputDISAPersonAge_text" aria-label="New person's age (text)">
+                        <div class="form-check" style="margin-top:-6px;">
+                          <input class="form-check-input" style="margin-left:.125em;" type="checkbox" id="formInputSpecifiedByNumber" value="option1">
+                          <label class="form-check-label" style="font-size: 85%;font-weight:bold;margin-left:.5em;margin-top:-10px;" for="formInputSpecifiedByNumber">AGE SPECIFIED BY A NUMBER</label>
+                        </div>
                       </div>
                     </div>
-                    <div class="form-group text-dark">
-                      <label for="formInputDISAPersonStatus"
-                        style="padding-left:5%;">Status</label>
-                      <select
-                        style="width:60%;float:right;margin-right:5%;"
-                        class="custom-select"
-                        id="formInputDISAPersonStatus">
+                    <div class="form-floating">
+                      <select class="form-select" id="formInputDISAPersonStatus" aria-label="New person's status">
                         <option selected>&nbsp;</option>
                         <option value="1">&nbsp;</option>
                         <option value="2">&nbsp;</option>
                         <option value="3">&nbsp;</option>
                       </select>
+                      <label for="formInputDISAPersonStatus">Status</label>
                     </div>
-                    <div class="form-group text-dark">
-                      <label for="formInputDISAStatusInfo"
-                        style="padding-left:5%;font-size:82%;">Additional
-                        status information</label>
-                      <input
-                        style="width:50%;float:right;margin-right:5%;"
-                        type="text" class="form-control"
-                        id="formInputDISAStatusInfo"
-                        placeholder="">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="formInputDISAStatusInfo" aria-label="Additional status information" placeholder="">
+                      <label for="formInputDISAStatusInfo">Additional status info.</label>
                     </div>
-                    <div class="form-group text-dark">
-                      <label for="formInputDISAPersonVocation"
-                        style="padding-left:5%;">Vocation</label>
-                      <input
-                        style="width:60%;float:right;margin-right:5%;"
-                        type="text" class="form-control"
-                        id="formInputDISAPersonVocation"
-                        placeholder="">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="formInputDISAPersonVocation" aria-label="Vocation" placeholder="">
+                      <label for="formInputDISAPersonVocation">Vocation</label>
                     </div>
                   </div>
                   <div class="col-md-6">
-                    <!-- <h5 class="text-dark" style="float:left;margin-left: 20px;"></h5> -->
-                    <p>&nbsp;</p>
-                    <div class="form-group text-dark">
-                      <label for="formInputDISAPersonRace"
-                        style="padding-left:5%;">Race</label>
-                      <select
-                        style="width:60%;float:right;margin-right:5%;"
-                        class="custom-select"
-                        id="formInputDISAPersonRace">
+                    <div class="form-floating">
+                      <select class="form-select" id="formInputDISAPersonRace" aria-label="New person's race">
                         <option selected>&nbsp;</option>
                         <option value="1">&nbsp;</option>
                         <option value="2">&nbsp;</option>
                         <option value="3">&nbsp;</option>
                       </select>
+                      <label for="formInputDISAPersonRace">Race</label>
                     </div>
-                    <div class="form-group text-dark">
-                      <label
-                        for="formInputDISAPersonRaceTerms"
-                        style="padding-left:5%;">Exact racial
-                        terms used</label>
-                      <input
-                        style="width:40%;float:right;margin-right:5%;"
-                        type="text" class="form-control"
-                        id="formInputDISAPersonRaceTerms"
-                        placeholder="">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="formInputDISAPersonRaceTerms" aria-label="Exact racial terms used" placeholder="">
+                      <label for="formInputDISAPersonRaceTerms">Exact racial terms used</label>
                     </div>
-                    <div class="form-group text-dark">
-                      <label for="formInputDISAPersonTribe"
-                        style="padding-left:5%;">Tribe</label>
-                      <select
-                        style="width:60%;float:right;margin-right:5%;"
-                        class="custom-select"
-                        id="formInputDISAPersonTribe">
+                    <div class="form-floating">
+                      <select class="form-select" id="formInputDISAPersonTribe" aria-label="New person's tribe">
                         <option selected>&nbsp;</option>
                         <option value="1">&nbsp;</option>
                         <option value="2">&nbsp;</option>
                         <option value="3">&nbsp;</option>
                       </select>
+                      <label for="formInputDISAPersonTribe">Tribe</label>
                     </div>
-                    <div class="form-group text-dark">
-                      <label
-                        for="formInputDISAPersonTribeTerms"
-                        style="padding-left:5%;font-size:77%;">Exact
-                        identity/geographical terms
-                        used</label>
-                      <input
-                        style="width:40%;float:right;margin-right:5%;"
-                        type="text" class="form-control"
-                        id="formInputDISAPersonTribeTerms"
-                        placeholder="">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="formInputDISAPersonTribeTerms" aria-label="Exact identity/geographical terms used" placeholder="">
+                      <label for="formInputDISAPersonTribeTerms">Exact identity/geographical terms used</label>
                     </div>
-                    <div class="form-group text-dark">
-                      <label
-                        for="formInputDISAPersonGeoOrigins"
-                        style="padding-left:5%;">Geographic
-                        origins</label>
-                      <input
-                        style="width:50%;float:right;margin-right:5%;"
-                        type="text" class="form-control"
-                        id="formInputDISAPersonGeoOrigins"
-                        placeholder="">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="formInputDISAPersonGeoOrigins" aria-label="Geographic origins" placeholder="">
+                      <label for="formInputDISAPersonGeoOrigins">Geographic origins</label>
                     </div>
                   </div>
                 </div>
-              </div> <!-- /.card-body for a new person -->
+              </div> <!-- /.card-body for a new person --> 
             </div>
           </div>
-          <div class="col-lg-12"
-            style="padding-top:0px;padding:40px;">
-            <div class="form-group" style="margin-top:-30px;">
-              <label
-                for="formInputDISAPeopleResearcherNotes">Researcher
-                notes</label>
-              <a href="#"
-                style="font-size:80%;margin-top:-7px;padding-left: 25px;clear: none;">Report
-                problems or ask for help</a>
-              <textarea class="form-control" rows="3"
-                id="formInputDISAPeopleResearcherNotes"></textarea>
-            </div>
-            <button type="button"
-              class="btn btn-secondary btn-md"
-              style="font-weight: bold;margin-top: 20px;">ALL
-              CHANGES SAVED</button>
-            <button type="button"
-              class="btn btn-primary btn-md"
-              style="font-weight: bold;margin-top: 20px;margin-left: 15px;">SAVE
-              ITEM AND EXIT THIS SOURCE CITATION</button>
+          <div class="col-lg-12" style="padding-top:0px;padding-left:40px;padding-right:40px;padding-bottom:40px;">
+            <div class="form-floating">
+              <textarea class="form-control" placeholder="Enter notes here..." id="formInputDISAPeopleResearcherNotes" style="height: 128px"></textarea>
+              <label for="formInputDISAPeopleResearcherNotes">Researcher notes</label>
+              <a href="#" style="font-size:80%;font-weight:bold;clear:left;">Report problems or ask for help</a> </div>
+            <button type="button" class="btn btn-secondary btn-md" style="font-weight: bold;margin-top: 20px;">ALL CHANGES SAVED</button>
+            <button type="button" class="btn btn-primary btn-md" style="font-weight: bold;margin-top: 20px;margin-left: 15px;">SAVE ITEM AND EXIT THIS SOURCE DOCUMENT</button>
           </div>
-        </div> <!-- /.tab-pane for items -->
-      </div> <!-- /.tab-content for items -->
+        </div> <!-- /.tab-pane for items --> 
+      </div> <!-- /.tab-content for items --> 
     </div>
-  </div>
+    </div>
   </div>
 </div> <!-- /#tabs_bibinfoanditems -->
 
