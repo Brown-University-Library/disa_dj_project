@@ -2,20 +2,35 @@
 
 {% block header_other %}
 
-<link href="/static/css/redesign_citation.css" rel="stylesheet"></link>
+<link href="/static/redesign_citation.css" rel="stylesheet"></link>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<!-- Production version of Vue
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+-->
 
 <script type="module">
+
+  // THIS IS THE MAIN MODULE
+  // It initializes the data structure and passes it to main()
 
   import {main} from '/static/js/redesign_citation.js';
   import {LOCAL_SETTINGS} from '/static/js/redesign_settings.js';
 
-  function preprocessCitationData(data) {
-    // THIS IS A TEMP KLUDGE -- server should break this out
-    const date = new Date(data.citation_type_fields.date);
-    data.citation_type_fields['date-day'] = date.getDate();
-    data.citation_type_fields['date-month'] = date.getMonth() + 1;
-    data.citation_type_fields['date-year'] = date.getFullYear();
-    delete data.citation_type_fields.date;
+  function preprocessCitationData(data) { 
+
+    // Convert dates to YYYY-MM-DD format
+    // @todo should be done on server
+
+    data.citation_type_fields.date = 
+      (new Date(data.citation_type_fields.date))
+      .toISOString()
+      .slice(0,10);
+
+    data.citation_type_fields.accessDate = 
+      (new Date(data.citation_type_fields.accessDate))
+      .toISOString()
+      .slice(0,10);
+
     return data;
   }
 
@@ -51,12 +66,14 @@
   };
 
   const SETTINGS = Object.assign({}, LOCAL_SETTINGS, SERVER_SETTINGS);
+  console.log('SETTINGS', SETTINGS);
+  // @todo keep local/server settings separate so that server 
+  //  settings can be sent back to server?
   main(SETTINGS);
 
 </script>
 
 {% endblock header_other %}
-
 
 <!-- Just a note that we could have page-specific sidebar documentation here, if desired. -->
 
@@ -101,76 +118,66 @@
          role="tabpanel" aria-labelledby="bib-tab"
          id="Bibliographic-information">
 
-      <!-- These are citation fields that are unused by the current citation type -->
-      <div id="hidden-fields" hidden></div>
-
-      <form id="citation-form">
-        <span class="badge bg-secondary float-right"
-              title="Unique identifier for this citation">
+      <form id="citation-form" 
+            v-on:submit.prevent="onSubmitForm">
+        <span class="badge badge-primary float-right"
+          title="Unique identifier for this citation">
           ID {{ doc.id }}
         </span>
         <h5 class="text-dark" style="width:25%;float:left;">
           Citation type
         </h5>
         <div style="clear: left;">
-     <!-- CITATION TYPE DROPDOWN SELECTOR -->
-     <!-- <label for="formInputDISADocType" style="padding-left:12%;">Citation type:</label> -->
-     <!-- hardcoded -->
-    <!-- Ben, I'm going to soon comment-out the select style block below.
-        Just a note that the (dynamic) replacement code below uses a different id.
-        I _could_ change it to match `formInputDISADocType`, but would have to change it in
-        5 or so places in the javascript at the bottom of this page.
-        If your styling depends on the `formInputDISADocType`, I'll go ahead and change it.
-        (I like the explicitness of your id name.)
-        Eventually I'm going to rename it anyway, working to unify 'doc' references to 'cite' or 'citation' references.
-        -->
-     <!--
-     <select style="width:75%;float:right;" class="custom-select" id="formInputDISADocType">
-        <option selected>Newspaper Article</option>
-        <option value="1">[Other doc format]</option>
-        <option value="2">[Other doc format]</option>
-        <option value="3">[Other doc format]</option>
-    </select>
-     -->
-     <!-- dynamic -->
-    <!-- populated by js readDocumentData() -> initializeForm() -->
-    <!-- <select class="form-control" id="document_type"> -->
-    <select style="" class="custom-select" id="document_type">
-      <!-- (Patrick) This option is only to be shown if citation type has not been selected -->
-      <option value="0" class="initMessage">
-        [Select a document type]
-      </option>
-    </select>
+          <select class="custom-select" id="document_type"
+                  v-model="citation_data.citation_type_id">
+            <option value="0" class="initMessage" 
+                    v-if="!citation_data.citation_type_id">
+              [Select a document type]
+            </option>
+            <option v-for="(docTypeId, docTypeName) in DOC_TYPES"
+                    v-bind:value="docTypeId"
+                    v-text="docTypeName">
+            </option>
+          </select>
   </div>
-   <!-- CITATION FIELDS (REQUIRED and OPTIONAL).
-     Unused fields are moved to #hidden-fields outside of the form element, above -->
-  <h5 id="required-fields-header" hidden>Priority information
-  </h5>
-  <div id="required-fields"></div>
-  <h5 id="optional-fields-header" hidden>Additional
-    information</h5>
-  <div id="optional-fields">
+
+  <div id="citation-fields" 
+       style="display:flex; flex-direction:column">
+
+    <!-- HEADERS: Priority vs Optional -->
+
+    <h5 id="required-fields-header" style="order:100" hidden>
+      Priority information
+    </h5>
+    <h5 id="optional-fields-header" style="order:200" hidden>
+      Additional information
+    </h5>
+
+    <!-- FIELDS: Dynamically moved under headings via flexbox order property -->
+
     <div class="citation-field form-group text-dark"
          id="abstractNote">
       <label for="abstractNote-value"
         style="padding-left:15%;">Abstract Note</label>
       <input id="abstractNote-value" name="abstractNote-value"
-        placeholder="Abstract Note" />
+        placeholder="Abstract Note"
+        v-model="citation_data.citation_type_fields.abstractNote" />
     </div>
     <div class="citation-field form-group text-dark"
       id="accessDate">
       <label for="accessDate-value"
         style="padding-left:15%;">Access Date</label>
       <input id="accessDate-value" name="accessDate-value"
-        type="date" placeholder="Access Date" />
+        type="date" placeholder="Access Date"
+        v-model="citation_data.citation_type_fields.accessDate" />
     </div>
-    <div class="citation-field form-group text-dark"
-      id="archive">
+    <div class="citation-field form-group text-dark" id="archive">
       <label for="archive-value"
         style="padding-left:15%;">Archive</label>
       <!-- <input id="archive-value" name="archive-value"  placeholder="Archive" /> -->
       <input id="archive-value" name="archive-value"
-        placeholder="Archive" value="" />
+        placeholder="Archive" 
+        v-model="citation_data.citation_type_fields.archive" />
     </div>
     <div class="citation-field form-group text-dark"
       id="archiveLocation">
@@ -178,7 +185,8 @@
         style="padding-left:15%;">Archive Location</label>
       <input id="archiveLocation-value"
         name="archiveLocation-value"
-        placeholder="Archive Location" />
+        placeholder="Archive Location"
+        v-model="citation_data.citation_type_fields.archiveLocation" />
     </div>
     <div class="citation-field form-group text-dark"
       id="author">
@@ -187,25 +195,34 @@
       <!-- <input id="author-value" name="author-value"  placeholder="Author (last name comes first)" /> -->
       <input id="author-value" name="author-value"
         placeholder="Author (last name comes first)"
-        value="" />
+        v-model="citation_data.citation_type_fields.author" />
     </div>
     <div class="citation-field form-group text-dark"
       id="callNumber">
       <label for="callNumber-value"
         style="padding-left:15%;">Call Number</label>
       <input id="callNumber-value" name="callNumber-value"
-        placeholder="Call Number" />
+        placeholder="Call Number"
+        v-model="citation_data.citation_type_fields.callNumber" />
     </div>
     <div class="citation-field form-group text-dark"
       id="date">
       <label for="date-value"
         style="padding-left:15%;">Date</label>
-      <!-- <input id="date-value" name="date-value" placeholder="Date" /> -->
+      <input id="date-value" name="date-value" placeholder="Date"
+             type="date"
+             v-model="citation_data.citation_type_fields.date" /> 
+
+      <!--  BROKEN OUT WITH YEAR/MONTH/DAY FOR WHEN WE'RE IMPLEMENTING
+            THE NEW DATA MODEL
+
       <label for="date-year-value">Year 
-        <input id="date-year-value" name="date-year-value" type="number" />
+        <input id="date-year-value" name="date-year-value" type="number" 
+                v-model="citation_data.citation_type_fields['date-year']" />
       </label>
       <label for="date-month-value">Month
-        <select id="date-month-value" name="date-month-value">
+        <select id="date-month-value" name="date-month-value"
+                v-model="citation_data.citation_type_fields['date-month']">
           <option value="0">Not specified</option>
           <option value="1">January</option>
           <option value="2">February</option>
@@ -222,7 +239,8 @@
         </select>
       </label>
       <label for="date-day-value">Day
-        <select id="date-day-value" name="date-day-value">
+        <select id="date-day-value" name="date-day-value"
+                v-model="citation_data.citation_type_fields['date-day']">
           <option	value="0">	Not specified	</option>
           <option	value="1">	1	</option>
           <option	value="2">	2	</option>
@@ -257,45 +275,48 @@
           <option	value="31">	31	</option>
         </select>
       </label>
-      <!--
-      <input id="date-value" name="date-value"
-        placeholder="Date" value="" />-->
+      -->
     </div>
     <div class="citation-field form-group text-dark"
       id="edition">
       <label for="edition-value"
         style="padding-left:15%;">Edition</label>
       <input id="edition-value" name="edition-value"
-        placeholder="Edition" />
+        placeholder="Edition" 
+        v-model="citation_data.citation_type_fields.edition" />
     </div>
     <div class="citation-field form-group text-dark"
       id="extra">
       <label for="extra-value"
         style="padding-left:15%;">Extra</label>
       <input id="extra-value" name="extra-value"
-        placeholder="Extra" />
+        placeholder="Extra" 
+        v-model="citation_data.citation_type_fields.extra" />
     </div>
     <div class="citation-field form-group text-dark"
       id="ISBN">
       <label for="ISBN-value"
         style="padding-left:15%;">ISBN</label>
       <input id="ISBN-value" name="ISBN-value"
-        placeholder="ISBN" />
+        placeholder="ISBN" 
+        v-model="citation_data.citation_type_fields.ISBN" />
     </div>
     <div class="citation-field form-group text-dark"
       id="ISSN">
       <label for="ISSN-value"
         style="padding-left:15%;">ISSN</label>
       <input id="ISSN-value" name="ISSN-value"
-        placeholder="ISSN" />
+        placeholder="ISSN" 
+        v-model="citation_data.citation_type_fields.ISSN" />
     </div>
     <div class="citation-field form-group text-dark"
       id="language">
       <label for="language-value"
         style="padding-left:15%;">Language</label>
-        <!-- DROPDOWN? -->
+        <!-- @todo SHOULD BE A DROPDOWN? -->
       <input id="language-value" name="language-value"
-        placeholder="Language" />
+        placeholder="Language" 
+        v-model="citation_data.citation_type_fields.language" />
     </div>
     <div class="citation-field form-group text-dark"
       id="libraryCatalog">
@@ -303,14 +324,16 @@
         style="padding-left:15%;">Library Catalog</label>
       <input id="libraryCatalog-value"
         name="libraryCatalog-value"
-        placeholder="Library Catalog" />
+        placeholder="Library Catalog"
+        v-model="citation_data.citation_type_fields.libraryCatalog" />
     </div>
     <div class="citation-field form-group text-dark"
       id="pages">
       <label for="pages-value"
         style="padding-left:15%;">Pages</label>
       <input id="pages-value" name="pages-value"
-        placeholder="Pages" />
+        placeholder="Pages"
+        v-model="citation_data.citation_type_fields.pages" />
     </div>
     <div class="citation-field form-group text-dark"
       id="place">
@@ -318,7 +341,8 @@
         style="padding-left:15%;">Place</label>
       <!-- <input id="place-value" name="place-value" placeholder="Place" /> -->
       <input id="place-value" name="place-value"
-        placeholder="Place" value="" />
+        placeholder="Place"
+        v-model="citation_data.citation_type_fields.place" />
     </div>
     <div class="citation-field form-group text-dark"
       id="publicationTitle">
@@ -326,43 +350,49 @@
         style="padding-left:15%;">Publication Title</label>
       <input id="publicationTitle-value"
         name="publicationTitle-value"
-        placeholder="Publication Title" />
+        placeholder="Publication Title"
+        v-model="citation_data.citation_type_fields.publicationTitle" />
     </div>
     <div class="citation-field form-group text-dark"
       id="rights">
-      <!-- DROPDOWN? -->
+      <!-- @todo DROPDOWN? -->
       <label for="rights-value"
         style="padding-left:15%;">Rights</label>
       <input id="rights-value" name="rights-value"
-        placeholder="Rights" />
+        placeholder="Rights"
+        v-model="citation_data.citation_type_fields.rights" />
     </div>
     <div class="citation-field form-group text-dark"
       id="section">
       <label for="section-value"
         style="padding-left:15%;">Section</label>
       <input id="section-value" name="section-value"
-        placeholder="Section" />
+        placeholder="Section"
+        v-model="citation_data.citation_type_fields.section" />
     </div>
     <div class="citation-field form-group text-dark"
       id="series">
       <label for="series-value"
         style="padding-left:15%;">Series</label>
       <input id="series-value" name="series-value"
-        placeholder="Series" />
+        placeholder="Series"
+        v-model="citation_data.citation_type_fields.series" />
     </div>
     <div class="citation-field form-group text-dark"
       id="seriesNumber">
       <label for="seriesNumber-value"
         style="padding-left:15%;">Series Number</label>
       <input id="seriesNumber-value" name="seriesNumber-value"
-        placeholder="Series Number" />
+        placeholder="Series Number" 
+        v-model="citation_data.citation_type_fields.seriesNumber" />
     </div>
     <div class="citation-field form-group text-dark"
       id="shortTitle">
       <label for="shortTitle-value"
         style="padding-left:15%;">Short Title</label>
       <input id="shortTitle-value" name="shortTitle-value"
-        placeholder="Short Title" />
+        placeholder="Short Title" 
+        v-model="citation_data.citation_type_fields.shortTitle" />
     </div>
     <div class="citation-field form-group text-dark"
       id="title">
@@ -370,49 +400,18 @@
         style="padding-left:15%;">Title</label>
       <!-- <input id="title-value" name="title-value" placeholder="Title" /> -->
       <input id="title-value" name="title-value"
-        placeholder="Title" value="" />
+        placeholder="Title"
+        v-model="citation_data.citation_type_fields.title" />
     </div>
     <div class="citation-field form-group text-dark" id="url">
       <label for="url-value"
         style="padding-left:15%;">URL</label>
       <input id="url-value" name="url-value"
-        type="url" placeholder="https://..." />
+        type="url" placeholder="https://..." 
+        v-model="citation_data.citation_type_fields.url" />
     </div>
-  </div>  <!-- end <div id="optional-fields"> -->
-   <!--
-  <div class="form-group text-dark">
-      <label for="formInputDISATitle" style="padding-left:10%;">Title<span style="font-size:85%;" class="text-danger">(required)</span></label>
-      <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISATitle" placeholder="Enter Title">
   </div>
-  <div class="form-group text-dark">
-      <label for="formInputDISAPlace" style="padding-left:15%;">Place</label>
-      <input style="width:75%;float:right;" type="text" class="form-control" id="formInputDISAPlace" placeholder="Enter Place">
-  </div>
-  <label for="formInputDISABiblioDateYear" style="padding-left:15%;">Date</label>
-  <div style="width:75%;float:right;">
-      <p style="width:25%;float:left;padding-right:10px;"> <select class="custom-select" id="formInputDISABiblioDateYear">
-              <option selected>Year</option>
-              <option value="1">[Year values?]</option>
-              <option value="2">[Year values?]</option>
-              <option value="3">[Year values?]</option>
-          </select>
-      </p>
-      <p style="width:25%;float:left;padding-right:10px;"> <select class="custom-select" id="formInputDISABiblioDateMonth">
-              <option selected>Month</option>
-              <option value="1">[Month values?]</option>
-              <option value="2">[Month values?]</option>
-              <option value="3">[Month values?]</option>
-          </select>
-      </p>
-      <p style="width:25%;float:left;padding-right:0px;"> <select class="custom-select" id="formInputDISABiblioDateDay">
-              <option selected>[Day]</option>
-              <option value="1">[Day values?]</option>
-              <option value="2">[Day values?]</option>
-              <option value="3">[Day values?]</option>
-          </select>
-      </p>
-  </div>
-  -->
+
   <div class="form-group">
     <label for="formInputDISAAcknowledgements"
       style="padding-left:0%;">Acknowledgements</label>
@@ -434,7 +433,7 @@
   <p>&nbsp;</p>
   <p>&nbsp;</p>
     
-  <button type="button" 
+  <button type="submit" 
     class="btn btn-primary btn-md"
     id="citation-form-submit">
     SAVE AND CONTINUE TO ENTER ITEMS
