@@ -21,15 +21,19 @@
     // Convert dates to YYYY-MM-DD format
     // @todo should be done on server
 
-    data.citation_type_fields.date = 
-      (new Date(data.citation_type_fields.date))
-      .toISOString()
-      .slice(0,10);
+    if (data.citation_type_fields.date) {
+      data.citation_type_fields.date = 
+        (new Date(data.citation_type_fields.date))
+        .toISOString()
+        .slice(0,10);
+    }
 
-    data.citation_type_fields.accessDate = 
-      (new Date(data.citation_type_fields.accessDate))
-      .toISOString()
-      .slice(0,10);
+    if (data.citation_type_fields.accessDate) {
+      data.citation_type_fields.accessDate = 
+        (new Date(data.citation_type_fields.accessDate))
+        .toISOString()
+        .slice(0,10);
+    }
 
     return data;
   }
