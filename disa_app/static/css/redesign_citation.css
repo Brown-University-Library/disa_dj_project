@@ -12,3 +12,10 @@
 .age-as-number #formInputDISAPersonAge_number {
 	display: initial;
 }
+
+/* Main tabs have a white background */
+
+#Bibliographic-information, #Items {
+  background: white;
+}
+
