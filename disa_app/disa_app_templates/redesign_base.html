@@ -16,10 +16,11 @@
         {% endif %}
 
         <!-- Bootstrap core CSS -->
-        {# <link href="../../static/lib/bootstrap-4.5.0-dist/css/bootstrap.min.css" rel="stylesheet"> #}
-        {# <link href="assets/css/sidebar-style.css" rel="stylesheet">  #}
-        {# <link href="assets/css/dummy_file.css" rel="stylesheet">  #}
-
+        {% comment %}
+          <link href="../../static/lib/bootstrap-4.5.0-dist/css/bootstrap.min.css" rel="stylesheet">
+          <link href="assets/css/sidebar-style.css" rel="stylesheet">
+          <link href="assets/css/dummy_file.css" rel="stylesheet">
+        {% endcomment %}
         <link href="{% static 'lib/bootstrap-5.0.0-beta2-dist/css/bootstrap.min.css' %}" rel="stylesheet">
         {# <script src="../../static/lib/bootstrap-5.0.0-beta2-dist/js/bootstrap.bundle.min.js"><\/script> #}
         <link href="{% static 'css/redesign_sidebar-style.css' %}" rel="stylesheet">
@@ -63,14 +64,14 @@
                         <ul class="navbar-nav mr-auto nav-fill w-100">
                             <li>
 
-                            {# <!--
-                            <form class="form-inline my-2 my-lg-0">
-                                <input class="form-control mr-sm-2" type="text" placeholder="enter search-term" aria-label="Search">
-                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">
-                                    <i class="fas fa-search fa-lg"></i>
-                                </button>
-                            </form>
-                            --> #}
+                            {% comment %} <!--
+                              <form class="form-inline my-2 my-lg-0">
+                                  <input class="form-control mr-sm-2" type="text" placeholder="enter search-term" aria-label="Search">
+                                  <button class="btn btn-secondary my-2 my-sm-0" type="submit">
+                                      <i class="fas fa-search fa-lg"></i>
+                                  </button>
+                              </form> --> 
+                            {% endcomment %}
 
                             <form class="form-inline my-2 my-lg-0" action="{% url 'search_results_url' %}" method="get">
 
@@ -89,7 +90,7 @@
 
                             </li>
 
-                            {# COMMENTED OUT ON THE SERVER - START
+                            {% comment "COMMENTED OUT ON THE SERVER" %}
 
                             <!-- removed 2020-July-23 because the `Citations` link is the home-link
                             <li class="nav-item active">
@@ -118,7 +119,7 @@
                             </li>
                             -->
 
-                            COMMENTED OUT ON THE SERVER - END #}
+                            {% endcomment %}
 
                             {% if user_is_authenticated %}
                             <li class="nav-item">

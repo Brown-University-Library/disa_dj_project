@@ -213,8 +213,7 @@
              type="date"
              v-model="citation_data.citation_type_fields.date" /> 
 
-      <!--  BROKEN OUT WITH YEAR/MONTH/DAY FOR WHEN WE'RE IMPLEMENTING
-            THE NEW DATA MODEL
+      {% comment "BROKEN OUT WITH YEAR/MONTH/DAY FOR WHEN WE'RE IMPLEMENTING THE NEW DATA MODEL" %}
 
       <label for="date-year-value">Year 
         <input id="date-year-value" name="date-year-value" type="number" 
@@ -275,7 +274,7 @@
           <option	value="31">	31	</option>
         </select>
       </label>
-      -->
+      {% endcomment %}
     </div>
     <div class="citation-field form-group text-dark"
       id="edition">
