@@ -11,10 +11,10 @@ from typing import List
 
 import sqlalchemy
 from disa_app import settings_app
-from sqlalchemy import Boolean
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, UnicodeText
-from sqlalchemy import Table
+from sqlalchemy import Boolean, Integer, String, ForeignKey, DateTime, UnicodeText
+from sqlalchemy import Column
 from sqlalchemy import create_engine
+from sqlalchemy import Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import relationship
