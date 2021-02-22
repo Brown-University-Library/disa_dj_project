@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import datetime, json, logging, os, pprint
+import datetime, json, logging, os, pprint, uuid
 
 import sqlalchemy
 from disa_app import models_sqlalchemy as models_alch
@@ -204,22 +204,71 @@ class Poster():
     def execute_post( self, user_id: int, data: dict ) -> dict:
         """ Updates db and returns data.
             Called by manage_post() """
-        prs = self.initialize_person()
+        log.debug( 'starting execute_post()' )
+        assert type(user_id) == int; assert type(data) == dict
+        log.debug( f'data, ``{pprint.pformat(data)}``' )
+
         rfrnt = models_alch.Referent( reference_id=data['record_id'] )
-        rfrnt.person = prs
         primary_name: str = self.common.update_referent_name( data['name'], self.session )
         rfrnt.names.append( primary_name )
         rfrnt.primary_name = primary_name
-        prs.first_name = primary_name.first
-        prs.last_name = primary_name.last
-        self.session.add( prs )
         rfrnt.roles = [ self.common.get_or_create_referent_attribute(a, models_alch.Role, self.session) for a in data['roles'] ]
+        rfrnt.uuid = uuid.uuid4().hex
+        if self.is_group( data ):
+            rfrnt.count = int( data['count'] )
+            rfnt.count_estimated = data['count_estimated']
+        else:
+            rfrnt.count = 1
+            rfrnt.count_estimated = False
+            prs = self.initialize_person()
+            rfrnt.person = prs
+            prs.first_name = primary_name.first
+            prs.last_name = primary_name.last
+            self.session.add( prs )
+
         self.session.add( rfrnt )
         self.session.commit()
         self.common.stamp_edit( user_id, rfrnt.reference, self.session )
-        data = self.common.prep_put_post_response_data( rfrnt )
-        log.debug( f'returning data, ```{pprint.pformat(data)}```' )
-        return data
+        return_data = self.common.prep_put_post_response_data( rfrnt )
+        assert type(return_data) == dict
+        log.debug( f'returning data, ```{pprint.pformat(return_data)}```' )
+        return return_data
+
+    def is_group( self, data: dict ) -> bool:
+        """ Determines whether referent is a group.
+            Called by execute_post() """
+        assert type(data) == dict
+        is_group = False
+        count = data.get( 'count', None )
+        if count:
+            try:
+                count = int(count)
+                if count > 1:
+                    is_group = True
+            except:
+                log.exception( 'unable to generate int; traceback follows; processing will continue' )
+        log.debug( f'is_group, ``{is_group}``' )
+        return is_group
+
+    # def execute_post( self, user_id: int, data: dict ) -> dict:
+    #     """ Updates db and returns data.
+    #         Called by manage_post() """
+    #     prs = self.initialize_person()
+    #     rfrnt = models_alch.Referent( reference_id=data['record_id'] )
+    #     rfrnt.person = prs
+    #     primary_name: str = self.common.update_referent_name( data['name'], self.session )
+    #     rfrnt.names.append( primary_name )
+    #     rfrnt.primary_name = primary_name
+    #     prs.first_name = primary_name.first
+    #     prs.last_name = primary_name.last
+    #     self.session.add( prs )
+    #     rfrnt.roles = [ self.common.get_or_create_referent_attribute(a, models_alch.Role, self.session) for a in data['roles'] ]
+    #     self.session.add( rfrnt )
+    #     self.session.commit()
+    #     self.common.stamp_edit( user_id, rfrnt.reference, self.session )
+    #     data = self.common.prep_put_post_response_data( rfrnt )
+    #     log.debug( f'returning data, ```{pprint.pformat(data)}```' )
+    #     return data
 
     def initialize_person( self ) -> models_alch.Person:
         """ Creates person record.
