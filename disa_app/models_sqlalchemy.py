@@ -11,6 +11,7 @@ from typing import List
 
 import sqlalchemy
 from disa_app import settings_app
+from sqlalchemy import Boolean
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, UnicodeText
 from sqlalchemy import Table
 from sqlalchemy import create_engine
@@ -431,11 +432,12 @@ class Referent(Base):
     __tablename__ = '5_referents'
 
     id = Column( Integer, primary_key=True )
+    uuid = Column( String(32) )
     age = Column( String(255) )
     sex = Column( String(255) )
-    count = Column( Integer )  # individual = 1
-    count_estimated( Boolean )  # individual = False
-    group_description( UnicodeText() )
+    count = Column( Integer )                   # individual = 1
+    count_estimated = Column( Boolean )         # individual = False
+    group_description = Column( UnicodeText() ) # individual = ''
     primary_name_id = Column(Integer,
         ForeignKey('6_referent_names.id'),
         nullable=True)
