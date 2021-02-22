@@ -216,10 +216,12 @@ class Poster():
         rfrnt.uuid = uuid.uuid4().hex
         if self.is_group( data ):
             rfrnt.count = int( data['count'] )
-            rfnt.count_estimated = data['count_estimated']
+            rfrnt.count_estimated = data['count_estimated']
+            rfrnt.group_description = data['group_description']
         else:
             rfrnt.count = 1
             rfrnt.count_estimated = False
+            rfrnt.group_description = ''
             prs = self.initialize_person()
             rfrnt.person = prs
             prs.first_name = primary_name.first
