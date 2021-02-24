@@ -426,7 +426,7 @@
         <div id="new_person_button" class="d-flex flex-row"
               style="margin: 1em 0">
             <button class="btn btn-primary" id="add-person">Add an individual</button>&nbsp;&nbsp;
-            {% comment %}<button class="btn btn-primary add-group-selector" id="add-group">Add a group</button>&nbsp;&nbsp;{% endcomment %}
+            <button class="btn btn-primary add-group-selector" id="add-group">Add a group</button>&nbsp;&nbsp;
             <a class="btn btn-primary" href="{% url 'edit_relationships_url' rec_id %}">Identify connections between people</a>
         </div>
         <table class="table" id="entrants-table" hidden="hidden">
@@ -1383,6 +1383,7 @@ $( document ).ready(function() {
     });
 
     $('#entrant_component').on('click', '#add-person', function(e) {
+        console.log( "handling click of `add-person`" );
         document.getElementById('entrants-table').hidden = false;
         e.preventDefault();
         var data = { 'id': 'new', 'first': '',
@@ -1390,6 +1391,16 @@ $( document ).ready(function() {
         addEntrantInput( $('#entrants'), data, roles);
         deactivateEntrantEditing( $('#entrant_component') );
         makeEntrantEditable( $('#entrants'), 'new');
+    });
+
+    $('#entrant_component').on('click', '#add-group', function(e) {
+        console.log( "handling click of `add-group`" );
+        // document.getElementById('entrants-table').hidden = false;
+        // e.preventDefault();
+        // var data = { 'id': 'new', 'first': '', 'last': '', 'roles': [], 'name_id': 'name' };
+        // addEntrantInput( $('#entrants'), data, roles);
+        // deactivateEntrantEditing( $('#entrant_component') );
+        // makeEntrantEditable( $('#entrants'), 'new');
     });
 
     $('#entrant_component').on('click', '.edit-entrant', function(e) {
@@ -1421,9 +1432,10 @@ $( document ).ready(function() {
     });
 
     $('#entrant_component').on('click', '.save-entrant', function(e) {
+        console.log( "handling save-entrant" );
+
         e.preventDefault();
         var ent_id = $( this ).attr('save-entrant-id');
-
         var data = getEntrantData($('#entrant_component'), ent_id, rec_id);
         updateEntrant( $('#entrant_component'), ent_id, data, details_url );
     });

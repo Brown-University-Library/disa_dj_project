@@ -432,7 +432,7 @@ class Referent(Base):
     __tablename__ = '5_referents'
 
     id = Column( Integer, primary_key=True )
-    uuid = Column( String(32) )
+    uuid = Column( String(32) )                 # patrick, this too is new
     age = Column( String(255) )
     sex = Column( String(255) )
     count = Column( Integer )                   # individual = 1
