@@ -806,6 +806,11 @@ var initializeForm = function (data, tags, editUrl) {
     const groupListingTemplate = document.getElementById('groups-template'),
           groupListingContainer = document.getElementById('groups-table');
 
+    // Function to create a group listing in DOM
+    //  Make a copy of the template, populate it
+    //  Add event listeners for buttons
+    //  Append populated template-copy to DOM
+
     function createGroupListingFromData(groupEntry) {
 
       const groupListing = groupListingTemplate.content.cloneNode(true);
@@ -896,7 +901,7 @@ var initializeForm = function (data, tags, editUrl) {
       // Append to document
 
       groupListingContainer.appendChild(groupListing);
-    }
+    } // End createGroupListingFromData()
 
     // Create a row in table for each entry in the data
 
@@ -978,6 +983,7 @@ var updateRecordData = function(recId, docId) {
     console.log( "collectInputValues data: ", data );
     var method = (recId ? "PUT" : "POST");
     console.log( "method: ", method );
+    
     $.ajax({
         type: method,
         url: rec_data_api,
