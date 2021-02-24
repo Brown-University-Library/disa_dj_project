@@ -290,7 +290,7 @@
     }
 
     .groups-count {
-      width: 5em; 
+      width: 5em;
       display: inline;
     }
 
@@ -395,11 +395,11 @@
                 <label for="image_url">Image<br />
                     <em class="small">
                       Paste the full URL of the image associated with this item. The image should be
-                      located in <a href="https://drive.google.com/drive/u/1/folders/1iEoQGjFo6ft-Vhzs9yaJytpt4KNmZv_L">this Google Drive folder</a>. 
+                      located in <a href="https://drive.google.com/drive/u/1/folders/1iEoQGjFo6ft-Vhzs9yaJytpt4KNmZv_L">this Google Drive folder</a>.
                       In Google Drive, right-click on the file and select "Get link," and in the pop-up, clock on "Copy link." Then paste into the field below.
                     </em></label>
                     <br />
-                <input class="form-control" id="image_url" 
+                <input class="form-control" id="image_url"
                        placeholder="https://drive.google.com/file/d/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/view?usp=sharing"></input>
                  <div class="alert alert-danger" id="url-error-message" role="alert" hidden>
                     Not a valid URL!
@@ -426,8 +426,7 @@
         <div id="new_person_button" class="d-flex flex-row"
               style="margin: 1em 0">
             <button class="btn btn-primary" id="add-person">Add an individual</button>&nbsp;&nbsp;
-            <button class="btn btn-primary add-group-selector" id="add-group">Add a group</button>&nbsp;&nbsp;
-            {% comment %}<a class="btn btn-primary" href="{{ url_for('edit_relationships', recId=rec.id)}}">Identify connections between people</a>{% endcomment %}
+            {% comment %}<button class="btn btn-primary add-group-selector" id="add-group">Add a group</button>&nbsp;&nbsp;{% endcomment %}
             <a class="btn btn-primary" href="{% url 'edit_relationships_url' rec_id %}">Identify connections between people</a>
         </div>
         <table class="table" id="entrants-table" hidden="hidden">
@@ -469,7 +468,7 @@
 
         <!-- Groups entry template -->
 
-        <template id="groups-template">            
+        <template id="groups-template">
           <tbody>
             <!-- Group data row when in edit mode -->
             <tr class="group-edit-entry">
@@ -477,12 +476,12 @@
               <td class="groups-id"></td>
               <!-- Group description -->
               <td>
-                <textarea class="form-control group-input groups-description" 
+                <textarea class="form-control group-input groups-description"
                       type="text" placeholder="Transcribe description from source"></textarea>
               </td>
               <td>
                   <!-- Group count -->
-                  <input class="form-control group-input groups-count" 
+                  <input class="form-control group-input groups-count"
                   type="number" value="10"></input>
                   <!-- Group count estimated checkbox -->
                   <label>
@@ -502,14 +501,14 @@
                         d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"
                       />
                     </svg>
-                  </button> 
+                  </button>
                   <!-- Group in-process save button -->
                   <button class="btn btn-primary saving-group entrant-ctl">
                     Saving &hellip;
-                  </button> 
+                  </button>
                 </span>
                   <!-- Group undo change button -->
-                  <button class="btn btn-secondary cancel-group entrant-ctl" 
+                  <button class="btn btn-secondary cancel-group entrant-ctl"
                           title="Cancel current changes">
                     <svg class="svg-inline--fa fa-undo fa-w-16" aria-hidden="true" data-prefix="fas"
                       data-icon="undo" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
@@ -527,12 +526,12 @@
                 <td class="groups-id"></td>
                 <!-- Group description -->
                 <td>
-                  <textarea class="form-control group-input groups-description click-to-edit-group" 
+                  <textarea class="form-control group-input groups-description click-to-edit-group"
                             type="text" readonly="true" placeholder="Transcribe description from source"></textarea>
                 </td>
                 <td>
                     <!-- Group count -->
-                    <input class="form-control group-input groups-count click-to-edit-group" 
+                    <input class="form-control group-input groups-count click-to-edit-group"
                            type="number" readonly="true"></input>
                     <!-- Group count estimated checkbox -->
                     <label>
@@ -624,12 +623,12 @@ var updateLocationInputs = function (locsArray) {
 
 var setInputValues = function(recData) {
 
-    /*  
-      Updates input fields from readRecordData() api call 
-      when initializing form, and from ajax-update from when 
+    /*
+      Updates input fields from readRecordData() api call
+      when initializing form, and from ajax-update from when
       data is updated.
 
-      Called by initializeForm() and updateRecordData() 
+      Called by initializeForm() and updateRecordData()
     */
 
     console.log( "in setInputValues; will update item fields." )
@@ -650,7 +649,7 @@ const updateImageUrl = function(input, data) {
     try {
       const validUrl = (new URL(new String(data))).href;
       input.value = validUrl;
-    } catch (_) { 
+    } catch (_) {
       console.error(`WARNING: provided image URL ${dataAsString} is not valid`);
     }
   }
@@ -720,10 +719,10 @@ var collectInputValues = function(docId) {
     try { // Only load image_url if it's a valid URL
       data['image_url'] = (new URL($('#image_url').val())).href;
       document.getElementById('url-error-message').setAttribute('hidden', 'hidden');
-    } catch (_) { 
+    } catch (_) {
       document.getElementById('url-error-message').removeAttribute('hidden');
     }
-    
+
     return data;
 }
 
@@ -777,20 +776,20 @@ var initializeForm = function (data, tags, editUrl) {
       for (var i=0; i < data['entrants'].length; i++ ) {
         console.log( "in initializeForm(); about to call addEntrantInput() with data: ", data['entrants'][i] );
         addEntrantInput(
-          $('#entrants'), data['entrants'][i], tags 
+          $('#entrants'), data['entrants'][i], tags
         );
       }
     }
 
     initiateEntrantWorkflow( $('#entrant_component'), editUrl );
-    
+
     // GROUPS - START
 
     // Populate groups table
 
     // fake data - START
 
-    const GROUPS_TEST_DATA = [ 
+    const GROUPS_TEST_DATA = [
       { id: 4, description: '12 angry men', count: 12, countEstimated: false },
       { id: 5, description: 'several people', count: 4, countEstimated: true },
       { id: 6, description: '3 little pigs', count: 3, countEstimated: false }
@@ -838,7 +837,7 @@ var initializeForm = function (data, tags, editUrl) {
 
       function gatherEntries(rowAcc, rowClassName) {
         let fieldsHash = {};
-        FIELD_CLASS_NAMES.forEach(fieldClassName => { 
+        FIELD_CLASS_NAMES.forEach(fieldClassName => {
           fieldsHash[fieldClassName] = groupListing.querySelector(`.${rowClassName} .${fieldClassName}`)
         });
         rowAcc[rowClassName] = fieldsHash;
@@ -882,7 +881,7 @@ var initializeForm = function (data, tags, editUrl) {
 
       // onClick for group save edit button
 
-      groupListing.querySelector('.save-group').addEventListener('click', (event) => {          
+      groupListing.querySelector('.save-group').addEventListener('click', (event) => {
         setIsCurrentlySaving(true);
         const onSaveComplete = () => {
           copyFromEditToDisplay('groups-description', 'value');
