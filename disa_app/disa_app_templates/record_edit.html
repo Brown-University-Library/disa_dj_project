@@ -791,13 +791,17 @@ var initializeForm = function (data, tags, editUrl) {
 
     // fake data - START
 
+    /*
     const GROUPS_TEST_DATA = [
       { id: 4, group_description: '12 angry men', count: 12, count_estimated: false },
       { id: 5, group_description: 'several people', count: 4, count_estimated: true },
       { id: 6, group_description: '3 little pigs', count: 3, count_estimated: false }
     ];
 
-    data.groups = []; // GROUPS_TEST_DATA;
+    data.groups = GROUPS_TEST_DATA;
+    */
+
+    data.groups = [];
 
     // fake data - END
 
@@ -824,7 +828,7 @@ var initializeForm = function (data, tags, editUrl) {
       );
 
       groupListing.querySelectorAll('.groups-description').forEach(
-        groupDescriptionField => groupDescriptionField.value = groupEntry.description
+        groupDescriptionField => groupDescriptionField.value = groupEntry.group_description
       );
 
       groupListing.querySelectorAll('.groups-count').forEach(
@@ -832,7 +836,7 @@ var initializeForm = function (data, tags, editUrl) {
       );
 
       groupListing.querySelectorAll('.groups-count-estimated').forEach(
-        groupCountEstimatedCheckbox => groupCountEstimatedCheckbox.checked = groupEntry.countEstimated
+        groupCountEstimatedCheckbox => groupCountEstimatedCheckbox.checked = groupEntry.count_estimated
       );
 
       // Set up event handlers
@@ -840,7 +844,7 @@ var initializeForm = function (data, tags, editUrl) {
       // First, gather references to form
 
       const ENTRY_CONTAINER_CLASS_NAMES = ['group-display-entry', 'group-edit-entry'],
-            FIELD_CLASS_NAMES = ['groups-description', 'groups-count', 'groups-count-estimated'];
+            FIELD_CLASS_NAMES = ['groups-description', 'groups-count', 'groups-count-estimated', 'groups-id'];
 
       function gatherEntries(rowAcc, rowClassName) {
         let fieldsHash = {};
@@ -858,7 +862,7 @@ var initializeForm = function (data, tags, editUrl) {
       const tbodyContainer = groupListing.querySelector('tbody'),
             editRow = groupListing.querySelector('.group-edit-entry'),
             savingStateClassList = groupListing.querySelector('.group-save-state').classList,
-            setIsCurrentlySaving = s => savingStateClassList[s ? 'add' : 'remove']('group-currently-saving');
+            setIsCurrentlySaving = (s) => savingStateClassList[s ? 'add' : 'remove']('group-currently-saving');
 
       function copyFromDisplayToEdit(fieldClassName, prop) {
         fields[`group-edit-entry`][fieldClassName][prop] = fields[`group-display-entry`][fieldClassName][prop];
@@ -937,14 +941,38 @@ var initializeForm = function (data, tags, editUrl) {
 // Save group to server
 
 function saveGroup(fields, onSaveComplete) {
-  const saveData = fields['group-edit-entry'];
-  console.log('SAVE GROUP DATA', {
-    description: saveData['groups-description'],
-    count: saveData['groups-count'],
-    countEstimated: saveData['groups-count-estimated']
-  });
-  // @todo hit the API
-  window.setTimeout(onSaveComplete, 3000);
+  const saveData = fields['group-edit-entry'],
+        groupData = {
+          id: parseInt(saveData['groups-id'].innerText) || 'new',
+          record_id: getRecId(),
+          count: parseInt(saveData['groups-count'].value),
+          count_estimated: saveData['groups-count-estimated'].checked,
+          group_description: saveData['groups-description'].value
+        };
+        
+        const ent_data_api = "{% url 'data_referent_url' 'STUB' %}".replace( 'STUB', groupData.id );
+
+        console.log('BIRKIN THIS IS THE DATA STRUCTURE', groupData);
+        console.log(`BIRKIN THIS IS WHAT THE FETCH CALL IS:`, 
+        `
+fetch('${ent_data_api}', {
+  method: '${(groupData.id === 'new' ? 'POST' : 'PUT')}',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: ${JSON.stringify(groupData, '', 2).replaceAll('\n', '\n  ')},
+})
+        `);
+
+  // window.setTimeout(onSaveComplete, 3000); // TEMP TEST
+
+  fetch(ent_data_api, {
+    method: (groupData.id === 'new' ? 'POST' : 'PUT'),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(groupData),
+  }).then(onSaveComplete);
 }
 
 // GROUPS - END
