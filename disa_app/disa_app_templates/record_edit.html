@@ -335,12 +335,12 @@
             <h1 id="doc_header">{{ doc_display }}</h1>
             <a class="title_link" href="{% url 'edit_citation_url' doc_id %}">(edit document)</a>
         </div>
-<!--
-        <div class='col-md-1'>
-            {% comment %}<a href="{{ url_for('edit_citation', citeId=doc.id)}}">Back</a>{% endcomment %}
-            <a href="{% url 'edit_citation_url' doc_id %}">Back</a>
-        </div>
- -->
+        {% comment %} 
+        <!--
+          <div class='col-md-1'>
+              <a href="{% url 'edit_citation_url' doc_id %}">Back</a>
+          </div> -->
+        {% endcomment %}
     </div>
     <hr id="post_document"> </hr>
 
@@ -571,6 +571,7 @@
 
 <script id="addl_loc_id" type="application/json">{{ addl_loc|safe }}</script>
 
+{% comment %}
 <!-- A test of the js far below that accesses this json
      The idea is from <https://docs.djangoproject.com/en/2.1/ref/templates/builtins/#json-script>,
      ...not yet available in Django 1.11 -->
@@ -581,6 +582,7 @@
     console.log( zzz );
 </script>
  -->
+ {% endcomment %}
 
 <script>
 var getDocumentId = function () {
@@ -790,9 +792,9 @@ var initializeForm = function (data, tags, editUrl) {
     // fake data - START
 
     const GROUPS_TEST_DATA = [
-      { id: 4, description: '12 angry men', count: 12, countEstimated: false },
-      { id: 5, description: 'several people', count: 4, countEstimated: true },
-      { id: 6, description: '3 little pigs', count: 3, countEstimated: false }
+      { id: 4, group_description: '12 angry men', count: 12, count_estimated: false },
+      { id: 5, group_description: 'several people', count: 4, count_estimated: true },
+      { id: 6, group_description: '3 little pigs', count: 3, count_estimated: false }
     ];
 
     data.groups = []; // GROUPS_TEST_DATA;
@@ -884,9 +886,12 @@ var initializeForm = function (data, tags, editUrl) {
         tbodyContainer.classList.remove('group-edit-mode');
       });
 
-      // onClick for group save edit button
+      // onClick for group save edit button:
+      //  send the data to the server, then copy data from edit form to display form
+      //  and hide the edit form
 
       groupListing.querySelector('.save-group').addEventListener('click', (event) => {
+
         setIsCurrentlySaving(true);
         const onSaveComplete = () => {
           copyFromEditToDisplay('groups-description', 'value');
@@ -943,7 +948,6 @@ function saveGroup(fields, onSaveComplete) {
 }
 
 // GROUPS - END
-
 
 var readRecordData = function(recId, roles, edit_url) {
     /*  Bridge to main controller (initializeForm).
@@ -1153,6 +1157,9 @@ var updateEntrant = function($container, entId, entData, editUrl) {
         // ent_data_api = ent_data_api + entId;
         method = 'PUT';
     }
+
+    console.log('DATA BEING SUBMITTED', JSON.stringify(entData));
+
     $.ajax({
         type: method,
         url: ent_data_api,
