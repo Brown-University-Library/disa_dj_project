@@ -428,16 +428,75 @@ class ReferentName(Base):
         return f'<Referent id, ``{self.referent_id}``; first, ``{self.first}``; last, ``{self.last}``>'
 
 
+# class Referent(Base):
+#     __tablename__ = '5_referents'
+
+#     id = Column( Integer, primary_key=True )
+#     uuid = Column( String(32) )                 # patrick, this too is new
+#     age = Column( String(255) )
+#     sex = Column( String(255) )
+#     count = Column( Integer )                   # individual = 1
+#     count_estimated = Column( Boolean )         # individual = False
+#     group_description = Column( UnicodeText() ) # individual = ''
+#     primary_name_id = Column(Integer,
+#         ForeignKey('6_referent_names.id'),
+#         nullable=True)
+#     reference_id = Column(Integer, ForeignKey('4_references.id'),
+#         nullable=False)
+#     person_id = Column(Integer, ForeignKey('1_people.id'),
+#         nullable=True)
+#     names = relationship(
+#         'ReferentName',
+#         primaryjoin=(id == ReferentName.referent_id),
+#         backref='referent',
+#         cascade='delete')
+#     primary_name = relationship(
+#         'ReferentName',
+#         primaryjoin=(primary_name_id == ReferentName.id),
+#         post_update=True )
+#     roles = relationship(
+#         'Role',
+#         secondary=has_role,
+#         back_populates='referents' )
+#     tribes = relationship(
+#         'Tribe',
+#         secondary=has_tribe,
+#         back_populates='referents' )
+#     races = relationship(
+#         'Race',
+#         secondary=has_race,
+#         back_populates='referents')
+#     titles = relationship('Title',
+#         secondary=has_title, back_populates='referents')
+#     vocations = relationship('Vocation',
+#         secondary=has_vocation, back_populates='referents')
+#     origins = relationship('Location',
+#         secondary=has_origin, back_populates='origin_for')
+#     enslavements = relationship('EnslavementType',
+#         secondary=enslaved_as, back_populates='referents')
+
+#     def __repr__(self):
+#         return '<Referent {0}: {1}>'.format(
+#             self.id, self.display_name() )
+
+#     def display_name(self):
+#         display = "{0} {1}".format(
+#             self.primary_name.first, self.primary_name.last).strip()
+#         if display == "":
+#             return "Unknown"
+#         else:
+#             return display
+
+#     ## end class Referent
+
+
 class Referent(Base):
     __tablename__ = '5_referents'
 
-    id = Column( Integer, primary_key=True )
-    uuid = Column( String(32) )                 # patrick, this too is new
-    age = Column( String(255) )
-    sex = Column( String(255) )
-    count = Column( Integer )                   # individual = 1
-    count_estimated = Column( Boolean )         # individual = False
-    group_description = Column( UnicodeText() ) # individual = ''
+    id = Column(Integer, primary_key=True)
+    uuid = Column( String(32) )
+    age = Column(String(255))
+    sex = Column(String(255))
     primary_name_id = Column(Integer,
         ForeignKey('6_referent_names.id'),
         nullable=True)
@@ -490,62 +549,13 @@ class Referent(Base):
     ## end class Referent
 
 
-# class Referent(Base):
-#     __tablename__ = '5_referents'
+class Group(Base):
+    __tablename__ = 'groups'
 
-#     id = Column(Integer, primary_key=True)
-#     age = Column(String(255))
-#     sex = Column(String(255))
-#     primary_name_id = Column(Integer,
-#         ForeignKey('6_referent_names.id'),
-#         nullable=True)
-#     reference_id = Column(Integer, ForeignKey('4_references.id'),
-#         nullable=False)
-#     person_id = Column(Integer, ForeignKey('1_people.id'),
-#         nullable=True)
-#     names = relationship(
-#         'ReferentName',
-#         primaryjoin=(id == ReferentName.referent_id),
-#         backref='referent',
-#         cascade='delete')
-#     primary_name = relationship(
-#         'ReferentName',
-#         primaryjoin=(primary_name_id == ReferentName.id),
-#         post_update=True )
-#     roles = relationship(
-#         'Role',
-#         secondary=has_role,
-#         back_populates='referents' )
-#     tribes = relationship(
-#         'Tribe',
-#         secondary=has_tribe,
-#         back_populates='referents' )
-#     races = relationship(
-#         'Race',
-#         secondary=has_race,
-#         back_populates='referents')
-#     titles = relationship('Title',
-#         secondary=has_title, back_populates='referents')
-#     vocations = relationship('Vocation',
-#         secondary=has_vocation, back_populates='referents')
-#     origins = relationship('Location',
-#         secondary=has_origin, back_populates='origin_for')
-#     enslavements = relationship('EnslavementType',
-#         secondary=enslaved_as, back_populates='referents')
-
-#     def __repr__(self):
-#         return '<Referent {0}: {1}>'.format(
-#             self.id, self.display_name() )
-
-#     def display_name(self):
-#         display = "{0} {1}".format(
-#             self.primary_name.first, self.primary_name.last).strip()
-#         if display == "":
-#             return "Unknown"
-#         else:
-#             return display
-
-#     ## end class Referent
+    uuid = Column( String(32), primary_key=True )
+    count = id = Column( Integer(11) )
+    count_estimated = Column( Boolean )
+    group_description = Column( UnicodeText() )
 
 
 class Title(Base):
