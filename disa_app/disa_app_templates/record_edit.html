@@ -1010,6 +1010,7 @@ var updateRecordData = function(recId, docId) {
 
     var rec_id = recId;
     var rec_data_api = "{% url 'data_record_url' rec_id %}";
+    console.log( "in updateRecordData(); rec_data_api, ", rec_data_api );
 
     console.log( "rec_id: ", rec_id );
     {% if rec_id %}

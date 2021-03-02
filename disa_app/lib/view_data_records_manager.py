@@ -48,6 +48,7 @@ def query_record( rec_id: str ) -> dict:
         'label': rec.reference_type.name,
         'value': rec.reference_type.name,
         'id':rec.reference_type.id }
+
     data['entrants'] = [ {
         'name_id': ent.primary_name.id,
         'first': ent.primary_name.first,
@@ -55,8 +56,15 @@ def query_record( rec_id: str ) -> dict:
         'id': ent.id,
         'person_id': ent.person_id,
         'roles': [ role.id for role in ent.roles ] } for ent in rec.referents ]
+
     data['rec']['header'] = '{}'.format(
         rec.reference_type.name or '').strip()
+
+    data['groups'] = [ {
+        rfrnc_group.uuid,
+        rfrnc_group.count,
+        rfrnc_group.count_estimated,
+        rfrnc_group.reference_id} for rfrnc_group in rec.groups ]
 
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     return data

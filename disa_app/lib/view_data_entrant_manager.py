@@ -28,13 +28,15 @@ class Getter():
         self.session = None
 
     def manage_get( self, rfrnt_id: str ) -> HttpResponse:
-        """ Manages data/api ajax 'PUT'.
-            Called by views.data_entrants(), triggered by views.edit_person() webpage. """
+        """ Manages data/api ajax 'GET'.
+            Called by views.data_entrants(), which is triggered by views.edit_person() webpage.
+            TODO: handle 'not-found' (returns None) on referent lookup. """
         log.debug( 'starting manage_get' )
         log.debug( f'rfrnt_id, ```{rfrnt_id}```' )
         self.session = make_session()
         try:
             rfrnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
+            log.debug( f'rfrnt.__dict__, ``{pprint.pformat(rfrnt.__dict__)}``' )
             context: dict = self.prep_get_response( rfrnt )
             resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         except:
