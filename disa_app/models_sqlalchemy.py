@@ -224,6 +224,8 @@ class Reference(Base):
     image_url = Column( String(500) )
     referents = relationship(
         'Referent', backref='reference', lazy=True, cascade="delete")
+    groups = relationship(
+        'Group', backref='reference', lazy=True, cascade="delete")
 
     def last_edit(self):
         """ Note: self.edits is possible because of ReferenceEdit() """
@@ -556,6 +558,7 @@ class Group(Base):
     count = Column( Integer )
     count_estimated = Column( Boolean )
     group_description = Column( UnicodeText() )
+    reference_id = Column( Integer, ForeignKey('4_references.id'), nullable=False )
 
 
 class Title(Base):
