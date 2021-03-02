@@ -63,7 +63,15 @@ class Client_ReferenceGroup_Test( TestCase ):
         response = self.client.post( post_url, payload )
         self.assertEqual( 200, response.status_code )
         resp_dct = json.loads( response.content )
-        self.assertEqual( ['foo'], sorted(resp_dct.keys()) )
+        self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
+        req_keys = sorted( resp_dct['request'].keys() )
+        self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
+        req_payload_keys = sorted( resp_dct['request']['payload'].keys() )
+        self.assertEqual( ['count', 'count_estimated', 'description', 'reference_id'], req_payload_keys )
+        resp_keys = sorted( resp_dct['response'].keys() )
+        self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
+        resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
+        self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
 
     # def test_get_record_data(self):
     #     """ Checks `http://127.0.0.1:8000/data/records/49/ """
