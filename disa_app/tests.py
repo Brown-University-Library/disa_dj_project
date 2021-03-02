@@ -2,6 +2,7 @@
 
 import json, logging, pprint, uuid
 
+import requests
 from disa_app import settings_app
 from disa_app.lib import view_search_results_manager
 from disa_app.models import UserProfile
@@ -17,15 +18,49 @@ log = logging.getLogger(__name__)
 TestCase.maxDiff = 1000
 
 
+# class ReferenceGroup_Test( TestCase ):
+#     """ Checks reference-group api urls. """
+
+#     def test_post(self):
+#         """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ """
+#         response = self.client.post( f'/data/reference_group/new/' )
+#         payload = {
+#             'count': 7,
+#             'count_estimated': True,
+#             'description': 'the description',
+#             'reference_id': 49
+#         }
+#         response = self.client.post( reverse('data_group_url'), payload=payload )
+#         self.assertEqual( 200, response.status_code )
+#         resp_dct = json.loads( response.content )
+#         self.assertEqual( ['foo'], sorted(resp_dct.keys()) )
+
+
 class Client_ReferenceGroup_Test( TestCase ):
     """ Checks reference-group api urls. """
 
-    def test_post(self):
-        """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ """
-        new_uuid = uuid.uuid4().hex
-        response = self.client.post( f'/data/reference_group/{new_uuid}/' )
-        payload = {}
-        response = self.client.post( reverse('data_group_url'), payload )
+    def test_post_bad(self):
+        """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/bad params. """
+        post_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'new'} )
+        log.debug( f'post-url, ``{post_url}``' )
+        payload = {
+            'foo': 'bar'
+        }
+        response = self.client.post( post_url, payload )
+        self.assertEqual( 400, response.status_code )
+        self.assertTrue( b'Bad Request' in response.content )
+
+    def test_post_good(self):
+        """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/good params. """
+        post_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'new'} )
+        log.debug( f'post-url, ``{post_url}``' )
+        payload = {
+            'count': 7,
+            'count_estimated': True,
+            'description': 'the description',
+            'reference_id': 49
+        }
+        response = self.client.post( post_url, payload )
         self.assertEqual( 200, response.status_code )
         resp_dct = json.loads( response.content )
         self.assertEqual( ['foo'], sorted(resp_dct.keys()) )
@@ -36,8 +71,8 @@ class Client_ReferenceGroup_Test( TestCase ):
     #     self.assertEqual( 200, response.status_code )
     #     resp_dct = json.loads( response.content )
     #     self.assertEqual( ['entrants', 'groups', 'rec'], sorted(resp_dct.keys()) )
-    #     group_keys = resp_dct['groups'][0].keys()
-    #     self.assertEqual( ['foo'], sorted(group_keys) )
+    #     # group_keys = resp_dct['groups'][0].keys()
+    #     # self.assertEqual( ['foo'], sorted(group_keys) )
 
     ## end Client_ReferenceGroup_Test()
 
