@@ -335,7 +335,7 @@
             <h1 id="doc_header">{{ doc_display }}</h1>
             <a class="title_link" href="{% url 'edit_citation_url' doc_id %}">(edit document)</a>
         </div>
-        {% comment %} 
+        {% comment %}
         <!--
           <div class='col-md-1'>
               <a href="{% url 'edit_citation_url' doc_id %}">Back</a>
@@ -941,7 +941,11 @@ var initializeForm = function (data, tags, editUrl) {
 // Save group to server
 
 function saveGroup(fields, onSaveComplete) {
+  console.log( "starting saveGroup()" );
+
+  console.log( "csrf_token, ", csrf_token );
   const saveData = fields['group-edit-entry'],
+
         groupData = {
           id: parseInt(saveData['groups-id'].innerText) || 'new',
           record_id: getRecId(),
@@ -949,29 +953,33 @@ function saveGroup(fields, onSaveComplete) {
           count_estimated: saveData['groups-count-estimated'].checked,
           group_description: saveData['groups-description'].value
         };
-        
+
         const ent_data_api = "{% url 'data_referent_url' 'STUB' %}".replace( 'STUB', groupData.id );
+        console.log( "ent_data_api, ", ent_data_api );
 
         console.log('BIRKIN THIS IS THE DATA STRUCTURE', groupData);
-        console.log(`BIRKIN THIS IS WHAT THE FETCH CALL IS:`, 
-        `
-fetch('${ent_data_api}', {
-  method: '${(groupData.id === 'new' ? 'POST' : 'PUT')}',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: ${JSON.stringify(groupData, '', 2).replaceAll('\n', '\n  ')},
-})
-        `);
+//         console.log(`BIRKIN THIS IS WHAT THE FETCH CALL IS:`,
+//         `
+// fetch('${ent_data_api}', {
+//   method: '${(groupData.id === 'new' ? 'POST' : 'PUT')}',
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+//   body: ${JSON.stringify(groupData, '', 2).replaceAll('\n', '\n  ')},
+// })
+//         `);
 
   // window.setTimeout(onSaveComplete, 3000); // TEMP TEST
 
+  var csrf_token = "{{ csrf_token }}";
   fetch(ent_data_api, {
     method: (groupData.id === 'new' ? 'POST' : 'PUT'),
     headers: {
       'Content-Type': 'application/json',
+      'X-CSRFToken': csrf_token
     },
     body: JSON.stringify(groupData),
+    credentials: 'same-origin',
   }).then(onSaveComplete);
 }
 
@@ -1015,7 +1023,7 @@ var updateRecordData = function(recId, docId) {
     console.log( "collectInputValues data: ", data );
     var method = (recId ? "PUT" : "POST");
     console.log( "method: ", method );
-    
+
     $.ajax({
         type: method,
         url: rec_data_api,
