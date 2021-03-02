@@ -98,30 +98,51 @@ class Poster():
         grp.date_modified = datetime.datetime.now()
         self.session.add( grp )
         self.session.commit()  # returns None, so no way to verify success
-        self.common = Common()
         self.common.stamp_edit( user_id, grp.reference, self.session )
-        # data = self.common.prep_put_post_response_data( rfrnt )
-        # log.debug( f'returning data, ```{pprint.pformat(data)}```' )
         log.debug( f'returning uuid, ``{uid}``' )
         return grp.uuid
 
-    def prep_response( self, uid ):
+    def prep_response_data( self, uid ):
         log.debug( 'starting Poster.prep_response()' )
         assert type(uid) == str, type(uid)
         self.session = make_session()
         try:
             grp = self.session.query( models_alch.Group ).get( uid )
             assert type(grp) == models_alch.Group
+            assert type(grp.date_created) == datetime.datetime, type(grp.date_created)
+            assert type(grp.date_modified) == datetime.datetime, type(grp.date_modified)
             log.debug( f'grp.__dict__, ``{pprint.pformat(grp.__dict__)}``' )
         except:
             log.exception( f'problem querying Group on uuid, ``{uid}``; traceback follows; exception will be raised' )
             raise exception( f'unable to query just-saved Group entry' )
         resp_dict = {
-            'group_uuid': grp.uuid
-        }
-        log.debug( f'resp_dict, ``{resp_dict}``' )
-        return resp_dict
+            'request': {
+                'url': self.common.request_url,
+                'method': 'POST',
+                'payload': {
+                    'count': self.perceived_count,
+                    'count_estimated': self.perceived_count_estimated,
+                    'description': self.perceived_description,
+                    'reference_id': self.perceived_reference_id
+                    },
+                'timestamp': str( self.common.start_time )
+            },
+            'response': {
+                'group_data': {
+                    'uuid': grp.uuid,
+                    'count': grp.count,
+                    'count_estimated': grp.count_estimated,
+                    'description': grp.description,
+                    'date_created': str( grp.date_created ),
+                    'date_modified': str( grp.date_modified ),
+                    'reference_id': grp.reference_id,
+                },
+                'elapsed_time': str( datetime.datetime.now() - self.common.start_time )
+            }
 
+        }
+        log.debug( f'resp_dict, ``{pprint.pformat(resp_dict)}``' )
+        return resp_dict
 
     ## end class Poster()
 
