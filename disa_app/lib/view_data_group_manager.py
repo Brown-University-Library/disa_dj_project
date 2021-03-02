@@ -68,11 +68,10 @@ class Poster():
         assert ( type(count), type(count_estimated), type(description), type(reference_id) ) == ( int, bool, str, int )
         assert type(user_id) == int
         self.session = make_session()
-        # self.common = Common()
         try:
             uid = self.execute_save( count, count_estimated, description, reference_id, user_id )
             assert type(uid) == str
-            resp_dict = self.prep_response( uid )
+            resp_dict = self.prep_response_data( uid )
             resp = HttpResponse( json.dumps(resp_dict, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         except:
             msg = 'problem with save, or with response-prep; see logs'
@@ -187,8 +186,9 @@ class Poster():
 class Common():
     """ Contains entrant-manager functions used by multiple method-classes. """
 
-    def __init__( self ):
-        pass
+    def __init__( self, request_url, start_time ):
+        self.request_url = request_url
+        self.start_time = start_time
 
     def stamp_edit( self, request_user_id: int, reference_obj: models_alch.Reference, session: sqlalchemy.orm.session.Session ) -> None:
         """ Updates when the Reference-object was last edited and by whom.
