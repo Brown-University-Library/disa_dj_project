@@ -188,6 +188,10 @@ class Poster():
         """ Manages data/api ajax 'POST'.
             Called by views.data_entrants(), triggered by views.edit_record() webpage 'Add person' button save. """
         log.debug( 'starting manage_post' )
+        assert type(payload) == bytes
+        assert type(request_user_id) == int
+        assert type(rfrnt_id) == str  # will be 'new'
+        log.debug( f'rfrnt_id, ``{rfrnt_id}``' )
         self.session = make_session()
         self.common = Common()
         data: dict = json.loads( payload )
