@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import logging, pprint
+import json, logging, pprint, uuid
 
 from disa_app import settings_app
 from disa_app.lib import view_search_results_manager
 from disa_app.models import UserProfile
 from django.conf import settings as project_settings
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.test import Client
 from django.test import TestCase  # from django.test import SimpleTestCase as TestCase    ## TestCase requires db, so if you're not using a db, and want tests, try this
 from django.test.utils import override_settings
@@ -14,6 +15,31 @@ from django.test.utils import override_settings
 
 log = logging.getLogger(__name__)
 TestCase.maxDiff = 1000
+
+
+class Client_ReferenceGroup_Test( TestCase ):
+    """ Checks reference-group api urls. """
+
+    def test_post(self):
+        """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ """
+        new_uuid = uuid.uuid4().hex
+        response = self.client.post( f'/data/reference_group/{new_uuid}/' )
+        payload = {}
+        response = self.client.post( reverse('data_group_url'), payload )
+        self.assertEqual( 200, response.status_code )
+        resp_dct = json.loads( response.content )
+        self.assertEqual( ['foo'], sorted(resp_dct.keys()) )
+
+    # def test_get_record_data(self):
+    #     """ Checks `http://127.0.0.1:8000/data/records/49/ """
+    #     response = self.client.get( '/data/records/49/' )
+    #     self.assertEqual( 200, response.status_code )
+    #     resp_dct = json.loads( response.content )
+    #     self.assertEqual( ['entrants', 'groups', 'rec'], sorted(resp_dct.keys()) )
+    #     group_keys = resp_dct['groups'][0].keys()
+    #     self.assertEqual( ['foo'], sorted(group_keys) )
+
+    ## end Client_ReferenceGroup_Test()
 
 
 class Client_Misc_Test( TestCase ):
