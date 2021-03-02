@@ -427,6 +427,9 @@ def data_reference_group( request, incoming_uuid=None ):
     """ Called via ajax from views.edit_record() page
         Url: '/data/reference_group/<incoming_uuid>/' -- 'data_group_url' """
     log.debug( 'starting data_reference_group()' )
+    start_time = datetime.datetime.now()
+    request_url = '%s://%s%s' % (
+        request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), request.META.get('REQUEST_URI', request.META['PATH_INFO']) )  # some info not available from client-test
     assert type(incoming_uuid) == str
     log.debug( f'incoming_uuid, ```{incoming_uuid}```' )
     log.debug( f'request.method, ```{request.method}```' )
@@ -439,7 +442,7 @@ def data_reference_group( request, incoming_uuid=None ):
     elif request.method == 'POST':
         user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
         assert type(user_id) == int
-        data_group_poster = view_data_group_manager.Poster()
+        data_group_poster = view_data_group_manager.Poster( request_url, start_time )
         params_valid = data_group_poster.validate_params( dict(request.POST) )
         if params_valid:
             resp = data_group_poster.manage_post( dict(request.POST), user_id )
