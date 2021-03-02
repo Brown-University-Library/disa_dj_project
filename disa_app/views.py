@@ -12,7 +12,8 @@ from disa_app.lib import utility_manager
 from disa_app.lib import v_data_document_manager  # api/documents
 from disa_app.lib import v_data_relationships_manager  # api/relationship-by-reference
 from disa_app.lib import view_browse_manager
-from disa_app.lib import view_data_entrant_manager  # api/people
+from disa_app.lib import view_data_entrant_manager  # api/referents
+from disa_app.lib import view_data_group_manager  # api/groups
 from disa_app.lib import view_data_records_manager  # api/items
 from disa_app.lib import view_edit_record_manager
 from disa_app.lib import view_edit_relationship_manager
@@ -24,7 +25,7 @@ from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 
 
@@ -89,55 +90,6 @@ def browse_tabulator( request ):
             resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_login.html' )
             log.debug( 'ok should render the browse-login template' )
         return resp
-
-
-# def browse_tabulator( request ):
-#     """ Displays tabulator page. """
-#     log.info( '\n\nstarting browse_tabulator()' )
-#     log.debug( f'request.__dict__, ``{request.__dict__}``' )
-#     log.debug( f'request.session.items(), ``{pprint.pformat(request.session.items())}``' )
-#     submitted_username = request.POST.get( 'browse_login_username', '' )
-#     submitted_password = request.POST.get( 'browse_login_password', '' )
-#     assert type(submitted_username) == str
-#     assert type(submitted_password) == str
-#     if request.method == 'POST':
-#         credentials_valid = view_browse_manager.check_credentials_on_post( submitted_username, submitted_password )
-#         assert type( credentials_valid ) == bool
-#         if credentials_valid:
-#             request.session['browse_logged_in'] = 'yes'
-#             request.session.pop( 'errant_browse_login_username', None )  # <https://stackoverflow.com/questions/11277432/how-can-i-remove-a-key-from-a-python-dictionary/15206537#15206537>
-#             request.session.pop( 'errant_browse_login_password', None )
-#         else:
-#             request.session['errant_browse_login_username'] = submitted_username
-#             request.session['errant_browse_login_password'] = submitted_password
-#         request.session.modified = True
-#         resp = view_browse_manager.prepare_self_redirect_on_post()
-#         return resp
-#     if request.method == 'GET':
-#         log.debug( 'handling GET' )
-#         is_browse_logged_in = view_browse_manager.check_browse_logged_in_on_get( dict(request.session), bool(request.user.is_authenticated) )
-#         assert type(is_browse_logged_in) == bool
-#         if is_browse_logged_in:
-#             log.debug( 'logged-in path' )
-#             # request.session.pop( 'browse_logged_in', None )
-#             request.session.modified = True
-#             context = view_browse_manager.prepare_logged_in_get_context( bool(request.user.is_authenticated) )
-#             resp = view_browse_manager.prepare_get_response(
-#                 request, context, 'disa_app_templates/browse_tabulator.html' )
-#         else:
-#             log.debug( 'not logged-in path' )
-#             errant_submitted_username = request.session.get( 'errant_browse_login_username', '' )
-#             errant_submitted_password = request.session.get( 'errant_browse_login_password', '' )
-#             assert type( errant_submitted_username ) == str
-#             assert type( errant_submitted_password ) == str
-#             request.session.pop( 'errant_browse_login_username', None )
-#             request.session.pop( 'errant_browse_login_password', None )
-#             request.session.modified = True
-#             context = view_browse_manager.prepare_non_logged_in_get_context( errant_submitted_username, errant_submitted_password )
-#             resp = view_browse_manager.prepare_get_response(
-#                 request, context, 'disa_app_templates/browse_login.html' )
-#             log.debug( 'ok should render the browse-login template' )
-#         return resp
 
 
 def browse_logout( request ):
@@ -468,6 +420,42 @@ def edit_relationships( request, rec_id: str ):
 # ===========================
 # data urls
 # ===========================
+
+
+@shib_login
+def data_reference_group( request, incoming_uuid=None ):
+    """ Called via ajax from views.edit_record() page
+        Url: '/data/reference_group/<incoming_uuid>/' -- 'data_group_url' """
+    log.debug( 'starting data_reference_group()' )
+    assert type(incoming_uuid) == str
+    log.debug( f'incoming_uuid, ```{incoming_uuid}```' )
+    log.debug( f'request.method, ```{request.method}```' )
+    if request.method == 'GET':
+        data_group_getter = view_data_group_manager.Getter()
+        resp = data_group_getter.manage_get( rfrnt_id )
+    elif request.method == 'PUT':
+        data_group_updater = view_data_group_manager.Updater()
+        resp = data_group_updater.manage_put( request.body, user_id, rfrnt_id )
+    elif request.method == 'POST':
+        user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+        assert type(user_id) == int
+        data_group_poster = view_data_group_manager.Poster()
+        params_valid = data_group_poster.validate_params( dict(request.POST) )
+        if params_valid:
+            resp = data_group_poster.manage_post( dict(request.POST), user_id )
+        else:
+            resp = HttpResponseBadRequest( '400 / Bad Request' )
+    elif request.method == 'DELETE':
+        log.debug( 'DELETE detected' )
+        data_group_deleter = view_data_group_manager.Deleter()
+        resp = data_group_deleter.manage_delete( user_id, rfrnt_id )
+    else:
+        msg = 'data_entrants() other request.method handling coming'
+        log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
+        resp = HttpResponse( msg )
+    return resp
+
+    ## end def data_reference_group()
 
 
 @shib_login
