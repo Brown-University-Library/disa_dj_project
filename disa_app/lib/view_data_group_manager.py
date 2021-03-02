@@ -23,10 +23,16 @@ def make_session() -> sqlalchemy.orm.session.Session:
 
 class Poster():
 
-    def __init__( self ):
+    def __init__( self, request_url, start_time ):
         """ Updated by manage_post() """
+        assert type(request_url) == str
+        assert type(start_time) == datetime.datetime, type(start_time)
         self.session = None
-        self.common = None
+        self.common = Common( request_url, start_time )
+        self.perceived_count = None
+        self.perceived_count_estimated = None
+        self.perceived_description = None
+        self.perceived_reference_id = None
 
     def validate_params( self, post_dict ) -> bool:
         """ Checks post params.
@@ -39,6 +45,10 @@ class Poster():
             assert type( bool(post_dict['count_estimated'][0]) ) == bool
             assert type( post_dict['description'][0] ) == str
             assert type( int(post_dict['reference_id'][0]) ) == int
+            self.perceived_count = post_dict['count'][0]
+            self.perceived_count_estimated = post_dict['count_estimated'][0]
+            self.perceived_description = post_dict['description'][0]
+            self.perceived_reference_id = post_dict['reference_id'][0]
             validity = True
         except:
             log.exception( 'bad params; traceback follows; processing will continue' )
