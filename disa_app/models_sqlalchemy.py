@@ -558,6 +558,8 @@ class Group(Base):
     count = Column( Integer )
     count_estimated = Column( Boolean )
     description = Column( UnicodeText() )
+    date_created = Column( DateTime() )
+    date_modified = Column( DateTime() )
     reference_id = Column( Integer, ForeignKey('4_references.id'), nullable=False )
 
 
