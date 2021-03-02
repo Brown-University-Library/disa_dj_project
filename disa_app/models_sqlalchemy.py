@@ -557,7 +557,7 @@ class Group(Base):
     uuid = Column( String(32), primary_key=True )
     count = Column( Integer )
     count_estimated = Column( Boolean )
-    group_description = Column( UnicodeText() )
+    description = Column( UnicodeText() )
     reference_id = Column( Integer, ForeignKey('4_references.id'), nullable=False )
 
 
