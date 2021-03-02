@@ -553,7 +553,7 @@ class Group(Base):
     __tablename__ = 'groups'
 
     uuid = Column( String(32), primary_key=True )
-    count = id = Column( Integer(11) )
+    count = Column( Integer )
     count_estimated = Column( Boolean )
     group_description = Column( UnicodeText() )
 
