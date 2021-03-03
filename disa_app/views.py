@@ -457,12 +457,21 @@ def data_reference_group( request, incoming_uuid=None ):
             resp = HttpResponseBadRequest( '400 / Bad Request' )
     elif request.method == 'DELETE':
         log.debug( 'DELETE detected' )
-        data_group_deleter = view_data_group_manager.Deleter()
-        resp = data_group_deleter.manage_delete( user_id, rfrnt_id )
+        data_group_deleter = view_data_group_manager.Deleter( request_url, start_time )
+        params_valid = data_group_deleter.validate_delete_params( incoming_uuid )
+        if params_valid:
+            if data_group_deleter.prelim_status_code == 200:
+                user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+                assert type(user_id) == int
+                resp = data_group_deleter.manage_delete( user_id )  # grp-obj already stored as attribute
+            else:
+                log.debug( 'returning `404 / Not Found`' )
+                resp = HttpResponseNotFound( '404 / Not Found' )
+        else:
+            resp = HttpResponseBadRequest( '400 / Bad Request' )
     else:
-        msg = 'data_entrants() other request.method handling coming'
-        log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
-        resp = HttpResponse( msg )
+        log.warning( f'request.method, ``{request.method}`` detected; returning `400 / Bad Request`' )
+        resp = HttpResponseBadRequest( '400 / Bad Request' )
     return resp
 
     ## end def data_reference_group()
