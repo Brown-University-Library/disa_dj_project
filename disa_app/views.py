@@ -434,17 +434,24 @@ def data_reference_group( request, incoming_uuid=None ):
     log.debug( f'incoming_uuid, ```{incoming_uuid}```' )
     log.debug( f'request.method, ```{request.method}```' )
     if request.method == 'GET':
-        data_group_getter = view_data_group_manager.Getter()
-        resp = data_group_getter.manage_get( rfrnt_id )
+        data_group_getter = view_data_group_manager.Getter( request_url, start_time )
+        params_valid = data_group_getter.validate_params( incoming_uuid )
+        if params_valid:
+            if data_group_getter.prelim_status_code == 200:
+                resp = data_group_getter.manage_get( request.GET['incoming_uuid'] )
+            else:
+                resp = HttpResponseNotFound( '404 / Not Found' )
+        else:
+            resp = HttpResponseBadRequest( '400 / Bad Request' )
     elif request.method == 'PUT':
         data_group_updater = view_data_group_manager.Updater()
         resp = data_group_updater.manage_put( request.body, user_id, rfrnt_id )
     elif request.method == 'POST':
-        user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
-        assert type(user_id) == int
         data_group_poster = view_data_group_manager.Poster( request_url, start_time )
         params_valid = data_group_poster.validate_params( dict(request.POST) )
         if params_valid:
+            user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+            assert type(user_id) == int
             resp = data_group_poster.manage_post( dict(request.POST), user_id )
         else:
             resp = HttpResponseBadRequest( '400 / Bad Request' )

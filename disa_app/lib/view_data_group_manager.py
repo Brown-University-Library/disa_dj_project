@@ -105,7 +105,6 @@ class Poster():
     def prep_response_data( self, uid ):
         log.debug( 'starting Poster.prep_response()' )
         assert type(uid) == str, type(uid)
-        self.session = make_session()
         try:
             grp = self.session.query( models_alch.Group ).get( uid )
             assert type(grp) == models_alch.Group
@@ -147,61 +146,59 @@ class Poster():
     ## end class Poster()
 
 
+class Getter():
 
-# class Getter():
-#     def __init__( self ):
-#         self.session = None
+    def __init__( self, request_url, start_time ):
+        """ Updated by manage_post() """
+        assert type(request_url) == str
+        assert type(start_time) == datetime.datetime, type(start_time)
+        self.session = None
+        self.common = Common( request_url, start_time )
+        self.grp = None
+        self.prelim_status_code = None
+        self.perceived_count = None
+        self.perceived_count_estimated = None
+        self.perceived_description = None
+        self.perceived_reference_id = None
 
-#     def manage_get( self, rfrnt_id: str ) -> HttpResponse:
-#         """ Manages data/api ajax 'GET'.
-#             Called by views.data_entrants(), triggered by views.edit_person() webpage. """
-#         log.debug( 'starting manage_get' )
-#         log.debug( f'rfrnt_id, ```{rfrnt_id}```' )
-#         self.session = make_session()
-#         try:
-#             rfrnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
-#             context: dict = self.prep_get_response( rfrnt )
-#             resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#         except:
-#             msg = 'problem with update, or with response-prep; see logs'
-#             log.exception( msg )
-#             resp = HttpResponse( msg )
-#         log.debug( 'returning response' )
-#         return resp
+    def validate_params( self, incoming_uuid ) -> bool:
+        """ Checks post params.
+            Called by views.data_reference_group(), triggered by views.edit_record() webpage 'Add Group' button save. """
+        log.debug( 'starting Getter.validate_params()' )
+        assert type( incoming_uuid ) == str
+        validity = False
+        self.session = make_session()
+        try:
+            grp = self.session.query( models_alch.Group ).get( incoming_uuid )
+            assert type(grp) == models_alch.Group or isinstance(grp, type(None))
+            validity = True
+            if grp:
+                self.grp = grp
+                self.prelim_status_code = 200
+        except:
+            log.exception( 'bad params; traceback follows; processing will continue' )
+        log.debug( f'validity, ``{validity}``' )
+        return validity
 
-#     def prep_get_response( self, rfrnt: models_alch.Referent ) -> dict:
-#         """ Prepares context.
-#             Called by manage_get() """
-#         data = { 'ent': {} }
-#         data['ent']['id'] = rfrnt.id
-#         data['ent']['names'] = [
-#             { 'first': n.first, 'last': n.last,
-#                 'name_type': n.name_type.name,
-#                 'id': n.id } for n in rfrnt.names ]
-#         data['ent']['age'] = rfrnt.age
-#         data['ent']['sex'] = rfrnt.sex
-#         data['ent']['races'] = [
-#             { 'label': r.name, 'value': r.name,
-#                 'id': r.name } for r in rfrnt.races ]
-#         data['ent']['tribes'] = [
-#             { 'label': t.name, 'value': t.name,
-#                 'id': t.name } for t in rfrnt.tribes ]
-#         data['ent']['origins'] = [
-#             { 'label': o.name, 'value': o.name,
-#                 'id': o.name } for o in rfrnt.origins ]
-#         data['ent']['titles'] = [
-#             { 'label': t.name, 'value': t.name,
-#                 'id': t.name } for t in rfrnt.titles ]
-#         data['ent']['vocations'] = [
-#             { 'label': v.name, 'value': v.name,
-#                 'id': v.name } for v in rfrnt.vocations ]
-#         data['ent']['enslavements'] = [
-#             { 'label': e.name, 'value': e.name,
-#                 'id': e.name } for e in rfrnt.enslavements ]
-#         log.debug( f'data, ```{pprint.pformat(data)}```' )
-#         return data
+    def manage_get( self, rfrnt_id: str ) -> HttpResponse:
+        """ Manages data/api ajax 'GET'.
+            Called by views.data_entrants(), triggered by views.edit_person() webpage. """
+        log.debug( 'starting manage_get' )
+        log.debug( f'rfrnt_id, ```{rfrnt_id}```' )
+        self.session = make_session()
+        try:
+            rfrnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
+            context: dict = self.prep_get_response( rfrnt )
+            resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+        except:
+            msg = 'problem with update, or with response-prep; see logs'
+            log.exception( msg )
+            resp = HttpResponse( msg )
+        log.debug( 'returning response' )
+        return resp
 
-#     ## end class Getter()
+
+    ## end class Getter()
 
 
 class Common():
