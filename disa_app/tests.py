@@ -26,7 +26,7 @@ class Client_ReferenceGroup_Test( TestCase ):
         delete_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'foo'} )
         delete_response = self.client.delete( delete_url )
         self.assertEqual( 404, delete_response.status_code )
-        self.assertTrue( b'Not Found' in response.content )
+        self.assertTrue( b'Not Found' in delete_response.content )
 
     def test_delete_good(self):
         """ Checks good DELETE of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
@@ -52,12 +52,7 @@ class Client_ReferenceGroup_Test( TestCase ):
         req_keys = sorted( resp_dct['request'].keys() )
         self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
         resp_keys = sorted( resp_dct['response'].keys() )
-        self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
-        resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
-        self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
-
-
-
+        self.assertEqual( ['elapsed_time', 'status'], resp_keys )
 
     def test_get_bad(self):
         """ Checks bad GET of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
@@ -116,7 +111,7 @@ class Client_ReferenceGroup_Test( TestCase ):
         resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
         self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
 
-    # def test_get_record_data(self):
+    # def test_get_record_data_for_group_check(self):
     #     """ Checks `http://127.0.0.1:8000/data/records/49/ """
     #     response = self.client.get( '/data/records/49/' )
     #     self.assertEqual( 200, response.status_code )
