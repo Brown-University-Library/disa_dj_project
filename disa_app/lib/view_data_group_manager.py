@@ -34,7 +34,7 @@ class Poster():
         self.perceived_description = None
         self.perceived_reference_id = None
 
-    def validate_params( self, post_dict ) -> bool:
+    def validate_post_params( self, post_dict ) -> bool:
         """ Checks post params.
             Called by views.data_reference_group(), triggered by views.edit_record() webpage 'Add Group' button save. """
         log.debug( 'starting Poster.validate_params()' )
@@ -69,9 +69,9 @@ class Poster():
         assert type(user_id) == int
         self.session = make_session()
         try:
-            uid = self.execute_save( count, count_estimated, description, reference_id, user_id )
+            uid = self.execute_post_save( count, count_estimated, description, reference_id, user_id )
             assert type(uid) == str
-            resp_dict = self.prep_response_data( uid )
+            resp_dict = self.prep_post_response_data( uid )
             resp = HttpResponse( json.dumps(resp_dict, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         except:
             msg = 'problem with save, or with response-prep; see logs'
@@ -80,7 +80,7 @@ class Poster():
         log.debug( 'returning response' )
         return resp
 
-    def execute_save( self, count, count_estimated, description, reference_id, user_id ) -> dict:
+    def execute_post_save( self, count, count_estimated, description, reference_id, user_id ) -> dict:
         """ Updates db and returns data.
             Called by manage_post() """
         log.debug( 'starting Poster.execute_save()' )
@@ -102,7 +102,7 @@ class Poster():
         log.debug( f'returning uuid, ``{uid}``' )
         return grp.uuid
 
-    def prep_response_data( self, uid ):
+    def prep_post_response_data( self, uid ):
         log.debug( 'starting Poster.prep_response()' )
         assert type(uid) == str, type(uid)
         try:
@@ -114,7 +114,9 @@ class Poster():
         except:
             log.exception( f'problem querying Group on uuid, ``{uid}``; traceback follows; exception will be raised' )
             raise exception( f'unable to query just-saved Group entry' )
-        resp_dict = {
+        response_dct = self.common.prepare_common_response_dct( grp )
+        assert type(response_dct) == dict
+        return_dct = {
             'request': {
                 'url': self.common.request_url,
                 'method': 'POST',
@@ -126,22 +128,10 @@ class Poster():
                     },
                 'timestamp': str( self.common.start_time )
             },
-            'response': {
-                'group_data': {
-                    'uuid': grp.uuid,
-                    'count': grp.count,
-                    'count_estimated': grp.count_estimated,
-                    'description': grp.description,
-                    'date_created': str( grp.date_created ),
-                    'date_modified': str( grp.date_modified ),
-                    'reference_id': grp.reference_id,
-                },
-                'elapsed_time': str( datetime.datetime.now() - self.common.start_time )
-            }
-
+            'response': response_dct
         }
-        log.debug( f'resp_dict, ``{pprint.pformat(resp_dict)}``' )
-        return resp_dict
+        log.debug( f'return_dct, ``{pprint.pformat(return_dct)}``' )
+        return return_dct
 
     ## end class Poster()
 
@@ -161,7 +151,7 @@ class Getter():
         self.perceived_description = None
         self.perceived_reference_id = None
 
-    def validate_params( self, incoming_uuid ) -> bool:
+    def validate_get_params( self, incoming_uuid ) -> bool:
         """ Checks post params.
             Called by views.data_reference_group(), triggered by views.edit_record() webpage 'Add Group' button save. """
         log.debug( 'starting Getter.validate_params()' )
@@ -180,23 +170,30 @@ class Getter():
         log.debug( f'validity, ``{validity}``' )
         return validity
 
-    def manage_get( self, rfrnt_id: str ) -> HttpResponse:
-        """ Manages data/api ajax 'GET'.
-            Called by views.data_entrants(), triggered by views.edit_person() webpage. """
+    def manage_get( self ) -> HttpResponse:
+        """ Manages group data/api ajax 'GET'.
+            Called by views.data_reference_group(), triggered by... ? """
         log.debug( 'starting manage_get' )
-        log.debug( f'rfrnt_id, ```{rfrnt_id}```' )
-        self.session = make_session()
-        try:
-            rfrnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
-            context: dict = self.prep_get_response( rfrnt )
-            resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-        except:
-            msg = 'problem with update, or with response-prep; see logs'
-            log.exception( msg )
-            resp = HttpResponse( msg )
+        assert type(self.grp) == models_alch.Group
+        resp_dict = self.prep_get_response_data()
+        resp = HttpResponse( json.dumps(resp_dict, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         log.debug( 'returning response' )
         return resp
 
+    def prep_get_response_data(self):
+        response_dct = self.common.prepare_common_response_dct( self.grp )
+        assert type(response_dct) == dict
+        return_dct = {
+            'request': {
+                'url': self.common.request_url,
+                'method': 'GET',
+                'payload': {},
+                'timestamp': str( self.common.start_time )
+            },
+            'response': response_dct
+        }
+        log.debug( f'return_dct, ``{pprint.pformat(return_dct)}``' )
+        return return_dct
 
     ## end class Getter()
 
@@ -207,6 +204,25 @@ class Common():
     def __init__( self, request_url, start_time ):
         self.request_url = request_url
         self.start_time = start_time
+
+    def prepare_common_response_dct( self, grp ):
+        """ Builds the response-dict.
+            Called by prep_get_response_data() """
+        assert type(grp) == models_alch.Group
+        response_dct = {
+            'group_data': {
+                'uuid': grp.uuid,
+                'count': grp.count,
+                'count_estimated': grp.count_estimated,
+                'description': grp.description,
+                'date_created': str( grp.date_created ),
+                'date_modified': str( grp.date_modified ),
+                'reference_id': grp.reference_id,
+            },
+            'elapsed_time': str( datetime.datetime.now() - self.start_time )
+        }
+        log.debug( f'response_dct, ``{pprint.pformat(response_dct)}``' )
+        return response_dct
 
     def stamp_edit( self, request_user_id: int, reference_obj: models_alch.Reference, session: sqlalchemy.orm.session.Session ) -> None:
         """ Updates when the Reference-object was last edited and by whom.
