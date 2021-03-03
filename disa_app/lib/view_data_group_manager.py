@@ -227,35 +227,35 @@ class Poster():
         self.perceived_description = None
         self.perceived_reference_id = None
 
-    def validate_post_params( self, post_dct ) -> bool:
-        """ Checks put params.
-            Called by views.data_reference_group(), triggered by views.edit_record() webpage. """
-        log.debug( 'starting validate_post_params()' )
-        assert type(post_dct) == dict
-        validity = self.common.validate_post_put_params( post_dct )
-        log.debug( f'validity, ``{validity}``' )
-        return validity
-
-    # def validate_post_params( self, post_dict ) -> bool:
-    #     """ Checks post params.
-    #         Called by views.data_reference_group(), triggered by views.edit_record() webpage 'Add Group' button save. """
-    #     log.debug( 'starting Poster.validate_params()' )
-    #     validity = False
-    #     try:
-    #         assert type(post_dict) == dict, type(post_dict)
-    #         assert type( int(post_dict['count'][0]) ) == int
-    #         assert type( bool(post_dict['count_estimated'][0]) ) == bool
-    #         assert type( post_dict['description'][0] ) == str
-    #         assert type( int(post_dict['reference_id'][0]) ) == int
-    #         self.perceived_count = post_dict['count'][0]
-    #         self.perceived_count_estimated = post_dict['count_estimated'][0]
-    #         self.perceived_description = post_dict['description'][0]
-    #         self.perceived_reference_id = post_dict['reference_id'][0]
-    #         validity = True
-    #     except:
-    #         log.exception( 'bad params; traceback follows; processing will continue' )
+    # def validate_post_params( self, post_dct ) -> bool:
+    #     """ Checks put params.
+    #         Called by views.data_reference_group(), triggered by views.edit_record() webpage. """
+    #     log.debug( 'starting validate_post_params()' )
+    #     assert type(post_dct) == dict
+    #     validity = self.common.validate_post_put_params( post_dct )
     #     log.debug( f'validity, ``{validity}``' )
     #     return validity
+
+    def validate_post_params( self, post_dict ) -> bool:
+        """ Checks post params.
+            Called by views.data_reference_group(), triggered by views.edit_record() webpage 'Add Group' button save. """
+        log.debug( 'starting Poster.validate_params()' )
+        validity = False
+        try:
+            assert type(post_dict) == dict, type(post_dict)
+            assert type( int(post_dict['count'][0]) ) == int
+            assert type( bool(post_dict['count_estimated'][0]) ) == bool
+            assert type( post_dict['description'][0] ) == str
+            assert type( int(post_dict['reference_id'][0]) ) == int
+            self.perceived_count = post_dict['count'][0]
+            self.perceived_count_estimated = post_dict['count_estimated'][0]
+            self.perceived_description = post_dict['description'][0]
+            self.perceived_reference_id = post_dict['reference_id'][0]
+            validity = True
+        except:
+            log.exception( 'bad params; traceback follows; processing will continue' )
+        log.debug( f'validity, ``{validity}``' )
+        return validity
 
     def manage_post( self, post_dict, user_id ) -> HttpResponse:
         """ Manages data/reference_group api ajax 'POST'.
@@ -442,24 +442,24 @@ class Common():
         session.commit()
         return
 
-    def validate_post_put_params( self, param_dct ):
-        """ Handles check for both the post and put validation step.
-            Called by manage_post() and manage_put() """
-        validity = False
-        try:
-            assert type(param_dct) == dict
-            assert type( int(param_dct['count'][0]) ) == int
-            assert type( bool(param_dct['count_estimated'][0]) ) == bool
-            assert type( param_dct['description'][0] ) == str
-            assert type( int(param_dct['reference_id'][0]) ) == int
-            self.perceived_count = param_dct['count'][0]
-            self.perceived_count_estimated = param_dct['count_estimated'][0]
-            self.perceived_description = param_dct['description'][0]
-            self.perceived_reference_id = param_dct['reference_id'][0]
-            validity = True
-        except:
-            log.exception( 'bad params; traceback follows; processing will continue' )
-        log.debug( f'validity, ``{validity}``' )
-        return validity
+    # def validate_post_put_params( self, param_dct ):
+    #     """ Handles check for both the post and put validation step.
+    #         Called by manage_post() and manage_put() """
+    #     validity = False
+    #     try:
+    #         assert type(param_dct) == dict
+    #         assert type( int(param_dct['count'][0]) ) == int
+    #         assert type( bool(param_dct['count_estimated'][0]) ) == bool
+    #         assert type( param_dct['description'][0] ) == str
+    #         assert type( int(param_dct['reference_id'][0]) ) == int
+    #         self.perceived_count = param_dct['count'][0]
+    #         self.perceived_count_estimated = param_dct['count_estimated'][0]
+    #         self.perceived_description = param_dct['description'][0]
+    #         self.perceived_reference_id = param_dct['reference_id'][0]
+    #         validity = True
+    #     except:
+    #         log.exception( 'bad params; traceback follows; processing will continue' )
+    #     log.debug( f'validity, ``{validity}``' )
+    #     return validity
 
     ## end class Common()
