@@ -207,7 +207,7 @@ class Common():
 
     def prepare_common_response_dct( self, grp ):
         """ Builds the response-dict.
-            Called by prep_get_response_data() """
+            Called by prep_get_response_data() and prep_post_response_data() """
         assert type(grp) == models_alch.Group
         response_dct = {
             'group_data': {
