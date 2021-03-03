@@ -33,7 +33,7 @@ class Client_ReferenceGroup_Test( TestCase ):
 
     def test_get_good(self):
         """ Checks good GET of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-        get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': '610c557a0126451183ca123f4c2924d3'} )
+        get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': '55062fa7c60f4ff9be2698b68ea9da8a'} )
         log.debug( f'get_url, ``{get_url}``' )
         response = self.client.get( get_url )
         self.assertEqual( 200, response.status_code )

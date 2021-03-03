@@ -359,7 +359,7 @@ class Getter():
     def validate_get_params( self, incoming_uuid ) -> bool:
         """ Checks post params.
             Called by views.data_reference_group(), triggered by views.edit_record() webpage 'Add Group' button save. """
-        log.debug( 'starting Getter.validate_params()' )
+        log.debug( 'starting validate_get_params()' )
         assert type( incoming_uuid ) == str
         validity = False
         self.session = make_session()
@@ -368,8 +368,11 @@ class Getter():
             assert type(grp) == models_alch.Group or isinstance(grp, type(None))
             validity = True
             if grp:
+                log.debug( 'group found' )
                 self.grp = grp
                 self.prelim_status_code = 200
+            else:
+                log.debug( 'group not found' )
         except:
             log.exception( 'bad params; traceback follows; processing will continue' )
         log.debug( f'validity, ``{validity}``' )
