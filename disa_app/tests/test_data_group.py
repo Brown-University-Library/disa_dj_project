@@ -88,37 +88,38 @@ class Client_ReferenceGroup_Test( TestCase ):
         """ Checks bad PUT of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
         put_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'foo'} )
         put_response = self.client.put( put_url )
-        self.assertEqual( 404, put_response.status_code )
-        self.assertTrue( b'Not Found' in put_response.content )
+        self.assertEqual( 400, put_response.status_code )
+        self.assertTrue( b'Bad Request' in put_response.content )
 
     def test_put_good(self):
         """ Checks good PUT of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
         ## put -> create entry ==================
         post_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'new'} )
         log.debug( f'post-url, ``{post_url}``' )
-        payload = {
+        post_payload = {
             'count': 7,
             'count_estimated': True,
             'description': 'the description',
             'reference_id': 49
         }
-        post_response = self.client.post( post_url, payload )
+        post_response = self.client.post( post_url, post_payload )
         post_resp_dct = json.loads( post_response.content )
         new_uuid = post_resp_dct['response']['group_data']['uuid']
         self.assertEqual( str, type(new_uuid) )
         ## put -> put ===========================
         put_url = reverse( 'data_group_url', kwargs={'incoming_uuid': new_uuid} )
         log.debug( f'put_url-url, ``{put_url}``' )
-        payload = {
+        put_payload = {
             'count': 8,
             'count_estimated': False,
             'description': 'the new description',
             'reference_id': 49
         }
-        put_response = self.client.put( put_url, payload )
+        jsn = json.dumps( put_payload )
+        put_response = self.client.put( put_url, data=jsn )
         put_resp_dct = json.loads( put_response.content )
-        self.assertEqual( 200, response.status_code )
-        resp_dct = json.loads( response.content )
+        self.assertEqual( 200, put_response.status_code )
+        resp_dct = json.loads( put_response.content )
         self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
         req_keys = sorted( resp_dct['request'].keys() )
         self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
