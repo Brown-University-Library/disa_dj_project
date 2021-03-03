@@ -18,26 +18,33 @@ log = logging.getLogger(__name__)
 TestCase.maxDiff = 1000
 
 
-# class ReferenceGroup_Test( TestCase ):
-#     """ Checks reference-group api urls. """
-
-#     def test_post(self):
-#         """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ """
-#         response = self.client.post( f'/data/reference_group/new/' )
-#         payload = {
-#             'count': 7,
-#             'count_estimated': True,
-#             'description': 'the description',
-#             'reference_id': 49
-#         }
-#         response = self.client.post( reverse('data_group_url'), payload=payload )
-#         self.assertEqual( 200, response.status_code )
-#         resp_dct = json.loads( response.content )
-#         self.assertEqual( ['foo'], sorted(resp_dct.keys()) )
-
-
 class Client_ReferenceGroup_Test( TestCase ):
     """ Checks reference-group api urls. """
+
+    def test_get_bad(self):
+        """ Checks bad GET of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
+        get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'foo'} )
+        log.debug( f'get_url, ``{get_url}``' )
+        response = self.client.get( get_url )
+        self.assertEqual( 404, response.status_code )
+        self.assertTrue( b'Not Found' in response.content )
+
+    def test_get_good(self):
+        """ Checks good GET of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
+        get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': '610c557a0126451183ca123f4c2924d3'} )
+        log.debug( f'get_url, ``{get_url}``' )
+        response = self.client.get( get_url )
+        self.assertEqual( 200, response.status_code )
+        resp_dct = json.loads( response.content )
+        self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
+        req_keys = sorted( resp_dct['request'].keys() )
+        self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
+        req_payload_keys = sorted( resp_dct['request']['payload'].keys() )
+        self.assertEqual( ['count', 'count_estimated', 'description', 'reference_id'], req_payload_keys )
+        resp_keys = sorted( resp_dct['response'].keys() )
+        self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
+        resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
+        self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
 
     def test_post_bad(self):
         """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/bad params. """
