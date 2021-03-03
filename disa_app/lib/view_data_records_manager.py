@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import datetime, json, logging, os, pprint
+import datetime, json, logging, operator, os, pprint
 
 import sqlalchemy
 from disa_app import settings_app
@@ -60,11 +60,21 @@ def query_record( rec_id: str ) -> dict:
     data['rec']['header'] = '{}'.format(
         rec.reference_type.name or '').strip()
 
-    data['groups'] = [ {
-        rfrnc_group.uuid,
-        rfrnc_group.count,
-        rfrnc_group.count_estimated,
-        rfrnc_group.reference_id} for rfrnc_group in rec.groups ]
+    groups = [ {
+        'uuid': rfrnc_group.uuid,
+        'count': rfrnc_group.count,
+        'count_estimated': rfrnc_group.count_estimated,
+        'description': rfrnc_group.description,
+        'date_created': str( rfrnc_group.date_created ),
+        'date_modified': str( rfrnc_group.date_modified ),
+        'reference_id': rfrnc_group.reference_id } for rfrnc_group in rec.groups ]
+    # log.debug( f'initial-groups, ``{pprint.pformat(groups)}``' )
+    sorted_groups = sorted( groups, key=lambda k: k['date_modified'], reverse=True )
+    # log.debug( f'sorted-groups, ``{pprint.pformat(sorted_groups)}``' )
+    data['groups'] = {
+        'group_data': sorted_groups,
+        'group_sort_order': 'reverse date_modified'
+    }
 
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     return data
