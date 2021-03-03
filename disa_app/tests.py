@@ -39,8 +39,6 @@ class Client_ReferenceGroup_Test( TestCase ):
         self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
         req_keys = sorted( resp_dct['request'].keys() )
         self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-        req_payload_keys = sorted( resp_dct['request']['payload'].keys() )
-        self.assertEqual( ['count', 'count_estimated', 'description', 'reference_id'], req_payload_keys )
         resp_keys = sorted( resp_dct['response'].keys() )
         self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
         resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
