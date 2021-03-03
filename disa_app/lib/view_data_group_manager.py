@@ -21,6 +21,80 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
+class Deleter():
+
+    def __init__( self, request_url, start_time ):
+        """ Updated by manage_delete() """
+        assert type(request_url) == str
+        assert type(start_time) == datetime.datetime, type(start_time)
+        self.session = None
+        self.common = Common( request_url, start_time )
+        self.grp = None
+        self.prelim_status_code = None
+
+    def validate_delete_params( self, incoming_uuid ) -> bool:
+        """ Checks delete params.
+            Called by views.data_reference_group(), triggered by views.edit_record() webpage. """
+        log.debug( 'starting Deleter.validate_params()' )
+        assert type( incoming_uuid ) == str
+        validity = False
+        self.session = make_session()
+        try:
+            grp = self.session.query( models_alch.Group ).get( incoming_uuid )
+            assert type(grp) == models_alch.Group or isinstance(grp, type(None))
+            validity = True
+            if grp:
+                self.grp = grp
+                self.prelim_status_code = 200
+        except:
+            log.exception( 'bad params; traceback follows; processing will continue' )
+        log.debug( f'validity, ``{validity}``' )
+        return validity
+
+    def manage_delete( self, user_id ) -> HttpResponse:
+        """ Manages group data/api ajax 'DELETE'.
+            Called by views.data_reference_group() """
+        log.debug( 'starting manage_delete' )
+        try:
+            rfrnc = self.grp.reference
+            self.session.delete( self.grp )
+            self.session.commit()
+            self.common.stamp_edit( user_id, rfrnc, self.session )
+            resp_dct = self.prep_delete_response_data()
+            resp = HttpResponse( json.dumps(resp_dct, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+        except:
+            msg = 'problem with delete, or with response-prep; see logs'
+            log.exception( msg )
+            resp = HttpResponse( msg, status=500 )
+        return resp
+
+    def prep_delete_response_data( self ):
+        """ Prepares delete-dict data.
+            Called by manage_delete() """
+        log.debug( 'starting Deleter.prep_delete_response_data()' )
+        return_dct = {
+            'request': {
+                'url': self.common.request_url,
+                'method': 'DELETE',
+                'payload': {},
+                'timestamp': str( self.common.start_time )
+            },
+            'response': {
+                "status": "success",
+                "elapsed_time": str( datetime.datetime.now() - self.common.start_time )
+            }
+        }
+        log.debug( f'return_dct, ``{pprint.pformat(return_dct)}``' )
+        return return_dct
+
+
+    ## end class Delete()
+
+
+
+
+
+
 class Poster():
 
     def __init__( self, request_url, start_time ):
@@ -71,8 +145,8 @@ class Poster():
         try:
             uid = self.execute_post_save( count, count_estimated, description, reference_id, user_id )
             assert type(uid) == str
-            resp_dict = self.prep_post_response_data( uid )
-            resp = HttpResponse( json.dumps(resp_dict, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+            resp_dct = self.prep_post_response_data( uid )
+            resp = HttpResponse( json.dumps(resp_dct, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         except:
             msg = 'problem with save, or with response-prep; see logs'
             log.exception( msg )
@@ -103,7 +177,9 @@ class Poster():
         return grp.uuid
 
     def prep_post_response_data( self, uid ):
-        log.debug( 'starting Poster.prep_response()' )
+        """ Prepares post-dict.
+            Called by manage_posst() """
+        log.debug( 'starting Poster.prep_post_response_data()' )
         assert type(uid) == str, type(uid)
         try:
             grp = self.session.query( models_alch.Group ).get( uid )
@@ -181,6 +257,8 @@ class Getter():
         return resp
 
     def prep_get_response_data(self):
+        """ Prepares get-dict data.
+            Called by manage_get() """
         response_dct = self.common.prepare_common_response_dct( self.grp )
         assert type(response_dct) == dict
         return_dct = {

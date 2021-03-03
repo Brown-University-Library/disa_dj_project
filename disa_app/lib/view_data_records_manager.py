@@ -250,7 +250,7 @@ def manage_reference_delete( rfrnc_id: str ) -> HttpResponseRedirect:  # or, muc
     session = make_session()
     existing = session.query( models_alch.Reference ).get( rfrnc_id )
     if existing:
-        cite = existing.citation
+        cite = existing.citation  # why did I get this?
         session.delete( existing )
         session.commit()
         # rsp = HttpResponseRedirect( redirect_url )  # if this doesn't work, i can just hit this url with requests and return the output.
