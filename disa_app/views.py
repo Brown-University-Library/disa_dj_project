@@ -433,6 +433,7 @@ def data_reference_group( request, incoming_uuid=None ):
     assert type(incoming_uuid) == str
     log.debug( f'incoming_uuid, ```{incoming_uuid}```' )
     log.debug( f'request.method, ```{request.method}```' )
+    ## GET --------------------------------------
     if request.method == 'GET':
         data_group_getter = view_data_group_manager.Getter( request_url, start_time )
         params_valid = data_group_getter.validate_get_params( incoming_uuid )
@@ -443,9 +444,18 @@ def data_reference_group( request, incoming_uuid=None ):
                 resp = HttpResponseNotFound( '404 / Not Found' )
         else:
             resp = HttpResponseBadRequest( '400 / Bad Request' )
+    ## PUT --------------------------------------
     elif request.method == 'PUT':
-        data_group_updater = view_data_group_manager.Updater()
-        resp = data_group_updater.manage_put( request.body, user_id, rfrnt_id )
+        log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
+        data_group_updater = view_data_group_manager.Updater( request_url, start_time )
+        params_valid = data_group_updater.validate_put_params( request.body )
+        if params_valid:
+            user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+            assert type(user_id) == int
+            resp = data_group_updater.manage_put( incoming_uuid, user_id )
+        else:
+            resp = HttpResponseBadRequest( '400 / Bad Request' )
+    ## POST --------------------------------------
     elif request.method == 'POST':
         data_group_poster = view_data_group_manager.Poster( request_url, start_time )
         params_valid = data_group_poster.validate_post_params( dict(request.POST) )
@@ -455,6 +465,7 @@ def data_reference_group( request, incoming_uuid=None ):
             resp = data_group_poster.manage_post( dict(request.POST), user_id )
         else:
             resp = HttpResponseBadRequest( '400 / Bad Request' )
+    ## DELETE --------------------------------------
     elif request.method == 'DELETE':
         log.debug( 'DELETE detected' )
         data_group_deleter = view_data_group_manager.Deleter( request_url, start_time )
