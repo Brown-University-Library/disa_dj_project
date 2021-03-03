@@ -43,9 +43,8 @@ class Updater():
         assert type(request_body) == bytes
         log.debug( f'request_body, ``{request_body}``' )
         validity = False
-        put_dct = json.loads( request_body )
-        assert type(put_dct) == dict
         try:
+            put_dct = json.loads( request_body )
             assert type(put_dct) == dict
             assert type( put_dct['count'] ) == int
             assert type( put_dct['count_estimated'] ) == bool
