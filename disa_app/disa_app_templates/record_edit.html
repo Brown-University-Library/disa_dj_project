@@ -523,7 +523,10 @@
             <!-- Group data row when in display mode -->
             <tr class="group-display-entry">
                 <!-- Group ID -->
-                <td class="groups-id"></td>
+                <td>
+                  <a  class="groups-id" href="" data-uuid=""
+                      title="Copy group ID to clipboard"></a>
+                </td>
                 <!-- Group description -->
                 <td>
                   <textarea class="form-control group-input groups-description click-to-edit-group"
@@ -585,6 +588,25 @@
  {% endcomment %}
 
 <script>
+
+// onlick handler for ID links -- copies URL (including UUID)
+//  to clipboard
+
+function copyUUIDtoClipboard(e) {
+  e.preventDefault();
+  navigator.permissions.query({name: 'clipboard-write'}).then(result => {
+    if (result.state == 'granted' || result.state == 'prompt') {
+      navigator.clipboard.writeText(e.target.href);
+      const oldText = e.target.innerHTML;
+      e.target.innerHTML = 'ID copied';
+      window.setTimeout(
+        () => e.target.innerHTML = oldText, 
+        2000
+      );
+    }
+  });
+}
+
 var getDocumentId = function () {
     {% comment %} var doc_id = "{{ doc.id or '' }}"; {% endcomment %}
     {% if doc_id %}
@@ -824,7 +846,12 @@ var initializeForm = function (data, tags, editUrl) {
       // Populate fields with values
 
       groupListing.querySelectorAll('.groups-id').forEach(
-        groupIdField => groupIdField.innerHTML = groupEntry.id || ''
+        groupIdField => {
+          groupIdField.href=`/data/reference_group/${groupEntry.uuid}/`;
+          groupIdField.innerHTML = groupEntry.uuid ? groupEntry.uuid.substr(0,7) : '';
+          groupIdField.setAttribute('data-uuid', groupEntry.uuid || '');
+          groupIdField.addEventListener('click', copyUUIDtoClipboard);
+        }
       );
 
       groupListing.querySelectorAll('.groups-description').forEach(
