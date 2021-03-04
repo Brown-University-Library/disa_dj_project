@@ -426,7 +426,10 @@ def edit_relationships( request, rec_id: str ):
 def data_reference_group( request, incoming_uuid=None ):
     """ Called via ajax from views.edit_record() page
         Url: '/data/reference_group/<incoming_uuid>/' -- 'data_group_url' """
-    log.debug( 'starting data_reference_group()' )
+    log.debug( '\n\nstarting data_reference_group()' )
+    # log.debug( f'request.body, ``{request.body}``' )
+    # log.debug( f'request.POST, ``{pprint.pformat(request.POST)}``' )
+    # log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
     start_time = datetime.datetime.now()
     request_url = '%s://%s%s' % (
         request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), request.META.get('REQUEST_URI', request.META['PATH_INFO']) )  # some info not available from client-test
@@ -446,7 +449,7 @@ def data_reference_group( request, incoming_uuid=None ):
             resp = HttpResponseBadRequest( '400 / Bad Request' )
     ## PUT --------------------------------------
     elif request.method == 'PUT':
-        log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
+        # log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
         data_group_updater = view_data_group_manager.Updater( request_url, start_time )
         params_valid = data_group_updater.validate_put_params( request.body )
         if params_valid:
@@ -458,11 +461,13 @@ def data_reference_group( request, incoming_uuid=None ):
     ## POST --------------------------------------
     elif request.method == 'POST':
         data_group_poster = view_data_group_manager.Poster( request_url, start_time )
-        params_valid = data_group_poster.validate_post_params( dict(request.POST) )
+        # params_valid = data_group_poster.validate_post_params( dict(request.POST) )
+        params_valid = data_group_poster.validate_post_params( request.body )
         if params_valid:
             user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
             assert type(user_id) == int
-            resp = data_group_poster.manage_post( dict(request.POST), user_id )
+            # resp = data_group_poster.manage_post( dict(request.POST), user_id )
+            resp = data_group_poster.manage_post( user_id )
         else:
             resp = HttpResponseBadRequest( '400 / Bad Request' )
     ## DELETE --------------------------------------

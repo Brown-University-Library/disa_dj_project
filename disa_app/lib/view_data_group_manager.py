@@ -236,42 +236,38 @@ class Poster():
     #     log.debug( f'validity, ``{validity}``' )
     #     return validity
 
-    def validate_post_params( self, post_dict ) -> bool:
+    def validate_post_params( self, request_body ) -> bool:
         """ Checks post params.
             Called by views.data_reference_group(), triggered by views.edit_record() webpage 'Add Group' button save. """
         log.debug( 'starting Poster.validate_params()' )
+        assert type(request_body) == bytes
+        log.debug( f'request_body, ``{request_body}``' )
         validity = False
         try:
-            assert type(post_dict) == dict, type(post_dict)
-            assert type( int(post_dict['count'][0]) ) == int
-            assert type( bool(post_dict['count_estimated'][0]) ) == bool
-            assert type( post_dict['description'][0] ) == str
-            assert type( int(post_dict['reference_id'][0]) ) == int
-            self.perceived_count = post_dict['count'][0]
-            self.perceived_count_estimated = post_dict['count_estimated'][0]
-            self.perceived_description = post_dict['description'][0]
-            self.perceived_reference_id = post_dict['reference_id'][0]
+            put_dct = json.loads( request_body )
+            assert type(put_dct) == dict
+            assert type( put_dct['count'] ) == int
+            assert type( put_dct['count_estimated'] ) == bool
+            assert type( put_dct['description'] ) == str
+            assert type( put_dct['reference_id'] ) == int
+            self.perceived_count = put_dct['count']
+            self.perceived_count_estimated = put_dct['count_estimated']
+            self.perceived_description = put_dct['description']
+            self.perceived_reference_id = put_dct['reference_id']
             validity = True
         except:
             log.exception( 'bad params; traceback follows; processing will continue' )
         log.debug( f'validity, ``{validity}``' )
         return validity
 
-    def manage_post( self, post_dict, user_id ) -> HttpResponse:
+    def manage_post( self, user_id ) -> HttpResponse:
         """ Manages data/reference_group api ajax 'POST'.
             Called by views.data_reference_group(), triggered by views.edit_record() webpage 'Add Group' button save. """
         log.debug( 'starting manage_post' )
-        ( count, count_estimated, description, reference_id ) = (
-            int( post_dict['count'][0] ),
-            bool( post_dict['count_estimated'][0] ),
-            post_dict['description'][0],
-            int( post_dict['reference_id'][0] )
-            )
-        assert ( type(count), type(count_estimated), type(description), type(reference_id) ) == ( int, bool, str, int )
-        assert type(user_id) == int
+        assert type(user_id) == int  # used for time-stamping the last time a record was updated (adding a group is counting as the record being updated)
         self.session = make_session()
         try:
-            uid = self.execute_post_save( count, count_estimated, description, reference_id, user_id )
+            uid = self.execute_post_save( self.perceived_count, self.perceived_count_estimated, self.perceived_description, self.perceived_reference_id, user_id )
             assert type(uid) == str
             resp_dct = self.prep_post_response_data( uid )
             resp = HttpResponse( json.dumps(resp_dct, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
@@ -281,6 +277,31 @@ class Poster():
             resp = HttpResponse( msg, status=500 )
         log.debug( 'returning response' )
         return resp
+
+    # def manage_post( self, post_dict, user_id ) -> HttpResponse:
+    #     """ Manages data/reference_group api ajax 'POST'.
+    #         Called by views.data_reference_group(), triggered by views.edit_record() webpage 'Add Group' button save. """
+    #     log.debug( 'starting manage_post' )
+    #     ( count, count_estimated, description, reference_id ) = (
+    #         int( post_dict['count'][0] ),
+    #         bool( post_dict['count_estimated'][0] ),
+    #         post_dict['description'][0],
+    #         int( post_dict['reference_id'][0] )
+    #         )
+    #     assert ( type(count), type(count_estimated), type(description), type(reference_id) ) == ( int, bool, str, int )
+    #     assert type(user_id) == int
+    #     self.session = make_session()
+    #     try:
+    #         uid = self.execute_post_save( count, count_estimated, description, reference_id, user_id )
+    #         assert type(uid) == str
+    #         resp_dct = self.prep_post_response_data( uid )
+    #         resp = HttpResponse( json.dumps(resp_dct, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    #     except:
+    #         msg = 'problem with save, or with response-prep; see logs'
+    #         log.exception( msg )
+    #         resp = HttpResponse( msg, status=500 )
+    #     log.debug( 'returning response' )
+    #     return resp
 
     def execute_post_save( self, count, count_estimated, description, reference_id, user_id ) -> dict:
         """ Updates db and returns data.
