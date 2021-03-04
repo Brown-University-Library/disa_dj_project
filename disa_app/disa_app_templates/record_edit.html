@@ -449,6 +449,28 @@
 
       <div id="group_component">
 
+        <!-- Groups delete confirmation modal -->
+
+        <div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                No turning back!
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="confirmDelete-no">Cancel delete</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="confirmDelete-yes">YES, delete!</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Groups table -->
 
         <table class="table" id="groups-table" hidden="hidden">
@@ -473,7 +495,10 @@
             <!-- Group data row when in edit mode -->
             <tr class="group-edit-entry">
               <!-- Group ID -->
-              <td class="groups-id"></td>
+              <td>
+                <a class="groups-id" href="" data-uuid=""
+                   title="Copy group ID to clipboard"></a>
+              </td>
               <!-- Group description -->
               <td>
                 <textarea class="form-control group-input groups-description"
@@ -544,16 +569,18 @@
                   </label>
                 </td>
                 <td class="group-controls">
-                    <!-- Group delete button -->
-                    <button class="btn btn-danger del-entrant entrant-ctl" title="Delete entry for this person">
-                      <svg class="svg-inline--fa fa-times-circle fa-w-16" aria-hidden="true" data-prefix="fas"
-                        data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                        data-fa-i2svg="">
-                        <path fill="currentColor"
-                          d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"
-                        />
-                      </svg>
-                    </button>
+                  <!-- Group delete button -->
+                  <button class="btn btn-danger del-group group-ctl" title="Delete entry for this person"
+                          data-toggle="modal" data-target="#confirmDelete">
+                    <svg class="svg-inline--fa fa-times-circle fa-w-16" aria-hidden="true" data-prefix="fas"
+                      data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                      data-fa-i2svg="">
+                      <path fill="currentColor"
+                        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"
+                      />
+                    </svg>
+                  </button>
+                  <!-- Group edit button -->
                   <button class="btn btn-primary edit-group group-ctl click-to-edit-group">
                     Edit
                   </button>
@@ -810,26 +837,9 @@ var initializeForm = function (data, tags, editUrl) {
     // GROUPS - START
 
     // Populate groups table
+    //  Unhide groups table if there are entries
 
-    // fake data - START
-
-    /*
-    const GROUPS_TEST_DATA = [
-      { id: 4, group_description: '12 angry men', count: 12, count_estimated: false },
-      { id: 5, group_description: 'several people', count: 4, count_estimated: true },
-      { id: 6, group_description: '3 little pigs', count: 3, count_estimated: false }
-    ];
-
-    data.groups = GROUPS_TEST_DATA;
-    */
-
-    data.groups = [];
-
-    // fake data - END
-
-    // Unhide groups table if there are entries
-
-    document.getElementById('groups-table').hidden = !(data.groups.length > 0);
+    document.getElementById('groups-table').hidden = !(data.groups.group_data.length > 0);
 
     const groupListingTemplate = document.getElementById('groups-template'),
           groupListingContainer = document.getElementById('groups-table');
@@ -855,7 +865,7 @@ var initializeForm = function (data, tags, editUrl) {
       );
 
       groupListing.querySelectorAll('.groups-description').forEach(
-        groupDescriptionField => groupDescriptionField.value = groupEntry.group_description
+        groupDescriptionField => groupDescriptionField.value = groupEntry.description
       );
 
       groupListing.querySelectorAll('.groups-count').forEach(
@@ -864,7 +874,7 @@ var initializeForm = function (data, tags, editUrl) {
 
       groupListing.querySelectorAll('.groups-count-estimated').forEach(
         groupCountEstimatedCheckbox => groupCountEstimatedCheckbox.checked = groupEntry.count_estimated
-      );
+      );      
 
       // Set up event handlers
 
@@ -882,6 +892,8 @@ var initializeForm = function (data, tags, editUrl) {
         return rowAcc;
       }
 
+      // fields holds references to DOM nodes by classname
+
       const fields = ENTRY_CONTAINER_CLASS_NAMES.reduce(gatherEntries, {});
 
       console.log('FIELDS', fields);
@@ -891,9 +903,13 @@ var initializeForm = function (data, tags, editUrl) {
             savingStateClassList = groupListing.querySelector('.group-save-state').classList,
             setIsCurrentlySaving = (s) => savingStateClassList[s ? 'add' : 'remove']('group-currently-saving');
 
+      // two functions to copy values to/from the edit and display copies of
+      //   the group form
+
       function copyFromDisplayToEdit(fieldClassName, prop) {
         fields[`group-edit-entry`][fieldClassName][prop] = fields[`group-display-entry`][fieldClassName][prop];
       }
+
       function copyFromEditToDisplay(fieldClassName, prop) {
         fields[`group-display-entry`][fieldClassName][prop] = fields[`group-edit-entry`][fieldClassName][prop];
       }
@@ -924,7 +940,9 @@ var initializeForm = function (data, tags, editUrl) {
       groupListing.querySelector('.save-group').addEventListener('click', (event) => {
 
         setIsCurrentlySaving(true);
-        const onSaveComplete = () => {
+        const onSaveComplete = (response) => {
+          // @todo Check if UUID is populated - if not copy from response to DOM
+          // console.log(`WWW`, {response, fields});
           copyFromEditToDisplay('groups-description', 'value');
           copyFromEditToDisplay('groups-count', 'value');
           copyFromEditToDisplay('groups-count-estimated', 'checked');
@@ -934,14 +952,23 @@ var initializeForm = function (data, tags, editUrl) {
         saveGroup(fields, onSaveComplete);
       });
 
+      // onClick handler for group delete button
+
+      groupListing.querySelector('.del-group').addEventListener('click', event => {
+        const onDeleteComplete = () => {
+          console.log('DELETED, now hide', tbodyContainer);
+          tbodyContainer.hidden = true;
+        };
+        deleteGroup(fields, onDeleteComplete);
+      });
+
       // Append to document
 
       groupListingContainer.appendChild(groupListing);
     } // End createGroupListingFromData()
 
     // Create a row in table for each entry in the data
-
-    data.groups.forEach(
+    data.groups.group_data.forEach(
       groupData => createGroupListingFromData(groupData)
     );
 
@@ -965,49 +992,74 @@ var initializeForm = function (data, tags, editUrl) {
     );
 }
 
+// const csrf_token = '{{ csrf_token }}';
+
 // Save group to server
 
 function saveGroup(fields, onSaveComplete) {
-  console.log( "starting saveGroup()" );
 
-  console.log( "csrf_token, ", csrf_token );
   const saveData = fields['group-edit-entry'],
-
+        uuid = saveData['groups-id'].getAttribute('data-uuid'),
+        isNewGroup = (uuid === ''),
         groupData = {
-          id: parseInt(saveData['groups-id'].innerText) || 'new',
-          record_id: getRecId(),
           count: parseInt(saveData['groups-count'].value),
           count_estimated: saveData['groups-count-estimated'].checked,
-          group_description: saveData['groups-description'].value
+          description: saveData['groups-description'].value,
+          reference_id: parseInt(getRecId())
         };
 
-        const ent_data_api = "{% url 'data_referent_url' 'STUB' %}".replace( 'STUB', groupData.id );
-        console.log( "ent_data_api, ", ent_data_api );
+  const groupApiUrl = isNewGroup ? '/data/reference_group/new/' : `/data/reference_group/${uuid}/`;
 
-        console.log('BIRKIN THIS IS THE DATA STRUCTURE', groupData);
-//         console.log(`BIRKIN THIS IS WHAT THE FETCH CALL IS:`,
-//         `
-// fetch('${ent_data_api}', {
-//   method: '${(groupData.id === 'new' ? 'POST' : 'PUT')}',
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-//   body: ${JSON.stringify(groupData, '', 2).replaceAll('\n', '\n  ')},
-// })
-//         `);
-
-  // window.setTimeout(onSaveComplete, 3000); // TEMP TEST
-
-  var csrf_token = "{{ csrf_token }}";
-  fetch(ent_data_api, {
-    method: (groupData.id === 'new' ? 'POST' : 'PUT'),
+  console.log('SAVE', {
+    method: (isNewGroup ? 'POST' : 'PUT'),
     headers: {
       'Content-Type': 'application/json',
-      'X-CSRFToken': csrf_token
+      'X-CSRFToken': '{{ csrf_token }}'
     },
     body: JSON.stringify(groupData),
-    credentials: 'same-origin',
+    credentials: 'same-origin'
+  });
+
+  fetch(groupApiUrl, {
+    method: (isNewGroup ? 'POST' : 'PUT'),
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': '{{ csrf_token }}'
+    },
+    body: JSON.stringify(groupData),
+    credentials: 'same-origin'
   }).then(onSaveComplete);
+}
+
+function deleteGroup(fields, onDeleteComplete) {
+
+  const uuid = fields['group-edit-entry']['groups-id'].getAttribute('data-uuid'),
+        groupApiUrl = `/data/reference_group/${uuid}/`,
+        confirmDeleteButton = document.getElementById('confirmDelete-yes'),
+        cancelDeleteButton = document.getElementById('confirmDelete-no');
+
+  const onConfirmDelete = function() {
+    console.log('REALLY REALLY DELETING ' + groupApiUrl);
+  /*
+    fetch(groupApiUrl, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: '',
+      credentials: 'same-origin',
+    }).then(onDeleteComplete); */
+    onDeleteComplete();
+  }
+
+  // Clear all event listeners out of confirm button
+
+  const confirmDeleteButtonClone = confirmDeleteButton.cloneNode(true);
+  confirmDeleteButton.parentNode.replaceChild(confirmDeleteButtonClone, confirmDeleteButton);
+  confirmDeleteButtonClone.addEventListener('click', onConfirmDelete, true);
+
+
 }
 
 // GROUPS - END
