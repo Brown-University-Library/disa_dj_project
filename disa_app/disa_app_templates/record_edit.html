@@ -915,15 +915,13 @@ var initializeForm = function (data, tags, editUrl) {
 
         setIsCurrentlySaving(true);
         const onSaveComplete = (uuid) => {
-          // @todo Check if UUID is populated - if not copy from response to DOM
-          //console.log(`WWW`, uuid, fields['group-edit-entry']['groups-id'].getAttribute('data-uuid'));
 
           if (!fields['group-edit-entry']['groups-id'].getAttribute('data-uuid')) {
-            const uuidDisplay = uuid.substr(0,7);
-            fields['group-edit-entry']['groups-id'].innerText = uuidDisplay;
-            fields['group-display-entry']['groups-id'].innerText = uuidDisplay;
-            fields['group-edit-entry']['groups-id'].setAttribute('data-uuid', uuid);
-            fields['group-display-entry']['groups-id'].setAttribute('data-uuid', uuid);
+            [fields['group-edit-entry'], fields['group-display-entry']].forEach(entry => {
+              entry['groups-id'].innerText = uuid.substr(0,7);
+              entry['groups-id'].setAttribute('data-uuid', uuid);
+              entry['groups-id'].href = `/data/reference_group/${uuid}`;
+            });
           }
 
           copyFromEditToDisplay('groups-description', 'value');
