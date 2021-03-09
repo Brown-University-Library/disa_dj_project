@@ -601,7 +601,7 @@ function copyUUIDtoClipboard(e) {
       const oldText = e.target.innerHTML;
       e.target.innerHTML = 'ID copied';
       window.setTimeout(
-        () => e.target.innerHTML = oldText, 
+        () => e.target.innerHTML = oldText,
         2000
       );
     }
@@ -848,7 +848,7 @@ var initializeForm = function (data, tags, editUrl) {
 
       groupListing.querySelectorAll('.groups-count-estimated').forEach(
         groupCountEstimatedCheckbox => groupCountEstimatedCheckbox.checked = groupEntry.count_estimated
-      );      
+      );
 
       // Set up event handlers
 
@@ -1031,13 +1031,21 @@ function saveGroup(fields, onSaveComplete) {
 function deleteGroup(fields, onDeleteComplete) {
 
   const uuid = fields['group-edit-entry']['groups-id'].getAttribute('data-uuid'),
-        groupApiUrl = `/data/reference_group/${uuid}/`,
+        // groupApiUrl = `/data/reference_group/${uuid}/`,
         confirmDeleteButton = document.getElementById('confirmDelete-yes'),
         cancelDeleteButton = document.getElementById('confirmDelete-no');
 
+  // const uuid = fields['group-edit-entry']['groups-id'].getAttribute('data-uuid'),
+  //       groupApiUrl = `/data/reference_group/${uuid}/`,
+  //       confirmDeleteButton = document.getElementById('confirmDelete-yes'),
+  //       cancelDeleteButton = document.getElementById('confirmDelete-no');
+
+  const groupApiUrl = "{% url 'data_group_url' 'STUB' %}".replace( 'STUB', uuid );
+  console.log( "deleteGroup() groupApiUrl, ", groupApiUrl );
+
   const onConfirmDelete = function() {
     console.log('REALLY REALLY DELETING ' + groupApiUrl);
-  
+
     fetch(groupApiUrl, {
       method: 'DELETE',
       headers: {
@@ -1190,7 +1198,7 @@ var makeEntrantEditable = function ($container, entId) {
     //$del_btn.append($del_span);
 
     $active.find($('.form-control')).prop('disabled', false);
-    
+
     if (entId !== 'new') {
         $cancel_btn = $('<button/>', {
             'class': 'btn btn-secondary cancel-entrant entrant-ctl',
