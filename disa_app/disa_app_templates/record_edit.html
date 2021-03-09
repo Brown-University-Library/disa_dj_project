@@ -991,7 +991,16 @@ function saveGroup(fields, onSaveComplete) {
           reference_id: parseInt(getRecId())
         };
 
-  const groupApiUrl = isNewGroup ? '/data/reference_group/new/' : `/data/reference_group/${uuid}/`;
+  // const groupApiUrl = isNewGroup ? '/data/reference_group/new/' : `/data/reference_group/${uuid}/`;
+  // console.log( "groupApiUrl, ", groupApiUrl );
+
+  let groupApiUrl = "init";
+  if (isNewGroup) {
+    groupApiUrl = "{% url 'data_group_url' 'STUB' %}".replace( 'STUB', 'new' );
+  } else {
+    groupApiUrl = "{% url 'data_group_url' 'STUB' %}".replace( 'STUB', uuid );
+  }
+  console.log( "saveGroup() groupApiUrl, ", groupApiUrl );
 
   console.log('SAVE', {
     method: (isNewGroup ? 'POST' : 'PUT'),
