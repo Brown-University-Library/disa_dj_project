@@ -996,7 +996,7 @@ function saveGroup(fields, onSaveComplete) {
 
   let groupApiUrl = "init";
   if (isNewGroup) {
-    groupApiUrl = "{% url 'data_group_url' 'STUB' %}".replace( 'STUB', 'new' );
+    groupApiUrl = "{% url 'data_group_url' 'new' %}";
   } else {
     groupApiUrl = "{% url 'data_group_url' 'STUB' %}".replace( 'STUB', uuid );
   }
