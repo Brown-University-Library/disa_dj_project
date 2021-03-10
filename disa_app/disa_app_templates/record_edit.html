@@ -594,6 +594,7 @@
 //  to clipboard
 
 function copyUUIDtoClipboard(e) {
+  console.log( "initial built url, ", e.target.href );
   e.preventDefault();
   navigator.permissions.query({name: 'clipboard-write'}).then(result => {
     if (result.state == 'granted' || result.state == 'prompt') {
@@ -831,7 +832,8 @@ var initializeForm = function (data, tags, editUrl) {
 
       groupListing.querySelectorAll('.groups-id').forEach(
         groupIdField => {
-          groupIdField.href=`/data/reference_group/${groupEntry.uuid}/`;
+          // groupIdField.href=`/data/reference_group/${groupEntry.uuid}/`;
+          groupIdField.href = "{% url 'data_group_url' 'STUB' %}".replace( 'STUB', groupEntry.uuid );
           groupIdField.innerHTML = groupEntry.uuid ? groupEntry.uuid.substr(0,7) : '';
           groupIdField.setAttribute('data-uuid', groupEntry.uuid || '');
           groupIdField.addEventListener('click', copyUUIDtoClipboard);
