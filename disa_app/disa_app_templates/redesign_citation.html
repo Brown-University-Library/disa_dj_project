@@ -131,7 +131,7 @@
         <h5 class="text-dark" style="width:25%;float:left;">
           Citation type
         </h5>
-        <div style="clear: left;">
+        <div style="clear: left;margin-bottom: 24px;">
           <select class="custom-select" id="document_type"
                   v-model="citation_data.citation_type_id">
             <option value="0" class="initMessage" 
@@ -159,31 +159,48 @@
 
     <!-- FIELDS: Dynamically moved under headings via flexbox order property -->
 
-    <div class="citation-field form-group text-dark"
+    <!--<div class="citation-field form-group text-dark"
          id="abstractNote">
       <label for="abstractNote-value"
         style="padding-left:15%;">Abstract Note</label>
       <input id="abstractNote-value" name="abstractNote-value"
         placeholder="Abstract Note"
         v-model="citation_data.citation_type_fields.abstractNote" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="abstractNote">
+      <input type="text" class="form-control" id="abstractNote-value" aria-label="Abstract Note" placeholder="Abstract Note" v-model="citation_data.citation_type_fields.abstractNote">
+      <label for="abstractNote-value">Abstract Note</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="accessDate">
       <label for="accessDate-value"
         style="padding-left:15%;">Access Date</label>
       <input id="accessDate-value" name="accessDate-value"
         type="date" placeholder="Access Date"
         v-model="citation_data.citation_type_fields.accessDate" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="accessDate">
+      <input type="text" class="form-control" id="accessDate-value" name="accessDate-value" aria-label="Access Date" placeholder="Access Date" v-model="citation_data.citation_type_fields.accessDate">
+      <label for="accessDate-value">Access Date</label>
     </div>
-    <div class="citation-field form-group text-dark" id="archive">
+
+    <!--<div class="citation-field form-group text-dark" id="archive">
       <label for="archive-value"
         style="padding-left:15%;">Archive</label>
-      <!-- <input id="archive-value" name="archive-value"  placeholder="Archive" /> -->
       <input id="archive-value" name="archive-value"
         placeholder="Archive" 
         v-model="citation_data.citation_type_fields.archive" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="archive">
+      <input type="text" class="form-control" id="archive-value" name="archive-value" aria-label="Archive" placeholder="Archive" v-model="citation_data.citation_type_fields.archive">
+      <label for="archive-value">Archive</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="archiveLocation">
       <label for="archiveLocation-value"
         style="padding-left:15%;">Archive Location</label>
@@ -191,28 +208,45 @@
         name="archiveLocation-value"
         placeholder="Archive Location"
         v-model="citation_data.citation_type_fields.archiveLocation" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="archiveLocation">
+      <input type="text" class="form-control" id="archiveLocation-value" name="archiveLocation-value" aria-label="Archive Location" placeholder="Archive Location" v-model="citation_data.citation_type_fields.archiveLocation">
+      <label for="archiveLocation-value">Archive Location</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="author">
       <label for="author-value"
         style="padding-left:15%;">Author</label>
-      <!-- <input id="author-value" name="author-value"  placeholder="Author (last name comes first)" /> -->
       <input id="author-value" name="author-value"
         placeholder="Author (last name comes first)"
         v-model="citation_data.citation_type_fields.author" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="author">
+      <input type="text" class="form-control" id="author-value" name="author-value" aria-label="Author" placeholder="Author (last name comes first)" v-model="citation_data.citation_type_fields.author">
+      <label for="author-value">Author</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="callNumber">
       <label for="callNumber-value"
         style="padding-left:15%;">Call Number</label>
       <input id="callNumber-value" name="callNumber-value"
         placeholder="Call Number"
         v-model="citation_data.citation_type_fields.callNumber" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="callNumber">
+      <input type="text" class="form-control" id="callNumber-value" name="callNumber-value" aria-label="Call Number" placeholder="Call Number" v-model="citation_data.citation_type_fields.callNumber">
+      <label for="callNumber-value">Call Number</label>
     </div>
+
     <div class="citation-field form-group text-dark"
       id="date">
       <label for="date-value"
-        style="padding-left:15%;">Date</label>
+        style="padding-right:12px;">Date</label>
       <input id="date-value" name="date-value" placeholder="Date"
              type="date"
              v-model="citation_data.citation_type_fields.date" /> 
@@ -280,48 +314,80 @@
       </label>
       {% endcomment %}
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="edition">
       <label for="edition-value"
         style="padding-left:15%;">Edition</label>
       <input id="edition-value" name="edition-value"
         placeholder="Edition" 
         v-model="citation_data.citation_type_fields.edition" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="edition">
+      <input type="text" class="form-control" id="edition-value" name="edition-value" aria-label="Edition" placeholder="Edition" v-model="citation_data.citation_type_fields.edition">
+      <label for="edition-value">Edition</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="extra">
       <label for="extra-value"
         style="padding-left:15%;">Extra</label>
       <input id="extra-value" name="extra-value"
         placeholder="Extra" 
         v-model="citation_data.citation_type_fields.extra" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="extra">
+      <input type="text" class="form-control" id="extra-value" name="extra-value" aria-label="Extra" placeholder="Extra" v-model="citation_data.citation_type_fields.extra">
+      <label for="extra-value">Extra</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="ISBN">
       <label for="ISBN-value"
         style="padding-left:15%;">ISBN</label>
       <input id="ISBN-value" name="ISBN-value"
         placeholder="ISBN" 
         v-model="citation_data.citation_type_fields.ISBN" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="ISBN">
+      <input type="text" class="form-control" id="ISBN-value" name="ISBN-value" aria-label="ISBN" placeholder="ISBN" v-model="citation_data.citation_type_fields.ISBN">
+      <label for="ISBN-value">ISBN</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="ISSN">
       <label for="ISSN-value"
         style="padding-left:15%;">ISSN</label>
       <input id="ISSN-value" name="ISSN-value"
         placeholder="ISSN" 
         v-model="citation_data.citation_type_fields.ISSN" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="ISSN">
+      <input type="text" class="form-control" id="ISSN-value" name="ISSN-value" aria-label="ISSN" placeholder="ISSN" v-model="citation_data.citation_type_fields.ISSN">
+      <label for="ISSN-value">ISSN</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="language">
       <label for="language-value"
-        style="padding-left:15%;">Language</label>
+        style="padding-left:15%;">Language</label>-->
         <!-- @todo SHOULD BE A DROPDOWN? -->
-      <input id="language-value" name="language-value"
+      <!--<input id="language-value" name="language-value"
         placeholder="Language" 
         v-model="citation_data.citation_type_fields.language" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="language">
+      <!-- @todo SHOULD BE A DROPDOWN? -->
+      <input type="text" class="form-control" id="language-value" name="language-value" aria-label="Language" placeholder="Language" v-model="citation_data.citation_type_fields.language">
+      <label for="language-value">Language</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="libraryCatalog">
       <label for="libraryCatalog-value"
         style="padding-left:15%;">Library Catalog</label>
@@ -329,25 +395,42 @@
         name="libraryCatalog-value"
         placeholder="Library Catalog"
         v-model="citation_data.citation_type_fields.libraryCatalog" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="libraryCatalog">
+      <input type="text" class="form-control" id="libraryCatalog-value" name="libraryCatalog-value" aria-label="Library Catalog" placeholder="Library Catalog" v-model="citation_data.citation_type_fields.libraryCatalog">
+      <label for="libraryCatalog-value">Library Catalog</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="pages">
       <label for="pages-value"
         style="padding-left:15%;">Pages</label>
       <input id="pages-value" name="pages-value"
         placeholder="Pages"
         v-model="citation_data.citation_type_fields.pages" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="pages">
+      <input type="text" class="form-control" id="pages-value" name="pages-value" aria-label="Pages" placeholder="Pages" v-model="citation_data.citation_type_fields.pages">
+      <label for="pages-value">Pages</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="place">
       <label for="place-value"
         style="padding-left:15%;">Place</label>
-      <!-- <input id="place-value" name="place-value" placeholder="Place" /> -->
       <input id="place-value" name="place-value"
         placeholder="Place"
         v-model="citation_data.citation_type_fields.place" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="place">
+      <input type="text" class="form-control" id="place-value" name="place-value" aria-label="Place" placeholder="Place" v-model="citation_data.citation_type_fields.place">
+      <label for="place-value">Place</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="publicationTitle">
       <label for="publicationTitle-value"
         style="padding-left:15%;">Publication Title</label>
@@ -355,74 +438,127 @@
         name="publicationTitle-value"
         placeholder="Publication Title"
         v-model="citation_data.citation_type_fields.publicationTitle" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="publicationTitle">
+      <input type="text" class="form-control" id="publicationTitle-value" name="publicationTitle-value" aria-label="Publication Title" placeholder="Publication Title" v-model="citation_data.citation_type_fields.publicationTitle">
+      <label for="publicationTitle-value">Publication Title</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="rights">
-      <!-- @todo DROPDOWN? -->
       <label for="rights-value"
         style="padding-left:15%;">Rights</label>
       <input id="rights-value" name="rights-value"
         placeholder="Rights"
         v-model="citation_data.citation_type_fields.rights" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="rights">
+      <!-- @todo DROPDOWN? -->
+      <input type="text" class="form-control" id="rights-value" name="rights-value" aria-label="Rights" placeholder="Rights" v-model="citation_data.citation_type_fields.rights">
+      <label for="rights-value">Rights</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="section">
       <label for="section-value"
         style="padding-left:15%;">Section</label>
       <input id="section-value" name="section-value"
         placeholder="Section"
         v-model="citation_data.citation_type_fields.section" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="section">
+      <input type="text" class="form-control" id="section-value" name="section-value" aria-label="Section" placeholder="Section" v-model="citation_data.citation_type_fields.section">
+      <label for="section-value">Section</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="series">
       <label for="series-value"
         style="padding-left:15%;">Series</label>
       <input id="series-value" name="series-value"
         placeholder="Series"
         v-model="citation_data.citation_type_fields.series" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="series">
+      <input type="text" class="form-control" id="series-value" name="series-value" aria-label="Series" placeholder="Series" v-model="citation_data.citation_type_fields.series">
+      <label for="series-value">Series</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="seriesNumber">
       <label for="seriesNumber-value"
         style="padding-left:15%;">Series Number</label>
       <input id="seriesNumber-value" name="seriesNumber-value"
         placeholder="Series Number" 
         v-model="citation_data.citation_type_fields.seriesNumber" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="seriesNumber">
+      <input type="text" class="form-control" id="seriesNumber-value" name="seriesNumber-value" aria-label="Series Number" placeholder="Series Number" v-model="citation_data.citation_type_fields.seriesNumber">
+      <label for="seriesNumber-value">Series Number</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="shortTitle">
       <label for="shortTitle-value"
         style="padding-left:15%;">Short Title</label>
       <input id="shortTitle-value" name="shortTitle-value"
         placeholder="Short Title" 
         v-model="citation_data.citation_type_fields.shortTitle" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="shortTitle">
+      <input type="text" class="form-control" id="shortTitle-value" name="shortTitle-value" aria-label="Short Title" placeholder="Short Title" v-model="citation_data.citation_type_fields.shortTitle">
+      <label for="shortTitle-value">Short Title</label>
     </div>
-    <div class="citation-field form-group text-dark"
+
+    <!--<div class="citation-field form-group text-dark"
       id="title">
       <label for="title-value"
         style="padding-left:15%;">Title</label>
-      <!-- <input id="title-value" name="title-value" placeholder="Title" /> -->
       <input id="title-value" name="title-value"
         placeholder="Title"
         v-model="citation_data.citation_type_fields.title" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="title">
+      <input type="text" class="form-control" id="title-value" name="title-value" aria-label="Title" placeholder="Title" v-model="citation_data.citation_type_fields.title">
+      <label for="title-value">Title</label>
     </div>
-    <div class="citation-field form-group text-dark" id="url">
+
+    <!--<div class="citation-field form-group text-dark" id="url">
       <label for="url-value"
         style="padding-left:15%;">URL</label>
       <input id="url-value" name="url-value"
         type="url" placeholder="https://..." 
         v-model="citation_data.citation_type_fields.url" />
+    </div>-->
+
+    <div class="citation-field form-floating" id="url">
+      <input type="text" class="form-control" id="url-value" name="url-value" aria-label="URL" placeholder="Full website link (URL)" v-model="citation_data.citation_type_fields.url">
+      <label for="url-value">URL</label>
     </div>
+
   </div>
 
-  <div class="form-group">
+  <!--<div class="form-group">
     <label for="formInputDISAAcknowledgements"
       style="padding-left:0%;">Acknowledgements</label>
     <textarea style="width:75%;float:right;"
       class="form-control" rows="3"
       id="formInputDISAAcknowledgements"></textarea>
+  </div>-->
+
+  <div class="form-floating">
+      <textarea class="form-control" placeholder="Enter notes here..." id="formInputDISAAcknowledgements" style="height: 128px"></textarea>
+      <label for="formInputDISAAcknowledgements">Acknowledgements</label>
   </div>
-  <div class="form-group" style="clear:both; margin-top: 3em">
+
+  <!--<div class="form-group" style="clear:both; margin-top: 3em">
     <label for="formInputDISABiblioResearcherNotes"
       style="padding-left:0%;">Researcher notes
       <br>
@@ -432,7 +568,14 @@
     <textarea style="width:75%;float:right;"
       class="form-control" rows="3"
       id="formInputDISABiblioResearcherNotes"></textarea>
+  </div>-->
+
+  <div class="form-floating">
+      <textarea class="form-control" placeholder="Enter notes here..." id="formInputDISABiblioResearcherNotes" style="height: 128px"></textarea>
+      <label for="formInputDISABiblioResearcherNotes">Researcher notes</label>
+      <a href="#" style="font-size:80%;font-weight:bold;clear:left;">Report problems or ask for help</a>
   </div>
+
   <p>&nbsp;</p>
   <p>&nbsp;</p>
     
@@ -483,7 +626,7 @@
                 <label for="formInputDISAItemType">Item type</label>
               </div>
               <div class="form-floating">
-                <textarea class="form-control" placeholder="" id="formInputDISAItemTranscription" style="height: 128px"></textarea>
+                <textarea class="form-control" placeholder="Transcription" id="formInputDISAItemTranscription" style="height: 128px"></textarea>
                 <label for="formInputDISAItemTranscription">Transcription</label>
                 <a href="#" style="font-size:80%;font-weight:bold;clear:left;">Open in new window</a> </div>
             </div>
@@ -520,7 +663,7 @@
                 <label for="formInputDISAEventDateYear">Year</label>
               </div>
               <div class="form-floating">
-                <input type="text" class="form-control" id="formInputDISAEventDateInfo" aria-label="Additional date information" placeholder="">
+                <input type="text" class="form-control" id="formInputDISAEventDateInfo" aria-label="Additional date information" placeholder="Additional date info.">
                 <label for="formInputDISAEventDateInfo">Additional date info.</label>
               </div>
             </div>
@@ -536,15 +679,15 @@
                 <label for="formInputDISAColonialContext">Colonial context</label>
               </div>
               <div class="form-floating">
-                <input type="text" class="form-control" id="formInputDISAColonyState" aria-label="Colony / State" placeholder="">
+                <input type="text" class="form-control" id="formInputDISAColonyState" aria-label="Colony / State" placeholder="Colony / State">
                 <label for="formInputDISAColonyState">Colony / State</label>
               </div>
               <div class="form-floating">
-                <input type="text" class="form-control" id="formInputDISATown" aria-label="Town" placeholder="">
+                <input type="text" class="form-control" id="formInputDISATown" aria-label="Town" placeholder="Town">
                 <label for="formInputDISATown">Town</label>
               </div>
               <div class="form-floating">
-                <input type="text" class="form-control" id="formInputDISAPlaceInfo" aria-label="Additional location information" placeholder="">
+                <input type="text" class="form-control" id="formInputDISAPlaceInfo" aria-label="Additional location information" placeholder="Additional location info.">
                 <label for="formInputDISAPlaceInfo">Additional location info.</label>
               </div>
             </div>
@@ -581,15 +724,15 @@
                       <label for="formInputDISAItemPersonNameType">Name type</label>
                     </div>
                     <div class="form-floating">
-                      <input type="text" class="form-control" id="formInputDISAItemPersonNameTranscription" aria-label="Full name transcription" placeholder="">
+                      <input type="text" class="form-control" id="formInputDISAItemPersonNameTranscription" aria-label="Full name transcription" placeholder="Full name transcription">
                       <label for="formInputDISAItemPersonNameTranscription">Full name transcription</label>
                     </div>
                     <div class="form-floating">
-                      <input type="text" class="form-control" id="formInputDISAItemPersonFirstName" aria-label="First name" placeholder="">
+                      <input type="text" class="form-control" id="formInputDISAItemPersonFirstName" aria-label="First name" placeholder="First name">
                       <label for="formInputDISAItemPersonFirstName">First name</label>
                     </div>
                     <div class="form-floating">
-                      <input type="text" class="form-control" id="formInputDISAItemPersonLastName" aria-label="Last name" placeholder="">
+                      <input type="text" class="form-control" id="formInputDISAItemPersonLastName" aria-label="Last name" placeholder="Last name">
                       <label for="formInputDISAItemPersonLastName">Last name</label>
                     </div>
                   </div>
@@ -598,7 +741,7 @@
                 <div class="row" style="padding-top:10px;clear: both;">
                   <div class="col-md-6">
                     <div class="form-floating">
-                      <select class="form-select" id="formInputDISAPersonGender" aria-label="New person's gender">
+                      <select class="form-select" id="formInputDISAPersonGender" aria-label="New person's gender" placeholder="Gender">
                         <option selected>&nbsp;</option>
                         <option value="1">&nbsp;</option>
                         <option value="2">&nbsp;</option>
@@ -608,7 +751,7 @@
                     </div>
                     <div class="form-group">
                       <div class="form-floating">
-                        <select style="" class="form-select" id="formInputDISAPersonAge_number" aria-label="New person's age (number)">
+                        <select style="" class="form-select" id="formInputDISAPersonAge_number" aria-label="New person's age (number)" placeholder="New person's age (number)">
                           <option selected>&nbsp;</option>
                           <option value="-1">Unspecified</option>
                           <option value="1">1 year</option>
@@ -616,7 +759,7 @@
                           <option value="3">3 years</option>
                         </select>
                         <label for="formInputDISAPersonAge_number">Age</label>
-                        <input type="text" class="form-control" id="formInputDISAPersonAge_text" aria-label="New person's age (text)">
+                        <input type="text" class="form-control" id="formInputDISAPersonAge_text" aria-label="New person's age (text)" placeholder="New person's age (text)">
                         <div class="form-check" style="margin-top:-6px;">
                           <input class="form-check-input" style="margin-left:.125em;" type="checkbox" id="formInputSpecifiedByNumber" value="option1">
                           <label class="form-check-label" style="font-size: 85%;font-weight:bold;margin-left:.5em;margin-top:-10px;" for="formInputSpecifiedByNumber">AGE SPECIFIED BY A NUMBER</label>
@@ -624,7 +767,7 @@
                       </div>
                     </div>
                     <div class="form-floating">
-                      <select class="form-select" id="formInputDISAPersonStatus" aria-label="New person's status">
+                      <select class="form-select" id="formInputDISAPersonStatus" aria-label="New person's status" placeholder="Status">
                         <option selected>&nbsp;</option>
                         <option value="1">&nbsp;</option>
                         <option value="2">&nbsp;</option>
@@ -633,11 +776,11 @@
                       <label for="formInputDISAPersonStatus">Status</label>
                     </div>
                     <div class="form-floating">
-                      <input type="text" class="form-control" id="formInputDISAStatusInfo" aria-label="Additional status information" placeholder="">
+                      <input type="text" class="form-control" id="formInputDISAStatusInfo" aria-label="Additional status information" placeholder="Additional status info.">
                       <label for="formInputDISAStatusInfo">Additional status info.</label>
                     </div>
                     <div class="form-floating">
-                      <input type="text" class="form-control" id="formInputDISAPersonVocation" aria-label="Vocation" placeholder="">
+                      <input type="text" class="form-control" id="formInputDISAPersonVocation" aria-label="Vocation" placeholder="Vocation">
                       <label for="formInputDISAPersonVocation">Vocation</label>
                     </div>
                   </div>
@@ -652,7 +795,7 @@
                       <label for="formInputDISAPersonRace">Race</label>
                     </div>
                     <div class="form-floating">
-                      <input type="text" class="form-control" id="formInputDISAPersonRaceTerms" aria-label="Exact racial terms used" placeholder="">
+                      <input type="text" class="form-control" id="formInputDISAPersonRaceTerms" aria-label="Exact racial terms used" placeholder="Exact racial terms used">
                       <label for="formInputDISAPersonRaceTerms">Exact racial terms used</label>
                     </div>
                     <div class="form-floating">
@@ -665,11 +808,11 @@
                       <label for="formInputDISAPersonTribe">Tribe</label>
                     </div>
                     <div class="form-floating">
-                      <input type="text" class="form-control" id="formInputDISAPersonTribeTerms" aria-label="Exact identity/geographical terms used" placeholder="">
+                      <input type="text" class="form-control" id="formInputDISAPersonTribeTerms" aria-label="Exact identity/geographical terms used" placeholder="Exact identity/geographical terms used">
                       <label for="formInputDISAPersonTribeTerms">Exact identity/geographical terms used</label>
                     </div>
                     <div class="form-floating">
-                      <input type="text" class="form-control" id="formInputDISAPersonGeoOrigins" aria-label="Geographic origins" placeholder="">
+                      <input type="text" class="form-control" id="formInputDISAPersonGeoOrigins" aria-label="Geographic origins" placeholder="Geographic origins">
                       <label for="formInputDISAPersonGeoOrigins">Geographic origins</label>
                     </div>
                   </div>

@@ -55,6 +55,6 @@ label {
 	color: #007bff;
 }
 
-.form-select, input {
+textarea, .form-select, input {
 	margin-bottom: 12px;
 }
