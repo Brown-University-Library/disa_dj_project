@@ -512,7 +512,7 @@
               <td>
                   <!-- Group count -->
                   <input class="form-control group-input groups-count"
-                  type="number" value="10" min="2"></input>
+                         type="number" value="2" min="2"></input>
                   <!-- Group count estimated checkbox -->
                   <label>
                       <input class="group-input groups-count-estimated"
@@ -594,6 +594,7 @@
 //  to clipboard
 
 function copyUUIDtoClipboard(e) {
+  console.log( "initial built url, ", e.target.href );
   e.preventDefault();
   navigator.permissions.query({name: 'clipboard-write'}).then(result => {
     if (result.state == 'granted' || result.state == 'prompt') {
@@ -601,7 +602,7 @@ function copyUUIDtoClipboard(e) {
       const oldText = e.target.innerHTML;
       e.target.innerHTML = 'ID copied';
       window.setTimeout(
-        () => e.target.innerHTML = oldText, 
+        () => e.target.innerHTML = oldText,
         2000
       );
     }
@@ -831,7 +832,8 @@ var initializeForm = function (data, tags, editUrl) {
 
       groupListing.querySelectorAll('.groups-id').forEach(
         groupIdField => {
-          groupIdField.href=`/data/reference_group/${groupEntry.uuid}/`;
+          // groupIdField.href=`/data/reference_group/${groupEntry.uuid}/`;
+          groupIdField.href = "{% url 'data_group_url' 'STUB' %}".replace( 'STUB', groupEntry.uuid );
           groupIdField.innerHTML = groupEntry.uuid ? groupEntry.uuid.substr(0,7) : '';
           groupIdField.setAttribute('data-uuid', groupEntry.uuid || '');
           groupIdField.addEventListener('click', copyUUIDtoClipboard);
@@ -848,7 +850,7 @@ var initializeForm = function (data, tags, editUrl) {
 
       groupListing.querySelectorAll('.groups-count-estimated').forEach(
         groupCountEstimatedCheckbox => groupCountEstimatedCheckbox.checked = groupEntry.count_estimated
-      );      
+      );
 
       // Set up event handlers
 
@@ -915,15 +917,13 @@ var initializeForm = function (data, tags, editUrl) {
 
         setIsCurrentlySaving(true);
         const onSaveComplete = (uuid) => {
-          // @todo Check if UUID is populated - if not copy from response to DOM
-          //console.log(`WWW`, uuid, fields['group-edit-entry']['groups-id'].getAttribute('data-uuid'));
 
           if (!fields['group-edit-entry']['groups-id'].getAttribute('data-uuid')) {
-            const uuidDisplay = uuid.substr(0,7);
-            fields['group-edit-entry']['groups-id'].innerText = uuidDisplay;
-            fields['group-display-entry']['groups-id'].innerText = uuidDisplay;
-            fields['group-edit-entry']['groups-id'].setAttribute('data-uuid', uuid);
-            fields['group-display-entry']['groups-id'].setAttribute('data-uuid', uuid);
+            [fields['group-edit-entry'], fields['group-display-entry']].forEach(entry => {
+              entry['groups-id'].innerText = uuid.substr(0,7);
+              entry['groups-id'].setAttribute('data-uuid', uuid);
+              entry['groups-id'].href = `/data/reference_group/${uuid}`;
+            });
           }
 
           copyFromEditToDisplay('groups-description', 'value');
@@ -993,7 +993,16 @@ function saveGroup(fields, onSaveComplete) {
           reference_id: parseInt(getRecId())
         };
 
-  const groupApiUrl = isNewGroup ? '/data/reference_group/new/' : `/data/reference_group/${uuid}/`;
+  // const groupApiUrl = isNewGroup ? '/data/reference_group/new/' : `/data/reference_group/${uuid}/`;
+  // console.log( "groupApiUrl, ", groupApiUrl );
+
+  let groupApiUrl = "init";
+  if (isNewGroup) {
+    groupApiUrl = "{% url 'data_group_url' 'new' %}";
+  } else {
+    groupApiUrl = "{% url 'data_group_url' 'STUB' %}".replace( 'STUB', uuid );
+  }
+  console.log( "saveGroup() groupApiUrl, ", groupApiUrl );
 
   console.log('SAVE', {
     method: (isNewGroup ? 'POST' : 'PUT'),
@@ -1024,13 +1033,21 @@ function saveGroup(fields, onSaveComplete) {
 function deleteGroup(fields, onDeleteComplete) {
 
   const uuid = fields['group-edit-entry']['groups-id'].getAttribute('data-uuid'),
-        groupApiUrl = `/data/reference_group/${uuid}/`,
+        // groupApiUrl = `/data/reference_group/${uuid}/`,
         confirmDeleteButton = document.getElementById('confirmDelete-yes'),
         cancelDeleteButton = document.getElementById('confirmDelete-no');
 
+  // const uuid = fields['group-edit-entry']['groups-id'].getAttribute('data-uuid'),
+  //       groupApiUrl = `/data/reference_group/${uuid}/`,
+  //       confirmDeleteButton = document.getElementById('confirmDelete-yes'),
+  //       cancelDeleteButton = document.getElementById('confirmDelete-no');
+
+  const groupApiUrl = "{% url 'data_group_url' 'STUB' %}".replace( 'STUB', uuid );
+  console.log( "deleteGroup() groupApiUrl, ", groupApiUrl );
+
   const onConfirmDelete = function() {
     console.log('REALLY REALLY DELETING ' + groupApiUrl);
-  
+
     fetch(groupApiUrl, {
       method: 'DELETE',
       headers: {
@@ -1183,7 +1200,7 @@ var makeEntrantEditable = function ($container, entId) {
     //$del_btn.append($del_span);
 
     $active.find($('.form-control')).prop('disabled', false);
-    
+
     if (entId !== 'new') {
         $cancel_btn = $('<button/>', {
             'class': 'btn btn-secondary cancel-entrant entrant-ctl',
