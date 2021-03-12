@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Creates the json file used by the browse-table javascript library.
 
@@ -47,6 +45,8 @@ def manage_generation():
     start_time = datetime.datetime.now()
     session = make_session()
 
+    ## referents ======================
+
     referents_all = session.query( models_alch.Referent ).all()
     log.debug( f'referents_all count, ``{len(referents_all)}``' )
 
@@ -61,6 +61,36 @@ def manage_generation():
 
     for referent in referents:
         populate_output( referent, output_dct, initialized_referent_dct )
+
+    ## groups =========================
+
+    groups = session.query( models_alch.Group ).all()
+
+    log.debug( f'groups count, ``{len(groups)}``' )
+    output_dct['meta']['groups_count'] = len( groups )
+
+    group_lst = []
+    for grp in groups:
+        assert type(grp.uuid) == str
+        assert type(grp.count) == int
+        assert type(grp.count_estimated) == bool
+        assert type(grp.description) == str
+        assert type(grp.date_created) == datetime.datetime
+        assert type(grp.date_modified) == datetime.datetime
+        assert type(grp.reference_id) == int
+        grp_dct = {  # if I need to create another group dct elsewhere, consider adding a dictify() function to the model.
+            'group_uuid': grp.uuid,
+            'count': grp.count,
+            'estimated': grp.count_estimated,
+            'description': grp.description,
+            'date_created': str(grp.date_created ),
+            'date_modified': str( grp.date_modified ),
+            'reference_db_id': grp.reference_id
+        }
+        group_lst.append( grp_dct )
+    output_dct['group_list'].append( group_lst )
+
+    ## return
 
     log.debug( f'output_dct, ``{pprint.pformat(output_dct)}``' )
     return output_dct
@@ -86,8 +116,11 @@ def initialize_output() -> tuple:
             'date_produced': str( datetime.datetime.now() ),
             'referents_count': None,
             'excluded_referents_count': None,
+            'groups_count': None,
         },
         'referent_list': [
+        ],
+        'group_list': [
         ]
     }
     initialized_referent_dct = {
