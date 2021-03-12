@@ -97,7 +97,17 @@ def manage_generation():
         else:
             reference_dct[reference_db_id] = [ grp ]
 
-    output_dct['groups_by_reference'].append( reference_dct )
+    reference_list = []
+    for (key, val) in reference_dct.items():
+        updated_dct = {
+            'refrence_db_id': key,
+            'groups': val
+        }
+        reference_list.append( updated_dct )
+
+    output_dct['groups_by_reference'] = reference_list
+    output_dct['meta']['groups__total_count'] = len( groups )
+    output_dct['meta']['groups__reference_count'] = len( reference_list )
 
     ## return
 
@@ -125,7 +135,8 @@ def initialize_output() -> tuple:
             'date_produced': str( datetime.datetime.now() ),
             'referents_count': None,
             'excluded_referents_count': None,
-            'groups_count': None,
+            'groups__total_count': None,
+            'groups__reference_count': None
         },
         'referent_list': [
         ],
