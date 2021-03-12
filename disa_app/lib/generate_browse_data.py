@@ -88,7 +88,16 @@ def manage_generation():
             'reference_db_id': grp.reference_id
         }
         group_lst.append( grp_dct )
-    output_dct['group_list'].append( group_lst )
+
+    reference_dct = {}
+    for grp in group_lst:
+        reference_db_id = grp['reference_db_id']
+        if reference_db_id in reference_dct.keys():
+            reference_dct[reference_db_id].append( grp )
+        else:
+            reference_dct[reference_db_id] = [ grp ]
+
+    output_dct['groups_by_reference'].append( reference_dct )
 
     ## return
 
@@ -120,7 +129,7 @@ def initialize_output() -> tuple:
         },
         'referent_list': [
         ],
-        'group_list': [
+        'groups_by_reference': [
         ]
     }
     initialized_referent_dct = {
