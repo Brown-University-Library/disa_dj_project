@@ -25,7 +25,7 @@ class Client_ReferenceGroup_Test( TestCase ):
         self.new_uuid = None
         self.post_resp_dct = None
         self.delete_resp_dct = None
-        log.debug( f'self.new_uuid, ``{self.new_uuid}``' )
+        log.debug( f'initial self.new_uuid, ``{self.new_uuid}``' )
         log.debug( f'self.post_resp_dct, ``{self.post_resp_dct}``' )
         log.debug( f'self.delete_resp_dct, ``{self.delete_resp_dct}``' )
 
