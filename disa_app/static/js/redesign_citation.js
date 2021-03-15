@@ -59,6 +59,7 @@ function main(DATA) {
 
   const itemForm = new Vue({
     delimiters: ['v{','}v'] // So as not to clash with Django templates
+    el: '#item-form',
   });
 }
 
