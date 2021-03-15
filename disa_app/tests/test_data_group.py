@@ -21,24 +21,28 @@ TestCase.maxDiff = 1000
 class Client_ReferenceGroup_Test( TestCase ):
     """ Checks reference-group api urls. """
 
-    ## HELPER ====================
+    def setUp(self):
+        self.existing_uuid = None
+        log.debug( f'self.existing_uuid, ``{self.existing_uuid}``' )
 
-    # def create_default_entry(self):
-    #     """ Creates a group for tests below. """
-    #     self.existing_uuid = None
-    #     post_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'new'} )
-    #     log.debug( f'post-url, ``{post_url}``' )
-    #     payload = {
-    #         'count': 7,
-    #         'count_estimated': True,
-    #         'description': 'the description',
-    #         'reference_id': 49
-    #     }
-    #     jsn = json.dumps( payload )
-    #     response = self.client.post( post_url, data=jsn, content_type='application/json' )
-    #     resp_dct = json.loads( response.content )
-    #     self.existing_uuid = resp_dct['response']['group_data']['uuid']
-    #     log.debug( f'self.existing_uuid, ``{self.existing_uuid}``' )
+    ## HELPERS ====================
+
+    def create_group(self):
+        """ Creates a group for tests below. """
+        post_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'new'} )
+        log.debug( f'post-url, ``{post_url}``' )
+        payload = {
+            'count': 7,
+            'count_estimated': True,
+            'description': 'the description',
+            'reference_id': 49
+        }
+        jsn = json.dumps( payload )
+        response = self.client.post( post_url, data=jsn, content_type='application/json' )
+        self.assertEqual( 200, response.status_code )
+        resp_dct = json.loads( response.content )
+        self.existing_uuid = resp_dct['response']['group_data']['uuid']
+        log.debug( f'self.existing_uuid, ``{self.existing_uuid}``' )
 
     ## GET =======================
 
@@ -52,7 +56,10 @@ class Client_ReferenceGroup_Test( TestCase ):
 
     def test_get_good(self):
         """ Checks good GET of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-        get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': '55062fa7c60f4ff9be2698b68ea9da8a'} )
+        self.create_group()
+        target_uuid = self.existing_uuid
+        log.debug( f'target_uuid, ``{target_uuid}``' )
+        get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': target_uuid} )
         log.debug( f'get_url, ``{get_url}``' )
         response = self.client.get( get_url )
         self.assertEqual( 200, response.status_code )
@@ -64,6 +71,21 @@ class Client_ReferenceGroup_Test( TestCase ):
         self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
         resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
         self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
+
+    # def test_get_good(self):
+    #     """ Checks good GET of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
+    #     get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': '55062fa7c60f4ff9be2698b68ea9da8a'} )
+    #     log.debug( f'get_url, ``{get_url}``' )
+    #     response = self.client.get( get_url )
+    #     self.assertEqual( 200, response.status_code )
+    #     resp_dct = json.loads( response.content )
+    #     self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
+    #     req_keys = sorted( resp_dct['request'].keys() )
+    #     self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
+    #     resp_keys = sorted( resp_dct['response'].keys() )
+    #     self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
+    #     resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
+    #     self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
 
     ## CREATE ====================
 
