@@ -244,16 +244,16 @@ class Poster():
         log.debug( f'request_body, ``{request_body}``' )
         validity = False
         try:
-            put_dct = json.loads( request_body )
-            assert type(put_dct) == dict
-            assert type( put_dct['count'] ) == int
-            assert type( put_dct['count_estimated'] ) == bool
-            assert type( put_dct['description'] ) == str
-            assert type( put_dct['reference_id'] ) == int
-            self.perceived_count = put_dct['count']
-            self.perceived_count_estimated = put_dct['count_estimated']
-            self.perceived_description = put_dct['description']
-            self.perceived_reference_id = put_dct['reference_id']
+            post_dct = json.loads( request_body )
+            assert type(post_dct) == dict
+            assert type( post_dct['count'] ) == int
+            assert type( post_dct['count_estimated'] ) == bool
+            assert type( post_dct['description'] ) == str
+            assert type( post_dct['reference_id'] ) == int
+            self.perceived_count = post_dct['count']
+            self.perceived_count_estimated = post_dct['count_estimated']
+            self.perceived_description = post_dct['description']
+            self.perceived_reference_id = post_dct['reference_id']
             validity = True
         except:
             log.exception( 'bad params; traceback follows; processing will continue' )

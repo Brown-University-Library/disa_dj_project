@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import json, logging, pprint, uuid
+import json, logging, pprint, secrets, uuid
 
 import requests
 from disa_app import settings_app
@@ -21,6 +21,41 @@ TestCase.maxDiff = 1000
 class Client_ReferenceGroup_Test( TestCase ):
     """ Checks reference-group api urls. """
 
+    def setUp(self):
+        self.new_uuid = None
+        self.post_resp_dct = None
+        self.delete_resp_dct = None
+        log.debug( f'initial self.new_uuid, ``{self.new_uuid}``' )
+        log.debug( f'self.post_resp_dct, ``{self.post_resp_dct}``' )
+        log.debug( f'self.delete_resp_dct, ``{self.delete_resp_dct}``' )
+
+    ## HELPERS ====================
+
+    def create_new_group(self):
+        """ Creates a group for tests. """
+        post_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'new'} )
+        log.debug( f'post-url, ``{post_url}``' )
+        payload = {
+            'count': 7,
+            'count_estimated': True,
+            'description': 'the description',
+            'reference_id': 49
+        }
+        jsn = json.dumps( payload )
+        response = self.client.post( post_url, data=jsn, content_type='application/json' )
+        self.assertEqual( 200, response.status_code )
+        self.post_resp_dct = json.loads( response.content )
+        self.new_uuid = self.post_resp_dct['response']['group_data']['uuid']
+        log.debug( f'self.new_uuid, ``{self.new_uuid}``' )
+
+    def delete_new_group(self):
+        """ Deletes group used by tests."""
+        delete_url = reverse( 'data_group_url', kwargs={'incoming_uuid': self.new_uuid} )
+        response = self.client.delete( delete_url )
+        self.assertEqual( 200, response.status_code )
+        self.delete_resp_dct = json.loads( response.content )
+        log.debug( f'delete_resp_dct, ``{pprint.pformat(self.delete_resp_dct)}``' )
+
     ## GET =======================
 
     def test_get_bad(self):
@@ -33,9 +68,15 @@ class Client_ReferenceGroup_Test( TestCase ):
 
     def test_get_good(self):
         """ Checks good GET of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-        get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': '55062fa7c60f4ff9be2698b68ea9da8a'} )
+        ## create group
+        self.create_new_group()
+        target_uuid = self.new_uuid
+        log.debug( f'target_uuid, ``{target_uuid}``' )
+        ## GET
+        get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': target_uuid} )
         log.debug( f'get_url, ``{get_url}``' )
         response = self.client.get( get_url )
+        ## tests
         self.assertEqual( 200, response.status_code )
         resp_dct = json.loads( response.content )
         self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
@@ -45,6 +86,8 @@ class Client_ReferenceGroup_Test( TestCase ):
         self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
         resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
         self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
+        ## cleanup
+        self.delete_new_group()
 
     ## CREATE ====================
 
@@ -61,26 +104,20 @@ class Client_ReferenceGroup_Test( TestCase ):
 
     def test_post_good(self):
         """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/good params. """
-        post_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'new'} )
-        log.debug( f'post-url, ``{post_url}``' )
-        payload = {
-            'count': 7,
-            'count_estimated': True,
-            'description': 'the description',
-            'reference_id': 49
-        }
-        response = self.client.post( post_url, payload )
-        self.assertEqual( 200, response.status_code )
-        resp_dct = json.loads( response.content )
-        self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
-        req_keys = sorted( resp_dct['request'].keys() )
+        ## create group
+        self.create_new_group()
+        ## tests
+        self.assertEqual( ['request', 'response'], sorted(self.post_resp_dct.keys()) )
+        req_keys = sorted( self.post_resp_dct['request'].keys() )
         self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-        req_payload_keys = sorted( resp_dct['request']['payload'].keys() )
+        req_payload_keys = sorted( self.post_resp_dct['request']['payload'].keys() )
         self.assertEqual( ['count', 'count_estimated', 'description', 'reference_id'], req_payload_keys )
-        resp_keys = sorted( resp_dct['response'].keys() )
+        resp_keys = sorted( self.post_resp_dct['response'].keys() )
         self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
-        resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
+        resp_group_data_keys = sorted( self.post_resp_dct['response']['group_data'].keys() )
         self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
+        ## cleanup
+        self.delete_new_group()
 
     ## UPDATE ====================
 
@@ -93,31 +130,23 @@ class Client_ReferenceGroup_Test( TestCase ):
 
     def test_put_good(self):
         """ Checks good PUT of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-        ## put -> create entry ==================
-        post_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'new'} )
-        log.debug( f'post-url, ``{post_url}``' )
-        post_payload = {
-            'count': 7,
-            'count_estimated': True,
-            'description': 'the description',
-            'reference_id': 49
-        }
-        post_response = self.client.post( post_url, post_payload )
-        post_resp_dct = json.loads( post_response.content )
-        new_uuid = post_resp_dct['response']['group_data']['uuid']
-        self.assertEqual( str, type(new_uuid) )
-        ## put -> put ===========================
-        put_url = reverse( 'data_group_url', kwargs={'incoming_uuid': new_uuid} )
+        ## create group
+        self.create_new_group()
+        ## PUT
+        put_url = reverse( 'data_group_url', kwargs={'incoming_uuid': self.new_uuid} )
         log.debug( f'put_url-url, ``{put_url}``' )
+        random_count = secrets.choice( [2, 4, 6, 8, 10] )
+        random_description = secrets.choice( ['descA', 'descB', 'descC', 'descD', 'descE'] )
         put_payload = {
-            'count': 8,
+            'count': random_count,
             'count_estimated': False,
-            'description': 'the new description',
+            'description': random_description,
             'reference_id': 49
         }
         jsn = json.dumps( put_payload )
-        put_response = self.client.put( put_url, data=jsn )
+        put_response = self.client.put( put_url, data=jsn, content_type='application/json' )
         put_resp_dct = json.loads( put_response.content )
+        ## tests
         self.assertEqual( 200, put_response.status_code )
         resp_dct = json.loads( put_response.content )
         self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
@@ -129,16 +158,10 @@ class Client_ReferenceGroup_Test( TestCase ):
         self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
         resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
         self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
-        ## put -> deletion ======================
-        delete_url = reverse( 'data_group_url', kwargs={'incoming_uuid': new_uuid} )
-        delete_response = self.client.delete( delete_url )
-        self.assertEqual( 200, delete_response.status_code )
-        resp_dct = json.loads( delete_response.content )
-        self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
-        req_keys = sorted( resp_dct['request'].keys() )
-        self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-        resp_keys = sorted( resp_dct['response'].keys() )
-        self.assertEqual( ['elapsed_time', 'status'], resp_keys )
+        self.assertEqual( random_count, resp_dct['response']['group_data']['count'] )
+        self.assertEqual( random_description, resp_dct['response']['group_data']['description'] )
+        ## cleanup
+        self.delete_new_group()
 
     ## DELETE ====================
 
@@ -151,34 +174,26 @@ class Client_ReferenceGroup_Test( TestCase ):
 
     def test_delete_good(self):
         """ Checks good DELETE of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-        ## first create entry
-        post_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'new'} )
-        log.debug( f'post-url, ``{post_url}``' )
-        payload = {
-            'count': 7,
-            'count_estimated': True,
-            'description': 'the description',
-            'reference_id': 49
-        }
-        post_response = self.client.post( post_url, payload )
-        post_resp_dct = json.loads( post_response.content )
-        new_uuid = post_resp_dct['response']['group_data']['uuid']
-        self.assertEqual( str, type(new_uuid) )
-        ## deletion
-        delete_url = reverse( 'data_group_url', kwargs={'incoming_uuid': new_uuid} )
-        delete_response = self.client.delete( delete_url )
-        self.assertEqual( 200, delete_response.status_code )
-        resp_dct = json.loads( delete_response.content )
-        self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
-        req_keys = sorted( resp_dct['request'].keys() )
+        ## create group
+        self.create_new_group()
+        ## DELETE
+        self.delete_new_group()
+        ## tests
+        self.assertEqual( ['request', 'response'], sorted(self.delete_resp_dct.keys()) )
+        req_keys = sorted( self.delete_resp_dct['request'].keys() )
         self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-        resp_keys = sorted( resp_dct['response'].keys() )
+        self.assertEqual( 'DELETE', self.delete_resp_dct['request']['method'] )
+        self.assertEqual( {}, self.delete_resp_dct['request']['payload'] )
+        resp_keys = sorted( self.delete_resp_dct['response'].keys() )
         self.assertEqual( ['elapsed_time', 'status'], resp_keys )
+        self.assertEqual( 'success', self.delete_resp_dct['response']['status'] )
 
     ## RECORD-GET ================
 
     def test_get_record_data_for_group_check(self):
-        """ Checks `http://127.0.0.1:8000/data/records/49/ """
+        """ Checks `http://127.0.0.1:8000/data/records/49/`
+            All the tests above assume the existence of record-49; this just confirms it's there,
+            ...and that the initial response includes some group info. """
         response = self.client.get( '/data/records/49/' )
         self.assertEqual( 200, response.status_code )
         resp_dct = json.loads( response.content )
