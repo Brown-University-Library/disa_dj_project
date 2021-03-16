@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import logging, pprint
+import json, logging, pprint
 
 from disa_app import settings_app
 from django.conf import settings as project_settings

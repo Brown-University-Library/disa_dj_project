@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import logging, pprint
+import json, logging, pprint, uuid
 
+import requests
 from disa_app import settings_app
 from disa_app.lib import view_search_results_manager
 from disa_app.models import UserProfile
 from django.conf import settings as project_settings
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.test import Client
 from django.test import TestCase  # from django.test import SimpleTestCase as TestCase    ## TestCase requires db, so if you're not using a db, and want tests, try this
 from django.test.utils import override_settings
@@ -14,6 +16,19 @@ from django.test.utils import override_settings
 
 log = logging.getLogger(__name__)
 TestCase.maxDiff = 1000
+
+
+class Browse_Test( TestCase ):
+    """ Checks /browse/ responses. """
+
+    def test_json_response__logged_in_false(self):
+        """ Checks ?format=json param. """
+        response = self.client.get( '/browse/?format=json' )
+        self.assertEqual( 200, response.status_code )
+        resp_dct = json.loads( response.content )
+        returned_keys = list( resp_dct.keys() )
+        expected_keys = [ 'LOGIN_PROBLEM_EMAIL', 'browse_login_password', 'browse_login_username', 'contact_url' ]
+        self.assertEqual( expected_keys.sort(), returned_keys.sort() )
 
 
 class Client_Misc_Test( TestCase ):
