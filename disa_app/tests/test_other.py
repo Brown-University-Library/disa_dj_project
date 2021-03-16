@@ -18,6 +18,19 @@ log = logging.getLogger(__name__)
 TestCase.maxDiff = 1000
 
 
+class Browse_Test( TestCase ):
+    """ Checks /browse/ responses. """
+
+    def test_json_response__logged_in_false(self):
+        """ Checks ?format=json param. """
+        response = self.client.get( '/browse/?format=json' )
+        self.assertEqual( 200, response.status_code )
+        resp_dct = json.loads( response.content )
+        returned_keys = list( resp_dct.keys() )
+        expected_keys = [ 'LOGIN_PROBLEM_EMAIL', 'browse_login_password', 'browse_login_username', 'contact_url' ]
+        self.assertEqual( expected_keys.sort(), returned_keys.sort() )
+
+
 class Client_Misc_Test( TestCase ):
     """ Checks miscellaneous url responses. """
 
