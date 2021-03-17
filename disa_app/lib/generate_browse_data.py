@@ -67,7 +67,7 @@ def manage_generation():
     groups = session.query( models_alch.Group ).all()
 
     log.debug( f'groups count, ``{len(groups)}``' )
-    output_dct['meta']['groups_count'] = len( groups )
+    # output_dct['meta']['groups_count'] = len( groups )
 
     group_lst = []
     for grp in groups:
