@@ -5,12 +5,15 @@ from typing import List
 
 import requests
 from disa_app import settings_app
+from disa_app.lib import basic_auth
 from disa_app.lib import denormalizer_document
 from disa_app.lib import user_pass_auth
 from disa_app.lib import utility_manager
 from disa_app.lib import v_data_document_manager  # api/documents
 from disa_app.lib import v_data_relationships_manager  # api/relationship-by-reference
-from disa_app.lib import view_data_entrant_manager  # api/people
+from disa_app.lib import view_browse_manager
+from disa_app.lib import view_data_entrant_manager  # api/referents
+from disa_app.lib import view_data_group_manager  # api/groups
 from disa_app.lib import view_data_records_manager  # api/items
 from disa_app.lib import view_edit_record_manager
 from disa_app.lib import view_edit_relationship_manager
@@ -22,7 +25,7 @@ from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 
 
@@ -30,113 +33,74 @@ log = logging.getLogger(__name__)
 
 
 # ===========================
-# redesign urls
-# ===========================
-
-
-def redesign_home( request ):
-    """ ? """
-    return HttpResponse( "What should be displayed here?" )
-
-
-@shib_login
-def redesign_citations( request ):
-    """ Displays main landing page of citations, with user's recently-edited citations first. """
-    log.debug( '\n\nstarting redesign_citations()' )
-    user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
-    context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
-    if request.user.is_authenticated:
-        context['user_is_authenticated'] = True
-        context['user_first_name'] = request.user.first_name
-    if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    else:
-        resp = render( request, 'disa_app_templates/redesign_citations.html', context )
-    return resp
-
-
-@shib_login
-def redesign_citation( request, cite_id=None ):
-    """ Displays specific citation. """
-    log.debug( '\n\nstarting redesign_citation()' )
-    # return HttpResponse( f'redesign-citation coming for cite-id, ``{cite_id}``' )
-
-    if cite_id == None:
-        return HttpResponseNotFound( '4040 / Not Found' )
-
-    context: dict = view_edit_citation_manager.query_data( cite_id )
-
-    if request.user.is_authenticated:
-        context['user_is_authenticated'] = True
-        context['user_first_name'] = request.user.first_name
-    if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    else:
-        resp = render( request, 'disa_app_templates/redesign_citation.html', context )
-    return resp
-
-
-# @shib_login
-# def edit_citation( request, cite_id=None ):
-#     """ Url: 'editor/documents/<cite_id>/' -- 'edit_citation_url' """
-#     log.debug( '\n\nstarting edit_citation()' )
-#     if cite_id:
-#         log.debug( f'will hit citation-manager with cite_id, ```{cite_id}```' )
-#         context: dict = view_edit_citation_manager.query_data( cite_id )
-#         if context == None:
-#             return HttpResponseNotFound( '404 / Not Found' )
-#     else:
-#         log.debug( 'will hit citation-manager with no cite_id' )
-#         user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
-#         context: dict = view_edit_citation_manager.manage_create( user_id )
-#     if request.user.is_authenticated:
-#         context['user_is_authenticated'] = True
-#         context['user_first_name'] = request.user.first_name
-#         context['can_delete_doc'] = request.user.profile.can_delete_doc
-#     if request.GET.get('format', '') == 'json':
-#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     else:
-#         resp = render( request, 'disa_app_templates/document_edit.html', context )
-#     return resp
-
-
-# ===========================
 # main urls
 # ===========================
 
 
-def browse( request ):
-    """ Displays home page. """
-    log.debug( '\n\nstarting browse()' )
+def info( request ):
+    """ Displays temporary home page which will redirect to the public disa page.
+        TODO: implement auto-redirect after a few seconds. """
+    log.debug( '\n\nstarting info()' )
     context = {
-        'denormalized_json_url': reverse('dnrmlzd_jsn_prx_url_url'),
-        'info_image_url': f'{project_settings.STATIC_URL}images/info.png',
-        'logout_next': reverse( 'browse_url' ) }
-    if request.user.is_authenticated:
-        context['user_is_authenticated'] = True
-        context['user_first_name'] = request.user.first_name
+        'redirect_url': 'https://indigenousslavery.org'
+        }
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/browse.html', context )
+        resp = render( request, 'disa_app_templates/info.html', context )
     return resp
 
 
 def browse_tabulator( request ):
-    """ Displays ALTERNATE home page. """
-    log.debug( '\n\nstarting browse()' )
-    context = {
-        'denormalized_json_url': reverse('dnrmlzd_jsn_prx_url_url'),
-        'info_image_url': f'{project_settings.STATIC_URL}images/info.png',
-        'logout_next': reverse( 'browse_url' ) }
-    if request.user.is_authenticated:
-        context['user_is_authenticated'] = True
-        context['user_first_name'] = request.user.first_name
-    if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    else:
-        resp = render( request, 'disa_app_templates/browse_tabulator.html', context )
-    return resp
+    """ Displays tabulator page. """
+    log.info( '\n\nstarting browse_tabulator()' )
+    log.debug( f'request.session.items(), ``{pprint.pformat(request.session.items())}``' )
+    ( submitted_username, submitted_password ) = ( request.POST.get('browse_login_username', ''), request.POST.get('browse_login_password', '') )
+    assert type(submitted_username) == str; assert type(submitted_password) == str
+    if request.method == 'POST':  # user has submitted browse login credentials
+        credentials_valid = view_browse_manager.check_credentials_on_post( submitted_username, submitted_password )
+        assert type( credentials_valid ) == bool
+        if credentials_valid:  # redirect to a GET to show the browse data
+            request.session['browse_logged_in'] = 'yes'
+            request.session.pop( 'errant_browse_login_username', None )  # <https://stackoverflow.com/questions/11277432/how-can-i-remove-a-key-from-a-python-dictionary/15206537#15206537>
+            request.session.pop( 'errant_browse_login_password', None )
+        else:  # store any entered data to the session and redirect to a GET to the login form again
+            ( request.session['errant_browse_login_username'], request.session['errant_browse_login_password'] ) = ( submitted_username, submitted_password )
+        request.session.modified = True
+        resp = view_browse_manager.prepare_self_redirect_on_post()
+        return resp
+    if request.method == 'GET':
+        log.debug( 'handling GET' )
+        is_browse_logged_in = view_browse_manager.check_browse_logged_in_on_get( dict(request.session), bool(request.user.is_authenticated) )
+        assert type(is_browse_logged_in) == bool
+        if is_browse_logged_in:  # show the browse data
+            log.debug( 'logged-in path' )
+            # request.session.pop( 'browse_logged_in', None )
+            # request.session.modified = True
+            context = view_browse_manager.prepare_logged_in_get_context( bool(request.user.is_authenticated) )
+            resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_tabulator.html' )
+        else:  # show the login form
+            log.debug( 'not logged-in path' )
+            ( errant_submitted_username, errant_submitted_password ) = ( request.session.get('errant_browse_login_username', ''), request.session.get('errant_browse_login_password', '') )
+            assert type( errant_submitted_username ) == str; assert type( errant_submitted_password ) == str
+            request.session.pop( 'errant_browse_login_username', None )
+            request.session.pop( 'errant_browse_login_password', None )
+            request.session.modified = True
+            context = view_browse_manager.prepare_non_logged_in_get_context( errant_submitted_username, errant_submitted_password )
+            resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_login.html' )
+            log.debug( 'ok should render the browse-login template' )
+        return resp
+
+
+def browse_logout( request ):
+    """ Logs user out of _browse_ view (only). """
+    log.debug( '\n\nstarting browse_logout()' )
+    log.debug( f'dict(request.session) start, ``{pprint.pformat(dict(request.session))}``' )
+    request.session['browse_logged_in'] = 'no'
+    log.debug( f'dict(request.session) end, ``{pprint.pformat(dict(request.session))}``' )
+    redirect_url = reverse( 'browse_url' )
+    log.debug( f'redirect_url, ```{redirect_url}```' )
+    return HttpResponseRedirect( redirect_url )
 
 
 def people( request ):
@@ -172,12 +136,6 @@ def source( request, src_id ):
     log.debug( f'redirect_url, ```{redirect_url}```' )
     return HttpResponseRedirect( redirect_url )
 
-# def source( request, src_id ):
-#     log.debug( f'\n\nstarting source(), with src_id, `{src_id}`' )
-#     redirect_url = reverse( 'edit_record_url', kwargs={'rec_id': src_id} )
-#     log.debug( f'redirect_url, ```{redirect_url}```' )
-#     return HttpResponseRedirect( redirect_url )
-
 
 @shib_login
 def editor_index( request ):
@@ -204,23 +162,6 @@ def editor_index( request ):
     else:
         resp = render( request, 'disa_app_templates/document_index.html', context )
     return resp
-
-
-# @shib_login
-# def editor_index( request ):
-#     ## TODO: rename this url from `/editor/` to `/citations/`?
-#     log.debug( '\n\nstarting editor_index()' )
-#     log.debug( 'slept' )
-#     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
-#     context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
-#     if request.user.is_authenticated:
-#         context['user_is_authenticated'] = True
-#         context['user_first_name'] = request.user.first_name
-#     if request.GET.get('format', '') == 'json':
-#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     else:
-#         resp = render( request, 'disa_app_templates/document_index.html', context )
-#     return resp
 
 
 def search_results( request ):
@@ -300,7 +241,7 @@ def handle_shib_login( request ):
     else:
         redirect_url = request.GET['next']  # may be same page
     if request.session.get( 'redirect_url', None ):  # cleanup
-        del request.session['redirect_url']
+        request.session.pop( 'redirect_url', None )
     log.debug( 'redirect_url, ```%s```' % redirect_url )
     return HttpResponseRedirect( redirect_url )
 
@@ -328,7 +269,6 @@ def user_pass_handler( request ):
     else:
         resp = user_pass_auth.prep_citations_redirect( request )
     return resp
-
 
 
 # ===========================
@@ -372,25 +312,6 @@ def edit_person( request, rfrnt_id=None ):
     return resp
 
 
-# @shib_login
-# def edit_record( request, rec_id=None ):
-#     """ Url: '/editor/records/<rec_id>/' -- 'edit_record_url' """
-#     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
-#     if rec_id:  # normal case
-#         log.debug( 'handling rec_id exists' )
-#         context: dict = view_edit_record_manager.prep_rec_id_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
-#     elif request.GET.get('doc_id', None):
-#         log.debug( 'handling doc_id parameter exists' )
-#         context: dict = view_edit_record_manager.prep_doc_id_context( request.GET.get('doc_id', None), request.user.first_name, bool(request.user.is_authenticated) )
-#     else:
-#         log.debug( f'strange, not found; request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
-#         return HttpResponseNotFound( '404 / Not Found' )
-#     if request.GET.get('format', '') == 'json':
-#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     else:
-#         resp = render( request, 'disa_app_templates/record_edit.html', context )
-#     return resp
-
 @shib_login
 def edit_record( request, rec_id=None ):
     """ Url: '/editor/records/<rec_id>/' -- 'edit_record_url' """
@@ -422,22 +343,6 @@ def edit_record_w_recid( request, rec_id=None ):
     return resp
 
 
-## -- original that seemed to have been working for a while...
-# @shib_login
-# def edit_record( request, rec_id=None ):
-#     """ Url: '/editor/records/<rec_id>/' -- 'edit_record_url' """
-#     log.debug( f'\n\nstarting edit_record(), with rec_id, `{rec_id}`' )
-#     if rec_id:
-#         context: dict = view_edit_record_manager.prep_rec_id_context( rec_id, request.user.first_name, bool(request.user.is_authenticated) )
-#     else:
-#         context: dict = view_edit_record_manager.prep_doc_id_context( request.GET.get('doc_id', None), request.user.first_name, bool(request.user.is_authenticated) )
-#     if request.GET.get('format', '') == 'json':
-#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     else:
-#         resp = render( request, 'disa_app_templates/record_edit.html', context )
-#     return resp
-
-
 @shib_login
 def edit_relationships( request, rec_id: str ):
     """ Note: though this is in the 'editor' section here, the url doesn't contain `editor` -- possible TODO.
@@ -456,6 +361,77 @@ def edit_relationships( request, rec_id: str ):
 # ===========================
 # data urls
 # ===========================
+
+
+@shib_login
+def data_reference_group( request, incoming_uuid=None ):
+    """ Called via ajax from views.edit_record() page
+        Url: '/data/reference_group/<incoming_uuid>/' -- 'data_group_url' """
+    log.debug( '\n\nstarting data_reference_group()' )
+    # log.debug( f'request.body, ``{request.body}``' )
+    # log.debug( f'request.POST, ``{pprint.pformat(request.POST)}``' )
+    # log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
+    start_time = datetime.datetime.now()
+    request_url = '%s://%s%s' % (
+        request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), request.META.get('REQUEST_URI', request.META['PATH_INFO']) )  # some info not available from client-test
+    assert type(incoming_uuid) == str
+    log.debug( f'incoming_uuid, ```{incoming_uuid}```' )
+    log.debug( f'request.method, ```{request.method}```' )
+    ## GET --------------------------------------
+    if request.method == 'GET':
+        data_group_getter = view_data_group_manager.Getter( request_url, start_time )
+        params_valid = data_group_getter.validate_get_params( incoming_uuid )
+        if params_valid:
+            if data_group_getter.prelim_status_code == 200:
+                resp = data_group_getter.manage_get()  # grp already in Getter() self.grp
+            else:
+                resp = HttpResponseNotFound( '404 / Not Found' )
+        else:
+            resp = HttpResponseBadRequest( '400 / Bad Request' )
+    ## PUT --------------------------------------
+    elif request.method == 'PUT':
+        # log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
+        data_group_updater = view_data_group_manager.Updater( request_url, start_time )
+        params_valid = data_group_updater.validate_put_params( request.body )
+        if params_valid:
+            user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+            assert type(user_id) == int
+            resp = data_group_updater.manage_put( incoming_uuid, user_id )
+        else:
+            resp = HttpResponseBadRequest( '400 / Bad Request' )
+    ## POST --------------------------------------
+    elif request.method == 'POST':
+        data_group_poster = view_data_group_manager.Poster( request_url, start_time )
+        # params_valid = data_group_poster.validate_post_params( dict(request.POST) )
+        params_valid = data_group_poster.validate_post_params( request.body )
+        if params_valid:
+            user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+            assert type(user_id) == int
+            # resp = data_group_poster.manage_post( dict(request.POST), user_id )
+            resp = data_group_poster.manage_post( user_id )
+        else:
+            resp = HttpResponseBadRequest( '400 / Bad Request' )
+    ## DELETE --------------------------------------
+    elif request.method == 'DELETE':
+        log.debug( 'DELETE detected' )
+        data_group_deleter = view_data_group_manager.Deleter( request_url, start_time )
+        params_valid = data_group_deleter.validate_delete_params( incoming_uuid )
+        if params_valid:
+            if data_group_deleter.prelim_status_code == 200:
+                user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+                assert type(user_id) == int
+                resp = data_group_deleter.manage_delete( user_id )  # grp-obj already stored as attribute
+            else:
+                log.debug( 'returning `404 / Not Found`' )
+                resp = HttpResponseNotFound( '404 / Not Found' )
+        else:
+            resp = HttpResponseBadRequest( '400 / Bad Request' )
+    else:
+        log.warning( f'request.method, ``{request.method}`` detected; returning `400 / Bad Request`' )
+        resp = HttpResponseBadRequest( '400 / Bad Request' )
+    return resp
+
+    ## end def data_reference_group()
 
 
 @shib_login
@@ -631,14 +607,17 @@ def utility_referents( request ):
 # ===========================
 
 
-# def dnrmlzd_jsn_prx_url( request ):
-#     """ Allows ajax loading of json from browse() view. """
-#     r = requests.get( settings_app.DENORMALIZED_JSON_URL )
-#     return HttpResponse( r.content, content_type='application/json; charset=utf-8' )
-
 def dnrmlzd_jsn_prx_url( request ):
-    """ Allows ajax loading of json from browse() view. """
+    """ Allows ajax loading of json from old browse() view. """
     url = settings_app.DENORMALIZED_JSON_URL
+    log.debug( f'url, ``{url}``' )
+    r = requests.get( url )
+    return HttpResponse( r.content, content_type='application/json; charset=utf-8' )
+
+
+def browse_json_proxy( request ):
+    """ Allows ajax loading of json from browse() view. """
+    url = settings_app.BROWSE_JSON_URL
     log.debug( f'url, ``{url}``' )
     r = requests.get( url )
     return HttpResponse( r.content, content_type='application/json; charset=utf-8' )
@@ -652,6 +631,8 @@ def dnrmlzd_jsn_prx_url( request ):
 def version( request ):
     """ Returns basic data including branch & commit. """
     # log.debug( 'request.__dict__, ```%s```' % pprint.pformat(request.__dict__) )
+    log.debug( f'project_settings, ``{pprint.pformat(project_settings)}``' )
+    log.debug( f'debug-setting, ``{project_settings.DEBUG}``' )
     rq_now = datetime.datetime.now()
     commit = view_info_manager.get_commit()
     branch = view_info_manager.get_branch()
@@ -669,47 +650,20 @@ def error_check( request ):
         - run, in another terminal window: `python -m smtpd -n -c DebuggingServer localhost:1026`,
         - (or substitue your own settings for localhost:1026)
     """
+    log.debug( f'project_settings.DEBUG, ``{project_settings.DEBUG}``' )
     if project_settings.DEBUG == True:
-        1/0
+        raise Exception( 'error-check triggered; admin emailed' )
     else:
         return HttpResponseNotFound( '<div>404 / Not Found</div>' )
 
 
+# ===========================
+# redesign EXAMPLE...
+# ===========================
 
 
-
-
-# # ==========
-# # works
-# # ==========
-# from sqlalchemy import Column, Integer, String, ForeignKey
-# from sqlalchemy import create_engine
-# engine = create_engine( settings_app.DB_URL, echo=True )
-# from sqlalchemy.ext.declarative import declarative_base
-# Base = declarative_base()
-
-# class Citation(Base):
-#     __tablename__ = '3_citations'
-#     id = Column( Integer, primary_key=True )
-#     citation_type_id = Column( Integer, ForeignKey('2_citation_types.id'), nullable=False )
-#     display = Column( String(500) )
-#     zotero_id = Column( String(255) )
-#     # comments = Column( UnicodeText() )
-#     acknowledgements = Column( String(255) )
-#     # references = db.relationship('Reference', backref='citation', lazy=True)
-
-#     def __repr__(self):
-#         return f'<Citation {self.id}>'
-
-# from sqlalchemy.orm import sessionmaker
-# Session = sessionmaker(bind = engine)
-# session = Session()
-# resultset: list = session.query( Citation ).all()
-# log.debug( f'type(resultset), `{type(resultset)}`' )
-
-# for row in resultset:
-#     citation: sqlalchemy.orm.state.InstanceState = row
-#     # log.debug( f'type(row), `{type(row)}`' )
-#     # log.debug( f'id, `{row.id}`; display, ```{row.display}```; citation_type_id, `{row.citation_type_id}`' )
-#     log.debug( f'citation, ```{pprint.pformat(citation.__dict__)}```' )
-#     # break
+def redesign_example( request ):
+    if project_settings.DEBUG == True:
+        return HttpResponse( 'This would show the actual new-flow response.' )
+    else:
+        return HttpResponse( 'Not yet running on production.' )

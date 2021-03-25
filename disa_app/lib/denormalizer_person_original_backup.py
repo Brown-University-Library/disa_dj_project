@@ -5,14 +5,13 @@ Creates the json file used by the browse-table javascript library.
 
 Usage...
 - called by cron script in practice.
-- can be called manually by cd-ing to the project directory (with virtual-environment activated) and running:
+- can be called manually by cd-ing to the project directory and running:
   $ python3 ./disa_app/lib/denormalizer_person_original.py
 """
 
 import collections, datetime, json, logging, os, pathlib, pprint, sys
 import django, sqlalchemy
 
-from django.core.urlresolvers import reverse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -26,55 +25,40 @@ django.setup()
 ## ok, now django-related imports will work
 from disa_app import models_sqlalchemy as models_alch
 from disa_app import settings_app
-from disa_app.models import MarkedForDeletion
 
 
-## set up file logger
-LOG_PATH = os.environ['DISA_DJ__LOG_PATH']
-LOG_LEVEL = os.environ['DISA_DJ__LOG_LEVEL']
-level_dct = { 'DEBUG': logging.DEBUG, 'INFO': logging.INFO }
-logging.basicConfig(
-    filename=LOG_PATH, level=level_dct[LOG_LEVEL],
-    format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s', datefmt='%d/%b/%Y %H:%M:%S' )
 log = logging.getLogger(__name__)
-log.info( '\n\ndenormalizer log ready' )
+
+
+def make_session() -> sqlalchemy.orm.session.Session:
+    engine = create_engine( settings_app.DB_URL, echo=True )
+    Session = sessionmaker( bind=engine )
+    session = Session()
+    return session
 
 
 def json_for_browse():
     """ Produces json used by 'browse'.
-        Called by ```if __name__ == "__main__":``` """
+        Called manually for now. """
     log.debug( 'starting json_for_browse()' )
     start_time = datetime.datetime.now()
 
     session = make_session()
-    filter_deleted = FilterDeleted()
 
+    # persons = models.Person.query.all()
     persons = session.query( models_alch.Person ).all()
-    log.debug( f'persons count, ``{len(persons)}``' )
 
-    filtered_out_deleted_persons = filter_deleted.manage_filtration( persons, session )
-    log.debug( f'filtered_out_deleted_persons count, ``{len(filtered_out_deleted_persons)}``' )
+    # owner_role = models.Role.query.filter_by(name='owner').first()
+    owner_role = session.query( models_alch.Role ).filter_by( name='owner' ).first()
 
-    persons_subset = list(
-        { p for p in filtered_out_deleted_persons for r in p.references if None not in r.roles }
-        )
-    log.debug( f'persons_subset count, ``{len(persons_subset)}``' )
-
+    ensl = list({ p for p in persons
+        for r in p.references if owner_role not in r.roles })
     out = []
-
-    counter = 0
-    for p in persons_subset:
-
-        log.debug( f'p.id, ``{p.id}``' )
-
-        counter += 1
+    for p in ensl:
         data = {}
         data['id'] = p.id
         data['first_name'] = p.first_name
         data['last_name'] = p.last_name
-
-        log.debug( f'last_name, ``{data["last_name"]}``' )
-
         if data['first_name'] == '' and data['last_name'] == '':
             data['first_name'] = 'unrecorded'
         data['documents'] = collections.defaultdict(list)
@@ -103,17 +87,8 @@ def json_for_browse():
 
             if new_date < first_date:
                 first_date = new_date
-
-            existing_ref_data = data['documents'][citation]  # 2020-Oct-13 -- weird -- this _always_ appears to return an empty list
-            log.debug( f'existing_ref_data, ``{pprint.pformat( existing_ref_data )}``' )
-
+            existing_ref_data = data['documents'][citation]
             new_ref_data = process_reference(ref)
-            log.debug( f'new_ref_data, ``{pprint.pformat( new_ref_data )}``' )
-            # data['roles_for_tabulator'] = new_ref_data['roles_tabulator']  # no, it needs to be in the document section, because a document can have more than one item
-            # del new_ref_data['roles_tabulator']   # no need to display it twice
-            log.debug( f'data id, ``{data["id"]}``' )
-            # break
-
             data['documents'][citation] = merge_ref_data(
                 existing_ref_data, new_ref_data)
             for d in data['documents'][citation]:
@@ -154,9 +129,6 @@ def json_for_browse():
         }
         out.append(data)
 
-        if counter > 5000:  # for development
-            break
-
     elapsed_time = str( datetime.datetime.now() - start_time )
     log.debug( 'elapsed time, ```%s```' % elapsed_time )
 
@@ -170,17 +142,10 @@ def json_for_browse():
 # ==========
 
 
-def make_session() -> sqlalchemy.orm.session.Session:
-    engine = create_engine( settings_app.DB_URL, echo=False )
-    Session = sessionmaker( bind=engine )
-    session = Session()
-    return session
-
-
 def process_reference(entrant):
     """ Called by json_for_browse() """
 
-    log.debug( f'\n\nentrant, ``{entrant}``' )
+    log.debug( 'starting process_reference()' )
     start_time = datetime.datetime.now()
 
     rec = entrant.reference
@@ -189,7 +154,6 @@ def process_reference(entrant):
     date = rec.date or datetime.datetime(year=1492,day=1,month=1)
     ref_data = {
         'roles': collections.defaultdict(list),
-        'roles_tabulator': collections.defaultdict( list ),
         'date': {
             'year': date.year,
             'month': date.month,
@@ -207,18 +171,7 @@ def process_reference(entrant):
         'race': merge_entrant_attributes(entrant.races)
     }
     for role in entrant.roles:
-        log.debug( f'role, ``{role}``' )
-        log.debug( f'role.__dict__, ``{role.__dict__}``' )
-        # 1/0
         ref_data['roles'][role.name] = []
-        ref_data['roles_tabulator'][role.name] = []
-
-        # ref_data['roles_tabulator'][role.name] = {
-        #     'name_as_relationship': role.name_as_relationship,
-        #     'people': []
-        #     }
-        # log.debug( f'roles-tabulator-entry, ``{ref_data["roles_tabulator"][role.name]}``' )
-
     ers = entrant.as_subject
     for er in ers:
         obj = er.obj
@@ -238,37 +191,12 @@ def process_reference(entrant):
             inv = [ i for i in invs if i.related_as.name in {'mother', 'father'}]
             if len(inv) > 0:
                 role = 'has_' + inv[0].related_as.name
-
         other = "{} {}".format(
             obj.primary_name.first, obj.primary_name.last).strip()
-
-        # tabulator_other = "{} {} {}".format(
-        #     obj.primary_name.first, obj.primary_name.last, obj.id ).strip()
-
-        tabulator_other = {
-            'primary_first_name': obj.primary_name.first.strip(),
-            'primary_last_name': obj.primary_name.last.strip(),
-            'link': f'%s%s' % ( reverse('edit_person_root_url'), obj.id )
-        }
-
         if other == '':
             other = 'unrecorded'
         ref_data['roles'][role].append(other)
-
-        ref_data['roles_tabulator'][role].append( tabulator_other )
-
-        # log.debug( 'people, ``%s``' % ref_data["roles_tabulator"][role] )
-        # try:
-        #     ref_data['roles_tabulator'][role]['people'].append( tabulator_other )
-        # except Exception as e:
-        #     log.debug( f'WARNING -- before error, ref_data-roles_tabulator was, ``{ref_data["roles_tabulator"]}``' )
-        #     # raise Exception( e )
-
-
     ref_data['roles'] = dict(ref_data['roles'])
-
-    ref_data['roles_tabulator'] = dict( ref_data['roles_tabulator'] )
-
     if 'has_mother' in ref_data['roles'] or 'has_father' in ref_data['roles']:
         if 'child' in ref_data['roles'] and ref_data['roles']['child']==[]:
             del ref_data['roles']['child']
@@ -277,6 +205,7 @@ def process_reference(entrant):
             del ref_data['roles']['parent']
 
     elapsed_time = str( datetime.datetime.now() - start_time )
+    log.debug( 'elapsed time, ```%s```' % elapsed_time )
 
     return ref_data
 
@@ -313,68 +242,6 @@ def merge_ref_roles(o,n):
                 o['roles'][k] + n['roles'][k]))
     return o
 
-
-class FilterDeleted():
-
-    def __init__( self ):
-        pass
-
-    def manage_filtration( self, persons, session ):
-        deleted_referent_ids = self.get_deleted_referent_ids()
-        deleted_referent_objs = self.get_deleted_referent_objs( deleted_referent_ids, session )
-        persons_to_ignore = self.get_persons_to_ignore( deleted_referent_objs, session )
-        filtered_persons = self.apply_filter( persons, persons_to_ignore, session )
-        return filtered_persons
-
-    def apply_filter( self, persons, persons_to_ignore, session ):
-        filtered_persons = []
-        for person in persons:
-            person_check = 'init'
-            for person_to_ignore in persons_to_ignore:
-                if person.id == person_to_ignore.id:
-                    person_check = 'found'
-                    break
-            if person_check == 'init':
-                filtered_persons.append( person )
-            else:
-                log.debug( f'filtering out person, ``{person}``' )
-                person_check = 'init'
-        return filtered_persons
-
-    def get_persons_to_ignore( self, deleted_referent_objs, session ):
-        persons = []
-        for deleted_referent_obj in deleted_referent_objs:
-            person_obj = session.query( models_alch.Person ).filter_by( id=deleted_referent_obj.person_id ).first()
-            log.debug( f'for referent ``{deleted_referent_obj}``, person is, ``{person_obj}``' )
-            persons.append( person_obj )
-        log.debug( f'persons to ignore, ``{persons}``' )
-        return persons
-
-    def get_deleted_referent_objs( self, deleted_referent_ids, session ):
-        objs = []
-        for referent_id in deleted_referent_ids:
-            referent_obj = session.query( models_alch.Referent ).filter_by( id=referent_id ).first()
-            objs.append( referent_obj )
-        log.debug( f'referent objs, ``{objs}``' )
-        return objs
-
-    def get_deleted_referent_ids( self ):
-        referent_ids = []
-        marked_entries = MarkedForDeletion.objects.all()
-        for entry in marked_entries:
-            doc = json.loads( entry.doc_json_data )
-            references = doc.get( 'references', None )
-            if references:
-                for reference in references:
-                    referents = reference.get( 'referents', None )
-                    if referents:
-                        for referent in referents:
-                            referent_ids.append( referent['id'] )
-        sorted_referent_ids = sorted( referent_ids )
-        log.debug( f'referent_ids, ``{sorted_referent_ids}``' )
-        return sorted_referent_ids
-
-    ## end class FilterDeleted()
 
 
 if __name__ == "__main__":

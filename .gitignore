@@ -2,6 +2,8 @@
 .DS_Store
 .hg
 .svn
+browse.json
+browse_formatted.json
 denormalized.json
 denormalized_formatted.json
 env
