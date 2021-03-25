@@ -161,7 +161,6 @@
   
     const jsonProcessor = function(_, __, response) {
   
-      console.log('JSON RESPONSE');
       console.log(response);
 
       // Create an 'all_names' field
