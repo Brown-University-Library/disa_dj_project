@@ -239,8 +239,6 @@
                 <p>(Count: {{ item_results.count }})</p>
                 <p>(Fields searched: {{ item_results.fields_searched|join:', ' }})</p>
 
-
-
                 <table class="table">
                     <thead>
                         <tr>
@@ -254,7 +252,12 @@
                         {% for rfrnc in item_results.references %}
                         <tr>
                             <td>{{ rfrnc.id }}</td>
-                            <td class="transcription">{{ rfrnc.transcription|truncatewords:1000 }}</td>
+                            <!-- <td class="transcription">{{ rfrnc.transcription|truncatewords:1000 }}</td> -->
+                            <td class="transcription">
+                                {% for segment in rfrnc.transcription %}
+                                    <p class="transcription_excerpt">{{ segment }}</p>
+                                {% endfor %}
+                            </td>
                             <!-- <td>location_info: {{ rfrnc.location_info }}</td> -->
                             <td>
                                 <ul>
