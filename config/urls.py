@@ -91,7 +91,7 @@ urlpatterns = [
     # redesign example...
     # --------------------
 
-    url( r'^redesign_example/$', views.redesign_example, name='redesign_example_url' ),
+    # url( r'^redesign_example/$', views.redesign_example, name='redesign_example_url' ),
 
     ]
 
