@@ -129,7 +129,21 @@ class Citation(Base):
     acknowledgements = Column(String(255))
     references = relationship('Reference', backref='citation', lazy=True)
 
-    def dictify( self ):
+    # def dictify( self ):  # branches dev & main, 2021-Apr-01
+    #     jsn_references = []
+    #     for rfrnc in self.references:
+    #         jsn_references.append( rfrnc.dictify() )
+    #     data = {
+    #         'id': self.id,
+    #         'citation_type_id': self.citation_type_id,
+    #         'display': self.display,
+    #         'zotero_id': self.zotero_id,
+    #         'comments': self.comments,
+    #         'references': jsn_references
+    #         }
+    #     return data
+
+    def dictify( self ):  # branch new_flow, 2021-Apr-01
         jsn_references = []
         for rfrnc in self.references:
             jsn_references.append( rfrnc.dictify() )
