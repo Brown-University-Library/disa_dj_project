@@ -94,12 +94,6 @@ urlpatterns = [
     # url( r'^$', RedirectView.as_view(pattern_name='browse_url') ),
     url( r'^$', RedirectView.as_view(pattern_name='info_url') ),
 
-    # --------------------
-    # redesign example...
-    # --------------------
-
-    url( r'^redesign_example/$', views.redesign_example, name='redesign_example_url' ),
-
     ]
 
 
