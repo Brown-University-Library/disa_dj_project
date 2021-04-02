@@ -52,13 +52,7 @@
         <tbody>
             {% for entry in user_documents %}
             <tr>
-                <!-- <td>{{ entry.doc.id }}</td> -->
-                {% if entry.doc.id|divisibleby:"2" is True %} {# temporary if, for easy comparison #}
-                    <td><a href="{% url 'redesign_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
-                }
-                {% else %}
-                    <td><a href="{% url 'edit_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
-                {% endif %}
+                <td><a href="{% url 'redesign_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
                 <td class="table-info">{{ entry.doc.display }}</td>
                 <td style="background-color: #eeeeee;">
                     <button type="button" class="close text-primary" aria-label="Close">
@@ -71,17 +65,17 @@
     </table>
 
     <h5 class="text-primary col-lg-5 col-sm-11" style="letter-spacing: .5px; padding: 0;">
-        All recent sources 
+        All recent sources
     </h5>
 
     {% endif %}
 
-    <!-- HIDE UNTIL IMPLEMENTED 
-        <a href="#" style="float: right;">Show details ></a> 
+    <!-- HIDE UNTIL IMPLEMENTED
+        <a href="#" style="float: right;">Show details ></a>
     -->
 
-    <table id="all-recent-citations" 
-            class="table table-striped" 
+    <table id="all-recent-citations"
+            class="table table-striped"
             style="background-color: white; table-layout: fixed!important;">
         <thead style="background-color: #eeeeee;">
             <tr>
@@ -94,12 +88,7 @@
         <tbody>
             {% for entry in documents %}
             <tr>
-                <!-- <td>{{ entry.doc.id }}</td> -->
-                {% if entry.doc.id|divisibleby:"2" is True %} {# temporary if, for easy comparison #}
-                    <td><a href="{% url 'redesign_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
-                {% else %}
-                    <td><a href="{% url 'edit_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
-                {% endif %}
+                <td><a href="{% url 'redesign_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
                 <td class="table-info">{{ entry.doc.display }}</td>
             </tr>
             {% endfor %}
