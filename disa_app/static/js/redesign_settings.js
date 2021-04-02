@@ -90,7 +90,7 @@ export const LOCAL_SETTINGS = {
       49: {
         required: ["accessDate", "date", "title", "url"],
         optional: ["author", "language"],
-      },
+      }
     }
   };
   
