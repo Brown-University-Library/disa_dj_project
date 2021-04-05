@@ -10,11 +10,12 @@ export const LOCAL_SETTINGS = {
     FIELDS_BY_DOC_TYPE: {
       // Book
       20: {
-        required: ["author", "date", "pages", "place", "title"],
+        required: ["author", "date", "pages", "place", "publisher", "title"],
         optional: [
           "abstractNote",
           "edition",
           "language",
+          "publisher",
           "series",
           "seriesNumber",
           "shortTitle",
@@ -23,7 +24,7 @@ export const LOCAL_SETTINGS = {
       },
       // Book Section
       21: {
-        required: ["author", "date", "pages", "place", "title"],
+        required: ["author", "date", "pages", "place", "publisher", "title"],
         optional: [
           "abstractNote",
           "edition",
@@ -38,21 +39,21 @@ export const LOCAL_SETTINGS = {
       // Document
       26: {
         required: ["author", "date", "pages", "place", "title"],
-        optional: ["abstractNote", "archive", "archiveLocation", "language", "url"],
+        optional: ["abstractNote", "archive", "archiveLocation", "language", "publisher", "url"],
       },
       // Interview
       33: {
         required: ["author", "date", "place", "rights", "title"],
-        optional: ["abstractNote", "archive", "archiveLocation", "language", "url"],
+        optional: ["abstractNote", "archive", "archiveLocation", "language", "publisher", "url"],
       },
       // Journal Article
       34: {
-        required: ["author", "date", "pages", "title"],
+        required: ["author", "date", "pages", "publisher", "title"],
         optional: ["abstractNote", "language", "url"],
       },
       // Magazine Article
       36: {
-        required: ["author", "date", "pages", "title"],
+        required: ["author", "date", "pages", "publisher", "title"],
         optional: ["abstractNote", "language", "url"],
       },
       // Manuscript
@@ -65,7 +66,7 @@ export const LOCAL_SETTINGS = {
           "pages",
           "title",
         ],
-        optional: ["abstractNote", "language", "place", "url"],
+        optional: ["abstractNote", "language", "place", "publisher", "url"],
       },
       // Newspaper Article
       39: {
@@ -76,6 +77,7 @@ export const LOCAL_SETTINGS = {
           "archiveLocation",
           "author",
           "language",
+          "publisher",
           "pages",
           "section",
           "url",
