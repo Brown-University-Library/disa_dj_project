@@ -8,7 +8,7 @@ from disa_app import settings_app
 from disa_app.lib import person_common
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest, HttpResponseServerError
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -221,18 +221,18 @@ class Poster():
         try:
             data: dict = json.loads( payload )
             log.debug( f'data, ``{pprint.pformat(data)}``' )
-            ## -- add data validation asserts here -- ##
+            assert sorted( data.keys() ) == ['id', 'name', 'record_id', 'roles']
         except:
-            msg = 'problem with post; see logs'
+            msg = 'Bad Request -- problem with post; see logs'
             log.exception( msg )
             return HttpResponseBadRequest( msg )
         try:
             context: dict = self.execute_post( request_user_id, data )
             resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         except:
-            msg = 'problem with response-prep; see logs'
+            msg = 'Server Error -- problem with response-prep; see logs'
             log.exception( msg )
-            resp = HttpResponseBadRequest( msg )
+            resp = HttpResponseServerError( msg )
         log.debug( 'returning response' )
         return resp
 
