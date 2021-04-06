@@ -307,15 +307,17 @@ class Deleter():
         """ Manages data/api ajax 'POST'.
             Called by views.data_entrants(), triggered by views.edit_record() webpage 'Add person' button save. """
         log.debug( 'starting manage_delete' )
+        assert type(request_user_id) == int
+        assert type(rfrnt_id) == str
         self.session = make_session()
         self.common = Common()
         try:
             context: dict = self.execute_delete( request_user_id, rfrnt_id )
             resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         except:
-            msg = 'problem with delete, or with response-prep; see logs'
+            msg = 'Server Error -- problem with delete, or with response-prep; see logs'
             log.exception( msg )
-            resp = HttpResponse( msg )
+            resp = HttpResponseServerError( msg )
         log.debug( 'returning response' )
         return resp
 

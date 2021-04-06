@@ -153,12 +153,12 @@ class Client_Referent_API_Test( TestCase ):
 
     # ## DELETE ====================
 
-    # def test_delete_bad(self):
-    #     """ Checks bad DELETE of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     delete_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'foo'} )
-    #     delete_response = self.client.delete( delete_url )
-    #     self.assertEqual( 404, delete_response.status_code )
-    #     self.assertTrue( b'Not Found' in delete_response.content )
+    def test_delete_bad(self):
+        """ Checks bad DELETE of `http://127.0.0.1:8000/data/entrants/foo/`. """
+        delete_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'foo'} )
+        delete_response = self.client.delete( delete_url )
+        self.assertEqual( 500, delete_response.status_code )
+        self.assertTrue( b'Server Error' in delete_response.content )
 
     # def test_delete_good(self):
     #     """ Checks good DELETE of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
@@ -175,21 +175,5 @@ class Client_Referent_API_Test( TestCase ):
     #     resp_keys = sorted( self.delete_resp_dct['response'].keys() )
     #     self.assertEqual( ['elapsed_time', 'status'], resp_keys )
     #     self.assertEqual( 'success', self.delete_resp_dct['response']['status'] )
-
-    # ## RECORD-GET ================
-
-    # def test_get_record_data_for_group_check(self):
-    #     """ Checks `http://127.0.0.1:8000/data/records/49/`
-    #         All the tests above assume the existence of record-49; this just confirms it's there,
-    #         ...and that the initial response includes some group info. """
-    #     response = self.client.get( '/data/records/49/' )
-    #     self.assertEqual( 200, response.status_code )
-    #     resp_dct = json.loads( response.content )
-    #     self.assertEqual( ['entrants', 'groups', 'rec'], sorted(resp_dct.keys()) )
-    #     try:
-    #         resp_group_data_keys = sorted( resp_dct['groups']['group_data'][0].keys() )
-    #         self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
-    #     except:
-    #        pass
 
     ## end Client_Referent_API_Test()
