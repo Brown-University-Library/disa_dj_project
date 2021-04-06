@@ -94,16 +94,17 @@ class Client_Referent_API_Test( TestCase ):
 
     # ## CREATE ====================
 
-    # def test_post_bad(self):
-    #     """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/bad params. """
-    #     post_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'new'} )
-    #     log.debug( f'post-url, ``{post_url}``' )
-    #     payload = {
-    #         'foo': 'bar'
-    #     }
-    #     response = self.client.post( post_url, payload )
-    #     self.assertEqual( 400, response.status_code )
-    #     self.assertTrue( b'Bad Request' in response.content )
+    def test_post_bad(self):
+        """ Checks POST to `http://127.0.0.1:8000/data/entrants/abcd/ w/bad params. """
+        post_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'new'} )
+        log.debug( f'post-url, ``{post_url}``' )
+        payload = {
+            'foo': 'bar'
+        }
+        jsn = json.dumps( payload )
+        response = self.client.post( post_url, data=jsn, content_type='application/json' )
+        self.assertEqual( 400, response.status_code )
+        self.assertTrue( b'Bad Request' in response.content )
 
     # def test_post_good(self):
     #     """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/good params. """
