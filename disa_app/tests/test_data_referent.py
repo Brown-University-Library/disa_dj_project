@@ -21,62 +21,62 @@ TestCase.maxDiff = 1000
 class Client_Referent_API_Test( TestCase ):
     """ Checks referent api urls. """
 
-    # def setUp(self):
-    #     self.new_uuid = None
-    #     self.post_resp_dct = None
-    #     self.delete_resp_dct = None
-    #     log.debug( f'initial self.new_uuid, ``{self.new_uuid}``' )
-    #     log.debug( f'self.post_resp_dct, ``{self.post_resp_dct}``' )
-    #     log.debug( f'self.delete_resp_dct, ``{self.delete_resp_dct}``' )
-
-    def test_stub(self):
-        self.assertTrue( 1 == 2 )
+    def setUp(self):
+        self.new_db_id = None
+        self.post_resp_dct = None
+        self.delete_resp_dct = None
+        log.debug( f'initial self.new_db_id, ``{self.new_db_id}``' )
+        log.debug( f'self.post_resp_dct, ``{self.post_resp_dct}``' )
+        log.debug( f'self.delete_resp_dct, ``{self.delete_resp_dct}``' )
 
     # ## HELPERS ====================
 
-    # def create_new_group(self):
-    #     """ Creates a group for tests. """
-    #     post_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'new'} )
-    #     log.debug( f'post-url, ``{post_url}``' )
-    #     payload = {
-    #         'count': 7,
-    #         'count_estimated': True,
-    #         'description': 'the description',
-    #         'reference_id': 49
-    #     }
-    #     jsn = json.dumps( payload )
-    #     response = self.client.post( post_url, data=jsn, content_type='application/json' )
-    #     self.assertEqual( 200, response.status_code )
-    #     self.post_resp_dct = json.loads( response.content )
-    #     self.new_uuid = self.post_resp_dct['response']['group_data']['uuid']
-    #     log.debug( f'self.new_uuid, ``{self.new_uuid}``' )
+    def create_new_referent(self):
+        """ Creates a group for tests. """
+        post_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'new'} )
+        log.debug( f'post-url, ``{post_url}``' )
+        payload = {
+            'id': 'new',
+            'name': {'first': 'test-first-1044', 'id': 'name', 'last': 'test-last-1044'},
+            'record_id': '49',
+            'roles': [
+                {'id': '3', 'name': 'Priest'},
+                {'id': '30', 'name': 'Previous Owner'}
+            ]
+        }
+        jsn = json.dumps( payload )
+        response = self.client.post( post_url, data=jsn, content_type='application/json' )
+        self.assertEqual( 200, response.status_code )
+        self.post_resp_dct = json.loads( response.content )
+        log.debug(  )
+        self.new_db_id = self.post_resp_dct['response']['group_data']['uuid']
+        log.debug( f'self.new_uuid, ``{self.new_uuid}``' )
 
-    # def delete_new_group(self):
-    #     """ Deletes group used by tests."""
-    #     delete_url = reverse( 'data_group_url', kwargs={'incoming_uuid': self.new_uuid} )
-    #     response = self.client.delete( delete_url )
-    #     self.assertEqual( 200, response.status_code )
-    #     self.delete_resp_dct = json.loads( response.content )
-    #     log.debug( f'delete_resp_dct, ``{pprint.pformat(self.delete_resp_dct)}``' )
+    def delete_new_referent(self):
+        """ Deletes group used by tests."""
+        delete_url = reverse( 'data_group_url', kwargs={'incoming_uuid': self.new_uuid} )
+        response = self.client.delete( delete_url )
+        self.assertEqual( 200, response.status_code )
+        self.delete_resp_dct = json.loads( response.content )
+        log.debug( f'delete_resp_dct, ``{pprint.pformat(self.delete_resp_dct)}``' )
 
     # ## GET =======================
 
-    # def test_get_bad(self):
-    #     """ Checks bad GET of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'foo'} )
-    #     log.debug( f'get_url, ``{get_url}``' )
-    #     response = self.client.get( get_url )
-    #     self.assertEqual( 404, response.status_code )
-    #     self.assertTrue( b'Not Found' in response.content )
+    def test_get_bad(self):
+        """ Checks bad GET of `http://127.0.0.1:8000/data/entrants/foo/`. """
+        get_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'foo'} )
+        log.debug( f'get_url, ``{get_url}``' )
+        response = self.client.get( get_url )
+        self.assertEqual( 404, response.status_code )
+        self.assertTrue( b'Not Found' in response.content )
 
     # def test_get_good(self):
-    #     """ Checks good GET of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
+    #     """ Checks good GET of `http://127.0.0.1:8000/data/entrants/abcd/`. """
     #     ## create group
-    #     self.create_new_group()
-    #     target_uuid = self.new_uuid
-    #     log.debug( f'target_uuid, ``{target_uuid}``' )
+    #     self.create_new_referent()
+    #     log.debug( f'target_db_id, ``{self.target_db_id}``' )
     #     ## GET
-    #     get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': target_uuid} )
+    #     get_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': target_db_id} )
     #     log.debug( f'get_url, ``{get_url}``' )
     #     response = self.client.get( get_url )
     #     ## tests
@@ -90,7 +90,7 @@ class Client_Referent_API_Test( TestCase ):
     #     resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
     #     self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
     #     ## cleanup
-    #     self.delete_new_group()
+    #     self.delete_new_referent()
 
     # ## CREATE ====================
 
