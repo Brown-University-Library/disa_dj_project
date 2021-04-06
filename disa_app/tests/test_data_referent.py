@@ -32,7 +32,7 @@ class Client_Referent_API_Test( TestCase ):
     # ## HELPERS ====================
 
     def create_new_referent(self):
-        """ Creates a group for tests. """
+        """ Creates a referent for tests. """
         post_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'new'} )
         log.debug( f'post-url, ``{post_url}``' )
         payload = {
@@ -48,13 +48,13 @@ class Client_Referent_API_Test( TestCase ):
         response = self.client.post( post_url, data=jsn, content_type='application/json' )
         self.assertEqual( 200, response.status_code )
         self.post_resp_dct = json.loads( response.content )
-        log.debug(  )
-        self.new_db_id = self.post_resp_dct['response']['group_data']['uuid']
-        log.debug( f'self.new_uuid, ``{self.new_uuid}``' )
+        log.debug( f'post_resp_dct, ``{pprint.pformat(self.post_resp_dct)}``' )
+        self.new_db_id = self.post_resp_dct['id']
+        log.debug( f'self.new_db_id, ``{self.new_db_id}``' )
 
     def delete_new_referent(self):
-        """ Deletes group used by tests."""
-        delete_url = reverse( 'data_group_url', kwargs={'incoming_uuid': self.new_uuid} )
+        """ Deletes referent used by tests."""
+        delete_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': self.new_db_id} )
         response = self.client.delete( delete_url )
         self.assertEqual( 200, response.status_code )
         self.delete_resp_dct = json.loads( response.content )
@@ -70,27 +70,27 @@ class Client_Referent_API_Test( TestCase ):
         self.assertEqual( 404, response.status_code )
         self.assertTrue( b'Not Found' in response.content )
 
-    # def test_get_good(self):
-    #     """ Checks good GET of `http://127.0.0.1:8000/data/entrants/abcd/`. """
-    #     ## create group
-    #     self.create_new_referent()
-    #     log.debug( f'target_db_id, ``{self.target_db_id}``' )
-    #     ## GET
-    #     get_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': target_db_id} )
-    #     log.debug( f'get_url, ``{get_url}``' )
-    #     response = self.client.get( get_url )
-    #     ## tests
-    #     self.assertEqual( 200, response.status_code )
-    #     resp_dct = json.loads( response.content )
-    #     self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
-    #     req_keys = sorted( resp_dct['request'].keys() )
-    #     self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-    #     resp_keys = sorted( resp_dct['response'].keys() )
-    #     self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
-    #     resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
-    #     self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
-    #     ## cleanup
-    #     self.delete_new_referent()
+    def test_get_good(self):
+        """ Checks good GET of `http://127.0.0.1:8000/data/entrants/abcd/`. """
+        ## create group
+        self.create_new_referent()
+        log.debug( f'new_db_id, ``{self.new_db_id}``' )
+        ## GET
+        get_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': self.new_db_id} )
+        log.debug( f'get_url, ``{get_url}``' )
+        response = self.client.get( get_url )
+        ## tests
+        self.assertEqual( 200, response.status_code )
+        resp_dct = json.loads( response.content )
+        self.assertEqual( ['ent'], sorted(resp_dct.keys()) )
+        rfrnt_data_keys = sorted( resp_dct['ent'].keys() )
+        # self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
+        self.assertEqual(
+            ['age', 'enslavements', 'id', 'names', 'origins', 'races', 'sex', 'titles', 'tribes', 'vocations'],
+            rfrnt_data_keys
+            )
+        ## cleanup
+        self.delete_new_referent()
 
     # ## CREATE ====================
 
