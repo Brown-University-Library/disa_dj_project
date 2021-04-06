@@ -106,22 +106,14 @@ class Client_Referent_API_Test( TestCase ):
         self.assertEqual( 400, response.status_code )
         self.assertTrue( b'Bad Request' in response.content )
 
-    # def test_post_good(self):
-    #     """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/good params. """
-    #     ## create group
-    #     self.create_new_group()
-    #     ## tests
-    #     self.assertEqual( ['request', 'response'], sorted(self.post_resp_dct.keys()) )
-    #     req_keys = sorted( self.post_resp_dct['request'].keys() )
-    #     self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-    #     req_payload_keys = sorted( self.post_resp_dct['request']['payload'].keys() )
-    #     self.assertEqual( ['count', 'count_estimated', 'description', 'reference_id'], req_payload_keys )
-    #     resp_keys = sorted( self.post_resp_dct['response'].keys() )
-    #     self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
-    #     resp_group_data_keys = sorted( self.post_resp_dct['response']['group_data'].keys() )
-    #     self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
-    #     ## cleanup
-    #     self.delete_new_group()
+    def test_post_good(self):
+        """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/good params. """
+        ## create group
+        self.create_new_referent()
+        ## tests
+        self.assertEqual( ['first', 'id', 'last', 'name_id', 'person_id', 'roles'], sorted(self.post_resp_dct.keys()) )
+        ## cleanup
+        self.delete_new_referent()
 
     # ## UPDATE ====================
 
