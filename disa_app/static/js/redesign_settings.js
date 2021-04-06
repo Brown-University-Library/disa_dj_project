@@ -93,6 +93,94 @@ export const LOCAL_SETTINGS = {
         required: ["accessDate", "date", "title", "url"],
         optional: ["author", "language"],
       }
+    },
+
+    // What goes in the menus? (can be controlled from server)
+
+    MENU_OPTIONS: {
+      document_type: {
+        '-1':'Unspecified / not clear',
+        '20':'Book',
+        '21':'Book Section',
+        '26':'Document',
+        '33':'Interview',
+        '34':'Journal Article',
+        '36':'Magazine Article',
+        '37':'Manuscript',
+        '39':'Newspaper Article',
+        '46':'Thesis',
+        '49':'Webpage'
+      },
+      formInputDISAPersonTribe: {
+        'tribe0':'Unspecified / not clear',
+        'tribe1':'Bocotora',
+        'tribe2':'Eastern Pequot',
+        'tribe3':'Mashantucket Pequot',
+        'tribe4':'Mohegan',
+        'tribe5':'Naragansett',
+        'tribe6':'Pequot',
+        'tribe7':'Wampanoag',
+        'tribe8':'Woolwa'
+      },
+      formInputDISAPersonVocation: {
+        '0': 'Not specified',
+        '1': 'Baker',
+        '2': 'Cordwainer',
+        '3': 'Farmer',
+        '4': 'Lawyer',
+        '5': 'Leatherer',
+        '6': 'Malster',
+        '7': 'Mariner',
+        '8': 'Merchant',
+        '9': 'Sadler',
+        '10': 'Ship Captain',
+        '11': 'Shopkeeper'
+      },
+      formInputDISAPersonStatus: {
+        'status0':'None specified',
+        'status1':'Free',
+        'status2':'Indentured Servant, Court-Ordered',
+        'status3':'Indentured Servant, General',
+        'status4':'Indentured Servant, Parental',
+        'status5':'Indentured Servant, Voluntary',
+        'status6':'Servant',
+        'status7':'Slave',
+        'status8':'Unclear',
+        'status9':'Other'
+      },
+      formInputDISAPersonGender: {
+        '0': 'Not specified',
+        '1': 'Male',
+        '2': 'Female',
+        '3': 'Two spirit'
+      },
+      formInputDISAColonialContext: {
+        '1': 'Unspecified',
+        '2': 'American (U.S.)',
+        '3': 'British',
+        '4': 'Dutch',
+        '5': 'French',
+        '6': 'Portuguese',
+        '7': 'Spanish',
+        '8': 'Other'
+      },
+      formInputDISAItemPersonNameType: {
+        '1': 'Alias',
+        '2': 'Baptismal',
+        '3': 'English',
+        '4': 'European',
+        '5': 'Indian',
+        '6': 'Nickname',
+        '7': 'Given',
+        '8': 'Unknown'
+      },
+      formInputDISAPersonRace: {
+        '1':'Black',
+        '2':'Indian',
+        '3':'Multi-racial',
+        '4':'White',
+        '5':'Not specified'
+      }
     }
   };
   
