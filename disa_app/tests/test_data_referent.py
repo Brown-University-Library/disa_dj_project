@@ -92,7 +92,7 @@ class Client_Referent_API_Test( TestCase ):
         ## cleanup
         self.delete_new_referent()
 
-    # ## CREATE ====================
+    ## CREATE ====================
 
     def test_post_bad(self):
         """ Checks POST to `http://127.0.0.1:8000/data/entrants/abcd/ w/bad params. """
@@ -107,7 +107,7 @@ class Client_Referent_API_Test( TestCase ):
         self.assertTrue( b'Bad Request' in response.content )
 
     def test_post_good(self):
-        """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/good params. """
+        """ Checks POST to `http://127.0.0.1:8000/data/entrants/abcd/` w/good params. """
         ## create group
         self.create_new_referent()
         ## tests
@@ -115,49 +115,41 @@ class Client_Referent_API_Test( TestCase ):
         ## cleanup
         self.delete_new_referent()
 
-    # ## UPDATE ====================
+    ## UPDATE ====================
 
-    # def test_put_bad(self):
-    #     """ Checks bad PUT of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     put_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'foo'} )
-    #     put_response = self.client.put( put_url )
-    #     self.assertEqual( 400, put_response.status_code )
-    #     self.assertTrue( b'Bad Request' in put_response.content )
+    def test_put_bad(self):
+        """ Checks bad PUT to `http://127.0.0.1:8000/data/entrants/abcd/` -- no payload. """
+        put_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'foo'} )
+        put_response = self.client.put( put_url )  # will fail; no payload
+        self.assertEqual( 400, put_response.status_code )
+        self.assertTrue( b'Bad Request' in put_response.content )
 
-    # def test_put_good(self):
-    #     """ Checks good PUT of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     ## create group
-    #     self.create_new_group()
-    #     ## PUT
-    #     put_url = reverse( 'data_group_url', kwargs={'incoming_uuid': self.new_uuid} )
-    #     log.debug( f'put_url-url, ``{put_url}``' )
-    #     random_count = secrets.choice( [2, 4, 6, 8, 10] )
-    #     random_description = secrets.choice( ['descA', 'descB', 'descC', 'descD', 'descE'] )
-    #     put_payload = {
-    #         'count': random_count,
-    #         'count_estimated': False,
-    #         'description': random_description,
-    #         'reference_id': 49
-    #     }
-    #     jsn = json.dumps( put_payload )
-    #     put_response = self.client.put( put_url, data=jsn, content_type='application/json' )
-    #     put_resp_dct = json.loads( put_response.content )
-    #     ## tests
-    #     self.assertEqual( 200, put_response.status_code )
-    #     resp_dct = json.loads( put_response.content )
-    #     self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
-    #     req_keys = sorted( resp_dct['request'].keys() )
-    #     self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-    #     req_payload_keys = sorted( resp_dct['request']['payload'].keys() )
-    #     self.assertEqual( ['count', 'count_estimated', 'description', 'reference_id'], req_payload_keys )
-    #     resp_keys = sorted( resp_dct['response'].keys() )
-    #     self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
-    #     resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
-    #     self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
-    #     self.assertEqual( random_count, resp_dct['response']['group_data']['count'] )
-    #     self.assertEqual( random_description, resp_dct['response']['group_data']['description'] )
-    #     ## cleanup
-    #     self.delete_new_group()
+    def test_put_good(self):
+        """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/abcd/`. """
+        ## create group
+        self.create_new_referent()
+        ## PUT
+        put_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': self.new_db_id} )
+        log.debug( f'put_url-url, ``{put_url}``' )
+        random_name_part = secrets.choice( ['nameA', 'nameB', 'nameC', 'nameD'] )
+        put_payload = {
+            'id': self.new_db_id,
+            'name': {'first': f'test-first-{random_name_part}', 'id': 'name', 'last': f'test-last-{random_name_part}'},
+            'record_id': '49',
+            'roles': [
+                {'id': '3', 'name': 'Priest'},
+                {'id': '30', 'name': 'Previous Owner'}
+            ]
+        }
+        jsn = json.dumps( put_payload )
+        put_response = self.client.put( put_url, data=jsn, content_type='application/json' )
+        put_resp_dct = json.loads( put_response.content )
+        ## tests
+        self.assertEqual( 200, put_response.status_code )
+        resp_dct = json.loads( put_response.content )
+        self.assertEqual( ['first', 'id', 'last', 'name_id', 'person_id', 'roles'], sorted(resp_dct.keys()) )
+        ## cleanup
+        self.delete_new_referent()
 
     # ## DELETE ====================
 
