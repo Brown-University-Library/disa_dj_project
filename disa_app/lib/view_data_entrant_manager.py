@@ -8,7 +8,7 @@ from disa_app import settings_app
 from disa_app.lib import person_common
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -40,9 +40,9 @@ class Getter():
             context: dict = self.prep_get_response( rfrnt )
             resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         except:
-            msg = 'problem with update, or with response-prep; see logs'
+            msg = 'Not Found -- possible problem with update, or with response-prep; see logs'
             log.exception( msg )
-            resp = HttpResponse( msg )
+            resp = HttpResponseNotFound( msg )
         log.debug( 'returning response' )
         return resp
 
@@ -197,6 +197,7 @@ class Poster():
         self.session = make_session()
         self.common = Common()
         data: dict = json.loads( payload )
+        log.debug( f'data, ``{pprint.pformat(data)}``' )
         try:
             context: dict = self.execute_post( request_user_id, data )
             resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )

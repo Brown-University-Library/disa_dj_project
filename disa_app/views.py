@@ -438,7 +438,7 @@ def data_reference_group( request, incoming_uuid=None ):
 def data_entrants( request, rfrnt_id: str ):
     """ Called via ajax by views.edit_record()
         Url: '/data/entrants/<rfrnt_id>/' -- 'data_referent_url' """
-    log.debug( 'starting data_entrants()' )
+    log.debug( '\n\nstarting data_entrants()' )
     log.debug( f'rfrnt_id, ```{rfrnt_id}```' )
     log.debug( f'request.method, ```{request.method}```' )
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
