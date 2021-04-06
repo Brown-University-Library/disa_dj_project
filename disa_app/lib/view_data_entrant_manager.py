@@ -87,20 +87,47 @@ class Updater():
         self.session = None  # updated by manage_put()
         self.common = None   # updated by manage_put()
 
+    # def manage_put( self, payload: bytes, request_user_id: int, rfrnt_id: str ) -> HttpResponse:
+    #     """ Manages data/api ajax 'PUT'.
+    #         Called by views.data_entrants(), triggered by views.edit_record() webpage. """
+    #     log.debug( 'starting manage_put()' )
+    #     self.session = make_session()
+    #     self.common = Common()
+    #     data: dict = json.loads( payload )
+    #     try:
+    #         context: dict = self.execute_update( request_user_id, data, rfrnt_id )
+    #         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    #     except:
+    #         msg = 'problem with update, or with response-prep; see logs'
+    #         log.exception( msg )
+    #         resp = HttpResponse( msg )
+    #     log.debug( 'returning response' )
+    #     return resp
+
     def manage_put( self, payload: bytes, request_user_id: int, rfrnt_id: str ) -> HttpResponse:
         """ Manages data/api ajax 'PUT'.
             Called by views.data_entrants(), triggered by views.edit_record() webpage. """
         log.debug( 'starting manage_put()' )
+        assert type(payload) == bytes
+        assert type(request_user_id) == int
+        assert type(rfrnt_id) == str
         self.session = make_session()
         self.common = Common()
-        data: dict = json.loads( payload )
+        try:
+            data: dict = json.loads( payload )
+            log.debug( f'data, ``{pprint.pformat(data)}``' )
+            assert sorted( data.keys() ) == ['id', 'name', 'record_id', 'roles']
+        except:
+            msg = 'Bad Request -- problem with put; see logs'
+            log.exception( msg )
+            return HttpResponseBadRequest( msg )
         try:
             context: dict = self.execute_update( request_user_id, data, rfrnt_id )
             resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         except:
-            msg = 'problem with update, or with response-prep; see logs'
+            msg = 'Server Error -- problem with update, or with response-prep; see logs'
             log.exception( msg )
-            resp = HttpResponse( msg )
+            resp = HttpResponseServerError( msg )
         log.debug( 'returning response' )
         return resp
 
