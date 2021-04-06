@@ -71,7 +71,7 @@ class Client_Referent_API_Test( TestCase ):
         self.assertTrue( b'Not Found' in response.content )
 
     def test_get_good(self):
-        """ Checks good GET of `http://127.0.0.1:8000/data/entrants/abcd/`. """
+        """ Checks good GET of `http://127.0.0.1:8000/data/entrants/1234/`. """
         ## create group
         self.create_new_referent()
         log.debug( f'new_db_id, ``{self.new_db_id}``' )
@@ -107,7 +107,7 @@ class Client_Referent_API_Test( TestCase ):
         self.assertTrue( b'Bad Request' in response.content )
 
     def test_post_good(self):
-        """ Checks POST to `http://127.0.0.1:8000/data/entrants/abcd/` w/good params. """
+        """ Checks POST to `http://127.0.0.1:8000/data/entrants/1234/` w/good params. """
         ## create group
         self.create_new_referent()
         ## tests
@@ -118,14 +118,14 @@ class Client_Referent_API_Test( TestCase ):
     ## UPDATE ====================
 
     def test_put_bad(self):
-        """ Checks bad PUT to `http://127.0.0.1:8000/data/entrants/abcd/` -- no payload. """
+        """ Checks bad PUT to `http://127.0.0.1:8000/data/entrants/1234/` -- no payload. """
         put_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'foo'} )
         put_response = self.client.put( put_url )  # will fail; no payload
         self.assertEqual( 400, put_response.status_code )
         self.assertTrue( b'Bad Request' in put_response.content )
 
     def test_put_good(self):
-        """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/abcd/`. """
+        """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/1234/`. """
         ## create group
         self.create_new_referent()
         ## PUT
@@ -160,20 +160,13 @@ class Client_Referent_API_Test( TestCase ):
         self.assertEqual( 500, delete_response.status_code )
         self.assertTrue( b'Server Error' in delete_response.content )
 
-    # def test_delete_good(self):
-    #     """ Checks good DELETE of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     ## create group
-    #     self.create_new_group()
-    #     ## DELETE
-    #     self.delete_new_group()
-    #     ## tests
-    #     self.assertEqual( ['request', 'response'], sorted(self.delete_resp_dct.keys()) )
-    #     req_keys = sorted( self.delete_resp_dct['request'].keys() )
-    #     self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-    #     self.assertEqual( 'DELETE', self.delete_resp_dct['request']['method'] )
-    #     self.assertEqual( {}, self.delete_resp_dct['request']['payload'] )
-    #     resp_keys = sorted( self.delete_resp_dct['response'].keys() )
-    #     self.assertEqual( ['elapsed_time', 'status'], resp_keys )
-    #     self.assertEqual( 'success', self.delete_resp_dct['response']['status'] )
+    def test_delete_good(self):
+        """ Checks good DELETE of `http://127.0.0.1:8000/data/entrants/1234/`. """
+        ## create group
+        self.create_new_referent()
+        ## DELETE
+        self.delete_new_referent()
+        ## tests
+        self.assertEqual( ['id'], sorted(self.delete_resp_dct.keys()) )
 
     ## end Client_Referent_API_Test()
