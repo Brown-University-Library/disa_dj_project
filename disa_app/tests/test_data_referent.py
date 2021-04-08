@@ -18,49 +18,6 @@ log = logging.getLogger(__name__)
 TestCase.maxDiff = 1000
 
 
-class Client_Referent_Details_API_Test( TestCase ):
-    """ Checks `/entrant/details/1234/` api urls. """
-
-    ## UPDATE-DETAILS ============ (separate view)
-
-    # def test_put_details_bad(self):
-    #     """ Checks bad PUT to `http://127.0.0.1:8000/data/entrants/details/1234/` -- no payload. """
-    #     put_url = reverse( 'data_entrants_details_url', kwargs={'rfrnt_id': 'foo'} )
-    #     put_response = self.client.put( put_url )  # will fail; no payload
-    #     self.assertEqual( 400, put_response.status_code )
-    #     self.assertTrue( b'Bad Request' in put_response.content )
-
-    def test_put_details_good(self):
-        """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/details/1234/`. """
-        ## create group
-        # self.create_new_referent()
-        ## PUT
-        put_details_url = reverse( 'data_entrants_details_url', kwargs={'rfrnt_id': 2033} )
-        log.debug( f'put_details_url, ``{put_details_url}``' )
-        random_name_part = secrets.choice( ['nameA', 'nameB', 'nameC', 'nameD'] )
-        put_details_payload = {
-            'names': [ {'id': self.new_db_id, 'first': f'test-first-{random_name_part}', 'last': f'test-last-{random_name_part}', 'name_type': '7'} ],
-            'age': '',
-            'sex': '',
-            'races': [ {'id': 'Indian', 'name': 'Indian'} ],
-            'tribes': [],
-            'origins': [],
-            'statuses': [],
-            'titles': [],
-            'vocations': []
-        }
-        jsn = json.dumps( put_details_payload )
-        put_details_response = self.client.put( put_details_url, data=jsn, content_type='application/json' )
-        put_details_resp_dct = json.loads( put_details_response.content )
-        log.debug( f'put_details_resp_dct, ``{pprint.pformat(put_details_resp_dct)}``' )
-        ## tests
-        self.assertEqual( 200, put_details_response.status_code )
-        self.assertEqual( ['first', 'id', 'last', 'name_id', 'person_id', 'roles'], sorted(put_details_resp_dct.keys()) )
-        ## cleanup
-        # self.delete_new_referent()
-
-    ## end Client_Referent_Details_API_Test()
-
 class Client_Referent_API_Test( TestCase ):
     """ Checks `/entrant/1234/` api urls. """
 
@@ -213,3 +170,50 @@ class Client_Referent_API_Test( TestCase ):
         self.assertEqual( ['id'], sorted(self.delete_resp_dct.keys()) )
 
     ## end Client_Referent_API_Test()
+
+
+class Client_Referent_Details_API_Test( TestCase ):
+    """ Checks `/entrant/details/1234/` api urls. """
+
+    ## UPDATE-DETAILS ============ (separate view)
+
+    # def test_put_details_bad(self):
+    #     """ Checks bad PUT to `http://127.0.0.1:8000/data/entrants/details/1234/` -- no payload. """
+    #     put_url = reverse( 'data_entrants_details_url', kwargs={'rfrnt_id': 'foo'} )
+    #     put_response = self.client.put( put_url )  # will fail; no payload
+    #     self.assertEqual( 400, put_response.status_code )
+    #     self.assertTrue( b'Bad Request' in put_response.content )
+
+    def test_put_details_good(self):
+        """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/details/1234/`. """
+        ## create group
+        # self.create_new_referent()
+        ## PUT
+        target_rfrnt_id = 2033
+        put_details_url = reverse( 'data_entrants_details_url', kwargs={'rfrnt_id': target_rfrnt_id} )
+        log.debug( f'put_details_url, ``{put_details_url}``' )
+        random_name_part = secrets.choice( ['nameA', 'nameB', 'nameC', 'nameD'] )
+        put_details_payload = {
+            'names': [ {'id': target_rfrnt_id, 'first': f'test-first-{random_name_part}', 'last': f'test-last-{random_name_part}', 'name_type': '7'} ],
+            'age': '',
+            'sex': '',
+            'races': [ {'id': 'Indian', 'name': 'Indian'} ],
+            'tribes': [],
+            'origins': [],
+            'statuses': [ {'id': 'Servant', 'name': 'Servant'}, {'id': 'Slave', 'name': 'Slave'} ],
+            'titles': [],
+            'vocations': []
+        }
+        jsn = json.dumps( put_details_payload )
+        put_details_response = self.client.put( put_details_url, data=jsn, content_type='application/json' )
+        put_details_resp_dct = json.loads( put_details_response.content )  # should be, i.e., `{'redirect': '/editor/records/895/'}`
+        log.debug( f'put_details_resp_dct, ``{pprint.pformat(put_details_resp_dct)}``' )
+        ## tests
+        self.assertEqual( 200, put_details_response.status_code )
+        ( key, val ) = list( put_details_resp_dct.items() )[0]
+        self.assertEqual( 'redirect', key )
+        self.assertTrue( '/editor/records/' in val )
+        ## cleanup
+        # self.delete_new_referent()
+
+    ## end Client_Referent_Details_API_Test()
