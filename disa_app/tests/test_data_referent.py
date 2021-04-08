@@ -23,14 +23,6 @@ class Client_Referent_Details_API_Test( TestCase ):
 
     ## UPDATE-DETAILS ============ (separate view)
 
-    def test_get_details_good(self):
-        """ Checks good GET to `http://127.0.0.1:8000/data/entrants/details/1234/` """
-        get_details_url = reverse( 'data_entrants_details_url', kwargs={'rfrnt_id': 2033} )
-        get_response = self.client.get( get_details_url )
-        self.assertEqual( 200, get_response.status_code )
-        get_response_dct = json.loads( get_response.content )
-        self.assertEqual( 'foo', sorted(get_response_dct.keys()) )
-
     # def test_put_details_bad(self):
     #     """ Checks bad PUT to `http://127.0.0.1:8000/data/entrants/details/1234/` -- no payload. """
     #     put_url = reverse( 'data_entrants_details_url', kwargs={'rfrnt_id': 'foo'} )
@@ -38,34 +30,34 @@ class Client_Referent_Details_API_Test( TestCase ):
     #     self.assertEqual( 400, put_response.status_code )
     #     self.assertTrue( b'Bad Request' in put_response.content )
 
-    # def test_put_details_good(self):
-    #     """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/details/1234/`. """
-    #     ## create group
-    #     self.create_new_referent()
-    #     ## PUT
-    #     put_details_url = reverse( 'data_entrants_details_url', kwargs={'rfrnt_id': self.new_db_id} )
-    #     log.debug( f'put_details_url, ``{put_details_url}``' )
-    #     random_name_part = secrets.choice( ['nameA', 'nameB', 'nameC', 'nameD'] )
-    #     put_details_payload = {
-    #         'names': [ {'id': self.new_db_id, 'first': f'test-first-{random_name_part}', 'last': f'test-last-{random_name_part}', 'name_type': '7'} ],
-    #         'age': '',
-    #         'sex': '',
-    #         'races': [ {'id': 'Indian', 'name': 'Indian'} ],
-    #         'tribes': [],
-    #         'origins': [],
-    #         'statuses': [],
-    #         'titles': [],
-    #         'vocations': []
-    #     }
-    #     jsn = json.dumps( put_details_payload )
-    #     put_details_response = self.client.put( put_details_url, data=jsn, content_type='application/json' )
-    #     put_details_resp_dct = json.loads( put_details_response.content )
-    #     log.debug( f'put_details_resp_dct, ``{pprint.pformat(put_details_resp_dct)}``' )
-    #     ## tests
-    #     self.assertEqual( 200, put_details_response.status_code )
-    #     self.assertEqual( ['first', 'id', 'last', 'name_id', 'person_id', 'roles'], sorted(put_details_resp_dct.keys()) )
-    #     ## cleanup
-    #     self.delete_new_referent()
+    def test_put_details_good(self):
+        """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/details/1234/`. """
+        ## create group
+        # self.create_new_referent()
+        ## PUT
+        put_details_url = reverse( 'data_entrants_details_url', kwargs={'rfrnt_id': 2033} )
+        log.debug( f'put_details_url, ``{put_details_url}``' )
+        random_name_part = secrets.choice( ['nameA', 'nameB', 'nameC', 'nameD'] )
+        put_details_payload = {
+            'names': [ {'id': self.new_db_id, 'first': f'test-first-{random_name_part}', 'last': f'test-last-{random_name_part}', 'name_type': '7'} ],
+            'age': '',
+            'sex': '',
+            'races': [ {'id': 'Indian', 'name': 'Indian'} ],
+            'tribes': [],
+            'origins': [],
+            'statuses': [],
+            'titles': [],
+            'vocations': []
+        }
+        jsn = json.dumps( put_details_payload )
+        put_details_response = self.client.put( put_details_url, data=jsn, content_type='application/json' )
+        put_details_resp_dct = json.loads( put_details_response.content )
+        log.debug( f'put_details_resp_dct, ``{pprint.pformat(put_details_resp_dct)}``' )
+        ## tests
+        self.assertEqual( 200, put_details_response.status_code )
+        self.assertEqual( ['first', 'id', 'last', 'name_id', 'person_id', 'roles'], sorted(put_details_resp_dct.keys()) )
+        ## cleanup
+        # self.delete_new_referent()
 
     ## end Client_Referent_Details_API_Test()
 

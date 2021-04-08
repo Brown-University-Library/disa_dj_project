@@ -467,7 +467,7 @@ def data_entrants_details( request, rfrnt_id ):
     """ Called via ajax by views.edit_person()
         Updates referent details.
         Url: 'data/entrants/details/<rfrnt_id>' -- 'data_entrants_details_url' """
-    log.debug( f'\n\nstarting data_entrants_details(), with rfrnt_id, `{rfrnt_id}`' )
+    log.debug( f'\n\nstarting data_entrants_details(), with rfrnt_id, ``{rfrnt_id}``, and method, ``{request.method}``' )
     log.debug( f'payload, ```{pprint.pformat(request.body)}```' )
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     data_entrant_details_updater = view_data_entrant_manager.Details_Updater()
