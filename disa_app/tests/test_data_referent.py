@@ -50,6 +50,7 @@ class Client_Referent_API_Test( TestCase ):
         self.post_resp_dct = json.loads( response.content )
         log.debug( f'post_resp_dct, ``{pprint.pformat(self.post_resp_dct)}``' )
         self.new_db_id = self.post_resp_dct['id']
+        self.assertEqual( type(self.new_db_id), int )
         log.debug( f'self.new_db_id, ``{self.new_db_id}``' )
 
     def delete_new_referent(self):
@@ -185,22 +186,29 @@ class Client_Referent_Details_API_Test( TestCase ):
     #     self.assertTrue( b'Bad Request' in put_response.content )
 
     def test_put_details_good(self):
-        """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/details/1234/`. """
+        """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/details/1234/`.
+            Note: the `random` part is to ensure there is different data being sent, and checked. """
         ## create referent
-        # self.create_new_referent()
+        # self.create_new_referent() -- eventually
         ## PUT
-        target_rfrnt_id = 2033
+        target_rfrnt_id = '2033'
         put_details_url = reverse( 'data_entrants_details_url', kwargs={'rfrnt_id': target_rfrnt_id} )
         log.debug( f'put_details_url, ``{put_details_url}``' )
-        random_name_part = secrets.choice( ['nameA', 'nameB', 'nameC', 'nameD'] )
+        random_name_part = secrets.choice( ['nameA', 'nameB', 'nameC'] )
+        random_race_partA = secrets.choice( ['Indian', 'Indio'] )
+        random_race_partB = secrets.choice( ['White', 'Unknown'] )
+        random_tribe_partA = secrets.choice( ['Bocotora', 'Eastern Pequot'] )
+        random_tribe_partB = secrets.choice( ['Mohegan', 'Wampanoag'] )
         put_details_payload = {
             'names': [ {'id': target_rfrnt_id, 'first': f'test-first-{random_name_part}', 'last': f'test-last-{random_name_part}', 'name_type': '7'} ],
             'age': '',
-            'sex': '',
-            'races': [ {'id': 'Indian', 'name': 'Indian'} ],
-            'tribes': [],
+            'sex': 'Other',
+            # 'races': [ {'id': 'India', 'name': 'India'}, {'id': 'Mustee', 'name': 'Mustee'} ],
+            'races': [ {'id': random_race_partA, 'name': random_race_partA}, {'id': random_race_partB, 'name': random_race_partB} ],
+            # 'tribes': [ {'id': 'Bocotora', 'name': 'Bocotora'}, {'id': 'Eastern Pequot', 'name': 'Eastern Pequot'} ],
+            'tribes': [ {'id': random_tribe_partA, 'name': random_tribe_partA}, {'id': random_tribe_partB, 'name': random_tribe_partB} ],
             'origins': [],
-            'statuses': [ {'id': 'Servant', 'name': 'Servant'}, {'id': 'Slave', 'name': 'Slave'} ],
+            'statuses': [],
             'titles': [],
             'vocations': []
         }
@@ -208,12 +216,30 @@ class Client_Referent_Details_API_Test( TestCase ):
         put_details_response = self.client.put( put_details_url, data=jsn, content_type='application/json' )
         put_details_resp_dct = json.loads( put_details_response.content )  # should be, i.e., `{'redirect': '/editor/records/895/'}`
         log.debug( f'put_details_resp_dct, ``{pprint.pformat(put_details_resp_dct)}``' )
-        ## tests
+        ## tests -- response
         self.assertEqual( 200, put_details_response.status_code )
         ( key, val ) = list( put_details_resp_dct.items() )[0]
         self.assertEqual( 'redirect', key )
         self.assertTrue( '/editor/records/' in val )
+        ## tests -- get and compare
+        get_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 2033} )
+        log.debug( f'get_url for details comparison, ``{get_url}``' )
+        get_response = self.client.get( get_url )
+        get_resp_dct = json.loads( get_response.content )
+        # print( f'get_resp_dct, ``{pprint.pformat(get_resp_dct)}``' )
+        self.assertEqual(
+            [{'first': f'test-first-{random_name_part}', 'id': 2033, 'last': f'test-last-{random_name_part}', 'name_type': 'Given'}],
+            get_resp_dct['ent']['names'],
+            )
+        self.assertEqual(
+            [{'id': random_race_partA, 'label': random_race_partA, 'value': random_race_partA}, {'id': random_race_partB, 'label': random_race_partB, 'value': random_race_partB}],
+            get_resp_dct['ent']['races'],
+            )
+        self.assertEqual(
+            [{'id': random_tribe_partA, 'label': random_tribe_partA, 'value': random_tribe_partA}, {'id': random_tribe_partB, 'label': random_tribe_partB, 'value': random_tribe_partB}],
+            get_resp_dct['ent']['tribes'],
+            )
         ## cleanup
-        # self.delete_new_referent()
+        # self.delete_new_referent() -- eventually
 
     ## end Client_Referent_Details_API_Test()
