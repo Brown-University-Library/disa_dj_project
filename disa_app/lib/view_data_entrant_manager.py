@@ -156,25 +156,6 @@ class Details_Updater():
         self.session = None
         self.common = None
 
-    # def manage_details_put( self, payload: bytes, request_user_id: int, rfrnt_id: str ) -> HttpResponse:
-    #     """ Manages data/api ajax 'PUT'.
-    #         Called by views.data_entrants_details(), triggered by views.edit_person() webpage. """
-    #     log.debug( 'starting manage_details_put' )
-    #     self.session = make_session()
-    #     self.common = Common()
-    #     try:
-    #         data: dict = json.loads( payload )
-    #         context: dict = self.execute_details_update( request_user_id, data, rfrnt_id )
-    #         # resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    #     except:
-    #         msg = 'problem with details-update, or with response-prep; see logs'
-    #         log.exception( msg )
-    #         # resp = HttpResponse( msg )
-    #         context: dict = { 'problem': msg }
-    #     log.debug( 'returning response' )
-    #     # return resp
-    #     return context
-
     def manage_details_put( self, payload: bytes, request_user_id: int, rfrnt_id: str ) -> HttpResponse:
         """ Manages data/api ajax 'PUT'.
             Called by views.data_entrants_details(), triggered by views.edit_person() webpage. """
@@ -186,6 +167,7 @@ class Details_Updater():
         self.common = Common()
         try:
             data: dict = json.loads( payload )
+            # log.debug( f'details-put-dct, ``{pprint.pformat(data)}``' )
             context: dict = self.execute_details_update( request_user_id, data, rfrnt_id )
         except:
             msg = 'problem with details-update, or with response-prep; see logs'
