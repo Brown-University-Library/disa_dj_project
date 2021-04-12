@@ -43,8 +43,18 @@ formInputDISAPersonStatusformInputDISAPersonStatus{% extends "disa_app_templates
 <!-- JavaScript-savvy URL control to toggle div display between 
      #startpanel above & #tabs_bibinfoanditems below -->
 
-<span id="save-status" class="badge bg-primary">
-  SAVED
+<!-- Save status indicator 
+
+    THIS NEEDS TO GET MOVED TO WITHIN VUE SCOPE
+
+-->
+
+<span id="save-status" class="badge bg-primary"
+      v-text="saveStatus">
+  <!--
+  <span v-if="saveStatus === 'saving-item'" 
+        v-text="`Saving changes to item ${currentItemId}`">ddd</span>
+  <span v-else v-text="saveStatus">All changes saved</span> -->
 </span>
 
 <!-- MAIN NAV TABS -->
