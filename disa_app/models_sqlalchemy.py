@@ -565,6 +565,45 @@ class Referent(Base):
         else:
             return display
 
+    def dictify(self):
+        enslavements = []
+        for enslavement in self.enslavements:  # the data-entry form says 'status'; the db stores these as enslavements.
+            enslavements.append( {'enslavement_db_id': enslavement.id, 'enslavement_name': enslavement.name} )
+        rfrnt_names = []
+        for rfrnt_name in self.names:
+            rfrnt_names.append( {
+                'rfrnt_name_db_id': rfrnt_name.id,
+                'rfrnt_name_first': rfrnt_name.first,
+                'rfrnt_name_last': rfrnt_name.last,
+                'rfrnt_name_nametype': {'name_type_id': rfrnt_name.name_type.id, 'name_type_name': rfrnt_name.name_type.name}
+                } )
+        origins = []
+        for origin in self.origins:
+            origins.append( {'origin_db_id': origin.id, 'origin_name': origin.name} )
+        roles = []
+        for role in self.roles:
+            roles.append( {'enslavement_db_id': role.id, 'enslavement_name': role.name} )
+        tribes = []
+        for tribe in self.tribes:
+            tribes.append( {'tribe_db_id': tribe.id, 'tribe_name': tribe.name} )
+        vocations = []
+        for vocation in self.vocations:
+            vocations.append( {'vocation_db_id': tribe.id, 'vocation_name': tribe.name} )
+        data = {
+            'referent_db_id': self.id,
+            'referent_uuid': None,
+            'person_db_id': self.person_id,
+            'reference_db_id': self.reference_id,
+            'age': self.age,
+            'enslavements': enslavements,
+            'names': rfrnt_names,
+            'origins': origins,
+            'roles': roles,
+            'tribes': tribes,
+            'vocations': vocations
+        }
+        return data
+
     ## end class Referent
 
 
