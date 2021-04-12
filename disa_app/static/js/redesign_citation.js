@@ -10,6 +10,7 @@ function uuidv4() {
 }
 
 // Parse URL for item and/or person to display
+//  URL format: <url><DOC ID>/#/<ITEM ID>/<PERSON ID>
 
 function getRoute() {
   const [itemId, personId] = window.location.hash.replace(/^[#\/]+/, '').split('/');
@@ -20,7 +21,7 @@ function getRoute() {
 }
 
 // Get callback for change in source type
-// (it's a callback in order to bake in the DATA object)
+// (it's a callback in order to bake in the dataAndSettings object)
 
 function getUpdateCitationFieldVisibilityCallback(FIELDS_BY_DOC_TYPE) {
 
@@ -145,4 +146,16 @@ function main(DATA) {
   });
 }
 
-export { main };
+export { main };/*
+/*
+
+  @todo
+
+  Use Tagify (as a Vue component?) on appropriate fields
+    https://yaireo.github.io/tagify/
+  Create a Vue component for ID badges
+  Add relationships between people
+  Add GUI editor for transcription (convert to markdown?)
+
+*/
+
