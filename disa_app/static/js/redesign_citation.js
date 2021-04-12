@@ -1,4 +1,5 @@
 
+import {getSourceData, getItemData, getReferentData} from './redesign_data.js';
 
 // UUID generator
 // Source: https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid/2117523#2117523
@@ -10,17 +11,18 @@ function uuidv4() {
 }
 
 // Parse URL for item and/or person to display
+//  URL format: <url><DOC ID>/#/<ITEM ID>/<PERSON ID>
 
 function getRoute() {
   const [itemId, personId] = window.location.hash.replace(/^[#\/]+/, '').split('/');
   return { 
     itemId: parseInt(itemId) || undefined,
-    personId: parseInt(personId) || undefined
+    referentId: parseInt(personId) || undefined
   };
 }
 
 // Get callback for change in source type
-// (it's a callback in order to bake in the DATA object)
+// (it's a callback in order to bake in the dataAndSettings object)
 
 function getUpdateCitationFieldVisibilityCallback(FIELDS_BY_DOC_TYPE) {
 
@@ -50,99 +52,200 @@ function getUpdateCitationFieldVisibilityCallback(FIELDS_BY_DOC_TYPE) {
   }
 }
 
-function main(DATA) {
+function initializeCitationForm(dataAndSettings) {
 
-  const initDisplay = getRoute();
-
-  // If item specified in URL, select tab and open item
-
-  if (initDisplay.itemId) {
-    document.getElementById('item-tab').click();
-    DATA.currentItemId = initDisplay.itemId;
-    // @todo - the same for persons
-    if (initDisplay.personId) {
-      // ...
-    }
-  }
-
-  // Citation form (tab 1)
-
-  const updateCitationFieldVisibility = getUpdateCitationFieldVisibilityCallback(DATA.FIELDS_BY_DOC_TYPE);
-
-  const citationForm = new Vue({
+  const updateCitationFieldVisibility = getUpdateCitationFieldVisibilityCallback(dataAndSettings.FIELDS_BY_DOC_TYPE);
+  
+  new Vue({
     el: '#citation-form',
-    data: DATA,
+    data: dataAndSettings,
     watch: {
-      'citation_data.citation_type_id': updateCitationFieldVisibility
+      'formData.doc.citation_type_id': updateCitationFieldVisibility
     },
     methods: {
       onSubmitForm: function(x) { 
         // @todo finish this
         console.log({ 
           submitEvent: x, 
-          data: JSON.parse(JSON.stringify(this._data))
+          data: JSON.parse(JSON.stringify(this.formData))
         })
       }
     },
-    mounted: updateCitationFieldVisibility(DATA.citation_data.citation_type_id)
+    mounted: updateCitationFieldVisibility(dataAndSettings.formData.doc.citation_type_id)
   });
+}
 
-  // Item form (tab 2)
-  // @todo finish item form
-
-  // console.log('XXXXXX', DATA, 'XXXXXXXX');
-
-  window.itemForm = new Vue({
+function initializeItemForm(dataAndSettings) {
+  new Vue({
     el: '#Items',
-    data: DATA,
-    computed: {},
+    data: dataAndSettings,
+    computed: {
+      currentItem: function() {
+        return this.formData.doc.references[this.currentItemId]
+      },
+      currentReferent: function () {
+        return this.currentItem.referents[this.currentReferentId]
+      }
+    },
     delimiters: ['v{','}v'], // So as not to clash with Django templates
-    mounted: () => console.log('MOUNTED', DATA),
+    watch: {
+      'formData.doc.references': {
+        handler() {
+          console.log('FGHFGHFGH');
+          this.saveStatus = 'saving-item';
+          window.setTimeout(
+            () => {this.saveStatus = 'saved'}, 
+            1000000
+          );
+        },
+        deep: true
+      },
+
+      // If currentItemId changes, load new item data
+      'currentItemId': function(itemId) {
+        if (! this.currentItem.FULL_DATA_LOADED) { // <-- CHECK THIS
+          getItemData(itemId).then(
+            itemData => this.formData.doc.references[itemId] = itemData
+          );
+        }
+      },
+      'currentReferentId': function(referentId) {
+        if (! this.currentReferent.FULL_DATA_LOADED) {
+          getReferentData(referentId).then(
+            referentData => this.currentItem.referents[referentId] = referentData
+          );
+        }
+      }
+    },
     methods: {
-      makeNewReferent: function () {
-        const currentItem = this.items.find(i => i.id === this.currentItemId)
-        currentItem.referents.push({
-          id: -1,
-          names: [{
-            id: -1,
-            firstName: '', 
-            lastName: '',
-            type: 0
-          }],
-          age: undefined, age_number: undefined,
-          gender: undefined,
-          tribe: undefined,
-          race: undefined,
-          transcription: undefined 
-        });
+      makeNewReferent: function (e) {
+        const newReferentId = uuidv4();
+        e.preventDefault(); // Link doesn't behave like a link
+        this.currentItem.referents[newReferentId] = {
+          id: newReferentId,
+          names: []
+        };
+        this.currentReferentId = newReferentId;
+        return false;
+      },
+      getReferentDisplayLabel: function (referent) {
+        //console.log('RRRRRRRRRRR');
+        //const referent = this.currentReferent;
+        return referent ? `${referent.first} ${referent.last}` : 'Hmmm';
       },
       makeNewReferentName: function () {
-        const currentItem = this.items.find(i => i.id === this.currentItemId),
-              currentReferent = currentItem.referents.find(r => r.id === this.currentReferentId),
-              newReferentId = uuidv4();
-        currentReferent.names.push({
-          id: newReferentId,
-          firstName: '', 
-          lastName: '',
-          type: 0
+        const newReferentId = uuidv4();
+        this.currentReferent.names.push({
+          id: newReferentId
         });
         this.currentNameId = newReferentId;
       },
       makeNewItem: function () {
-        this.items.push(
-          {
-            id: -1,
-            type: undefined,
-            volume: undefined,
-            page_start: undefined,
-            page_end: undefined,
-            title: 'New item'
-          }
-        );
-        this.currentItemId = -1;
+        const newItemId = uuidv4();
+        this.formData.doc.references[newItemId] = {
+          id: newItemId,
+          citation_id: this.formData.doc.id,
+          referents: {}
+        };
+        this.currentItemId = newItemId;
+      },
+
+      // Take a long UUID and make a display version
+
+      displayId: function (longId) {
+        return longId.toString().slice(-5);
+      },
+
+      // Take a long string (especially transcriptions) 
+      // and make it into a display title
+
+      makeItemDisplayTitle: function (item, length=100) {
+
+        let displayTitle;
+
+        if (item.transcription) {
+          displayTitle = item.transcription.replaceAll(/<[^>]+>/g, '')
+              .slice(0,length) + '…';
+        } else {
+          // displayTitle = `Item ID:${this.displayId(item.id)}`;
+          displayTitle = 'New item';
+        }
+        return displayTitle
+      },
+
+      // onClick handler for ID badges
+
+      activateIdOptions: function () {
+        alert('options, I got options!');
       }
     }
   });
 }
 
-export { main };
+async function loadAndInitializeData(initDisplay) {
+
+  let dataAndSettings = await getSourceData();
+
+  // Set initial item to display:
+  //  from URL, assign to first item, or undefined
+
+  dataAndSettings.currentItemId = 
+    initDisplay.itemId || 
+    Object.keys(dataAndSettings.formData.doc.references)[0] ||
+    undefined;
+
+  // Set first referent to display: from URL or none
+
+  dataAndSettings.currentReferentId = initDisplay.referentId || -1;
+
+  // Load full data for current item
+
+  dataAndSettings.formData.doc.references[dataAndSettings.currentItemId] 
+    = await getItemData(dataAndSettings.currentItemId);
+
+  // Initialize save status register
+
+  dataAndSettings.saveStatus = 'saved';
+
+  return dataAndSettings;
+}
+
+// Main routine
+
+async function main() {
+
+  // Get initial item/referent display selector from URL
+
+  const initDisplay = getRoute();
+
+  // Get the data structure to pass to Vue
+
+  let dataAndSettings = await loadAndInitializeData(initDisplay);
+  console.log(dataAndSettings);
+
+  // If item specified in URL, select tab
+
+  if (initDisplay.itemId) {
+    document.getElementById('item-tab').click();
+  }
+
+  // Initialize forms
+
+  initializeCitationForm(dataAndSettings);
+  initializeItemForm(dataAndSettings);
+}
+
+main();
+
+/*
+
+  @todo
+
+  Use Tagify (as a Vue component?) on appropriate fields
+    https://yaireo.github.io/tagify/
+  Create a Vue component for ID badges
+  Add relationships between people
+  Add GUI editor for transcription (convert to markdown?)
+
+*/
+
