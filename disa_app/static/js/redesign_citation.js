@@ -146,7 +146,61 @@ function main(DATA) {
   });
 }
 
-export { main };/*
+async function loadAndInitializeData(initDisplay) {
+
+  let dataAndSettings = await getSourceData();
+
+  // Set initial item to display:
+  //  from URL, assign to first item, or undefined
+
+  dataAndSettings.currentItemId = 
+    initDisplay.itemId || 
+    Object.keys(dataAndSettings.formData.doc.references)[0] ||
+    undefined;
+
+  // Set first referent to display: from URL or none
+
+  dataAndSettings.currentReferentId = initDisplay.referentId || -1;
+
+  // Load full data for current item
+
+  dataAndSettings.formData.doc.references[dataAndSettings.currentItemId] 
+    = await getItemData(dataAndSettings.currentItemId);
+
+  // Initialize save status register
+
+  dataAndSettings.saveStatus = 'saved';
+
+  return dataAndSettings;
+}
+
+// Main routine
+
+async function main() {
+
+  // Get initial item/referent display selector from URL
+
+  const initDisplay = getRoute();
+
+  // Get the data structure to pass to Vue
+
+  let dataAndSettings = await loadAndInitializeData(initDisplay);
+  console.log(dataAndSettings);
+
+  // If item specified in URL, select tab
+
+  if (initDisplay.itemId) {
+    document.getElementById('item-tab').click();
+  }
+
+  // Initialize forms
+
+  initializeCitationForm(dataAndSettings);
+  initializeItemForm(dataAndSettings);
+}
+
+main();
+
 /*
 
   @todo

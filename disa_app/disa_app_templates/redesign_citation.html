@@ -26,19 +26,8 @@ formInputDISAPersonStatusformInputDISAPersonStatus{% extends "disa_app_templates
 
 </style>
 
-<script type="module">
+<script type="module" src="/static/js/redesign_citation.js"></script>
 
-  // THIS IS THE MAIN MODULE
-  // It initializes the data structure and passes it to main()
-
-  import {main} from '/static/js/redesign_citation.js';
-  import {getData} from '/static/js/redesign_data.js';
-
-  getData().then(dataAndSettings => {
-    main(dataAndSettings);
-  });
-
-</script>
 
 {% endblock header_other %}
 
