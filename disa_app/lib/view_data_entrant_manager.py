@@ -201,11 +201,11 @@ class Details_Updater():
             Called by manage_details_put() """
         log.debug( 'starting execute_details_update()' )
         print( '------- starting execute_details_update()' )
-        log.debug( f'user_id, ``{user_id}``' )
-        log.debug( f'data, ``{data}``' )
-        log.debug( f'rfrnt_id, ``{rfrnt_id}``' )
+        log.debug( f'submitted user_id, ``{user_id}``' )
+        log.debug( f'submitted data, ``{data}``' )
+        log.debug( f'submitted rfrnt_id, ``{rfrnt_id}``' )
         rfrnt: models_alch.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
-        log.debug( f'rfrnt-obj from rfrnt_id query, ``{rfrnt}``' )
+        log.debug( f'initial rfrnt.dictify(), ``{pprint.pformat(rfrnt.dictify())}``' )
         rfrnt.names = [ self.common.update_referent_name( na, self.session )
             for na in data['names'] ]
         log.debug( f'rfrnt.names, ``{rfrnt.names}``' )
@@ -240,6 +240,7 @@ class Details_Updater():
             log.debug( 'common.stamp_edit() ok' )
         except:
             log.exception( 'problem with common.stamp_edit(); traceback follows but processing continues' )
+        log.debug( f'final rfrnt.dictify() after add & commit & stamp, ``{pprint.pformat(rfrnt.dictify())}``' )
         data = { 'redirect': reverse( 'edit_record_w_recid_url', kwargs={'rec_id': rfrnt.reference_id} ) }
         log.debug( f'returning data, ```{pprint.pformat(data)}```' )
         print( '------- ending execute_details_update()' )
