@@ -72,7 +72,7 @@ class Client_Referent_API_Test( TestCase ):
 
     def test_get_good(self):
         """ Checks good GET of `http://127.0.0.1:8000/data/entrants/1234/`. """
-        ## create group
+        ## create referent
         self.create_new_referent()
         log.debug( f'new_db_id, ``{self.new_db_id}``' )
         ## GET
@@ -108,7 +108,7 @@ class Client_Referent_API_Test( TestCase ):
 
     def test_post_good(self):
         """ Checks POST to `http://127.0.0.1:8000/data/entrants/1234/` w/good params. """
-        ## create group
+        ## create referent
         self.create_new_referent()
         ## tests
         self.assertEqual( ['first', 'id', 'last', 'name_id', 'person_id', 'roles'], sorted(self.post_resp_dct.keys()) )
@@ -126,7 +126,7 @@ class Client_Referent_API_Test( TestCase ):
 
     def test_put_good(self):
         """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/1234/`. """
-        ## create group
+        ## create referent
         self.create_new_referent()
         ## PUT
         put_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': self.new_db_id} )
@@ -162,7 +162,7 @@ class Client_Referent_API_Test( TestCase ):
 
     def test_delete_good(self):
         """ Checks good DELETE of `http://127.0.0.1:8000/data/entrants/1234/`. """
-        ## create group
+        ## create referent
         self.create_new_referent()
         ## DELETE
         self.delete_new_referent()
@@ -186,7 +186,7 @@ class Client_Referent_Details_API_Test( TestCase ):
 
     def test_put_details_good(self):
         """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/details/1234/`. """
-        ## create group
+        ## create referent
         # self.create_new_referent()
         ## PUT
         target_rfrnt_id = 2033
