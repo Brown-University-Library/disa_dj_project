@@ -1,4 +1,5 @@
 
+import {getSourceData, getItemData, getReferentData} from './redesign_data.js';
 
 // UUID generator
 // Source: https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid/2117523#2117523
