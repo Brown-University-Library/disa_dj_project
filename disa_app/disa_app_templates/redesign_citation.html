@@ -24,6 +24,10 @@ formInputDISAPersonStatusformInputDISAPersonStatus{% extends "disa_app_templates
   bottom: 10px;
 }
 
+#item-selector-modal .modal-body li {
+  cursor: pointer;
+}
+
 </style>
 
 <script type="module" src="/static/js/redesign_citation.js"></script>
@@ -352,7 +356,35 @@ formInputDISAPersonStatusformInputDISAPersonStatus{% extends "disa_app_templates
     <div class="tab-pane card-body" 
          role="tabpanel" aria-labelledby="item-tab" id="Items">
 
-      <!-- <div> -->
+      <!-- Change item modal -->
+
+      <div class="modal" tabindex="-1" id="item-selector-modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">
+                Select an item to edit
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-start"
+                    data-bs-dismiss="modal"
+                    v-for="item in formData.doc.references"
+                    v-on:click="currentItemId = item.id">
+                  <div class="ms-2 me-auto"
+                       v-text="makeItemDisplayTitle(item, 50)">
+                    <!-- <div class="fw-bold">Subheading</div> -->
+                  </div>
+                  <span class="badge bg-primary rounded-pill"
+                        v-text="`ID:${displayId(item.id)}`">14</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="tab-content" style="background-color: white!important;opacity:1;">
 
@@ -372,20 +404,13 @@ formInputDISAPersonStatusformInputDISAPersonStatus{% extends "disa_app_templates
                       v-text="currentItem.id"></span>
               </h1>
 
-              <!-- Change item control -->
+              <!-- Change item button 
+                    (opens modal #item-selector-modal, defined above) -->
 
-              <div class="col-6">
-                <label class="visually-hidden-x" for="item-select">
-                  Change to another item:
-                </label>
-                <select class="form-select form-select-sm" id="item-select"
-                        v-model="currentItemId">
-                  <option v-for="item in formData.doc.references"
-                          v-bind:value="item.id"
-                          v-text="`ID:${displayId(item.id)} ${makeItemDisplayTitle(item, 50)}`">
-                  </option>
-                </select>
-              </div>
+              <button type="button" class="btn btn-primary btn-sm col-6"
+                      data-bs-toggle="modal" data-bs-target="#item-selector-modal">
+                change item
+              </button>
 
               <!-- Create new item control -->
 
