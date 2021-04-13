@@ -19,7 +19,7 @@ TestCase.maxDiff = 1000
 
 
 class Client_Referent_API_Test( TestCase ):
-    """ Checks referent api urls. """
+    """ Checks `/entrant/1234/` api urls. """
 
     def setUp(self):
         self.new_db_id = None
@@ -50,6 +50,7 @@ class Client_Referent_API_Test( TestCase ):
         self.post_resp_dct = json.loads( response.content )
         log.debug( f'post_resp_dct, ``{pprint.pformat(self.post_resp_dct)}``' )
         self.new_db_id = self.post_resp_dct['id']
+        self.assertEqual( type(self.new_db_id), int )
         log.debug( f'self.new_db_id, ``{self.new_db_id}``' )
 
     def delete_new_referent(self):
@@ -60,7 +61,7 @@ class Client_Referent_API_Test( TestCase ):
         self.delete_resp_dct = json.loads( response.content )
         log.debug( f'delete_resp_dct, ``{pprint.pformat(self.delete_resp_dct)}``' )
 
-    # ## GET =======================
+    ## GET =======================
 
     def test_get_bad(self):
         """ Checks bad GET of `http://127.0.0.1:8000/data/entrants/foo/`. """
@@ -71,8 +72,8 @@ class Client_Referent_API_Test( TestCase ):
         self.assertTrue( b'Not Found' in response.content )
 
     def test_get_good(self):
-        """ Checks good GET of `http://127.0.0.1:8000/data/entrants/abcd/`. """
-        ## create group
+        """ Checks good GET of `http://127.0.0.1:8000/data/entrants/1234/`. """
+        ## create referent
         self.create_new_referent()
         log.debug( f'new_db_id, ``{self.new_db_id}``' )
         ## GET
@@ -107,8 +108,8 @@ class Client_Referent_API_Test( TestCase ):
         self.assertTrue( b'Bad Request' in response.content )
 
     def test_post_good(self):
-        """ Checks POST to `http://127.0.0.1:8000/data/entrants/abcd/` w/good params. """
-        ## create group
+        """ Checks POST to `http://127.0.0.1:8000/data/entrants/1234/` w/good params. """
+        ## create referent
         self.create_new_referent()
         ## tests
         self.assertEqual( ['first', 'id', 'last', 'name_id', 'person_id', 'roles'], sorted(self.post_resp_dct.keys()) )
@@ -118,15 +119,15 @@ class Client_Referent_API_Test( TestCase ):
     ## UPDATE ====================
 
     def test_put_bad(self):
-        """ Checks bad PUT to `http://127.0.0.1:8000/data/entrants/abcd/` -- no payload. """
+        """ Checks bad PUT to `http://127.0.0.1:8000/data/entrants/1234/` -- no payload. """
         put_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'foo'} )
         put_response = self.client.put( put_url )  # will fail; no payload
         self.assertEqual( 400, put_response.status_code )
         self.assertTrue( b'Bad Request' in put_response.content )
 
     def test_put_good(self):
-        """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/abcd/`. """
-        ## create group
+        """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/1234/`. """
+        ## create referent
         self.create_new_referent()
         ## PUT
         put_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': self.new_db_id} )
@@ -151,45 +152,94 @@ class Client_Referent_API_Test( TestCase ):
         ## cleanup
         self.delete_new_referent()
 
-    # ## DELETE ====================
+    ## DELETE ====================
 
-    # def test_delete_bad(self):
-    #     """ Checks bad DELETE of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     delete_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'foo'} )
-    #     delete_response = self.client.delete( delete_url )
-    #     self.assertEqual( 404, delete_response.status_code )
-    #     self.assertTrue( b'Not Found' in delete_response.content )
+    def test_delete_bad(self):
+        """ Checks bad DELETE of `http://127.0.0.1:8000/data/entrants/foo/`. """
+        delete_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'foo'} )
+        delete_response = self.client.delete( delete_url )
+        self.assertEqual( 500, delete_response.status_code )
+        self.assertTrue( b'Server Error' in delete_response.content )
 
-    # def test_delete_good(self):
-    #     """ Checks good DELETE of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     ## create group
-    #     self.create_new_group()
-    #     ## DELETE
-    #     self.delete_new_group()
-    #     ## tests
-    #     self.assertEqual( ['request', 'response'], sorted(self.delete_resp_dct.keys()) )
-    #     req_keys = sorted( self.delete_resp_dct['request'].keys() )
-    #     self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-    #     self.assertEqual( 'DELETE', self.delete_resp_dct['request']['method'] )
-    #     self.assertEqual( {}, self.delete_resp_dct['request']['payload'] )
-    #     resp_keys = sorted( self.delete_resp_dct['response'].keys() )
-    #     self.assertEqual( ['elapsed_time', 'status'], resp_keys )
-    #     self.assertEqual( 'success', self.delete_resp_dct['response']['status'] )
-
-    # ## RECORD-GET ================
-
-    # def test_get_record_data_for_group_check(self):
-    #     """ Checks `http://127.0.0.1:8000/data/records/49/`
-    #         All the tests above assume the existence of record-49; this just confirms it's there,
-    #         ...and that the initial response includes some group info. """
-    #     response = self.client.get( '/data/records/49/' )
-    #     self.assertEqual( 200, response.status_code )
-    #     resp_dct = json.loads( response.content )
-    #     self.assertEqual( ['entrants', 'groups', 'rec'], sorted(resp_dct.keys()) )
-    #     try:
-    #         resp_group_data_keys = sorted( resp_dct['groups']['group_data'][0].keys() )
-    #         self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
-    #     except:
-    #        pass
+    def test_delete_good(self):
+        """ Checks good DELETE of `http://127.0.0.1:8000/data/entrants/1234/`. """
+        ## create referent
+        self.create_new_referent()
+        ## DELETE
+        self.delete_new_referent()
+        ## tests
+        self.assertEqual( ['id'], sorted(self.delete_resp_dct.keys()) )
 
     ## end Client_Referent_API_Test()
+
+
+class Client_Referent_Details_API_Test( TestCase ):
+    """ Checks `/entrant/details/1234/` api urls. """
+
+    ## UPDATE-DETAILS ============ (separate view)
+
+    # def test_put_details_bad(self):
+    #     """ Checks bad PUT to `http://127.0.0.1:8000/data/entrants/details/1234/` -- no payload. """
+    #     put_url = reverse( 'data_entrants_details_url', kwargs={'rfrnt_id': 'foo'} )
+    #     put_response = self.client.put( put_url )  # will fail; no payload
+    #     self.assertEqual( 400, put_response.status_code )
+    #     self.assertTrue( b'Bad Request' in put_response.content )
+
+    def test_put_details_good(self):
+        """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/details/1234/`.
+            Note: the `random` part is to ensure there is different data being sent, and checked. """
+        ## create referent
+        # self.create_new_referent() -- eventually
+        ## PUT
+        target_rfrnt_id = '2033'
+        put_details_url = reverse( 'data_entrants_details_url', kwargs={'rfrnt_id': target_rfrnt_id} )
+        log.debug( f'put_details_url, ``{put_details_url}``' )
+        random_name_part = secrets.choice( ['nameA', 'nameB', 'nameC'] )
+        random_race_partA = secrets.choice( ['Indian', 'Indio'] )
+        random_race_partB = secrets.choice( ['White', 'Unknown'] )
+        random_tribe_partA = secrets.choice( ['Bocotora', 'Eastern Pequot'] )
+        random_tribe_partB = secrets.choice( ['Mohegan', 'Wampanoag'] )
+        put_details_payload = {
+            'names': [ {'id': target_rfrnt_id, 'first': f'test-first-{random_name_part}', 'last': f'test-last-{random_name_part}', 'name_type': '7'} ],
+            'age': '',
+            'sex': 'Other',
+            # 'races': [ {'id': 'India', 'name': 'India'}, {'id': 'Mustee', 'name': 'Mustee'} ],
+            'races': [ {'id': random_race_partA, 'name': random_race_partA}, {'id': random_race_partB, 'name': random_race_partB} ],
+            # 'tribes': [ {'id': 'Bocotora', 'name': 'Bocotora'}, {'id': 'Eastern Pequot', 'name': 'Eastern Pequot'} ],
+            'tribes': [ {'id': random_tribe_partA, 'name': random_tribe_partA}, {'id': random_tribe_partB, 'name': random_tribe_partB} ],
+            'origins': [],
+            'statuses': [],
+            'titles': [],
+            'vocations': []
+        }
+        jsn = json.dumps( put_details_payload )
+        put_details_response = self.client.put( put_details_url, data=jsn, content_type='application/json' )
+        put_details_resp_dct = json.loads( put_details_response.content )  # should be, i.e., `{'redirect': '/editor/records/895/'}`
+        log.debug( f'put_details_resp_dct, ``{pprint.pformat(put_details_resp_dct)}``' )
+        ## tests -- response
+        self.assertEqual( 200, put_details_response.status_code )
+        ( key, val ) = list( put_details_resp_dct.items() )[0]
+        self.assertEqual( 'redirect', key )
+        self.assertTrue( '/editor/records/' in val )
+        ## tests -- get and compare
+        get_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 2033} )
+        log.debug( f'get_url for details comparison, ``{get_url}``' )
+        get_response = self.client.get( get_url )
+        get_resp_dct = json.loads( get_response.content )
+        # print( f'get_resp_dct, ``{pprint.pformat(get_resp_dct)}``' )
+        self.assertEqual(
+            [{'first': f'test-first-{random_name_part}', 'id': 2033, 'last': f'test-last-{random_name_part}', 'name_type': 'Given'}],
+            get_resp_dct['ent']['names'],
+            )
+        self.assertEqual(
+            [{'id': random_race_partA, 'label': random_race_partA, 'value': random_race_partA}, {'id': random_race_partB, 'label': random_race_partB, 'value': random_race_partB}],
+            get_resp_dct['ent']['races'],
+            )
+        self.assertEqual(
+            [{'id': random_tribe_partA, 'label': random_tribe_partA, 'value': random_tribe_partA}, {'id': random_tribe_partB, 'label': random_tribe_partB, 'value': random_tribe_partB}],
+            get_resp_dct['ent']['tribes'],
+            )
+        ## cleanup
+        # self.delete_new_referent() -- eventually
+
+    ## end Client_Referent_Details_API_Test()

@@ -160,12 +160,15 @@ class Details_Updater():
         """ Manages data/api ajax 'PUT'.
             Called by views.data_entrants_details(), triggered by views.edit_person() webpage. """
         log.debug( 'starting manage_details_put' )
+        log.debug( f'payload, ``{payload}``' )
+        log.debug( f'request_user_id, ``{request_user_id}``' )
+        log.debug( f'rfrnt_id, ``{rfrnt_id}``' )
         self.session = make_session()
         self.common = Common()
         try:
             data: dict = json.loads( payload )
+            # log.debug( f'details-put-dct, ``{pprint.pformat(data)}``' )
             context: dict = self.execute_details_update( request_user_id, data, rfrnt_id )
-            # resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         except:
             msg = 'problem with details-update, or with response-prep; see logs'
             log.exception( msg )
@@ -178,9 +181,16 @@ class Details_Updater():
     def execute_details_update( self, user_id: int, data: dict, rfrnt_id: str ) -> dict:
         """ Updates db and returns data.
             Called by manage_details_put() """
+        log.debug( 'starting execute_details_update()' )
+        print( '------- starting execute_details_update()' )
+        log.debug( f'submitted user_id, ``{user_id}``' )
+        log.debug( f'submitted data, ``{data}``' )
+        log.debug( f'submitted rfrnt_id, ``{rfrnt_id}``' )
         rfrnt: models_alch.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
+        log.debug( f'initial rfrnt.dictify(), ``{pprint.pformat(rfrnt.dictify())}``' )
         rfrnt.names = [ self.common.update_referent_name( na, self.session )
             for na in data['names'] ]
+        log.debug( f'rfrnt.names, ``{rfrnt.names}``' )
         rfrnt.age = data['age']
         rfrnt.sex = data['sex']
         rfrnt.primary_name = rfrnt.names[0]
@@ -194,13 +204,28 @@ class Details_Updater():
             for ti in data['titles'] ]
         rfrnt.enslavements = [ self.common.get_or_create_referent_attribute( st, models_alch.EnslavementType, self.session )
             for st in data['statuses'] ]
+        log.debug( f'rfrnt.enslavements from statuses-data, ``{rfrnt.enslavements}``' )
         rfrnt.vocations = [ self.common.get_or_create_referent_attribute( vo, models_alch.Vocation, self.session )
             for vo in data['vocations'] ]
-        self.session.add( rfrnt )
-        self.session.commit()
-        self.common.stamp_edit( user_id, rfrnt.reference, self.session )
+        try:
+            self.session.add( rfrnt )
+            log.debug( 'session.add ok' )
+        except:
+            log.exception( 'problem with session.add(); traceback follows but processing continues' )
+        try:
+            self.session.commit()
+            log.debug( 'session.commit ok' )
+        except:
+            log.exception( 'problem with session.commit(); traceback follows but processing continues' )
+        try:
+            self.common.stamp_edit( user_id, rfrnt.reference, self.session )
+            log.debug( 'common.stamp_edit() ok' )
+        except:
+            log.exception( 'problem with common.stamp_edit(); traceback follows but processing continues' )
+        log.debug( f'final rfrnt.dictify() after add & commit & stamp, ``{pprint.pformat(rfrnt.dictify())}``' )
         data = { 'redirect': reverse( 'edit_record_w_recid_url', kwargs={'rec_id': rfrnt.reference_id} ) }
         log.debug( f'returning data, ```{pprint.pformat(data)}```' )
+        print( '------- ending execute_details_update()' )
         return data
 
     ## end class Details_Updater()
@@ -307,15 +332,17 @@ class Deleter():
         """ Manages data/api ajax 'POST'.
             Called by views.data_entrants(), triggered by views.edit_record() webpage 'Add person' button save. """
         log.debug( 'starting manage_delete' )
+        assert type(request_user_id) == int
+        assert type(rfrnt_id) == str
         self.session = make_session()
         self.common = Common()
         try:
             context: dict = self.execute_delete( request_user_id, rfrnt_id )
             resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
         except:
-            msg = 'problem with delete, or with response-prep; see logs'
+            msg = 'Server Error -- problem with delete, or with response-prep; see logs'
             log.exception( msg )
-            resp = HttpResponse( msg )
+            resp = HttpResponseServerError( msg )
         log.debug( 'returning response' )
         return resp
 
