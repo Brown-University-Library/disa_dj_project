@@ -464,20 +464,9 @@ formInputDISAPersonStatusformInputDISAPersonStatus{% extends "disa_app_templates
                             id="formInputDISAItemType" 
                             aria-label="Event date: month"
                             v-model="currentItem.type">
-                      <option value="0">	[Select]	</option>
-                      <option value="1">	Birth	</option>
-                      <option value="2">	Correspondence	</option>
-                      <option value="3">	Court	</option>
-                      <option value="4">	Death	</option>
-                      <option value="5">	Governmental	</option>
-                      <option value="6">	Indenture	</option>
-                      <option value="7">	Legal	</option>
-                      <option value="8">	Minutes	</option>
-                      <option value="9">	Petition	</option>
-                      <option value="10">	Purchase	</option>
-                      <option value="11">	Other	</option>
-                      <option value="12">	Runaway	</option>
-                      <option value="13">	Sale	</option>
+                      <option v-for="(itemTypeOption, itemTypeOptionId) in MENU_OPTIONS.formInputDISAItemType"
+                              v-bind:value="itemTypeOptionId"
+                              v-text="itemTypeOption"></option>
                     </select>
                     <label for="formInputDISAItemType">Item type</label>
                   </div>

@@ -180,6 +180,11 @@ export const LOCAL_SETTINGS = {
         '3':'Multi-racial',
         '4':'White',
         '5':'Not specified'
+      },
+      formInputDISAItemType: {
+        '1': 'Type A',
+        '2': 'Type B',
+        '3': 'Type C'
       }
     }
   };
