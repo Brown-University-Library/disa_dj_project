@@ -1,8 +1,8 @@
-formInputDISAPersonStatusformInputDISAPersonStatus{% extends "disa_app_templates/redesign_base.html" %}
-
+{% extends "disa_app_templates/redesign_base.html" %}
+{% load staticfiles %}
 {% block header_other %}
 
-<link href="/static/css/redesign_citation.css" rel="stylesheet"></link>
+<link rel="stylesheet" type="text/css" href="{% static 'css/redesign_citation.css' %}">
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <!-- Production version of Vue
 <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
@@ -30,7 +30,7 @@ formInputDISAPersonStatusformInputDISAPersonStatus{% extends "disa_app_templates
 
 </style>
 
-<script type="module" src="/static/js/redesign_citation.js"></script>
+<script type="module" src="{% static 'js/redesign_citation.js' %}"></script>
 
 
 {% endblock header_other %}
