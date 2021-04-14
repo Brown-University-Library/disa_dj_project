@@ -438,8 +438,8 @@ formInputDISAPersonStatusformInputDISAPersonStatus{% extends "disa_app_templates
                   <p>&nbsp;</p>
                   <div class="form-floating">
                     <input type="number" class="form-control" 
-                            id="formInputDISAItemVolume" aria-label="Volume" 
-                            placeholder="#" v-model="currentItem.volume">
+                           id="formInputDISAItemVolume" aria-label="Volume" 
+                           placeholder="Volume in source" v-model="currentItem.volume">
                     <label for="formInputDISAItemVolume">Volume</label>
                   </div>
                   <div class="form-floating">
@@ -458,8 +458,7 @@ formInputDISAPersonStatusformInputDISAPersonStatus{% extends "disa_app_templates
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <h5 class="text-dark" style="float:left;">Item content</h5>
-                  <p>&nbsp;</p>
+                  <h5 class="text-dark">Item content</h5>
                   <div class="form-floating">
                     <select class="form-select" 
                             id="formInputDISAItemType" 
@@ -531,7 +530,6 @@ formInputDISAPersonStatusformInputDISAPersonStatus{% extends "disa_app_templates
                   <h5 class="text-dark" style="">Place</h5>
                   <div class="form-floating">
                     <select class="form-select" id="formInputDISAColonialContext" aria-label="Colonial context">
-                      <!-- <option selected>Select a colonial context...</option> -->
                       <option v-for="(colonialContextOption, colonialContextOptionId) in MENU_OPTIONS.formInputDISAColonialContext"
                               v-bind:value="colonialContextOptionId"
                               v-text="colonialContextOption">
