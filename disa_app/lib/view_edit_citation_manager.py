@@ -7,6 +7,7 @@ from disa_app import settings_app
 from disa_app import models_sqlalchemy as models_alch
 from disa_app.lib import person_common
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -64,6 +65,8 @@ def redesign_query_data( cite_id: str ) -> dict:
         cite_obj['citation_uuid'] = 'not-yet-implemented'
         data['citation_json'] = json.dumps( cite_obj )
         log.debug( f'data, ``{pprint.pformat(data)}``' )
+        ## new-user-template
+        data['new_user_template'] = prep_new_user_payload_template()
     else:
         data = None
     log.debug( f'data, ```{data}```' )
@@ -87,6 +90,23 @@ def manage_create( user_id: int ) -> dict:
 # helpers
 # ----------
 
+
+def prep_new_user_payload_template() -> dict:
+    """ Adds new-user sample-payload to context.
+        Called by redesign_query_data() """
+    new_user_template = {
+        'post_api_url': reverse( 'data_referent_url', kwargs={'rfrnt_id': 'new'} ),
+        'sample_payload': {
+            'id': 'new',
+            'name': {'first': '(sample)John', 'id': 'name', 'last': '(sample)Doe'},
+            'record_id': '(sample)49',
+            'roles': [
+                {'id': '(sample)3', 'name': '(sample)Priest'},
+                {'id': '(sample)30', 'name': '(sample)Previous Owner'}
+            ]
+        }
+    }
+    return new_user_template
 
 def build_ct_js_data( session ) -> dict:
     """ Builds structural data for the page's javascript.
@@ -120,7 +140,9 @@ def build_ct_js_data( session ) -> dict:
     return ct_fields
 
 
+## =========
 ## from DISA
+## =========
 # @app.route('/editor/documents/<citeId>')
 # @login_required
 # def edit_citation(citeId=None):
