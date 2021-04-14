@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json, logging, pprint, secrets, uuid
+from operator import itemgetter
 
 import requests
 from disa_app import settings_app
@@ -233,11 +234,13 @@ class Client_Referent_Details_API_Test( TestCase ):
             )
         self.assertEqual(
             [{'id': random_race_partA, 'label': random_race_partA, 'value': random_race_partA}, {'id': random_race_partB, 'label': random_race_partB, 'value': random_race_partB}],
-            get_resp_dct['ent']['races'],
+            # get_resp_dct['ent']['races'],
+            sorted( get_resp_dct['ent']['races'], key=itemgetter('label') ),  ## sort needed because sometimes the data is returned in a different sort-order
             )
         self.assertEqual(
             [{'id': random_tribe_partA, 'label': random_tribe_partA, 'value': random_tribe_partA}, {'id': random_tribe_partB, 'label': random_tribe_partB, 'value': random_tribe_partB}],
-            get_resp_dct['ent']['tribes'],
+            # get_resp_dct['ent']['tribes'],
+            sorted( get_resp_dct['ent']['tribes'], key=itemgetter('label') ),
             )
         ## cleanup
         # self.delete_new_referent() -- eventually
