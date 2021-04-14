@@ -1,5 +1,6 @@
 
 import {getSourceData, getItemData, getReferentData} from './redesign_data.js';
+import { DISA_ID_COMPONENT } from './redesign_id_component.js';
 
 // UUID generator
 // Source: https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid/2117523#2117523
@@ -79,6 +80,9 @@ function initializeItemForm(dataAndSettings) {
   new Vue({
     el: '#Items',
     data: dataAndSettings,
+    components: {
+      'disa-id': DISA_ID_COMPONENT
+    },
     computed: {
       currentItem: function() {
         return this.formData.doc.references[this.currentItemId]
@@ -151,6 +155,7 @@ function initializeItemForm(dataAndSettings) {
       },
 
       // Take a long UUID and make a display version
+      // @todo only have this in the ID badge component?
 
       displayId: function (longId) {
         return longId.toString().slice(-5);
@@ -171,12 +176,6 @@ function initializeItemForm(dataAndSettings) {
           displayTitle = 'New item';
         }
         return displayTitle
-      },
-
-      // onClick handler for ID badges
-
-      activateIdOptions: function () {
-        alert('options, I got options!');
       }
     }
   });
