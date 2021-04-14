@@ -426,6 +426,8 @@ formInputDISAPersonStatusformInputDISAPersonStatus{% extends "disa_app_templates
             </div>
           </div>
 
+          <disa-id v-bind:forthis="currentItem" class="float-end"></disa-id>
+
           <!-- Main item input form -->
 
           <div id="item-form">
@@ -571,11 +573,7 @@ formInputDISAPersonStatusformInputDISAPersonStatus{% extends "disa_app_templates
                               v-text="`${referent.names[0].first} ${referent.names[0].last}`">
                         </span>
                         <em v-else>New person</em>
-                        <span class="badge rounded-pill bg-secondary text-light disa-id-badge disa-id-badge"
-                              style="float: right"
-                              title="Unique identifier for this citation"
-                              v-on:click="activateIdOptions"
-                              vv-text="displayId(referent.id)"></span>
+                        <disa-id v-bind:forthis="referent" class="float-end"></disa-id>
                       </div>
 
                       <!-- Edit area for this referent -->
