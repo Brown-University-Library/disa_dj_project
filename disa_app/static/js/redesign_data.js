@@ -86,6 +86,8 @@ async function getAdditionalReferentInfo(referents) {
 } */
 
 async function getItemData(itemId) {
+  var foo_url = `/data/records/${itemId}/`;
+  console.log( "foo_url, ", foo_url );
   if (itemId) {
     const dataURL = `/data/records/${itemId}/`,
     response = await fetch(dataURL),
