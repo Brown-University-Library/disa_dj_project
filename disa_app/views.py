@@ -701,7 +701,12 @@ def redesign_citation( request, cite_id=None ):
     if cite_id == None:
         return HttpResponseNotFound( '404 / Not Found' )
 
-    context: dict = view_edit_citation_manager.redesign_query_data( cite_id )
+    # context: dict = view_edit_citation_manager.redesign_query_data( cite_id )
+    ( scheme, host ) = ( request.scheme, request.META.get('HTTP_HOST', '127.0.0.1') )
+    assert type(scheme) == str
+    assert type(host) == str
+    context: dict = view_edit_citation_manager.redesign_query_data( cite_id, scheme, host )
+    assert type(context) == dict
     if context == None:
         return HttpResponseNotFound( '404 / Not Found' )
 
