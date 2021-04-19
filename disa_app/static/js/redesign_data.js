@@ -85,11 +85,27 @@ async function getAdditionalReferentInfo(referents) {
   const referentIDs = referents.map(r => r.id);
 } */
 
+// async function getItemData(itemId) {
+//   var foo_url = `/data/records/${itemId}/`;
+//   console.log( "foo_url, ", foo_url );
+//   if (itemId) {
+//     const dataURL = `/data/records/${itemId}/`,
+//     response = await fetch(dataURL),
+//     dataJSON = await response.json();
+//     return preprocessItemData(dataJSON);
+//   } else {
+//     return undefined
+//   }
+// }
+
 async function getItemData(itemId) {
-  var foo_url = `/data/records/${itemId}/`;
-  console.log( "foo_url, ", foo_url );
+  // var foo_url = `/data/records/${itemId}/`;
+  // console.log( "foo_url, ", foo_url );
+  console.log( "data_itemrecord_api_url_root, ", data_itemrecord_api_url_root );
+  var data_itemrecord_api_specific_url = `${data_itemrecord_api_url_root}${itemId}/`;  // var set in `redesign_citation.html`
+  console.log( "data_itemrecord_api_specific_url, ", data_itemrecord_api_specific_url );
   if (itemId) {
-    const dataURL = `/data/records/${itemId}/`,
+    const dataURL = `/data/records/${itemId}/`,  // HEREZZ -- change this
     response = await fetch(dataURL),
     dataJSON = await response.json();
     return preprocessItemData(dataJSON);
