@@ -5,6 +5,13 @@ export const LOCAL_SETTINGS = {
     AGE_BY_NUMBER_DISPLAY_CSS_CLASS: "age-as-number",
     DOC_TYPE_ELEM_ID: "document_type",
 
+    // API endpoints -- NOT BEING USED
+
+    API_ENDPOINT_URL: {
+      'new-entrant': '[not yet used]',
+      'delete-entrant': ''
+    },
+
     // Data structure for showing / hiding citation fields
 
     FIELDS_BY_DOC_TYPE: {
