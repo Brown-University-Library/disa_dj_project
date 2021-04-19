@@ -4,10 +4,12 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/redesign_citation.css' %}">
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="{% static 'js/tagify.min.js' %}" type="module"></script>
 <!-- Production version of Vue
 <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 -->
 
+<link rel="stylesheet" href="{% static 'css/tagify.css' %}"></link>
 <style>
 
 .disa-id-badge {
@@ -689,12 +691,13 @@
                               </div>
                             </div>
                             <div class="form-floating">
-                              <select class="form-select" id="formInputDISAPersonStatus" aria-label="New person's status" placeholder="Status">
-                                <!-- NEED TO MAKE THIS INTO A SUGGEST AREA
-                                  <option v-for="(statusOption, statusOptionId) in MENU_OPTIONS.formInputDISAPersonStatus"
-                                          v-bind:value="statusOptionId"
-                                          v-text="statusOption"> -->
-                              </select>
+                              <!--
+                              <input class="form-select taggedInput" id="formInputDISAPersonStatus" aria-label="New person's status"
+                                      value="yes1, yes2, yes3"
+                                      placeholder="Status">
+                                </input>-->
+
+                              <disa-tags value="One, Two, Three"></disa-tags>
                               <label for="formInputDISAPersonStatus">Status</label>
                             </div>
                             <div class="form-floating">

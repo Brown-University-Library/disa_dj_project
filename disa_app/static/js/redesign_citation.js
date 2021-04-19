@@ -1,6 +1,7 @@
 
 import {getSourceData, getItemData, getReferentData} from './redesign_data.js';
 import { DISA_ID_COMPONENT } from './redesign_id_component.js';
+import { TAG_INPUT_COMPONENT } from './redesign_tag-input_component.js';
 
 // UUID generator
 // Source: https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid/2117523#2117523
@@ -81,7 +82,13 @@ function initializeItemForm(dataAndSettings) {
     el: '#Items',
     data: dataAndSettings,
     components: {
-      'disa-id': DISA_ID_COMPONENT
+      'disa-id': DISA_ID_COMPONENT,
+      'disa-tags': TAG_INPUT_COMPONENT
+    },
+    mounted: function () {
+      Array.from(document.getElementsByClassName('taggedInput')).forEach(
+        taggedInput => new Tagify(taggedInput)
+      )
     },
     computed: {
       currentItem: function() {
