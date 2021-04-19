@@ -181,11 +181,21 @@ export const LOCAL_SETTINGS = {
         '4':'White',
         '5':'Not specified'
       },
-      formInputDISAItemType: {
-        '1': 'Type A',
-        '2': 'Type B',
-        '3': 'Type C'
-      }
+      formInputDISAItemType: {	
+        'item-type-1':'Birth',
+        'item-type-2':'Correspondence',
+        'item-type-3':'Court',
+        'item-type-4':'Death',
+        'item-type-5':'Governmental',
+        'item-type-6':'Indenture',
+        'item-type-7':'Legal',
+        'item-type-8':'Minutes',
+        'item-type-9':'Petition',
+        'item-type-10':'Purchase',
+        'item-type-11':'Other',
+        'item-type-12':'Runaway',
+        'item-type-13':'Sale',
+      }	
     }
   };
   
