@@ -94,6 +94,13 @@ urlpatterns = [
     # url( r'^$', RedirectView.as_view(pattern_name='browse_url') ),
     url( r'^$', RedirectView.as_view(pattern_name='info_url') ),
 
+
+    ## testing
+
+    url( r'^js_demo_1/$', views.js_demo_1, name='js_demo_1_url' ),
+    url( r'^js_demo_2/$', views.js_demo_2, name='js_demo_2_url' ),
+    url( r'^js_demo_3/$', views.js_demo_3, name='js_demo_3_url' ),
+
     ]
 
 

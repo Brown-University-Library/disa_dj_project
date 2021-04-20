@@ -1,8 +1,10 @@
 {% extends "disa_app_templates/redesign_base.html" %}
 {% load staticfiles %}
+
 {% block header_other %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/redesign_citation.css' %}">
+
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <script src="{% static 'js/tagify.min.js' %}" type="module"></script>
 <!-- Production version of Vue
@@ -11,29 +13,30 @@
 
 <link rel="stylesheet" href="{% static 'css/tagify.css' %}"></link>
 <style>
+    .disa-id-badge {
+      font-size: 12px;
+    }
 
-.disa-id-badge {
-  font-size: 12px;
-}
+    .disa-id-badge::before {
+      content: "ID:";
+    }
 
-.disa-id-badge::before {
-  content: "ID:";
-}
+    #save-status {
+      position: fixed;
+      left: 10px;
+      bottom: 10px;
+    }
 
-#save-status {
-  position: fixed;
-  left: 10px;
-  bottom: 10px;
-}
-
-#item-selector-modal .modal-body li {
-  cursor: pointer;
-}
-
+    #item-selector-modal .modal-body li {
+      cursor: pointer;
+    }
 </style>
 
-<script type="module" src="{% static 'js/redesign_citation.js' %}"></script>
+<script type="text/javascript">
+    var data_itemrecord_api_url_root = "{{ data_itemrecord_api_url_root }}";  // needed by `redesign_data.js`
+</script>
 
+<script type="module" src="{% static 'js/redesign_citation.js' %}"></script>
 
 {% endblock header_other %}
 
@@ -46,10 +49,10 @@
 
 {% block content %}
 
-<!-- JavaScript-savvy URL control to toggle div display between 
+<!-- JavaScript-savvy URL control to toggle div display between
      #startpanel above & #tabs_bibinfoanditems below -->
 
-<!-- Save status indicator 
+<!-- Save status indicator
 
     THIS NEEDS TO GET MOVED TO WITHIN VUE SCOPE
 
@@ -58,7 +61,7 @@
 <span id="save-status" class="badge bg-primary"
       v-text="saveStatus">
   <!--
-  <span v-if="saveStatus === 'saving-item'" 
+  <span v-if="saveStatus === 'saving-item'"
         v-text="`Saving changes to item ${currentItemId}`">ddd</span>
   <span v-else v-text="saveStatus">All changes saved</span> -->
 </span>
@@ -69,20 +72,20 @@
   <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item" role="presentation">
       <button class="nav-link active"
-              id="bib-tab" 
-              data-bs-toggle="tab" 
-              data-bs-target="#Bibliographic-information" 
-              type="button" role="tab" aria-controls="Bibliographic-information" 
+              id="bib-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#Bibliographic-information"
+              type="button" role="tab" aria-controls="Bibliographic-information"
               aria-selected="true">
         Bibliographic information
       </button>
     </li>
     <li class="nav-item" role="presentation">
       <button class="nav-link"
-              id="item-tab" 
-              data-bs-toggle="tab" 
-              data-bs-target="#Items" 
-              type="button" role="tab" aria-controls="Items" 
+              id="item-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#Items"
+              type="button" role="tab" aria-controls="Items"
               aria-selected="false">
         Items
       </button>
@@ -99,7 +102,7 @@
          role="tabpanel" aria-labelledby="bib-tab"
          id="Bibliographic-information">
 
-      <form id="citation-form" 
+      <form id="citation-form"
             v-on:submit.prevent="onSubmitForm">
         <span class="badge badge-secondary float-right disa-id-badge"
           title="Unique identifier for this citation">
@@ -112,7 +115,7 @@
           <select class="custom-select" id="document_type"
                   v-model="formData.doc.citation_type_id">
             <!-- If unselected, show this at the top -->
-            <option value="0" class="initMessage" 
+            <option value="0" class="initMessage"
                     v-if="!formData.doc.citation_type_id">
               Select a document type:
             </option>
@@ -123,7 +126,7 @@
           </select>
   </div>
 
-  <div id="citation-fields" 
+  <div id="citation-fields"
        style="display:flex; flex-direction:column">
 
     <!-- HEADERS: Priority vs Optional -->
@@ -173,12 +176,12 @@
         style="padding-right:12px;">Date</label>
       <input id="date-value" name="date-value" placeholder="Date"
              type="date"
-             v-model="formData.doc.fields.date" /> 
+             v-model="formData.doc.fields.date" />
 
       {% comment "BROKEN OUT WITH YEAR/MONTH/DAY FOR WHEN WE'RE IMPLEMENTING THE NEW DATA MODEL" %}
 
-      <label for="date-year-value">Year 
-        <input id="date-year-value" name="date-year-value" type="number" 
+      <label for="date-year-value">Year
+        <input id="date-year-value" name="date-year-value" type="number"
                 v-model="formData.doc.citation_type_fields['date-year']" />
       </label>
       <label for="date-month-value">Month
@@ -286,9 +289,9 @@
     </div>
 
     <div class="citation-field form-floating" id="publisher">
-      <input type="text" class="form-control" id="publisher-value" 
-             name="publisher-value" aria-label="Publisher" 
-             placeholder="Publisher" 
+      <input type="text" class="form-control" id="publisher-value"
+             name="publisher-value" aria-label="Publisher"
+             placeholder="Publisher"
              v-model="formData.doc.fields.publisher">
       <label for="publisher-value">Publisher</label>
     </div>
@@ -344,8 +347,8 @@
 
   <p>&nbsp;</p>
   <p>&nbsp;</p>
-    
-  <button type="submit" 
+
+  <button type="submit"
     class="btn btn-primary btn-md"
     id="citation-form-submit">
     SAVE AND CONTINUE TO ENTER ITEMS
@@ -355,7 +358,7 @@
 
     <!-- Item Tab -->
 
-    <div class="tab-pane card-body" 
+    <div class="tab-pane card-body"
          role="tabpanel" aria-labelledby="item-tab" id="Items">
 
       <!-- Change item modal -->
@@ -390,11 +393,11 @@
 
       <div class="tab-content" style="background-color: white!important;opacity:1;">
 
-        <div class="active tab-pane" role="tabpanel" aria-labelledby="New-Item" 
+        <div class="active tab-pane" role="tabpanel" aria-labelledby="New-Item"
              id="New-Item">
 
           <!-- Top control panel: title, item selector, and new item button -->
-          
+
           <div class="card bg-light card-body">
 
             <div class="row row-cols-lg-auto-DISABLED g-3 align-items-center">
@@ -406,7 +409,7 @@
                       v-text="currentItem.id"></span>
               </h1>
 
-              <!-- Change item button 
+              <!-- Change item button
                     (opens modal #item-selector-modal, defined above) -->
 
               <button type="button" class="btn btn-primary btn-sm col-6"
@@ -441,22 +444,22 @@
                   </h5>
                   <p>&nbsp;</p>
                   <div class="form-floating">
-                    <input type="number" class="form-control" 
-                           id="formInputDISAItemVolume" aria-label="Volume" 
+                    <input type="number" class="form-control"
+                           id="formInputDISAItemVolume" aria-label="Volume"
                            placeholder="Volume in source" v-model="currentItem.volume">
                     <label for="formInputDISAItemVolume">Volume</label>
                   </div>
                   <div class="form-floating">
                     <div class="input-group mb-3">
                       <span class="input-group-text">Page numbers from</span>
-                      <input type="number" 
-                              class="form-control" id="formInputDISASourcePageStart" 
-                              aria-label="starting page number" 
+                      <input type="number"
+                              class="form-control" id="formInputDISASourcePageStart"
+                              aria-label="starting page number"
                               v-model="currentItem.page_start"
                               placeholder="starting page">
                       <span class="input-group-text">to</span>
-                      <input type="number" 
-                              class="form-control" id="formInputDISASourcePageEnd" aria-label="ending page number" 
+                      <input type="number"
+                              class="form-control" id="formInputDISASourcePageEnd" aria-label="ending page number"
                               placeholder="ending page" v-model="currentItem.page_end">
                     </div>
                   </div>
@@ -464,8 +467,8 @@
                 <div class="col-md-6">
                   <h5 class="text-dark">Item content</h5>
                   <div class="form-floating">
-                    <select class="form-select" 
-                            id="formInputDISAItemType" 
+                    <select class="form-select"
+                            id="formInputDISAItemType"
                             aria-label="Event date: month"
                             v-model="currentItem.type">
                       <option v-for="(itemTypeOption, itemTypeOptionId) in MENU_OPTIONS.formInputDISAItemType"
@@ -475,9 +478,9 @@
                     <label for="formInputDISAItemType">Item type</label>
                   </div>
                   <div class="form-floating">
-                    <textarea class="form-control" 
-                              placeholder="Transcription" 
-                              id="formInputDISAItemTranscription" 
+                    <textarea class="form-control"
+                              placeholder="Transcription"
+                              id="formInputDISAItemTranscription"
                               style="height: 128px"
                               v-model="currentItem.transcription"></textarea>
                     <label for="formInputDISAItemTranscription">Transcription</label>
@@ -493,7 +496,7 @@
                     <span class="input-group-text" id="basic-addon1">@</span>
                     <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
                     -->
-                    <select class="form-select" id="formInputDISAEventDateMonth" 
+                    <select class="form-select" id="formInputDISAEventDateMonth"
                             aria-label="Event date: month" placeholder="Month">
                       <option value="0">Month unspecified</option>
                       <option value="1">January</option>
@@ -509,9 +512,9 @@
                       <option value="11">November</option>
                       <option value="12">December</option>
                     </select>
-                    <input class="form-control" id="formInputDISAEventDateDay" 
+                    <input class="form-control" id="formInputDISAEventDateDay"
                             type="number" min="0" max="31" placeholder="Day">
-                    <input class="form-control" id="formInputDISAEventDateYear" 
+                    <input class="form-control" id="formInputDISAEventDateYear"
                             type="number" min="1500" max="1900" placeholder="Year">
                   </div>
                   <div class="form-floating">
@@ -560,7 +563,7 @@
                     </button>
                   </h5>
                   <div class="col-lg-12" style="padding-right: 40px; clear: both">
-                    <div class="card" 
+                    <div class="card"
                           v-for="(referent, referentId) in currentItem.referents">
 
                       <!-- Main (clickable accordion) header for this referent -->
@@ -580,7 +583,7 @@
 
                       <!-- Edit area for this referent -->
 
-                      <div class="card-body" 
+                      <div class="card-body"
                             v-if="currentReferentId === referent.id">
                         <div class="card card-body">
 
@@ -617,7 +620,7 @@
                                 <div class="custom-control custom-switch" style="">
                                   <input type="checkbox" class="custom-control-input" id="formCustomSwitchForAdvancedNames"
                                           v-model="referent.name">
-                                  <label style="font-size: 85%;margin-top: -10px;font-weight:bold;" 
+                                  <label style="font-size: 85%;margin-top: -10px;font-weight:bold;"
                                           class="custom-control-label" for="formCustomSwitchForAdvancedNames">
                                     ADVANCED NAME OPTIONS (if the first / last name designation doesn't apply)
                                   </label>
@@ -635,21 +638,21 @@
                                 </div>
                                 <!-- NAME TRANSCRIPTION - DEFER TO V2? OR DROP?
                                 <div class="form-floating">
-                                  <input type="text" 
-                                          class="form-control" id="formInputDISAItemPersonNameTranscription" 
-                                          aria-label="Full name transcription" 
+                                  <input type="text"
+                                          class="form-control" id="formInputDISAItemPersonNameTranscription"
+                                          aria-label="Full name transcription"
                                           placeholder="The name as it's written in the document"
                                           v-model="referent.transcription">
                                   <label for="formInputDISAItemPersonNameTranscription">Full name transcription</label>
                                 </div> -->
                                 <div class="form-floating">
-                                  <input type="text" class="form-control" id="formInputDISAItemPersonFirstName" 
+                                  <input type="text" class="form-control" id="formInputDISAItemPersonFirstName"
                                           aria-label="First name" placeholder="First name"
                                           v-model="name.first">
                                   <label for="formInputDISAItemPersonFirstName">First name</label>
                                 </div>
                                 <div class="form-floating">
-                                  <input type="text" class="form-control" id="formInputDISAItemPersonLastName" 
+                                  <input type="text" class="form-control" id="formInputDISAItemPersonLastName"
                                           aria-label="Last name" placeholder="Last name"
                                           v-model="name.last">
                                   <label for="formInputDISAItemPersonLastName">Last name</label>
@@ -661,7 +664,7 @@
                         <div class="row" style="padding-top:10px;clear: both;">
                           <div class="col-md-6">
                             <div class="form-floating">
-                              <select class="form-select" id="formInputDISAPersonGender" 
+                              <select class="form-select" id="formInputDISAPersonGender"
                                       aria-label="New person's gender" placeholder="Gender"
                                       v-model="referent.gender">
                                 <option v-for="(genderOption, genderOptionId) in MENU_OPTIONS.formInputDISAPersonGender"
@@ -765,8 +768,8 @@
               </div>
             </form>
           </div>
-        </div> <!-- /.tab-pane for items --> 
-      </div> <!-- /.tab-content for items --> 
+        </div> <!-- /.tab-pane for items -->
+      </div> <!-- /.tab-content for items -->
     <!-- </div> -->
     </div>
   </div>

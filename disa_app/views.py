@@ -701,7 +701,12 @@ def redesign_citation( request, cite_id=None ):
     if cite_id == None:
         return HttpResponseNotFound( '404 / Not Found' )
 
-    context: dict = view_edit_citation_manager.redesign_query_data( cite_id )
+    # context: dict = view_edit_citation_manager.redesign_query_data( cite_id )
+    ( scheme, host ) = ( request.scheme, request.META.get('HTTP_HOST', '127.0.0.1') )
+    assert type(scheme) == str
+    assert type(host) == str
+    context: dict = view_edit_citation_manager.redesign_query_data( cite_id, scheme, host )
+    assert type(context) == dict
     if context == None:
         return HttpResponseNotFound( '404 / Not Found' )
 
@@ -712,4 +717,37 @@ def redesign_citation( request, cite_id=None ):
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
         resp = render( request, 'disa_app_templates/redesign_citation.html', context )
+    return resp
+
+
+## testing --------------
+
+
+def js_demo_1( request ):
+    """ Explores js & template vars v1. """
+    log.debug( '\n\nstarting js_demo_1()' )
+    context = {}
+    resp = render( request, 'disa_app_templates/js_demo_1.html', context )
+    return resp
+
+
+def js_demo_2( request ):
+    """ Explores js & template vars v2. """
+    log.debug( '\n\nstarting js_demo_2()' )
+    context = { 'foo': 'bar' }
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/js_demo_2.html', context )
+    return resp
+
+
+def js_demo_3( request ):
+    """ Explores js & template vars v3. """
+    log.debug( '\n\nstarting js_demo_3()' )
+    context = { 'foo2': 'bar2' }
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/js_demo_3.html', context )
     return resp
