@@ -120,6 +120,7 @@ function initializeItemForm(dataAndSettings) {
           );
         }
       },
+      // If currentReferentId changes, load new referent data
       'currentReferentId': function(referentId) {
         if (! this.currentReferent.FULL_DATA_LOADED) {
           getReferentData(referentId).then(
