@@ -173,15 +173,58 @@ def prep_user_api_info( scheme, host ) -> dict:
         'api_method': 'GET',
         'sample_payload': None
     }
-    update_user_info = {
-        'api_url': 'TODO'
+    update_user_info_SIMPLE = {
+        'api_url': '%s://%s%s' % (
+            scheme,
+            host,
+            reverse('data_referent_url', kwargs={'rfrnt_id': 'THE-REFERENT-ID'}) ),
+        'api_method': 'PUT',
+        'sample_payload': {
+            'id': 'THE-REFERENT-ID',
+            'name': {'first': '', 'id': 'name', 'last': ''},
+            'record_id': '',
+            'roles': [
+                {'id': '', 'name': ''},
+            ]
+        }
+    }
+    update_user_info_DETAILS = {
+        'api_url': '%s://%s%s' % (
+            scheme,
+            host,
+            reverse( 'data_entrants_details_url', kwargs={'rfrnt_id': 'THE-REFERENT-ID'} ) ),
+        'api_method': 'PUT',
+        'sample_payload': {
+            'names': [],
+            'age': '',
+            'sex': '',
+            'races': [],
+            'tribes': [],
+            'origins': [],
+            'statuses': [],
+            'titles': [],
+            'vocations': []
+        }
     }
     delete_user_info = {
-        'api_url': 'TODO'
+        'api_url': '%s://%s%s' % (
+            scheme,
+            host,
+            reverse('data_referent_url', kwargs={'rfrnt_id': 'THE-REFERENT-ID'}) ),
+        'api_method': 'DELETE',
+        'sample_payload': None
     }
-    user_api_info = {'create_user_info': create_user_info, 'get_user_info': get_user_info, 'update_user_info': update_user_info, 'delete_user_info': delete_user_info }
+    user_api_info = {
+        'create_user_info': create_user_info,
+        'get_user_info': get_user_info,
+        'update_user_info_SIMPLE': update_user_info_SIMPLE,
+        'update_user_info_DETAILS': update_user_info_DETAILS,
+        'delete_user_info': delete_user_info }
     log.debug( f'user_api_info, ``{pprint.pformat(user_api_info)}``' )
     return user_api_info
+
+    ## end prep_user_api_info()
+
 
 def build_ct_js_data( session ) -> dict:
     """ Builds structural data for the page's javascript.
