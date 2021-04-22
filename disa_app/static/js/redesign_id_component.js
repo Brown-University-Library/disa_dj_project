@@ -2,12 +2,11 @@
 // A DISA form ID badge
 
 const template = `
-  <span class="badge rounded-pill bg-secondary text-light"
+  <span class="badge rounded-pill bg-secondary text-light disa-id-badge"
         vv-on:click="optionsMenu()"
         data-bs-toggle="popover"
-        data-bs-content="And here's some amazing content. It's very engaging. Right?" 
-        title="yes yes yes"
-        >
+        data-bs-animation="false"
+        title="Click for sharing options">
     ID:{{ displayId(forthis.id || forthis.uuid) }}
   </span>
 `;
