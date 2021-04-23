@@ -377,7 +377,7 @@ class Common():
         """ Obtains a ReferentName object. Does not write to the db.
             Called by Updater.execute_update() and Poster.manage_post() """
         log.debug( f'data, ```{data}```' )
-        if data['id'] == 'name':
+        if data['id'] == 'name': # what's this 'id' for??
             name = models_alch.ReferentName()
             log.debug( f'name, ```{name}```' )
         else:

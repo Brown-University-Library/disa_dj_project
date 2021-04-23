@@ -79,6 +79,14 @@ class Client_Misc_Test( TestCase ):
         response = self.client.get( '/error_check/' )
         self.assertEqual( 404, response.status_code )
 
+    @override_settings(DEBUG=True)  # necessary because settings default to False, resulting in a 200/'Not yet running on production.' response.
+    def test_redesign_citation(self):
+        """ Checks '/redesign_citations/992/' -- i.e., a specific citation. """
+        response = self.client.get( '/redesign_citations/992/' )
+        log.debug( f'response.status_code, ``{response.status_code}``' )
+        log.debug( f'response.content, ``{response.content}``' )
+        self.assertEqual( 200, response.status_code )
+
     # end class Client_Misc_Test()
 
 
@@ -135,8 +143,6 @@ class ClientDocDataTest( TestCase ):
         client.force_login( usr )  # does not get past shib-decorator -- request.user.is_authenticated stays False; added host-check to shib-decorator
         response = self.client.get( '/editor/documents/99999/' )
         self.assertEqual( 404, response.status_code )
-
-
 
 
 class SearchTest( TestCase ):

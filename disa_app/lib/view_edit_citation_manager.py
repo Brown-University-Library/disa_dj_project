@@ -42,20 +42,55 @@ def query_data( cite_id: str ) -> dict:
     return data
 
 
-def redesign_query_data( cite_id: str ) -> dict:
+# def redesign_query_data( cite_id: str ) -> dict:
+#     """ Prepares structural form-data, and citation-data.
+#         Called by views.redesign_citation() """
+#     session = make_session()
+#     data = {}
+#     citation_type_data = build_ct_js_data( session )
+#     cite = session.query( models_alch.Citation ).get( cite_id )
+#     if cite:
+#         log.debug( f'cite, ``{cite}``' )
+#         log.debug( f'cite.references, ```{cite.references}```' )
+#         cite_dct = cite.dictify()
+#         log.debug( f'cite_dct, ``{pprint.pformat(cite_dct)}``' )
+#         data['ct_fields'] = citation_type_data
+#         data['ct_fields_json'] = json.dumps( citation_type_data )
+#         data['doc'] = cite_dct
+#         ## create json object
+#         cite_obj = cite_dct.copy()
+#         del cite_obj['references']
+#         cite_obj['citation_db_id'] = cite_obj.pop('id')
+#         cite_obj['citation_type_fields'] = cite_obj.pop('fields')
+#         cite_obj['citation_uuid'] = 'not-yet-implemented'
+#         data['citation_json'] = json.dumps( cite_obj )
+#         log.debug( f'data, ``{pprint.pformat(data)}``' )
+#         ## new-user-template
+#         data['new_user_template'] = prep_new_user_payload_template()
+#         # data['data_itemrecord_api_url'] = reverse( 'data_record_url' )
+#     else:
+#         data = None
+#     log.debug( f'data, ```{data}```' )
+#     return data
+
+
+def redesign_query_data( cite_id: str, scheme, host ) -> dict:
     """ Prepares structural form-data, and citation-data.
         Called by views.redesign_citation() """
+    log.debug( 'starting redesign_query_data()' )
+    assert type(cite_id) == str; assert type(scheme) == str; assert type(host) == str
     session = make_session()
     data = {}
     citation_type_data = build_ct_js_data( session )
     cite = session.query( models_alch.Citation ).get( cite_id )
+    user_api_info = prep_user_api_info( scheme, host ); assert type(user_api_info) == dict
     if cite:
         log.debug( f'cite, ``{cite}``' )
         log.debug( f'cite.references, ```{cite.references}```' )
         cite_dct = cite.dictify()
         log.debug( f'cite_dct, ``{pprint.pformat(cite_dct)}``' )
         data['ct_fields'] = citation_type_data
-        data['ct_fields_json'] = json.dumps( citation_type_data )
+        # data['ct_fields_json'] = json.dumps( citation_type_data )
         data['doc'] = cite_dct
         ## create json object
         cite_obj = cite_dct.copy()
@@ -63,10 +98,12 @@ def redesign_query_data( cite_id: str ) -> dict:
         cite_obj['citation_db_id'] = cite_obj.pop('id')
         cite_obj['citation_type_fields'] = cite_obj.pop('fields')
         cite_obj['citation_uuid'] = 'not-yet-implemented'
-        data['citation_json'] = json.dumps( cite_obj )
+        # data['citation_json'] = json.dumps( cite_obj )
         log.debug( f'data, ``{pprint.pformat(data)}``' )
         ## new-user-template
         data['new_user_template'] = prep_new_user_payload_template()
+        data['user_api_info'] = user_api_info
+        data['data_itemrecord_api_url_root'] = '%s://%s%s' % ( scheme, host, reverse('data_record_url') )
     else:
         data = None
     log.debug( f'data, ```{data}```' )
@@ -93,6 +130,7 @@ def manage_create( user_id: int ) -> dict:
 
 def prep_new_user_payload_template() -> dict:
     """ Adds new-user sample-payload to context.
+        DEPRECATED!
         Called by redesign_query_data() """
     new_user_template = {
         'post_api_url': reverse( 'data_referent_url', kwargs={'rfrnt_id': 'new'} ),
@@ -107,6 +145,86 @@ def prep_new_user_payload_template() -> dict:
         }
     }
     return new_user_template
+
+def prep_user_api_info( scheme, host ) -> dict:
+    """ Adds user-api info to context.
+        Called by redesign_query_data() """
+    assert type(scheme) == str; assert type(host) == str
+    create_user_info = {
+        'api_url': '%s://%s%s' % (
+            scheme,
+            host,
+            reverse('data_referent_url', kwargs={'rfrnt_id': 'new'}) ),
+        'api_method': 'POST',
+        'sample_payload': {
+            'id': 'new',
+            'name': {'first': '', 'id': 'name', 'last': ''},
+            'record_id': '',
+            'roles': [
+                {'id': '', 'name': ''},
+            ]
+        }
+    }
+    get_user_info = {
+        'api_url': '%s://%s%s' % (
+            scheme,
+            host,
+            reverse('data_referent_url', kwargs={'rfrnt_id': 'THE-REFERENT-ID'}) ),
+        'api_method': 'GET',
+        'sample_payload': None
+    }
+    update_user_info_SIMPLE = {
+        'api_url': '%s://%s%s' % (
+            scheme,
+            host,
+            reverse('data_referent_url', kwargs={'rfrnt_id': 'THE-REFERENT-ID'}) ),
+        'api_method': 'PUT',
+        'sample_payload': {
+            'id': 'THE-REFERENT-ID',
+            'name': {'first': '', 'id': 'name', 'last': ''},
+            'record_id': '',
+            'roles': [
+                {'id': '', 'name': ''},
+            ]
+        }
+    }
+    update_user_info_DETAILS = {
+        'api_url': '%s://%s%s' % (
+            scheme,
+            host,
+            reverse( 'data_entrants_details_url', kwargs={'rfrnt_id': 'THE-REFERENT-ID'} ) ),
+        'api_method': 'PUT',
+        'sample_payload': {
+            'names': [],
+            'age': '',
+            'sex': '',
+            'races': [],
+            'tribes': [],
+            'origins': [],
+            'statuses': [],
+            'titles': [],
+            'vocations': []
+        }
+    }
+    delete_user_info = {
+        'api_url': '%s://%s%s' % (
+            scheme,
+            host,
+            reverse('data_referent_url', kwargs={'rfrnt_id': 'THE-REFERENT-ID'}) ),
+        'api_method': 'DELETE',
+        'sample_payload': None
+    }
+    user_api_info = {
+        'create_user_info': create_user_info,
+        'get_user_info': get_user_info,
+        'update_user_info_SIMPLE': update_user_info_SIMPLE,
+        'update_user_info_DETAILS': update_user_info_DETAILS,
+        'delete_user_info': delete_user_info }
+    log.debug( f'user_api_info, ``{pprint.pformat(user_api_info)}``' )
+    return user_api_info
+
+    ## end prep_user_api_info()
+
 
 def build_ct_js_data( session ) -> dict:
     """ Builds structural data for the page's javascript.
