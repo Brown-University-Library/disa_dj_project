@@ -132,18 +132,27 @@ def prep_new_user_payload_template() -> dict:
     """ Adds new-user sample-payload to context.
         DEPRECATED!
         Called by redesign_query_data() """
+
     new_user_template = {
         'post_api_url': reverse( 'data_referent_url', kwargs={'rfrnt_id': 'new'} ),
         'sample_payload': {
+            'age': 0,
             'id': 'new',
-            'name': {'first': '(sample)John', 'id': 'name', 'last': '(sample)Doe'},
+            'names': [
+              {'id': 'name', 'first': '(sample)John', 'last': '(sample)Doe', 'name_type': 'Given'}
+            ],
+            'origins': [],
+            'races': [],
+            'sex': '',
+            'titles': [{ 'id': '', 'label': '', 'value': '' }],
+            'tribes': [],
+            'vocations': [{'id': '', 'label': '', 'value': ''}],
             'record_id': '(sample)49',
             'roles': [
-                {'id': '(sample)3', 'name': '(sample)Priest'},
-                {'id': '(sample)30', 'name': '(sample)Previous Owner'}
+                {'id': '(sample)3', 'name': '(sample)Priest'}
             ]
         }
-    }
+      }   
     return new_user_template
 
 def prep_user_api_info( scheme, host ) -> dict:
