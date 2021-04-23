@@ -131,7 +131,7 @@ function initializeItemForm(dataAndSettings) {
     },
     methods: {
       makeNewReferent: function (e) {
-        const newReferentId = uuidv4();
+        const newReferentId = 'new'; // uuidv4();
         e.preventDefault(); // Link doesn't behave like a link
         this.currentItem.referents[newReferentId] = {
           id: newReferentId,
