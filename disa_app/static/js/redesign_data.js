@@ -101,12 +101,34 @@ function preprocessReferentData(referentData) {
   return referentData;
 }
 
-async function getReferentData(referentId) {
-  if (referentId) {
+async function getReferentData(referentId, itemId) {
+  if (referentId === 'new') {
+    const dataURL = `/data/entrants/new/`,
+          fetchOptions = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              id: 'new',
+              name: {
+                first: '[none]', 
+                id: 'name', 
+                last: '[none]'
+              },
+              record_id: itemId,
+              roles: [ {'id': '3', 'name': 'Priest'}]
+            })
+          },
+          response = await fetch(dataURL, fetchOptions); // @todo need to handle 404s etc.
+          dataJSON = await response.json();
+    console.log('GGGGGGG', dataJSON);
+    // return preprocessReferentData(dataJSON.ent);
+  } else if (referentId) {
+    console.log('RRR', `/data/entrants/${referentId}/`);
     const dataURL = `/data/entrants/${referentId}/`,
-    response = await fetch(dataURL); // @todo need to handle 404s etc.
-    dataJSON = await response.json();
-
+          response = await fetch(dataURL), // @todo need to handle 404s etc.
+          dataJSON = await response.json();
     return preprocessReferentData(dataJSON.ent);
   } else {
     return undefined;

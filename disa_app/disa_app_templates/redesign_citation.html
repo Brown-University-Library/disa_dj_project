@@ -4,6 +4,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/redesign_citation.css' %}">
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js" integrity="sha512-g2PN+aYR0KupTVwea5Ppqw4bxWLLypWdd+h7E0ydT8zF+/Y2Qpk8Y1SnzVw6ZCVJPrgB/91s3VfhVhP7Y4+ucw==" crossorigin="anonymous"></script>
 <script src="{% static 'js/tagify.min.js' %}" type="module"></script>
 <script src="{% static 'js/redesign_citation.js' %}" type="module"></script>
 
@@ -18,8 +19,8 @@
   font-size: 12px;
 }
 
-.disa-id-badge::before {
-  content: "ID:";
+.disa-id-badge {
+  cursor: pointer;
 }
 
 #save-status {
@@ -399,30 +400,24 @@
 
               <!-- Main title -->
 
-              <h1 class="col-12" v-text="makeItemDisplayTitle(currentItem)">
-                <span class="badge rounded-pill bg-secondary text-light disa-id-badge"
-                      v-text="currentItem.id"></span>
-              </h1>
-
+              <disa-id v-bind:forthis="currentItem" class="float-end"></disa-id>
+              <h1 v-text="makeItemDisplayTitle(currentItem)"></h1>
+              <div class="float-end">
               <!-- Change item button 
                     (opens modal #item-selector-modal, defined above) -->
 
-              <button type="button" class="btn btn-primary btn-sm col-6"
+              <button type="button" class="btn btn-primary btn-sm"
                       data-bs-toggle="modal" data-bs-target="#item-selector-modal">
                 change item
               </button>
 
               <!-- Create new item control -->
 
-              <div class="col-6">
-                <label for="item-select">
-                  or
-                </label><br />
-                <button type="button" class="btn btn-primary btn-sm"
-                        v-on:click="makeNewItem">
-                  create a new item
-                </button>
-              </div>
+              <button type="button" class="btn btn-primary btn-sm"
+                      v-on:click="makeNewItem">
+                create a new item
+              </button>
+            </div>
             </div>
           </div>
 
