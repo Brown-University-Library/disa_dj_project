@@ -103,6 +103,7 @@ export const LOCAL_SETTINGS = {
     },
 
     // What goes in the menus? (can be controlled from server)
+    // (note: keys are same as element IDs)
 
     MENU_OPTIONS: {
       document_type: {
@@ -202,7 +203,13 @@ export const LOCAL_SETTINGS = {
         'item-type-11':'Other',
         'item-type-12':'Runaway',
         'item-type-13':'Sale',
-      }	
+      },
+      formInputDISAPersonStatus: [
+        'one',
+        'two',
+        'three',
+        'four'
+      ]	
     }
   };
   

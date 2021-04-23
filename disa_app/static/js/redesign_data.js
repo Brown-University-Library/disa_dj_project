@@ -68,7 +68,11 @@ function preprocessItemData(itemData) {
     // reference_type_name: itemData.rec.record_type.label,
     // Convert array of referents to a hash by referent ID
     referents: itemData.entrants.reduce(
-      (referentHash, referent) => { referentHash[referent.id] = referent; return referentHash },
+      (referentHash, referent) => { 
+        referentHash[referent.id] = referent; 
+        referentHash[referent.id].status = ['red', 'green', 'blue'];
+        return referentHash;
+      },
       {}
     ),
     // referents: getAdditionalReferentInfo(itemData.entrants),

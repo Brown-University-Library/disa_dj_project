@@ -1,16 +1,12 @@
 
 // @todo load tagify as module
 
-/*
-const template = `
-  <div v-once>
-    <textarea v-if="mode === 'textarea'" v-model="value"/>
-    <input v-else :value="value" v-on:change="onChange">
-  </div>
-`; */
+// https://yaireo.github.io/tagify/
+
 
 const template = `
-    <input :value="value" v-on:change="onChange"></input>
+    <input :value="value" v-on:change="onChange" class="disa-tags-input"
+           :data-whitelist="suggestions"></input>
 `;
 
 const componentDefinition = {
@@ -20,17 +16,22 @@ const componentDefinition = {
     mode: String,
     settings: Object,
     value: [String, Array],
-    onChange: Function
+    suggestions: [String, Array]
   },
   watch: {
     value(newVal, oldVal) {
-      this.tagify.loadOriginalValues(newVal)
+      this.tagify.loadOriginalValues(newVal);
+      console.log('yessss', this.$el);
     },
   },
   mounted() {
-    this.tagify = new Tagify(this.$el, this.settings)
+    this.tagify = new Tagify(this.$el, this.settings);
+  },
+  methods: {
+    onChange: function(x) { 
+      console.log('AAAA', x);
+    }
   }
 };
 
 export { componentDefinition as TAG_INPUT_COMPONENT }
-
