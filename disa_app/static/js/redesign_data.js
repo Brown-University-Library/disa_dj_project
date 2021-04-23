@@ -99,13 +99,9 @@ async function getAdditionalReferentInfo(referents) {
 // }
 
 async function getItemData(itemId) {
-  // var foo_url = `/data/records/${itemId}/`;
-  // console.log( "foo_url, ", foo_url );
-  // console.log( "data_itemrecord_api_url_root, ", data_itemrecord_api_url_root );
-  // var test_data_itemrecord_api_specific_url = `${data_itemrecord_api_url_root}${itemId}/`;
-  // console.log( "test_data_itemrecord_api_specific_url, ", test_data_itemrecord_api_specific_url );
   if (itemId) {
-    const dataURL = `${data_itemrecord_api_url_root}${itemId}/`,  // `data_itemrecord_api_url_root` variable set in `redesign_citation.html`
+    // data_itemrecord_api_url_root variable set in redesign_citation.html
+    const dataURL = `${data_itemrecord_api_url_root}${itemId}/`,
     response = await fetch(dataURL),
     dataJSON = await response.json();
     return preprocessItemData(dataJSON);
