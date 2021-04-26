@@ -23,12 +23,9 @@ class Citation_Test( TestCase ):
 
     def setUp(self):
         self.random_new_citation_text = secrets.choice( ['aaa', 'bbb', 'ccc', 'ddd'] )  # so we can tell that stuff is really getting saved to the db
-        self.post_resp_dct = None  # updated by create_new_citation()
-        self.post_resp_id = None  # updated by create_new_citation()
-        # self.delete_resp_dct = None
-        # log.debug( f'initial self.new_uuid, ``{self.new_uuid}``' )
-        # log.debug( f'self.post_resp_dct, ``{self.post_resp_dct}``' )
-        # log.debug( f'self.delete_resp_dct, ``{self.delete_resp_dct}``' )
+        self.post_resp_dct = None       # updated by create_new_citation()
+        self.post_resp_id = None        # updated by create_new_citation()
+        self.delete_resp_dct = None     # updated by delete_new_citation()
 
     ## HELPERS ====================
 
@@ -76,13 +73,13 @@ class Citation_Test( TestCase ):
         self.post_resp_id = parts[-2]
         self.assertEqual( self.post_resp_id.isnumeric(), True )
 
-    # def delete_new_citation(self):
-    #     """ Deletes group used by tests."""
-    #     delete_url = reverse( 'data_group_url', kwargs={'incoming_uuid': self.new_uuid} )
-    #     response = self.client.delete( delete_url )
-    #     self.assertEqual( 200, response.status_code )
-    #     self.delete_resp_dct = json.loads( response.content )
-    #     log.debug( f'delete_resp_dct, ``{pprint.pformat(self.delete_resp_dct)}``' )
+    def delete_new_citation(self):
+        """ Deletes citation used by tests."""
+        delete_url = reverse( 'data_documents_url', kwargs={'doc_id': self.post_resp_id} )
+        response = self.client.delete( delete_url )
+        self.assertEqual( 200, response.status_code )
+        self.delete_resp_dct = json.loads( response.content )
+        log.debug( f'delete_resp_dct, ``{pprint.pformat(self.delete_resp_dct)}``' )
 
     ## GET LIST ===================
 
@@ -170,7 +167,7 @@ class Citation_Test( TestCase ):
         ## tests
         self.assertEqual( ['redirect'], list(self.post_resp_dct.keys()) )
         ## cleanup
-        # self.delete_new_group()
+        self.delete_new_citation()
 
     ## UPDATE ====================
 
