@@ -162,24 +162,32 @@ def manage_put( cite_id: str, user_id: int, payload: bytes ):
 def manage_post( user_id, payload ):
     """ Updates document.
         Called by views.data_documents() on POST """
+    log.debug( 'starting manage_post()' )
+    assert type(user_id) == int; assert type(payload) == bytes
+    log.debug( f'user_id, ``{user_id}``' )
+    log.debug( f'payload, ``{payload}``' )
+
     session = make_session()
     data: dict = json.loads( payload )
-    try:  # temp; remove after debugging
-        unspec = session.query( models_alch.CitationType ).filter_by( name='Document' ).first()
+    log.debug( f'data, ``{pprint.pformat(data)}``' )
 
+    try:  # temp; remove after debugging
+        log.debug( f'initial data["citation_type_id"], ``{data["citation_type_id"]}``' )
+
+        unspec = session.query( models_alch.CitationType ).filter_by( name='Document' ).first()
         data['citation_type_id'] = data['citation_type_id'] or unspec.id
 
-        # cite = models.Citation(citation_type_id=data['citation_type_id'],
-        #     comments=data['comments'], acknowledgements=data['acknowledgements'])
+        log.debug( f'unspec.id, ``{unspec.id}``')
+        log.debug( f'final data["citation_type_id"], ``{data["citation_type_id"]}``' )
 
         cite = models_alch.Citation(
             citation_type_id=data['citation_type_id'],
             comments=data['comments'],
             acknowledgements=data['acknowledgements']
             )
-
-        session.add(cite)
+        session.add(cite)  # this creates the citation in mysql
         session.commit()
+        log.debug( 'citation-obj added to mysql' )
 
         field_order_map = { f.zotero_field.name: f.rank
             for f in cite.citation_type.zotero_type.template_fields }
@@ -201,20 +209,23 @@ def manage_post( user_id, payload ):
 
             citation_display.append( (field_order_map[zfield.name], val) )
             session.add(cfield)
+
+        log.debug( f'initial citation_display, ``{citation_display}``' )
         if len(citation_display) == 0:
             now = datetime.datetime.utcnow()
             cite.display = 'Document :: {}'.format(now.strftime('%Y %B %d'))
         else:
             vals = [ v[1] for v in sorted(citation_display) ]
             cite.display = ' '.join(vals)
+        log.debug( f'final citation_display, ``{citation_display}``' )
 
-        session.add(cite)
+        session.add(cite)  # I assume this simply updates the existing citation in mysql
         session.commit()
 
         context = { 'redirect': reverse( 'edit_citation_url', kwargs={'cite_id': cite.id} ) }
 
     except:
-        log.exception( 'problem on api POST; traceback follows...' )
+        log.exception( 'problem on api POST; traceback follows; processing will continue.' )
         context = {}
 
     log.debug( f'context, ```{context}```' )
