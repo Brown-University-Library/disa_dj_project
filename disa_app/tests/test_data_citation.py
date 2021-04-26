@@ -21,32 +21,60 @@ TestCase.maxDiff = 1000
 class Citation_Test( TestCase ):
     """ Checks reference-group api urls. """
 
-    # def setUp(self):
-    #     self.new_uuid = None
-    #     self.post_resp_dct = None
-    #     self.delete_resp_dct = None
-    #     log.debug( f'initial self.new_uuid, ``{self.new_uuid}``' )
-    #     log.debug( f'self.post_resp_dct, ``{self.post_resp_dct}``' )
-    #     log.debug( f'self.delete_resp_dct, ``{self.delete_resp_dct}``' )
+    def setUp(self):
+        self.random_new_citation_text = secrets.choice( ['aaa', 'bbb', 'ccc', 'ddd'] )  # so we can tell that stuff is really getting saved to the db
+        self.post_resp_dct = None  # updated by create_new_citation()
+        self.post_resp_id = None  # updated by create_new_citation()
+        # self.delete_resp_dct = None
+        # log.debug( f'initial self.new_uuid, ``{self.new_uuid}``' )
+        # log.debug( f'self.post_resp_dct, ``{self.post_resp_dct}``' )
+        # log.debug( f'self.delete_resp_dct, ``{self.delete_resp_dct}``' )
 
     ## HELPERS ====================
 
-    # def create_new_citation(self):
-    #     """ Creates a group for tests. """
-    #     post_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'new'} )
-    #     log.debug( f'post-url, ``{post_url}``' )
-    #     payload = {
-    #         'count': 7,
-    #         'count_estimated': True,
-    #         'description': 'the description',
-    #         'reference_id': 49
-    #     }
-    #     jsn = json.dumps( payload )
-    #     response = self.client.post( post_url, data=jsn, content_type='application/json' )
-    #     self.assertEqual( 200, response.status_code )
-    #     self.post_resp_dct = json.loads( response.content )
-    #     self.new_uuid = self.post_resp_dct['response']['group_data']['uuid']
-    #     log.debug( f'self.new_uuid, ``{self.new_uuid}``' )
+    def create_new_citation(self):
+        """ Creates a citation for tests. """
+        post_url = reverse( 'data_documents_url', kwargs={'doc_id': None} )
+        log.debug( f'post-url, ``{post_url}``' )
+        payload = {
+            'acknowledgements': f'acks--{self.random_new_citation_text}',
+            'citation_type_id': 20,  # means the fields below will be 'Book' fields
+            'comments': f'comments--{self.random_new_citation_text}',
+            'fields': {
+                'ISBN': '',
+                'abstractNote': '',
+                'accessDate': '',
+                'archive': '',
+                'archiveLocation': '',
+                'author': '',
+                'callNumber': '',
+                'date': '',
+                'edition': '',
+                'extra': '',
+                'language': '',
+                'libraryCatalog': '',
+                'numPages': '',
+                'numberOfVolumes': '',
+                'pages': '',
+                'place': '',
+                'publisher': '',
+                'rights': '',
+                'series': '',
+                'seriesNumber': '',
+                'shortTitle': '',
+                'title': f'title--{self.random_new_citation_text}',
+                'url': '',
+                'volume': ''}
+            }
+        jsn = json.dumps( payload )
+        response = self.client.post( post_url, data=jsn, content_type='application/json' )
+        self.assertEqual( 200, response.status_code )
+        self.post_resp_dct = json.loads( response.content )
+        log.debug( f'create_new_citation response dict, ``{self.post_resp_dct}``' )
+        redirect_value = self.post_resp_dct['redirect']
+        parts = redirect_value.split( '/' )
+        self.post_resp_id = parts[-2]
+        self.assertEqual( self.post_resp_id.isnumeric(), True )
 
     # def delete_new_citation(self):
     #     """ Deletes group used by tests."""
@@ -135,22 +163,14 @@ class Citation_Test( TestCase ):
     #     self.assertEqual( 400, response.status_code )
     #     self.assertTrue( b'Bad Request' in response.content )
 
-    # def test_post_good(self):
-    #     """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/good params. """
-    #     ## create group
-    #     self.create_new_group()
-    #     ## tests
-    #     self.assertEqual( ['request', 'response'], sorted(self.post_resp_dct.keys()) )
-    #     req_keys = sorted( self.post_resp_dct['request'].keys() )
-    #     self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-    #     req_payload_keys = sorted( self.post_resp_dct['request']['payload'].keys() )
-    #     self.assertEqual( ['count', 'count_estimated', 'description', 'reference_id'], req_payload_keys )
-    #     resp_keys = sorted( self.post_resp_dct['response'].keys() )
-    #     self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
-    #     resp_group_data_keys = sorted( self.post_resp_dct['response']['group_data'].keys() )
-    #     self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
-    #     ## cleanup
-    #     self.delete_new_group()
+    def test_post_good(self):
+        """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/good params. """
+        ## create group
+        self.create_new_citation()
+        ## tests
+        self.assertEqual( ['redirect'], list(self.post_resp_dct.keys()) )
+        ## cleanup
+        # self.delete_new_group()
 
     ## UPDATE ====================
 
