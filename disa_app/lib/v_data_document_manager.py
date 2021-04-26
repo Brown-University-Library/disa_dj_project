@@ -167,11 +167,12 @@ def manage_post( user_id, payload ):
     log.debug( f'user_id, ``{user_id}``' )
     log.debug( f'payload, ``{payload}``' )
 
-    session = make_session()
-    data: dict = json.loads( payload )
-    log.debug( f'data, ``{pprint.pformat(data)}``' )
-
     try:  # temp; remove after debugging
+
+        session = make_session()
+        data: dict = json.loads( payload )
+        log.debug( f'data, ``{pprint.pformat(data)}``' )
+
         log.debug( f'initial data["citation_type_id"], ``{data["citation_type_id"]}``' )
 
         unspec = session.query( models_alch.CitationType ).filter_by( name='Document' ).first()
@@ -226,7 +227,7 @@ def manage_post( user_id, payload ):
 
     except:
         log.exception( 'problem on api POST; traceback follows; processing will continue.' )
-        context = {}
+        context = 'error'
 
     log.debug( f'context, ```{context}```' )
     return context
