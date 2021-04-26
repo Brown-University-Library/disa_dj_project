@@ -31,7 +31,8 @@ class Citation_Test( TestCase ):
 
     def create_new_citation(self):
         """ Creates a citation for tests. """
-        post_url = reverse( 'data_documents_url', kwargs={'doc_id': None} )
+        # post_url = reverse( 'data_documents_url', kwargs={'doc_id': None} )
+        post_url = reverse( 'data_documents_url' )
         log.debug( f'post-url, ``{post_url}``' )
         payload = {
             'acknowledgements': f'acks--{self.random_new_citation_text}',
@@ -65,6 +66,7 @@ class Citation_Test( TestCase ):
             }
         jsn = json.dumps( payload )
         response = self.client.post( post_url, data=jsn, content_type='application/json' )
+        log.debug( f'create_new_citation response (bytes), ``{response.content}``' )
         self.assertEqual( 200, response.status_code )
         self.post_resp_dct = json.loads( response.content )
         log.debug( f'create_new_citation response dict, ``{self.post_resp_dct}``' )
@@ -149,16 +151,17 @@ class Citation_Test( TestCase ):
 
     ## CREATE ====================
 
-    # def test_post_bad(self):
-    #     """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/bad params. """
-    #     post_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'new'} )
-    #     log.debug( f'post-url, ``{post_url}``' )
-    #     payload = {
-    #         'foo': 'bar'
-    #     }
-    #     response = self.client.post( post_url, payload )
-    #     self.assertEqual( 400, response.status_code )
-    #     self.assertTrue( b'Bad Request' in response.content )
+    def test_post_bad(self):
+        """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/bad params. """
+        post_url = reverse( 'data_documents_url' )
+        log.debug( f'post-url, ``{post_url}``' )
+        payload = {
+            'foo': 'bar'
+        }
+        response = self.client.post( post_url, payload )
+        log.debug( f'create_new_citation response (bytes), ``{response.content}``' )
+        self.assertEqual( 400, response.status_code )
+        self.assertEqual( b'400 / Bad Request', response.content )
 
     def test_post_good(self):
         """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/good params. """
