@@ -116,7 +116,7 @@ class Citation_Test( TestCase ):
     #     ## cleanup
     #     self.delete_new_group()
 
-    ## GET LIST ===================
+    ## GET SINGLE ===================
 
     # def test_get_single_bad(self):
     #     """ Checks bad GET of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
@@ -152,7 +152,7 @@ class Citation_Test( TestCase ):
     ## CREATE ====================
 
     def test_post_bad(self):
-        """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/bad params. """
+        """ Checks `http://127.0.0.1:8000/data/documents/ POST w/bad params. """
         post_url = reverse( 'data_documents_url' )
         log.debug( f'post-url, ``{post_url}``' )
         payload = {
@@ -164,7 +164,7 @@ class Citation_Test( TestCase ):
         self.assertEqual( b'400 / Bad Request', response.content )
 
     def test_post_good(self):
-        """ Checks `http://127.0.0.1:8000/data/reference_group/abcd/ w/good params. """
+        """ Checks `http://127.0.0.1:8000/data/documents/ POST w/good params. """
         ## create group
         self.create_new_citation()
         ## tests
