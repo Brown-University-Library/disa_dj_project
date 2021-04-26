@@ -85,36 +85,7 @@ class Citation_Test( TestCase ):
 
     ## GET LIST ===================
 
-    # def test_get_list_bad(self):
-    #     """ Checks bad GET of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'foo'} )
-    #     log.debug( f'get_url, ``{get_url}``' )
-    #     response = self.client.get( get_url )
-    #     self.assertEqual( 404, response.status_code )
-    #     self.assertTrue( b'Not Found' in response.content )
-
-    # def test_get_list_good(self):
-    #     """ Checks good GET of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     ## create group
-    #     self.create_new_group()
-    #     target_uuid = self.new_uuid
-    #     log.debug( f'target_uuid, ``{target_uuid}``' )
-    #     ## GET
-    #     get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': target_uuid} )
-    #     log.debug( f'get_url, ``{get_url}``' )
-    #     response = self.client.get( get_url )
-    #     ## tests
-    #     self.assertEqual( 200, response.status_code )
-    #     resp_dct = json.loads( response.content )
-    #     self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
-    #     req_keys = sorted( resp_dct['request'].keys() )
-    #     self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-    #     resp_keys = sorted( resp_dct['response'].keys() )
-    #     self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
-    #     resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
-    #     self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
-    #     ## cleanup
-    #     self.delete_new_group()
+    """ not applicable -- there is no api for getting a list of citations """
 
     ## GET SINGLE ===================
 
