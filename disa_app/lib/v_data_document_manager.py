@@ -37,6 +37,7 @@ def make_session() -> sqlalchemy.orm.session.Session:
 def manage_get( doc_id: str, user_id: int ) -> dict:
     """ Queries and massages data for given doc_id.
         Called by views.data_documents() on GET """
+    assert type(doc_id) == str; assert type(user_id) == int
     session = make_session()
     data = { 'doc': {} }
     included: list = CITATION_TYPES
@@ -48,6 +49,7 @@ def manage_get( doc_id: str, user_id: int ) -> dict:
     # if doc_id == None:
     #     log.debug( f'returning data for docID equals None, ```{pprint.pformat(data)}```' )
     #     return jsonify(data)
+
     if doc_id == 'copy':
 
         last_edit = edit = session.query( models_alch.ReferenceEdit ).filter_by( user_id=user_id ).order_by( models_alch.ReferenceEdit.timestamp.desc() ).first()
@@ -60,6 +62,9 @@ def manage_get( doc_id: str, user_id: int ) -> dict:
         log.debug( f'doc, ```{doc}```' )
     else:
         doc = session.query( models_alch.Citation ).get( doc_id )
+        if doc == None:
+            log.debug( 'citation query not found' )
+            return 'not_found'
         data['doc']['id'] = doc.id
     data['doc']['citation'] = doc.display
     # data['doc']['zotero_id'] = doc.zotero_id

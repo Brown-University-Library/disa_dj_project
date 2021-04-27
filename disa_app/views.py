@@ -543,6 +543,8 @@ def data_documents( request, doc_id=None ):
         resp = HttpResponse( msg )
     if context == 'error':
         resp = HttpResponseBadRequest( '400 / Bad Request' )
+    elif context == 'not_found':
+        resp = HttpResponseNotFound( '404 / Not Found' )
     else:
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
