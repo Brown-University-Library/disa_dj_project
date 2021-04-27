@@ -35,6 +35,10 @@
     cursor: pointer;
   }
 
+  .disa-tags-input {
+    display: inline-block;
+  }
+
 </style>
 
 <script type="text/javascript">
@@ -730,13 +734,11 @@
                               <input type="text" class="form-control" id="formInputDISAPersonRaceTerms" aria-label="Exact racial terms used" placeholder="Exact racial terms used">
                               <label for="formInputDISAPersonRaceTerms">Exact racial terms used</label>
                             </div>
-                            <div class="form-floating">
-                              <select class="form-select" id="formInputDISAPersonTribe" aria-label="This person's tribe">
-                                  <option v-for="(tribeOption, tribeOptionId) in MENU_OPTIONS.formInputDISAPersonTribe"
-                                          v-bind:value="tribeOptionId"
-                                          v-text="tribeOption">
-                              </select>
+                            <div class="form-floating-x">
                               <label for="formInputDISAPersonTribe">Tribe</label>
+                              <disa-tags v-model="currentReferentTribesForTagify"
+                                         v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonTribe"
+                                         id="formInputDISAPersonTribe"></disa-tags>
                             </div>
                             <div class="form-floating">
                               <input type="text" class="form-control" id="formInputDISAPersonTribeTerms" aria-label="Exact identity/geographical terms used" placeholder="Exact identity/geographical terms used">

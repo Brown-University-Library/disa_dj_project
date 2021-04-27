@@ -91,11 +91,37 @@ function initializeItemForm(dataAndSettings) {
       )
     },
     computed: {
+
       currentItem: function() {
         return this.formData.doc.references[this.currentItemId]
       },
       currentReferent: function () {
         return this.currentItem.referents[this.currentReferentId]
+      },
+      currentReferentTribesForTagify: {
+        get: function() {
+          return JSON.stringify(this.currentReferent.tribes.map(
+            tribe => {
+              return {
+                value: tribe.value,
+                dbID: tribe.id
+              }
+            }
+          ));
+        },
+        set: function(newValue) {
+          console.log('CHANGING TRIBES TO', newValue);
+          this.currentReferent.tribes = JSON.parse(newValue).map(
+            tribeTag => { 
+              return { 
+                label: tribeTag.value, 
+                value: tribeTag.value, 
+                id: tribeTag.dbID 
+              } 
+            }
+          );
+        }
+      },
       }
     },
     delimiters: ['v{','}v'], // So as not to clash with Django templates
@@ -113,6 +139,7 @@ function initializeItemForm(dataAndSettings) {
       },
 
       // If currentItemId changes, load new item data
+
       'currentItemId': function(itemId) {
         if (! this.currentItem.FULL_DATA_LOADED) { // <-- CHECK THIS
           getItemData(itemId).then(
@@ -120,7 +147,9 @@ function initializeItemForm(dataAndSettings) {
           );
         }
       },
+
       // If currentReferentId changes, load new referent data
+
       'currentReferentId': function(referentId) {
         if (! this.currentReferent.FULL_DATA_LOADED) {
           getReferentData(referentId).then(
