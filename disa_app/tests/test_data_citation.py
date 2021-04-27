@@ -89,36 +89,48 @@ class Citation_Test( TestCase ):
 
     ## GET SINGLE ===================
 
-    # def test_get_single_bad(self):
-    #     """ Checks bad GET of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'foo'} )
-    #     log.debug( f'get_url, ``{get_url}``' )
-    #     response = self.client.get( get_url )
-    #     self.assertEqual( 404, response.status_code )
-    #     self.assertTrue( b'Not Found' in response.content )
+    def test_get_single_bad(self):
+        """ Checks bad GET of `http://127.0.0.1:8000/data/documents/foo`. """
+        get_url = reverse( 'data_documents_url', kwargs={'doc_id': 'foo'} )
+        log.debug( f'get_url, ``{get_url}``' )
+        response = self.client.get( get_url )
+        self.assertEqual( 404, response.status_code )
+        self.assertEqual( b'404 / Not Found', response.content )
 
-    # def test_get_single_good(self):
-    #     """ Checks good GET of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     ## create group
-    #     self.create_new_group()
-    #     target_uuid = self.new_uuid
-    #     log.debug( f'target_uuid, ``{target_uuid}``' )
-    #     ## GET
-    #     get_url = reverse( 'data_group_url', kwargs={'incoming_uuid': target_uuid} )
-    #     log.debug( f'get_url, ``{get_url}``' )
-    #     response = self.client.get( get_url )
-    #     ## tests
-    #     self.assertEqual( 200, response.status_code )
-    #     resp_dct = json.loads( response.content )
-    #     self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
-    #     req_keys = sorted( resp_dct['request'].keys() )
-    #     self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-    #     resp_keys = sorted( resp_dct['response'].keys() )
-    #     self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
-    #     resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
-    #     self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
-    #     ## cleanup
-    #     self.delete_new_group()
+    def test_get_single_good(self):
+        """ Checks good GET of `http://127.0.0.1:8000/data/documents/abcd/`. """
+        ## create group
+        self.create_new_citation()
+        ## GET
+        get_url = reverse( 'data_documents_url', kwargs={'doc_id': self.post_resp_id} )
+        log.debug( f'get_url, ``{get_url}``' )
+        response = self.client.get( get_url )
+        log.debug( f'response.content, ``{response.content}``' )
+        ## tests
+        self.assertEqual( 200, response.status_code )
+        resp_dct = json.loads( response.content )
+        self.assertEqual(
+            ['doc', 'doc_types'],
+            sorted(resp_dct.keys()) )
+        doc_keys = sorted( resp_dct['doc'].keys() )
+        self.assertEqual(
+            ['acknowledgements', 'citation', 'citation_type_id', 'comments', 'fields', 'id'],
+            doc_keys )
+        self.assertEqual(
+            f'acks--{self.random_new_citation_text}', resp_dct['doc']['acknowledgements']
+            )
+        self.assertEqual(
+            f'title--{self.random_new_citation_text}', resp_dct['doc']['citation']
+            )  # note, the display will be some combination of the `fields` data sent
+        self.assertEqual(
+            f'comments--{self.random_new_citation_text}', resp_dct['doc']['comments']
+            )
+        self.assertEqual(
+            {'title': f'title--{self.random_new_citation_text}'},
+            resp_dct['doc']['fields']
+            )
+        ## cleanup
+        self.delete_new_citation()
 
     ## CREATE ====================
 
