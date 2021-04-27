@@ -122,6 +122,19 @@ function initializeItemForm(dataAndSettings) {
           );
         }
       },
+      currentReferentRaceID: {
+        get: function () {
+          return (Array.isArray(this.currentReferent.races) && this.currentReferent.races.length)
+            ? this.currentReferent.races[0].id 
+            : undefined;
+        },
+        set: function (raceID) {
+          console.log('ABCDEF', this.currentReferent.races);
+          if (! Array.isArray(this.currentReferent.races)) {
+            this.currentReferent.races = [];
+          }
+          this.currentReferent.races[0] = { id: raceID };
+        }
       }
     },
     delimiters: ['v{','}v'], // So as not to clash with Django templates

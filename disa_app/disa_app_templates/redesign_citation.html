@@ -723,8 +723,10 @@
                           </div>
                           <div class="col-md-6">
                             <div class="form-floating">
-                              <select class="form-select" id="formInputDISAPersonRace" aria-label="This person's race designation">
-                                  <option v-for="(raceOption, raceOptionId) in MENU_OPTIONS.formInputDISAPersonStatus"
+                              <select class="form-select" id="formInputDISAPersonRace" 
+                                      aria-label="This person's race designation"
+                                      v-model="currentReferentRaceID">
+                                  <option v-for="(raceOption, raceOptionId) in MENU_OPTIONS.formInputDISAPersonRace"
                                           v-bind:value="raceOptionId"
                                           v-text="raceOption"></option>
                               </select>
