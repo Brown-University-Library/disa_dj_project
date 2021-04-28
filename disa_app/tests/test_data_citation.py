@@ -23,9 +23,11 @@ class Citation_Test( TestCase ):
 
     def setUp(self):
         self.random_new_citation_text = secrets.choice( ['aaa', 'bbb', 'ccc', 'ddd'] )  # so we can tell that stuff is really getting saved to the db
-        self.post_resp_dct = None       # updated by create_new_citation()
-        self.post_resp_id = None        # updated by create_new_citation()
-        self.delete_resp_dct = None     # updated by delete_new_citation()
+        self.random_put_citation_text = secrets.choice( ['aaa', 'bbb', 'ccc', 'ddd'] )
+        self.post_resp_dct = None           # updated by create_new_citation()
+        self.post_resp_id = None            # updated by create_new_citation()
+        self.delete_resp_statuscode = None  # updated by delete_new_citation()
+        self.delete_resp_dct = None         # updated by delete_new_citation()
 
     ## HELPERS ====================
 
@@ -79,7 +81,7 @@ class Citation_Test( TestCase ):
         """ Deletes citation used by tests."""
         delete_url = reverse( 'data_documents_url', kwargs={'doc_id': self.post_resp_id} )
         response = self.client.delete( delete_url )
-        self.assertEqual( 200, response.status_code )
+        self.delete_resp_statuscode = response.status_code
         self.delete_resp_dct = json.loads( response.content )
         log.debug( f'delete_resp_dct, ``{pprint.pformat(self.delete_resp_dct)}``' )
 
@@ -148,7 +150,7 @@ class Citation_Test( TestCase ):
 
     def test_post_good(self):
         """ Checks `http://127.0.0.1:8000/data/documents/ POST w/good params. """
-        ## create group
+        ## create citation
         self.create_new_citation()
         ## tests
         self.assertEqual( ['redirect'], list(self.post_resp_dct.keys()) )
@@ -164,40 +166,76 @@ class Citation_Test( TestCase ):
     #     self.assertEqual( 400, put_response.status_code )
     #     self.assertTrue( b'Bad Request' in put_response.content )
 
-    # def test_put_good(self):
-    #     """ Checks good PUT of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     ## create group
-    #     self.create_new_group()
-    #     ## PUT
-    #     put_url = reverse( 'data_group_url', kwargs={'incoming_uuid': self.new_uuid} )
-    #     log.debug( f'put_url-url, ``{put_url}``' )
-    #     random_count = secrets.choice( [2, 4, 6, 8, 10] )
-    #     random_description = secrets.choice( ['descA', 'descB', 'descC', 'descD', 'descE'] )
-    #     put_payload = {
-    #         'count': random_count,
-    #         'count_estimated': False,
-    #         'description': random_description,
-    #         'reference_id': 49
-    #     }
-    #     jsn = json.dumps( put_payload )
-    #     put_response = self.client.put( put_url, data=jsn, content_type='application/json' )
-    #     put_resp_dct = json.loads( put_response.content )
-    #     ## tests
-    #     self.assertEqual( 200, put_response.status_code )
-    #     resp_dct = json.loads( put_response.content )
-    #     self.assertEqual( ['request', 'response'], sorted(resp_dct.keys()) )
-    #     req_keys = sorted( resp_dct['request'].keys() )
-    #     self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-    #     req_payload_keys = sorted( resp_dct['request']['payload'].keys() )
-    #     self.assertEqual( ['count', 'count_estimated', 'description', 'reference_id'], req_payload_keys )
-    #     resp_keys = sorted( resp_dct['response'].keys() )
-    #     self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
-    #     resp_group_data_keys = sorted( resp_dct['response']['group_data'].keys() )
-    #     self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
-    #     self.assertEqual( random_count, resp_dct['response']['group_data']['count'] )
-    #     self.assertEqual( random_description, resp_dct['response']['group_data']['description'] )
-    #     ## cleanup
-    #     self.delete_new_group()
+    def test_put_good(self):
+        """ Checks good PUT to `http://127.0.0.1:8000/data/documents/abcd/`. """
+        ## create citation
+        self.create_new_citation()
+        ## PUT
+        put_url = reverse( 'data_documents_url', kwargs={'doc_id': self.post_resp_id} )
+        log.debug( f'put_url-url, ``{put_url}``' )
+        put_payload = {  # same as create, except for `shortTitle`, which was blank
+            'acknowledgements': f'acks--{self.random_new_citation_text}',
+            'citation_type_id': 20,  # means the fields below will be 'Book' fields
+            'comments': f'comments--{self.random_new_citation_text}',
+            'fields': {
+                'ISBN': '',
+                'abstractNote': '',
+                'accessDate': '',
+                'archive': '',
+                'archiveLocation': '',
+                'author': '',
+                'callNumber': '',
+                'date': '',
+                'edition': '',
+                'extra': '',
+                'language': '',
+                'libraryCatalog': '',
+                'numPages': '',
+                'numberOfVolumes': '',
+                'pages': '',
+                'place': '',
+                'publisher': '',
+                'rights': '',
+                'series': '',
+                'seriesNumber': '',
+                'shortTitle': f'shortTitle--{self.random_put_citation_text}',  # <-- this is the only change
+                'title': f'title--{self.random_new_citation_text}',
+                'url': '',
+                'volume': ''}
+            }
+        jsn = json.dumps( put_payload )
+        put_response = self.client.put( put_url, data=jsn, content_type='application/json' )
+        put_resp_dct = json.loads( put_response.content )
+        log.debug( f'put_resp_dct, ``{pprint.pformat(put_resp_dct)}``' )
+        ## tests
+        ''' Note, they're similar the 'get' tests, with two differences:
+            1) no `fields` are returned in the PUT response;
+            2) the 'citation' (title) check: it now incorporates (additionally) the _updated_ `shortTitle`
+        '''
+        self.assertEqual( 200, put_response.status_code )
+        self.assertEqual(
+            ['doc', 'doc_types'],
+            sorted(put_resp_dct.keys()) )
+        doc_keys = sorted( put_resp_dct['doc'].keys() )
+        log.debug( f'doc_keys, ``{doc_keys}``' )
+        self.assertEqual( # same as `create` test
+            f'acks--{self.random_new_citation_text}',
+            put_resp_dct['doc']['acknowledgements']
+            )
+        self.assertEqual( # same as `create` test
+            f'comments--{self.random_new_citation_text}',
+            put_resp_dct['doc']['comments']
+            )
+        self.assertEqual(
+            ['acknowledgements', 'citation', 'citation_type_id', 'comments', 'id'],  # no `fields`, as in the `create` response-dct
+            doc_keys
+            )
+        self.assertEqual(
+            'title--%s, shortTitle--%s' % ( self.random_new_citation_text, self.random_put_citation_text ),
+            put_resp_dct['doc']['citation']
+            )  # note, the display _was_ just the contents of fields['title'], but is now the contents of that, plus fields['shortTitle']
+        ## cleanup
+        self.delete_new_citation()
 
     ## DELETE ====================
 
@@ -208,20 +246,19 @@ class Citation_Test( TestCase ):
     #     self.assertEqual( 404, delete_response.status_code )
     #     self.assertTrue( b'Not Found' in delete_response.content )
 
-    # def test_delete_good(self):
-    #     """ Checks good DELETE of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     ## create group
-    #     self.create_new_group()
-    #     ## DELETE
-    #     self.delete_new_group()
-    #     ## tests
-    #     self.assertEqual( ['request', 'response'], sorted(self.delete_resp_dct.keys()) )
-    #     req_keys = sorted( self.delete_resp_dct['request'].keys() )
-    #     self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-    #     self.assertEqual( 'DELETE', self.delete_resp_dct['request']['method'] )
-    #     self.assertEqual( {}, self.delete_resp_dct['request']['payload'] )
-    #     resp_keys = sorted( self.delete_resp_dct['response'].keys() )
-    #     self.assertEqual( ['elapsed_time', 'status'], resp_keys )
-    #     self.assertEqual( 'success', self.delete_resp_dct['response']['status'] )
+    def test_delete_good(self):
+        """ Checks good DELETE of `http://127.0.0.1:8000/data/documents/abcd/`. """
+        ## create group
+        self.create_new_citation()
+        ## DELETE
+        self.delete_new_citation()
+        ## tests
+        self.assertEqual( 200, self.delete_resp_statuscode )
+        self.assertEqual(
+            ['marked_for_deletion_result'],
+            list(self.delete_resp_dct.keys()) )
+        self.assertEqual(
+            'success',
+            self.delete_resp_dct['marked_for_deletion_result'] )
 
     ## end Client_ReferenceGroup_Test()
