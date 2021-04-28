@@ -555,42 +555,6 @@ def data_documents( request, doc_id=None ):
     return resp
 
 
-# @shib_login
-# def data_documents( request, doc_id=None ):
-#     """ Called via ajax by views.edit_citation()
-#         Url: '/data/documents/<docId>/' -- 'data_documents_url' """
-#     log.debug( f'\n\nstarting data_documents, with doc_id, `{doc_id}`; with method, ```{request.method}```, with a payload of, `{request.body}`' )
-#     log.debug( f'request.user.id, ```{request.user.id}```; request.user.profile.old_db_id, ```{request.user.profile.old_db_id}```,' )
-#     log.debug( f'type(request.user.id), ```{type(request.user.id)}```; type(request.user.profile.old_db_id), ```{type(request.user.profile.old_db_id)}```,' )
-#     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
-#     user_uuid = request.user.profile.uu_id
-#     user_email = request.user.profile.email
-#     log.debug( f'user_id, ```{user_id}```' )
-#     if request.method == 'GET' and doc_id:
-#         context: dict = v_data_document_manager.manage_get( doc_id, user_id )
-#     elif request.method == 'GET':  # called when clicking 'New document' button
-#         context: dict = v_data_document_manager.manage_get_all( user_id )
-#     elif request.method == 'PUT':
-#         context: dict = v_data_document_manager.manage_put( doc_id, user_id, request.body )
-#     elif request.method == 'POST':
-#         context: dict = v_data_document_manager.manage_post( user_id, request.body )
-#     elif request.method == 'DELETE':
-#         log.debug( 'DELETE detected' )
-#         context: dict = v_data_document_manager.manage_delete( doc_id, user_uuid.hex, user_email )
-#     else:
-#         msg = 'data_documents() other request.method handling coming'
-#         log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
-#         resp = HttpResponse( msg )
-#     # if 'redirect' in context.keys():
-#     #     redirect_url = context['redirect']
-#     #     log.debug( f'redirecting to, ```{redirect_url}```' )
-#     #     resp = HttpResponseRedirect( redirect_url )
-#     # else:
-#     #     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     return resp
-
-
 @shib_login
 def relationships_by_reference( request, rfrnc_id ):
     """ Called via ajax by views.edit_relationships() when page is loaded.
