@@ -27,7 +27,8 @@ class Citation_Test( TestCase ):
         self.post_resp_dct = None           # updated by create_new_citation()
         self.post_resp_id = None            # updated by create_new_citation()
         self.delete_resp_statuscode = None  # updated by delete_new_citation()
-        self.delete_resp_dct = None         # updated by delete_new_citation()
+        # self.delete_resp_dct = None         # updated by delete_new_citation()
+        self.delete_resp_content = None     # updated by delete_new_citation()
 
     ## HELPERS ====================
 
@@ -70,7 +71,7 @@ class Citation_Test( TestCase ):
         response = self.client.post( post_url, data=jsn, content_type='application/json' )
         log.debug( f'create_new_citation response (bytes), ``{response.content}``' )
         self.assertEqual( 200, response.status_code )
-        self.post_resp_dct = json.loads( response.content )
+        self.post_resp_dct = json.loads( response.content )  # TODO: change this to make it like delete_new_citation(); only saving response.content, and making the dict in the test.
         log.debug( f'create_new_citation response dict, ``{self.post_resp_dct}``' )
         redirect_value = self.post_resp_dct['redirect']
         parts = redirect_value.split( '/' )
@@ -82,12 +83,11 @@ class Citation_Test( TestCase ):
         delete_url = reverse( 'data_documents_url', kwargs={'doc_id': self.post_resp_id} )
         response = self.client.delete( delete_url )
         self.delete_resp_statuscode = response.status_code
-        self.delete_resp_dct = json.loads( response.content )
-        log.debug( f'delete_resp_dct, ``{pprint.pformat(self.delete_resp_dct)}``' )
+        self.delete_resp_content = response.content
 
     ## GET LIST ===================
 
-    """ not applicable -- there is no api for getting a list of citations """
+    """ not applicable -- there _is_ code, but it is not used, for getting a list of citations """
 
     ## GET SINGLE ===================
 
@@ -239,26 +239,29 @@ class Citation_Test( TestCase ):
 
     ## DELETE ====================
 
-    # def test_delete_bad(self):
-    #     """ Checks bad DELETE of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     delete_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'foo'} )
-    #     delete_response = self.client.delete( delete_url )
-    #     self.assertEqual( 404, delete_response.status_code )
-    #     self.assertTrue( b'Not Found' in delete_response.content )
+    def test_delete_bad(self):
+        """ Checks bad DELETE of `http://127.0.0.1:8000/data/documents/foo/`. """
+        ## DELETE
+        self.post_resp_id == 'foo'
+        self.delete_new_citation()  # will attempt to delete citation-id `foo`
+        ## tests
+        self.assertEqual( 500, self.delete_resp_statuscode )
+        self.assertEqual( b'500 / Server Error', self.delete_resp_content )
 
     def test_delete_good(self):
         """ Checks good DELETE of `http://127.0.0.1:8000/data/documents/abcd/`. """
-        ## create group
+        ## create citation
         self.create_new_citation()
         ## DELETE
         self.delete_new_citation()
         ## tests
+        delete_resp_dct = json.loads( self.delete_resp_content )
         self.assertEqual( 200, self.delete_resp_statuscode )
         self.assertEqual(
             ['marked_for_deletion_result'],
-            list(self.delete_resp_dct.keys()) )
+            list(delete_resp_dct.keys()) )
         self.assertEqual(
             'success',
-            self.delete_resp_dct['marked_for_deletion_result'] )
+            delete_resp_dct['marked_for_deletion_result'] )
 
     ## end Client_ReferenceGroup_Test()

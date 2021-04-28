@@ -250,41 +250,45 @@ def manage_delete( doc_id, user_uuid_str, user_email ):
     assert type(doc_id) == str
     assert type(user_uuid_str) == str
     assert type(user_email) == str
-    ## build citation_jsn and user_jsn for storage
-    session = make_session()
-    log.debug( f'session, ``{session}``' )
-    citation_result = session.query( models_alch.Citation ).get( doc_id )
-    log.debug( f'citation_result, ``{citation_result}``' )
+    context = None
 
-    citaton_dct = citation_result.dictify()
-    log.debug( f'citaton_dct, ``{citaton_dct}``' )
-
+    ## build citation_jsn for storage
     try:
+        session = make_session()
+        log.debug( f'session, ``{session}``' )
+        citation_result = session.query( models_alch.Citation ).get( doc_id )
+        log.debug( f'citation_result, ``{citation_result}``' )
+        citaton_dct = citation_result.dictify()
+        log.debug( f'citaton_dct, ``{citaton_dct}``' )
         citation_jsn = json.dumps( citaton_dct, sort_keys=True, indent=2 )
         log.debug( f'citation_jsn, ``{citation_jsn}``' )
     except:
-        log.exception( 'problem getting citation json' )
+        log.exception( 'problem getting citation json; traceback follows; returning error-message' )
+        context = '500 / Server Error'
 
-    try:
-        usr_dct = { 'user_uuid': user_uuid_str, 'user_email': user_email }
-        user_jsn = json.dumps( usr_dct, sort_keys=True, indent=2 )
-    except:
-        log.exception( 'problem getting user json' )
+    ## build user_jsn for storage
+    if context == None:
+        try:
+            usr_dct = { 'user_uuid': user_uuid_str, 'user_email': user_email }
+            user_jsn = json.dumps( usr_dct, sort_keys=True, indent=2 )
+        except:
+            log.exception( 'problem getting user json; traceback follows; returning error-message' )
+            context = '500 / Server Error'
 
     ## save the citation_jsn and user_jsn to the marked-for-deletion entry
-    context = { 'marked_for_deletion_result': None }
-    try:
-        log.debug( 'saving markedfordeletion_entry' )
-        markedfordeletion_entry = MarkedForDeletion(
-            old_db_id=doc_id,
-            doc_json_data=citation_jsn,
-            patron_json_data=user_jsn )
-        markedfordeletion_entry.save()
-        context['marked_for_deletion_result'] = 'success'
-        log.debug( 'markedfordeletion_entry seems to have worked' )
-    except:
-        log.exception( 'problem saving markedfordeletion_entry; traceback follows; processing continues' )
-        context['marked_for_deletion_result'] = 'error; see logs'
+    if context == None:
+        try:
+            log.debug( 'saving markedfordeletion_entry' )
+            markedfordeletion_entry = MarkedForDeletion(
+                old_db_id=doc_id,
+                doc_json_data=citation_jsn,
+                patron_json_data=user_jsn )
+            markedfordeletion_entry.save()
+            context = { 'marked_for_deletion_result': 'success' }
+            log.debug( 'markedfordeletion_entry save successful' )
+        except:
+            log.exception( 'problem saving markedfordeletion_entry; traceback follows; eturning error-message' )
+            context = '500 / Server Error'
     log.debug( f'context, ``{context}``' )
     return context
 

@@ -25,7 +25,7 @@ from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, HttpResponseRedirect, HttpResponseServerError
 from django.shortcuts import get_object_or_404, render
 
 
@@ -541,10 +541,13 @@ def data_documents( request, doc_id=None ):
         msg = 'data_documents() other request.method handling coming'
         log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
         resp = HttpResponse( msg )
+    log.debug( f'context, ``{context}``' )
     if context == 'error':
         resp = HttpResponseBadRequest( '400 / Bad Request' )
     elif context == 'not_found':
         resp = HttpResponseNotFound( '404 / Not Found' )
+    elif context == '500 / Server Error':
+        resp = HttpResponseServerError( context )
     else:
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
