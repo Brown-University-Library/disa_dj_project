@@ -159,12 +159,12 @@ class Citation_Test( TestCase ):
 
     ## UPDATE ====================
 
-    # def test_put_bad(self):
-    #     """ Checks bad PUT of `http://127.0.0.1:8000/data/reference_group/abcd/`. """
-    #     put_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'foo'} )
-    #     put_response = self.client.put( put_url )
-    #     self.assertEqual( 400, put_response.status_code )
-    #     self.assertTrue( b'Bad Request' in put_response.content )
+    def test_put_bad(self):
+        """ Checks bad PUT to `http://127.0.0.1:8000/data/documents/foo/`. """
+        put_url = reverse( 'data_documents_url', kwargs={'doc_id': 'foo'} )
+        put_response = self.client.put( put_url )
+        self.assertEqual( 400, put_response.status_code )
+        self.assertTrue( b'Bad Request' in put_response.content )
 
     def test_put_good(self):
         """ Checks good PUT to `http://127.0.0.1:8000/data/documents/abcd/`. """

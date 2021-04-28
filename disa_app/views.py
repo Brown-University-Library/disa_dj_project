@@ -542,7 +542,9 @@ def data_documents( request, doc_id=None ):
         log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
         resp = HttpResponse( msg )
     log.debug( f'context, ``{context}``' )
-    if context == 'error':
+    if context == 'error':  # TODO: merge this response into `400 / Bad Request`
+        resp = HttpResponseBadRequest( '400 / Bad Request' )
+    elif context == '400 / Bad Request':
         resp = HttpResponseBadRequest( '400 / Bad Request' )
     elif context == 'not_found':
         resp = HttpResponseNotFound( '404 / Not Found' )

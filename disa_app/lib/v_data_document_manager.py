@@ -104,8 +104,14 @@ def manage_put( cite_id: str, user_id: int, payload: bytes ):
         Called by views.data_documents() on PUT """
     assert type(cite_id) == str; assert type(user_id) == int; assert type(payload) == bytes
     session = make_session()
-    data: dict = json.loads( payload )
-    log.debug( f'data (from payload), ``{pprint.pformat(data)}``' )
+
+    try:
+        data: dict = json.loads( payload )
+        log.debug( f'data (from payload), ``{pprint.pformat(data)}``' )
+    except:
+        log.exception( 'problem parsing payload; error will be returned' )
+        return '400 / Bad Request'
+
     try:  # temp; remove after debugging
         unspec = session.query( models_alch.CitationType ).filter_by( name='Document' ).first()
 
@@ -162,6 +168,7 @@ def manage_put( cite_id: str, user_id: int, payload: bytes ):
 
     except:
         log.exception( 'problem on api PUT; traceback follows...' )
+    log.debug( f'data (put-context), ``{pprint.pformat(data)}``' )
     return data
 
     ## end def manage_put()
