@@ -19,7 +19,7 @@ TestCase.maxDiff = 1000
 
 
 class Citation_Test( TestCase ):
-    """ Checks reference-group api urls. """
+    """ Checks citation data-api urls. """
 
     def setUp(self):
         self.random_new_citation_text = secrets.choice( ['aaa', 'bbb', 'ccc', 'ddd'] )  # so we can tell that stuff is really getting saved to the db
@@ -101,7 +101,7 @@ class Citation_Test( TestCase ):
 
     def test_get_single_good(self):
         """ Checks good GET of `http://127.0.0.1:8000/data/documents/abcd/`. """
-        ## create group
+        ## create citation
         self.create_new_citation()
         ## GET
         get_url = reverse( 'data_documents_url', kwargs={'doc_id': self.post_resp_id} )
@@ -264,4 +264,4 @@ class Citation_Test( TestCase ):
             'success',
             delete_resp_dct['marked_for_deletion_result'] )
 
-    ## end Client_ReferenceGroup_Test()
+    ## end Citation_Test()
