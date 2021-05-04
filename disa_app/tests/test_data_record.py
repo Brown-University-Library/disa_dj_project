@@ -22,7 +22,29 @@ class Record_Test( TestCase ):
     """ Checks Record data-api urls. """
 
     def setUp(self):
-        self.random_new_record_text = secrets.choice( ['aaa', 'bbb', 'ccc', 'ddd'] )  # so we can tell that stuff is really getting saved to the db
+
+        self.random_new_record_location = secrets.choice( [
+            {'id': 550, 'label': 'Rhode Island ', 'value': 'Rhode Island '},
+            {'id': 23, 'label': 'New York', 'value': 'New York'},
+            {'id': 191, 'label': 'Maine', 'value': 'Maine'}
+            ] )  # so we can tell that stuff is really getting saved to the db
+
+        self.random_new_record_national_context = secrets.choice( [
+            1, # British
+            2, # American
+            3  # French
+            ] )
+
+        self.random_new_record_record_type = secrets.choice( [
+            {'id': 29, 'label': 'Burial Record', 'value': 'Burial Record'},
+            {'id': 1, 'label': 'Baptism', 'value': 'Baptism'},
+            {'id': 20, 'label': 'Petition to Assembly', 'value': 'Petition to Assembly'},
+            ] )
+
+        self.random_new_record_transcription_text = secrets.choice( [
+            'transcription_aaa', 'transcription_bbb', 'transcription_ccc'
+            ] )
+
         self.random_put_record_text = secrets.choice( ['aaa', 'bbb', 'ccc', 'ddd'] )
         self.create_resp_statuscode = None  # updated by create_new_record()
         self.create_resp_content = None     # updated by create_new_record()
@@ -36,36 +58,15 @@ class Record_Test( TestCase ):
         """ Creates a record for tests. """
         post_url = reverse( 'data_record_url' )
         log.debug( f'post-url, ``{post_url}``' )
-        # payload = {
-        #     'acknowledgements': f'acks--{self.random_new_citation_text}',
-        #     'citation_type_id': 20,  # means the fields below will be 'Book' fields
-        #     'comments': f'comments--{self.random_new_citation_text}',
-        #     'fields': {
-        #         'ISBN': '',
-        #         'abstractNote': '',
-        #         'accessDate': '',
-        #         'archive': '',
-        #         'archiveLocation': '',
-        #         'author': '',
-        #         'callNumber': '',
-        #         'date': '',
-        #         'edition': '',
-        #         'extra': '',
-        #         'language': '',
-        #         'libraryCatalog': '',
-        #         'numPages': '',
-        #         'numberOfVolumes': '',
-        #         'pages': '',
-        #         'place': '',
-        #         'publisher': '',
-        #         'rights': '',
-        #         'series': '',
-        #         'seriesNumber': '',
-        #         'shortTitle': '',
-        #         'title': f'title--{self.random_new_citation_text}',
-        #         'url': '',
-        #         'volume': ''}
-        #     }
+        payload = {
+            'citation_id': 768,
+            'date': '',
+            'locations': [ self.random_new_record_location ],
+            'national_context': self.random_new_record_national_context,
+            'record_type': self.random_new_record_record_type,
+            'transcription': self.random_new_record_transcription_text
+            }
+        log.debug( f'payload, ``{payload}``' )
         # jsn = json.dumps( payload )
         # response = self.client.post( post_url, data=jsn, content_type='application/json' )
         # log.debug( f'create_new_citation response (bytes), ``{response.content}``' )
