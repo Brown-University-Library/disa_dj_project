@@ -24,59 +24,59 @@ class Record_Test( TestCase ):
     def setUp(self):
         self.random_new_record_text = secrets.choice( ['aaa', 'bbb', 'ccc', 'ddd'] )  # so we can tell that stuff is really getting saved to the db
         self.random_put_record_text = secrets.choice( ['aaa', 'bbb', 'ccc', 'ddd'] )
-        self.post_resp_statuscode = None    # updated by create_new_citation()
-        self.post_resp_content = None       # updated by create_new_citation()
-        self.post_resp_id = None            # updated by create_new_citation()
-        self.delete_resp_statuscode = None  # updated by delete_new_citation()
-        self.delete_resp_content = None     # updated by delete_new_citation()
+        self.create_resp_statuscode = None  # updated by create_new_record()
+        self.create_resp_content = None     # updated by create_new_record()
+        self.create_resp_id = None          # updated by create_new_record()
+        self.delete_resp_statuscode = None  # updated by delete_new_record()
+        self.delete_resp_content = None     # updated by delete_new_record()
 
     ## HELPERS ====================
 
-    # def create_new_citation(self):
-    #     """ Creates a citation for tests. """
-    #     # post_url = reverse( 'data_documents_url', kwargs={'doc_id': None} )
-    #     post_url = reverse( 'data_documents_url' )
-    #     log.debug( f'post-url, ``{post_url}``' )
-    #     payload = {
-    #         'acknowledgements': f'acks--{self.random_new_citation_text}',
-    #         'citation_type_id': 20,  # means the fields below will be 'Book' fields
-    #         'comments': f'comments--{self.random_new_citation_text}',
-    #         'fields': {
-    #             'ISBN': '',
-    #             'abstractNote': '',
-    #             'accessDate': '',
-    #             'archive': '',
-    #             'archiveLocation': '',
-    #             'author': '',
-    #             'callNumber': '',
-    #             'date': '',
-    #             'edition': '',
-    #             'extra': '',
-    #             'language': '',
-    #             'libraryCatalog': '',
-    #             'numPages': '',
-    #             'numberOfVolumes': '',
-    #             'pages': '',
-    #             'place': '',
-    #             'publisher': '',
-    #             'rights': '',
-    #             'series': '',
-    #             'seriesNumber': '',
-    #             'shortTitle': '',
-    #             'title': f'title--{self.random_new_citation_text}',
-    #             'url': '',
-    #             'volume': ''}
-    #         }
-    #     jsn = json.dumps( payload )
-    #     response = self.client.post( post_url, data=jsn, content_type='application/json' )
-    #     log.debug( f'create_new_citation response (bytes), ``{response.content}``' )
-    #     self.assertEqual( 200, response.status_code )
-    #     self.post_resp_dct = json.loads( response.content )  # TODO: change this to make it like delete_new_citation(); only saving response.content, and making the dict in the test.
-    #     log.debug( f'create_new_citation response dict, ``{self.post_resp_dct}``' )
-    #     redirect_value = self.post_resp_dct['redirect']
-    #     parts = redirect_value.split( '/' )
-    #     self.post_resp_id = parts[-2]
-    #     self.assertEqual( self.post_resp_id.isnumeric(), True )
+    def create_new_record(self):
+        """ Creates a record for tests. """
+        post_url = reverse( 'data_record_url' )
+        log.debug( f'post-url, ``{post_url}``' )
+        # payload = {
+        #     'acknowledgements': f'acks--{self.random_new_citation_text}',
+        #     'citation_type_id': 20,  # means the fields below will be 'Book' fields
+        #     'comments': f'comments--{self.random_new_citation_text}',
+        #     'fields': {
+        #         'ISBN': '',
+        #         'abstractNote': '',
+        #         'accessDate': '',
+        #         'archive': '',
+        #         'archiveLocation': '',
+        #         'author': '',
+        #         'callNumber': '',
+        #         'date': '',
+        #         'edition': '',
+        #         'extra': '',
+        #         'language': '',
+        #         'libraryCatalog': '',
+        #         'numPages': '',
+        #         'numberOfVolumes': '',
+        #         'pages': '',
+        #         'place': '',
+        #         'publisher': '',
+        #         'rights': '',
+        #         'series': '',
+        #         'seriesNumber': '',
+        #         'shortTitle': '',
+        #         'title': f'title--{self.random_new_citation_text}',
+        #         'url': '',
+        #         'volume': ''}
+        #     }
+        # jsn = json.dumps( payload )
+        # response = self.client.post( post_url, data=jsn, content_type='application/json' )
+        # log.debug( f'create_new_citation response (bytes), ``{response.content}``' )
+        # self.assertEqual( 200, response.status_code )
+        # self.post_resp_dct = json.loads( response.content )  # TODO: change this to make it like delete_new_citation(); only saving response.content, and making the dict in the test.
+        # log.debug( f'create_new_citation response dict, ``{self.post_resp_dct}``' )
+        # redirect_value = self.post_resp_dct['redirect']
+        # parts = redirect_value.split( '/' )
+        # self.post_resp_id = parts[-2]
+        # self.assertEqual( self.post_resp_id.isnumeric(), True )
+        self.assertEqual( 1, 2 )
 
     # def delete_new_citation(self):
     #     """ Deletes citation used by tests."""
@@ -148,14 +148,15 @@ class Record_Test( TestCase ):
     #     self.assertEqual( 400, response.status_code )
     #     self.assertEqual( b'400 / Bad Request', response.content )
 
-    # def test_post_good(self):
-    #     """ Checks `http://127.0.0.1:8000/data/documents/ POST w/good params. """
-    #     ## create citation
-    #     self.create_new_citation()
-    #     ## tests
-    #     self.assertEqual( ['redirect'], list(self.post_resp_dct.keys()) )
-    #     ## cleanup
-    #     self.delete_new_citation()
+    def test_post_good(self):
+        """ Checks `http://127.0.0.1:8000/data/records/` POST w/good params. """
+        ## create record
+        self.create_new_record()
+        ## tests
+        self.assertEqual( 2, 3 )
+        # self.assertEqual( ['redirect'], list(self.post_resp_dct.keys()) )
+        # ## cleanup
+        # self.delete_new_citation()
 
     # ## UPDATE ====================
 

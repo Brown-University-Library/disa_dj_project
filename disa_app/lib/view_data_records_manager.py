@@ -300,6 +300,7 @@ def manage_reference_delete( rfrnc_id: str ) -> HttpResponseRedirect:  # or, muc
 
 
 def make_session() -> sqlalchemy.orm.session.Session:
+    log.debug( 'making Session' )
     engine = create_engine( settings_app.DB_URL, echo=True )
     Session = sessionmaker( bind=engine )
     session = Session()
@@ -309,7 +310,7 @@ def make_session() -> sqlalchemy.orm.session.Session:
 def get_or_create_type( typeData: dict, typeModel: models_alch.ReferenceType, session: sqlalchemy.orm.session.Session ) -> models_alch.ReferenceType:
     """ Gets or creates a ReferenceType instance.
         Called by manage_post() """
-    log.debug( f'typeData, ```{pprint.pformat(typeData)}```' )
+    log.debug( f'starting get(); typeData, ```{pprint.pformat(typeData)}```' )
     if typeData['id'] == -1:
         new_type = typeModel (name=typeData['value'] )
         session.add( new_type )
@@ -332,7 +333,7 @@ def process_record_locations( locData: list, recObj: models_alch.Reference, sess
         Updates ReferenceLocation records if necessary...
         Creates a linkage between the Reference record and the ReferenceLocation record if necessary.
         Called by manage_post() """
-    log.debug( f'locData, ```{pprint.pformat(locData)}```' )
+    log.debug( f'starting process_record_locations(); locData, ```{pprint.pformat(locData)}```' )
     locations = []
     for loc in locData:
         if loc['id'] == -1:
