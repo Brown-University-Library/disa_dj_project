@@ -22,35 +22,30 @@ class Record_Test( TestCase ):
     """ Checks Record data-api urls. """
 
     def setUp(self):
-
         self.random_new_record_location = secrets.choice( [
             {'id': 550, 'label': 'Rhode Island ', 'value': 'Rhode Island '},
             {'id': 23, 'label': 'New York', 'value': 'New York'},
             {'id': 191, 'label': 'Maine', 'value': 'Maine'}
             ] )  # so we can tell that stuff is really getting saved to the db
-
         self.random_new_record_national_context = secrets.choice( [
             1, # British
             2, # American
             3  # French
             ] )
-
         self.random_new_record_record_type = secrets.choice( [
             {'id': 29, 'label': 'Burial Record', 'value': 'Burial Record'},
             {'id': 1, 'label': 'Baptism', 'value': 'Baptism'},
             {'id': 20, 'label': 'Petition to Assembly', 'value': 'Petition to Assembly'},
             ] )
-
         self.random_new_record_transcription_text = secrets.choice( [
             'transcription_aaa', 'transcription_bbb', 'transcription_ccc'
             ] )
-
-        self.random_put_record_text = secrets.choice( ['aaa', 'bbb', 'ccc', 'ddd'] )
+        # self.random_put_record_text = secrets.choice( ['aaa', 'bbb', 'ccc', 'ddd'] )
         self.create_resp_statuscode = None  # updated by create_new_record()
-        self.create_resp_content = None     # updated by create_new_record()
+        self.create_resp_dct = None         # updated by create_new_record()
         self.create_resp_id = None          # updated by create_new_record()
         self.delete_resp_statuscode = None  # updated by delete_new_record()
-        self.delete_resp_content = None     # updated by delete_new_record()
+        # self.delete_resp_dct = None     # updated by delete_new_record()
 
     ## HELPERS ====================
 
@@ -67,24 +62,23 @@ class Record_Test( TestCase ):
             'transcription': self.random_new_record_transcription_text
             }
         log.debug( f'payload, ``{payload}``' )
-        # jsn = json.dumps( payload )
-        # response = self.client.post( post_url, data=jsn, content_type='application/json' )
-        # log.debug( f'create_new_citation response (bytes), ``{response.content}``' )
-        # self.assertEqual( 200, response.status_code )
-        # self.post_resp_dct = json.loads( response.content )  # TODO: change this to make it like delete_new_citation(); only saving response.content, and making the dict in the test.
-        # log.debug( f'create_new_citation response dict, ``{self.post_resp_dct}``' )
-        # redirect_value = self.post_resp_dct['redirect']
-        # parts = redirect_value.split( '/' )
-        # self.post_resp_id = parts[-2]
+        jsn = json.dumps( payload )
+        response = self.client.post( post_url, data=jsn, content_type='application/json' )
+        self.create_resp_statuscode = response.status_code
+        self.post_resp_dct = json.loads( response.content )
+        log.debug( f'create_new_record response dict, ``{self.post_resp_dct}``' )
+        redirect_value = self.post_resp_dct['redirect']
+        parts = redirect_value.split( '/' )
+        self.create_resp_id = parts[-2]
+        log.debug( f'create_resp_id, ``{self.create_resp_id}``' )
         # self.assertEqual( self.post_resp_id.isnumeric(), True )
-        self.assertEqual( 1, 2 )
 
-    # def delete_new_citation(self):
-    #     """ Deletes citation used by tests."""
-    #     delete_url = reverse( 'data_documents_url', kwargs={'doc_id': self.post_resp_id} )
-    #     response = self.client.delete( delete_url )
-    #     self.delete_resp_statuscode = response.status_code
-    #     self.delete_resp_content = response.content
+    def delete_new_record(self):
+        """ Deletes citation used by tests."""
+        delete_url = reverse( 'data_reference_url', kwargs={'rfrnc_id': self.create_resp_id} )
+        response = self.client.delete( delete_url )
+        self.delete_resp_statuscode = response.status_code
+        self.delete_resp_dct = json.loads( response.content )
 
     # ## GET LIST ===================
 
@@ -138,14 +132,14 @@ class Record_Test( TestCase ):
     # ## CREATE ====================
 
     # def test_post_bad(self):
-    #     """ Checks `http://127.0.0.1:8000/data/documents/ POST w/bad params. """
-    #     post_url = reverse( 'data_documents_url' )
+    #     """ Checks `http://127.0.0.1:8000/data/records/` POST w/bad params. """
+    #     post_url = reverse( 'data_record_url' )
     #     log.debug( f'post-url, ``{post_url}``' )
     #     payload = {
     #         'foo': 'bar'
     #     }
     #     response = self.client.post( post_url, payload )
-    #     log.debug( f'create_new_citation response (bytes), ``{response.content}``' )
+    #     log.debug( f'create_new_record response (bytes), ``{response.content}``' )
     #     self.assertEqual( 400, response.status_code )
     #     self.assertEqual( b'400 / Bad Request', response.content )
 
@@ -154,9 +148,11 @@ class Record_Test( TestCase ):
         ## create record
         self.create_new_record()
         ## tests
-        self.assertEqual( 2, 3 )
-        # self.assertEqual( ['redirect'], list(self.post_resp_dct.keys()) )
-        # ## cleanup
+        self.assertEqual( 200, self.create_resp_statuscode )
+        self.assertEqual( True, self.create_resp_id.isnumeric(),  )
+        self.assertEqual( str, type(self.create_resp_id) )
+        self.assertEqual( ['redirect'], list(self.post_resp_dct.keys()) )
+        ## cleanup
         # self.delete_new_citation()
 
     # ## UPDATE ====================
@@ -242,28 +238,25 @@ class Record_Test( TestCase ):
     # ## DELETE ====================
 
     # def test_delete_bad(self):
-    #     """ Checks bad DELETE of `http://127.0.0.1:8000/data/documents/foo/`. """
+    #     """ Checks bad DELETE of `http://127.0.0.1:8000/data/reference/foo/`. """
     #     ## DELETE
     #     self.post_resp_id == 'foo'
-    #     self.delete_new_citation()  # will attempt to delete citation-id `foo`
+    #     self.delete_new_record()  # will attempt to delete record-id `foo`
     #     ## tests
     #     self.assertEqual( 500, self.delete_resp_statuscode )
     #     self.assertEqual( b'500 / Server Error', self.delete_resp_content )
 
-    # def test_delete_good(self):
-    #     """ Checks good DELETE of `http://127.0.0.1:8000/data/documents/abcd/`. """
-    #     ## create citation
-    #     self.create_new_citation()
-    #     ## DELETE
-    #     self.delete_new_citation()
-    #     ## tests
-    #     delete_resp_dct = json.loads( self.delete_resp_content )
-    #     self.assertEqual( 200, self.delete_resp_statuscode )
-    #     self.assertEqual(
-    #         ['marked_for_deletion_result'],
-    #         list(delete_resp_dct.keys()) )
-    #     self.assertEqual(
-    #         'success',
-    #         delete_resp_dct['marked_for_deletion_result'] )
+    def test_delete_good(self):
+        """ Checks good DELETE of `http://127.0.0.1:8000/data/reference/abcd/`.
+            Note that, for no good reason, this root url is _different_ from the normal `http://127.0.0.1:8000/data/records/abcd/` """
+        ## create record
+        self.create_new_record()
+        ## DELETE
+        self.delete_new_record()
+        ## tests
+        self.assertEqual( 200, self.delete_resp_statuscode )
+        self.assertEqual(
+            {'redirect': '/editor/documents/768/'},
+            self.delete_resp_dct )  # for now, we're hard-coding new adds to citation-document #768
 
     ## end Record_Test()
