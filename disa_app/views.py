@@ -484,11 +484,16 @@ def data_records( request, rec_id=None ):
     """ Called via ajax by views.edit_record()
         Url: '/data/records/<rec_id>/' -- 'data_record_url' """
     log.debug( '\n\nstarting data_records' )
-    log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
-    log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rec_id, ``{rec_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
-    assert( rec_id == None or rec_id == str )
-    user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+    # log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
     try:
+        log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rec_id, ``{rec_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
+        assert ( rec_id == None or rec_id == str )
+        user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+        log.debug( f'request.user.profile.old_db_id, ``{request.user.profile.old_db_id}``' )
+        log.debug( f'request.user.id, ``{request.user.id}``' )
+        assert type(user_id) == int, type(user_id)
+        log.debug( f'user_id, ``{user_id}``' )
+        log.debug( f'request.body, ``{request.body}``' )
         if request.method == 'GET':
             if rec_id:
                 log.debug( 'here, because rec_id exists' )
