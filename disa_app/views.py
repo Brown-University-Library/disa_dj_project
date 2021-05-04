@@ -483,14 +483,18 @@ def data_entrants_details( request, rfrnt_id ):
 def data_records( request, rec_id=None ):
     """ Called via ajax by views.edit_record()
         Url: '/data/records/<rec_id>/' -- 'data_record_url' """
-    log.debug( f'\n\nstarting data_records, with rec_id, `{rec_id}`; with method, ```{request.method}```, with a payload of, `{request.body}`' )
+    log.debug( '\n\nstarting data_records' )
+    log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
+    log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rec_id, ``{rec_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
+    assert( rec_id == None or rec_id == str )
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     try:
         if request.method == 'GET':
             if rec_id:
-                log.debug( f'here, because rec_id is, `{rec_id}`; and is type, `{type(rec_id)}`' )
+                log.debug( 'here, because rec_id exists' )
                 context: dict = view_data_records_manager.query_record( rec_id )
             else:
+                log.debug( f'here, because rec_id is None' )
                 context = { 'rec': {}, 'entrants': [] }
         elif request.method == 'PUT':
             context: dict = view_data_records_manager.manage_reference_put( rec_id, request.body, user_id )
