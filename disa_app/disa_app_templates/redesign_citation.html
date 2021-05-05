@@ -62,20 +62,6 @@
 <!-- JavaScript-savvy URL control to toggle div display between
      #startpanel above & #tabs_bibinfoanditems below -->
 
-<!-- Save status indicator
-
-    THIS NEEDS TO GET MOVED TO WITHIN VUE SCOPE
-
--->
-
-<span id="save-status" class="badge bg-primary"
-      v-text="saveStatus">
-  <!--
-  <span v-if="saveStatus === 'saving-item'"
-        v-text="`Saving changes to item ${currentItemId}`">ddd</span>
-  <span v-else v-text="saveStatus">All changes saved</span> -->
-</span>
-
 <!-- MAIN NAV TABS -->
 
 <div id="tabs_bibinfoanditems" style="margin-top:10em;">
@@ -370,9 +356,17 @@
 
     <div class="tab-pane card-body"
          role="tabpanel" aria-labelledby="item-tab" id="Items">
+    
+      <!-- Save status indicator
+
+          THIS NEEDS TO GET MOVED TO WITHIN VUE SCOPE
+
+      -->
+
+      <disa-save-status ref="database"></disa-save-status>
 
       <!-- Change item modal -->
-
+      
       <div class="modal" tabindex="-1" id="item-selector-modal">
         <div class="modal-dialog">
           <div class="modal-content">
