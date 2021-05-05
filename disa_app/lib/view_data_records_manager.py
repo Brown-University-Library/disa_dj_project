@@ -23,6 +23,8 @@ log = logging.getLogger(__name__)
 def query_record( rec_id: str ) -> dict:
     """ Handles api call for GET reference-data and associated referent-data.
         Called by views.data_records() """
+    log.debug( 'starting query_record()' )
+    assert type(rec_id) == str
     data = { 'rec': {}, 'entrants': [] }
     if rec_id == None:
         data = json.dumps( data )
