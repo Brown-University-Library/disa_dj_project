@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import json, logging, pprint, secrets, uuid
+import datetime, json, logging, pprint, secrets, uuid
 
 import requests
 from disa_app import settings_app
@@ -102,7 +102,7 @@ class Record_Test( TestCase ):
 
     # ## GET LIST ===================
 
-    # """ not applicable -- there _is_ code, but it is not used, for getting a list of citations """
+    # TODO
 
     # ## GET SINGLE ===================
 
@@ -114,40 +114,57 @@ class Record_Test( TestCase ):
     #     self.assertEqual( 404, response.status_code )
     #     self.assertEqual( b'404 / Not Found', response.content )
 
-    # def test_get_single_good(self):
-    #     """ Checks good GET of `http://127.0.0.1:8000/data/documents/abcd/`. """
-    #     ## create citation
-    #     self.create_new_citation()
-    #     ## GET
-    #     get_url = reverse( 'data_documents_url', kwargs={'doc_id': self.post_resp_id} )
-    #     log.debug( f'get_url, ``{get_url}``' )
-    #     response = self.client.get( get_url )
-    #     log.debug( f'response.content, ``{response.content}``' )
-    #     ## tests
-    #     self.assertEqual( 200, response.status_code )
-    #     resp_dct = json.loads( response.content )
-    #     self.assertEqual(
-    #         ['doc', 'doc_types'],
-    #         sorted(resp_dct.keys()) )
-    #     doc_keys = sorted( resp_dct['doc'].keys() )
-    #     self.assertEqual(
-    #         ['acknowledgements', 'citation', 'citation_type_id', 'comments', 'fields', 'id'],
-    #         doc_keys )
-    #     self.assertEqual(
-    #         f'acks--{self.random_new_citation_text}', resp_dct['doc']['acknowledgements']
-    #         )
-    #     self.assertEqual(
-    #         f'title--{self.random_new_citation_text}', resp_dct['doc']['citation']
-    #         )  # note, the display will be some combination of the `fields` data sent
-    #     self.assertEqual(
-    #         f'comments--{self.random_new_citation_text}', resp_dct['doc']['comments']
-    #         )
-    #     self.assertEqual(
-    #         {'title': f'title--{self.random_new_citation_text}'},
-    #         resp_dct['doc']['fields']
-    #         )
-    #     ## cleanup
-    #     self.delete_new_citation()
+    def test_get_single_good(self):
+        """ Checks good GET of `http://127.0.0.1:8000/data/records/abcd/`. """
+        ## create record
+        self.create_new_record()
+        ## GET
+        get_url = reverse( 'data_record_url', kwargs={'rec_id': self.create_resp_id} )
+        log.debug( f'get_url, ``{get_url}``' )
+        response = self.client.get( get_url )
+        log.debug( f'response.content, ``{response.content}``' )
+        ## tests
+        self.assertEqual( 200, response.status_code )
+        resp_dct = json.loads( response.content )
+        self.assertEqual(
+            ['entrants', 'groups', 'rec'],
+            sorted(resp_dct.keys()) )
+        record_keys = sorted( resp_dct['rec'].keys() )
+        self.assertEqual(
+            ['date', 'header', 'id', 'image_url', 'locations', 'national_context', 'record_type', 'transcription'],
+            record_keys )
+        if self.random_new_record_date:
+            date_object = datetime.datetime.strptime( self.random_new_record_date, '%m/%d/%Y')
+            log.debug( f'initial date_object, ``{str(date_object)}``' )
+            modified_date_string = f'{date_object.month}/{date_object.day}/{date_object.year}'
+            log.debug( f'modified_date_string, ``{modified_date_string}``' )
+            self.assertEqual(
+                modified_date_string, resp_dct['rec']['date'] )
+        if self.random_new_record_record_type['label'] == '':
+            self.assertEqual(
+                'Unspecified', resp_dct['rec']['header'] )
+        else:
+            self.assertEqual(
+                self.random_new_record_record_type['label'], resp_dct['rec']['header'] )
+        if self.random_new_record_image_url:
+            self.assertEqual(
+                self.random_new_record_image_url, resp_dct['rec']['image_url'] )
+        self.assertEqual(
+            self.random_new_record_location, resp_dct['rec']['locations'] )
+        self.assertEqual(
+            self.random_new_record_national_context, resp_dct['rec']['national_context'] )
+        # self.assertEqual(
+        #     self.random_new_record_record_type, resp_dct['rec']['record_type'] )
+        if self.random_new_record_record_type['label'] == '':
+            self.assertEqual(
+                {'id': 13, 'label': 'Unspecified', 'value': 'Unspecified'}, resp_dct['rec']['record_type'] )
+        else:
+            self.assertEqual(
+                self.random_new_record_record_type, resp_dct['rec']['record_type'] )
+        self.assertEqual(
+            self.random_new_record_transcription_text, resp_dct['rec']['transcription'] )
+        ## cleanup
+        self.delete_new_record()
 
     # ## CREATE ====================
 
