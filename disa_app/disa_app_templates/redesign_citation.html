@@ -341,14 +341,16 @@
       <a href="#" style="font-size:80%;font-weight:bold;clear:left;">Report problems or ask for help</a>
   </div>
 
-  <p>&nbsp;</p>
-  <p>&nbsp;</p>
+  <a type="button" class="btn btn-primary btn-md" href="../../redesign_citations/">
+    &nwarr; save source and exit
+  </a>
 
-  <button type="submit"
-    class="btn btn-primary btn-md"
-    id="citation-form-submit">
-    SAVE AND CONTINUE TO ENTER ITEMS
+  <button type="submit" class="btn btn-primary btn-md" id="citation-form-submit"
+          v-on:click="openItemTab">
+    save source and continue to enter items &rarr;
   </button>
+
+
   </form>
     </div> <!-- /.tab-pane for bibinfo -->
 
@@ -785,7 +787,7 @@
 
               <!-- <h5>Notes</h5> -->
               <div class="col-lg-12" style="padding-top:0px;padding-left:40px;padding-right:40px;padding-bottom:40px;">
-                
+
                 <!-- RESEARCHER NOTES ARE FOR NEW MODEL
                 <div class="form-floating">
                   <textarea class="form-control" placeholder="Enter notes here..." id="formInputDISAPeopleResearcherNotes" style="height: 128px"></textarea>
@@ -799,7 +801,7 @@
                 </button> 
                 -->
                 <a type="button" class="btn btn-primary btn-md" href="../../redesign_citations/">
-                  Save and exit this source
+                  &nwarr; save item and exit this source
                 </a>
               </div>
             </form>

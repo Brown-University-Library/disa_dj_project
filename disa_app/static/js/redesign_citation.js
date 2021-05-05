@@ -69,6 +69,9 @@ function initializeCitationForm(dataAndSettings) {
       'formData.doc.citation_type_id': updateCitationFieldVisibility
     },
     methods: {
+      openItemTab: function () {
+        document.getElementById('item-tab').click();
+      },
       onSubmitForm: function(x) { 
         // @todo finish this
         console.log({ 
