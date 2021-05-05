@@ -716,15 +716,18 @@
                                 </div>-->
                               </div>
                             </div>
-                            <div class="form-floating">
+
+                            <div class="form-floating-x" style="clear: both">
+                                <label for="formInputDISAPersonStatus">Status</label>
+                                <!--
+                                <disa-tags v-bind:value="referent.status"
+                                           v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonStatus"
+                                           id="formInputDISAPersonStatus"></disa-tags> -->
                               <!--
                               <input class="form-select taggedInput" id="formInputDISAPersonStatus" aria-label="New person's status"
                                       value="yes1, yes2, yes3"
                                       placeholder="Status">
                                 </input>-->
-
-                              <disa-tags value="One, Two, Three"></disa-tags>
-                              <label for="formInputDISAPersonStatus">Status</label>
                             </div>
                             <div class="form-floating">
                               <input type="text" class="form-control" id="formInputDISAStatusInfo" aria-label="Additional status information" placeholder="Additional status info.">
