@@ -173,7 +173,7 @@ class Record_Test( TestCase ):
         self.assertEqual( str, type(self.create_resp_id) )
         self.assertEqual( ['redirect'], list(self.post_resp_dct.keys()) )
         ## cleanup
-        # self.delete_new_record()
+        self.delete_new_record()
 
     # ## UPDATE ====================
 
