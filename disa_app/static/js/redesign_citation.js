@@ -445,11 +445,13 @@ async function loadAndInitializeData(initDisplay) {
   // Load full data for current item
 
   dataAndSettings.formData.doc.references[dataAndSettings.currentItemId] 
-    = await getItemData(dataAndSettings.currentItemId);
+    = await getItemData(dataAndSettings.currentItemId, 
+                        dataAndSettings.formData.doc.references[dataAndSettings.currentItemId]);
 
   // Initialize save status register
 
-  dataAndSettings.saveStatus = 'saved';
+  dataAndSettings.saveStatus = dataAndSettings.SAVE_STATUS.NO_CHANGE;
+
   // 'glue' between form fields and data structure
 
   dataAndSettings.currentItemDate_day = undefined;
