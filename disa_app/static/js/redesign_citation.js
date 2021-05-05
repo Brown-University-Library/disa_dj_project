@@ -99,6 +99,13 @@ function initializeItemForm(dataAndSettings) {
     },
 
     mounted: function () {
+
+      // Initialize item date fields
+
+      const itemDate = new Date(this.currentItem.date);
+      this.currentItemDate_day = itemDate.getDate();
+      this.currentItemDate_month = itemDate.getMonth();
+      this.currentItemDate_year = itemDate.getFullYear();
       Array.from(document.getElementsByClassName('taggedInput')).forEach(
         taggedInput => new Tagify(taggedInput)
       )
@@ -159,6 +166,13 @@ function initializeItemForm(dataAndSettings) {
         // Ignore changes in referents
         const {referents, ...rest} = this.currentItem;
         return JSON.stringify(rest);
+      },
+
+      // Computed properties to translate to/from server data structure
+      //  (this is watched for changes to update data structure)
+
+      watchMeToTriggerItemDateSync: function () {
+        return `${this.currentItemDate_month}/${this.currentItemDate_day}/${this.currentItemDate_year}`;
       },
 
       // Computed properties for translating to/from 
@@ -304,6 +318,15 @@ function initializeItemForm(dataAndSettings) {
             referentData => this.currentItem.referents[referentId] = referentData
           );
         }
+      // If date fields in form change, update data structure with
+      //  form field values
+
+      watchMeToTriggerItemDateSync: function (dateString) {
+        this.currentItem.date = [
+          this.currentItemDate_month,
+          this.currentItemDate_day,
+          this.currentItemDate_year
+        ].join('-');
       }
     },
 
@@ -390,6 +413,11 @@ async function loadAndInitializeData(initDisplay) {
   // Initialize save status register
 
   dataAndSettings.saveStatus = 'saved';
+  // 'glue' between form fields and data structure
+
+  dataAndSettings.currentItemDate_day = undefined;
+  dataAndSettings.currentItemDate_month = undefined;
+  dataAndSettings.currentItemDate_year = undefined;
 
   return dataAndSettings;
 }
