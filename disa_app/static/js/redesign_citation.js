@@ -231,6 +231,52 @@ function initializeItemForm(dataAndSettings) {
         },
         deep: true
       },
+
+      // If current referent info changes, save
+      //  (if full referent data has been previously loaded)
+
+      currentReferent: {
+        handler() {
+          if (this.currentReferent.FULL_DATA_LOADED) {
+
+            const requestBody = JSON.stringify({
+              id: this.currentReferent.id,
+              age: this.currentReferent.age,
+              // name: this.currentReferent.names[0], // @todo - only one name?? BD's test has a .name field
+              "names": this.currentReferent.names.map(
+                name => { name.name_type = "7"; return name }
+              ),
+              "origins": this.currentReferent.origins,
+              "races": this.currentReferent.races,
+              "sex": this.currentReferent.sex,
+              "statuses": [], // this.currentReferent.statuses, // ??
+              "titles": this.currentReferent.titles.map(
+                title => {
+                  title.name = title.label.valueOf();
+                  return title 
+                }
+              ),
+              "tribes": this.currentReferent.tribes,
+              "vocations": this.currentReferent.vocations
+            });
+
+            console.log('SAVE CURRENT REFERENT');
+            console.log('WTF WTF?', requestBody);
+            this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
+            saveReferentData(
+              this.currentReferentId, 
+              this.currentItemId,
+              this.saveCurrentReferentAPI,
+              requestBody
+            );
+            window.setTimeout( // FAKE FETCH
+              () => { 
+                this.saveStatus = this.SAVE_STATUS.SUCCESS; 
+                console.log('SAVED!'); 
+              }, 
+              2000
+            );
+          }
         },
         deep: true
       },
