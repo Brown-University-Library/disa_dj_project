@@ -22,14 +22,24 @@ class Record_Test( TestCase ):
     """ Checks Record data-api urls. """
 
     def setUp(self):
+        self.random_new_record_date = secrets.choice( [  # month/day/year (future TODO: make this a more-standard ISO-format like year/month/day)
+            '02/02/1492', '03/03/1493', '04/04/1494', ''
+            ])
+        ''' Location can have 3, 2, 1, or 0 elements.
+            - Position 1 will populate the form's 'Colony/State' field.
+            - Position 2 will populate the form's 'Town' field.
+            - Position 3 will populate the form's 'Additional location' field.'''
         self.random_new_record_location = secrets.choice( [
-            {'id': 550, 'label': 'Rhode Island ', 'value': 'Rhode Island '},
-            {'id': 23, 'label': 'New York', 'value': 'New York'},
-            {'id': 191, 'label': 'Maine', 'value': 'Maine'},
-            {'id': 560, 'label': 'Virginia', 'value': 'Virginia'}
+            [ {'id': 735, 'label': 'Massachusetts', 'value': 'Massachusetts'},
+              {'id': 21, 'label': 'Boston', 'value': 'Boston'},
+              {'id': 357, 'label': 'somewhere about Pumpkin-Hill', 'value': 'somewhere about Pumpkin-Hill'}],
+            [ {'id': 23, 'label': 'New York', 'value': 'New York'},
+              {'id': 748, 'label': 'Albany', 'value': 'Albany'} ],
+            [ {'id': 630, 'label': 'Rhode Island', 'value': 'Rhode Island'} ],
+            [],                                  # this is what is sent if neither of the three location-fields are not filled out
             ] )
         self.random_new_record_national_context = secrets.choice( [
-            1, # British
+            1, # British -- note: this is what is auto-sent if the field is not filled out
             2, # American
             3, # French
             4  # Spanish
@@ -38,10 +48,15 @@ class Record_Test( TestCase ):
             {'id': 29, 'label': 'Burial Record', 'value': 'Burial Record'},
             {'id': 1, 'label': 'Baptism', 'value': 'Baptism'},
             {'id': 20, 'label': 'Petition to Assembly', 'value': 'Petition to Assembly'},
-            {'id': 56, 'label': 'Criminal case abstract', 'value': 'Criminal case abstract'}
+            {'id': 0, 'label': '', 'value': ''}  # this is what is sent if the field is not filled out; the form will show "Unspecified"
             ] )
         self.random_new_record_transcription_text = secrets.choice( [
-            'transcription_aaa', 'transcription_bbb', 'transcription_ccc', 'transcription_ddd'
+            'transcription_aaa', 'transcription_bbb', 'transcription_ccc',
+            ''                                   # this is what is sent if the field is not filled out
+            ] )
+        self.random_new_record_image_url = secrets.choice( [
+            'https://foo1.com', 'https://foo2.com', 'https://foo3.com',
+            None                                 # as shown below in create_new_record(), no key-value is sent if the field is not filled out
             ] )
         # self.random_put_record_text = secrets.choice( ['aaa', 'bbb', 'ccc', 'ddd'] )
         self.create_resp_statuscode = None  # updated by create_new_record()
@@ -58,12 +73,14 @@ class Record_Test( TestCase ):
         log.debug( f'post-url, ``{post_url}``' )
         payload = {
             'citation_id': 768,
-            'date': '',
-            'locations': [ self.random_new_record_location ],
-            'national_context': self.random_new_record_national_context,
-            'record_type': self.random_new_record_record_type,
-            'transcription': self.random_new_record_transcription_text
+            'date': self.random_new_record_date,                            # string; see self.random_new_record_date
+            'locations': self.random_new_record_location,                   # list of dicts; see self.random_new_record_location
+            'national_context': self.random_new_record_national_context,    # int
+            'record_type': self.random_new_record_record_type,              # dict; see self.random_new_record_record_type
+            'transcription': self.random_new_record_transcription_text      # string
             }
+        if self.random_new_record_image_url:
+            payload['image_url'] = self.random_new_record_image_url         # string; but no key-value data is sent if not filled-out
         log.debug( f'payload, ``{payload}``' )
         jsn = json.dumps( payload )
         response = self.client.post( post_url, data=jsn, content_type='application/json' )
@@ -156,7 +173,7 @@ class Record_Test( TestCase ):
         self.assertEqual( str, type(self.create_resp_id) )
         self.assertEqual( ['redirect'], list(self.post_resp_dct.keys()) )
         ## cleanup
-        self.delete_new_record()
+        # self.delete_new_record()
 
     # ## UPDATE ====================
 
