@@ -148,6 +148,19 @@ function initializeItemForm(dataAndSettings) {
           return undefined;
         }
       },
+
+      // Computed properties to trigger saves
+
+      watchMeToTriggerReferentSave: function () { // (may not be necessary)
+        return JSON.stringify(this.currentReferent);
+      },
+
+      watchMeToTriggerItemSave: function () {
+        // Ignore changes in referents
+        const {referents, ...rest} = this.currentItem;
+        return JSON.stringify(rest);
+      },
+
       // Computed properties for translating to/from 
       //  Tagify's input requirements
 
@@ -222,7 +235,12 @@ function initializeItemForm(dataAndSettings) {
         deep: true
       },
 
-      // If currentItemId changes, load new item data
+      // If current Item info changes, save
+
+      watchMeToTriggerItemSave: {
+        handler() {
+          if (this.currentItem.FULL_DATA_LOADED) {
+            this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
 
       'currentItemId': function(itemId) {
         if (! this.currentItem.FULL_DATA_LOADED) { // <-- CHECK THIS
