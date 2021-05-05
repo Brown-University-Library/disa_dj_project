@@ -82,19 +82,28 @@ function initializeCitationForm(dataAndSettings) {
 }
 
 function initializeItemForm(dataAndSettings) {
-  new Vue({
+
+  window.itemFormVue = new Vue({
+
     el: '#Items',
-    data: dataAndSettings,
+
+    // Data is not a function (as usual with Vue) b/c changes should be 
+    //  reflected between this and the previous form
+
+    data: dataAndSettings, 
+
     components: {
       'disa-id': DISA_ID_COMPONENT,
-      'disa-tags': TAG_INPUT_COMPONENT
+      'disa-tags': TAG_INPUT_COMPONENT,
       'disa-save-status': SAVE_STATUS_COMPONENT
     },
+
     mounted: function () {
       Array.from(document.getElementsByClassName('taggedInput')).forEach(
         taggedInput => new Tagify(taggedInput)
       )
     },
+
     computed: {
 
       currentItem: function() {
@@ -103,6 +112,10 @@ function initializeItemForm(dataAndSettings) {
       currentReferent: function () {
         return this.currentItem.referents[this.currentReferentId]
       },
+
+      // Computed properties for translating to/from 
+      //  Tagify's input requirements
+
       currentReferentTribesForTagify: {
         get: function() {
           return JSON.stringify(this.currentReferent.tribes.map(
@@ -127,6 +140,7 @@ function initializeItemForm(dataAndSettings) {
           );
         }
       },
+
       currentReferentRaceID: {
         get: function () {
           return (Array.isArray(this.currentReferent.races) && this.currentReferent.races.length)
@@ -134,7 +148,6 @@ function initializeItemForm(dataAndSettings) {
             : undefined;
         },
         set: function (raceID) {
-          console.log('ABCDEF', this.currentReferent.races);
           if (! Array.isArray(this.currentReferent.races)) {
             this.currentReferent.races = [];
           }
@@ -142,9 +155,12 @@ function initializeItemForm(dataAndSettings) {
         }
       }
     },
-    delimiters: ['v{','}v'], // So as not to clash with Django templates
+
+    // So as not to clash with Django templates, if needed
+
+    delimiters: ['v{','}v'], 
+
     watch: {
-      'formData.doc.references': {
 
       // SAVE ROUTINES
 
@@ -191,7 +207,9 @@ function initializeItemForm(dataAndSettings) {
         }
       }
     },
+
     methods: {
+
       makeNewReferent: function (e) {
         const newReferentId = 'new'; // uuidv4();
         e.preventDefault(); // Link doesn't behave like a link
@@ -203,8 +221,6 @@ function initializeItemForm(dataAndSettings) {
         return false;
       },
       getReferentDisplayLabel: function (referent) {
-        //console.log('RRRRRRRRRRR');
-        //const referent = this.currentReferent;
         return referent ? `${referent.first} ${referent.last}` : 'Hmmm';
       },
       makeNewReferentName: function () {
