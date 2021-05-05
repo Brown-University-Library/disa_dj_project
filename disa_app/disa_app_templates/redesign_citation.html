@@ -676,6 +676,7 @@
 
                             <div class="form-group">
                               <div class="form-floating">
+                                <!-- BELOW IS FOR NEW MODEL WITH AGE AS NUMBER OR TEXT -->
                                 <!--
                                 <input vv-if="TEST FOR age_number"
                                         type="number" min="0" max="110"> -->
@@ -690,10 +691,14 @@
                                 </select>
                                 <label for="formInputDISAPersonAge_number">Age</label>
                                 <input type="text" class="form-control" id="formInputDISAPersonAge_text" aria-label="New person's age (text)" placeholder="New person's age (text)">
+                                <!-- WAITING FOR NEW MODEL
                                 <div class="form-check" style="margin-top:-6px;">
                                   <input class="form-check-input" style="margin-left:.125em;" type="checkbox" id="formInputSpecifiedByNumber" value="option1">
-                                  <label class="form-check-label" style="font-size: 85%;font-weight:bold;margin-left:.5em;margin-top:-10px;" for="formInputSpecifiedByNumber">AGE SPECIFIED BY A NUMBER</label>
-                                </div>
+                                  <label class="form-check-label" style="font-size: 85%;font-weight:bold;margin-left:.5em;margin-top:-10px;" 
+                                         for="formInputSpecifiedByNumber">
+                                    AGE SPECIFIED BY A NUMBER
+                                  </label>
+                                </div>-->
                               </div>
                             </div>
                             <div class="form-floating">
@@ -764,11 +769,19 @@
 
               <!-- <h5>Notes</h5> -->
               <div class="col-lg-12" style="padding-top:0px;padding-left:40px;padding-right:40px;padding-bottom:40px;">
+                
+                <!-- RESEARCHER NOTES ARE FOR NEW MODEL
                 <div class="form-floating">
                   <textarea class="form-control" placeholder="Enter notes here..." id="formInputDISAPeopleResearcherNotes" style="height: 128px"></textarea>
                   <label for="formInputDISAPeopleResearcherNotes">Researcher notes</label>
-                  <a href="#" style="font-size:80%;font-weight:bold;clear:left;">Report problems or ask for help</a> </div>
-                <button type="button" class="btn btn-secondary btn-md" style="font-weight: bold;margin-top: 20px;">ALL CHANGES SAVED</button>
+                  <a href="#" style="font-size:80%;font-weight:bold;clear:left;">Report problems or ask for help</a> 
+                </div>-->
+
+                <!-- IS THIS BUTTON NECESSARY? 
+                <button type="button" class="btn btn-secondary btn-md" style="font-weight: bold;margin-top: 20px;">
+                  ALL CHANGES SAVED
+                </button> 
+                -->
                 <a type="button" class="btn btn-primary btn-md" href="../../redesign_citations/">
                   Save and exit this source
                 </a>
