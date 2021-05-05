@@ -113,6 +113,41 @@ function initializeItemForm(dataAndSettings) {
         return this.currentItem.referents[this.currentReferentId]
       },
 
+      currentItemLocationCity: function () {
+        if (this.currentItem.location_info) {
+          const cityLocation = this.currentItem.location_info.find(
+            loc => loc.location_type === 'City'
+          );
+          return cityLocation && cityLocation.location_name 
+            ? cityLocation.location_name : undefined;
+        } else {
+          return undefined;
+        }
+      },
+
+      currentItemLocationColonyState: function () {
+        if (this.currentItem.location_info) {
+          const colonyStateLocation = this.currentItem.location_info.find(
+            loc => loc.location_type === 'Colony/State'
+          );
+          return colonyStateLocation && colonyStateLocation.location_name 
+            ? colonyStateLocation.location_name : undefined;
+        } else {
+          return undefined;
+        }
+      },
+
+      currentItemLocationLocale: function () {
+        if (this.currentItem.location_info) {
+          const localeLocation = this.currentItem.location_info.find(
+            loc => loc.location_type === 'Locale'
+          );
+          return localeLocation && localeLocation.location_name 
+            ? localeLocation.location_name : undefined;
+        } else {
+          return undefined;
+        }
+      },
       // Computed properties for translating to/from 
       //  Tagify's input requirements
 
