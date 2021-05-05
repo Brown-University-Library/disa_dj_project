@@ -4,6 +4,9 @@ import { DISA_ID_COMPONENT } from './redesign_id_component.js';
 import { TAG_INPUT_COMPONENT } from './redesign_tag-input_component.js';
 import { SAVE_STATUS_COMPONENT } from './redesign_save-status_component.js';
 
+
+const DATA_BACKUP = [];
+
 // UUID generator
 // Source: https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid/2117523#2117523
 
@@ -142,13 +145,28 @@ function initializeItemForm(dataAndSettings) {
     delimiters: ['v{','}v'], // So as not to clash with Django templates
     watch: {
       'formData.doc.references': {
+
+      // SAVE ROUTINES
+
+      // Backup data whenever anything changes
+
+      formData: {
         handler() {
-          console.log('FGHFGHFGH');
-          this.saveStatus = 'saving-item';
-          window.setTimeout(
-            () => {this.saveStatus = 'saved'}, 
-            1000000
-          );
+          DATA_BACKUP.push({
+            timestamp: Date.now(),
+            data: JSON.stringify(this.formData)
+          });
+
+          // Limit backup history
+          // @todo - be smarter about this
+
+          while (DATA_BACKUP.length > 100) {
+            DATA_BACKUP.shift();
+          }
+          console.log('BACKED UP DATA', DATA_BACKUP);
+        },
+        deep: true
+      },
         },
         deep: true
       },
