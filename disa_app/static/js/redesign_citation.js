@@ -215,6 +215,20 @@ function initializeItemForm(dataAndSettings) {
           }
           this.currentReferent.races[0] = { id: raceID };
         }
+      },
+
+      // Compute API endpoints
+
+      saveCurrentReferentAPI: function () {
+        const apiDefinition = this.formData.user_api_info.update_user_info_DETAILS,
+              qualifiedURL = apiDefinition.api_url.replace('THE-REFERENT-ID', this.currentReferentId);
+        return Object.assign({}, apiDefinition, { api_url: qualifiedURL });
+      },
+
+      loadCurrentReferentAPI: function () {
+        const apiDefinition = this.formData.user_api_info.get_user_info,
+              qualifiedURL = apiDefinition.api_url.replace('THE-REFERENT-ID', this.currentReferentId);
+        return Object.assign({}, apiDefinition, { api_url: qualifiedURL });
       }
     },
 
