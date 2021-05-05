@@ -1,5 +1,5 @@
 
-import {getSourceData, getItemData, getReferentData} from './redesign_data.js';
+import {getSourceData, getItemData, getReferentData, saveReferentData} from './redesign_data.js';
 import { DISA_ID_COMPONENT } from './redesign_id_component.js';
 import { TAG_INPUT_COMPONENT } from './redesign_tag-input_component.js';
 
