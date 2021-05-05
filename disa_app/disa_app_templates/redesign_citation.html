@@ -174,8 +174,8 @@
              type="date"
              v-model="formData.doc.fields.date" />
 
-      {% comment "BROKEN OUT WITH YEAR/MONTH/DAY FOR WHEN WE'RE IMPLEMENTING THE NEW DATA MODEL" %}
-
+      <!-- Broken out with year/month/day for when we have the new DB model -->
+      <!--
       <label for="date-year-value">Year
         <input id="date-year-value" name="date-year-value" type="number"
                 v-model="formData.doc.citation_type_fields['date-year']" />
@@ -235,7 +235,7 @@
           <option	value="31">	31	</option>
         </select>
       </label>
-      {% endcomment %}
+    -->
     </div>
 
     <div class="citation-field form-floating" id="edition">
@@ -394,14 +394,14 @@
           </div>
         </div>
       </div>
-
+      
       <div class="tab-content" style="background-color: white!important;opacity:1;">
 
         <div class="active tab-pane" role="tabpanel" aria-labelledby="New-Item"
              id="New-Item">
 
           <!-- Top control panel: title, item selector, and new item button -->
-          
+
           <div class="card bg-light">
             <div class="card-body">
 
@@ -415,7 +415,7 @@
 
                 <button type="button" class="btn btn-primary btn-sm"
                         data-bs-toggle="modal" data-bs-target="#item-selector-modal">
-                  change item
+                  open another item
                 </button>
 
                 <!-- Create new item control -->
@@ -484,7 +484,7 @@
                     <a href="#" style="font-size:80%;font-weight:bold;clear:left;">Open in new window</a> </div>
                 </div>
               </div> <!-- /.row -->
-              <hr>
+              <hr>  
               <div class="row" style="padding:25px;">
                 <div class="col-md-6">
                   <h5 class="text-dark">Event date</h5>
@@ -514,10 +514,13 @@
                     <input class="form-control" id="formInputDISAEventDateYear"
                             type="number" min="1500" max="1900" placeholder="Year">
                   </div>
+
+                  <!-- AWAITING NEW DATA MODEL
                   <div class="form-floating">
                     <input type="text" class="form-control" id="formInputDISAEventDateInfo" aria-label="Additional date information" placeholder="Additional date info.">
                     <label for="formInputDISAEventDateInfo">Additional date info.</label>
-                  </div>
+                  </div> -->
+
                 </div>
                 <div class="col-md-6">
                   <h5 class="text-dark">Place</h5>
@@ -670,6 +673,7 @@
                               </select>
                               <label for="formInputDISAPersonGender">Gender</label>
                             </div>
+
                             <div class="form-group">
                               <div class="form-floating">
                                 <!--
@@ -728,7 +732,8 @@
                               <label for="formInputDISAPersonRace">Race</label>
                             </div>
                             <div class="form-floating">
-                              <input type="text" class="form-control" id="formInputDISAPersonRaceTerms" aria-label="Exact racial terms used" placeholder="Exact racial terms used">
+                              <input type="text" class="form-control" id="formInputDISAPersonRaceTerms" 
+                                     aria-label="Exact racial terms used" placeholder="Exact racial terms used">
                               <label for="formInputDISAPersonRaceTerms">Exact racial terms used</label>
                             </div>
                             <div class="form-floating-x">
@@ -756,7 +761,8 @@
               <!-- ITEM NOTES -->
 
               <hr />
-              <h5>Notes</h5>
+
+              <!-- <h5>Notes</h5> -->
               <div class="col-lg-12" style="padding-top:0px;padding-left:40px;padding-right:40px;padding-bottom:40px;">
                 <div class="form-floating">
                   <textarea class="form-control" placeholder="Enter notes here..." id="formInputDISAPeopleResearcherNotes" style="height: 128px"></textarea>
@@ -770,6 +776,7 @@
         </div> <!-- /.tab-pane for items -->
       </div> <!-- /.tab-content for items -->
     <!-- </div> -->
+
     </div>
   </div>
 </div> <!-- /#tabs_bibinfoanditems -->
