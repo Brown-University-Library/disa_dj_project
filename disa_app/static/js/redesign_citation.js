@@ -319,6 +319,15 @@ function initializeItemForm(dataAndSettings) {
       'currentItemId': function(itemId) {
         if (! this.currentItem.FULL_DATA_LOADED) { // <-- CHECK THIS
           getItemData(itemId).then(
+      // LOAD ROUTINES
+
+      // If currentItemId changes, load new item data (if necessary)
+      //  Also update date fields for this item
+
+      currentItemId: function(itemId) {
+        const oldItemData = this.currentItem;
+        if (!this.currentItem.FULL_DATA_LOADED) {
+          getItemData(itemId, oldItemData).then(
             itemData => this.formData.doc.references[itemId] = itemData
           );
         }
@@ -326,12 +335,14 @@ function initializeItemForm(dataAndSettings) {
 
       // If currentReferentId changes, load new referent data
 
-      'currentReferentId': function(referentId) {
-        if (! this.currentReferent.FULL_DATA_LOADED) {
-          getReferentData(referentId).then(
+      currentReferentId: function(referentId) {
+        if (!this.currentReferent.FULL_DATA_LOADED) {
+          getReferentData(referentId, this.currentItemId, this.loadCurrentReferentAPI).then(
             referentData => this.currentItem.referents[referentId] = referentData
           );
         }
+      },
+
       // If date fields in form change, update data structure with
       //  form field values
 
