@@ -183,14 +183,18 @@ function initializeItemForm(dataAndSettings) {
 
       currentReferentTribesForTagify: {
         get: function() {
-          return JSON.stringify(this.currentReferent.tribes.map(
-            tribe => {
-              return {
-                value: tribe.value,
-                dbID: tribe.id
+          if (Array.isArray(this.currentReferent.tribes)) {
+            return JSON.stringify(this.currentReferent.tribes.map(
+              tribe => {
+                return {
+                  value: tribe.value,
+                  dbID: tribe.id
+                }
               }
-            }
-          ));
+            ));
+          } else {
+            return '';
+          }
         },
         set: function(newValue) {
           console.log('CHANGING TRIBES TO', newValue);
