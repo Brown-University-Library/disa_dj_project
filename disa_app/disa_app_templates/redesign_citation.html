@@ -466,8 +466,8 @@
                   <div class="form-floating">
                     <select class="form-select"
                             id="formInputDISAItemType"
-                            aria-label="Event date: month"
-                            v-model="currentItem.type">
+                            aria-label=""
+                            v-model="currentItem.reference_type_id">
                       <option v-for="(itemTypeOption, itemTypeOptionId) in MENU_OPTIONS.formInputDISAItemType"
                               v-bind:value="itemTypeOptionId"
                               v-text="itemTypeOption"></option>
@@ -494,7 +494,8 @@
                     <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
                     -->
                     <select class="form-select" id="formInputDISAEventDateMonth"
-                            aria-label="Event date: month" placeholder="Month">
+                            aria-label="Event date: month" placeholder="Month"
+                            v-model="currentItemDate_month">
                       <option value="0">Month unspecified</option>
                       <option value="1">January</option>
                       <option value="2">February</option>
@@ -510,9 +511,11 @@
                       <option value="12">December</option>
                     </select>
                     <input class="form-control" id="formInputDISAEventDateDay"
-                            type="number" min="0" max="31" placeholder="Day">
+                            type="number" min="0" max="31" placeholder="Day"
+                            v-model="currentItemDate_day">
                     <input class="form-control" id="formInputDISAEventDateYear"
-                            type="number" min="1500" max="1900" placeholder="Year">
+                            type="number" min="1500" max="1900" placeholder="Year"
+                            v-model="currentItemDate_year">
                   </div>
 
                   <!-- AWAITING NEW DATA MODEL
@@ -525,7 +528,8 @@
                 <div class="col-md-6">
                   <h5 class="text-dark">Place</h5>
                   <div class="form-floating">
-                    <select class="form-select" id="formInputDISAColonialContext" aria-label="Colonial context">
+                    <select class="form-select" id="formInputDISAColonialContext" aria-label="Colonial context"
+                            v-model="currentItem.national_context_id">
                       <option v-for="(colonialContextOption, colonialContextOptionId) in MENU_OPTIONS.formInputDISAColonialContext"
                               v-bind:value="colonialContextOptionId"
                               v-text="colonialContextOption">
@@ -533,15 +537,21 @@
                     <label for="formInputDISAColonialContext">Colonial context</label>
                   </div>
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="formInputDISAColonyState" aria-label="Colony / State" placeholder="Colony / State">
+                    <input type="text" class="form-control" id="formInputDISAColonyState" 
+                           aria-label="Colony / State" placeholder="Colony / State"
+                           v-model="currentItemLocationColonyState">
                     <label for="formInputDISAColonyState">Colony / State</label>
                   </div>
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="formInputDISATown" aria-label="Town" placeholder="Town">
+                    <input type="text" class="form-control" id="formInputDISATown" 
+                           aria-label="Town" placeholder="Town"
+                           v-model="currentItemLocationCity">
                     <label for="formInputDISATown">Town</label>
                   </div>
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="formInputDISAPlaceInfo" aria-label="Additional location information" placeholder="Additional location info.">
+                    <input type="text" class="form-control" id="formInputDISAPlaceInfo" 
+                           aria-label="Additional location information" placeholder="Additional location info."
+                           v-model="currentItemLocationLocale">
                     <label for="formInputDISAPlaceInfo">Additional location info.</label>
                   </div>
                 </div>
@@ -675,7 +685,10 @@
                             </div>
 
                             <div class="form-group">
-                              <div class="form-floating">
+                              <div class="form-floating"> <!--
+                                <input v-model="referent.age" id="formInputDISAPersonAge"></input>
+                                <label for="formInputDISAPersonAge">Age</label> -->
+
                                 <!-- BELOW IS FOR NEW MODEL WITH AGE AS NUMBER OR TEXT -->
                                 <!--
                                 <input vv-if="TEST FOR age_number"
@@ -690,7 +703,9 @@
                                   <option value="3">3 years</option>
                                 </select>
                                 <label for="formInputDISAPersonAge_number">Age</label>
-                                <input type="text" class="form-control" id="formInputDISAPersonAge_text" aria-label="New person's age (text)" placeholder="New person's age (text)">
+                                <input type="text" class="form-control" id="formInputDISAPersonAge_text" 
+                                       aria-label="New person's age (text)" placeholder="New person's age (text)"
+                                       v-model="referent.age">
                                 <!-- WAITING FOR NEW MODEL
                                 <div class="form-check" style="margin-top:-6px;">
                                   <input class="form-check-input" style="margin-left:.125em;" type="checkbox" id="formInputSpecifiedByNumber" value="option1">
