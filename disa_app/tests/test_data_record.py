@@ -25,20 +25,23 @@ class Record_Test( TestCase ):
         self.random_new_record_location = secrets.choice( [
             {'id': 550, 'label': 'Rhode Island ', 'value': 'Rhode Island '},
             {'id': 23, 'label': 'New York', 'value': 'New York'},
-            {'id': 191, 'label': 'Maine', 'value': 'Maine'}
-            ] )  # so we can tell that stuff is really getting saved to the db
+            {'id': 191, 'label': 'Maine', 'value': 'Maine'},
+            {'id': 560, 'label': 'Virginia', 'value': 'Virginia'}
+            ] )
         self.random_new_record_national_context = secrets.choice( [
             1, # British
             2, # American
-            3  # French
+            3, # French
+            4  # Spanish
             ] )
         self.random_new_record_record_type = secrets.choice( [
             {'id': 29, 'label': 'Burial Record', 'value': 'Burial Record'},
             {'id': 1, 'label': 'Baptism', 'value': 'Baptism'},
             {'id': 20, 'label': 'Petition to Assembly', 'value': 'Petition to Assembly'},
+            {'id': 56, 'label': 'Criminal case abstract', 'value': 'Criminal case abstract'}
             ] )
         self.random_new_record_transcription_text = secrets.choice( [
-            'transcription_aaa', 'transcription_bbb', 'transcription_ccc'
+            'transcription_aaa', 'transcription_bbb', 'transcription_ccc', 'transcription_ddd'
             ] )
         # self.random_put_record_text = secrets.choice( ['aaa', 'bbb', 'ccc', 'ddd'] )
         self.create_resp_statuscode = None  # updated by create_new_record()
@@ -153,7 +156,7 @@ class Record_Test( TestCase ):
         self.assertEqual( str, type(self.create_resp_id) )
         self.assertEqual( ['redirect'], list(self.post_resp_dct.keys()) )
         ## cleanup
-        # self.delete_new_citation()
+        self.delete_new_record()
 
     # ## UPDATE ====================
 
