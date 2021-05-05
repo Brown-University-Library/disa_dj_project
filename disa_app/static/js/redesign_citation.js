@@ -316,9 +316,21 @@ function initializeItemForm(dataAndSettings) {
           if (this.currentItem.FULL_DATA_LOADED) {
             this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
 
-      'currentItemId': function(itemId) {
-        if (! this.currentItem.FULL_DATA_LOADED) { // <-- CHECK THIS
-          getItemData(itemId).then(
+            // Only save current Item (without Referent data)
+  
+            const { referents, ...currentItemDataNoReferents } = this.currentItem;
+            const currentItemCopy = JSON.parse(JSON.stringify(currentItemDataNoReferents));
+  
+            console.log('SAVING ITEM DATA ...', currentItemCopy);
+  
+            window.setTimeout( // FAKE FETCH
+              () => this.saveStatus = this.SAVE_STATUS.SUCCESS, 
+              2000
+            );
+          }
+        }
+      },
+
       // LOAD ROUTINES
 
       // If currentItemId changes, load new item data (if necessary)
