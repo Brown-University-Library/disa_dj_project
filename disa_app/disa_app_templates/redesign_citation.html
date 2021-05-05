@@ -42,7 +42,8 @@
 </style>
 
 <script type="text/javascript">
-    var data_itemrecord_api_url_root = "{{ data_itemrecord_api_url_root }}";  // needed by `redesign_data.js`
+    var data_itemrecord_api_url_root = "{{ data_itemrecord_api_url_root }}",  // needed by `redesign_data.js`
+        TOKEN = "{{ csrf_token }}";
 </script>
 
 <script type="module" src="{% static 'js/redesign_citation.js' %}"></script>
