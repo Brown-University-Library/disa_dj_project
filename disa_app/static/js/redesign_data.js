@@ -119,9 +119,10 @@ function preprocessReferentData(referentData) {
   return referentData;
 }
 
-async function getReferentData(referentId, itemId) {
-  if (referentId === 'new') {
-    const dataURL = `/data/entrants/new/`,
+async function getReferentData(referentId, itemId, apiDefinition) {
+  
+  if (referentId === 'new' && false) { // DISABLED - actually, this is a SAVE function
+    const dataURL = apiDefinition.api_url,
           fetchOptions = {
             method: 'POST',
             headers: {
@@ -138,14 +139,18 @@ async function getReferentData(referentId, itemId) {
               roles: [ {'id': '3', 'name': 'Priest'}]
             })
           },
-          response = await fetch(dataURL, fetchOptions); // @todo need to handle 404s etc.
+          // response = await fetch(dataURL, fetchOptions); // @todo need to handle 404s etc.
           dataJSON = await response.json();
     console.log('GGGGGGG', dataJSON);
     // return preprocessReferentData(dataJSON.ent);
   } else if (referentId) {
-    console.log('RRR', `/data/entrants/${referentId}/`);
-    const dataURL = `/data/entrants/${referentId}/`,
-          response = await fetch(dataURL), // @todo need to handle 404s etc.
+    const dataURL = apiDefinition.api_url,
+          response = await fetch(dataURL, { 
+            method: apiDefinition.api_method,
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }), // @todo need to handle 404s etc.
           dataJSON = await response.json();
     return preprocessReferentData(dataJSON.ent);
   } else {

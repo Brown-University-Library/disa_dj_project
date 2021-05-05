@@ -2,6 +2,10 @@
 import {getSourceData, getItemData, getReferentData, saveReferentData} from './redesign_data.js';
 import { DISA_ID_COMPONENT } from './redesign_id_component.js';
 import { TAG_INPUT_COMPONENT } from './redesign_tag-input_component.js';
+import { SAVE_STATUS_COMPONENT } from './redesign_save-status_component.js';
+
+
+const DATA_BACKUP = [];
 
 // UUID generator
 // Source: https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid/2117523#2117523
@@ -65,6 +69,9 @@ function initializeCitationForm(dataAndSettings) {
       'formData.doc.citation_type_id': updateCitationFieldVisibility
     },
     methods: {
+      openItemTab: function () {
+        document.getElementById('item-tab').click();
+      },
       onSubmitForm: function(x) { 
         // @todo finish this
         console.log({ 
@@ -78,18 +85,35 @@ function initializeCitationForm(dataAndSettings) {
 }
 
 function initializeItemForm(dataAndSettings) {
-  new Vue({
+
+  window.itemFormVue = new Vue({
+
     el: '#Items',
-    data: dataAndSettings,
+
+    // Data is not a function (as usual with Vue) b/c changes should be 
+    //  reflected between this and the previous form
+
+    data: dataAndSettings, 
+
     components: {
       'disa-id': DISA_ID_COMPONENT,
-      'disa-tags': TAG_INPUT_COMPONENT
+      'disa-tags': TAG_INPUT_COMPONENT,
+      'disa-save-status': SAVE_STATUS_COMPONENT
     },
+
     mounted: function () {
+
+      // Initialize item date fields
+
+      const itemDate = new Date(this.currentItem.date);
+      this.currentItemDate_day = itemDate.getDate();
+      this.currentItemDate_month = itemDate.getMonth();
+      this.currentItemDate_year = itemDate.getFullYear();
       Array.from(document.getElementsByClassName('taggedInput')).forEach(
         taggedInput => new Tagify(taggedInput)
       )
     },
+
     computed: {
 
       currentItem: function() {
@@ -98,6 +122,65 @@ function initializeItemForm(dataAndSettings) {
       currentReferent: function () {
         return this.currentItem.referents[this.currentReferentId]
       },
+
+      currentItemLocationCity: function () {
+        if (this.currentItem.location_info) {
+          const cityLocation = this.currentItem.location_info.find(
+            loc => loc.location_type === 'City'
+          );
+          return cityLocation && cityLocation.location_name 
+            ? cityLocation.location_name : undefined;
+        } else {
+          return undefined;
+        }
+      },
+
+      currentItemLocationColonyState: function () {
+        if (this.currentItem.location_info) {
+          const colonyStateLocation = this.currentItem.location_info.find(
+            loc => loc.location_type === 'Colony/State'
+          );
+          return colonyStateLocation && colonyStateLocation.location_name 
+            ? colonyStateLocation.location_name : undefined;
+        } else {
+          return undefined;
+        }
+      },
+
+      currentItemLocationLocale: function () {
+        if (this.currentItem.location_info) {
+          const localeLocation = this.currentItem.location_info.find(
+            loc => loc.location_type === 'Locale'
+          );
+          return localeLocation && localeLocation.location_name 
+            ? localeLocation.location_name : undefined;
+        } else {
+          return undefined;
+        }
+      },
+
+      // Computed properties to trigger saves
+
+      watchMeToTriggerReferentSave: function () { // (may not be necessary)
+        return JSON.stringify(this.currentReferent);
+      },
+
+      watchMeToTriggerItemSave: function () {
+        // Ignore changes in referents
+        const {referents, ...rest} = this.currentItem;
+        return JSON.stringify(rest);
+      },
+
+      // Computed properties to translate to/from server data structure
+      //  (this is watched for changes to update data structure)
+
+      watchMeToTriggerItemDateSync: function () {
+        return `${this.currentItemDate_month}/${this.currentItemDate_day}/${this.currentItemDate_year}`;
+      },
+
+      // Computed properties for translating to/from 
+      //  Tagify's input requirements
+
       currentReferentTribesForTagify: {
         get: function() {
           return JSON.stringify(this.currentReferent.tribes.map(
@@ -122,6 +205,7 @@ function initializeItemForm(dataAndSettings) {
           );
         }
       },
+
       currentReferentRaceID: {
         get: function () {
           return (Array.isArray(this.currentReferent.races) && this.currentReferent.races.length)
@@ -129,33 +213,136 @@ function initializeItemForm(dataAndSettings) {
             : undefined;
         },
         set: function (raceID) {
-          console.log('ABCDEF', this.currentReferent.races);
           if (! Array.isArray(this.currentReferent.races)) {
             this.currentReferent.races = [];
           }
           this.currentReferent.races[0] = { id: raceID };
         }
+      },
+
+      // Compute API endpoints
+
+      saveCurrentReferentAPI: function () {
+        const apiDefinition = this.formData.user_api_info.update_user_info_DETAILS,
+              qualifiedURL = apiDefinition.api_url.replace('THE-REFERENT-ID', this.currentReferentId);
+        return Object.assign({}, apiDefinition, { api_url: qualifiedURL });
+      },
+
+      loadCurrentReferentAPI: function () {
+        const apiDefinition = this.formData.user_api_info.get_user_info,
+              qualifiedURL = apiDefinition.api_url.replace('THE-REFERENT-ID', this.currentReferentId);
+        return Object.assign({}, apiDefinition, { api_url: qualifiedURL });
       }
     },
-    delimiters: ['v{','}v'], // So as not to clash with Django templates
+
+    // So as not to clash with Django templates, if needed
+
+    delimiters: ['v{','}v'], 
+
     watch: {
-      'formData.doc.references': {
+
+      // SAVE ROUTINES
+
+      // Backup data whenever anything changes
+
+      formData: {
         handler() {
-          console.log('FGHFGHFGH');
-          this.saveStatus = 'saving-item';
-          window.setTimeout(
-            () => {this.saveStatus = 'saved'}, 
-            1000000
-          );
+          DATA_BACKUP.push({
+            timestamp: Date.now(),
+            data: JSON.stringify(this.formData)
+          });
+
+          // Limit backup history
+          // @todo - be smarter about this
+
+          while (DATA_BACKUP.length > 100) {
+            DATA_BACKUP.shift();
+          }
+          console.log('BACKED UP DATA', DATA_BACKUP);
         },
         deep: true
       },
 
-      // If currentItemId changes, load new item data
+      // If current referent info changes, save
+      //  (if full referent data has been previously loaded)
 
-      'currentItemId': function(itemId) {
-        if (! this.currentItem.FULL_DATA_LOADED) { // <-- CHECK THIS
-          getItemData(itemId).then(
+      currentReferent: {
+        handler() {
+          if (this.currentReferent.FULL_DATA_LOADED) {
+
+            const requestBody = JSON.stringify({
+              id: this.currentReferent.id,
+              age: this.currentReferent.age,
+              // name: this.currentReferent.names[0], // @todo - only one name?? BD's test has a .name field
+              "names": this.currentReferent.names.map(
+                name => { name.name_type = "7"; return name }
+              ),
+              "origins": this.currentReferent.origins,
+              "races": this.currentReferent.races,
+              "sex": this.currentReferent.sex,
+              "statuses": [], // this.currentReferent.statuses, // ??
+              "titles": this.currentReferent.titles.map(
+                title => {
+                  title.name = title.label.valueOf();
+                  return title 
+                }
+              ),
+              "tribes": this.currentReferent.tribes,
+              "vocations": this.currentReferent.vocations
+            });
+
+            console.log('SAVE CURRENT REFERENT');
+            console.log('WTF WTF?', requestBody);
+            this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
+            saveReferentData(
+              this.currentReferentId, 
+              this.currentItemId,
+              this.saveCurrentReferentAPI,
+              requestBody
+            );
+            window.setTimeout( // FAKE FETCH
+              () => { 
+                this.saveStatus = this.SAVE_STATUS.SUCCESS; 
+                console.log('SAVED!'); 
+              }, 
+              2000
+            );
+          }
+        },
+        deep: true
+      },
+
+      // If current Item info changes, save
+
+      watchMeToTriggerItemSave: {
+        handler() {
+          if (this.currentItem.FULL_DATA_LOADED) {
+            this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
+
+            // Only save current Item (without Referent data)
+  
+            const { referents, ...currentItemDataNoReferents } = this.currentItem;
+            const currentItemCopy = JSON.parse(JSON.stringify(currentItemDataNoReferents));
+  
+            console.log('SAVING ITEM DATA ...', currentItemCopy);
+  
+            window.setTimeout( // FAKE FETCH
+              () => this.saveStatus = this.SAVE_STATUS.SUCCESS, 
+              2000
+            );
+          }
+        }
+      },
+
+      // LOAD ROUTINES
+
+      // If currentItemId changes, load new item data (if necessary)
+      //  Also update date fields for this item
+
+      currentItemId: function(itemId) {
+        const oldItemData = this.currentItem;
+        if (!this.currentItem.FULL_DATA_LOADED) {
+          getItemData(itemId, oldItemData).then(
             itemData => this.formData.doc.references[itemId] = itemData
           );
         }
@@ -163,15 +350,28 @@ function initializeItemForm(dataAndSettings) {
 
       // If currentReferentId changes, load new referent data
 
-      'currentReferentId': function(referentId) {
-        if (! this.currentReferent.FULL_DATA_LOADED) {
-          getReferentData(referentId).then(
+      currentReferentId: function(referentId) {
+        if (!this.currentReferent.FULL_DATA_LOADED) {
+          getReferentData(referentId, this.currentItemId, this.loadCurrentReferentAPI).then(
             referentData => this.currentItem.referents[referentId] = referentData
           );
         }
+      },
+
+      // If date fields in form change, update data structure with
+      //  form field values
+
+      watchMeToTriggerItemDateSync: function (dateString) {
+        this.currentItem.date = [
+          this.currentItemDate_month,
+          this.currentItemDate_day,
+          this.currentItemDate_year
+        ].join('-');
       }
     },
+
     methods: {
+
       makeNewReferent: function (e) {
         const newReferentId = 'new'; // uuidv4();
         e.preventDefault(); // Link doesn't behave like a link
@@ -183,8 +383,6 @@ function initializeItemForm(dataAndSettings) {
         return false;
       },
       getReferentDisplayLabel: function (referent) {
-        //console.log('RRRRRRRRRRR');
-        //const referent = this.currentReferent;
         return referent ? `${referent.first} ${referent.last}` : 'Hmmm';
       },
       makeNewReferentName: function () {
@@ -250,11 +448,18 @@ async function loadAndInitializeData(initDisplay) {
   // Load full data for current item
 
   dataAndSettings.formData.doc.references[dataAndSettings.currentItemId] 
-    = await getItemData(dataAndSettings.currentItemId);
+    = await getItemData(dataAndSettings.currentItemId, 
+                        dataAndSettings.formData.doc.references[dataAndSettings.currentItemId]);
 
   // Initialize save status register
 
-  dataAndSettings.saveStatus = 'saved';
+  dataAndSettings.saveStatus = dataAndSettings.SAVE_STATUS.NO_CHANGE;
+
+  // 'glue' between form fields and data structure
+
+  dataAndSettings.currentItemDate_day = undefined;
+  dataAndSettings.currentItemDate_month = undefined;
+  dataAndSettings.currentItemDate_year = undefined;
 
   return dataAndSettings;
 }

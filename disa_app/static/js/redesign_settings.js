@@ -102,6 +102,15 @@ export const LOCAL_SETTINGS = {
       }
     },
 
+    // Save status codes
+
+    SAVE_STATUS: {
+      NO_CHANGE: 1, 
+      SAVE_IN_PROGRESS: 2, 
+      ERROR_BAD_API_ID: 3, 
+      SUCCESS: 4
+    },
+
     // What goes in the menus? (can be controlled from server)
     // (note: keys are same as element IDs)
 
