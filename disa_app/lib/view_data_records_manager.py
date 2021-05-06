@@ -23,6 +23,8 @@ log = logging.getLogger(__name__)
 def query_record( rec_id: str ) -> dict:
     """ Handles api call for GET reference-data and associated referent-data.
         Called by views.data_records() """
+    log.debug( 'starting query_record()' )
+    assert type(rec_id) == str
     data = { 'rec': {}, 'entrants': [] }
     if rec_id == None:
         data = json.dumps( data )
@@ -257,18 +259,20 @@ def manage_reference_delete( rfrnc_id: str ) -> HttpResponseRedirect:  # or, muc
               ...but a good TODO would be to refactor that view and have a general views.data_record() url...
               ...handle the full CRUD set of methods -- which would all call this data_records_manager.py file """
     log.debug( 'starting manage_delete()' )
+    assert type(rfrnc_id) == str
     session = make_session()
     existing = session.query( models_alch.Reference ).get( rfrnc_id )
     if existing:
+        log.debug( 'found reference to delete' )
         cite = existing.citation  # why did I get this?
         session.delete( existing )
         session.commit()
-        # rsp = HttpResponseRedirect( redirect_url )  # if this doesn't work, i can just hit this url with requests and return the output.
     else:
+        log.debug( 'TODO: return a 404 or bad-request' )
         pass
     redirect_url = reverse( 'edit_citation_url', kwargs={'cite_id': cite.id} )
-    log.debug( f'redirect_url, ```{redirect_url}```' )
     context =  { 'redirect': redirect_url }
+    log.debug( f'context, ``{context}``' )
     return context
 
 # def manage_reference_delete( rfrnc_id: str ) -> HttpResponseRedirect:  # or, much less likely, HttpResponseNotFound
@@ -300,6 +304,7 @@ def manage_reference_delete( rfrnc_id: str ) -> HttpResponseRedirect:  # or, muc
 
 
 def make_session() -> sqlalchemy.orm.session.Session:
+    log.debug( 'making Session' )
     engine = create_engine( settings_app.DB_URL, echo=True )
     Session = sessionmaker( bind=engine )
     session = Session()
@@ -309,7 +314,7 @@ def make_session() -> sqlalchemy.orm.session.Session:
 def get_or_create_type( typeData: dict, typeModel: models_alch.ReferenceType, session: sqlalchemy.orm.session.Session ) -> models_alch.ReferenceType:
     """ Gets or creates a ReferenceType instance.
         Called by manage_post() """
-    log.debug( f'typeData, ```{pprint.pformat(typeData)}```' )
+    log.debug( f'starting get(); typeData, ```{pprint.pformat(typeData)}```' )
     if typeData['id'] == -1:
         new_type = typeModel (name=typeData['value'] )
         session.add( new_type )
@@ -332,7 +337,7 @@ def process_record_locations( locData: list, recObj: models_alch.Reference, sess
         Updates ReferenceLocation records if necessary...
         Creates a linkage between the Reference record and the ReferenceLocation record if necessary.
         Called by manage_post() """
-    log.debug( f'locData, ```{pprint.pformat(locData)}```' )
+    log.debug( f'starting process_record_locations(); locData, ```{pprint.pformat(locData)}```' )
     locations = []
     for loc in locData:
         if loc['id'] == -1:

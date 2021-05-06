@@ -25,7 +25,7 @@ from disa_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, HttpResponseRedirect, HttpResponseServerError
 from django.shortcuts import get_object_or_404, render
 
 
@@ -483,14 +483,23 @@ def data_entrants_details( request, rfrnt_id ):
 def data_records( request, rec_id=None ):
     """ Called via ajax by views.edit_record()
         Url: '/data/records/<rec_id>/' -- 'data_record_url' """
-    log.debug( f'\n\nstarting data_records, with rec_id, `{rec_id}`; with method, ```{request.method}```, with a payload of, `{request.body}`' )
-    user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+    log.debug( '\n\nstarting data_records' )
+    # log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
     try:
+        log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rec_id, ``{rec_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
+        assert ( rec_id == None or type(rec_id) == str )
+        user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+        log.debug( f'request.user.profile.old_db_id, ``{request.user.profile.old_db_id}``' )
+        log.debug( f'request.user.id, ``{request.user.id}``' )
+        assert type(user_id) == int, type(user_id)
+        log.debug( f'user_id, ``{user_id}``' )
+        log.debug( f'request.body, ``{request.body}``' )
         if request.method == 'GET':
             if rec_id:
-                log.debug( f'here, because rec_id is, `{rec_id}`; and is type, `{type(rec_id)}`' )
+                log.debug( 'here, because rec_id exists' )
                 context: dict = view_data_records_manager.query_record( rec_id )
             else:
+                log.debug( f'here, because rec_id is None' )
                 context = { 'rec': {}, 'entrants': [] }
         elif request.method == 'PUT':
             context: dict = view_data_records_manager.manage_reference_put( rec_id, request.body, user_id )
@@ -508,8 +517,12 @@ def data_records( request, rec_id=None ):
 def data_reference( request, rfrnc_id ):
     """ Called via ajax by views.edit_citation() on DELETE
         Handles api call when red `x` button is clicked in, eg, <http://127.0.0.1:8000/editor/documents/(123)/>
-        Url: '/data/reference/<rfrnc_id>/' -- 'data_reference_url' """
-    log.debug( f'\n\nstarting data_reference, with rfrnc_id, `{rfrnc_id}`; with method, ```{request.method}```' )
+        Url: '/data/reference/<rfrnc_id>/' -- 'data_reference_url'
+        TODO: Why isn't this part of the above data_records() function??!!
+        """
+    log.debug( f'\n\nstarting data_reference()' )
+    log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rfrnc_id, ``{rfrnc_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
+    assert type(rfrnc_id) == str
     context: dict = view_data_records_manager.manage_reference_delete( rfrnc_id )
     rspns = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return rspns
@@ -541,13 +554,17 @@ def data_documents( request, doc_id=None ):
         msg = 'data_documents() other request.method handling coming'
         log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
         resp = HttpResponse( msg )
-    # if 'redirect' in context.keys():
-    #     redirect_url = context['redirect']
-    #     log.debug( f'redirecting to, ```{redirect_url}```' )
-    #     resp = HttpResponseRedirect( redirect_url )
-    # else:
-    #     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    log.debug( f'context, ``{context}``' )
+    if context == 'error':  # TODO: merge this response into `400 / Bad Request`
+        resp = HttpResponseBadRequest( '400 / Bad Request' )
+    elif context == '400 / Bad Request':
+        resp = HttpResponseBadRequest( '400 / Bad Request' )
+    elif context == 'not_found':
+        resp = HttpResponseNotFound( '404 / Not Found' )
+    elif context == '500 / Server Error':
+        resp = HttpResponseServerError( context )
+    else:
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
 
 
