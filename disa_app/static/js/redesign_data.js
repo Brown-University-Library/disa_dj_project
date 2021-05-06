@@ -53,16 +53,12 @@ async function getSourceData() {
   return preprocessCitationData(dataWithSettings);
 }
 
-function preprocessItemData(itemData) {
+function preprocessItemData(itemData, oldItemData) {
+
   let processedData = {
     date: itemData.rec.date,
     id: itemData.rec.id,
-    location_info: [ // @todo figure this out
-      {
-        "location_name": "Plymouth",
-        "location_type": "Colony/State"
-      }
-    ],
+    location_info: oldItemData.location_info, // the old (non-enhanced) location data is richer
     national_context_id: itemData.rec.national_context,
     reference_type_id: itemData.rec.record_type.id,
     // reference_type_name: itemData.rec.record_type.label,
@@ -102,13 +98,15 @@ async function getAdditionalReferentInfo(referents) {
 //   }
 // }
 
-async function getItemData(itemId) {
+async function getItemData(itemId, oldItemData) {
+  // const fullLocationData = oldItemData.location_info;
   if (itemId) {
     // data_itemrecord_api_url_root variable set in redesign_citation.html
     const dataURL = `${data_itemrecord_api_url_root}${itemId}/`,
     response = await fetch(dataURL),
     dataJSON = await response.json();
-    return preprocessItemData(dataJSON);
+    console.log('ABCDEF', dataURL, dataJSON);
+    return preprocessItemData(dataJSON, oldItemData);
   } else {
     return undefined
   }
