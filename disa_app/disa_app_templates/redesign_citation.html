@@ -3,18 +3,11 @@
 
 {% block header_other %}
 
+<!-- Styles -->
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/redesign_citation.css' %}">
-
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js" integrity="sha512-g2PN+aYR0KupTVwea5Ppqw4bxWLLypWdd+h7E0ydT8zF+/Y2Qpk8Y1SnzVw6ZCVJPrgB/91s3VfhVhP7Y4+ucw==" crossorigin="anonymous"></script>
-<script src="{% static 'js/tagify.min.js' %}" type="module"></script>
-<script src="{% static 'js/redesign_citation.js' %}" type="module"></script>
-
-<!-- Production version of Vue
-<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
--->
-
 <link rel="stylesheet" href="{% static 'css/tagify.css' %}"></link>
+
 <style>
 
   .disa-id-badge {
@@ -41,12 +34,18 @@
 
 </style>
 
+<!-- Scripts -->
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<!-- Production version of Vue: <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js" integrity="sha512-g2PN+aYR0KupTVwea5Ppqw4bxWLLypWdd+h7E0ydT8zF+/Y2Qpk8Y1SnzVw6ZCVJPrgB/91s3VfhVhP7Y4+ucw==" crossorigin="anonymous"></script>
+<script src="{% static 'js/tagify.min.js' %}" type="module"></script>
+<script src="{% static 'js/entry_form_citation.js' %}" type="module"></script>
+
 <script type="text/javascript">
     var data_itemrecord_api_url_root = "{{ data_itemrecord_api_url_root }}",  // needed by `redesign_data.js`
         TOKEN = "{{ csrf_token }}";
 </script>
-
-<script type="module" src="{% static 'js/redesign_citation.js' %}"></script>
 
 {% endblock header_other %}
 
