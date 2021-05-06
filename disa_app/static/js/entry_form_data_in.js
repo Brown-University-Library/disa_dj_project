@@ -1,35 +1,40 @@
 
-import {LOCAL_SETTINGS} from './redesign_settings.js';
-
-
+import {LOCAL_SETTINGS} from './entry_form_settings.js';
 
 function preprocessCitationData(data) {
 
-/*
-  // Convert dates to YYYY-MM-DD format
-  // @todo should be done on server
+  /*
+    // Convert dates to YYYY-MM-DD format
+    // @todo should be done on server
 
-  if (data.citation_type_fields.date) {
-    data.citation_type_fields.date =
-      (new Date(data.citation_type_fields.date))
-      .toISOString()
-      .slice(0,10);
-  }
+    if (data.citation_type_fields.date) {
+      data.citation_type_fields.date =
+        (new Date(data.citation_type_fields.date))
+        .toISOString()
+        .slice(0,10);
+    }
 
-  if (data.citation_type_fields.accessDate) {
-    data.citation_type_fields.accessDate =
-      (new Date(data.citation_type_fields.accessDate))
-      .toISOString()
-      .slice(0,10);
-  }
+    if (data.citation_type_fields.accessDate) {
+      data.citation_type_fields.accessDate =
+        (new Date(data.citation_type_fields.accessDate))
+        .toISOString()
+        .slice(0,10);
+    }
   */
 
   // Convert array of references to hash of references (by ID)
+  // @todo replace this with a cacluated field
+  //       referenceByID = function(id) { 
+  //         return formData.doc.references.find(reference => reference.id === id)
+  //       }
 
   data.formData.doc.references = data.formData.doc.references.reduce(
     (refObj, ref) => { refObj[ref.id] = ref; return refObj },
     {}
   );
+
+  data.NEW_USER_TEMPLATE = data.formData.new_user_template.sample_payload; 
+  delete data.formData.new_user_template;
 
   // Add registers for Vue implementation
 
@@ -63,10 +68,11 @@ function preprocessItemData(itemData, oldItemData) {
     reference_type_id: itemData.rec.record_type.id,
     // reference_type_name: itemData.rec.record_type.label,
     // Convert array of referents to a hash by referent ID
+    // @todo - make this into a calculated field instead
     referents: itemData.entrants.reduce(
       (referentHash, referent) => { 
         referentHash[referent.id] = referent; 
-        referentHash[referent.id].status = ['red', 'green', 'blue'];
+        referentHash[referent.id].status = ['red', 'green', 'blue']; // TEMP
         return referentHash;
       },
       {}

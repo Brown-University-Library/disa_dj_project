@@ -7,10 +7,7 @@ export const LOCAL_SETTINGS = {
 
     // API endpoints -- NOT BEING USED
 
-    API_ENDPOINT_URL: {
-      'new-entrant': '[not yet used]',
-      'delete-entrant': ''
-    },
+    API_ENDPOINT_URL: {},
 
     // Data structure for showing / hiding citation fields
 
@@ -128,16 +125,31 @@ export const LOCAL_SETTINGS = {
         '46':'Thesis',
         '49':'Webpage'
       },
-      formInputDISAPersonTribe: {
-        'tribe0':'Unspecified / not clear',
-        'tribe1':'Bocotora',
-        'tribe2':'Eastern Pequot',
-        'tribe3':'Mashantucket Pequot',
-        'tribe4':'Mohegan',
-        'tribe5':'Naragansett',
-        'tribe6':'Pequot',
-        'tribe7':'Wampanoag',
-        'tribe8':'Woolwa'
+      formInputDISAPersonTribe: { 
+        
+        // With labels/values as ID ... (weird)
+
+        'Bocotora':'Bocotora',
+        'Eastern Pequot':'Eastern Pequot',
+        'Mashantucket Pequot':'Mashantucket Pequot',
+        'Mohegan':'Mohegan',
+        'Naragansett':'Naragansett',
+        'Pequot':'Pequot',
+        'Wampanoag':'Wampanoag',
+        'Woolwa':'Woolwa',
+        'Unspecified / not clear':'Unspecified / not clear'
+        
+        /* WITH DB IDs AS KEYS ... (logical)
+
+        '25':'Unspecified / not clear',
+        '2':'Bocotora',
+        '4':'Eastern Pequot',
+        '5':'Mashantucket Pequot',
+        '6':'Mohegan',
+        '7':'Naragansett',
+        '10':'Pequot',
+        '20':'Wampanoag',
+        '21':'Woolwa' */
       },
       formInputDISAPersonVocation: {
         '0': 'Not specified',
@@ -167,19 +179,19 @@ export const LOCAL_SETTINGS = {
       },
       formInputDISAPersonGender: {
         '0': 'Not specified',
-        '1': 'Male',
-        '2': 'Female',
-        '3': 'Two spirit'
+        'Male': 'Male',
+        'Female': 'Female',
+        'Two spirit': 'Two spirit'
       },
       formInputDISAColonialContext: {
-        '1': 'Unspecified',
-        '2': 'American (U.S.)',
-        '3': 'British',
-        '4': 'Dutch',
-        '5': 'French',
-        '6': 'Portuguese',
-        '7': 'Spanish',
-        '8': 'Other'
+        1: 'Unspecified',
+        2: 'American (U.S.)',
+        3: 'British',
+        4: 'Dutch',
+        5: 'French',
+        6: 'Portuguese',
+        7: 'Spanish',
+        8: 'Other'
       },
       formInputDISAItemPersonNameType: {
         '1': 'Alias',
@@ -192,11 +204,18 @@ export const LOCAL_SETTINGS = {
         '8': 'Unknown'
       },
       formInputDISAPersonRace: {
-        '1':'Black',
-        '2':'Indian',
-        '3':'Multi-racial',
-        '4':'White',
-        '5':'Not specified'
+
+        'Not specified':'Not specified',
+        'Black':'Black',
+        'Indian':'Indian',
+        'Multi-racial':'Multi-racial',
+        'White':'White'
+        /*
+        '23':'Not specified',
+        '30':'Black',
+        '7':'Indian',
+        '35':'Multi-racial',
+        '24':'White' */
       },
       formInputDISAItemType: {	
         'item-type-1':'Birth',
@@ -213,12 +232,12 @@ export const LOCAL_SETTINGS = {
         'item-type-12':'Runaway',
         'item-type-13':'Sale',
       },
-      formInputDISAPersonStatus: [
-        'one',
-        'two',
-        'three',
-        'four'
-      ]	
+      formInputDISAPersonStatus: {
+        1: 'one',
+        2: 'two',
+        3: 'three',
+        4: 'four'
+      }	
     }
   };
   
