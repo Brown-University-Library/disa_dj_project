@@ -22,38 +22,16 @@ class Record_Test( TestCase ):
     """ Checks Record data-api urls. """
 
     def setUp(self):
-        self.random_new_record_date = secrets.choice( [  # month/day/year (future TODO: make this a more-standard ISO-format like year/month/day)
-            '02/02/1492', '03/03/1493', '04/04/1494', ''
-            ])
-        ''' Location can have 3, 2, 1, or 0 elements.
-            - Position 1 will populate the form's 'Colony/State' field.
-            - Position 2 will populate the form's 'Town' field.
-            - Position 3 will populate the form's 'Additional location' field.'''
-        self.random_new_record_location = secrets.choice( [
-            [ {'id': 735, 'label': 'Massachusetts', 'value': 'Massachusetts'},
-              {'id': 21, 'label': 'Boston', 'value': 'Boston'},
-              {'id': 357, 'label': 'somewhere about Pumpkin-Hill', 'value': 'somewhere about Pumpkin-Hill'}],
-            [ {'id': 23, 'label': 'New York', 'value': 'New York'},
-              {'id': 748, 'label': 'Albany', 'value': 'Albany'} ],
-            [ {'id': 630, 'label': 'Rhode Island', 'value': 'Rhode Island'} ],
-            [],                                  # this is what is sent if neither of the three location-fields are not filled out
-            ] )
-        self.random_new_record_national_context = secrets.choice( [
-            1, # British -- note: this is what is auto-sent if the field is not filled out
-            2, # American
-            3, # French
-            4  # Spanish
-            ] )
-        self.random_new_record_record_type = secrets.choice( [
-            {'id': 29, 'label': 'Burial Record', 'value': 'Burial Record'},
-            {'id': 1, 'label': 'Baptism', 'value': 'Baptism'},
-            {'id': 20, 'label': 'Petition to Assembly', 'value': 'Petition to Assembly'},
-            {'id': 0, 'label': '', 'value': ''}  # this is what is sent if the field is not filled out; the form will show "Unspecified"
-            ] )
-        self.random_new_record_transcription_text = secrets.choice( [
-            'transcription_aaa', 'transcription_bbb', 'transcription_ccc',
-            ''                                   # this is what is sent if the field is not filled out
-            ] )
+        self.random_new_record_date = self.make_random_date_str()
+        self.random_put_date = self.make_random_date_str()
+        self.random_new_record_location = self.make_random_location_data()
+        self.random_put_location = self.make_random_location_data()
+        self.random_new_record_national_context = self.make_random_national_context()
+        self.random_put_national_context = self.make_random_national_context()
+        self.random_new_record_record_type = self.make_random_record_type()
+        self.random_put_record_type = self.make_random_record_type()
+        self.random_new_record_transcription_text = self.make_random_transcription()
+        self.random_put_transcription = self.make_random_transcription()
         self.random_new_record_image_url = secrets.choice( [
             'https://foo1.com', 'https://foo2.com', 'https://foo3.com',
             None                                 # as shown below in create_new_record(), no key-value is sent if the field is not filled out
@@ -99,6 +77,63 @@ class Record_Test( TestCase ):
         response = self.client.delete( delete_url )
         self.delete_resp_statuscode = response.status_code
         self.delete_resp_dct = json.loads( response.content )
+
+    def make_random_date_str(self):
+        """ Provides data for POST and PUT.
+            Called by setUp() """
+        dt_str =  secrets.choice( [  # month/day/year (future TODO: make this a more-standard ISO-format like year/month/day)
+            '02/02/1492', '03/03/1493', '04/04/1494', ''
+            ] )
+        return dt_str
+
+    def make_random_location_data(self):
+        """ Provides data for POST and PUT.
+            Called by setUp() """
+        ''' Location can have 3, 2, 1, or 0 elements.
+            - Position 1 will populate the form's 'Colony/State' field.
+            - Position 2 will populate the form's 'Town' field.
+            - Position 3 will populate the form's 'Additional location' field.'''
+        loc = secrets.choice( [
+            [ {'id': 735, 'label': 'Massachusetts', 'value': 'Massachusetts'},
+              {'id': 21, 'label': 'Boston', 'value': 'Boston'},
+              {'id': 357, 'label': 'somewhere about Pumpkin-Hill', 'value': 'somewhere about Pumpkin-Hill'}],
+            [ {'id': 23, 'label': 'New York', 'value': 'New York'},
+              {'id': 748, 'label': 'Albany', 'value': 'Albany'} ],
+            [ {'id': 630, 'label': 'Rhode Island', 'value': 'Rhode Island'} ],
+            [],  # this is what is sent if neither of the three location-fields are not filled out
+            ] )
+        return loc
+
+    def make_random_national_context(self):
+        """ Provides data for POST and PUT.
+            Called by setUp() """
+        nc = secrets.choice( [
+            1, # British -- note: this is what is auto-sent if the field is not filled out
+            2, # American
+            3, # French
+            4  # Spanish
+            ] )
+        return nc
+
+    def make_random_record_type(self):
+        """ Provides data for POST and PUT.
+            Called by setUp() """
+        rt = secrets.choice( [
+            {'id': 29, 'label': 'Burial Record', 'value': 'Burial Record'},
+            {'id': 1, 'label': 'Baptism', 'value': 'Baptism'},
+            {'id': 20, 'label': 'Petition to Assembly', 'value': 'Petition to Assembly'},
+            {'id': 0, 'label': '', 'value': ''}  # this is what is sent if the field is not filled out; the form will show "Unspecified"
+            ] )
+        return rt
+
+    def make_random_transcription(self):
+        """ Provides data for POST and PUT.
+            Called by setUp() """
+        t = secrets.choice( [
+            'transcription_aaa', 'transcription_bbb', 'transcription_ccc',
+            ''  # this is what is sent if the field is not filled out
+            ] )
+        return t
 
     # ## GET LIST ===================
 
@@ -153,8 +188,6 @@ class Record_Test( TestCase ):
             self.random_new_record_location, resp_dct['rec']['locations'] )
         self.assertEqual(
             self.random_new_record_national_context, resp_dct['rec']['national_context'] )
-        # self.assertEqual(
-        #     self.random_new_record_record_type, resp_dct['rec']['record_type'] )
         if self.random_new_record_record_type['label'] == '':
             self.assertEqual(
                 {'id': 13, 'label': 'Unspecified', 'value': 'Unspecified'}, resp_dct['rec']['record_type'] )
@@ -195,82 +228,83 @@ class Record_Test( TestCase ):
     # ## UPDATE ====================
 
     # def test_put_bad(self):
-    #     """ Checks bad PUT to `http://127.0.0.1:8000/data/documents/foo/`. """
-    #     put_url = reverse( 'data_documents_url', kwargs={'doc_id': 'foo'} )
+    #     """ Checks bad PUT to `http://127.0.0.1:8000/data/records/foo/`. """
+    #     put_url = reverse( 'data_record_url', kwargs={'doc_id': 'foo'} )
     #     put_response = self.client.put( put_url )
     #     self.assertEqual( 400, put_response.status_code )
     #     self.assertTrue( b'Bad Request' in put_response.content )
 
-    # def test_put_good(self):
-    #     """ Checks good PUT to `http://127.0.0.1:8000/data/documents/abcd/`. """
-    #     ## create citation
-    #     self.create_new_citation()
-    #     ## PUT
-    #     put_url = reverse( 'data_documents_url', kwargs={'doc_id': self.post_resp_id} )
-    #     log.debug( f'put_url-url, ``{put_url}``' )
-    #     put_payload = {  # same as create, except for `shortTitle`, which was blank
-    #         'acknowledgements': f'acks--{self.random_new_citation_text}',
-    #         'citation_type_id': 20,  # means the fields below will be 'Book' fields
-    #         'comments': f'comments--{self.random_new_citation_text}',
-    #         'fields': {
-    #             'ISBN': '',
-    #             'abstractNote': '',
-    #             'accessDate': '',
-    #             'archive': '',
-    #             'archiveLocation': '',
-    #             'author': '',
-    #             'callNumber': '',
-    #             'date': '',
-    #             'edition': '',
-    #             'extra': '',
-    #             'language': '',
-    #             'libraryCatalog': '',
-    #             'numPages': '',
-    #             'numberOfVolumes': '',
-    #             'pages': '',
-    #             'place': '',
-    #             'publisher': '',
-    #             'rights': '',
-    #             'series': '',
-    #             'seriesNumber': '',
-    #             'shortTitle': f'shortTitle--{self.random_put_citation_text}',  # <-- this is the only change
-    #             'title': f'title--{self.random_new_citation_text}',
-    #             'url': '',
-    #             'volume': ''}
-    #         }
-    #     jsn = json.dumps( put_payload )
-    #     put_response = self.client.put( put_url, data=jsn, content_type='application/json' )
-    #     put_resp_dct = json.loads( put_response.content )
-    #     log.debug( f'put_resp_dct, ``{pprint.pformat(put_resp_dct)}``' )
-    #     ## tests
-    #     ''' Note, they're similar the 'get' tests, with two differences:
-    #         1) no `fields` are returned in the PUT response;
-    #         2) the 'citation' (title) check: it now incorporates (additionally) the _updated_ `shortTitle`
-    #     '''
-    #     self.assertEqual( 200, put_response.status_code )
-    #     self.assertEqual(
-    #         ['doc', 'doc_types'],
-    #         sorted(put_resp_dct.keys()) )
-    #     doc_keys = sorted( put_resp_dct['doc'].keys() )
-    #     log.debug( f'doc_keys, ``{doc_keys}``' )
-    #     self.assertEqual( # same as `create` test
-    #         f'acks--{self.random_new_citation_text}',
-    #         put_resp_dct['doc']['acknowledgements']
-    #         )
-    #     self.assertEqual( # same as `create` test
-    #         f'comments--{self.random_new_citation_text}',
-    #         put_resp_dct['doc']['comments']
-    #         )
-    #     self.assertEqual(
-    #         ['acknowledgements', 'citation', 'citation_type_id', 'comments', 'id'],  # no `fields`, as in the `create` response-dct
-    #         doc_keys
-    #         )
-    #     self.assertEqual(
-    #         'title--%s, shortTitle--%s' % ( self.random_new_citation_text, self.random_put_citation_text ),
-    #         put_resp_dct['doc']['citation']
-    #         )  # note, the display _was_ just the contents of fields['title'], but is now the contents of that, plus fields['shortTitle']
-    #     ## cleanup
-    #     self.delete_new_citation()
+    def test_put_good(self):
+        """ Checks good PUT to `http://127.0.0.1:8000/data/records/abcd/`.
+            Sample put payload:
+                {
+                'citation_id': 768,
+                'date': '03/03/1493',
+                'locations': [
+                    {'id': 735, 'label': 'Massachusetts', 'value': 'Massachusetts'},
+                    {'id': 21, 'label': 'Boston', 'value': 'Boston'},
+                    {'id': 357, 'label': 'somewhere about Pumpkin-Hill', 'value': 'somewhere about Pumpkin-Hill'}
+                    ],
+                'national_context': 1,
+                'record_type': {
+                    'id': 20,
+                    'label': 'Petition to Assembly',
+                    'value': 'Petition to Assembly'
+                    },
+                'transcription': 'transcription_bbb'
+                }
+        """
+        ## create citation
+        self.create_new_record()
+        ## PUT
+        put_url = reverse( 'data_record_url', kwargs={'rec_id': self.create_resp_id} )
+        log.debug( f'put_url-url, ``{put_url}``' )
+        put_payload = {
+            'citation_id': 768,
+            'date': self.random_put_date,
+            'locations': self.random_put_location,
+            'national_context': self.random_put_national_context,
+            'record_type': self.random_put_record_type,
+            'transcription': self.random_put_transcription
+            }
+        jsn = json.dumps( put_payload )
+        put_response = self.client.put( put_url, data=jsn, content_type='application/json' )
+        put_resp_dct = json.loads( put_response.content )
+        log.debug( f'put_resp_dct, ``{pprint.pformat(put_resp_dct)}``' )
+        ## tests
+        ''' Note, these are similar to the GET tests. '''
+        self.assertEqual( 200, put_response.status_code )
+        self.assertEqual(
+            ['rec'], sorted(put_resp_dct.keys()) )
+        rec_keys = sorted( put_resp_dct['rec'].keys() )
+        log.debug( f'rec_keys, ``{rec_keys}``' )
+        self.assertEqual(  # similar to POST payload, except that has a key of `citation_id` instead of `citation`, and this has an `id` element.
+            ['citation', 'date', 'id', 'locations', 'national_context', 'record_type', 'transcription' ],
+            sorted(rec_keys) )
+        if self.random_put_date:
+            date_object = datetime.datetime.strptime( self.random_put_date, '%m/%d/%Y')
+            log.debug( f'initial date_object, ``{str(date_object)}``' )
+            modified_date_string = f'{date_object.month}/{date_object.day}/{date_object.year}'
+            log.debug( f'modified_date_string, ``{modified_date_string}``' )
+            self.assertEqual(
+                modified_date_string, put_resp_dct['rec']['date'] )
+        self.assertEqual(
+            self.random_put_location, put_resp_dct['rec']['locations'] )
+        self.assertEqual(
+            self.random_put_national_context, put_resp_dct['rec']['national_context'] )
+        if self.random_put_record_type['label'] == '':
+            self.assertEqual(
+                {'id': 13, 'label': 'Unspecified', 'value': 'Unspecified'}, put_resp_dct['rec']['record_type'] )
+        else:
+            self.assertEqual(
+                self.random_put_record_type, put_resp_dct['rec']['record_type'] )
+
+        # self.assertEqual(
+        #     # self.random_new_record_transcription_text, resp_dct['rec']['transcription'] )
+        #     1, 2 )
+
+        ## cleanup
+        self.delete_new_record()
 
     # ## DELETE ====================
 
