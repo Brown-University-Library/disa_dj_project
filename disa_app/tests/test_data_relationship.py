@@ -150,11 +150,12 @@ class Relationship_Test( TestCase ):
             )
         #
         self.assertEqual(
-            list, type(resp_dct['people'])                                      # 'people' is a list -- IMPORTANT: of _referents_
+            list, type(resp_dct['people'])                                      # 'people' is a list -- IMPORTANT: this is a list of _referents_
             )
         self.assertEqual(
             ['id', 'name'], sorted( resp_dct['people'][0].keys() )              # there will always be at least one referent, with keys of 'id' (meaning referent-id) and 'name'
             )
+        #
 
     def test_get_all_relationships__relationships_DO_exist(self):
         """ Checks good GET all relationships for given item-record. """
