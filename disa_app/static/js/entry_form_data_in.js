@@ -124,7 +124,20 @@ async function getItemData(itemId, oldItemData) {
 }
 
 function preprocessReferentData(referentData) {
+
+  // The API gives us name types as string labels, but borks
+  //   the entry upon save if it's anything but a number (ID).
+  // Convert name type to number
+
+  const nameTypesEntries = Object.entries(LOCAL_SETTINGS.MENU_OPTIONS.formInputDISAItemPersonNameType);
+  referentData.names.forEach(name => {
+    const nameTypeAsLabel = name.name_type,
+          nameTypeAsID_all = nameTypesEntries.find(n => n[1] === nameTypeAsLabel);
+    name.name_type = nameTypeAsID_all ? nameTypeAsID_all[0] : '';
+  });
+console.log('yes');
   referentData.FULL_DATA_LOADED = true;
+
   return referentData;
 }
 

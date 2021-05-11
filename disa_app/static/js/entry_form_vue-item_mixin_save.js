@@ -42,9 +42,7 @@ function submitReferentDataToServer() {
       id: this.currentReferent.id,
       age: this.currentReferent.age,
       // name: this.currentReferent.names[0], // @todo - only one name?? BD's test has a .name field
-      names: this.currentReferent.names.map(
-        name => { name.name_type = "7"; return name }
-      ),
+      names: this.currentReferent.names,
       origins: this.currentReferent.origins,
       races: this.currentReferent.races,
       sex: this.currentReferent.sex,
