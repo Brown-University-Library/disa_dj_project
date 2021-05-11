@@ -616,8 +616,9 @@
                             <li v-for="(name, nameIndex) in referent.names">
 
                               <div v-on:click="currentNameId = (currentNameId === name.id) ? -1 : name.id">
-                                <span v-if="name.first || name.last"
-                                      v-text="`${name.first} ${name.last}`">
+                                <span v-if="name.first || name.last">
+                                  <span v-text="`${name.first} ${name.last}  `"></span>
+                                  <disa-id v-if="currentNameId === name.id" v-bind:forthis="name"></disa-id>
                                 </span>
                                 <em v-else>
                                   New name
