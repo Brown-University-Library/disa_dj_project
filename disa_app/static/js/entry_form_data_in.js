@@ -75,11 +75,10 @@ function preprocessItemData(itemData, oldItemData) {
     reference_type_id: itemData.rec.record_type.id,
     // reference_type_name: itemData.rec.record_type.label,
     // Convert array of referents to a hash by referent ID
-    // @todo - make this into a calculated field instead
     referents: itemData.entrants.reduce(
       (referentHash, referent) => { 
-        referentHash[referent.id] = referent; 
-        referentHash[referent.id].status = ['red', 'green', 'blue']; // TEMP
+        referentHash[referent.id] = referent;
+        referentHash[referent.id].hello = 'there'; // @todo temp
         return referentHash;
       },
       {}
@@ -118,7 +117,6 @@ async function getItemData(itemId, oldItemData) {
     const dataURL = `${data_itemrecord_api_url_root}${itemId}/`,
     response = await fetch(dataURL),
     dataJSON = await response.json();
-    console.log('ABCDEF', dataURL, dataJSON);
     return preprocessItemData(dataJSON, oldItemData);
   } else {
     return undefined

@@ -594,12 +594,12 @@
                       <!-- Edit area for this referent -->
 
                       <div class="card-body"
-                            v-if="currentReferentId === referent.id">
+                           v-if="currentReferentId === referent.id">
                         <div class="card card-body">
 
                           <!-- Name(s) -->
 
-                          <!-- Create new name button -->
+                          <!-- Heading and create-new-name button -->
                           
                           <div>
                             <strong v-text="'Name' + (referent.names && referent.names.length > 1 ? 's' : '')"></strong>
@@ -611,7 +611,7 @@
                           </div>
 
                           <!-- List of names -->
-                          
+
                           <ul>
                             <li v-for="(name, nameIndex) in referent.names">
 
@@ -624,9 +624,11 @@
                                 </em>
                               </div>
 
+                              <!-- Current name - details -->
+
                               <div v-if="currentNameId === name.id">
 
-                                <!-- ADVANCED NAMES - DEFER TO V2
+                                <!-- ADVANCED NAMES - DEFER FOR NEW MODEL
                                 <div class="custom-control custom-switch" style="">
                                   <input type="checkbox" class="custom-control-input" id="formCustomSwitchForAdvancedNames"
                                           v-model="referent.name">
@@ -637,7 +639,8 @@
                                 </div> -->
 
                                 <div class="form-floating">
-                                  <select class="form-select" id="formInputDISAItemPersonNameType" aria-label="Name type"
+                                  <select class="form-select" id="formInputDISAItemPersonNameType" 
+                                          aria-label="Name type"
                                           v-model="name.name_type">
                                     <option v-for="(nameTypeMenuLabel, nameTypeId) in MENU_OPTIONS.formInputDISAItemPersonNameType"
                                             v-bind:value="nameTypeMenuLabel"

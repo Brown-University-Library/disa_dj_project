@@ -1,10 +1,10 @@
 
-import { getSourceData, getItemData } from './entry_form_data_in.js';
-import { DISA_ID_COMPONENT } from './entry_form_component_id-badge.js';
-import { TAG_INPUT_COMPONENT } from './entry_form_component_tag-input.js';
-import { SAVE_STATUS_COMPONENT } from './entry_form_component_save-status.js';
-import { initializeCitationForm } from './entry_form_vue-citation.js';
-import { initializeItemForm } from './entry_form_vue-item.js';
+import { getSourceData, getItemData, getReferentData } from './entry_form_data_in.js';
+import { DISA_ID_COMPONENT }          from './entry_form_component_id-badge.js';
+import { TAG_INPUT_COMPONENT }        from './entry_form_component_tag-input.js';
+import { SAVE_STATUS_COMPONENT }      from './entry_form_component_save-status.js';
+import { initializeCitationForm }     from './entry_form_vue-citation.js';
+import { initializeItemForm }         from './entry_form_vue-item.js';
 
 // UUID generator
 // Source: https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid/2117523#2117523
