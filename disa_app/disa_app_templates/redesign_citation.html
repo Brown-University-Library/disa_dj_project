@@ -381,10 +381,8 @@
                     v-on:click="currentItemId = item.id">
                   <div class="ms-2 me-auto"
                        v-text="makeItemDisplayTitle(item, 50)">
-                    <!-- <div class="fw-bold">Subheading</div> -->
                   </div>
-                  <span class="badge bg-primary rounded-pill"
-                        v-text="`ID:${displayId(item.id)}`">14</span>
+                  <disa-id v-bind:forthis="currentItem" class="float-end"></disa-id>
                 </li>
               </ul>
             </div>
