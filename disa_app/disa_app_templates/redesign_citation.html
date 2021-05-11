@@ -493,8 +493,9 @@
                     -->
                     <select class="form-select" id="formInputDISAEventDateMonth"
                             aria-label="Event date: month" placeholder="Month"
-                            v-model="currentItemDate_month">
-                      <option value="0">Month unspecified</option>
+                            vv-model="currentItemDate_month"
+                            v-model="currentItem.dateParts.month">
+                      <option value="-1">Month unspecified</option>
                       <option value="1">January</option>
                       <option value="2">February</option>
                       <option value="3">March</option>
@@ -510,10 +511,12 @@
                     </select>
                     <input class="form-control" id="formInputDISAEventDateDay"
                             type="number" min="0" max="31" placeholder="Day"
-                            v-model="currentItemDate_day">
+                            vv-model="currentItemDate_day"
+                            v-model="currentItem.dateParts.day">
                     <input class="form-control" id="formInputDISAEventDateYear"
                             type="number" min="1500" max="1900" placeholder="Year"
-                            v-model="currentItemDate_year">
+                            vv-model="currentItemDate_year"
+                            v-model="currentItem.dateParts.year">
                   </div>
 
                   <!-- AWAITING NEW DATA MODEL

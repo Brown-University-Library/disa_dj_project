@@ -60,8 +60,15 @@ async function getSourceData() {
 
 function preprocessItemData(itemData, oldItemData) {
 
+  const itemDate = new Date(itemData.rec.date);
+
   let processedData = {
-    date: itemData.rec.date,
+    // date: itemData.rec.date,
+    dateParts: {
+      month: itemDate.getMonth() + 1,
+      day: itemDate.getDate(),
+      year: itemDate.getFullYear()
+    },
     id: itemData.rec.id,
     location_info: oldItemData.location_info, // the old (non-enhanced) location data is richer
     national_context_id: itemData.rec.national_context,

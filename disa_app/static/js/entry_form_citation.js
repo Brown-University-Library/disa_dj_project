@@ -54,9 +54,9 @@ async function loadAndInitializeData(initDisplay) {
 
   // 'glue' between form fields and data structure
 
-  dataAndSettings.currentItemDate_day = undefined;
-  dataAndSettings.currentItemDate_month = undefined;
-  dataAndSettings.currentItemDate_year = undefined;
+  // dataAndSettings.currentItemDate_day = undefined;
+  // dataAndSettings.currentItemDate_month = undefined;
+  // dataAndSettings.currentItemDate_year = undefined;
 
   return dataAndSettings;
 }

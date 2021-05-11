@@ -61,10 +61,17 @@ function submitItemDataToServer() {
 
     // Only save current Item (without Referent data)
 
-    const { referents, ...currentItemDataNoReferents } = this.currentItem;
-    const currentItemCopy = JSON.parse(JSON.stringify(currentItemDataNoReferents));
+    // const { referents, ...currentItemDataNoReferents } = this.currentItem;
+    // const currentItemCopy = JSON.parse(JSON.stringify(currentItemDataNoReferents));
 
-    console.log('SAVING ITEM DATA ...', currentItemCopy);
+    // @todo INSTEAD ... create a completely new object as API payload
+
+    const submitPayload = {
+      date: ['day','month','year'].map(x => this.currentItem.dateParts[x]).join('/')
+      // ... and so on
+    }
+
+    console.log('SAVING ITEM DATA ...', submitPayload);
 
     window.setTimeout( // FAKE FETCH
       () => this.saveStatus = this.SAVE_STATUS.SUCCESS, 
