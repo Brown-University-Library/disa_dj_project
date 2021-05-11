@@ -1,6 +1,33 @@
 
 
+
+
 // This module collects all the functionality related to saving to the server
+
+
+async function saveReferentData(referentId, itemId, apiDefinition, requestBody) {
+
+  const fetchOptions = {
+          method: apiDefinition.api_method,
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': TOKEN
+          },
+          body: requestBody
+        };
+
+  console.log(`SAVE REFERENT FETCH OPTIONS - posting to ${apiDefinition.api_url}`, 
+              fetchOptions);
+
+  if (true) { // TURN OFF/ON REFERENT SAVING
+    const response = await fetch(apiDefinition.api_url, fetchOptions);
+    console.log('SAVE REFERENT RESPONSE', response);
+    const dataJSON = await response.text();
+    console.log('SAVE REFERENT RESPONSE JSON', dataJSON);
+  }
+
+  // @todo Return value??
+};
 
 
 function submitReferentDataToServer() {

@@ -167,28 +167,4 @@ async function getReferentData(referentId, itemId, apiDefinition) {
   }
 }
 
-
-
-async function saveReferentData(referentId, itemId, apiDefinition, requestBody) {
-
-  const fetchOptions = {
-          method: apiDefinition.api_method,
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': TOKEN
-          },
-          body: requestBody
-        };
-
-  console.log(`SAVE REFERENT FETCH OPTIONS - posting to ${apiDefinition.api_url}`, 
-              fetchOptions);
-  const response = await fetch(apiDefinition.api_url, fetchOptions);
-
-  console.log('SAVE REFERENT RESPONSE', response);
-
-  // const dataJSON = await response.json();
-  const dataJSON = await response.text();
-  console.log('SAVE REFERENT RESPONSE JSON');
-  console.log(dataJSON);
-}
-export { getSourceData, getItemData, getReferentData, saveReferentData }
+export { getSourceData, getItemData, getReferentData }
