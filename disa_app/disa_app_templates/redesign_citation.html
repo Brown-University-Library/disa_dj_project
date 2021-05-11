@@ -643,7 +643,7 @@
                                           aria-label="Name type"
                                           v-model="name.name_type">
                                     <option v-for="(nameTypeMenuLabel, nameTypeId) in MENU_OPTIONS.formInputDISAItemPersonNameType"
-                                            v-bind:value="nameTypeMenuLabel"
+                                            v-bind:value="nameTypeId"
                                             v-text="nameTypeMenuLabel">
                                     </option>
                                   </select>
