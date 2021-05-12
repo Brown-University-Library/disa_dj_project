@@ -258,6 +258,22 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         return displayTitle
       },
 
+      getReferentDisplayLabel: function (referent) {
+        let displayLabel;
+        if (referent.first || referent.last) {
+          displayLabel = `${referent.first} ${referent.last}`;
+        } else if ( referent.names && referent.names.length && 
+                    (referent.names[0].first || referent.names[0].last)) {
+          displayLabel = `${referent.names[0].first} ${referent.names[0].last}`
+        } else if (!referent.id || referent.id === 'new') {
+          displayLabel = 'New person';
+        } else {
+          displayLabel = `Individual-${referent.id}`;
+        }
+
+        return displayLabel;
+      },
+
       // Update URL to reflect current source, item, referent
 
       updateUrl: function () {

@@ -580,16 +580,10 @@
                          v-for="(referent, referentId) in currentItem.referents">
 
                       <!-- Main (clickable accordion) header for this referent -->
+
                       <div class="card-header"
                             v-on:click="currentReferentId = (currentReferentId === referent.id) ? -1 : referent.id">
-                        <span v-if="referent.first || referent.last"
-                              vv-text="getReferentDisplayLabel(referent)"
-                              v-text="`${referent.first} ${referent.last}`">
-                        </span>
-                        <span v-else-if="referent.names && referent.names.length && (referent.names[0].first || referent.names[0].last)"
-                              v-text="`${referent.names[0].first} ${referent.names[0].last}`">
-                        </span>
-                        <em v-else>New person</em>
+                        <span v-text="getReferentDisplayLabel(referent)"></span>
                         <disa-id v-bind:forthis="referent" class="float-end"></disa-id>
                       </div>
 
