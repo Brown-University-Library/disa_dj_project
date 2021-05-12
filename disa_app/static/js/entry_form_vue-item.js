@@ -83,13 +83,6 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         }
       },
 
-      // Computed properties to translate to/from server data structure
-      //  (this is watched for changes to update data structure)
-
-      watchMeToTriggerItemDateSync: function () {
-        return `${this.currentItemDate_month}/${this.currentItemDate_day}/${this.currentItemDate_year}`;
-      },
-
       // Computed properties for translating to/from 
       //  Tagify's input requirements
 
