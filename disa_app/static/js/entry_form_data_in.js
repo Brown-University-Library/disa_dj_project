@@ -3,6 +3,8 @@ import {LOCAL_SETTINGS} from './entry_form_settings.js';
 
 function preprocessSourceData(data) {
 
+  // Make array of references into a hash by reference ID
+
   data.formData.doc.references = data.formData.doc.references.reduce(
     (refObj, ref) => { refObj[ref.id] = ref; return refObj },
     {}
@@ -39,7 +41,7 @@ async function getSourceData() {
   return preprocessSourceData(dataWithSettings);
 }
 
-function preprocessItemData(itemData, oldItemData) {
+function preprocessItemData(itemData, oldItemData, relationshipsData, referentData) {
 
   const itemDate = new Date(itemData.rec.date);
 
@@ -56,10 +58,11 @@ function preprocessItemData(itemData, oldItemData) {
     reference_type_id: itemData.rec.record_type.id,
     // reference_type_name: itemData.rec.record_type.label,
     // Convert array of referents to a hash by referent ID
-    referents: itemData.entrants.reduce(
-      (referentHash, referent) => { 
+    referents: referentData.reduce(
+      (referentHash, referent) => {
         referentHash[referent.id] = referent;
         referentHash[referent.id].hello = 'there'; // @todo temp
+        referentHash[referent.id].relationships = relationshipsData[referent.id];
         return referentHash;
       },
       {}
@@ -91,14 +94,27 @@ async function getAdditionalReferentInfo(referents) {
 //   }
 // }
 
-async function getItemData(itemId, oldItemData) {
-  // const fullLocationData = oldItemData.location_info;
+async function getItemData(itemId, oldItemData, apiInfo) {
   if (itemId) {
+
     // data_itemrecord_api_url_root variable set in redesign_citation.html
+    // @todo but is also available in apiInfo?
+
     const dataURL = `${data_itemrecord_api_url_root}${itemId}/`,
-    response = await fetch(dataURL),
-    dataJSON = await response.json();
-    return preprocessItemData(dataJSON, oldItemData);
+          itemDataPromise = fetch(dataURL).then(response => response.json()),
+          referentDataPromise = itemDataPromise.then(itemData => {
+            return getReferentsData(
+              itemData.entrants.map(referent => referent.id), 
+              itemId,
+              apiInfo
+            );
+          }),
+          relationshipsDataPromise = getRelationshipsData(itemId);
+
+    return Promise.all([].concat(referentDataPromise, relationshipsDataPromise, itemDataPromise))
+           .then(([referentData, relationshipsData, itemData]) => {
+      return preprocessItemData(itemData, oldItemData, relationshipsData, referentData);
+    });
   } else {
     return undefined
   }
@@ -116,13 +132,19 @@ function preprocessReferentData(referentData) {
           nameTypeAsID_all = nameTypesEntries.find(n => n[1] === nameTypeAsLabel);
     name.name_type = nameTypeAsID_all ? nameTypeAsID_all[0] : '';
   });
-console.log('yes');
+
   referentData.FULL_DATA_LOADED = true;
 
   return referentData;
 }
 
-async function getReferentData(referentId, itemId, apiDefinition) {
+async function getReferentsData(referentIDs, itemID, apiDefinition) {
+  return Promise.all(referentIDs.map(referentID => getReferentData(referentID, itemID, apiDefinition)))
+}
+
+async function getReferentData(referentId, itemId, apiDefinitions) {
+
+  const apiDefinition = apiDefinitions.get_user_info;
   
   if (referentId === 'new' && false) { // DISABLED - actually, this is a SAVE function
     const dataURL = apiDefinition.api_url,
