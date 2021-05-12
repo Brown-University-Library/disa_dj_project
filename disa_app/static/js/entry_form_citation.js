@@ -40,23 +40,12 @@ async function loadAndInitializeData(initDisplay) {
 
   // Set first referent to display: from URL or none
 
-  dataAndSettings.currentReferentId = initDisplay.referentId || -1;
-
-  // Load full data for current item
-
-  dataAndSettings.formData.doc.references[dataAndSettings.currentItemId] 
-    = await getItemData(dataAndSettings.currentItemId, 
-                        dataAndSettings.formData.doc.references[dataAndSettings.currentItemId]);
+  const NO_REFERENT = -1;
+  dataAndSettings.currentReferentId = initDisplay.referentId || NO_REFERENT;
 
   // Initialize save status register
 
   dataAndSettings.saveStatus = dataAndSettings.SAVE_STATUS.NO_CHANGE;
-
-  // 'glue' between form fields and data structure
-
-  // dataAndSettings.currentItemDate_day = undefined;
-  // dataAndSettings.currentItemDate_month = undefined;
-  // dataAndSettings.currentItemDate_year = undefined;
 
   return dataAndSettings;
 }
@@ -105,7 +94,6 @@ window.addEventListener('load', () => {
 
   @todo
   Only have one Vue instance for both tabs
-  Add relationships between people
   Add GUI editor for transcription (convert to markdown?)
 
 */
