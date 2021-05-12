@@ -1,6 +1,33 @@
 
 
+
+
 // This module collects all the functionality related to saving to the server
+
+
+async function saveReferentData(referentId, itemId, apiDefinition, requestBody) {
+
+  const fetchOptions = {
+          method: apiDefinition.api_method,
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': TOKEN
+          },
+          body: requestBody
+        };
+
+  console.log(`SAVE REFERENT FETCH OPTIONS - posting to ${apiDefinition.api_url}`, 
+              fetchOptions);
+
+  if (true) { // TURN OFF/ON REFERENT SAVING
+    const response = await fetch(apiDefinition.api_url, fetchOptions);
+    console.log('SAVE REFERENT RESPONSE', response);
+    const dataJSON = await response.text();
+    console.log('SAVE REFERENT RESPONSE JSON', dataJSON);
+  }
+
+  // @todo Return value??
+};
 
 
 function submitReferentDataToServer() {
@@ -15,9 +42,7 @@ function submitReferentDataToServer() {
       id: this.currentReferent.id,
       age: this.currentReferent.age,
       // name: this.currentReferent.names[0], // @todo - only one name?? BD's test has a .name field
-      names: this.currentReferent.names.map(
-        name => { name.name_type = "7"; return name }
-      ),
+      names: this.currentReferent.names,
       origins: this.currentReferent.origins,
       races: this.currentReferent.races,
       sex: this.currentReferent.sex,
@@ -61,10 +86,17 @@ function submitItemDataToServer() {
 
     // Only save current Item (without Referent data)
 
-    const { referents, ...currentItemDataNoReferents } = this.currentItem;
-    const currentItemCopy = JSON.parse(JSON.stringify(currentItemDataNoReferents));
+    // const { referents, ...currentItemDataNoReferents } = this.currentItem;
+    // const currentItemCopy = JSON.parse(JSON.stringify(currentItemDataNoReferents));
 
-    console.log('SAVING ITEM DATA ...', currentItemCopy);
+    // @todo INSTEAD ... create a completely new object as API payload
+
+    const submitPayload = {
+      date: ['day','month','year'].map(x => this.currentItem.dateParts[x]).join('/')
+      // ... and so on
+    }
+
+    console.log('SAVING ITEM DATA ...', submitPayload);
 
     window.setTimeout( // FAKE FETCH
       () => this.saveStatus = this.SAVE_STATUS.SUCCESS, 

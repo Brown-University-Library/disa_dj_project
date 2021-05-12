@@ -19,3 +19,6 @@
   background: white;
 }
 
+input, textarea {
+	margin-bottom: 12px!important;
+}

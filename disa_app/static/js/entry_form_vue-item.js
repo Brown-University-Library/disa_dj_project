@@ -181,14 +181,14 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
       // If date fields in form change, update data structure with
       //  form field values
-
+      /*
       watchMeToTriggerItemDateSync: function (dateString) {
         this.currentItem.date = [
           this.currentItemDate_month,
           this.currentItemDate_day,
           this.currentItemDate_year
         ].join('-');
-      }
+      } */
     },
 
     methods: {

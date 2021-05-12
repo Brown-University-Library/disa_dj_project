@@ -381,10 +381,8 @@
                     v-on:click="currentItemId = item.id">
                   <div class="ms-2 me-auto"
                        v-text="makeItemDisplayTitle(item, 50)">
-                    <!-- <div class="fw-bold">Subheading</div> -->
                   </div>
-                  <span class="badge bg-primary rounded-pill"
-                        v-text="`ID:${displayId(item.id)}`">14</span>
+                  <disa-id v-bind:forthis="currentItem" class="float-end"></disa-id>
                 </li>
               </ul>
             </div>
@@ -495,8 +493,9 @@
                     -->
                     <select class="form-select" id="formInputDISAEventDateMonth"
                             aria-label="Event date: month" placeholder="Month"
-                            v-model="currentItemDate_month">
-                      <option value="0">Month unspecified</option>
+                            vv-model="currentItemDate_month"
+                            v-model="currentItem.dateParts.month">
+                      <option value="-1">Month unspecified</option>
                       <option value="1">January</option>
                       <option value="2">February</option>
                       <option value="3">March</option>
@@ -512,10 +511,12 @@
                     </select>
                     <input class="form-control" id="formInputDISAEventDateDay"
                             type="number" min="0" max="31" placeholder="Day"
-                            v-model="currentItemDate_day">
+                            vv-model="currentItemDate_day"
+                            v-model="currentItem.dateParts.day">
                     <input class="form-control" id="formInputDISAEventDateYear"
                             type="number" min="1500" max="1900" placeholder="Year"
-                            v-model="currentItemDate_year">
+                            vv-model="currentItemDate_year"
+                            v-model="currentItem.dateParts.year">
                   </div>
 
                   <!-- AWAITING NEW DATA MODEL
@@ -593,12 +594,12 @@
                       <!-- Edit area for this referent -->
 
                       <div class="card-body"
-                            v-if="currentReferentId === referent.id">
+                           v-if="currentReferentId === referent.id">
                         <div class="card card-body">
 
                           <!-- Name(s) -->
 
-                          <!-- Create new name button -->
+                          <!-- Heading and create-new-name button -->
                           
                           <div>
                             <strong v-text="'Name' + (referent.names && referent.names.length > 1 ? 's' : '')"></strong>
@@ -610,22 +611,25 @@
                           </div>
 
                           <!-- List of names -->
-                          
+
                           <ul>
                             <li v-for="(name, nameIndex) in referent.names">
 
                               <div v-on:click="currentNameId = (currentNameId === name.id) ? -1 : name.id">
-                                <span v-if="name.first || name.last"
-                                      v-text="`${name.first} ${name.last}`">
+                                <span v-if="name.first || name.last">
+                                  <span v-text="`${name.first} ${name.last}  `"></span>
+                                  <disa-id v-if="currentNameId === name.id" v-bind:forthis="name"></disa-id>
                                 </span>
                                 <em v-else>
                                   New name
                                 </em>
                               </div>
 
+                              <!-- Current name - details -->
+
                               <div v-if="currentNameId === name.id">
 
-                                <!-- ADVANCED NAMES - DEFER TO V2
+                                <!-- ADVANCED NAMES - DEFER FOR NEW MODEL
                                 <div class="custom-control custom-switch" style="">
                                   <input type="checkbox" class="custom-control-input" id="formCustomSwitchForAdvancedNames"
                                           v-model="referent.name">
@@ -636,10 +640,11 @@
                                 </div> -->
 
                                 <div class="form-floating">
-                                  <select class="form-select" id="formInputDISAItemPersonNameType" aria-label="Name type"
+                                  <select class="form-select" id="formInputDISAItemPersonNameType" 
+                                          aria-label="Name type"
                                           v-model="name.name_type">
                                     <option v-for="(nameTypeMenuLabel, nameTypeId) in MENU_OPTIONS.formInputDISAItemPersonNameType"
-                                            v-bind:value="nameTypeMenuLabel"
+                                            v-bind:value="nameTypeId"
                                             v-text="nameTypeMenuLabel">
                                     </option>
                                   </select>

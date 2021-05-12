@@ -60,19 +60,25 @@ async function getSourceData() {
 
 function preprocessItemData(itemData, oldItemData) {
 
+  const itemDate = new Date(itemData.rec.date);
+
   let processedData = {
-    date: itemData.rec.date,
+    // date: itemData.rec.date,
+    dateParts: {
+      month: itemDate.getMonth() + 1,
+      day: itemDate.getDate(),
+      year: itemDate.getFullYear()
+    },
     id: itemData.rec.id,
     location_info: oldItemData.location_info, // the old (non-enhanced) location data is richer
     national_context_id: itemData.rec.national_context,
     reference_type_id: itemData.rec.record_type.id,
     // reference_type_name: itemData.rec.record_type.label,
     // Convert array of referents to a hash by referent ID
-    // @todo - make this into a calculated field instead
     referents: itemData.entrants.reduce(
       (referentHash, referent) => { 
-        referentHash[referent.id] = referent; 
-        referentHash[referent.id].status = ['red', 'green', 'blue']; // TEMP
+        referentHash[referent.id] = referent;
+        referentHash[referent.id].hello = 'there'; // @todo temp
         return referentHash;
       },
       {}
@@ -111,7 +117,6 @@ async function getItemData(itemId, oldItemData) {
     const dataURL = `${data_itemrecord_api_url_root}${itemId}/`,
     response = await fetch(dataURL),
     dataJSON = await response.json();
-    console.log('ABCDEF', dataURL, dataJSON);
     return preprocessItemData(dataJSON, oldItemData);
   } else {
     return undefined
@@ -119,7 +124,20 @@ async function getItemData(itemId, oldItemData) {
 }
 
 function preprocessReferentData(referentData) {
+
+  // The API gives us name types as string labels, but borks
+  //   the entry upon save if it's anything but a number (ID).
+  // Convert name type to number
+
+  const nameTypesEntries = Object.entries(LOCAL_SETTINGS.MENU_OPTIONS.formInputDISAItemPersonNameType);
+  referentData.names.forEach(name => {
+    const nameTypeAsLabel = name.name_type,
+          nameTypeAsID_all = nameTypesEntries.find(n => n[1] === nameTypeAsLabel);
+    name.name_type = nameTypeAsID_all ? nameTypeAsID_all[0] : '';
+  });
+console.log('yes');
   referentData.FULL_DATA_LOADED = true;
+
   return referentData;
 }
 
@@ -162,28 +180,4 @@ async function getReferentData(referentId, itemId, apiDefinition) {
   }
 }
 
-
-
-async function saveReferentData(referentId, itemId, apiDefinition, requestBody) {
-
-  const fetchOptions = {
-          method: apiDefinition.api_method,
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': TOKEN
-          },
-          body: requestBody
-        };
-
-  console.log(`SAVE REFERENT FETCH OPTIONS - posting to ${apiDefinition.api_url}`, 
-              fetchOptions);
-  const response = await fetch(apiDefinition.api_url, fetchOptions);
-
-  console.log('SAVE REFERENT RESPONSE', response);
-
-  // const dataJSON = await response.json();
-  const dataJSON = await response.text();
-  console.log('SAVE REFERENT RESPONSE JSON');
-  console.log(dataJSON);
-}
-export { getSourceData, getItemData, getReferentData, saveReferentData }
+export { getSourceData, getItemData, getReferentData }
