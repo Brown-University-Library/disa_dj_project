@@ -310,7 +310,38 @@ export const LOCAL_SETTINGS = {
         2: 'two',
         3: 'three',
         4: 'four'
-      }	
+      },
+
+      // @todo THESE ARE NOT GOOD - this is only a partial reflection of what's
+      //  in the DB (in table 1_roles), but this all needs to be reviewed
+
+      formInputDISARelationship: {
+        '1':'enslaved by',
+        '2':'owner of',
+        '3':'priest for',
+        '4':'inoculated by',
+        '5':'bought by',
+        '6':'sold by',
+        '7':'shipped by',
+        '8':'delivered by',
+        '9':'escaped from',
+        '10':'captured',
+        '11':'captured by',
+        '12':'baptised by',
+        '13':'released by',
+        '14':'executed by',
+        '15':'parent of',
+        '16':'spouse of',
+        '17':'child of',
+        '18':'mother of',
+        '19':'father of',
+        '20':'buyer of',
+        '21':'seller of',
+        '22':'indentured by',
+        '23':'master of',
+        '34':'ran away with',
+        '38':'servant of'
+      }
     }
   };
   
