@@ -17,6 +17,12 @@ function preprocessSourceData(data) {
   data.currentReferentId = -1;
   data.currentNameId     = -1;
 
+  // Add accessors for API registry
+
+  data.formData.user_api_info.get_user_info.api_url_forID = function (referentID) {
+    return data.formData.user_api_info.get_user_info.api_url.replace('THE-REFERENT-ID', referentID);
+  }
+
   return data;
 }
 
@@ -141,7 +147,7 @@ async function getReferentData(referentId, itemId, apiDefinition) {
     console.log('GGGGGGG', dataJSON);
     // return preprocessReferentData(dataJSON.ent);
   } else if (referentId) {
-    const dataURL = apiDefinition.api_url,
+    const dataURL = apiDefinition.api_url_forID(referentId),
           response = await fetch(dataURL, { 
             method: apiDefinition.api_method,
             headers: {
