@@ -23,14 +23,18 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
     mixins: [ saveFunctionsMixin, dataBackupMixin ],
 
-    mounted: function () {
+    // Initializing routine
 
-      // Initialize item date fields
+    created: function () {
 
-      const itemDate = new Date(this.currentItem.date);
-      this.currentItemDate_day = itemDate.getDate();
-      this.currentItemDate_month = itemDate.getMonth();
-      this.currentItemDate_year = itemDate.getFullYear();
+      // Initialize item data
+      // @todo THIS SHOULD CALL A METHOD this.loadItemData(itemID)
+
+      if (this.currentItemId !== -1) {
+        getItemData(this.currentItemId, this.currentItem, this.formData.user_api_info).then(currentItemDetails => {
+          this.formData.doc.references[this.currentItemId] = currentItemDetails;
+        });
+      }
     },
 
     computed: {
