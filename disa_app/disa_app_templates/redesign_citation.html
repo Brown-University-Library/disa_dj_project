@@ -405,6 +405,7 @@
               <disa-id v-bind:forthis="currentItem" class="float-end"></disa-id>
               <h1 v-text="makeItemDisplayTitle(currentItem)"></h1>
               <div class="float-end">
+                
                 <!-- Change item button 
                       (opens modal #item-selector-modal, defined above) -->
 
@@ -560,7 +561,8 @@
               </div>
               <hr>
 
-              <!-- People / referents -->              
+              <!-- Referents (people) -->
+              
               <div class="row" style="padding-top:20px;padding-right:20px;">
                 <div class="col-md-12" style="margin-left: 40px;">
 
@@ -678,6 +680,9 @@
                         
                         <div class="row" style="padding-top:10px;clear: both;">
                           <div class="col-md-6">
+
+                            <!-- Gender -->
+
                             <div class="form-floating">
                               <select class="form-select" id="formInputDISAPersonGender"
                                       aria-label="New person's gender" placeholder="Gender"
@@ -688,6 +693,8 @@
                               </select>
                               <label for="formInputDISAPersonGender">Gender</label>
                             </div>
+
+                            <!-- Age -->
 
                             <div class="form-group">
                               <div class="form-floating"> <!--
@@ -722,6 +729,8 @@
                               </div>
                             </div>
 
+                            <!-- Status -->
+
                             <div class="form-floating-x" style="clear: both">
                                 <label for="formInputDISAPersonStatus">Status</label>
                                 <!--
@@ -738,6 +747,9 @@
                               <input type="text" class="form-control" id="formInputDISAStatusInfo" aria-label="Additional status information" placeholder="Additional status info.">
                               <label for="formInputDISAStatusInfo">Additional status info.</label>
                             </div>
+
+                            <!-- Vocation -->
+
                             <div class="form-floating">
                               <select class="form-control" id="formInputDISAPersonVocation" aria-label="Vocation" placeholder="Vocation">
                                 <option v-for="(vocationOption, vocationOptionId) in MENU_OPTIONS.formInputDISAPersonVocation"
@@ -749,6 +761,9 @@
                             </div>
                           </div>
                           <div class="col-md-6">
+
+                            <!-- Race -->
+
                             <div class="form-floating">
                               <select class="form-select" id="formInputDISAPersonRace" 
                                       aria-label="This person's race designation"
@@ -764,6 +779,9 @@
                                      aria-label="Exact racial terms used" placeholder="Exact racial terms used">
                               <label for="formInputDISAPersonRaceTerms">Exact racial terms used</label>
                             </div>
+
+                            <!-- Tribe -->
+
                             <div class="form-floating-x">
                               <label for="formInputDISAPersonTribe">Tribe</label>
                               <disa-tags v-model="currentReferentTribesForTagify"
@@ -774,6 +792,9 @@
                               <input type="text" class="form-control" id="formInputDISAPersonTribeTerms" aria-label="Exact identity/geographical terms used" placeholder="Exact identity/geographical terms used">
                               <label for="formInputDISAPersonTribeTerms">Exact identity/geographical terms used</label>
                             </div>
+
+                            <!-- Geographical origins -->
+
                             <div class="form-floating">
                               <input type="text" class="form-control" id="formInputDISAPersonGeoOrigins" aria-label="Geographic origins" placeholder="Geographic origins">
                               <label for="formInputDISAPersonGeoOrigins">Geographic origins</label>

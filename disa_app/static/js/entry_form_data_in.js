@@ -1,32 +1,7 @@
 
 import {LOCAL_SETTINGS} from './entry_form_settings.js';
 
-function preprocessCitationData(data) {
-
-  /*
-    // Convert dates to YYYY-MM-DD format
-    // @todo should be done on server
-
-    if (data.citation_type_fields.date) {
-      data.citation_type_fields.date =
-        (new Date(data.citation_type_fields.date))
-        .toISOString()
-        .slice(0,10);
-    }
-
-    if (data.citation_type_fields.accessDate) {
-      data.citation_type_fields.accessDate =
-        (new Date(data.citation_type_fields.accessDate))
-        .toISOString()
-        .slice(0,10);
-    }
-  */
-
-  // Convert array of references to hash of references (by ID)
-  // @todo replace this with a cacluated field
-  //       referenceByID = function(id) { 
-  //         return formData.doc.references.find(reference => reference.id === id)
-  //       }
+function preprocessSourceData(data) {
 
   data.formData.doc.references = data.formData.doc.references.reduce(
     (refObj, ref) => { refObj[ref.id] = ref; return refObj },
@@ -55,7 +30,7 @@ async function getSourceData() {
   const response = await fetch(dataURL.href),
         dataJSON = await response.json(),
         dataWithSettings = Object.assign({}, LOCAL_SETTINGS, { formData: dataJSON });
-  return preprocessCitationData(dataWithSettings);
+  return preprocessSourceData(dataWithSettings);
 }
 
 function preprocessItemData(itemData, oldItemData) {
