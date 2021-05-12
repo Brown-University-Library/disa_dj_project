@@ -298,11 +298,8 @@ class Record_Test( TestCase ):
         else:
             self.assertEqual(
                 self.random_put_record_type, put_resp_dct['rec']['record_type'] )
-
-        # self.assertEqual(
-        #     # self.random_new_record_transcription_text, resp_dct['rec']['transcription'] )
-        #     1, 2 )
-
+        self.assertEqual(
+            self.random_put_transcription, put_resp_dct['rec']['transcription'] )
         ## cleanup
         self.delete_new_record()
 

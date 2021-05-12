@@ -572,7 +572,8 @@ def data_documents( request, doc_id=None ):
 def relationships_by_reference( request, rfrnc_id ):
     """ Called via ajax by views.edit_relationships() when page is loaded.
         Url: '/data/sections/<rfrnc_id>/relationships/' -- 'data_reference_relationships_url' """
-    log.debug( f'\n\nstarting relationships_by_reference person(), with rfrnc_id, `{rfrnc_id}`' )
+    log.debug( '\n\nstarting relationships_by_reference()' )
+    log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rfrnc_id, ``{rfrnc_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
     context: dict = v_data_relationships_manager.prepare_relationships_by_reference_data( rfrnc_id )
     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
@@ -582,7 +583,8 @@ def relationships_by_reference( request, rfrnc_id ):
 def data_relationships( request, rltnshp_id=None ):
     """ Called via ajax by views.edit_relationships() when `+` buton is clicked.
         Url: '/data/relationships/' -- 'data_relationships_url' """
-    log.debug( f'\n\nstarting data_relationships(), with method, ```{request.method}```, with a payload of, `{request.body}`' )
+    log.debug( '\n\nstarting data_relationships()' )
+    log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rfrnc_id, ``{rfrnc_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     if request.method == 'POST':
         rfrnc_id: str = v_data_relationships_manager.manage_relationships_post( request.body, user_id )
