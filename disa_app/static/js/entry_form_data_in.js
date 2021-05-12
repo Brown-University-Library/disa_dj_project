@@ -155,4 +155,39 @@ async function getReferentData(referentId, itemId, apiDefinition) {
   }
 }
 
-export { getSourceData, getItemData, getReferentData }
+// Convert relationships to a hash of arrays by the subject's ID
+//  i.e. r[<user ID>] = [ rel1, rel2, etc. ]
+
+function preprocessRelationshipsData(relationshipData) {
+
+  const relHash = {};
+
+  relationshipData.store.forEach(rel => {
+    if (!relHash[rel.data.sbj.id]) {
+      relHash[rel.data.sbj.id] = []
+    } 
+    relHash[rel.data.sbj.id] = relHash[rel.data.sbj.id].concat(
+      relationshipData.store
+        .filter(rel2 => rel2.data.sbj === rel.data.sbj)
+        .map(x => Object.assign({ relTripleId: x.id }, x.data))
+    )
+  });
+// console.log('QQQQQQ', relHash)
+  return relHash;
+}
+
+async function getRelationshipsData(itemId, apiDefinition) {
+  const dataURL = `/data/sections/${itemId}/relationships/`, // @todo Birkin needs to include this in his APIs list
+        response = await fetch(dataURL, { 
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }), // @todo need to handle errors
+        dataJSON = await response.json();
+  return preprocessRelationshipsData(dataJSON);
+}
+
+window.getRelationshipsData = getRelationshipsData;
+
+export { getSourceData, getItemData, getReferentData, getRelationshipsData }
