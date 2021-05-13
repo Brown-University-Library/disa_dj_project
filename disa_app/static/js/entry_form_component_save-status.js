@@ -4,7 +4,7 @@ const template = `
   <span id="save-status"
         class="badge" 
         v-bind:class="STATUS_INFO[$root.saveStatus].classname"
-        v-text="STATUS_INFO[$root.saveStatus].displayText">
+        v-html="STATUS_INFO[$root.saveStatus].displayText">
   </span>`;
 
 const componentDefinition = {
@@ -22,7 +22,7 @@ const componentDefinition = {
         },
         [this.$root.SAVE_STATUS.SAVE_IN_PROGRESS]: {
           classname: 'bg-warning',
-          displayText: 'Saving ...'
+          displayText: 'Saving<br />&nbsp;'
         },
         [this.$root.SAVE_STATUS.ERROR_BAD_API_ID]: {
           classname: 'bg-danger',
@@ -30,13 +30,20 @@ const componentDefinition = {
         },
         [this.$root.SAVE_STATUS.SUCCESS]: {
           classname: 'bg-success',
-          displayText: 'Saved'
+          get displayText() { 
+            const now = new Date(),
+                  h = now.getHours(),
+                  m = (now.getMinutes() < 10 ? '0' : '') + now.getMinutes(),
+                  s = (now.getSeconds() < 10 ? '0' : '') + now.getSeconds();
+            return `Saved<br />${h}:${m}:${s}`;
+          }
         }
       }
     }
   },
   computed: {},
   methods: {
+
     // DOES SAVING TO SERVER BELONG HERE?
     /*
     saveDataToServer({ apiId, data, displayText }) {
