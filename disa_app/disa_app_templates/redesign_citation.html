@@ -834,9 +834,11 @@
                               </select>
                             </div>
 
-                            <!-- Object of relationship -->
+                            <!-- Object of relationship (only show dropdown if there are more than 2 referents) -->
 
-                            <div class="col-md-4">
+                            <div v-if="Object.keys(currentItem.referents).length > 2"
+                                 class="col-md-4">
+                                 
                               <select class="form-select" id="formInputDISARelationshipObject" 
                                       aria-label="Who is in the relationship"
                                       v-model="relationship.obj.id">
@@ -846,6 +848,9 @@
                                         v-text="getReferentDisplayLabel(relationshipObject)">
                                 </option>
                               </select>
+                            </div>
+                            <div v-else class="col-md-4" 
+                                 v-text="getReferentDisplayLabel(Object.values(currentItem.referents).find(r => r !== currentReferent))">
                             </div>
                             <div class="col">
                               <button title="Delete this relationship" class="btn btn-link btn-sm">
