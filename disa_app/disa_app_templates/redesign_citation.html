@@ -358,11 +358,11 @@
     <div class="tab-pane card-body"
          role="tabpanel" aria-labelledby="item-tab" id="Items">
     
-      <!-- Save status indicator -->
+      <!-- "Save status" indicator -->
 
       <disa-save-status ref="database"></disa-save-status>
 
-      <!-- Change item modal -->
+      <!-- "Change item" modal -->
       
       <div class="modal" tabindex="-1" id="item-selector-modal">
         <div class="modal-dialog">
@@ -405,7 +405,7 @@
               <disa-id v-bind:forthis="currentItem" class="float-end"></disa-id>
               <h1 v-text="makeItemDisplayTitle(currentItem)"></h1>
               <div class="float-end">
-                
+
                 <!-- Change item button 
                       (opens modal #item-selector-modal, defined above) -->
 
@@ -745,7 +745,7 @@
                             <!-- Vocation -->
 
                             <div class="form-floating">
-                              <select class="form-control" id="formInputDISAPersonVocation" aria-label="Vocation" placeholder="Vocation">
+                              <select class="form-select" id="formInputDISAPersonVocation" aria-label="Vocation" placeholder="Vocation">
                                 <option v-for="(vocationOption, vocationOptionId) in MENU_OPTIONS.formInputDISAPersonVocation"
                                         v-bind:value="vocationOptionId"
                                         v-text="vocationOption">
@@ -818,7 +818,7 @@
 
                             <!-- Subject of relationship (i.e. the current referent) -->
 
-                            <div class="col-md-3" style="text-align: right">
+                            <div class="col-md-3" style="text-align: left">
                               <span v-text="getReferentDisplayLabel(referent)"></span> was
                             </div>
 
