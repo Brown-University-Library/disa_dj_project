@@ -17,9 +17,13 @@ const dataBackupMixin = {
     }
   }, */
   watch: {
+
+    // Look for changes to formData - upon change, 
+    //  add stringified snapshot to top of stack
+
     formData: {
       handler() {
-        this.dataHistory.push({
+        this.dataHistory.unshift({
           timestamp: Date.now(),
           data: JSON.stringify(this.formData)
         });
