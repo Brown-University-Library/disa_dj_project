@@ -47,6 +47,10 @@ async function loadAndInitializeData(initDisplay) {
 
   dataAndSettings.saveStatus = dataAndSettings.SAVE_STATUS.NO_CHANGE;
 
+  // New relationship register
+
+  dataAndSettings.newRelationship = { obj: null, rel: null }
+
   return dataAndSettings;
 }
 

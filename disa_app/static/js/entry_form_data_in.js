@@ -61,12 +61,11 @@ function preprocessItemData(itemData, oldItemData, relationshipsData, referentDa
     referents: referentData.reduce(
       (referentHash, referent) => {
         referentHash[referent.id] = referent;
-        referentHash[referent.id].hello = 'there'; // @todo temp
-        referentHash[referent.id].relationships = relationshipsData[referent.id];
         return referentHash;
       },
       {}
     ),
+    relationships: relationshipsData,
     // referents: getAdditionalReferentInfo(itemData.entrants),
     groups: itemData.groups.group_data,
     transcription: itemData.rec.transcription,
@@ -183,25 +182,10 @@ async function getReferentData(referentId, itemId, apiDefinitions) {
   }
 }
 
-// Convert relationships to a hash of arrays by the subject's ID
-//  i.e. r[<user ID>] = [ rel1, rel2, etc. ]
+// Get relationships data
 
 function preprocessRelationshipsData(relationshipData) {
-
-  const relHash = {};
-
-  relationshipData.store.forEach(rel => {
-    if (!relHash[rel.data.sbj.id]) {
-      relHash[rel.data.sbj.id] = []
-    } 
-    relHash[rel.data.sbj.id] = relHash[rel.data.sbj.id].concat(
-      relationshipData.store
-        .filter(rel2 => rel2.data.sbj === rel.data.sbj)
-        .map(x => Object.assign({ relTripleId: x.id }, x.data))
-    )
-  });
-// console.log('QQQQQQ', relHash)
-  return relHash;
+  return relationshipData.store;
 }
 
 async function getRelationshipsData(itemId, apiDefinition) {

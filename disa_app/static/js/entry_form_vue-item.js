@@ -1,4 +1,4 @@
-import { getItemData, getReferentData } from './entry_form_data_in.js';
+import { getItemData, getReferentData, getRelationshipsData } from './entry_form_data_in.js';
 import { saveFunctionsMixin } from './entry_form_vue-item_mixin_save.js';
 import { dataBackupMixin } from './entry_form_vue-item_mixin_backup.js';
 
@@ -127,6 +127,12 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
           }
           this.currentReferent.races[0] = { id: raceID };
         }
+      },
+
+      currentReferentRelationships: function () {
+        return this.currentItem.relationships.filter(
+          relationship => relationship.data.sbj.id === this.currentReferentId
+        )
       },
 
       // Compute API endpoints

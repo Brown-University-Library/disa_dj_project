@@ -103,6 +103,42 @@ function submitItemDataToServer() {
 }
 
 
+// Relationships
+
+async function createRelationshipOnServer() {
+  
+  console.log(`SAVING NEW RELATIONSHIP`);
+  const requestBody = {
+          sbj: this.currentReferentId,
+          rel: parseInt(this.newRelationship.rel),
+          obj: parseInt(this.newRelationship.obj),
+          section: this.currentItemId
+        },
+        url = `http://127.0.0.1:8000/data/relationships/`,
+        fetchOptions = {
+          method: 'POST', // apiDefinition.api_method,
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': TOKEN
+          },
+          body: JSON.stringify(requestBody)
+        };
+  // console.log({requestBody, url, fetchOptions});
+  if (true) { // TURN OFF/ON REFERENT SAVING
+    const response = await fetch(url, fetchOptions);
+    console.log('SAVE REFERENT RESPONSE', response);
+    const dataJSON = await response.json();
+    console.log('SAVE REFERENT RESPONSE JSON', dataJSON.store);
+
+    this.currentItem.relationships = dataJSON.store;
+
+    // Reset new relationship form elements
+
+    this.newRelationship.rel = null;
+    this.newRelationship.obj = null;
+  }
+}
+
 
 const saveFunctionsMixin = {
 
@@ -123,20 +159,25 @@ const saveFunctionsMixin = {
 
   watch: {
 
-      // If current referent info changes, save
-      //  (but only if full referent data has been previously loaded)
+    // If current referent info changes, save
+    //  (but only if full referent data has been previously loaded)
 
-      currentReferent: {
-        handler: submitReferentDataToServer,
-        deep: true
-      },
+    currentReferent: {
+      handler: saveReferentDataToServer,
+      deep: true
+    },
 
-      // If the Item data changes (as defined by computed field)
-      //  then save
+    // If the Item data changes (as defined by computed field)
+    //  then save
 
-      watchMeToTriggerItemSave: {
-        handler: submitItemDataToServer
-      }
+    watchMeToTriggerItemSave: {
+      handler: saveItemDataToServer
+    }
+  },
+
+  methods: {
+    createRelationshipOnServer,
+    deleteRelationshipOnServer,
   }
 }
 

@@ -895,21 +895,34 @@
 
                           <div>
                             <strong>Relationships</strong>
-                            <button class="btn btn-link btn-sm"
-                                    v-on:click=""
-                                    title="Enter information for a new relationship">
-                              +new
-                            </button>
                           </div>
 
+                          <!-- Existing relationships -->
+
                           <div class="row"
-                               v-if="referent.relationships"
-                               v-for="relationship in referent.relationships">
+                               v-for="relationship in currentReferentRelationships">
+
+                            <!-- Subject of relationship (i.e. the current referent) -->
+
+                            <div class="" style="text-align: left">
+                              <span v-text="getReferentDisplayLabel(referent)"></span> is
+                              <span v-text="MENU_OPTIONS.formInputDISARelationship[relationship.data.rel.id]"></span>
+                              <span v-text="getReferentDisplayLabel(currentItem.referents[relationship.data.obj.id])"></span>
+                              <disa-id v-bind:forthis="relationship" class="float-end-x"></disa-id>
+                              <span title="Delete this relationship" class="btn btn-link btn-sm">
+                                &times;&nbsp;delete
+                              </span>
+                            </div>
+                          </div>
+
+                          <!-- New relationship -->
+
+                          <div class="row">
 
                             <!-- Subject of relationship (i.e. the current referent) -->
 
                             <div class="col-md-3" style="text-align: left">
-                              <span v-text="getReferentDisplayLabel(referent)"></span> was
+                              NEW: <span v-text="getReferentDisplayLabel(referent)"></span> is
                             </div>
 
                             <!-- Relationship type -->
@@ -917,7 +930,7 @@
                             <div class="col-md-4">
                               <select class="form-select" id="formInputDISARelationship" 
                                       aria-label="Type of relationship"
-                                      v-model="relationship.rel.id">
+                                      v-model="newRelationship.rel">
                                 <option v-for="(relationshipTypeOption, relationshipTypeId) in MENU_OPTIONS.formInputDISARelationship"
                                         v-bind:value="relationshipTypeId"
                                         v-text="relationshipTypeOption"></option>
@@ -931,7 +944,7 @@
                                  
                               <select class="form-select" id="formInputDISARelationshipObject" 
                                       aria-label="Who is in the relationship"
-                                      v-model="relationship.obj.id">
+                                      v-model="newRelationship.obj">
                                 <option v-for="(relationshipObject, relationshipObjectId) in currentItem.referents"
                                         v-if="relationshipObjectId != referent.id"
                                         v-bind:value="relationshipObjectId"
@@ -943,8 +956,9 @@
                                  v-text="getReferentDisplayLabel(Object.values(currentItem.referents).find(r => r !== currentReferent))">
                             </div>
                             <div class="col">
-                              <button title="Delete this relationship" class="btn btn-link btn-sm">
-                                &times;delete
+                              <button title="Save this relationship" class="btn btn-link-x btn-sm"
+                                      v-on:click="createRelationshipOnServer()">
+                                save
                               </button>
                             </div>
                           </div>
