@@ -57,6 +57,7 @@ def manage_relationships_post( payload: bytes, request_user_id: int ) -> str:
     try:
         session = make_session()
         data: dict = json.loads( payload )
+        log.debug( f'data, ``{pprint.pformat(data)}``' )
         section: int = data['section']  # seems to be the 'reference-id'
         rfrnc = session.query( models_alch.Reference ).get( section )
         rfrnc_id = rfrnc.id
