@@ -71,7 +71,8 @@
               data-bs-toggle="tab"
               data-bs-target="#Bibliographic-information"
               type="button" role="tab" aria-controls="Bibliographic-information"
-              aria-selected="true">
+              aria-selected="true"
+              aria-label="Bibliographic-information">
         Bibliographic information
       </button>
     </li>
@@ -81,7 +82,8 @@
               data-bs-toggle="tab"
               data-bs-target="#Items"
               type="button" role="tab" aria-controls="Items"
-              aria-selected="false">
+              aria-selected="false"
+              aria-label="Items">
         Items
       </button>
     </li>
@@ -513,11 +515,11 @@
                     <input class="form-control" id="formInputDISAEventDateDay"
                             type="number" min="0" max="31" placeholder="Day"
                             vv-model="currentItemDate_day"
-                            v-model="currentItem.dateParts.day">
+                            v-model="currentItem.dateParts.day" aria-label="Event date: day">
                     <input class="form-control" id="formInputDISAEventDateYear"
                             type="number" min="1500" max="1900" placeholder="Year"
                             vv-model="currentItemDate_year"
-                            v-model="currentItem.dateParts.year">
+                            v-model="currentItem.dateParts.year" aria-label="Event date: year">
                   </div>
 
                   <!-- AWAITING NEW DATA MODEL
