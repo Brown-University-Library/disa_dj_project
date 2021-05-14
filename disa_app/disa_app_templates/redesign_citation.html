@@ -472,7 +472,7 @@
                   <div class="ms-2 me-auto"
                        v-text="makeItemDisplayTitle(item, 50)">
                   </div>
-                  <disa-id v-bind:forthis="currentItem" class="float-end"></disa-id>
+                  <disa-id v-bind:forthis="item" class="float-end"></disa-id>
                 </li>
               </ul>
             </div>
@@ -526,10 +526,10 @@
                   <!-- Item page numbers -->
 
                   <div class="form-floating">
+                    <label for="formInputDISAItemVolume">Volume</label>
                     <input type="number" class="form-control"
                            id="formInputDISAItemVolume" aria-label="Volume"
                            placeholder="Volume in source" v-model="currentItem.volume">
-                    <label for="formInputDISAItemVolume">Volume</label>
                   </div>
                   <div class="form-floating">
                     <div class="input-group mb-3">
@@ -548,6 +548,7 @@
                 </div>
                 
                 <!-- Item type and transcription area-->
+
                 <div class="col-md-6">
                   <h5 class="text-dark">Item content</h5>
                   <div class="form-floating">
@@ -568,23 +569,28 @@
                               style="height: 128px"
                               v-model="currentItem.transcription"></textarea>
                     <label for="formInputDISAItemTranscription">Transcription</label>
-                    <a href="#" style="font-size:80%;font-weight:bold;clear:left;">Open in new window</a> </div>
+                    <button class="btn btn-link btn-sm"
+                            vv-on:click=""
+                            title="Opens transcript editor in a larger format">
+                      Open large editor
+                    </button>
                 </div>
               </div> <!-- /.row -->
-              <hr>  
+              <hr />
+
               <!-- Item date and location -->
+
               <div class="row" style="padding:25px;">
+
                 <!-- Item date -->
+                
                 <div class="col-md-6">
                   <h5 class="text-dark">Event date</h5>
 
-                  <div class="input-group mb-3"> <!--
-                    <span class="input-group-text" id="basic-addon1">@</span>
-                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                    -->
+                  <div class="input-group mb-3">
+
                     <select class="form-select" id="formInputDISAEventDateMonth"
                             aria-label="Event date: month" placeholder="Month"
-                            vv-model="currentItemDate_month"
                             v-model="currentItem.dateParts.month">
                       <option value="-1">Month unspecified</option>
                       <option value="1">January</option>
@@ -602,11 +608,9 @@
                     </select>
                     <input class="form-control" id="formInputDISAEventDateDay"
                             type="number" min="0" max="31" placeholder="Day"
-                            vv-model="currentItemDate_day"
                             v-model="currentItem.dateParts.day">
                     <input class="form-control" id="formInputDISAEventDateYear"
                             type="number" min="1500" max="1900" placeholder="Year"
-                            vv-model="currentItemDate_year"
                             v-model="currentItem.dateParts.year">
                   </div>
 
@@ -888,10 +892,6 @@
                         <div class="card card-body" style-x="padding-top:10px;clear: both;">
 
                           <!-- Relationships -->
-<!--
-                          <div class="card card-body">
-                            HELLO
-                          </div> -->
 
                           <div>
                             <strong>Relationships</strong>
