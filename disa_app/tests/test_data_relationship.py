@@ -21,11 +21,42 @@ TestCase.maxDiff = 1000
 class Relationship_Test( TestCase ):
     """ Checks Record data-api urls. """
 
+    ## DELETE =====================
+
+    def test_delete_relationship(self):
+        """ Checks good DELETE of a relationship.
+            Sample api url: 'https://project_root_url/data/relationships/4671/'
+                ...where `4671` is the db relationship-id
+            Sample payload: {'section': 895}
+                ...where `895` is the item-record-id
+        """
+        self.assertEqual( 1, 2)
+
+    ## POST =======================
+
+    def test_post_relationship(self):
+        """ Checks good POST of a relationship.
+            Sample api url: 'https://project_root_url/data/relationships/' (no relationship-id)
+            Sample payload: {'obj': 3394, 'rel': 1, 'sbj': 2033, 'section': 895}
+               ...where `3394` is a referent-id
+                        `1` is an id for the drop-down relationship selected
+                        `2033` is a referent-id
+                        `895` is the item-record-id
+            Note: some posted relationships will auto-create their inverse relationship.
+                  Example: a POST of `rel': 1`, where `1` represents the relationship `enslaved by`,
+                           will auto-create, for the record, the inverse-relationship that the other referent is the `owner of` (id `2`) the first referent.
+                           But not all relationships do this.
+                  Patrick, this is not something you have to address, but should be aware of.
+        """
+        self.assertEqual( 1, 2 )
+
     ## GET LIST ===================
 
     def test_get_all_relationships__relationships_do_NOT_exist(self):
         """ Checks good GET all relationships for given item-record.
-            Sample response...
+            Sample api url: 'https://project_root_url/data/sections/895/relationships/'
+                ...where `895` is the item-record ID
+            Sample no-relationships response (`store` is empty)...
             {'people': [{'id': 2033, 'name': 'test-first-nameB test-last-nameB'},
                         {'id': 3394, 'name': 'test-first-C test-last-C'}],
              'relationships': [{'id': 1, 'name': 'enslaved by'},
@@ -66,6 +97,8 @@ class Relationship_Test( TestCase ):
 
     def test_get_all_relationships__relationships_DO_exist(self):
         """ Checks good GET all relationships for given item-record.
+            Sample api url: 'https://project_root_url/data/sections/896/relationships/'
+                ...where `896` is the item-record ID
             Note #1: only 'store' will be tested here; it's the only thing different between data-returned and no-data-returned.
             Sample 'store' response...
             'store': [{'data': {'obj': {'id': 2037, 'name': 'Zacheriah Allin'},
@@ -111,8 +144,5 @@ class Relationship_Test( TestCase ):
         self.assertEqual(
             ['obj', 'rel', 'sbj'], list( resp_dct['store'][0]['data'].keys() )  # as seen above, each of these keys has for its value a dictionary with keys of 'id' and 'name'
             )
-
-    ## PUT ========================
-
 
     ## end Record_Test()
