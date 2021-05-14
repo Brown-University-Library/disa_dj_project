@@ -584,7 +584,7 @@ def data_relationships( request, rltnshp_id=None ):
     """ Called via ajax by views.edit_relationships() when `+` buton is clicked.
         Url: '/data/relationships/' -- 'data_relationships_url' """
     log.debug( '\n\nstarting data_relationships()' )
-    log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rfrnc_id, ``{rfrnc_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
+    log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rltnshp_id, ``{rltnshp_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     if request.method == 'POST':
         rfrnc_id: str = v_data_relationships_manager.manage_relationships_post( request.body, user_id )
