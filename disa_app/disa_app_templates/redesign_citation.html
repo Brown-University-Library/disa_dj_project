@@ -197,7 +197,7 @@
           Source type
         </h5>
         <div style="clear: left;margin-bottom: 36px;">
-          <select class="custom-select" id="document_type"
+          <select class="form-select" id="document_type"
                   v-model="formData.doc.citation_type_id">
             <!-- If unselected, show this at the top -->
             <option value="0" class="initMessage"
@@ -436,7 +436,7 @@
 
   <button type="submit" class="btn btn-primary btn-md" id="citation-form-submit"
           v-on:click="openItemTab">
-    save source and continue to enter items &rarr;
+    save source and continue to enter records &rarr;
   </button>
 
 
@@ -459,7 +459,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">
-                Select an item to edit
+                Select a record to edit
               </h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -493,22 +493,23 @@
               <!-- Main title -->
 
               <disa-id v-bind:forthis="currentItem" class="float-end"></disa-id>
-              <h1 v-text="makeItemDisplayTitle(currentItem)"></h1>
+              <h1 v-html="makeItemDisplayTitle(currentItem)"></h1>
               <div class="float-end">
 
                 <!-- Change item button 
                       (opens modal #item-selector-modal, defined above) -->
 
                 <button type="button" class="btn btn-primary btn-sm"
+                        v-if="Object.values(formData.doc.references).length > 1"
                         data-bs-toggle="modal" data-bs-target="#item-selector-modal">
-                  open another item
+                  change to another record
                 </button>
 
                 <!-- Create new item control -->
 
                 <button type="button" class="btn btn-primary btn-sm"
                         v-on:click="makeNewItem">
-                  create a new item
+                  create a new record
                 </button>
               </div>
             </div>
@@ -519,11 +520,16 @@
           <div id="item-form">
             <form>
               <div class="row col-lg-12" style="padding-top:40px;padding-left:25px;">
+
+                <!-- Record location not in current DB model
+
                 <div class="col-md-6">
+
                   <h5 class="text-dark" style="float:left;">
-                    Item's location in source document
+                    Record's location in source document
                   </h5>
-                  <!-- Item page numbers -->
+
+                  <!-/- Item page numbers -/->
 
                   <div class="form-floating">
                     <label for="formInputDISAItemVolume">Volume</label>
@@ -546,12 +552,16 @@
                     </div>
                   </div>
                 </div>
+                 -->
                 
                 <!-- Item type and transcription area-->
 
-                <div class="col-md-6">
-                  <h5 class="text-dark">Item content</h5>
+                <div class="col-md-12"> <!-- Change to col-md-6 when Record location added above -->
+                  <h5 class="text-dark">Record content</h5>
                   <div class="form-floating">
+
+                    <!-- Item type dropdown -->
+
                     <select class="form-select"
                             id="formInputDISAItemType"
                             aria-label=""
@@ -562,7 +572,11 @@
                     </select>
                     <label for="formInputDISAItemType">Item type</label>
                   </div>
+
                   <div class="form-floating">
+
+                    <!-- Transcription textarea -->
+
                     <textarea class="form-control"
                               placeholder="Transcription"
                               id="formInputDISAItemTranscription"
@@ -593,15 +607,15 @@
                             aria-label="Event date: month" placeholder="Month"
                             v-model="currentItem.dateParts.month">
                       <option value="-1">Month unspecified</option>
-                      <option value="1">January</option>
-                      <option value="2">February</option>
-                      <option value="3">March</option>
-                      <option value="4">April</option>
-                      <option value="5">May</option>
-                      <option value="6">June</option>
-                      <option value="7">July</option>
-                      <option value="8">August</option>
-                      <option value="9">September</option>
+                      <option value="01">January</option>
+                      <option value="02">February</option>
+                      <option value="03">March</option>
+                      <option value="04">April</option>
+                      <option value="05">May</option>
+                      <option value="06">June</option>
+                      <option value="07">July</option>
+                      <option value="08">August</option>
+                      <option value="09">September</option>
                       <option value="10">October</option>
                       <option value="11">November</option>
                       <option value="12">December</option>
@@ -621,10 +635,15 @@
                   </div> -->
 
                 </div>
+
                 <!-- Item location -->
+
                 <div class="col-md-6">
                   <h5 class="text-dark">Place</h5>
                   <div class="form-floating">
+
+                    <!-- Colonial context -->
+
                     <select class="form-select" id="formInputDISAColonialContext" aria-label="Colonial context"
                             v-model="currentItem.national_context_id">
                       <option v-for="(colonialContextOption, colonialContextOptionId) in MENU_OPTIONS.formInputDISAColonialContext"
@@ -633,22 +652,31 @@
                     </select>
                     <label for="formInputDISAColonialContext">Colonial context</label>
                   </div>
+
+                  <!-- Colony / state -->
+
                   <div class="form-floating">
                     <input type="text" class="form-control" id="formInputDISAColonyState" 
                            aria-label="Colony / State" placeholder="Colony / State"
-                           v-model="currentItemLocationColonyState">
+                           v-model="currentItem.location_info['Colony/State'].name">
                     <label for="formInputDISAColonyState">Colony / State</label>
                   </div>
+                  
+                  <!-- City -->
+
                   <div class="form-floating">
                     <input type="text" class="form-control" id="formInputDISATown" 
                            aria-label="Town" placeholder="Town"
-                           v-model="currentItemLocationCity">
+                           v-model="currentItem.location_info['City'].name">
                     <label for="formInputDISATown">Town</label>
                   </div>
                   <div class="form-floating">
+
+                    <!-- Additional location info -->
+
                     <input type="text" class="form-control" id="formInputDISAPlaceInfo" 
                            aria-label="Additional location information" placeholder="Additional location info."
-                           v-model="currentItemLocationLocale">
+                           v-model="currentItem.location_info['Locale'].name">
                     <label for="formInputDISAPlaceInfo">Additional location info.</label>
                   </div>
                 </div>
@@ -988,7 +1016,7 @@
                 </button> 
                 -->
                 <a type="button" class="btn btn-primary btn-md" href="../../redesign_citations/">
-                  &nwarr; save item and exit this source
+                  &nwarr; save record and exit this source
                 </a>
               </div>
             </form>
