@@ -1,13 +1,29 @@
 
+function updateCitationFieldVisibility() {
 
+  const citationTypeId = this.formData.doc.citation_type_id,
+        requiredFieldsHeader = document.getElementById('required-fields-header'),
+        optionalFieldsHeader = document.getElementById('optional-fields-header'),
+        citationFields = document.querySelectorAll('#citation-fields > div'),
+        fieldStatus = this.FIELDS_BY_DOC_TYPE[citationTypeId];
 
-// Get callback for change in source type
-// (it's a callback in order to bake in the dataAndSettings object)
+  requiredFieldsHeader.hidden = (fieldStatus.required.length === 0);
+  optionalFieldsHeader.hidden = (fieldStatus.optional.length === 0);
 
-function getUpdateCitationFieldVisibilityCallback(FIELDS_BY_DOC_TYPE) {
+  citationFields.forEach((citationField, defaultOrderIndex) => { 
+    const fieldId = citationField.id;
+    if (fieldStatus.required.includes(fieldId)) {
+      citationField.hidden = false;
+      citationField.style.order = (100 + defaultOrderIndex);
+    } else if (fieldStatus.optional.includes(fieldId)) {
+      citationField.hidden = false;
+      citationField.style.order = (200 + defaultOrderIndex);
+    } else {
+      citationField.hidden = true;
+    }
+  });
+}
 
-  const requiredFieldsHeader = document.getElementById('required-fields-header'),
-        optionalFieldsHeader = document.getElementById('optional-fields-header');
 
   return function(citationTypeId) {
 
@@ -55,7 +71,13 @@ function initializeCitationForm(dataAndSettings) {
         })
       }
     },
-    mounted: updateCitationFieldVisibility(dataAndSettings.formData.doc.citation_type_id)
+    mounted: updateCitationFieldVisibility,
+    computed: {
+      watchMeToTriggerSave: function () {
+        return this.formData.doc.citation_type_id + JSON.stringify(this.formData.doc.fields) +
+               this.formData.doc.acknowledgements + this.formData.doc.comments;
+      }
+    }
   });
 }
 
