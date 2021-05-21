@@ -188,7 +188,7 @@
          id="Bibliographic-information">
 
       <form id="citation-form"
-            v-on:submit.prevent="onSubmitForm">
+            vv-on:submit.prevent="onSubmitForm">
         <span class="badge badge-secondary float-right disa-id-badge"
           title="Unique identifier for this citation">
           {{ doc.id }}
@@ -226,40 +226,51 @@
     <!-- FIELDS: Dynamically moved under headings via flexbox order property -->
 
     <div class="citation-field form-floating" id="abstractNote">
-      <input type="text" class="form-control" id="abstractNote-value" aria-label="Abstract Note" placeholder="Abstract Note" v-model="formData.doc.fields.abstractNote">
+      <input type="text" class="form-control" id="abstractNote-value" 
+             aria-label="Abstract Note" placeholder="Abstract Note" 
+             v-model="formData.doc.fields.abstractNote">
       <label for="abstractNote-value">Abstract Note</label>
     </div>
 
     <div class="citation-field form-floating" id="accessDate">
-      <input type="text" class="form-control" id="accessDate-value" name="accessDate-value" aria-label="Access Date" placeholder="Access Date" v-model="formData.doc.fields.accessDate">
       <label for="accessDate-value">Access Date</label>
+      <input type="date" class="form-control" id="accessDate-value" name="accessDate-value" 
+             aria-label="Access Date" placeholder="Access Date" 
+             v-model="formData.doc.fields.accessDate">
     </div>
 
     <div class="citation-field form-floating" id="archive">
-      <input type="text" class="form-control" id="archive-value" name="archive-value" aria-label="Archive" placeholder="Archive" v-model="formData.doc.fields.archive">
+      <input type="text" class="form-control" id="archive-value" name="archive-value" 
+             aria-label="Archive" placeholder="Archive" 
+             v-model="formData.doc.fields.archive">
       <label for="archive-value">Archive</label>
     </div>
 
     <div class="citation-field form-floating" id="archiveLocation">
-      <input type="text" class="form-control" id="archiveLocation-value" name="archiveLocation-value" aria-label="Archive Location" placeholder="Archive Location" v-model="formData.doc.fields.archiveLocation">
+      <input type="text" class="form-control" id="archiveLocation-value" name="archiveLocation-value" 
+             aria-label="Archive Location" placeholder="Archive Location" 
+             v-model="formData.doc.fields.archiveLocation">
       <label for="archiveLocation-value">Archive Location</label>
     </div>
 
     <div class="citation-field form-floating" id="author">
-      <input type="text" class="form-control" id="author-value" name="author-value" aria-label="Author" placeholder="Author (last name comes first)" v-model="formData.doc.fields.author">
+      <input type="text" class="form-control" id="author-value" name="author-value" 
+             aria-label="Author" placeholder="Author (last name comes first)" 
+             v-model="formData.doc.fields.author">
       <label for="author-value">Author</label>
     </div>
 
     <div class="citation-field form-floating" id="callNumber">
-      <input type="text" class="form-control" id="callNumber-value" name="callNumber-value" aria-label="Call Number" placeholder="Call Number" v-model="formData.doc.fields.callNumber">
+      <input type="text" class="form-control" id="callNumber-value" name="callNumber-value" 
+             aria-label="Call Number" placeholder="Call Number" 
+             v-model="formData.doc.fields.callNumber">
       <label for="callNumber-value">Call Number</label>
     </div>
 
-    <div class="citation-field form-group text-dark"
-      id="date">
+    <div class="citation-field form-group text-dark" id="date">
       <label for="date-value"
         style="padding-right:12px;">Date</label>
-      <input id="date-value" name="date-value" placeholder="Date"
+      <input id="date-value" class="form-control" name="date-value" placeholder="Date"
              type="date"
              v-model="formData.doc.fields.date" />
 
@@ -328,48 +339,66 @@
     </div>
 
     <div class="citation-field form-floating" id="edition">
-      <input type="text" class="form-control" id="edition-value" name="edition-value" aria-label="Edition" placeholder="Edition" v-model="formData.doc.fields.edition">
+      <input type="text" class="form-control" id="edition-value" name="edition-value" 
+             aria-label="Edition" placeholder="Edition" 
+             v-model="formData.doc.fields.edition">
       <label for="edition-value">Edition</label>
     </div>
 
     <div class="citation-field form-floating" id="extra">
-      <input type="text" class="form-control" id="extra-value" name="extra-value" aria-label="Extra" placeholder="Extra" v-model="formData.doc.fields.extra">
+      <input type="text" class="form-control" id="extra-value" name="extra-value" 
+             aria-label="Extra" placeholder="Extra" 
+             v-model="formData.doc.fields.extra">
       <label for="extra-value">Extra</label>
     </div>
 
     <div class="citation-field form-floating" id="ISBN">
-      <input type="text" class="form-control" id="ISBN-value" name="ISBN-value" aria-label="ISBN" placeholder="ISBN" v-model="formData.doc.fields.ISBN">
+      <input type="text" class="form-control" id="ISBN-value" name="ISBN-value" 
+             aria-label="ISBN" placeholder="ISBN" 
+             v-model="formData.doc.fields.ISBN">
       <label for="ISBN-value">ISBN</label>
     </div>
 
     <div class="citation-field form-floating" id="ISSN">
-      <input type="text" class="form-control" id="ISSN-value" name="ISSN-value" aria-label="ISSN" placeholder="ISSN" v-model="formData.doc.fields.ISSN">
+      <input type="text" class="form-control" id="ISSN-value" name="ISSN-value" 
+             aria-label="ISSN" placeholder="ISSN" 
+             v-model="formData.doc.fields.ISSN">
       <label for="ISSN-value">ISSN</label>
     </div>
 
     <div class="citation-field form-floating" id="language">
       <!-- @todo SHOULD BE A DROPDOWN? -->
-      <input type="text" class="form-control" id="language-value" name="language-value" aria-label="Language" placeholder="Language" v-model="formData.doc.fields.language">
+      <input type="text" class="form-control" id="language-value" name="language-value" 
+             aria-label="Language" placeholder="Language" 
+             v-model="formData.doc.fields.language">
       <label for="language-value">Language</label>
     </div>
 
     <div class="citation-field form-floating" id="libraryCatalog">
-      <input type="text" class="form-control" id="libraryCatalog-value" name="libraryCatalog-value" aria-label="Library Catalog" placeholder="Library Catalog" v-model="formData.doc.fields.libraryCatalog">
+      <input type="text" class="form-control" id="libraryCatalog-value" name="libraryCatalog-value" 
+             aria-label="Library Catalog" placeholder="Library Catalog" 
+             v-model="formData.doc.fields.libraryCatalog">
       <label for="libraryCatalog-value">Library Catalog</label>
     </div>
 
     <div class="citation-field form-floating" id="pages">
-      <input type="text" class="form-control" id="pages-value" name="pages-value" aria-label="Pages" placeholder="Pages" v-model="formData.doc.fields.pages">
+      <input type="text" class="form-control" id="pages-value" name="pages-value" 
+             aria-label="Pages" placeholder="Pages" 
+             v-model="formData.doc.fields.pages">
       <label for="pages-value">Pages</label>
     </div>
 
     <div class="citation-field form-floating" id="place">
-      <input type="text" class="form-control" id="place-value" name="place-value" aria-label="Place" placeholder="Place" v-model="formData.doc.fields.place">
+      <input type="text" class="form-control" id="place-value" name="place-value" 
+             aria-label="Place" placeholder="Place" 
+             v-model="formData.doc.fields.place">
       <label for="place-value">Place</label>
     </div>
 
     <div class="citation-field form-floating" id="publicationTitle">
-      <input type="text" class="form-control" id="publicationTitle-value" name="publicationTitle-value" aria-label="Publication Title" placeholder="Publication Title" v-model="formData.doc.fields.publicationTitle">
+      <input type="text" class="form-control" id="publicationTitle-value" name="publicationTitle-value" 
+             aria-label="Publication Title" placeholder="Publication Title" 
+             v-model="formData.doc.fields.publicationTitle">
       <label for="publicationTitle-value">Publication Title</label>
     </div>
 
@@ -383,49 +412,68 @@
 
     <div class="citation-field form-floating" id="rights">
       <!-- @todo DROPDOWN? -->
-      <input type="text" class="form-control" id="rights-value" name="rights-value" aria-label="Rights" placeholder="Rights" v-model="formData.doc.fields.rights">
+      <input type="text" class="form-control" id="rights-value" name="rights-value" 
+             aria-label="Rights" placeholder="Rights" 
+             v-model="formData.doc.fields.rights">
       <label for="rights-value">Rights</label>
     </div>
 
     <div class="citation-field form-floating" id="section">
-      <input type="text" class="form-control" id="section-value" name="section-value" aria-label="Section" placeholder="Section" v-model="formData.doc.fields.section">
+      <input type="text" class="form-control" id="section-value" name="section-value"
+             aria-label="Section" placeholder="Section" 
+             v-model="formData.doc.fields.section">
       <label for="section-value">Section</label>
     </div>
 
     <div class="citation-field form-floating" id="series">
-      <input type="text" class="form-control" id="series-value" name="series-value" aria-label="Series" placeholder="Series" v-model="formData.doc.fields.series">
+      <input type="text" class="form-control" id="series-value" name="series-value" 
+             aria-label="Series" placeholder="Series" 
+             v-model="formData.doc.fields.series">
       <label for="series-value">Series</label>
     </div>
 
     <div class="citation-field form-floating" id="seriesNumber">
-      <input type="text" class="form-control" id="seriesNumber-value" name="seriesNumber-value" aria-label="Series Number" placeholder="Series Number" v-model="formData.doc.fields.seriesNumber">
+      <input type="text" class="form-control" id="seriesNumber-value" name="seriesNumber-value" 
+             aria-label="Series Number" placeholder="Series Number" 
+             v-model="formData.doc.fields.seriesNumber">
       <label for="seriesNumber-value">Series Number</label>
     </div>
 
     <div class="citation-field form-floating" id="shortTitle">
-      <input type="text" class="form-control" id="shortTitle-value" name="shortTitle-value" aria-label="Short Title" placeholder="Short Title" v-model="formData.doc.fields.shortTitle">
+      <input type="text" class="form-control" id="shortTitle-value" name="shortTitle-value" 
+             aria-label="Short Title" placeholder="Short Title" 
+             v-model="formData.doc.fields.shortTitle">
       <label for="shortTitle-value">Short Title</label>
     </div>
 
     <div class="citation-field form-floating" id="title">
-      <input type="text" class="form-control" id="title-value" name="title-value" aria-label="Title" placeholder="Title" v-model="formData.doc.fields.title">
+      <input type="text" class="form-control" id="title-value" name="title-value" 
+             aria-label="Title" placeholder="Title" 
+             v-model="formData.doc.fields.title">
       <label for="title-value">Title</label>
     </div>
 
     <div class="citation-field form-floating" id="url">
-      <input type="text" class="form-control" id="url-value" name="url-value" aria-label="URL" placeholder="Full website link (URL)" v-model="formData.doc.fields.url">
+      <input type="text" class="form-control" id="url-value" name="url-value" 
+             aria-label="URL" placeholder="Full website link (URL)" 
+             v-model="formData.doc.fields.url">
       <label for="url-value">URL</label>
     </div>
-
   </div>
 
   <div class="form-floating">
-      <textarea class="form-control" placeholder="Enter notes here..." id="formInputDISAAcknowledgements" style="height: 128px"></textarea>
+      <textarea class="form-control" id="formInputDISAAcknowledgements" 
+                placeholder="Enter notes here..."
+                v-model="formData.doc.acknowledgements"
+                style="height: 128px"></textarea>
       <label for="formInputDISAAcknowledgements">Acknowledgements</label>
   </div>
 
   <div class="form-floating">
-      <textarea class="form-control" placeholder="Enter notes here..." id="formInputDISABiblioResearcherNotes" style="height: 128px"></textarea>
+      <textarea class="form-control" id="formInputDISABiblioResearcherNotes" 
+                placeholder="Enter notes here..." 
+                v-model="formData.doc.comments"
+                style="height: 128px"></textarea>
       <label for="formInputDISABiblioResearcherNotes">Researcher notes</label>
       <a href="#" style="font-size:80%;font-weight:bold;clear:left;">Report problems or ask for help</a>
   </div>
@@ -434,7 +482,7 @@
     &nwarr; save source and exit
   </a>
 
-  <button type="submit" class="btn btn-primary btn-md" id="citation-form-submit"
+  <button type="button" class="btn btn-primary btn-md" id="citation-form-submit"
           v-on:click="openItemTab">
     save source and continue to enter records &rarr;
   </button>
