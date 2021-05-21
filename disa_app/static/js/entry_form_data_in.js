@@ -23,6 +23,20 @@ function prepareForTagify(data) {
 
 function preprocessSourceData(data) {
 
+  // Convert date formats so that they can be inserted into
+  //  date input element
+
+  function getDateInFormFormat(dbDateString) {
+    const date = new Date(dbDateString),
+          yyyy = date.getFullYear(),
+          mm = (date.getMonth() + 1).toString().padStart(2,'0'),
+          dd = date.getDate().toString().padStart(2,'0')
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  data.formData.doc.fields.date = getDateInFormFormat(data.formData.doc.fields.date);
+  data.formData.doc.fields.accessDate = getDateInFormFormat(data.formData.doc.fields.accessDate);
+  
   // Make array of references into a hash by reference ID
 
   data.formData.doc.references = data.formData.doc.references.reduce(
