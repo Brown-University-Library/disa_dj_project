@@ -591,7 +591,7 @@ class Referent(Base):
             tribes.append( {'tribe_db_id': tribe.id, 'tribe_name': tribe.name} )
         vocations = []
         for vocation in self.vocations:
-            vocations.append( {'vocation_db_id': tribe.id, 'vocation_name': tribe.name} )
+            vocations.append( {'vocation_db_id': vocation.id, 'vocation_name': vocation.name} )
         data = {
             'referent_db_id': self.id,
             'referent_uuid': None,

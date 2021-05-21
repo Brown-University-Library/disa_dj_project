@@ -1,5 +1,5 @@
 
-import { getSourceData, getItemData, getReferentData } from './entry_form_data_in.js';
+import { getSourceData } from './entry_form_data_in.js';
 import { DISA_ID_COMPONENT }          from './entry_form_component_id-badge.js';
 import { TAG_INPUT_COMPONENT }        from './entry_form_component_tag-input.js';
 import { SAVE_STATUS_COMPONENT }      from './entry_form_component_save-status.js';
