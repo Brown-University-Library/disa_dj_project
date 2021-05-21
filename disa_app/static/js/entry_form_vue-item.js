@@ -107,13 +107,13 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
       currentReferentId: function(referentId) {
         this.updateUrl();
+        /* DISABLED FOR NOW
         if (!this.currentReferent.FULL_DATA_LOADED) {
           getReferentData(referentId, this.currentItemId, this.loadCurrentReferentAPI).then(
             referentData => this.currentItem.referents[referentId] = referentData
           );
-        }
-      },
-
+        } */
+      }
     },
 
     methods: {
