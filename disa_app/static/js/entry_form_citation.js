@@ -65,7 +65,7 @@ async function main() {
   // Get the data structure to pass to Vue
 
   let dataAndSettings = await loadAndInitializeData(initDisplay);
-  console.log('MAIN DATA PRIOR TO VUE', dataAndSettings);
+  console.log('MAIN DATA PRIOR TO VUE', JSON.stringify(dataAndSettings, null, 2));
 
   // If item specified in URL, select tab
 

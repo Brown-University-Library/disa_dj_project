@@ -99,11 +99,12 @@ async function saveCitationToServer() {
 
 */
 
+function initializeCitationForm(dataAndSettings) {  
   new Vue({
     el: '#citation-form',
     data: dataAndSettings,
     watch: {
-      'formData.doc.citation_type_id': updateCitationFieldVisibility
+      'formData.doc.citation_type_id': updateCitationFieldVisibility,
       watchMeToTriggerSave: saveCitationToServer
     },
     methods: {
