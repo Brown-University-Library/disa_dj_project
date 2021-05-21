@@ -895,16 +895,24 @@
 
                             <!-- Race -->
 
+                            <div>
+                              <label for="formInputDISAPersonRace">Race</label>
+                              <disa-tags v-model="currentReferent.races"
+                                         v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonRace"
+                                         id="formInputDISAPersonRace"></disa-tags>
+                            </div>
+
+                            <!-- NEW MODEL: only one race as dropdown
                             <div class="form-floating">
                               <select class="form-select" id="formInputDISAPersonRace" 
                                       aria-label="This person's race designation"
-                                      v-model="currentReferentRaceID">
+                                      v-model="currentReferent.race">
                                   <option v-for="(raceOption, raceOptionId) in MENU_OPTIONS.formInputDISAPersonRace"
                                           v-bind:value="raceOptionId"
                                           v-text="raceOption"></option>
                               </select>
                               <label for="formInputDISAPersonRace">Race</label>
-                            </div>
+                            </div>  -->
                             <div class="form-floating">
                               <input type="text" class="form-control" id="formInputDISAPersonRaceTerms" 
                                      aria-label="Exact racial terms used" placeholder="Exact racial terms used">
