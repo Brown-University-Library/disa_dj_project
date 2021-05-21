@@ -125,6 +125,7 @@ function preprocessItemData(itemData, oldItemData, relationshipsData, referentDa
 // Get item data (including relationships) -- return Promise
 
 async function getItemData(itemId, oldItemData, apiInfo) {
+  
   if (itemId) {
 
     // data_itemrecord_api_url_root variable set in redesign_citation.html

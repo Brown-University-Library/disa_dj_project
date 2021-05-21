@@ -1,4 +1,4 @@
-import { getItemData, getReferentData, getRelationshipsData } from './entry_form_data_in.js';
+import { getItemData, getRelationshipsData } from './entry_form_data_in.js';
 import { saveFunctionsMixin } from './entry_form_vue-item_mixin_save.js';
 import { dataBackupMixin } from './entry_form_vue-item_mixin_backup.js';
 
@@ -95,11 +95,11 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
       currentItemId: function(itemId) {
         this.updateUrl();
-        const oldItemData = this.currentItem;
         if (!this.currentItem.FULL_DATA_LOADED) {
-          getItemData(itemId, oldItemData).then(
-            itemData => this.formData.doc.references[itemId] = itemData
-          );
+          const oldItemData = this.currentItem;
+          getItemData(itemId, oldItemData).then(itemData => {
+            this.formData.doc.references[itemId] = itemData;
+          });
         }
       },
 

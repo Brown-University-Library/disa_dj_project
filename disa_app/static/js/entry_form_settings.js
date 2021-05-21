@@ -211,7 +211,6 @@ export const LOCAL_SETTINGS = {
         '8': 'Unknown'
       },
       formInputDISAPersonRace: {
-
         'Not specified':'Not specified',
         'Black':'Black',
         'Indian':'Indian',
