@@ -43,89 +43,21 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         return this.formData.doc.references[this.currentItemId]
       },
 
-      currentReferent: function () {
-        return this.currentItem.referents[this.currentReferentId]
-      },
-
-      currentItemLocationCity: function () {
-        if (this.currentItem.location_info) {
-          const cityLocation = this.currentItem.location_info.find(
-            loc => loc.location_type === 'City'
-          );
-          return cityLocation && cityLocation.location_name 
-            ? cityLocation.location_name : undefined;
-        } else {
-          return undefined;
-        }
-      },
-
-      currentItemLocationColonyState: function () {
-        if (this.currentItem.location_info) {
-          const colonyStateLocation = this.currentItem.location_info.find(
-            loc => loc.location_type === 'Colony/State'
-          );
-          return colonyStateLocation && colonyStateLocation.location_name 
-            ? colonyStateLocation.location_name : undefined;
-        } else {
-          return undefined;
-        }
-      },
-
-      currentItemLocationLocale: function () {
-        if (this.currentItem.location_info) {
-          const localeLocation = this.currentItem.location_info.find(
-            loc => loc.location_type === 'Locale'
-          );
-          return localeLocation && localeLocation.location_name 
-            ? localeLocation.location_name : undefined;
-        } else {
-          return undefined;
-        }
-      },
-
-      // Computed properties for translating to/from 
-      //  Tagify's input requirements
-
-      currentReferentTribesForTagify: {
-        get: function() {
-          if (Array.isArray(this.currentReferent.tribes)) {
-            return JSON.stringify(this.currentReferent.tribes.map(
-              tribe => {
-                return {
-                  value: tribe.value,
-                  dbID: tribe.id
-                }
-              }
-            ));
-          } else {
-            return '';
-          }
-        },
-        set: function(newValue) {
-          console.log('CHANGING TRIBES TO', newValue);
-          this.currentReferent.tribes = JSON.parse(newValue).map(
-            tribeTag => { 
-              return { 
-                label: tribeTag.value, 
-                value: tribeTag.value, 
-                id: tribeTag.dbID 
-              } 
-            }
-          );
-        }
-      },
-
-      currentReferentRaceID: {
+      currentReferent: {
         get: function () {
-          return (Array.isArray(this.currentReferent.races) && this.currentReferent.races.length)
-            ? this.currentReferent.races[0].id 
-            : undefined;
+          return this.currentItem.referents[this.currentReferentId.toString()]
+          /*
+          return this.currentItem.referents.find(
+            referent => referent.id === this.currentReferentId
+          ); */
         },
-        set: function (raceID) {
-          if (! Array.isArray(this.currentReferent.races)) {
-            this.currentReferent.races = [];
+        set: function (referentData) { // @todo I don't think this is used
+          let oldReferentData = this.currentItem.referents.find(
+            referent => referent.id === this.currentReferentId
+          );
+          if (oldReferentData) {
+            oldReferentData = referentData;
           }
-          this.currentReferent.races[0] = { id: raceID };
         }
       },
 

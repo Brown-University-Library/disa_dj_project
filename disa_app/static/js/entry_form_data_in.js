@@ -1,6 +1,26 @@
 
 import {LOCAL_SETTINGS} from './entry_form_settings.js';
 
+// Convert an array into a form that Tagify understands
+
+function prepareForTagify(data) {
+
+  let tagifiedData;
+  if (Array.isArray(data) && data.length > 0) {
+    if (data[0].id && data[0].label) {
+      tagifiedData = JSON.stringify(data.map(dataItem => {
+        return { value: dataItem.label, dbID: dataItem.id }
+      }));
+    }
+  } else {
+    tagifiedData = '[]';
+  }
+
+  console.log('TAGIFYING FROM ', data, ' TO ', tagifiedData);
+
+  return tagifiedData;
+}
+
 function preprocessSourceData(data) {
 
   // Make array of references into a hash by reference ID
@@ -43,17 +63,44 @@ async function getSourceData() {
 
 function preprocessItemData(itemData, oldItemData, relationshipsData, referentData) {
 
-  const itemDate = new Date(itemData.rec.date);
+  const itemDate = itemData.rec.date ? new Date(itemData.rec.date) : null;
+
+  // Location info: ID is present only in oldItemData BUT
+  //  Type is located only in itemData -- need to combine
+
+  const locationInfo = itemData.rec.locations.map(location1 => {
+    const location2 = oldItemData.location_info.find(
+      loc2 => loc2.location_name === location1.label
+    );
+    return {
+      id: location1.id,
+      name: location2.location_name,
+      type: location2.location_type
+    }
+  });
+
+  const locationDefaults = {
+          'Locale': { name: '' },
+          'City': { name: '' },
+          'Colony/State': { name: '' }
+        },
+        locationInfoByType = locationInfo.reduce(
+          (locationHash, location) => Object.assign(
+            {}, locationHash, { [location.type]: location }
+          ), locationDefaults
+        );
+
+  console.log("LOCATIONS", {locationInfo, locationInfoByType});
 
   let processedData = {
     // date: itemData.rec.date,
     dateParts: {
-      month: itemDate.getMonth() + 1,
-      day: itemDate.getDate(),
-      year: itemDate.getFullYear()
+      day:   itemDate ? itemDate.getDate()      : undefined,
+      month: itemDate ? (itemDate.getMonth() + 1).toString().padStart(2, '0') : -1,
+      year:  itemDate ? itemDate.getFullYear()  : undefined
     },
     id: itemData.rec.id,
-    location_info: oldItemData.location_info, // the old (non-enhanced) location data is richer
+    location_info: locationInfoByType,
     national_context_id: itemData.rec.national_context,
     reference_type_id: itemData.rec.record_type.id,
     // reference_type_name: itemData.rec.record_type.label,
@@ -131,6 +178,12 @@ function preprocessReferentData(referentData) {
           nameTypeAsID_all = nameTypesEntries.find(n => n[1] === nameTypeAsLabel);
     name.name_type = nameTypeAsID_all ? nameTypeAsID_all[0] : '';
   });
+
+  // Tagify fields -- races, tribes, vocation
+
+  referentData.races     = prepareForTagify(referentData.races);
+  referentData.tribes    = prepareForTagify(referentData.tribes);
+  referentData.vocations = prepareForTagify(referentData.vocations);
 
   referentData.FULL_DATA_LOADED = true;
 
