@@ -874,6 +874,13 @@
 
                             <!-- Vocation -->
 
+                            <div>
+                              <label for="formInputDISAPersonVocation">Vocation</label>
+                              <disa-tags v-model="currentReferent.vocations"
+                                          v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonVocation"
+                                          id="formInputDISAPersonVocation"></disa-tags>
+                            </div>
+                            <!-- VOCATION AS DROPDOWN ...
                             <div class="form-floating">
                               <select class="form-select" id="formInputDISAPersonVocation" aria-label="Vocation" placeholder="Vocation">
                                 <option v-for="(vocationOption, vocationOptionId) in MENU_OPTIONS.formInputDISAPersonVocation"
@@ -882,7 +889,7 @@
                                 </option>
                               </select>
                               <label for="formInputDISAPersonVocation">Vocation</label>
-                            </div>
+                            </div> -->
                           </div>
                           <div class="col-md-6">
 
