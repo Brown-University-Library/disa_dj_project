@@ -122,23 +122,7 @@ function preprocessItemData(itemData, oldItemData, relationshipsData, referentDa
   return processedData;
 }
 
-/*
-async function getAdditionalReferentInfo(referents) {
-  const referentIDs = referents.map(r => r.id);
-} */
-
-// async function getItemData(itemId) {
-//   var foo_url = `/data/records/${itemId}/`;
-//   console.log( "foo_url, ", foo_url );
-//   if (itemId) {
-//     const dataURL = `/data/records/${itemId}/`,
-//     response = await fetch(dataURL),
-//     dataJSON = await response.json();
-//     return preprocessItemData(dataJSON);
-//   } else {
-//     return undefined
-//   }
-// }
+// Get item data (including relationships) -- return Promise
 
 async function getItemData(itemId, oldItemData, apiInfo) {
   if (itemId) {
@@ -166,13 +150,23 @@ async function getItemData(itemId, oldItemData, apiInfo) {
   }
 }
 
+// Referent data - called by getItemData
+
+async function getReferentsData(referentIDs, itemID, apiDefinition) {
+  return Promise.all(referentIDs.map(
+    referentID => getReferentData(referentID, itemID, apiDefinition))
+  );
+}
+
 function preprocessReferentData(referentData) {
 
   // The API gives us name types as string labels, but borks
   //   the entry upon save if it's anything but a number (ID).
+
   // Convert name type to number
 
   const nameTypesEntries = Object.entries(LOCAL_SETTINGS.MENU_OPTIONS.formInputDISAItemPersonNameType);
+
   referentData.names.forEach(name => {
     const nameTypeAsLabel = name.name_type,
           nameTypeAsID_all = nameTypesEntries.find(n => n[1] === nameTypeAsLabel);
@@ -188,10 +182,6 @@ function preprocessReferentData(referentData) {
   referentData.FULL_DATA_LOADED = true;
 
   return referentData;
-}
-
-async function getReferentsData(referentIDs, itemID, apiDefinition) {
-  return Promise.all(referentIDs.map(referentID => getReferentData(referentID, itemID, apiDefinition)))
 }
 
 async function getReferentData(referentId, itemId, apiDefinitions) {
@@ -255,4 +245,4 @@ async function getRelationshipsData(itemId, apiDefinition) {
 
 window.getRelationshipsData = getRelationshipsData;
 
-export { getSourceData, getItemData, getReferentData, getRelationshipsData }
+export { getSourceData, getItemData, getRelationshipsData }
