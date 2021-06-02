@@ -177,6 +177,9 @@ async function saveItemDataToServer() {
   }
 }
 
+function deleteCurrentItem() {
+  console.log(`DELETING ITEM ID ${this.currentItemId}`);
+}
 
 // Relationships
 
