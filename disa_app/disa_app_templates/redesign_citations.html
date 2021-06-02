@@ -36,7 +36,10 @@
 <div id="startpanel">
     <h1 class="text-secondary">Choose a source</h1>
     <h3>Starting with a new source?</h3>
-    <button type="button" class="btn btn-primary btn-lg" style="font-weight: bold">Add source</button>
+    <button type="button" class="btn btn-primary btn-lg" id="createNewSourceButton"
+            style="font-weight: bold">
+      Add new source
+    </button>
     <h3>Returning to a previously added document?</h3>
     {% if user_documents %}
     <h5 class="text-primary col-lg-5 col-sm-11" style="letter-spacing: .5px; padding: 0;">Your recent sources</h5>
@@ -106,10 +109,73 @@
 {% block page_specific_js %}
 <script>
 
+  async function createNewSource() {
+    console.log('CREATE');
+    // Create new item on server
+    const url = 'http://127.0.0.1:8000/data/documents/', // @todo BIRKIN REPLACE THIS
+          TOKEN = '{{ csrf_token }}',
+          requestBody = {
+            'acknowledgements': '',
+            'citation_type_id': 20,  // means the fields below will be 'Book' fields
+            'comments': '',
+            'fields': {
+              'ISBN': '',
+              'abstractNote': '',
+              'accessDate': '',
+              'archive': '',
+              'archiveLocation': '',
+              'author': '',
+              'callNumber': '',
+              'date': '',
+              'edition': '',
+              'extra': '',
+              'language': '',
+              'libraryCatalog': '',
+              'numPages': '',
+              'numberOfVolumes': '',
+              'pages': '',
+              'place': '',
+              'publisher': '',
+              'rights': '',
+              'series': '',
+              'seriesNumber': '',
+              'shortTitle': '',
+              'title': '',
+              'url': '',
+              'volume': ''
+            }
+          },
+          fetchOptions = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': TOKEN
+            },
+            body: JSON.stringify(requestBody)
+          };
+    
+    const response = await fetch(url, fetchOptions);
+    const dataJSON = await response.json();
+    const sourceIdMatch = dataJSON.redirect.match('/editor/documents/([^/]+)/');
+
+    if (response.ok) {
+      if (sourceIdMatch && sourceIdMatch[1]) {
+        window.location.href = `http://127.0.0.1:8000/redesign_citations/${sourceIdMatch[1]}/`;
+        // @todo need Birkin's URLs
+      } else {
+        console.error(`Can't create new source: redirect URL format error`, dataJSON);
+      }
+    } else {
+      console.error("Error on server creating new Source", { fetchOptions, response });
+    }
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
     const sidebarClassList = document.getElementById('sidebar').classList;
     document.getElementById('sidebarCollapse')
       .addEventListener('click', () => sidebarClassList.toggle('active'));
+    document.getElementById('createNewSourceButton')
+      .addEventListener('click', createNewSource);
   });
 
 </script>
