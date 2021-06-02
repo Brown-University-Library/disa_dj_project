@@ -53,10 +53,14 @@
             {% for entry in user_documents %}
             <tr>
                 <td><a href="{% url 'redesign_citation_url' entry.doc.id %}">{{ entry.doc.id }}</a></td>
-                <td class="table-info">{{ entry.doc.display }}</td>
+                <td class="table-info">
+                  <a href="{% url 'redesign_citation_url' entry.doc.id %}">
+                    {{ entry.doc.display }}
+                  </a>
+                </td>
                 <td style="background-color: #eeeeee;">
-                    <button type="button" class="close text-primary" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    <button type="button" class="btn btn-primary btn-sm">
+                      delete
                     </button>
                 </td>
             </tr>
