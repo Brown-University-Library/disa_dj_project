@@ -73,6 +73,11 @@ async function main() {
     document.getElementById('item-tab').click();
   }
 
+  // TEMP: Fill in source title at top
+  // @todo this will be better when the two tabs fall under the same Vue instance
+
+  document.getElementById('sourceTitle').innerText = dataAndSettings.formData.doc.fields.title || '[New source]';
+
   // Initialize forms in Vue
 
   initializeCitationForm(dataAndSettings);
