@@ -1,5 +1,6 @@
 
 import {LOCAL_SETTINGS} from './entry_form_settings.js';
+import {DATA_TEMPLATES} from './entry_form_data_templates.js';
 
 // Convert an array into a form that Tagify understands
 

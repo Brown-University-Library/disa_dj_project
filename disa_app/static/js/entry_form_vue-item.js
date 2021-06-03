@@ -1,6 +1,7 @@
 import { getItemData, getRelationshipsData } from './entry_form_data_in.js';
 import { saveFunctionsMixin } from './entry_form_vue-item_mixin_save.js';
 import { dataBackupMixin } from './entry_form_vue-item_mixin_backup.js';
+import { DATA_TEMPLATES } from './entry_form_data_templates.js';
 
 
 // UUID generator
