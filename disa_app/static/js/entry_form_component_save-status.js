@@ -80,6 +80,10 @@ const componentDefinition = {
                   s = (now.getSeconds() < 10 ? '0' : '') + now.getSeconds();
             return `Saved<br />${h}:${m}:${s}`;
           }
+        },
+        undefined: { // Catches when something strange is afoot
+          classname: 'bg-danger',
+          displayText: 'STATUS<br />UNDEFINED'
         }
       }
     }
