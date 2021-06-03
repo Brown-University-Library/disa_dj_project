@@ -1,6 +1,7 @@
 
 // This module collects all the functionality related to saving to the server
 
+// Referents - save
 
 async function saveReferentData_post(referentId, itemId, apiDefinition, requestBody) {
 
@@ -25,7 +26,6 @@ async function saveReferentData_post(referentId, itemId, apiDefinition, requestB
 
   // @todo Return value??
 };
-
 
 function saveReferentDataToServer() {
 
@@ -151,16 +151,6 @@ async function saveItemDataToServer() {
         }
       }
     }
-/*
-    const locations = ['Colony/State','City','Locale'].filter(
-      locationType => (this.currentItem.location_info[locationType].name)
-    ).map(locationType => {
-      return {
-        id: this.currentItem.location_info[locationType].id || -1,
-        label: this.currentItem.location_info[locationType].name,
-        value: this.currentItem.location_info[locationType].name
-      }
-    }); */
 
     let date;
 
@@ -234,7 +224,7 @@ async function createRelationshipOnServer() {
           obj: parseInt(this.newRelationship.obj),
           section: this.currentItemId
         },
-        url = `http://127.0.0.1:8000/data/relationships/`,
+        url = `http://127.0.0.1:8000/data/relationships/`, // @todo replace with Birkin's URL
         fetchOptions = {
           method: 'POST', // apiDefinition.api_method,
           headers: {
@@ -259,10 +249,9 @@ async function createRelationshipOnServer() {
   }
 }
 
-
 async function deleteRelationshipOnServer(relationship) {
   console.log(`DELETING RELATIONSHIP ID: ${relationship.id}`);
-  const url = `http://127.0.0.1:8000/data/relationships/${relationship.id}`,
+  const url = `http://127.0.0.1:8000/data/relationships/${relationship.id}`, // @todo BIRKIN - NEED URL
         requestBody = { section: this.currentItemId },
         fetchOptions = {
           method: 'DELETE', // apiDefinition.api_method,
@@ -279,7 +268,7 @@ async function deleteRelationshipOnServer(relationship) {
   if (response.ok) {
     const dataJSON = await response.json();
     this.currentItem.relationships = dataJSON.store;
-    this.saveStatus = this.SAVE_STATUS.SUCCESS;  
+    this.saveStatus = this.SAVE_STATUS.SUCCESS;
   } else {
     this.saveStatus = this.SAVE_STATUS.ERROR;
     throw Error(response.statusText);
@@ -287,7 +276,6 @@ async function deleteRelationshipOnServer(relationship) {
   
   // @todo - also delete inverse relationship?
 }
-
 
 // Vue Mixin
 

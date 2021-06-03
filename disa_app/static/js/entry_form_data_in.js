@@ -21,6 +21,11 @@ function prepareForTagify(data) {
   return tagifiedData;
 }
 
+
+
+
+// SOURCE
+
 function preprocessSourceData(data) {
 
   // Convert date formats so that they can be inserted into
@@ -33,17 +38,17 @@ function preprocessSourceData(data) {
           dd = date.getDate().toString().padStart(2,'0')
     return `${yyyy}-${mm}-${dd}`;
   }
-
+  
   data.formData.doc.fields.date = getDateInFormFormat(data.formData.doc.fields.date);
   data.formData.doc.fields.accessDate = getDateInFormFormat(data.formData.doc.fields.accessDate);
   
-  // Make array of references into a hash by reference ID
+  // Make array of references/items into a hash by ID
+  //  Use the template data structure
 
   data.formData.doc.references = data.formData.doc.references.reduce(
     (refObj, ref) => { refObj[ref.id] = ref; return refObj },
     {}
   );
-
   data.NEW_USER_TEMPLATE = data.formData.new_user_template.sample_payload; 
   delete data.formData.new_user_template;
 
@@ -65,7 +70,6 @@ function preprocessSourceData(data) {
 async function getSourceData() {
 
   const dataURL = new URL(window.location.toString());
-
   dataURL.hash = '';
   dataURL.search = '?format=json';
 
@@ -74,6 +78,9 @@ async function getSourceData() {
         dataWithSettings = Object.assign({}, LOCAL_SETTINGS, { formData: dataJSON });
   return preprocessSourceData(dataWithSettings);
 }
+
+
+// ITEM
 
 function preprocessItemData(itemData, oldItemData, relationshipsData, referentData) {
 
@@ -94,15 +101,15 @@ function preprocessItemData(itemData, oldItemData, relationshipsData, referentDa
   });
 
   const locationDefaults = {
-          'Locale': { name: '' },
-          'City': { name: '' },
-          'Colony/State': { name: '' }
-        },
-        locationInfoByType = locationInfo.reduce(
-          (locationHash, location) => Object.assign(
-            {}, locationHash, { [location.type]: location }
-          ), locationDefaults
-        );
+      'Locale': { name: '' },
+      'City': { name: '' },
+      'Colony/State': { name: '' }
+    },
+    locationInfoByType = locationInfo.reduce(
+      (locationHash, location) => Object.assign(
+        {}, locationHash, { [location.type]: location }
+      ), locationDefaults
+    );
 
   console.log("LOCATIONS", {locationInfo, locationInfoByType});
 
@@ -175,6 +182,9 @@ async function getItemData(itemId, oldItemData, apiInfo) {
     return undefined
   }
 }
+
+
+// REFERENT
 
 // Referent data - called by getItemData
 
@@ -250,6 +260,9 @@ async function getReferentData(referentId, itemId, apiDefinitions) {
     return undefined;
   }
 }
+
+
+// RELATIONSHIP
 
 // Get relationships data
 

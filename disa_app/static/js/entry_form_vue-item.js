@@ -12,6 +12,7 @@ function uuidv4() {
   );
 }
 
+// Routine to initialize the Item form in Vue
 
 function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPONENT, SAVE_STATUS_COMPONENT}) {
 
