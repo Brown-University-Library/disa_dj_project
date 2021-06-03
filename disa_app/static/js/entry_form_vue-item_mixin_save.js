@@ -121,12 +121,14 @@ async function createItemOnServer() {
 
 async function saveItemDataToServer() {
 
-  console.log('CALLING ROUTINE TO SUBMIT ITEM DATA');
+  console.log(`CALLING ROUTINE TO SUBMIT ITEM DATA - item id ${this.currentItemId}`);
   console.log(' FULL DATA LOADED? ' + this.currentItem.FULL_DATA_LOADED);
 
   if (this.currentItem.FULL_DATA_LOADED) {
 
     this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
+
+    const isNewItem = (this.currentItemId === 'new');
 
     // Only save current Item (without Referent data)
 
@@ -181,9 +183,11 @@ async function saveItemDataToServer() {
       image_url: this.currentItem.image_url
     };
 
+    const httpMethod = isNewItem ? 'POST' : 'PUT';
+
     const url = `http://127.0.0.1:8000/data/records/${this.currentItemId}/`,
           fetchOptions = {
-            method: 'PUT', // apiDefinition.api_method,
+            method: httpMethod, // 'PUT', // apiDefinition.api_method,
             headers: {
               'Content-Type': 'application/json',
               'X-CSRFToken': TOKEN
@@ -191,7 +195,7 @@ async function saveItemDataToServer() {
             body: JSON.stringify(requestBody)
           };
 
-    console.log(`SAVE ITEM FETCH OPTIONS - putting to ${url}`, fetchOptions);
+    console.log(`SAVE ITEM FETCH OPTIONS - ${httpMethod}ing to ${url}`, fetchOptions);
 
     if (false) { return }  // Skip send if true
 
@@ -201,7 +205,46 @@ async function saveItemDataToServer() {
       const dataJSON = await response.json();
       // this.currentItem.relationships = dataJSON.store;
       this.saveStatus = this.SAVE_STATUS.SUCCESS;
-      console.log('RESPONSE', {response, dataJSON}) ;
+      console.log('RESPONSE', {response, dataJSON});
+
+      // If this is a new item ...
+
+      if (isNewItem) {
+        const itemIdMatch = dataJSON.redirect.match('/editor/records/([^/]+)/');
+        if (itemIdMatch && itemIdMatch[1]) {
+          // @todo, sometime - if we go with UUIDs, then the ID will be a string
+          const newItemDatabaseId = parseInt(itemIdMatch[1]);
+          console.log(`NEW ITEM ID: ${newItemDatabaseId}`);
+
+          let newItemData = JSON.parse(
+            JSON.stringify(this.formData.doc.references.new)
+          );
+          newItemData.id = newItemDatabaseId;
+          newItemData.transcription = 'BOOYAH 5';
+
+          this.formData.doc.references.new = undefined;
+          delete this.formData.doc.references.new;
+
+          // METHOD 1 -- doesn't create a reactive item
+          // this.formData.doc.references[newItemDatabaseId] = newItemData;
+
+          // METHOD 2
+          /*
+          this.formData.doc.references = Object.assign(
+            {}, 
+            this.formData.doc.references, 
+            { [newItemDatabaseId]: newItemData }
+          ); */
+
+          // METHOD 3
+          this.$set(this.formData.doc.references, newItemDatabaseId, newItemData);
+          //this.$set(this.formData.doc.references[newItemDatabaseId], 'transcription', 'CAT');
+          // this.formData.doc.references[newItemDatabaseId].id = newItemDatabaseId;
+
+          this.currentItemId = newItemDatabaseId;
+        }
+      }
+
     } else {
       this.saveStatus = this.SAVE_STATUS.ERROR;
       throw Error(response.statusText);
