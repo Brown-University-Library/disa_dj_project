@@ -76,6 +76,48 @@ function saveReferentDataToServer() {
   }
 }
 
+// Item: create, save, delete
+
+async function createItemOnServer() {
+
+  /* NOTE: THIS MAY NOT BE USEFUL
+           Maybe we just need to create a new entry, it will save automatically,
+           (using saveItemDatatoServer()) and then we just reload the 
+           data into the local copy OR rename 'new' to whatever */
+
+  const requestBody = {
+    locations:[],
+    date:'',
+    transcription:'',
+    record_type:{},
+    national_context: 3,
+    citation_id: 8, // this.formData.doc.id,
+    image_url:''
+  };
+
+  const url = `http://127.0.0.1:8000/data/records/new/`,
+        fetchOptions = {
+          method: 'POST', // apiDefinition.api_method,
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': TOKEN
+          },
+          body: JSON.stringify(requestBody)
+        };
+
+  console.log('CREATE ITEM', fetchOptions);
+
+  const response = await fetch(url, fetchOptions);
+  if (response.ok) {
+    const dataJSON = await response.json();
+    // this.currentItem.relationships = dataJSON.store;
+    // this.saveStatus = this.SAVE_STATUS.SUCCESS;
+    console.log('RESPONSE', {response, dataJSON}) ;
+  } else {
+    // this.saveStatus = this.SAVE_STATUS.ERROR;
+    throw Error(response.statusText);
+  }
+}
 
 async function saveItemDataToServer() {
 

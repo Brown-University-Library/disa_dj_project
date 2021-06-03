@@ -167,13 +167,62 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         });
         this.currentNameId = newReferentId;
       },
-      makeNewItem: function () {
-        const newItemId = uuidv4();
+
+      // Creates a new, empty item in the data structure and make it 
+      //  the current item
+      // NOTE: does not communicate with server -- that is handled
+      //       by the currentItemId watcher
+
+      createNewItem: function () {
+        const newItemId = 'new'; // uuidv4();
+        const initData = Object.assign(DATA_TEMPLATES.ITEM, {
+          national_context_id:'2',
+          reference_type_id:'13',
+          FULL_DATA_LOADED: true
+        });
+        this.formData.doc.references[newItemId] = initData;
+
+        /*
         this.formData.doc.references[newItemId] = {
-          id: newItemId,
-          citation_id: this.formData.doc.id,
-          referents: {}
-        };
+          "dateParts":{
+             "day":"",
+             "month":"-1",
+             "year":""
+          },
+          "id":8,
+          "location_info":{
+             "Locale":{
+                "id": -1,
+                "name":"",
+                "type":"Locale"
+             },
+             "City":{
+                "id": -1,
+                "name":"",
+                "type":"City"
+             },
+             "Colony/State":{
+                "id": -1,
+                "name":"",
+                "type":"Colony/State"
+             }
+          },
+          "national_context_id":"2",
+          "reference_type_id":"13",
+          "referents":{},
+          "relationships":[],
+          "groups":[],
+          "transcription":"",
+          kludge: {
+            transcription: '',
+
+          },
+          "image_url":"",
+          "FULL_DATA_LOADED":true
+        }; */
+
+        this.currentNameId = -1;
+        this.currentReferentId = -1;
         this.currentItemId = newItemId;
       },
 
