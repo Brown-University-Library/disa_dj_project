@@ -2,6 +2,17 @@ import { getItemData, getRelationshipsData } from './entry_form_data_in.js';
 import { saveFunctionsMixin } from './entry_form_vue-item_mixin_save.js';
 import { dataBackupMixin } from './entry_form_vue-item_mixin_backup.js';
 
+
+// UUID generator
+// Source: https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid/2117523#2117523
+
+function uuidv4() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
+}
+
+
 function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPONENT, SAVE_STATUS_COMPONENT}) {
 
   dataAndSettings.dataHistory = []; // not sure why Vue doesn't let me add this in the mixin ...
