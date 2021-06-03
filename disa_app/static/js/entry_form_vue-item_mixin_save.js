@@ -180,9 +180,9 @@ async function saveItemDataToServer() {
     const requestBody = {
       locations,
       date,
-      transcription: this.currentItem.transcription,
+      transcription: this.currentItem.kludge.transcription,
       record_type: {
-         id: this.currentItem.reference_type_id
+         id: this.currentItem.kludge.reference_type_id,
          //"value":"Runaway",
          //"label":"Runaway" @todo Q: ARE THESE NECESSARY?
       },

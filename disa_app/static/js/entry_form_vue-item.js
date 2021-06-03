@@ -234,11 +234,11 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         let displayTitle;
 
         if (item.transcription) {
-          displayTitle = item.transcription.replaceAll(/<[^>]+>/g, '')
-              .slice(0,length) + '…';
+          const transcriptionNoHTML = item.kludge.transcription.replaceAll(/<[^>]+>/g, ''),
+                truncatedTitle = transcriptionNoHTML.slice(0,length);
+          displayTitle = truncatedTitle + (truncatedTitle.length < transcriptionNoHTML.length ? '…' : '');
         } else {
-          // displayTitle = `Item ID:${this.displayId(item.id)}`;
-          displayTitle = 'New item';
+          displayTitle = '[No title]';
         }
         return displayTitle
       },

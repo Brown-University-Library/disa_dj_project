@@ -116,7 +116,7 @@ function preprocessItemData(itemData, oldItemData, relationshipsData, referentDa
     id: itemData.rec.id,
     location_info: locationInfoByType,
     national_context_id: itemData.rec.national_context,
-    reference_type_id: itemData.rec.record_type.id,
+    reference_type_id: 'IGNORE ME', // itemData.rec.record_type.id,
     // reference_type_name: itemData.rec.record_type.label,
     // Convert array of referents to a hash by referent ID
     referents: referentData.reduce(
@@ -129,10 +129,21 @@ function preprocessItemData(itemData, oldItemData, relationshipsData, referentDa
     relationships: relationshipsData,
     // referents: getAdditionalReferentInfo(itemData.entrants),
     groups: itemData.groups.group_data,
-    transcription: itemData.rec.transcription,
+    transcription: 'IGNORE ME', // itemData.rec.transcription,
     image_url: itemData.rec.image_url,
+
+    // I have no idea why this works -- without these properties being inside of a
+    //  wrapper object, they're not Vue-responsive
+
+    kludge: {
+      transcription: itemData.rec.transcription,
+      reference_type_id: itemData.rec.record_type.id,
+      image_url: itemData.rec.image_url
+    },
+
     FULL_DATA_LOADED: true // Flag
   }
+
   return processedData;
 }
 
