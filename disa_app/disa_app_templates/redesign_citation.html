@@ -177,7 +177,7 @@
               data-bs-target="#Items"
               type="button" role="tab" aria-controls="Items"
               aria-selected="false">
-        Records
+        Records in this source
       </button>
     </li>
   </ul>
@@ -492,7 +492,6 @@
     save source and continue to enter records &rarr;
   </button>
 
-
   </form>
     </div> <!-- /.tab-pane for bibinfo -->
 
@@ -533,6 +532,8 @@
         </div>
       </div>
       
+      <!-- Actual item tab content -->
+
       <div class="tab-content" style="background-color: white!important;opacity:1;">
 
         <div class="active tab-pane" role="tabpanel" aria-labelledby="New-Item"
@@ -546,19 +547,21 @@
               <!-- Main title -->
 
               <disa-id v-bind:forthis="currentItem" class="float-end"></disa-id>
-              <h1 v-html="makeItemDisplayTitle(currentItem)"></h1>
+              <h2>
+                Record: <em v-html="makeItemDisplayTitle(currentItem)"></em>
+              </h2>
               <div class="float-end">
 
-                <!-- Change item button 
+                <!-- Change item button if more than one item
                       (opens modal #item-selector-modal, defined above) -->
 
                 <button type="button" class="btn btn-primary btn-sm"
                         v-if="Object.values(formData.doc.references).length > 1"
                         data-bs-toggle="modal" data-bs-target="#item-selector-modal">
-                  change to another record
+                  move to another record
                 </button>
 
-                <!-- Create new item control -->
+                <!-- Create new item button -->
 
                 <button type="button" class="btn btn-primary btn-sm"
                         v-on:click="makeNewItem">
