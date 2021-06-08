@@ -1,6 +1,19 @@
-import { getItemData, getReferentData } from './entry_form_data_in.js';
+import { getItemData, getRelationshipsData } from './entry_form_data_in.js';
 import { saveFunctionsMixin } from './entry_form_vue-item_mixin_save.js';
 import { dataBackupMixin } from './entry_form_vue-item_mixin_backup.js';
+import { DATA_TEMPLATES } from './entry_form_data_templates.js';
+
+
+// UUID generator
+// Source: https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid/2117523#2117523
+
+function uuidv4() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
+}
+
+// Routine to initialize the Item form in Vue
 
 function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPONENT, SAVE_STATUS_COMPONENT}) {
 
@@ -43,90 +56,28 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         return this.formData.doc.references[this.currentItemId]
       },
 
-      currentReferent: function () {
-        return this.currentItem.referents[this.currentReferentId]
-      },
-
-      currentItemLocationCity: function () {
-        if (this.currentItem.location_info) {
-          const cityLocation = this.currentItem.location_info.find(
-            loc => loc.location_type === 'City'
-          );
-          return cityLocation && cityLocation.location_name 
-            ? cityLocation.location_name : undefined;
-        } else {
-          return undefined;
-        }
-      },
-
-      currentItemLocationColonyState: function () {
-        if (this.currentItem.location_info) {
-          const colonyStateLocation = this.currentItem.location_info.find(
-            loc => loc.location_type === 'Colony/State'
-          );
-          return colonyStateLocation && colonyStateLocation.location_name 
-            ? colonyStateLocation.location_name : undefined;
-        } else {
-          return undefined;
-        }
-      },
-
-      currentItemLocationLocale: function () {
-        if (this.currentItem.location_info) {
-          const localeLocation = this.currentItem.location_info.find(
-            loc => loc.location_type === 'Locale'
-          );
-          return localeLocation && localeLocation.location_name 
-            ? localeLocation.location_name : undefined;
-        } else {
-          return undefined;
-        }
-      },
-
-      // Computed properties for translating to/from 
-      //  Tagify's input requirements
-
-      currentReferentTribesForTagify: {
-        get: function() {
-          if (Array.isArray(this.currentReferent.tribes)) {
-            return JSON.stringify(this.currentReferent.tribes.map(
-              tribe => {
-                return {
-                  value: tribe.value,
-                  dbID: tribe.id
-                }
-              }
-            ));
-          } else {
-            return '';
-          }
-        },
-        set: function(newValue) {
-          console.log('CHANGING TRIBES TO', newValue);
-          this.currentReferent.tribes = JSON.parse(newValue).map(
-            tribeTag => { 
-              return { 
-                label: tribeTag.value, 
-                value: tribeTag.value, 
-                id: tribeTag.dbID 
-              } 
-            }
-          );
-        }
-      },
-
-      currentReferentRaceID: {
+      currentReferent: {
         get: function () {
-          return (Array.isArray(this.currentReferent.races) && this.currentReferent.races.length)
-            ? this.currentReferent.races[0].id 
-            : undefined;
+          return this.currentItem.referents[this.currentReferentId.toString()]
+          /*
+          return this.currentItem.referents.find(
+            referent => referent.id === this.currentReferentId
+          ); */
         },
-        set: function (raceID) {
-          if (! Array.isArray(this.currentReferent.races)) {
-            this.currentReferent.races = [];
+        set: function (referentData) { // @todo I don't think this is used
+          let oldReferentData = this.currentItem.referents.find(
+            referent => referent.id === this.currentReferentId
+          );
+          if (oldReferentData) {
+            oldReferentData = referentData;
           }
-          this.currentReferent.races[0] = { id: raceID };
         }
+      },
+
+      currentReferentRelationships: function () {
+        return this.currentItem.relationships.filter(
+          relationship => relationship.data.sbj.id === this.currentReferentId
+        )
       },
 
       // Compute API endpoints
@@ -157,11 +108,11 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
       currentItemId: function(itemId) {
         this.updateUrl();
-        const oldItemData = this.currentItem;
         if (!this.currentItem.FULL_DATA_LOADED) {
-          getItemData(itemId, oldItemData).then(
-            itemData => this.formData.doc.references[itemId] = itemData
-          );
+          const oldItemData = this.currentItem;
+          getItemData(itemId, oldItemData).then(itemData => {
+            this.formData.doc.references[itemId] = itemData;
+          });
         }
       },
 
@@ -169,23 +120,13 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
       currentReferentId: function(referentId) {
         this.updateUrl();
+        /* DISABLED FOR NOW
         if (!this.currentReferent.FULL_DATA_LOADED) {
           getReferentData(referentId, this.currentItemId, this.loadCurrentReferentAPI).then(
             referentData => this.currentItem.referents[referentId] = referentData
           );
-        }
-      },
-
-      // If date fields in form change, update data structure with
-      //  form field values
-      /*
-      watchMeToTriggerItemDateSync: function (dateString) {
-        this.currentItem.date = [
-          this.currentItemDate_month,
-          this.currentItemDate_day,
-          this.currentItemDate_year
-        ].join('-');
-      } */
+        } */
+      }
     },
 
     methods: {
@@ -228,13 +169,62 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         });
         this.currentNameId = newReferentId;
       },
-      makeNewItem: function () {
-        const newItemId = uuidv4();
+
+      // Creates a new, empty item in the data structure and make it 
+      //  the current item
+      // NOTE: does not communicate with server -- that is handled
+      //       by the currentItemId watcher
+
+      createNewItem: function () {
+        const newItemId = 'new'; // uuidv4();
+        const initData = Object.assign(DATA_TEMPLATES.ITEM, {
+          national_context_id:'2',
+          reference_type_id:'13',
+          FULL_DATA_LOADED: true
+        });
+        this.formData.doc.references[newItemId] = initData;
+
+        /*
         this.formData.doc.references[newItemId] = {
-          id: newItemId,
-          citation_id: this.formData.doc.id,
-          referents: {}
-        };
+          "dateParts":{
+             "day":"",
+             "month":"-1",
+             "year":""
+          },
+          "id":8,
+          "location_info":{
+             "Locale":{
+                "id": -1,
+                "name":"",
+                "type":"Locale"
+             },
+             "City":{
+                "id": -1,
+                "name":"",
+                "type":"City"
+             },
+             "Colony/State":{
+                "id": -1,
+                "name":"",
+                "type":"Colony/State"
+             }
+          },
+          "national_context_id":"2",
+          "reference_type_id":"13",
+          "referents":{},
+          "relationships":[],
+          "groups":[],
+          "transcription":"",
+          kludge: {
+            transcription: '',
+
+          },
+          "image_url":"",
+          "FULL_DATA_LOADED":true
+        }; */
+
+        this.currentNameId = -1;
+        this.currentReferentId = -1;
         this.currentItemId = newItemId;
       },
 
@@ -246,11 +236,11 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         let displayTitle;
 
         if (item.transcription) {
-          displayTitle = item.transcription.replaceAll(/<[^>]+>/g, '')
-              .slice(0,length) + '…';
+          const transcriptionNoHTML = item.kludge.transcription.replaceAll(/<[^>]+>/g, ''),
+                truncatedTitle = transcriptionNoHTML.slice(0,length);
+          displayTitle = truncatedTitle + (truncatedTitle.length < transcriptionNoHTML.length ? '…' : '');
         } else {
-          // displayTitle = `Item ID:${this.displayId(item.id)}`;
-          displayTitle = 'New item';
+          displayTitle = '[No title]';
         }
         return displayTitle
       },
