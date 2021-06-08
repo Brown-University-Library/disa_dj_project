@@ -150,6 +150,8 @@ class Client_Referent_API_Test( TestCase ):
         self.assertEqual( 200, put_response.status_code )
         resp_dct = json.loads( put_response.content )
         self.assertEqual( ['first', 'id', 'last', 'name_id', 'person_id', 'roles'], sorted(resp_dct.keys()) )
+        self.assertEqual( f'test-first-{random_name_part}', resp_dct['first'] )
+        self.assertEqual( f'test-last-{random_name_part}', resp_dct['last'] )
         ## cleanup
         self.delete_new_referent()
 
