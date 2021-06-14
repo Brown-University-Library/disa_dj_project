@@ -156,7 +156,7 @@
 <div id="tabs_bibinfoanditems" style="margin-top:10em;">
 
   <h1>
-    Source: <em id="sourceTitle"></em>
+    <em id="sourceTitle"></em>
   </h1>
 
   <ul class="nav nav-tabs" role="tablist">
@@ -493,7 +493,11 @@
                 v-model="formData.doc.comments"
                 style="height: 128px"></textarea>
       <label for="formInputDISABiblioResearcherNotes">Researcher notes</label>
-      <a href="#" style="font-size:80%;font-weight:bold;clear:left;">Report problems or ask for help</a>
+      <button class="btn btn-link btn-sm mb-3"
+          vv-on:click=""
+          title="Open an email to Stolen Relations help">
+        Report problems or ask for help
+      </button>
   </div>
 
   <a type="button" class="btn btn-primary btn-md" href="../../redesign_citations/">
@@ -577,7 +581,7 @@
                 <!-- Create new item button -->
 
                 <button type="button" class="btn btn-primary btn-sm"
-                        v-on:click="createNewItem"
+                        v-on:click="createNewItem">
                   create a new record
                 </button>
 
@@ -766,18 +770,18 @@
               </div>
               <hr>
 
-              <!-- Referents (people) -->
-              
+              <!-- People (Referents/individuals and groups) -->
+
               <div class="row" style="padding-top:20px;padding-right:20px;">
                 <div class="col-md-12" style="margin-left: 40px;">
 
-                  <!-- Add new referent button -->
+                  <!-- Add new referents and group button -->
 
-                  <h5 class="text-dark" style="float:left;">People
+                  <h5 class="text-dark col-12" style="float:left;">People
                     <button class="btn btn-link btn-sm"
                             v-on:click="makeNewReferent"
                             title="Enter information for a new person">
-                      +new
+                      +new individual
                     </button>
                   </h5>
                   <div class="col-lg-12" style="padding-right: 40px; clear: both">
@@ -802,6 +806,7 @@
 
                       <div class="card-body"
                            v-if="currentReferentId === referent.id">
+
                         <div class="card card-body">
 
                           <!-- Name(s) -->
