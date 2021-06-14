@@ -133,7 +133,8 @@
 <script src="{% static 'js/entry_form_citation.js' %}" type="module"></script>
 
 <script type="text/javascript">
-    var data_itemrecord_api_url_root = "{{ data_itemrecord_api_url_root }}",  // needed by `redesign_data.js`
+    var API_URL_ROOT = "", // @TODO @BIRKIN ADD 'projects/disa' or whatever here
+        data_itemrecord_api_url_root = "{{ data_itemrecord_api_url_root }}",  // needed by `redesign_data.js`
         TOKEN = "{{ csrf_token }}";
 </script>
 
