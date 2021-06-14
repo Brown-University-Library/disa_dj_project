@@ -180,6 +180,19 @@
         Records in this source
       </button>
     </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link"
+              id="item-tab"
+              data-bs-toggle-x="tab"
+              data-bs-target-x="#change-source"
+              type="button" role="tab" aria-controls="Change source"
+              aria-selected="false"
+              onclick="document.getElementById('loading-change-source').hidden = false; window.location.href = '../../redesign_citations/'">
+        Change to another source
+        <img id="loading-change-source" hidden
+             src="/static/images/loading-buffering.gif" style="height: 1em">
+      </button>
+    </li>
   </ul>
 
   <!-- TAB CONTENT -->
