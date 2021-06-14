@@ -32,6 +32,32 @@ class Client_Referent_API_Test( TestCase ):
 
     # ## HELPERS ====================
 
+    # def create_new_referent(self):
+    #     """ Creates a referent for tests. """
+    #     post_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'new'} )
+    #     log.debug( f'post-url, ``{post_url}``' )
+    #     payload = {
+    #         'id': 'new',
+    #         # 'name': {'first': 'test-first-1044', 'id': 'name', 'last': 'test-last-1044'},
+    #         'name': [
+    #             {'first': 'test-firstA-1044', 'id': 'name', 'last': 'test-lastA-1044'},
+    #             {'first': 'test-firstB-1044', 'id': 'name', 'last': 'test-lastB-1044'}
+    #         ],
+    #         'record_id': '49',
+    #         'roles': [
+    #             {'id': '3', 'name': 'Priest'},
+    #             {'id': '30', 'name': 'Previous Owner'}
+    #         ]
+    #     }
+    #     jsn = json.dumps( payload )
+    #     response = self.client.post( post_url, data=jsn, content_type='application/json' )
+    #     self.assertEqual( 200, response.status_code )
+    #     self.post_resp_dct = json.loads( response.content )
+    #     log.debug( f'post_resp_dct, ``{pprint.pformat(self.post_resp_dct)}``' )
+    #     self.new_db_id = self.post_resp_dct['id']
+    #     self.assertEqual( type(self.new_db_id), int )
+    #     log.debug( f'self.new_db_id, ``{self.new_db_id}``' )
+
     def create_new_referent(self):
         """ Creates a referent for tests. """
         post_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'new'} )
