@@ -69,6 +69,8 @@ urlpatterns = [
 
     url( r'^data/reference_group/(?P<incoming_uuid>.*)/$', views.data_reference_group, name='data_group_url' ),
 
+    url( r'^data/$', views.data_root, name='data_root_url' ),  # a 'fake' url, for building other urls; set to return a 404 if hit directly
+
 
     ## utility-urls (protected, act as viewable integrity checks)...
 

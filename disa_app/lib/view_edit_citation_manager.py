@@ -104,6 +104,8 @@ def redesign_query_data( cite_id: str, scheme, host ) -> dict:
         data['new_user_template'] = prep_new_user_payload_template()
         data['user_api_info'] = user_api_info
         data['data_itemrecord_api_url_root'] = '%s://%s%s' % ( scheme, host, reverse('data_record_url') )
+        data['API_URL_ROOT'] = '%s://%s%s' % ( scheme, host, reverse('data_root_url') )
+        log.debug( f'api-url-root, ``{data["API_URL_ROOT"]}``' )
     else:
         data = None
     log.debug( f'data, ```{data}```' )

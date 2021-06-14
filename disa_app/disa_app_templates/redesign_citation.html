@@ -133,7 +133,7 @@
 <script src="{% static 'js/entry_form_citation.js' %}" type="module"></script>
 
 <script type="text/javascript">
-    var API_URL_ROOT = "", // @TODO @BIRKIN ADD 'projects/disa' or whatever here
+    var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` -- or the proper dev or production /data/ root url -- used to build other api endpoints.
         data_itemrecord_api_url_root = "{{ data_itemrecord_api_url_root }}",  // needed by `redesign_data.js`
         TOKEN = "{{ csrf_token }}";
 </script>

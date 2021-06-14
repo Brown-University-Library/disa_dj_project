@@ -568,6 +568,12 @@ def data_documents( request, doc_id=None ):
     return resp
 
 
+def data_root( request ):
+    """ Not called directly; this is a convenience feature for building other urls in javascript
+        Url: '/data/' -- 'data_root_url' """
+    return HttpResponseNotFound( '404 / Not Found' )
+
+
 @shib_login
 def relationships_by_reference( request, rfrnc_id ):
     """ Called via ajax by views.edit_relationships() when page is loaded.
@@ -732,6 +738,7 @@ def redesign_citation( request, cite_id=None ):
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
         context['user_first_name'] = request.user.first_name
+    # log.debug( f'redesign_citation context, ```{pprint.pformat(context)}```' )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
