@@ -76,6 +76,26 @@ function saveReferentDataToServer() {
   }
 }
 
+async function deleteReferentOnServer(referent) {
+  const url = `http://127.0.0.1:8000/data/entrants/${referent.id}/`,
+        fetchOptions = {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': TOKEN
+          }
+        };
+
+  const response = await fetch(url, fetchOptions);
+
+  if (response.ok) {
+    // @todo - trigger data backup?
+    return true;
+  } else {
+    throw Error(response.statusText);
+  }
+}
+
 // Item: create, save, delete
 
 async function createItemOnServer() {
@@ -358,6 +378,7 @@ const saveFunctionsMixin = {
   },
 
   methods: {
+    deleteReferentOnServer,
     createRelationshipOnServer,
     deleteRelationshipOnServer
   }

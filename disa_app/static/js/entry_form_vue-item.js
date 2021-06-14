@@ -161,6 +161,18 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
       // (is this used?)
       getReferentDisplayLabel: function (referent) {
         return referent ? `${referent.first} ${referent.last}` : 'Hmmm';
+
+      deleteReferent: function (referent) {
+        // e.preventDefault(); // Link doesn't behave like a link
+        console.log('DELETE', referent);
+        this.deleteReferentOnServer(referent).then(
+          // _ => console.log('DEL - YES', this)
+          // _ => this.currentItem.referents = this.currentItem.referents.filter(r => r !== referent)
+          _ => {
+            const referentIndex = this.currentItem.referents.findIndex(r => r === referent);
+            this.currentItem.referents.splice(referentIndex, 1);
+          }
+        );
       },
       makeNewReferentName: function () {
         const newReferentId = uuidv4();
