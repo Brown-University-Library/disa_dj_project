@@ -239,6 +239,24 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         this.currentItemId = newItemId;
       },
 
+      // Delete Item on server, then delete locally.
+      //  Set current Item to first in references array,
+      //  or (if no others exist) create a new Item
+
+      deleteItem: function(item) {
+        console.log('DELETE ITEM', item);
+        this.deleteItemOnServer(item).then(_ => {
+          console.log('DELETE ITEM LOCALLY');
+          const itemIndex = this.formData.doc.references.findIndex(r => r.id === item.id);
+          this.formData.doc.references.splice(itemIndex, 1);
+          if (this.formData.doc.references.length > 0) {
+            this.currentItemId = this.formData.doc.references[0].id
+          } else {
+            this.createNewItem();
+          }
+        });
+      },
+
       // Take a long string (especially transcriptions) 
       // and make it into a display title
 

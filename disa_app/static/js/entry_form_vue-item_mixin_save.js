@@ -363,8 +363,24 @@ async function saveItemDataToServer() {
   }
 }
 
-function deleteCurrentItem() {
-  console.log(`DELETING ITEM ID ${this.currentItemId}`);
+async function deleteItemOnServer(item) {
+  console.log(`DELETING ITEM ON SERVER ID ${item.id}`);
+  const url = `http://127.0.0.1:8000/data/reference/${item.id}/`,
+        fetchOptions = {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': TOKEN
+          }
+        };
+
+  const response = await fetch(url, fetchOptions);
+
+  if (response.ok) {
+    return true;
+  } else {
+    throw Error(response.statusText);
+  }
 }
 
 
@@ -474,6 +490,8 @@ const saveFunctionsMixin = {
     deleteReferentOnServer,
     createRelationshipOnServer,
     deleteRelationshipOnServer
+    createItemOnServer,
+    deleteItemOnServer
   }
 }
 
