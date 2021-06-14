@@ -1093,8 +1093,9 @@
                             <div v-else class="col-md-4" 
                                  v-text="getReferentDisplayLabel(Object.values(currentItem.referents).find(r => r !== currentReferent))">
                             </div>
+                            <!-- Relationship save button -->
                             <div class="col">
-                              <button title="Save this relationship" class="btn btn-link-x btn-sm"
+                              <button title="Save this relationship" class="btn btn-primary btn-sm"
                                       v-on:click="createRelationshipOnServer()">
                                 save
                               </button>
