@@ -27,29 +27,120 @@ async function saveReferentData_post(referentId, itemId, apiDefinition, requestB
   // @todo Return value??
 };
 
-function saveReferentDataToServer() {
 
-  console.log('CALLING ROUTINE TO SUBMIT REFERENT DATA');
 
-  if (this.currentReferent.FULL_DATA_LOADED) {
+async function createNewReferentOnServer(currentItemId) {
+
+  // If this is a new referent, then create on server;
+
+  console.log('CREATE REFERENT - INIT');
+
+  // Empty starter data structure
+
+  const requestBody = {
+    name:{
+      id:'name',
+      first:'',
+      last:''
+    },
+    id:'new',
+    record_id: currentItemId.toString(),
+    roles:[]
+  }
+
+  const fetchOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': TOKEN
+    },
+    body: JSON.stringify(requestBody)
+  };
+
+  console.log(`CREATE REFERENT FETCH OPTIONS - posting to http://127.0.0.1:8000/data/entrants/new/`, 
+              fetchOptions);
+
+  if (true) { // TURN OFF/ON REFERENT CREATION
+    const response = await fetch('http://127.0.0.1:8000/data/entrants/new/', fetchOptions);
+    console.log('CREATE REFERENT RESPONSE', response);
+    const dataJSON = await response.json();
+    console.log('CREATE REFERENT RESPONSE JSON', dataJSON);
+    return dataJSON;
+  }
+}
+
+async function createOrSaveReferentDataToServer() {
+  if (this.currentReferent && this.currentReferent.FULL_DATA_LOADED) {
+    if (this.currentReferentId === 'new') {
+      createNewReferentOnServer(this.currentItemId).then(newReferentData => {
+
+        /* NEW REFERENT DATA:
+        {
+          "first": "ABCABCA",
+          "id": 3325,
+          "last": "DFGDFGDFG",
+          "name_id": 3337,
+          "person_id": 3328,
+          "roles": []
+        } */
+        console.log('CREATE REFERENT - CURRENT REFERENT', this.currentReferent);
+
+        this.currentReferent.id = newReferentData.id;
+        this.currentReferentId = newReferentData.id;
+
+        this.currentReferent.names[0].id = newReferentData.name_id;
+        this.currentNameId = newReferentData.name_id;
+        console.log('CREATE REFERENT #2 - CURRENT REFERENT', this.currentReferent);
+        // this.saveReferentDataToServer(); // SAVE HANDLED BY WATCHER
+      })
+    } else {
+      this.saveReferentDataToServer();
+    }
+  }
+}
+
+async function saveReferentDataToServer() {
+
+  console.log('SAVE REFERENT - DATA', this.currentReferent);
+
+  if (this.currentReferent && this.currentReferent.FULL_DATA_LOADED) {
 
     // Convert from Tagify to DB-ready data structure
 
     function convertFromTagify(tagifyString) {
-      return JSON.parse(tagifyString || '[]').map(
-        tagData => { return { id: tagData.dbID, name: tagData.value } }
-      );
+
+      let dataStructure;
+
+      try {
+        dataStructure = JSON.parse(tagifyString || '[]').map(
+          tagData => { return { id: tagData.dbID, name: tagData.value } }
+        );
+      } catch (error) {
+        dataStructure = [];
+      }
+
+      /*
+      if (tagifyString) {
+        dataStructure = JSON.parse(tagifyString || '[]').map(
+          tagData => { return { id: tagData.dbID, name: tagData.value } }
+        );
+      } */
+
+      return dataStructure;
     }
 
     // Map data in Vue to what's expected by the API
 
     const requestBody = JSON.stringify({
+      id: this.currentReferentId.toString(),
+      record_id: this.currentItemId.toString(),
       age: this.currentReferent.age,
       names: this.currentReferent.names.map(
         name => Object.assign({}, name, { id: name.id.toString() })
       ),
-      origins: this.currentReferent.origins,
+      origins: convertFromTagify(this.currentReferent.origins),
       races: convertFromTagify(this.currentReferent.races),
+      roles: [], // @todo ?? this.currentReferent.roles,
       sex: this.currentReferent.sex,
       statuses: [], // this.currentReferent.statuses, // ??
       titles: this.currentReferent.titles.map(
@@ -276,6 +367,7 @@ function deleteCurrentItem() {
   console.log(`DELETING ITEM ID ${this.currentItemId}`);
 }
 
+
 // Relationships
 
 async function createRelationshipOnServer() {
@@ -365,7 +457,7 @@ const saveFunctionsMixin = {
     //  (but only if full referent data has been previously loaded)
 
     currentReferent: {
-      handler: saveReferentDataToServer,
+      handler: createOrSaveReferentDataToServer,
       deep: true
     },
 
@@ -378,6 +470,7 @@ const saveFunctionsMixin = {
   },
 
   methods: {
+    saveReferentDataToServer,
     deleteReferentOnServer,
     createRelationshipOnServer,
     deleteRelationshipOnServer

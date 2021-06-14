@@ -42,14 +42,14 @@ function preprocessSourceData(data) {
   
   data.formData.doc.fields.date = getDateInFormFormat(data.formData.doc.fields.date);
   data.formData.doc.fields.accessDate = getDateInFormFormat(data.formData.doc.fields.accessDate);
-  
-  // Make array of references/items into a hash by ID
-  //  Use the template data structure
 
-  data.formData.doc.references = data.formData.doc.references.reduce(
-    (refObj, ref) => { refObj[ref.id] = ref; return refObj },
-    {}
+  // Merge incoming data with data structure template to create a
+  //  full data structure
+
+  data.formData.doc.references = data.formData.doc.references.map(
+    item => Object.assign({}, DATA_TEMPLATES.ITEM, item)
   );
+
   data.NEW_USER_TEMPLATE = data.formData.new_user_template.sample_payload; 
   delete data.formData.new_user_template;
 
@@ -126,14 +126,7 @@ function preprocessItemData(itemData, oldItemData, relationshipsData, referentDa
     national_context_id: itemData.rec.national_context,
     reference_type_id: 'IGNORE ME', // itemData.rec.record_type.id,
     // reference_type_name: itemData.rec.record_type.label,
-    // Convert array of referents to a hash by referent ID
-    referents: referentData.reduce(
-      (referentHash, referent) => {
-        referentHash[referent.id] = referent;
-        return referentHash;
-      },
-      {}
-    ),
+    referents: referentData,
     relationships: relationshipsData,
     // referents: getAdditionalReferentInfo(itemData.entrants),
     groups: itemData.groups.group_data,

@@ -58,11 +58,14 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
       currentReferent: {
         get: function () {
-          return this.currentItem.referents[this.currentReferentId.toString()]
-          /*
-          return this.currentItem.referents.find(
-            referent => referent.id === this.currentReferentId
-          ); */
+          console.warn(`CurrentRef`, this.currentItem);
+          if (this.currentItem && this.currentItem.referents) {
+            return this.currentItem.referents.find(
+              referent => referent.id === this.currentReferentId
+            );
+          } else {
+            return undefined;
+          }
         },
         set: function (referentData) { // @todo I don't think this is used
           let oldReferentData = this.currentItem.referents.find(
@@ -131,36 +134,32 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
     methods: {
 
+      // Called when user clicks on +new referent button
+      //  Adds a blank data structure to .referents array
+
       makeNewReferent: function (e) {
-        const newReferentId = 'new'; // uuidv4();
         e.preventDefault(); // Link doesn't behave like a link
-        /* EVENTUALLY ...
-
-          const newReferent = getReferentData(), // No parameter = new
-                newReferentId = newReferent.id,
-                this.currentItem.referents[newReferentId] = newReferent;
-
-        */
+        const newReferentId = 'new';
 
         // Copy new referent data structure from template
         //  and add to referent hash
 
-        const blankReferentDataStructure = JSON.parse(
-          JSON.stringify(this.NEW_USER_TEMPLATE)
-        );
+        const blankReferentDataStructure = DATA_TEMPLATES.REFERENT,
+              updatedFields = {
+                id: newReferentId,
+                record_id: this.currentItemId
+              },
+              newReferentData = Object.assign({},
+                blankReferentDataStructure, 
+                updatedFields
+              );
 
-        console.log('Adding new referent', blankReferentDataStructure);
+        console.log('CREATE REFERENT DATA', newReferentData);
 
-        blankReferentDataStructure.id = newReferentId;
-        blankReferentDataStructure.FULL_DATA_LOADED = true;
-
-        this.currentItem.referents[newReferentId] = blankReferentDataStructure;
-        this.currentReferentId = newReferentId;
+        this.currentItem.referents.push(newReferentData);
+        this.currentReferentId = newReferentId; // Note: triggers referent save
         return false;
       },
-      // (is this used?)
-      getReferentDisplayLabel: function (referent) {
-        return referent ? `${referent.first} ${referent.last}` : 'Hmmm';
 
       deleteReferent: function (referent) {
         // e.preventDefault(); // Link doesn't behave like a link
@@ -259,13 +258,15 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
       getReferentDisplayLabel: function (referent) {
         let displayLabel;
-        if (referent.first || referent.last) {
-          displayLabel = `${referent.first} ${referent.last}`;
+
+        if (!referent || !referent.id || referent.id === 'new') {
+          displayLabel = 'New person';
+        } else if (referent.first || referent.last) {
+          displayLabel = (referent.first ? referent.first : '') +
+                          (referent.last ? ' ' + referent.last : '');
         } else if ( referent.names && referent.names.length && 
                     (referent.names[0].first || referent.names[0].last)) {
           displayLabel = `${referent.names[0].first} ${referent.names[0].last}`
-        } else if (!referent.id || referent.id === 'new') {
-          displayLabel = 'New person';
         } else {
           displayLabel = `Individual-${referent.id}`;
         }

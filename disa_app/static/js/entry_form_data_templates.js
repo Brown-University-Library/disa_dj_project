@@ -26,7 +26,7 @@ const ITEM_TEMPLATE = {
   },
   national_context_id: '',
   reference_type_id: 'IGNORE ME',
-  referents:{},
+  referents:[],
   relationships:[],
   groups:[],
   transcription: 'IGNORE ME',
@@ -39,14 +39,44 @@ const ITEM_TEMPLATE = {
   FULL_DATA_LOADED:false
 };
 
+const REFERENT_TEMPLATE = {
+  age: undefined,
+  id: 'new',
+  names:[
+    {
+      first:'',
+      id:'name',
+      last:'',
+      name_type:'Unknown'
+    }
+  ],
+  origins:'[]', // Tagify
+  races:'[]', // Tagify
+  record_id: undefined,
+  roles:'[]', // Tagify
+  sex:'',
+  titles:[],
+  tribes:'[]', // Tagify
+  vocations:'[]', // Tagify
+  FULL_DATA_LOADED: true
+};
+
+// Make a copy of the given template
+
+function copyTemplate(template) {
+  return JSON.parse(
+    JSON.stringify(template)
+  )
+}
 const DATA_TEMPLATES = {
   get ITEM() {
     return JSON.parse(
       JSON.stringify(ITEM_TEMPLATE)
     )
+  get REFERENT() {
+    return copyTemplate(REFERENT_TEMPLATE)
   }
 }
-
 
 export { DATA_TEMPLATES }
 
