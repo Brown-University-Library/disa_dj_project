@@ -10,9 +10,9 @@ const template = `
         v-html="STATUS_INFO[$root.saveStatus].displayText"
         data-bs-toggle="modal" data-bs-target="#data-history-modal">
   </span>
-  
+
   <!-- HISTORY MODAL -->
-  
+
   <div class="modal" tabindex="-1" id="data-history-modal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -89,21 +89,7 @@ const componentDefinition = {
     }
   },
   computed: {},
-  methods: {
-
-    // DOES SAVING TO SERVER BELONG HERE?
-    /*
-    saveDataToServer({ apiId, data, displayText }) {
-      const url = this.$root.API_ENDPOINT_URL[apiId];
-
-      if (url) {
-        this.currentStatus = STATUS.SAVE_IN_PROGRESS;
-        console.log('SAVING', this.$root.API_ENDPOINT_URL);
-      } else {
-        this.currentStatus = STATUS.ERROR_BAD_API_ID;
-      }
-    } */
-  }
+  methods: {}
 };
 
 export { componentDefinition as SAVE_STATUS_COMPONENT }
