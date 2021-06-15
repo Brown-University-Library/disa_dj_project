@@ -246,21 +246,60 @@ async function saveItemDataToServer() {
     // const { referents, ...currentItemDataNoReferents } = this.currentItem;
     // const currentItemCopy = JSON.parse(JSON.stringify(currentItemDataNoReferents));
 
+
+    // THIS WHOLE LOCATION THING IS WAY TOO COMPLICATED FOR WHAT IT DOES
+
     const locations = [],
           makeLocationObj = locationType => {
-            return {
-              id: this.currentItem.location_info[locationType].id || -1,
-              label: this.currentItem.location_info[locationType].name,
-              value: this.currentItem.location_info[locationType].name
+            if (this.currentItem.location_info[locationType].name) {
+              return {
+                id: this.currentItem.location_info[locationType].id || -1,
+                label: this.currentItem.location_info[locationType].name,
+                value: this.currentItem.location_info[locationType].name
+              }
+            } else {
+              return undefined;
             }
           };
 
+    
+    // TODO CHECK THIS
+/*
+    function makeLocArray(locationArray, locationTypes) {
+      const locationType = shift(locationTypes);
+      if (this.currentItem.location_info[locationType]) {
+        const locObj = makeLocationObj(locationType);
+        if (locObj) {
+          locationArray.push(locObj);
+          return locationTypes.length 
+            ? makeLocArray(locationArray, locationTypes) 
+            : locationArray;
+        } else {
+          return locationArray;
+        }
+      }
+    }
+
+    locations = makeLocArray([], ['Colony/State', 'City', 'Locale']);
+    */
+
+    // YIKES!
+
     if (this.currentItem.location_info['Colony/State']) {
-      locations.push(makeLocationObj('Colony/State'));
-      if (this.currentItem.location_info['City']) {
-        locations.push(makeLocationObj('City'));
-        if (this.currentItem.location_info['Locale']) {
-          locations.push(makeLocationObj('Locale'));
+      const colStateObj = makeLocationObj('Colony/State');
+      if (colStateObj) {
+        locations.push(colStateObj);
+        if (this.currentItem.location_info['City']) {
+          const cityObj = makeLocationObj('City');
+          if (cityObj) {
+            locations.push(cityObj);
+            if (this.currentItem.location_info['Locale']) {
+              const localeObj = makeLocationObj('Locale');
+              if (localeObj) {
+                locations.push(localeObj);
+              }
+            }
+          }
         }
       }
     }
