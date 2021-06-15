@@ -102,8 +102,8 @@ function preprocessItemData(itemData, oldItemData, relationshipsData, referentDa
   });
 
   const locationDefaults = {
-      'Locale': { name: '' },
-      'City': { name: '' },
+      Locale: { name: '' },
+      City: { name: '' },
       'Colony/State': { name: '' }
     },
     locationInfoByType = locationInfo.reduce(
@@ -114,7 +114,7 @@ function preprocessItemData(itemData, oldItemData, relationshipsData, referentDa
 
   console.log("LOCATIONS", {locationInfo, locationInfoByType});
 
-  let processedData = {
+  const processedItemData = {
     // date: itemData.rec.date,
     dateParts: {
       day:   itemDate ? itemDate.getDate()      : undefined,
@@ -145,7 +145,7 @@ function preprocessItemData(itemData, oldItemData, relationshipsData, referentDa
     FULL_DATA_LOADED: true // Flag
   }
 
-  return processedData;
+  return processedItemData;
 }
 
 // Get item data (including relationships) -- return Promise
@@ -218,29 +218,7 @@ async function getReferentData(referentId, itemId, apiDefinitions) {
 
   const apiDefinition = apiDefinitions.get_user_info;
   
-  if (referentId === 'new' && false) { // DISABLED - actually, this is a SAVE function
-    const dataURL = apiDefinition.api_url,
-          fetchOptions = {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              id: 'new',
-              name: {
-                first: '[none]', 
-                id: 'name', 
-                last: '[none]'
-              },
-              record_id: itemId,
-              roles: [ {'id': '3', 'name': 'Priest'}]
-            })
-          },
-          // response = await fetch(dataURL, fetchOptions); // @todo need to handle 404s etc.
-          dataJSON = await response.json();
-    console.log('GGGGGGG', dataJSON);
-    // return preprocessReferentData(dataJSON.ent);
-  } else if (referentId) {
+  if (referentId) {
     const dataURL = apiDefinition.api_url_forID(referentId),
           response = await fetch(dataURL, { 
             method: apiDefinition.api_method,
