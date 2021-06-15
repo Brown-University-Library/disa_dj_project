@@ -1,5 +1,5 @@
 
-import { getSourceData } from './entry_form_data_in.js';
+import { getSourceData }              from './entry_form_data_in.js';
 import { DISA_ID_COMPONENT }          from './entry_form_component_id-badge.js';
 import { TAG_INPUT_COMPONENT }        from './entry_form_component_tag-input.js';
 import { SAVE_STATUS_COMPONENT }      from './entry_form_component_save-status.js';
@@ -19,10 +19,12 @@ function getRoute() {
 
 async function loadAndInitializeData(initDisplay) {
 
+  // Load the source data
+
   let dataAndSettings = await getSourceData();
 
-  // Set initial item to display:
-  //  from URL, assign to first item, or undefined
+  // Set currentItemId (initial item to display):
+  //  either from URL, or the first item, or undefined
 
   dataAndSettings.currentItemId = 
     initDisplay.itemId || 
@@ -86,15 +88,3 @@ window.addEventListener('load', () => {
     return new bootstrap.Popover(popoverTriggerEl)
   });
  }) */
-
-
-
-
-/*
-
-  @todo
-  Only have one Vue instance for both tabs
-  Add GUI editor for transcription (convert to markdown?)
-
-*/
-
