@@ -125,14 +125,22 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
       // LOAD ROUTINES
 
       // If currentItemId changes, load new item data (if necessary)
-      //  Also update date fields for this item
 
       currentItemId: function(itemId) {
         this.updateUrl();
         if (!this.currentItem.FULL_DATA_LOADED) {
           const oldItemData = this.currentItem;
-          getItemData(itemId, oldItemData).then(itemData => {
-            this.formData.doc.references[itemId] = itemData;
+          getItemData(itemId, oldItemData, this.formData.user_api_info).then(itemData => {
+            const currentItemIndex = this.formData.doc.references.findIndex(
+              item => item.id === itemId
+            );
+            console.log("UPDATING ITEM", {
+              currentItemIndex,
+              itemData,
+              references: JSON.stringify(this.formData.doc.references, null, 2)
+            });
+            this.formData.doc.references.splice(currentItemIndex, 1, itemData);
+            // this.currentItem = itemData;
           });
         }
       },
