@@ -373,32 +373,8 @@ async function saveItemDataToServer() {
           // @todo, sometime - if we go with UUIDs, then the ID will be a string
           const newItemDatabaseId = parseInt(itemIdMatch[1]);
           console.log(`NEW ITEM ID: ${newItemDatabaseId}`);
-
-          let newItemData = JSON.parse(
-            JSON.stringify(this.formData.doc.references.new)
-          );
-          newItemData.id = newItemDatabaseId;
-          newItemData.transcription = 'BOOYAH 5';
-
-          this.formData.doc.references.new = undefined;
-          delete this.formData.doc.references.new;
-
-          // METHOD 1 -- doesn't create a reactive item
-          // this.formData.doc.references[newItemDatabaseId] = newItemData;
-
-          // METHOD 2
-          /*
-          this.formData.doc.references = Object.assign(
-            {}, 
-            this.formData.doc.references, 
-            { [newItemDatabaseId]: newItemData }
-          ); */
-
-          // METHOD 3
-          this.$set(this.formData.doc.references, newItemDatabaseId, newItemData);
-          //this.$set(this.formData.doc.references[newItemDatabaseId], 'transcription', 'CAT');
-          // this.formData.doc.references[newItemDatabaseId].id = newItemDatabaseId;
-
+          console.log(`CURRENT ITEM `, this.currentItem);
+          this.formData.doc.references.find(r => r.id === 'new').id = newItemDatabaseId;
           this.currentItemId = newItemDatabaseId;
         }
       }
