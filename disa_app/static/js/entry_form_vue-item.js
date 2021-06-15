@@ -281,7 +281,17 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
       // Update URL to reflect current item and referent
 
       updateUrl: function () {
-        window.location.hash = `/${this.currentItemId}/${this.currentReferentId}`;
+
+        let hash = '';
+
+        if (this.currentItemId && this.currentItemId !== -1) {
+          hash += `/${this.currentItemId}`;
+          if (this.currentReferentId && this.currentReferentId !== -1) {
+            hash += `/${this.currentReferentId}`;
+          }
+        }
+
+        window.location.hash = hash;
       }
     }
   });
