@@ -153,7 +153,7 @@ async function saveReferentDataToServer() {
       vocations: convertFromTagify(this.currentReferent.vocations)
     });
 
-    console.log('SAVE CURRENT REFERENT');
+    console.log('SAVE REFERENT - REQUEST', requestBody);
     this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
 
     saveReferentData_post(
@@ -188,6 +188,9 @@ async function deleteReferentOnServer(referent) {
 }
 
 // Item: create, save, delete
+
+// createItemOnServer() CURRENTLY NOT USED: saveItemDataToServer() is overloaded to allow
+//  for new items. Not a good solution
 
 async function createItemOnServer() {
 
@@ -304,6 +307,8 @@ async function saveItemDataToServer() {
       }
     }
 
+    // Prep item date for API
+
     let date;
 
     if (this.currentItem.dateParts.year) {
@@ -318,6 +323,8 @@ async function saveItemDataToServer() {
     } else {
       date = null;
     }
+
+    // Compile request JSON
 
     const requestBody = {
       locations,
@@ -337,7 +344,7 @@ async function saveItemDataToServer() {
 
     const url = `http://127.0.0.1:8000/data/records/${this.currentItemId}/`,
           fetchOptions = {
-            method: httpMethod, // 'PUT', // apiDefinition.api_method,
+            method: httpMethod,
             headers: {
               'Content-Type': 'application/json',
               'X-CSRFToken': TOKEN
@@ -357,7 +364,8 @@ async function saveItemDataToServer() {
       this.saveStatus = this.SAVE_STATUS.SUCCESS;
       console.log('RESPONSE', {response, dataJSON});
 
-      // If this is a new item ...
+      // If this is a new item, grab server-generated Item ID
+      //  and update relevant fields
 
       if (isNewItem) {
         const itemIdMatch = dataJSON.redirect.match('/editor/records/([^/]+)/');
