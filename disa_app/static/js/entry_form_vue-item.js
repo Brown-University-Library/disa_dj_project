@@ -216,14 +216,20 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
       //       by the currentItemId watcher
 
       createNewItem: function () {
+
+        // Add new empty item to references array
+
         const newItemId = 'new'; // uuidv4();
         const initData = Object.assign(DATA_TEMPLATES.ITEM, {
+          id: newItemId,
           national_context_id:'2',
           reference_type_id:'13',
           FULL_DATA_LOADED: true
         });
-        this.formData.doc.references[newItemId] = initData;
 
+        this.formData.doc.references.push(initData);
+
+        // Update current item
 
         this.currentNameId = -1;
         this.currentReferentId = -1;
