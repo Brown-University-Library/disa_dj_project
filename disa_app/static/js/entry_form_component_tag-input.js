@@ -49,12 +49,6 @@ const componentDefinition = {
                               newTags.map(newTag => newTag.value)
                                      .some(newTagVal => ! oldTags.includes(newTagVal));
 
-      console.log('TAGIFY ONCHANGE', {event: x, tagify: this.tagify});
-      console.log('OLD', oldTags);
-      console.log('NEW', newTags);
-      console.log('INPUT EL VALUE', this.$el.value);
-      console.log('CHANGED', tagsHaveChanged);
-
       if (tagsHaveChanged) {
 
       }
