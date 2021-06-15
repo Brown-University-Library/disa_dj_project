@@ -26,10 +26,14 @@ async function loadAndInitializeData(initDisplay) {
   // Set currentItemId (initial item to display):
   //  either from URL, or the first item, or undefined
 
-  dataAndSettings.currentItemId = 
-    initDisplay.itemId || 
-    Object.keys(dataAndSettings.formData.doc.references)[0] ||
-    undefined;
+  if (initDisplay.itemId) {
+    dataAndSettings.currentItemId = initDisplay.itemId
+  } else if (dataAndSettings.formData.doc.references[0] && 
+             dataAndSettings.formData.doc.references[0].id) {
+    dataAndSettings.currentItemId = dataAndSettings.formData.doc.references[0].id;
+  } else {
+    dataAndSettings.currentItemId = undefined;
+  }
 
   // Set first referent to display: from URL or none
 
