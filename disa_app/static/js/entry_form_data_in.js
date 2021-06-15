@@ -112,7 +112,13 @@ function preprocessItemData(itemData, oldItemData, relationshipsData, referentDa
       ), locationDefaults
     );
 
-  console.log("LOCATIONS", {locationInfo, locationInfoByType});
+  if (locationInfoByType[null]) { // Sometimes the API lists Locale data as type 'null' (??)
+    locationInfoByType.Locale = Object.assign({},
+      locationInfoByType[null],
+      { type: 'Locale' }
+    );
+    delete locationInfoByType[null];
+  }
 
   const processedItemData = {
     // date: itemData.rec.date,
