@@ -16,12 +16,20 @@ const ITEM_TEMPLATE = {
   },
   id: '',
   location_info: {
-    Locale:{name: ''},
-    City:{name: ''},
+    Locale:{
+      id: undefined,
+      name: undefined,
+      type: 'Locale'
+    },
+    City:{
+      id: undefined,
+      name: undefined,
+      type: 'City'
+    },
     'Colony/State':{
-      id: '',
-      name: '',
-      type: ''
+      id: undefined,
+      name: undefined,
+      type: 'Colony/State'
     }
   },
   national_context_id: '',
@@ -68,11 +76,13 @@ function copyTemplate(template) {
     JSON.stringify(template)
   )
 }
+
+// Interface - create copies of template data structures
+
 const DATA_TEMPLATES = {
   get ITEM() {
-    return JSON.parse(
-      JSON.stringify(ITEM_TEMPLATE)
-    )
+    return copyTemplate(ITEM_TEMPLATE)
+  },
   get REFERENT() {
     return copyTemplate(REFERENT_TEMPLATE)
   }
