@@ -189,10 +189,8 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
       deleteReferent: function (referent) {
         // e.preventDefault(); // Link doesn't behave like a link
-        console.log('DELETE', referent);
+        console.log('DELETE REFERENT', referent);
         this.deleteReferentOnServer(referent).then(
-          // _ => console.log('DEL - YES', this)
-          // _ => this.currentItem.referents = this.currentItem.referents.filter(r => r !== referent)
           _ => {
             const referentIndex = this.currentItem.referents.findIndex(r => r === referent);
             this.currentItem.referents.splice(referentIndex, 1);
@@ -221,44 +219,6 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         });
         this.formData.doc.references[newItemId] = initData;
 
-        /*
-        this.formData.doc.references[newItemId] = {
-          "dateParts":{
-             "day":"",
-             "month":"-1",
-             "year":""
-          },
-          "id":8,
-          "location_info":{
-             "Locale":{
-                "id": -1,
-                "name":"",
-                "type":"Locale"
-             },
-             "City":{
-                "id": -1,
-                "name":"",
-                "type":"City"
-             },
-             "Colony/State":{
-                "id": -1,
-                "name":"",
-                "type":"Colony/State"
-             }
-          },
-          "national_context_id":"2",
-          "reference_type_id":"13",
-          "referents":{},
-          "relationships":[],
-          "groups":[],
-          "transcription":"",
-          kludge: {
-            transcription: '',
-
-          },
-          "image_url":"",
-          "FULL_DATA_LOADED":true
-        }; */
 
         this.currentNameId = -1;
         this.currentReferentId = -1;
@@ -318,7 +278,7 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         return displayLabel;
       },
 
-      // Update URL to reflect current source, item, referent
+      // Update URL to reflect current item and referent
 
       updateUrl: function () {
         window.location.hash = `/${this.currentItemId}/${this.currentReferentId}`;
