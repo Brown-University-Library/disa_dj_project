@@ -197,12 +197,17 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
           }
         );
       },
+
       makeNewReferentName: function () {
-        const newReferentId = uuidv4();
+        const newReferentId = 'name'; // uuidv4();
+        // @todo this should be made into a data template
         this.currentReferent.names.push({
-          id: newReferentId
+          first: '',
+          last: '',
+          id: newReferentId,
+          name_type: undefined
         });
-        this.currentNameId = newReferentId;
+        this.currentNameId = newReferentId; // Note: triggers name save
       },
 
       // Creates a new, empty item in the data structure and make it 
