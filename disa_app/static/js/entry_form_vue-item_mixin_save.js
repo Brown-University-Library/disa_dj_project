@@ -512,7 +512,7 @@ const saveFunctionsMixin = {
     saveReferentDataToServer,
     deleteReferentOnServer,
     createRelationshipOnServer,
-    deleteRelationshipOnServer
+    deleteRelationshipOnServer,
     createItemOnServer,
     deleteItemOnServer
   }
