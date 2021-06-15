@@ -331,9 +331,9 @@ async function saveItemDataToServer() {
       date,
       transcription: this.currentItem.kludge.transcription,
       record_type: {
-         id: this.currentItem.kludge.reference_type_id,
-         //"value":"Runaway",
-         //"label":"Runaway" @todo Q: ARE THESE NECESSARY?
+        id: this.currentItem.kludge.reference_type_id,
+        value: this.MENU_OPTIONS.formInputDISAItemType[this.currentItem.kludge.reference_type_id],
+        label: this.MENU_OPTIONS.formInputDISAItemType[this.currentItem.kludge.reference_type_id]
       },
       national_context: this.currentItem.national_context_id,
       citation_id: this.formData.doc.id,
