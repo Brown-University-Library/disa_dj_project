@@ -38,16 +38,30 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
     // Initializing routine
 
-    created: function () {
+    created: async function () {
 
-      // Initialize item data
-      // @todo THIS SHOULD CALL A METHOD this.loadItemData(itemID)
+      // If there are no items, create a new one
+      // If there ARE items, load extra details for current
 
-      if (this.currentItemId !== -1) {
-        getItemData(this.currentItemId, this.currentItem, this.formData.user_api_info).then(currentItemDetails => {
-          this.formData.doc.references[this.currentItemId] = currentItemDetails;
-        });
+      if (!this.formData.doc.references || 
+          Object.keys(this.formData.doc.references).length === 0) {
+        console.log('NO ITEMS FOUND - CREATING NEW ITEM');
+        this.createNewItem();
+      } else if (this.currentItemId !== -1) {
+        getItemData(this.currentItemId, this.currentItem, this.formData.user_api_info).then(
+          currentItemDetails => {
+            Object.assign(
+              this.formData.doc.references.find(item => item.id === this.currentItemId),
+              currentItemDetails
+            );
+          }
+        )
       }
+
+      // Initialize save status
+
+      this.saveStatus = this.SAVE_STATUS.NO_CHANGE;
+
     },
 
     computed: {
