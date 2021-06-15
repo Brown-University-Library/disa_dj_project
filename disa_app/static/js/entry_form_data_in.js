@@ -168,7 +168,7 @@ async function getItemData(itemId, oldItemData, apiInfo) {
           }),
           relationshipsDataPromise = getRelationshipsData(itemId);
 
-    return Promise.all([].concat(referentDataPromise, relationshipsDataPromise, itemDataPromise))
+    return Promise.all([referentDataPromise, relationshipsDataPromise, itemDataPromise])
            .then(([referentData, relationshipsData, itemData]) => {
       return preprocessItemData(itemData, oldItemData, relationshipsData, referentData);
     });
@@ -208,6 +208,7 @@ function preprocessReferentData(referentData) {
   referentData.races     = prepareForTagify(referentData.races);
   referentData.tribes    = prepareForTagify(referentData.tribes);
   referentData.vocations = prepareForTagify(referentData.vocations);
+  referentData.origins   = prepareForTagify(referentData.origins);
 
   referentData.FULL_DATA_LOADED = true;
 
