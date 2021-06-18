@@ -1070,12 +1070,14 @@
 
                           <!-- New relationship -->
 
-                          <div class="row">
+                          <div class="row" v-if="newRelationshipFormVisible">
 
                             <!-- Subject of relationship (i.e. the current referent) -->
 
+                            <hr />
+                            <div><em>Add a new relationship</em></div>
                             <div class="col-md-3" style="text-align: left">
-                              NEW: <span v-text="getReferentDisplayLabel(referent)"></span> is
+                              <span v-text="getReferentDisplayLabel(referent)"></span> is ...
                             </div>
 
                             <!-- Relationship type -->
@@ -1092,26 +1094,29 @@
 
                             <!-- Object of relationship (only show dropdown if there are more than 2 referents) -->
 
-                            <div v-if="Object.keys(currentItem.referents).length > 2"
+                            <div v-if="currentItem.referents.length > 2"
                                  class="col-md-4">
                                  
                               <select class="form-select" id="formInputDISARelationshipObject" 
                                       aria-label="Who is in the relationship"
                                       v-model="newRelationship.obj">
-                                <option v-for="(relationshipObject, relationshipObjectId) in currentItem.referents"
-                                        v-if="relationshipObjectId != referent.id"
-                                        v-bind:value="relationshipObjectId"
+                                <option v-for="relationshipObject in currentItem.referents"
+                                        v-if="relationshipObject.id != referent.id"
+                                        v-bind:value="relationshipObject.id"
                                         v-text="getReferentDisplayLabel(relationshipObject)">
                                 </option>
                               </select>
                             </div>
-                            <div v-else class="col-md-4" 
-                                 v-text="getReferentDisplayLabel(Object.values(currentItem.referents).find(r => r !== currentReferent))">
+
+                            <!-- If only one other referent (besides current) just show name as text -->
+
+                            <div v-else class="col-md-4"
+                                 v-text="'... ' + getReferentDisplayLabel(currentItem.referents.find(r => r !== currentReferent))">
                             </div>
                             <!-- Relationship save button -->
                             <div class="col">
                               <button title="Save this relationship" class="btn btn-primary btn-sm"
-                                      v-on:click="createRelationshipOnServer()">
+                                      v-on:click="createRelationship()">
                                 save
                               </button>
                             </div>

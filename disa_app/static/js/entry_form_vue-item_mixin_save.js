@@ -463,13 +463,11 @@ async function deleteRelationshipOnServer(relationship) {
           body: JSON.stringify(requestBody)
         };
   
-  this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
   const response = await fetch(url, fetchOptions);
 
   if (response.ok) {
     const dataJSON = await response.json();
-    this.currentItem.relationships = dataJSON.store;
-    this.saveStatus = this.SAVE_STATUS.SUCCESS;
+    return dataJSON.store;
   } else {
     this.saveStatus = this.SAVE_STATUS.ERROR;
     throw Error(response.statusText);
