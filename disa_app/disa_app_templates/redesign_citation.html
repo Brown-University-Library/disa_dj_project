@@ -784,6 +784,11 @@
                             title="Enter information for a new person">
                       +new individual
                     </button>
+                    <button class="btn btn-link btn-sm"
+                            vv-on:click="makeNewGroup"
+                            title="Enter information for a new group">
+                      +new group
+                    </button>
                   </h5>
 
                   <h6>Individuals</h6>
@@ -1115,8 +1120,63 @@
                       </div>    
                     </div>
                   </div>
+
+                  <!-- Groups -->
+
+                  <h6 class="mt-3">Groups</h6>
+                  <div class="col-lg-12" style="padding-right: 40px; clear: both">
+                      <div class="card"
+                           v-for="group in currentItem.groups">
+
+                        <!-- Main (clackable accordion) header for this group -->
+
+                        <div class="card-header"
+                              v-on:click="currentGroupId = (currentGroupId === group.id) ? -1 : group.id">
+                          <span v-text="getGroupDisplayLabel(group)"></span>
+                          <disa-id v-bind:forthis="group" class="float-end"></disa-id>
+                        </div>
+
+                        <!-- Edit area for this group -->
+
+                        <div class="card-body"
+                             v-if="currentGroupId === group.id">
+
+                            <!-- Group description -->
+
+                            <div class="form-floating">
+                                <textarea class="form-control" id="formInputGroupDescription" 
+                                          placeholder="Description from source"
+                                          v-model="group.description">
+                                </textarea>
+                                <label for="formInputGroupDescription">Description</label>
+                            </div>
+
+                            <!-- Group Count -->
+
+                            <div class="form-floating col-lg-4">
+                              <input type="number" class="form-control"
+                                     id="formInputDISAGroupCount" aria-label="Count of people in group"
+                                     placeholder="" v-model="group.count">
+                              <label for="formInputDISAGroupCount">Number of individuals in group</label>
+                            </div>
+
+                            <!-- Group count - estimated -->
+
+                            <div class="form-check col-lg-4" style="margin-top:-6px;">
+                              <input class="form-check-input" style="margin-left:.125em;" type="checkbox" 
+                                     id="formInputDISAGroupCountEstimated"
+                                     v-model="group.count_estimated">
+                              <label class="form-check-label" style="font-size: 85%;font-weight:bold;margin-left:.5em;margin-top:-10px;" 
+                                     for="formInputDISAGroupCountEstimated">
+                                Estimated
+                              </label>
+                            </div>
+                        </div>
+                      </div>
+                  </div>
                 </div>
               </div>
+
               <!-- Item notes -->
               <!-- 
               <hr />

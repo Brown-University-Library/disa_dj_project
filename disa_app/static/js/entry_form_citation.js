@@ -47,6 +47,9 @@ async function loadAndInitializeData(initDisplay) {
   // New relationship register
 
   dataAndSettings.newRelationship = { obj: null, rel: null }
+  // Current group ID register
+
+  dataAndSettings.currentGroupId = -1;
 
   return dataAndSettings;
 }

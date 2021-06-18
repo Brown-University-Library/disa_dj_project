@@ -333,6 +333,10 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         return this.getReferentDisplayLabel(referent);
       },
 
+      getGroupDisplayLabel(group) {
+        return `group-${group.uuid}`;
+      },
+
       // Update URL to reflect current item and referent
 
       updateUrl: function () {
