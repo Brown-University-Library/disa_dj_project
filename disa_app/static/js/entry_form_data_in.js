@@ -250,7 +250,7 @@ function preprocessRelationshipsData(relationshipData) {
 }
 
 async function getRelationshipsData(itemId, apiDefinition) {
-  const dataURL = `/data/sections/${itemId}/relationships/`, // @todo Birkin needs to include this in his APIs list
+  const dataURL = `${API_URL_ROOT}sections/${itemId}/relationships/`,
         response = await fetch(dataURL, { 
           method: 'GET',
           headers: {

@@ -254,6 +254,45 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         });
       },
 
+      // Relationships
+
+      createRelationship: async function () {
+
+        this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
+
+        // Ask server to create new relationship;
+        //  sends updated relationships data in Response
+
+        const newRelationshipData = {
+          subject: this.currentReferentId,
+          relationshipType: parseInt(this.newRelationship.rel),
+          object: parseInt(this.newRelationship.obj),
+          itemId: this.currentItemId
+        };
+
+        const updatedRelationshipData = await this.createRelationshipOnServer(newRelationshipData);
+        this.formData.doc.references.find(r => r.id === this.currentItemId).relationships = updatedRelationshipData;
+        // @todo network error handling?
+
+        // Reset & hide new-relationships subform
+
+        this.newRelationship.rel = null;
+        this.newRelationship.obj = null;
+        this.newRelationshipFormVisible = false;
+
+        this.saveStatus = this.SAVE_STATUS.SUCCESS;
+      },
+
+      deleteRelationship: async function (relationship) {
+        if (relationship && relationship.id) {
+          this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
+          const updatedRelationshipData = await this.deleteRelationshipOnServer(relationship);
+          this.formData.doc.references.find(r => r.id === this.currentItemId).relationships = updatedRelationshipData;
+          // @todo network error handling?
+          this.saveStatus = this.SAVE_STATUS.SUCCESS;
+        }
+      },
+
       // Take a long string (especially transcriptions) 
       // and make it into a display title
 
@@ -287,6 +326,11 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         }
 
         return displayLabel;
+      },
+
+      getReferentDisplayLabelById(referentId) {
+        const referent = this.currentItem.referents.find(r => r.id === referentId);
+        return this.getReferentDisplayLabel(referent);
       },
 
       // Update URL to reflect current item and referent

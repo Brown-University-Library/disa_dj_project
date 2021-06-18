@@ -409,18 +409,20 @@ async function deleteItemOnServer(item) {
 
 // Relationships
 
-async function createRelationshipOnServer() {
+async function createRelationshipOnServer(relationshipData) {
   
-  console.log(`SAVING NEW RELATIONSHIP`);
+  console.log(`SAVING NEW RELATIONSHIP TO SERVER`, relationshipData);
+
   const requestBody = {
-          sbj: this.currentReferentId,
-          rel: parseInt(this.newRelationship.rel),
-          obj: parseInt(this.newRelationship.obj),
-          section: this.currentItemId
+          sbj: parseInt(relationshipData.subject),
+          rel: parseInt(relationshipData.relationshipType),
+          obj: parseInt(relationshipData.object),
+          section: parseInt(relationshipData.itemId)
         },
-        url = `http://127.0.0.1:8000/data/relationships/`, // @todo replace with Birkin's URL
+
+        url = `${API_URL_ROOT}relationships/`,
         fetchOptions = {
-          method: 'POST', // apiDefinition.api_method,
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': TOKEN
@@ -428,27 +430,32 @@ async function createRelationshipOnServer() {
           body: JSON.stringify(requestBody)
         };
   // console.log({requestBody, url, fetchOptions});
-  if (true) { // TURN OFF/ON REFERENT SAVING
+
+  console.log('SAVE RELATIONSHIP FETCHOPTIONS', fetchOptions);
+
+  if (true) { // TURN OFF/ON RELATIONSHIP SAVING
     const response = await fetch(url, fetchOptions);
-    console.log('SAVE REFERENT RESPONSE', response);
-    const dataJSON = await response.json();
-    console.log('SAVE REFERENT RESPONSE JSON', dataJSON.store);
+    console.log('SAVE RELATIONSHIP RESPONSE', response);
 
-    this.currentItem.relationships = dataJSON.store;
+    if (response.ok) {
 
-    // Reset new relationship form elements
+      // Save new relationship data to relationship store 
 
-    this.newRelationship.rel = null;
-    this.newRelationship.obj = null;
+      const dataJSON = await response.json();
+      console.log('SAVE RELATIONSHIP RESPONSE JSON', dataJSON.store);
+      return dataJSON.store;
+    } else {
+      console.log(`Error creating a new relationship`, { fetchOptions, response });
+    }
   }
 }
 
 async function deleteRelationshipOnServer(relationship) {
-  console.log(`DELETING RELATIONSHIP ID: ${relationship.id}`);
-  const url = `http://127.0.0.1:8000/data/relationships/${relationship.id}`, // @todo BIRKIN - NEED URL
+  console.log(`DELETING RELATIONSHIP ON SERVER ID: ${relationship.id}`);
+  const url = `${API_URL_ROOT}relationships/${relationship.id}`,
         requestBody = { section: this.currentItemId },
         fetchOptions = {
-          method: 'DELETE', // apiDefinition.api_method,
+          method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': TOKEN

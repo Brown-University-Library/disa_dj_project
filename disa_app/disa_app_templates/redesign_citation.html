@@ -1035,6 +1035,11 @@
 
                           <div>
                             <strong>Relationships</strong>
+                            <button class="btn btn-link btn-sm"
+                                    v-on:click="newRelationshipFormVisible = true"
+                                    title="Enter information for a new relationship">
+                              +new
+                            </button>
                           </div>
 
                           <!-- Existing relationships -->
@@ -1042,15 +1047,17 @@
                           <div class="row"
                                v-for="relationship in currentReferentRelationships">
 
-                            <!-- Subject of relationship (i.e. the current referent) -->
-
                             <div class="" style="text-align: left">
+                              <!-- Subject of relationship (i.e. the current referent) -->
                               <span v-text="getReferentDisplayLabel(referent)"></span> is
+                              <!-- Relationship type -->
                               <span v-text="MENU_OPTIONS.formInputDISARelationship[relationship.data.rel.id]"></span>
-                              <span v-text="getReferentDisplayLabel(currentItem.referents[relationship.data.obj.id])"></span>
+                              <!-- Object of relationship -->
+                              <span vv-text="getReferentDisplayLabel(currentItem.referents[relationship.data.obj.id])"
+                                    v-text="getReferentDisplayLabelById(relationship.data.obj.id)"></span>
                               <disa-id v-bind:forthis="relationship" class="float-end-x"></disa-id>
                               <span title="Delete this relationship" class="btn btn-link btn-sm"
-                                    v-on:click="deleteRelationshipOnServer(relationship)">
+                                    v-on:click="deleteRelationship(relationship)">
                                 &times;&nbsp;delete
                               </span>
                             </div>
