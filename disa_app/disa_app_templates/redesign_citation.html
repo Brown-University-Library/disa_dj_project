@@ -785,7 +785,7 @@
                       +new individual
                     </button>
                     <button class="btn btn-link btn-sm"
-                            vv-on:click="makeNewGroup"
+                            v-on:click="makeNewGroup"
                             title="Enter information for a new group">
                       +new group
                     </button>
@@ -1136,7 +1136,7 @@
                         <!-- Main (clackable accordion) header for this group -->
 
                         <div class="card-header"
-                              v-on:click="currentGroupId = (currentGroupId === group.id) ? -1 : group.id">
+                              v-on:click="currentGroupId = (currentGroupId === group.uuid) ? -1 : group.uuid">
                           <span v-text="getGroupDisplayLabel(group)"></span>
                           <disa-id v-bind:forthis="group" class="float-end"></disa-id>
                         </div>
@@ -1144,7 +1144,7 @@
                         <!-- Edit area for this group -->
 
                         <div class="card-body"
-                             v-if="currentGroupId === group.id">
+                             v-if="currentGroupId === group.uuid">
 
                             <!-- Group description -->
 

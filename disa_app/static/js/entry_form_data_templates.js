@@ -47,6 +47,16 @@ const ITEM_TEMPLATE = {
   FULL_DATA_LOADED:false
 };
 
+const GROUP_TEMPLATE = {
+  count: 0,
+  count_estimated: undefined,
+  date_created: undefined,
+  date_modified: undefined,
+  description: '',
+  reference_id: undefined,
+  uuid: undefined
+}
+
 const REFERENT_TEMPLATE = {
   age: undefined,
   id: 'new',
@@ -85,6 +95,9 @@ const DATA_TEMPLATES = {
   },
   get REFERENT() {
     return copyTemplate(REFERENT_TEMPLATE)
+  },
+  get GROUP() {
+    return copyTemplate(GROUP_TEMPLATE)
   }
 }
 
