@@ -61,6 +61,7 @@ async function createNewReferentOnServer(currentItemId) {
               fetchOptions);
 
   if (true) { // TURN OFF/ON REFERENT CREATION
+    const response = await fetch(`${API_URL_ROOT}entrants/new/`, fetchOptions);
     console.log('CREATE REFERENT RESPONSE', response);
     const dataJSON = await response.json();
     console.log('CREATE REFERENT RESPONSE JSON', dataJSON);
