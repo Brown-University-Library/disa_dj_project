@@ -298,25 +298,20 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
       makeNewGroup: async function(e) {
 
         e.preventDefault(); // Link doesn't behave like a link
-        const newGroupId = 'new';
 
-        // Copy new referent data structure from template
-        //  and add to referent hash
+        const initGroupRequest = {
+          count: 0, 
+          count_estimated: false, 
+          description: '',
+          reference_id: this.currentItemId
+        };
 
-        const blankGroupDataStructure = DATA_TEMPLATES.GROUP,
-              updatedFields = {
-                uuid: newGroupId,
-                reference_id: this.currentItemId
-              },
-              newGroupData = Object.assign({},
-                blankGroupDataStructure, 
-                updatedFields
-              );
+        this.createGroupOnServer(initGroupRequest)
+            .then(newGroupData => {
+              this.currentItem.groups.push(newGroupData);
+              this.currentGroupId = newGroupData.uuid;
+            });
 
-        console.log('CREATE GROUP DATA', newGroupData);
-
-        this.currentItem.groups.push(newGroupData);
-        this.currentGroupId = newGroupId; // Note: triggers group save via watcher
         return false;
 
       },

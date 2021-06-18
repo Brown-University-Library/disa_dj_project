@@ -187,6 +187,30 @@ async function deleteReferentOnServer(referent) {
   }
 }
 
+// Group: create, save, delete
+
+async function createGroupOnServer(newGroupOptions) {
+  console.log(`CREATING NEW GROUP ON SERVER`);
+  const url = `${API_URL_ROOT}reference_group/new/`,
+        fetchOptions = {
+          body: JSON.stringify(newGroupOptions),
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': TOKEN
+          }
+        };
+
+  const response = await fetch(url, fetchOptions);
+
+  if (response.ok) {
+    const dataJSON = await response.json();
+    return dataJSON.response.group_data;
+  } else {
+    throw Error(response.statusText);
+  }
+}
+
 // Item: create, save, delete
 
 // createItemOnServer() CURRENTLY NOT USED: saveItemDataToServer() is overloaded to allow
@@ -518,6 +542,7 @@ const saveFunctionsMixin = {
     deleteReferentOnServer,
     createRelationshipOnServer,
     deleteRelationshipOnServer,
+    createGroupOnServer,
     createItemOnServer,
     deleteItemOnServer
   }
