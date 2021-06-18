@@ -57,11 +57,11 @@ async function createNewReferentOnServer(currentItemId) {
     body: JSON.stringify(requestBody)
   };
 
-  console.log(`CREATE REFERENT FETCH OPTIONS - posting to http://127.0.0.1:8000/data/entrants/new/`, 
+  console.log(`CREATE REFERENT FETCH OPTIONS - posting to ${API_URL_ROOT}entrants/new/`, 
               fetchOptions);
 
   if (true) { // TURN OFF/ON REFERENT CREATION
-    const response = await fetch('http://127.0.0.1:8000/data/entrants/new/', fetchOptions);
+    const response = await fetch(`${API_URL_ROOT}data/entrants/new/`, fetchOptions);
     console.log('CREATE REFERENT RESPONSE', response);
     const dataJSON = await response.json();
     console.log('CREATE REFERENT RESPONSE JSON', dataJSON);
@@ -168,7 +168,7 @@ async function saveReferentDataToServer() {
 }
 
 async function deleteReferentOnServer(referent) {
-  const url = `http://127.0.0.1:8000/data/entrants/${referent.id}/`,
+  const url = `${API_URL_ROOT}entrants/${referent.id}/`,
         fetchOptions = {
           method: 'DELETE',
           headers: {
@@ -209,7 +209,7 @@ async function createItemOnServer() {
     image_url:''
   };
 
-  const url = `http://127.0.0.1:8000/data/records/new/`,
+  const url = `${API_URL_ROOT}records/new/`,
         fetchOptions = {
           method: 'POST', // apiDefinition.api_method,
           headers: {
@@ -342,7 +342,7 @@ async function saveItemDataToServer() {
 
     const httpMethod = isNewItem ? 'POST' : 'PUT';
 
-    const url = `http://127.0.0.1:8000/data/records/${this.currentItemId}/`,
+    const url = `${API_URL_ROOT}records/${this.currentItemId}/`,
           fetchOptions = {
             method: httpMethod,
             headers: {
@@ -388,7 +388,7 @@ async function saveItemDataToServer() {
 
 async function deleteItemOnServer(item) {
   console.log(`DELETING ITEM ON SERVER ID ${item.id}`);
-  const url = `http://127.0.0.1:8000/data/reference/${item.id}/`,
+  const url = `${API_URL_ROOT}reference/${item.id}/`,
         fetchOptions = {
           method: 'DELETE',
           headers: {
