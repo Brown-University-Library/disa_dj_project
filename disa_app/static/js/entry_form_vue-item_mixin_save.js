@@ -211,6 +211,24 @@ async function createGroupOnServer(newGroupOptions) {
   }
 }
 
+async function deleteGroupOnServer(group) {
+  console.log(`DELETING GROUP ${group.uuid} ON SERVER`);
+  const url = `${API_URL_ROOT}reference_group/${group.uuid}/`,
+        fetchOptions = {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': TOKEN
+          }
+        };
+
+  const response = await fetch(url, fetchOptions);
+
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+}
+
 // Item: create, save, delete
 
 // createItemOnServer() CURRENTLY NOT USED: saveItemDataToServer() is overloaded to allow

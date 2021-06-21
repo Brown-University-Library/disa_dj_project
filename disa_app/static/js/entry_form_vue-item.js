@@ -210,6 +210,18 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         this.currentNameId = newReferentId; // Note: triggers name save
       },
 
+      // Groups
+
+      deleteGroup: function(group) {
+        console.log(`Delete group ${group.uuid}`);
+        this.deleteGroupOnServer(group).then(
+          _ => {
+            const groupIndex = this.currentItem.groups.findIndex(g => g === group);
+            this.currentItem.groups.splice(groupIndex, 1);
+            this.currentGroupId = -1;
+          }
+        );
+      },
       // Creates a new, empty item in the data structure and make it 
       //  the current item
       // NOTE: does not communicate with server -- that is handled

@@ -1168,8 +1168,7 @@
                           <span v-text="getGroupDisplayLabel(group)"></span>
                           <span title="Delete this group" 
                                 class="btn btn-link btn-sm delete-link"
-                                vv-on:click="deleteGroup(group)"
-                                vv-if="currentReferentId === referent.id">
+                                v-on:click.self="deleteGroup(group)">
                             &times;&nbsp;delete
                           </span>
                           <disa-id v-bind:forthis="group" class="float-end"></disa-id>
