@@ -1054,8 +1054,14 @@
                             <!-- Geographical origins -->
 
                             <div class="form-floating">
-                              <input type="text" class="form-control" id="formInputDISAPersonGeoOrigins" aria-label="Geographic origins" placeholder="Geographic origins">
                               <label for="formInputDISAPersonGeoOrigins">Geographic origins</label>
+                              <disa-tags v-model="currentReferent.origins"
+                                v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonGeoOrigins"
+                                id="formInputDISAPersonGeoOrigins"></disa-tags>
+                              <!--
+                              <input type="text" class="form-control" id="formInputDISAPersonGeoOrigins" 
+                                     aria-label="Geographic origins" placeholder="Geographic origins"
+                                     v-model="currentReferent.origins">-->
                             </div>
                           </div>
                         </div>
