@@ -170,6 +170,8 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
     methods: {
 
+      // Referents
+
       // Called when user clicks on +new referent button
       //  Adds a blank data structure to .referents array
 
@@ -198,7 +200,6 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
       },
 
       deleteReferent: function (referent) {
-        // e.preventDefault(); // Link doesn't behave like a link
         console.log('DELETE REFERENT', referent);
         this.deleteReferentOnServer(referent).then(
           _ => {
@@ -232,6 +233,9 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
           }
         );
       },
+
+      // Items
+
       // Creates a new, empty item in the data structure and make it 
       //  the current item
       // NOTE: does not communicate with server -- that is handled
@@ -356,6 +360,7 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
       },
 
       getReferentDisplayLabel: function (referent) {
+
         let displayLabel;
 
         if (!referent || !referent.id || referent.id === 'new') {

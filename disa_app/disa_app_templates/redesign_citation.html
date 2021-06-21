@@ -1077,8 +1077,7 @@
                               <!-- Relationship type -->
                               <span v-text="MENU_OPTIONS.formInputDISARelationship[relationship.data.rel.id]"></span>
                               <!-- Object of relationship -->
-                              <span vv-text="getReferentDisplayLabel(currentItem.referents[relationship.data.obj.id])"
-                                    v-text="getReferentDisplayLabelById(relationship.data.obj.id)"></span>
+                              <span v-text="getReferentDisplayLabelById(relationship.data.obj.id)"></span>
                               <disa-id v-bind:forthis="relationship" class="float-end-x"></disa-id>
                               <span title="Delete this relationship" class="btn btn-link btn-sm"
                                     v-on:click="deleteRelationship(relationship)">
@@ -1191,7 +1190,7 @@
 
                             <!-- Group Count -->
 
-                            <div class="form-floating col-lg-4">
+                            <div class="form-floating col-lg-8">
                               <input type="number" class="form-control"
                                      id="formInputDISAGroupCount" aria-label="Count of people in group"
                                      placeholder="" v-model="group.count">
