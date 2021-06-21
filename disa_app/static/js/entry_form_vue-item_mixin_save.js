@@ -573,8 +573,9 @@ const saveFunctionsMixin = {
       },
 
       watchMeToTriggerItemSave: function () {
-        // Ignores changes in referents
-        const {referents, ...rest} = this.currentItem;
+        // Ignores changes in referents and groups
+        //  (who have their own save API)
+        const {referents, groups, ...rest} = this.currentItem;
         return JSON.stringify(rest);
       }
   },
