@@ -16,7 +16,7 @@ const componentDefinition = {
   template,
   methods: {
     displayId: function (longId) {
-      return longId.toString().slice(-5);
+      return longId.toString().slice(0,5);
     },
     optionsMenu: function(x, e) {
       console.log('options!', x, e);
