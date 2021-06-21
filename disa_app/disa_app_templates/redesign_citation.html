@@ -834,12 +834,15 @@
                       <div class="card-body"
                            v-if="currentReferentId === referent.id">
 
+                        <!-- Name(s) -->
+
+                        <h6>Name</h6>
+
+                        <!-- WAITING FOR NEW MODEL (multiple names, advanced model)
+
                         <div class="card card-body">
 
-                          <!-- Name(s) -->
-
-                          <!-- Heading and create-new-name button -->
-                          
+                          <!-/- Heading and create-new-name button -/->
                           <div>
                             <strong v-text="'Name' + (referent.names && referent.names.length > 1 ? 's' : '')"></strong>
                             <button type="button" class="btn btn-link btn-sm" id="formInputDISAPersonAddName"
@@ -849,10 +852,9 @@
                             </button>
                           </div>
 
-                          <!-- List of names -->
+                          <!-/- List of names (WAITING FOR NEW MODEL) -/->
                           <ul>
-                            <li v-for="(name, nameIndex) in referent.names">
-
+                            <li v-for="name in referent.names">
                               <div v-on:click="currentNameId = (currentNameId === name.id) ? -1 : name.id">
                                 <span v-if="name.first || name.last">
                                   <span v-text="`${name.first} ${name.last}  `"></span>
@@ -863,11 +865,11 @@
                                 </em>
                               </div>
 
-                              <!-- Current name - details -->
+                              <!-/- Current name - details -/->
 
                               <div v-if="currentNameId === name.id">
 
-                                <!-- ADVANCED NAMES - DEFER FOR NEW MODEL
+                                <!-/- ADVANCED NAMES - DEFER FOR NEW MODEL
                                 <div class="custom-control custom-switch" style="">
                                   <input type="checkbox" class="custom-control-input" id="formCustomSwitchForAdvancedNames"
                                           v-model="referent.name">
@@ -875,7 +877,7 @@
                                           class="custom-control-label" for="formCustomSwitchForAdvancedNames">
                                     ADVANCED NAME OPTIONS (if the first / last name designation doesn't apply)
                                   </label>
-                                </div> -->
+                                </div> -/->
 
                                 <div class="form-floating">
                                   <select class="form-select" id="formInputDISAItemPersonNameType" 
@@ -888,7 +890,7 @@
                                   </select>
                                   <label for="formInputDISAItemPersonNameType">Name type</label>
                                 </div>
-                                <!-- NAME TRANSCRIPTION - DEFER TO V2? OR DROP?
+                                <!-/- NAME TRANSCRIPTION - DEFER TO V2? OR DROP?
                                 <div class="form-floating">
                                   <input type="text"
                                           class="form-control" id="formInputDISAItemPersonNameTranscription"
@@ -896,7 +898,7 @@
                                           placeholder="The name as it's written in the document"
                                           v-model="referent.transcription">
                                   <label for="formInputDISAItemPersonNameTranscription">Full name transcription</label>
-                                </div> -->
+                                </div> -/->
                                 <div class="form-floating">
                                   <input type="text" class="form-control" id="formInputDISAItemPersonFirstName"
                                           aria-label="First name" placeholder="First name"
@@ -911,8 +913,40 @@
                                 </div>
                               </div>
                             </li>
-                          </ul>
+                          </ul> 
+                        </div>-->
+
+
+                          <!-- START - SINGLE, SIMPLE NAME INTERFACE
+                               (will be replaced by above with new model) -->
+
+                        <div class="row">
+                          <div class="form-floating col-4">
+                            <input type="text" class="form-control" id="formInputDISAItemPersonFirstName"
+                                    aria-label="First name" placeholder="First name"
+                                    v-model="referent.names[0].first">
+                            <label for="formInputDISAItemPersonFirstName">First name</label>
+                          </div>
+                          <div class="form-floating col-4">
+                            <input type="text" class="form-control" id="formInputDISAItemPersonLastName"
+                                    aria-label="Last name" placeholder="Last name"
+                                    v-model="referent.names[0].last">
+                            <label for="formInputDISAItemPersonLastName">Last name</label>
+                          </div>
+                          <div class="form-floating col-4">
+                            <select class="form-select" id="formInputDISAItemPersonNameType" 
+                                    aria-label="Name type"
+                                    v-model="referent.names[0].name_type">
+                              <option v-for="(nameTypeMenuLabel, nameTypeId) in MENU_OPTIONS.formInputDISAItemPersonNameType"
+                                      v-bind:value="nameTypeId"
+                                      v-text="nameTypeMenuLabel">
+                              </option>
+                            </select>
+                            <label for="formInputDISAItemPersonNameType">Name type</label>
+                          </div>
                         </div>
+
+                        <!-- END - SINGLE, SIMPLE NAME INTERFACE -->
                         
                         <div class="row" style="padding-top:10px;clear: both;">
                           <div class="col-md-6">
