@@ -384,7 +384,19 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
       },
 
       getGroupDisplayLabel(group) {
-        return `group-${group.uuid}`;
+        let displayText = '';
+
+        if (group.description) {
+          displayText = group.description.slice(0,50)
+            + (group.description.length > 50 ? '...' : '');
+        } else if (group.count) {
+          displayText = `${group.count} individual`
+            + (group.count > 1 ? 's' : '');
+        } else {
+          displayText = `Group-${group.uuid.slice(0,5)}`;
+        }
+
+        return displayText;
       },
 
       // Update URL to reflect current item and referent
