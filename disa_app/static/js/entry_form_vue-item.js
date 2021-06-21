@@ -101,6 +101,16 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         )
       },
 
+      currentGroup: function () {
+        if (this.currentItem && this.currentItem.groups) {
+          return this.currentItem.groups.find(
+            group => group.uuid === this.currentGroupId
+          )
+        } else {
+          return undefined;
+        }
+      },
+
       // Compute API endpoints
 
       saveCurrentReferentAPI: function () {

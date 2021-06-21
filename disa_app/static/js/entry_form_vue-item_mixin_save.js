@@ -211,6 +211,44 @@ async function createGroupOnServer(newGroupOptions) {
   }
 }
 
+async function saveGroupDataToServer() {
+
+  if (this.currentGroup) {
+
+    console.log(`SAVING GROUP ${this.currentGroup.uuid.slice(0,5)} TO SERVER`);
+
+    this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
+    const url = `${API_URL_ROOT}reference_group/${this.currentGroup.uuid}/`,
+          payload = {
+            count: parseInt(this.currentGroup.count),
+            count_estimated: this.currentGroup.count_estimated,
+            description: this.currentGroup.description,
+            reference_id: this.currentGroup.reference_id
+          },
+          fetchOptions = {
+            body: JSON.stringify(payload),
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': TOKEN
+            }
+          };
+  
+    console.log({ url, payload, fetchOptions });
+  
+    const response = await fetch(url, fetchOptions);
+  
+    if (response.ok) {
+      this.saveStatus = this.SAVE_STATUS.SUCCESS;
+      const dataJSON = await response.json();
+      return dataJSON.response.group_data;
+    } else {
+      this.saveStatus = this.SAVE_STATUS.ERROR;
+      throw Error(response.statusText);
+    }
+  }
+}
+
 async function deleteGroupOnServer(group) {
   console.log(`DELETING GROUP ${group.uuid} ON SERVER`);
   const url = `${API_URL_ROOT}reference_group/${group.uuid}/`,
@@ -530,6 +568,10 @@ const saveFunctionsMixin = {
         return JSON.stringify(this.currentReferent);
       },
 
+      watchMeToTriggerGroupSave: function () {
+        return JSON.stringify(this.currentGroup);
+      },
+
       watchMeToTriggerItemSave: function () {
         // Ignores changes in referents
         const {referents, ...rest} = this.currentItem;
@@ -545,6 +587,10 @@ const saveFunctionsMixin = {
     currentReferent: {
       handler: createOrSaveReferentDataToServer,
       deep: true
+    },
+
+    watchMeToTriggerGroupSave: {
+      handler: saveGroupDataToServer
     },
 
     // If the Item data changes (as defined by computed field)
