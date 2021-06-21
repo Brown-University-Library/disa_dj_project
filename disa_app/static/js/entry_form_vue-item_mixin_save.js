@@ -607,6 +607,7 @@ const saveFunctionsMixin = {
     createRelationshipOnServer,
     deleteRelationshipOnServer,
     createGroupOnServer,
+    deleteGroupOnServer,
     createItemOnServer,
     deleteItemOnServer
   }
