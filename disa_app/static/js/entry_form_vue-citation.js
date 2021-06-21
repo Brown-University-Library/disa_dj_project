@@ -44,7 +44,7 @@ async function saveCitationToServer() {
     })
   };
 
-  const url = `http://127.0.0.1:8000/data/documents/${this.formData.doc.id}/`,
+  const url = `${API_URL_ROOT}documents/${this.formData.doc.id}/`,
         fetchOptions = {
           method: 'PUT', // apiDefinition.api_method,
           headers: {
