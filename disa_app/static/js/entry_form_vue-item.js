@@ -339,7 +339,6 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
             });
 
         return false;
-
       },
 
       // Take a long string (especially transcriptions) 
