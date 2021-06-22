@@ -140,7 +140,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js" integrity="sha512-g2PN+aYR0KupTVwea5Ppqw4bxWLLypWdd+h7E0ydT8zF+/Y2Qpk8Y1SnzVw6ZCVJPrgB/91s3VfhVhP7Y4+ucw==" crossorigin="anonymous"></script>
 <script src="{% static 'js/tagify.min.js' %}" type="module"></script>
 <script src="{% static 'js/entry_form_citation.js' %}" type="module"></script>
-
+<script src="{% static 'js/tinymce.min.js' %}"></script>
 <script type="text/javascript">
     var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` -- or the proper dev or production /data/ root url -- used to build other api endpoints.
         data_itemrecord_api_url_root = "{{ data_itemrecord_api_url_root }}",  // needed by `redesign_data.js`
@@ -662,10 +662,19 @@
                     </select>
                     <label for="formInputDISAItemType">Item type</label>
                   </div>
+
+                  <!-- Image URL -->
+
                   <div class="form-floating">
+                    <input class="form-control" type="url" placeholder="URL of image"
+                           v-model="currentItem.image_url"></input>
+                    <label for="formInputDISAItemImage">Image URL</label>
+                  </div>
+
+                  <div class="form-floating mb-5">
 
                     <!-- Transcription textarea -->
-
+<!-- 
                     <textarea class="form-control"
                               placeholder="Transcription"
                               id="formInputDISAItemTranscription"
@@ -676,16 +685,15 @@
                             vv-on:click=""
                             title="Opens transcript editor in a larger format">
                       Open large editor
-                    </button>
-                </div>
+                    </button> -->
 
-                <!-- Image URL -->
+                    <h6>Transcription</h6>
+                    <wysiwyg-editor api-key="ondkaoffzc1dnoz0vypajv5qg9fvnun0bss1ew22yncnvquc" 
+                                    toolbar="bold italic fullscreen"
+                                    :init="{ height:200,menubar:false,plugins:['fullscreen'], toolbar_mode: 'floating'}"
+                                    v-model="currentItem.kludge.transcription"></wysiwyg-editor>
 
-                <div class="form-floating">
-                  <input class="form-control" type="url" placeholder="URL of image"
-                         v-model="currentItem.image_url"></input>
-                  <label for="formInputDISAItemImage">Image URL</label>
-                </div>
+                  </div>
               </div> <!-- /.row -->
               <hr />
 

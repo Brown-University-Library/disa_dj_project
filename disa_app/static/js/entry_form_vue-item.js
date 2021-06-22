@@ -2,7 +2,7 @@ import { getItemData } from './entry_form_data_in.js';
 import { saveFunctionsMixin } from './entry_form_vue-item_mixin_save.js';
 import { dataBackupMixin } from './entry_form_vue-item_mixin_backup.js';
 import { DATA_TEMPLATES } from './entry_form_data_templates.js';
-
+import { TinyMCEEditor } from './tinymce-vue.js';
 
 // UUID generator
 // Source: https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid/2117523#2117523
@@ -31,7 +31,8 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
     components: {
       'disa-id': DISA_ID_COMPONENT,
       'disa-tags': TAG_INPUT_COMPONENT,
-      'disa-save-status': SAVE_STATUS_COMPONENT
+      'disa-save-status': SAVE_STATUS_COMPONENT,
+      'wysiwyg-editor': TinyMCEEditor
     },
 
     mixins: [ saveFunctionsMixin, dataBackupMixin ],
