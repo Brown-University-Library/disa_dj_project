@@ -417,7 +417,7 @@ async function saveItemDataToServer() {
       },
       national_context: this.currentItem.national_context_id,
       citation_id: this.formData.doc.id,
-      image_url: this.currentItem.image_url
+      image_url: this.currentItem.kludge.image_url
     };
 
     const httpMethod = isNewItem ? 'POST' : 'PUT';

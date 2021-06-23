@@ -38,7 +38,7 @@ const ITEM_TEMPLATE = {
   relationships:[],
   groups:[],
   transcription: 'IGNORE ME',
-  image_url: 'IGNORE ME',
+  // image_url: '',
   kludge:{
     transcription: '',
     reference_type_id: '13',
