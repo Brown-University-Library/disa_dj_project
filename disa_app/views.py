@@ -731,7 +731,7 @@ def redesign_citation( request, cite_id=None ):
     assert type(scheme) == str
     assert type(host) == str
     context: dict = view_edit_citation_manager.redesign_query_data( cite_id, scheme, host )
-    assert type(context) in [dict, None]  # context can be None if an id is entered that doesn't exist in the db
+    assert type(context) in [dict, type(None)]  # context can be None if an id is entered that doesn't exist in the db
     if context == None:
         return HttpResponseNotFound( '404 / Not Found' )
 
