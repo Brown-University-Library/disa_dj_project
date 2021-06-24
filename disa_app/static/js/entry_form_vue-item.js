@@ -63,6 +63,10 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
       this.saveStatus = this.SAVE_STATUS.NO_CHANGE;
 
+      // Initialize confirm-delete modal
+
+      // this.CONFIRM_DELETE_MODAL = new bootstrap.Modal(document.getElementById('confirm-delete'));
+
     },
 
     computed: {
@@ -73,6 +77,12 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
           item => item.id === this.currentItemId
         ));
       },
+
+      // THIS MAY NOT BE NECESSARY
+
+      currentItemLocationCity: function () {
+        return currentItem.location_info.find(loc => loc.type === 'City');
+        // currentItem.location_info['City'].name
       },
 
       currentReferent: {
