@@ -53,6 +53,10 @@ async function loadAndInitializeData(initDisplay) {
 
   dataAndSettings.currentGroupId = -1;
 
+  // confirm-delete modal
+
+  dataAndSettings.CONFIRM_DELETE_MODAL = undefined;
+
   return dataAndSettings;
 }
 
