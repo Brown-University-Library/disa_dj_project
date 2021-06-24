@@ -73,7 +73,6 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
           item => item.id === this.currentItemId
         ));
       },
-      },
 
       currentReferent: {
         get: function () {
