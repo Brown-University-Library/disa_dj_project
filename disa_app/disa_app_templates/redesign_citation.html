@@ -18,6 +18,14 @@
     cursor: pointer;
   }
 
+  .card-header.clickable {
+    cursor: pointer;
+  }
+
+  .card-header.clickable:hover .sr-referent-heading {
+    text-decoration: underline;
+  }
+
   #save-status {
     position: fixed;
     left: 10px;
@@ -46,6 +54,17 @@
   .card-header:hover .delete-link,
   .card.is-current .delete-link {
     visibility: initial;
+  }
+
+  /* Source for arrow characters
+     https://www.fileformat.info/info/unicode/block/geometric_shapes/images.htm */
+
+  .sr-referent-heading::before {
+    content: "▶ ";
+  }
+
+  .is-current .sr-referent-heading::before {
+    content: "▼ ";
   }
 
   /* ----------------------------------------------
@@ -820,6 +839,8 @@
                     </button>
                   </h5>
 
+                  <!-- Individuals-->
+
                   <div v-if="currentItem.referents.length > 0" class="mt-3">
                     <h6 style="float:left;">Individuals</h6>
                     <button class="btn btn-link btn-sm"
@@ -832,13 +853,20 @@
                   <div class="col-lg-12" style="padding-right: 40px; clear: both">
                     <div class="card"
                          v-for="referent in currentItem.referents"
-                         v-bind:class="{ 'is-current': currentReferentId === referent.id }">
+                         v-bind:class="{ 
+                          'is-current': currentReferentId === referent.id,
+                          'border-white': currentReferentId !== referent.id
+                         }">
 
                       <!-- Main (clickable accordion) header for this referent -->
 
-                      <div class="card-header"
-                            v-on:click="currentReferentId = (currentReferentId === referent.id) ? -1 : referent.id">
-                        <span v-text="getReferentDisplayLabel(referent)"></span>
+                      <div class="card-header clickable"
+                           v-bind:class="{
+                             'bg-transparent': currentReferentId !== referent.id,
+                             'border-white': currentReferentId !== referent.id
+                           }"
+                           v-on:click="currentReferentId = (currentReferentId === referent.id) ? -1 : referent.id">
+                        <span v-text="getReferentDisplayLabel(referent)" class="sr-referent-heading"></span>
                         <disa-id v-bind:forthis="referent" class="float-end"></disa-id>
                         <span title="Delete this individual" 
                              class="btn btn-link btn-sm delete-link float-end"
@@ -1221,13 +1249,20 @@
                   <div class="col-lg-12" style="padding-right: 40px; clear: both">
                       <div class="card"
                            v-for="group in currentItem.groups"
-                           v-bind:class="{ 'is-current': currentGroupId === group.uuid }">
+                           v-bind:class="{ 
+                            'is-current': currentGroupId === group.uuid,
+                            'border-white': currentGroupId !== group.uuid
+                           }">
 
-                        <!-- Main (clackable accordion) header for this group -->
+                        <!-- Main (clickable accordion) header for this group -->
 
-                        <div class="card-header"
-                              v-on:click="currentGroupId = (currentGroupId === group.uuid) ? -1 : group.uuid">
-                          <span v-text="getGroupDisplayLabel(group)"></span>
+                        <div class="card-header clickable"
+                             v-bind:class="{
+                               'bg-transparent': currentGroupId !== group.uuid,
+                               'border-white': currentGroupId !== group.uuid
+                             }"
+                             v-on:click="currentGroupId = (currentGroupId === group.uuid) ? -1 : group.uuid">
+                          <span v-text="getGroupDisplayLabel(group)" class="sr-referent-heading"></span>
                           <span title="Delete this group" 
                                 class="btn btn-link btn-sm delete-link"
                                 v-on:click.self="deleteGroup(group)">
