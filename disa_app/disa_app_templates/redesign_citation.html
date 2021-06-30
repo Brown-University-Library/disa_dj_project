@@ -839,12 +839,12 @@
                       <div class="card-header"
                             v-on:click="currentReferentId = (currentReferentId === referent.id) ? -1 : referent.id">
                         <span v-text="getReferentDisplayLabel(referent)"></span>
+                        <disa-id v-bind:forthis="referent" class="float-end"></disa-id>
                         <span title="Delete this individual" 
-                             class="btn btn-link btn-sm delete-link"
+                             class="btn btn-link btn-sm delete-link float-end"
                              v-on:click="deleteReferent(referent)">
                           &times;&nbsp;delete
                         </span>
-                        <disa-id v-bind:forthis="referent" class="float-end"></disa-id>
                       </div>
 
                       <!-- Edit area for this referent -->
