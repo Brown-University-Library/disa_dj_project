@@ -541,7 +541,7 @@
   </form>
     </div> <!-- /.tab-pane for bibinfo -->
 
-    <!-- Item Tab -->
+    <!-- Record Tab -->
 
     <div class="tab-pane card-body"
          role="tabpanel" aria-labelledby="item-tab" id="Items">
@@ -550,7 +550,7 @@
 
       <disa-save-status ref="database"></disa-save-status>
 
-      <!-- "Change item" modal -->
+      <!-- "Change Record" modal -->
       
       <div class="modal" tabindex="-1" id="item-selector-modal">
         <div class="modal-dialog">
@@ -595,14 +595,14 @@
         </div>
       </div> -->
       
-      <!-- Actual item tab content -->
+      <!-- Actual Record tab content -->
 
       <div class="tab-content" style="background-color: white!important;opacity:1;">
 
         <div class="active tab-pane" role="tabpanel" aria-labelledby="New-Item"
              id="New-Item">
 
-          <!-- Top control panel: title, item selector, and new item button -->
+          <!-- Top control panel: title, Record selector, and new Record button -->
 
           <div class="card bg-light">
             <div class="card-body">
@@ -615,7 +615,7 @@
               </h2>
               <div class="float-end">
 
-                <!-- Change item button if more than one item
+                <!-- Change Record button if more than one Record
                       (opens modal #item-selector-modal, defined above) -->
 
                 <button type="button" class="btn btn-primary btn-sm"
@@ -624,14 +624,14 @@
                   move to another record
                 </button>
 
-                <!-- Create new item button -->
+                <!-- Create new Record button -->
 
                 <button type="button" class="btn btn-primary btn-sm"
                         v-on:click="createNewItem">
                   create a new record
                 </button>
 
-                <!-- Delete item button -->
+                <!-- Delete Record button -->
 
                 <button type="button" class="btn btn-primary btn-sm"
                         v-on:click="deleteItem">
@@ -641,7 +641,7 @@
             </div>
           </div>
 
-          <!-- Main item input form -->
+          <!-- Main Record input form -->
 
           <div id="item-form">
             <form>
@@ -655,7 +655,7 @@
                     Record's location in source document
                   </h5>
 
-                  <!-/- Item page numbers -/->
+                  <!-/- Record page numbers -/->
 
                   <div class="form-floating">
                     <label for="formInputDISAItemVolume">Volume</label>
@@ -680,10 +680,10 @@
                 </div>
                  -->
                 
-                <!-- Item type and transcription area-->
+                <!-- Record type and transcription area-->
 
                 <div class="col-md-12"> <!-- Change to col-md-6 when Record location added above -->
-<!--
+                  <!--
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirm-delete">
                     Launch demo modal
                   </button>-->
@@ -691,7 +691,7 @@
                   <h5 class="text-dark">Record content</h5>
                   <div class="form-floating">
 
-                    <!-- Item type dropdown -->
+                    <!-- Record type dropdown -->
 
                     <select class="form-select"
                             id="formInputDISAItemType"
@@ -701,7 +701,7 @@
                               v-bind:value="itemTypeOptionId"
                               v-text="itemTypeOption"></option>
                     </select>
-                    <label for="formInputDISAItemType">Item type</label>
+                    <label for="formInputDISAItemType">Record type</label>
                   </div>
 
                   <!-- Image URL -->
@@ -726,11 +726,11 @@
               </div> <!-- /.row -->
               <hr />
 
-              <!-- Item date and location -->
+              <!-- Record date and location -->
 
               <div class="row" style="padding:25px;">
 
-                <!-- Item date -->
+                <!-- Record date -->
                 
                 <div class="col-md-6">
                   <h5 class="text-dark">Event date</h5>
@@ -770,7 +770,7 @@
 
                 </div>
 
-                <!-- Item location -->
+                <!-- Record location -->
 
                 <div class="col-md-6">
                   <h5 class="text-dark">Place</h5>
@@ -1312,7 +1312,7 @@
                 </div>
               </div>
 
-              <!-- Item notes -->
+              <!-- Record notes -->
               <!-- 
               <hr />
               <h5>Notes</h5> 
