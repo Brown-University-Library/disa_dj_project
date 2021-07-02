@@ -159,7 +159,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js" integrity="sha512-g2PN+aYR0KupTVwea5Ppqw4bxWLLypWdd+h7E0ydT8zF+/Y2Qpk8Y1SnzVw6ZCVJPrgB/91s3VfhVhP7Y4+ucw==" crossorigin="anonymous"></script>
 <script src="{% static 'js/tagify.min.js' %}" type="module"></script>
 <script src="{% static 'js/entry_form_citation.js' %}" type="module"></script>
-<script src="{% static 'js/tinymce.min.js' %}"></script>
+
+<!-- <script src="{% static 'js/tinymce.min.js' %}"></script> -->
+<script src="https://cdn.tiny.cloud/1/ondkaoffzc1dnoz0vypajv5qg9fvnun0bss1ew22yncnvquc/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script type="text/javascript">
     var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` -- or the proper dev or production /data/ root url -- used to build other api endpoints.
         data_itemrecord_api_url_root = "{{ data_itemrecord_api_url_root }}",  // needed by `redesign_data.js`
