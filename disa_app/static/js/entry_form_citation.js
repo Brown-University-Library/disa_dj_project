@@ -28,11 +28,11 @@ async function loadAndInitializeData(initDisplay) {
 
   if (initDisplay.itemId) {
     dataAndSettings.currentItemId = initDisplay.itemId
-  } else if (dataAndSettings.formData.doc.references[0] && 
+  } else if (false && dataAndSettings.formData.doc.references[0] && 
              dataAndSettings.formData.doc.references[0].id) {
     dataAndSettings.currentItemId = dataAndSettings.formData.doc.references[0].id;
   } else {
-    dataAndSettings.currentItemId = undefined;
+    dataAndSettings.currentItemId = -1;
   }
 
   // Set first referent to display: from URL or none

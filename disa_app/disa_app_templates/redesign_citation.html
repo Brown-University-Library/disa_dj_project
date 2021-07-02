@@ -602,7 +602,39 @@
         <div class="active tab-pane" role="tabpanel" aria-labelledby="New-Item"
              id="New-Item">
 
-          <!-- Top control panel: title, Record selector, and new Record button -->
+          <!-- If no Record currently selected, then show list of all Records -->
+
+          <div v-if="currentItemId === -1 || !currentItemId">
+
+            <h1>
+              Records contained within this Source
+              <button type="button" class="btn btn-link"
+                      v-on:click="createNewItem">
+                +new
+              </button>
+            </h1>
+
+            <p>Select to open a Record</p>
+
+            <ul class="list-group">
+              <li class="list-group-item d-flex justify-content-between align-items-start"
+                  v-for="item in formData.doc.references"
+                  v-on:click="currentItemId = item.id">
+                <div class="ms-2 me-auto btn btn-link"
+                     v-text="makeItemDisplayTitle(item, 50)">
+                </div>
+                <disa-id v-bind:forthis="item" class="float-end"></disa-id>
+              </li>
+            </ul>
+          </div>
+
+          <!-- If there IS a current Record selected, then show edit interface for that Record -->
+
+          <!-- start edit Record form -->
+
+          <div v-else> 
+              
+            <!-- Top control panel: title, Record selector, and new Record button -->
 
           <div class="card bg-light">
             <div class="card-body">
@@ -1339,6 +1371,7 @@
           </div>
         </div> <!-- /.tab-pane for items -->
       </div> <!-- /.tab-content for items -->
+          </div> <!-- end edit Record form -->
     <!-- </div> -->
 
     </div>

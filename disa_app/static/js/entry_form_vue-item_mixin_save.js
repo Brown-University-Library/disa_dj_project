@@ -319,7 +319,7 @@ async function saveItemDataToServer() {
   console.log(`CALLING ROUTINE TO SUBMIT ITEM DATA - item id ${this.currentItemId}`);
   console.log(' FULL DATA LOADED? ' + this.currentItem.FULL_DATA_LOADED);
 
-  if (this.currentItem.FULL_DATA_LOADED) {
+  if (this.currentItem && this.currentItem.FULL_DATA_LOADED) {
 
     this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
 
@@ -576,8 +576,12 @@ const saveFunctionsMixin = {
       watchMeToTriggerItemSave: function () {
         // Ignores changes in referents and groups
         //  (who have their own save API)
-        const {referents, groups, ...rest} = this.currentItem;
-        return JSON.stringify(rest);
+        if (this.currentItem) {
+          const {referents, groups, ...rest} = this.currentItem;
+          return JSON.stringify(rest);
+        } else {
+          return undefined;
+        }
       }
   },
 
