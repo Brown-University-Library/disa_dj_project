@@ -83,7 +83,7 @@ def prepare_common_data( session: sqlalchemy.orm.session.Session ):
     uniq_addl = { (l.location.name, l.location_id) for l in locs if l.location_rank == 2 and l.location_id is not None}
 
     col_state_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_cols ]  # again, typo?
-    col_state_json = json.dumps( col_state_list )
+    # col_state_json = json.dumps( col_state_list )
 
     towns_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_town ]
     towns_json = json.dumps( towns_list )
@@ -98,12 +98,13 @@ def prepare_common_data( session: sqlalchemy.orm.session.Session ):
         'roles': roles_json,
         'natl_ctxs_list': natl_ctxs_list,   # not used; for reference
         'natl_ctxs': natl_ctxs_json,
-        'col_state_list': col_state_list,   # not used; for reference
-        'col_state': col_state_json,
+        'col_state_list': col_state_list,
+        # 'col_state': col_state_json,
         'towns_list': towns_list,           # not used; for reference
         'towns': towns_json,
         'addl_loc_list': addl_loc_list,     # not used; for reference
         'addl_loc': addl_loc_json,
+        # 'foo_list_from_django': [ {'aa': 'one', 'bb': "t'w'o"} ]  # test
         }
 
     log.debug( 'form-data (i.e. roles-list & towns-list) prepared' )
