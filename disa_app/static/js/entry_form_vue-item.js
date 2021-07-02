@@ -72,10 +72,9 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
     computed: {
 
       currentItem: function() {
-        const timeStamp = (new Date()).valueOf(); // TEMP for debugging
-        return Object.assign({ timeStamp }, this.formData.doc.references.find(
+        return this.formData.doc.references.find(
           item => item.id === this.currentItemId
-        ));
+        );
       },
 
       // THIS MAY NOT BE NECESSARY
