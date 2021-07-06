@@ -363,10 +363,14 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
                 truncatedTitle = transcriptionNoHTML.slice(0,length);
           displayTitle = truncatedTitle + (truncatedTitle.length < transcriptionNoHTML.length ? '…' : '');
         } else {
-          const displayDate = ['day', 'month', 'year'].map(k => item.dateParts[k]).filter(k => (k && k !== -1)).join('-'),
+          const displayDate = ['day', 'month', 'year']
+                  .map(k => item.dateParts[k])
+                  .filter(k => (k && k !== -1))
+                  .map(k => parseInt(k) < 10 ? `0${parseInt(k)}` : k)
+                  .join('‑'),
                 displayDateText = displayDate ? ` from ${displayDate}` : '',
-                displayType = this.MENU_OPTIONS.formInputDISAItemType[item.reference_type_id];
-          displayTitle = `Record: ${displayType}${displayDateText}`;
+                displayType = this.MENU_OPTIONS.formInputDISAItemType[item.reference_type_id] + ' record';
+          displayTitle = `${displayType}${displayDateText}`;
         }
         return displayTitle
       },
