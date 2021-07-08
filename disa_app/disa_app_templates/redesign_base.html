@@ -50,9 +50,9 @@
 				    <div class="row">
 				      <div class="d-flex flex-wrap align-items-center justify-content-md-between justify-content-end col-12">
 
-				        <a class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none" style="margin-right:4%;" href="#"><strong><span style="font-size: 181%;">Stolen Relations</span></strong>&nbsp;&nbsp;&nbsp;<span style="font-size: 77%;letter-spacing: 2!important;">Recovering Stories of <br>Indigenous Enslavement in the Americas</span></a>
+				        <a class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none" style="margin-right:3.5%;" href="#"><strong><span style="font-size: 181%;">Stolen Relations</span></strong>&nbsp;&nbsp;&nbsp;<span style="font-size: 67%;letter-spacing: 2!important;">Recovering Stories of <br>Indigenous Enslavement in the Americas</span></a>
 
-				        <form class="d-flex col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="{% url 'search_results_url' %}" method="get">
+				        <form class="d-flex col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="{% url 'search_results_url' %}" method="get" style="width:185px!important;margin-top:7px!important;">
 
 		                    {% if search_query %}
 		                    <input class="form-control mr-sm-2" type="text" placeholder="searched: `{{ search_query }}`" aria-label="Search" id="query" name="query">
@@ -62,7 +62,7 @@
 		                    <!-- <input type="text" class="searchTerm" placeholder="enter search-term" id="query" name="query"> -->
 		                    {% endif %}
 
-		                    <button class="btn btn-secondary my-2 my-sm-0" style="margin-bottom:11px!important;" type="submit" aria-label="search button">
+		                    <button class="btn btn-secondary my-2 my-sm-0" style="margin-bottom:11px!important;margin-right:7px;" type="submit" aria-label="search button">
 		                        <i class="fas fa-search fa-lg"></i>
 		                    </button>
 		                </form>
