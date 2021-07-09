@@ -28,3 +28,7 @@ input, textarea {
 	font-weight: bold;
 	margin-bottom: 1.25em;
 }
+
+.card-body h2 {
+	font-size: 1.75em!important;
+}
