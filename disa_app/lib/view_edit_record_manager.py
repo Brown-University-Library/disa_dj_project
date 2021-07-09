@@ -43,21 +43,6 @@ def prep_doc_id_context( doc_id: str, usr_first_name: str, usr_is_authenticated:
     return context
 
 
-# def prep_doc_id_context( doc_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
-#     """ Preps context for template when a doc_id (meaning a `Citation` id) is included.
-#         Called by views.edit_record() """
-#     context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
-#     session = make_session()
-#     common_data: dict = prepare_common_data( session )
-#     context.update( common_data )  # merges common_data key-vals into context
-#     doc = session.query( models_alch.Citation ).get( doc_id )
-#     context['rec_id'] = None
-#     context['doc_display'] = doc.display
-#     context['doc_id'] = doc.id
-#     log.debug( 'context prepared' )
-#     return context
-
-
 def prep_rec_id_context( rec_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
     """ Preps context for record_edit.html template when a rec_id (meaning a `Reference` id) is included.
         Called by views.edit_record() """
@@ -98,7 +83,7 @@ def prepare_common_data( session: sqlalchemy.orm.session.Session ):
     uniq_addl = { (l.location.name, l.location_id) for l in locs if l.location_rank == 2 and l.location_id is not None}
 
     col_state_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_cols ]  # again, typo?
-    col_state_json = json.dumps( col_state_list )
+    # col_state_json = json.dumps( col_state_list )
 
     towns_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_town ]
     towns_json = json.dumps( towns_list )
@@ -113,15 +98,17 @@ def prepare_common_data( session: sqlalchemy.orm.session.Session ):
         'roles': roles_json,
         'natl_ctxs_list': natl_ctxs_list,   # not used; for reference
         'natl_ctxs': natl_ctxs_json,
-        'col_state_list': col_state_list,   # not used; for reference
-        'col_state': col_state_json,
+        'col_state_list': col_state_list,
+        # 'col_state': col_state_json,
         'towns_list': towns_list,           # not used; for reference
         'towns': towns_json,
         'addl_loc_list': addl_loc_list,     # not used; for reference
         'addl_loc': addl_loc_json,
+        # 'foo_list_from_django': [ {'aa': 'one', 'bb': "t'w'o"} ]  # test
         }
 
-    log.debug( 'data prepared' )
+    log.debug( 'form-data (i.e. roles-list & towns-list) prepared' )
+    # log.debug( f'data prepared, ``{pprint.pformat(data)}``' )
     return data
 
     ## end def prepare_common_data

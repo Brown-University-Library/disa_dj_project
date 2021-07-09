@@ -1366,6 +1366,12 @@ $( document ).ready(function() {
 
     console.log( "starting document.ready()" );
 
+    // var foo_list_jsn = JSON.stringify( {{ foo_list_from_django | safe }} );
+    // console.log( "foo_list_jsn: ", foo_list_jsn );
+
+    // var foo_list = JSON.parse( foo_list_jsn );
+    // console.log( "foo_list: ", foo_list );
+
     var doc_id = getDocumentId();
 
     var rec_id = getRecId();
@@ -1420,8 +1426,14 @@ $( document ).ready(function() {
     {% comment %} addNationalContextOptions(JSON.parse('{{ natl_ctxs | tojson | safe}}')); {% endcomment %}
     addNationalContextOptions(JSON.parse('{{ natl_ctxs | safe}}'));
 
+
+    var col_state_jsn = JSON.stringify( {{ col_state_list | safe }} );
+    // console.log( "col_state_jsn: ", col_state_jsn );
+    var col_state_lst = JSON.parse( col_state_jsn );
+    // console.log( "col_state_lst: ", col_state_lst );
     $('#col_state_autocomplete').autocomplete({
-        source: JSON.parse('{{ col_state | safe}}'),
+        // source: JSON.parse('{{ col_state | safe}}'),  // col_state is json, but this throws error when value contains unescaped apostrophe.
+        source: col_state_lst,
         minLength: 1,
         delay: 10,
         autoFocus: true,
