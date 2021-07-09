@@ -22,27 +22,6 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-# def query_documents( username: str, old_usr_db_id: int ) -> dict:
-#     """ Queries and massages data.
-#         Called by views.editor_index() """
-#     session = make_session()
-#     data = {}
-#     all_cites = session.query( models_alch.Citation ).all()
-#     no_refs = [ (cite, old_usr_db_id, datetime.datetime.now(), '')
-#         for cite in all_cites if len(cite.references) == 0 ]
-#     has_refs = [ cite
-#         for cite in all_cites if len(cite.references) > 0 ]
-#     wrapped_refs = make_wrapped_refs( has_refs )
-#     user_cites = [ wrapped
-#         for wrapped in wrapped_refs if wrapped[1] == old_usr_db_id ]
-#     srtd_all = sort_documents( wrapped_refs )  # was ```srtd_all = sort_documents(no_refs + wrapped_refs)```
-#     srtd_user = sort_documents( user_cites )
-#     data['user_documents'] = jsonify_entries( srtd_user[0:10] )
-#     data['documents'] = jsonify_entries( srtd_all )
-#     log.debug( f'data (first 1K chars), ```{pprint.pformat(data)[0:1000]}...```' )
-#     return data
-
-
 def query_documents( username: str, old_usr_db_id: int ) -> dict:
     """ Queries and massages data.
         Called by views.editor_index() """
