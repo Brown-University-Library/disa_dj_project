@@ -1102,11 +1102,15 @@
 
                               <!-- Vocation -->
 
-                              <div>
+                              <!--<div>
                                 <label for="formInputDISAPersonVocation">Vocation</label>
                                 <disa-tags v-model="currentReferent.vocations"
                                             v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonVocation"
                                             id="formInputDISAPersonVocation"></disa-tags>
+                              </div>-->
+                              <div class="form-floating">
+                                <input type="text" class="form-control" id="formInputDISAPersonVocation" aria-label="Vocation" placeholder="Vocation">
+                                <label for="formInputDISAPersonVocation">Vocation</label>
                               </div>
                               <!-- VOCATION AS DROPDOWN ...
                               <div class="form-floating">
