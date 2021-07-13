@@ -1102,11 +1102,13 @@
 
                               <!-- Vocation -->
 
-                              <div>
-                                <label for="formInputDISAPersonVocation">Vocation</label>
+                              <div class="row mb-4">
+                                <label for="formInputDISAPersonVocation" class="col-sm-3 col-form-label" style="text-align: left;">Vocation</label>
+                                <div class="col-sm-9">
                                 <disa-tags v-model="currentReferent.vocations"
                                             v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonVocation"
                                             id="formInputDISAPersonVocation"></disa-tags>
+                                </div>
                               </div>
                               <!-- VOCATION AS DROPDOWN ...
                               <div class="form-floating">
@@ -1123,11 +1125,13 @@
 
                               <!-- Race -->
 
-                              <div>
-                                <label for="formInputDISAPersonRace">Race</label>
-                                <disa-tags v-model="currentReferent.races"
+                              <div class="row mb-4">
+                                <label for="formInputDISAPersonRace" class="col-sm-4 col-form-label" style="text-align: right;">Race</label>
+                                <div class="col-sm-8">
+                                  <disa-tags v-model="currentReferent.races"
                                           v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonRace"
                                           id="formInputDISAPersonRace"></disa-tags>
+                                  </div>
                               </div>
 
                               <!-- NEW MODEL: only one race as dropdown
@@ -1151,11 +1155,13 @@
 
                               <!-- Tribe -->
 
-                              <div class="form-floating-x">
-                                <label for="formInputDISAPersonTribe">Tribal Nation</label>
+                              <div class="row mb-4">
+                                <label for="formInputDISAPersonTribe" class="col-sm-4 col-form-label" style="text-align: right;">Tribal Nation</label>
+                                <div class="col-sm-8">
                                 <disa-tags v-model="currentReferent.tribes"
                                           v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonTribe"
                                           id="formInputDISAPersonTribe"></disa-tags>
+                                </div>
                               </div>
 
                               <!-- NEW MODEL: Transcribed geographical terms  
@@ -1168,16 +1174,14 @@
 
                               <!-- Geographical origins -->
 
-                              <div class="form-floating">
-                                <label for="formInputDISAPersonGeoOrigins">Geographic origins</label>
+                              <div class="row mb-4">
+                                <label for="formInputDISAPersonGeoOrigins" class="col-sm-4 col-form-label" style="text-align: right;">Geographic origins</label>
+                                <div class="col-sm-8">
                                 <disa-tags v-model="currentReferent.origins"
                                   v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonGeoOrigins"
                                   id="formInputDISAPersonGeoOrigins"></disa-tags>
-                                <!--
-                                <input type="text" class="form-control" id="formInputDISAPersonGeoOrigins" 
-                                      aria-label="Geographic origins" placeholder="Geographic origins"
-                                      v-model="currentReferent.origins">-->
                               </div>
+
                             </div>
                           </div>
                           <div class="card card-body" style-x="padding-top:10px;clear: both;">
