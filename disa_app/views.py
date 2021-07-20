@@ -758,9 +758,14 @@ def redesign_citation( request, cite_id=None ):
     if context == None:
         return HttpResponseNotFound( '404 / Not Found' )
 
+    ## temp code to get P.R. location-data
+    sess = view_edit_record_manager.make_session()
+    location_context = view_edit_record_manager.prepare_common_data( sess )
+
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
         context['user_first_name'] = request.user.first_name
+        context['location_stuff'] = location_context
     # log.debug( f'redesign_citation context, ```{pprint.pformat(context)}```' )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
