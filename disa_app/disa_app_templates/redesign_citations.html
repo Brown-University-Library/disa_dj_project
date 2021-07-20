@@ -263,11 +263,18 @@
 
   window.addEventListener('DOMContentLoaded', () => {
 
-    // Initialize sidebar
+    // Initialize sidebar (with its local storage to determine if it's open or closed)
 
     const sidebarClassList = document.getElementById('sidebar').classList;
     document.getElementById('sidebarCollapse')
-      .addEventListener('click', () => sidebarClassList.toggle('active'));
+      .addEventListener('click', () => {
+        sidebarClassList.toggle('active');
+        localStorage.setItem('citationsInfoSidebarClosed', sidebarClassList.contains('active'));
+      });
+
+    if (localStorage.getItem('citationsInfoSidebarClosed') === "true") {
+      sidebarClassList.add('active');
+    }
 
     // Initialize new-source button
 
