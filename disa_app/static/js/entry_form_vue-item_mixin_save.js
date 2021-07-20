@@ -563,26 +563,15 @@ const saveFunctionsMixin = {
 
   computed: {
 
-      // Computed properties that are watched to trigger saves
+    // Computed properties that are watched to trigger saves
 
-      watchMeToTriggerReferentSave: function () { // (may not be necessary)
-        return JSON.stringify(this.currentReferent);
-      },
+    watchMeToTriggerReferentSave: function () { // (may not be necessary)
+      return JSON.stringify(this.currentReferent);
+    },
 
-      watchMeToTriggerGroupSave: function () {
-        return JSON.stringify(this.currentGroup);
-      },
-
-      watchMeToTriggerItemSave: function () {
-        // Ignores changes in referents and groups
-        //  (who have their own save API)
-        if (this.currentItem) {
-          const {referents, groups, ...rest} = this.currentItem;
-          return JSON.stringify(rest);
-        } else {
-          return undefined;
-        }
-      }
+    watchMeToTriggerGroupSave: function () {
+      return JSON.stringify(this.currentGroup);
+    }
   },
 
   watch: {
@@ -597,13 +586,6 @@ const saveFunctionsMixin = {
 
     watchMeToTriggerGroupSave: {
       handler: saveGroupDataToServer
-    },
-
-    // If the Item data changes (as defined by computed field)
-    //  then save
-
-    watchMeToTriggerItemSave: {
-      handler: saveItemDataToServer
     }
   },
 
@@ -615,7 +597,8 @@ const saveFunctionsMixin = {
     createGroupOnServer,
     deleteGroupOnServer,
     createItemOnServer,
-    deleteItemOnServer
+    deleteItemOnServer,
+    saveItemDataToServer
   }
 }
 

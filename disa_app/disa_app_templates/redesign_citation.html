@@ -737,7 +737,8 @@
                       <select class="form-select"
                               id="formInputDISAItemType"
                               aria-label=""
-                              v-model="currentItem.kludge.reference_type_id">
+                              v-model="currentItem.kludge.reference_type_id"
+                              v-on:change="saveItemDataToServer">
                         <option v-for="(itemTypeOption, itemTypeOptionId) in MENU_OPTIONS.formInputDISAItemType"
                                 v-bind:value="itemTypeOptionId"
                                 v-text="itemTypeOption"></option>
@@ -749,7 +750,8 @@
 
                     <div class="form-floating">
                       <input class="form-control" type="url" placeholder="URL of image"
-                            v-model="currentItem.kludge.image_url"></input>
+                            v-model="currentItem.kludge.image_url"
+                            v-on:blur="saveItemDataToServer"></input>
                       <label for="formInputDISAItemImage">Image URL</label>
                     </div>
 
@@ -761,8 +763,8 @@
                       <wysiwyg-editor api-key="ondkaoffzc1dnoz0vypajv5qg9fvnun0bss1ew22yncnvquc" 
                                       toolbar="bold italic fullscreen"
                                       :init="{ height:200,menubar:false,plugins:['fullscreen'], toolbar_mode: 'floating'}"
-                                      v-model="currentItem.kludge.transcription"></wysiwyg-editor>
-
+                                      v-model="currentItem.kludge.transcription"
+                                      v-on:blur="saveItemDataToServer"></wysiwyg-editor>
                     </div>
                 </div> <!-- /.row -->
                 <hr />
@@ -780,7 +782,8 @@
 
                       <select class="form-select" id="formInputDISAEventDateMonth"
                               aria-label="Event date: month" placeholder="Month"
-                              v-model="currentItem.dateParts.month">
+                              v-model="currentItem.dateParts.month"
+                              v-on:change="saveItemDataToServer">
                         <option value="-1">Month unspecified</option>
                         <option value="01">January</option>
                         <option value="02">February</option>
@@ -797,10 +800,12 @@
                       </select>
                       <input class="form-control" id="formInputDISAEventDateDay"
                               type="number" min="0" max="31" placeholder="Day"
-                              v-model="currentItem.dateParts.day">
+                              v-model="currentItem.dateParts.day"
+                              v-on:change="saveItemDataToServer">
                       <input class="form-control" id="formInputDISAEventDateYear"
                               type="number" min="1500" max="1900" placeholder="Year"
-                              v-model="currentItem.dateParts.year">
+                              v-model="currentItem.dateParts.year"
+                              v-on:change="saveItemDataToServer">
                     </div>
 
                     <!-- AWAITING NEW DATA MODEL
@@ -820,7 +825,8 @@
                       <!-- Colonial context -->
 
                       <select class="form-select" id="formInputDISAColonialContext" aria-label="Colonial context"
-                              v-model="currentItem.national_context_id">
+                              v-model="currentItem.national_context_id"
+                              v-on:change="saveItemDataToServer">
                         <option v-for="(colonialContextOption, colonialContextOptionId) in MENU_OPTIONS.formInputDISAColonialContext"
                                 v-bind:value="colonialContextOptionId"
                                 v-text="colonialContextOption">
@@ -833,7 +839,8 @@
                     <div class="form-floating">
                       <input type="text" class="form-control" id="formInputDISAColonyState" 
                             aria-label="Colony / State" placeholder="Colony / State"
-                            v-model="currentItem.location_info['Colony/State'].name">
+                            v-model="currentItem.location_info['Colony/State'].name"
+                            v-on:blur="saveItemDataToServer">
                       <label for="formInputDISAColonyState">Colony / State</label>
                     </div>
                     
@@ -842,7 +849,8 @@
                     <div class="form-floating">
                       <input type="text" class="form-control" id="formInputDISATown" 
                             aria-label="Town" placeholder="Town"
-                            v-model="currentItem.location_info['City'].name">
+                            v-model="currentItem.location_info['City'].name"
+                            v-on:blur="saveItemDataToServer">
                       <label for="formInputDISATown">Town</label>
                     </div>
                     <div class="form-floating">
@@ -851,7 +859,8 @@
 
                       <input type="text" class="form-control" id="formInputDISAPlaceInfo" 
                             aria-label="Additional location information" placeholder="Additional location info."
-                            v-model="currentItem.location_info['Locale'].name">
+                            v-model="currentItem.location_info['Locale'].name"
+                            v-on:blur="saveItemDataToServer">
                       <label for="formInputDISAPlaceInfo">Additional location info.</label>
                     </div>
                   </div>
