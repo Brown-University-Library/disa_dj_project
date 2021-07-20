@@ -45,12 +45,14 @@
 {% block header_options %}
 
     {% if user_is_authenticated %}
+        <script> window.srUserCanEdit = true; </script>
         {% comment %}
         <li class="nav-item">
             <a class="nav-link text-white" href="{% url 'browse_logout_url' %}">FOO</a>
         </li>
         {% endcomment %}
     {% else %}
+        <script> window.srUserCanEdit = false; </script>
         {% if browse_logged_in %}
         <li class="nav-item">
             <a class="nav-link text-white" href="{% url 'browse_logout_url' %}">browse-logout</a>
