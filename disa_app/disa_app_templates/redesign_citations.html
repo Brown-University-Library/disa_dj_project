@@ -46,6 +46,15 @@
   text-overflow: ellipsis;
 }
 
+.source-delete-cell {
+  text-align: right;
+  width: 5em;
+}
+
+.source-id-cell {
+  width: 5em;
+}
+
 </style>
 
 <!-- Delete confirmation modal -->
@@ -98,19 +107,22 @@
       <tbody>
         {% for entry in user_documents %}
           <tr>
-            <td>
+            <td class="source-title-cell">
+              <!-- Source title -->
               <a href="{% url 'redesign_citation_url' entry.doc.id %}">
                 {{ entry.doc.display }}
               </a>
             </td>
-            <td>
+            <td class="source-delete-cell">
+              <!-- Delete source button (opens confirmation modal) -->
               <button type="button" class="btn btn-link btn-sm delete-source"
                 data-delete-url="{{ API_URL_ROOT }}documents/{{ entry.doc.id }}"
                 data-bs-toggle="modal" data-bs-target="#delete-source-modal">
                 &times;&nbsp;delete
               </button>
             </td>
-            <td>
+            <td class="source-id-cell">
+              <!-- Source ID badge -->
               <span title="Unique identifier for this source is {{ entry.doc.id }}" 
                     class="badge rounded-pill bg-secondary text-light disa-id-badge float-end">
                 ID:{{ entry.doc.id }}
@@ -136,18 +148,21 @@
         {% for entry in documents %}
         <tr>
           <td class="source-title-cell">
+            <!-- Source title -->
             <a href="{% url 'redesign_citation_url' entry.doc.id %}">
               {{ entry.doc.display }}
             </a>
           </td>
-          <td>
+          <td class="source-delete-cell">
+            <!-- Delete source button (opens confirmation modal) -->
             <button type="button" class="btn btn-link btn-sm delete-source"
                     data-delete-url="{{ API_URL_ROOT }}documents/{{ entry.doc.id }}"
                     data-bs-toggle="modal" data-bs-target="#delete-source-modal">
               &times;&nbsp;delete
             </button>
           </td>
-          <td>
+          <td class="source-id-cell">
+            <!-- Source ID badge -->
             <span title="Unique identifier for this source is {{ entry.doc.id }}" 
                   class="badge rounded-pill bg-secondary text-light disa-id-badge float-end">
               ID:{{ entry.doc.id }}
