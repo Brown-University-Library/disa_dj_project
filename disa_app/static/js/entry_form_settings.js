@@ -164,7 +164,7 @@ export const LOCAL_SETTINGS = {
       '9': 'Sadler',
       '10': 'Ship Captain',
       '11': 'Shopkeeper'
-    },
+    }, /* NOW LOADED FROM SERVER
     formInputDISAPersonStatus: {
       'status0':'None specified',
       'status1':'Free',
@@ -176,30 +176,20 @@ export const LOCAL_SETTINGS = {
       'status7':'Slave',
       'status8':'Unclear',
       'status9':'Other'
-    },
+    }, */
     formInputDISAPersonGender: {
       '0': 'Not specified',
       'Male': 'Male',
       'Female': 'Female',
       'Two spirit': 'Two spirit'
-    },
+    }, /*
     formInputDISAColonialContext: {
-
       '1':	'British',
       '2':	'American',
       '3':	'French',
       '4':	'Spanish',
       '5':	'Other'
-/*
-      1: 'Unspecified',
-      2: 'American (U.S.)',
-      3: 'British',
-      4: 'Dutch',
-      5: 'French',
-      6: 'Portuguese',
-      7: 'Spanish',
-      8: 'Other' */
-    },
+    }, */
     formInputDISAItemPersonNameType: {
       '1': 'Alias',
       '2': 'Baptismal',
@@ -304,14 +294,8 @@ export const LOCAL_SETTINGS = {
       '78':'Abstract',
       '79':'Notice of Runaway'
     },
-    formInputDISAPersonStatus: {
-      1: 'one',
-      2: 'two',
-      3: 'three',
-      4: 'four'
-    },
 
-    // @todo THESE ARE NOT GOOD - this is only a partial reflection of what's
+    // @todo @birkin THESE ARE NOT GOOD - this is only a partial reflection of what's
     //  in the DB (in table 1_roles), but this all needs to be reviewed
 
     formInputDISARelationship: {

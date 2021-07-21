@@ -70,6 +70,39 @@ function preprocessSourceData(data) {
     return data.formData.user_api_info.get_user_info.api_url.replace('THE-REFERENT-ID', referentID);
   }
 
+  // Trim & move location_stuff to MENU_OPTIONS
+  // (location_stuff is where Birkin puts value tables, etc.)
+
+  data.MENU_OPTIONS.formInputDISAColonyState = data.formData.location_stuff.col_state_list.reduce(
+    (colStateHash, colStateLoc) => Object.assign(colStateHash, { [colStateLoc.id]: colStateLoc.value }),
+    {}
+  );
+
+  data.MENU_OPTIONS.formInputDISAColonialContext = data.formData.location_stuff.natl_ctxs_list.reduce(
+    (locHash, currLoc) => Object.assign(locHash, { [currLoc.id]: currLoc.value }),
+    {}
+  );
+
+  data.MENU_OPTIONS.formInputDISATown = data.formData.location_stuff.towns_list.reduce(
+    (townHash, currTown) => Object.assign(townHash, { [currTown.id]: currTown.value }),
+    {}
+  );
+
+  data.MENU_OPTIONS.formInputDISAItemType = data.formData.location_stuff.rec_types_list.reduce(
+    (recTypeHash, currRecType) => Object.assign(recTypeHash, { [currRecType.id]: currRecType.value }),
+    {}
+  );
+
+  data.MENU_OPTIONS.formInputDISAPersonStatus = data.formData.location_stuff.roles_list.reduce(
+    (statusHash, currStatus) => Object.assign(statusHash, { [currStatus.id]: currStatus.value }),
+    {}
+  );
+
+  // more stuff in data.formData.location_stuff dealt with here ...
+  // addl_loc_list
+
+  // delete data.formData.location_stuff;
+
   return data;
 }
 
