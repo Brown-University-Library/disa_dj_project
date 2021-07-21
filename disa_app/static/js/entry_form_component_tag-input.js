@@ -18,10 +18,14 @@ const componentDefinition = {
   props: {
     // settings: Object,
     value: String,
-    suggestions: Object
+    suggestions: Object,
+    'single-value': Boolean
   },
 
   mounted() {
+
+    // The dropdown suggestions are passed via the @suggestions attribute
+    //  as a object with keys as IDs and values as the text
 
     const whitelist = Object.keys(this.suggestions).map(
             id => { 
@@ -31,28 +35,23 @@ const componentDefinition = {
               }
             }
           ),
-          // tagifySettings = Object.assign({}, this.settings, whitelist);
-          tagifySettings = { whitelist: whitelist };
-    console.log('TAGIFY INIT', {tagifySettings, el: this.$el, elVal: this.value});
-    this.tagify = new Tagify(this.$el, tagifySettings);
-  },
-  
-  methods: {
-    onChange: function(x) { 
 
-      const oldTags = this.value,
-            newTags = this.tagify.value.map(tag => { 
-                        return { id: tag.dbID, label: tag.value, value: tag.value } 
-                      });
+          tagifySettings = { 
+            whitelist,
+            dropdown: {
+              enabled: 0 // show suggestions on focus
+            }
+          };
 
-      const tagsHaveChanged = oldTags.length !== newTags.length ||
-                              newTags.map(newTag => newTag.value)
-                                     .some(newTagVal => ! oldTags.includes(newTagVal));
+    // Set the @single attribute to make it a drop-down equivalent
+    // (with ability to add your own text)
 
-      if (tagsHaveChanged) {
-
-      }
+    if (this.singleValue) {
+      tagifySettings.mode = 'select';
     }
+
+    console.log('TAGIFY INIT', {tagifySettings, el: this.$el, elVal: this.value, whitelist});
+    this.tagify = new Tagify(this.$el, tagifySettings);
   }
 };
 

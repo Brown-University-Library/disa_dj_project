@@ -333,20 +333,50 @@ async function saveItemDataToServer() {
 
     // THIS WHOLE LOCATION THING IS WAY TOO COMPLICATED FOR WHAT IT DOES
 
+    const NEW_LOCATION_ID = -1;
+
     const locations = [],
-          makeLocationObj = locationType => {
-            if (this.currentItem.location_info[locationType].name) {
+          insertIdIntoTagify_functions = [],
+          makeLocationObj = (tagifyValue) => {
+
+            if (tagifyValue) {
+
+              const tagsData = JSON.parse(tagifyValue),
+                    tagData = Array.isArray(tagsData) && tagsData[0]
+                      ? tagsData[0] 
+                      : tagsData;
+// @TODO need to look up if this value already exists and get ID
+// (maybe they typed in the text but didn't select the suggest)
               return {
-                id: this.currentItem.location_info[locationType].id || -1,
-                label: this.currentItem.location_info[locationType].name,
-                value: this.currentItem.location_info[locationType].name
+                id: tagData.dbID || NEW_LOCATION_ID,
+                label: tagData.value,
+                value: tagData.value
               }
             } else {
               return undefined;
             }
           };
 
-    
+    // Creates a function that extracts the ID from the
+    //  server response and inserts it into the Tagify field
+
+    function getUpdateIdIntoTagify_function(locationValue, idSetter) {
+      return function(serverResponse) {
+        console.log('QWERTY 1', { serverResponse, locationValue, idSetter })
+
+        if (serverResponse.rec.locations && Array.isArray(serverResponse.rec.locations)) {
+          const matchingServerLocation = serverResponse.rec.locations.find(
+            serverLocation => serverLocation.value === locationValue
+          );
+
+          if (matchingServerLocation.id) {
+            console.log('QWERTY 2', { locationValue, newLocations: serverResponse.rec.locations, newId: matchingServerLocation.id });
+            idSetter(matchingServerLocation.id);
+          }
+        }
+      }
+    };
+
     // TODO CHECK THIS
 /*
     function makeLocArray(locationArray, locationTypes) {
@@ -368,17 +398,43 @@ async function saveItemDataToServer() {
     */
 
     // YIKES!
+    // @todo Currently this.currentItem.location_info[<X>]
+    //  is an object with only one property: value
+    // Instead, have the Tagify string just sit right off of
+    //  e.g. this.currentItem.location_info['Colony/State']
 
     if (this.currentItem.location_info['Colony/State']) {
-      const colStateObj = makeLocationObj('Colony/State');
+      const colStateObj = makeLocationObj(
+        this.currentItem.location_info['Colony/State'].value
+      );
       if (colStateObj) {
         locations.push(colStateObj);
+        if (colStateObj.id === NEW_LOCATION_ID) {
+          insertIdIntoTagify_functions.push(
+            getUpdateIdIntoTagify_function(
+              colStateObj.value,
+              this.setCurrentItemLocationColonyStateId
+            )
+          );
+        }
         if (this.currentItem.location_info['City']) {
-          const cityObj = makeLocationObj('City');
+          const cityObj = makeLocationObj(
+            this.currentItem.location_info['City'].value
+          );
           if (cityObj) {
             locations.push(cityObj);
+            if (cityObj.id === NEW_LOCATION_ID) {
+              insertIdIntoTagify_functions.push(
+                getUpdateIdIntoTagify_function(
+                  cityObj.value,
+                  this.setCurrentItemLocationCityId
+                )
+              );
+            }
             if (this.currentItem.location_info['Locale']) {
-              const localeObj = makeLocationObj('Locale');
+              const localeObj = makeLocationObj(
+                this.currentItem.location_info['Locale'].value
+              );
               if (localeObj) {
                 locations.push(localeObj);
               }
@@ -460,7 +516,13 @@ async function saveItemDataToServer() {
         }
       }
 
-    } else {
+      // If new tag, then gather the ID and insert it into tagify
+
+      insertIdIntoTagify_functions.forEach(
+        insertFunction => insertFunction(dataJSON)
+      );
+
+    } else { // response NOT ok
       this.saveStatus = this.SAVE_STATUS.ERROR;
       throw Error(response.statusText);
     }

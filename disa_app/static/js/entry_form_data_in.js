@@ -13,6 +13,11 @@ function prepareForTagify(data) {
         return { value: dataItem.label, dbID: dataItem.id }
       }));
     }
+  } else if (data.id !== undefined && data.label !== undefined) {
+    tagifiedData = JSON.stringify({ 
+      value: dataItem.label, 
+      dbID: dataItem.id
+    });
   } else {
     tagifiedData = '[]';
   }
@@ -91,20 +96,33 @@ function preprocessItemData(itemData, oldItemData, relationshipsData, referentDa
   //  Type is located only in itemData -- need to combine
 
   const locationInfo = itemData.rec.locations.map(location1 => {
+    
+    // Look up this location in itemData in oldItemData
+
     const location2 = oldItemData.location_info.find(
       loc2 => loc2.location_name === location1.label
     );
-    return {
+    
+    // Combine the ID from itemData and label from oldItemData
+    //  and prepare for tagify
+
+    const tagifiedValue = prepareForTagify([{
       id: location1.id,
-      name: location2.location_name,
-      type: location2.location_type
-    }
+      label: location2.location_name
+    }]);
+
+    // Mix in the type from itemData and voila! Easy as pie
+    
+    return { 
+      value: tagifiedValue, 
+      type: location2.location_type 
+    };
   });
 
   const locationDefaults = {
-      Locale: { name: '' },
-      City: { name: '' },
-      'Colony/State': { name: '' }
+      Locale: { value: '' },
+      City: { value: '' },
+      'Colony/State': { value: '' }
     },
     locationInfoByType = locationInfo.reduce(
       (locationHash, location) => Object.assign(

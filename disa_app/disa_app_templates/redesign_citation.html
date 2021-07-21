@@ -836,23 +836,38 @@
 
                     <!-- Colony / state -->
 
-                    <div class="form-floating">
-                      <input type="text" class="form-control" id="formInputDISAColonyState" 
-                            aria-label="Colony / State" placeholder="Colony / State"
-                            v-model="currentItem.location_info['Colony/State'].name"
-                            v-on:blur="saveItemDataToServer">
-                      <label for="formInputDISAColonyState">Colony / State</label>
+                    <div class="row mb-4">
+                      <label for="formInputDISAColonyState"
+                             class="col-3 col-form-label" 
+                             style="text-align: left;">
+                        Colony / State
+                      </label>
+                      <div class="col-9">
+                        <disa-tags id="formInputDISAColonyState" 
+                                   v-model="currentItem.location_info['Colony/State'].value"
+                                   v-bind:suggestions="MENU_OPTIONS.formInputDISAColonyState"
+                                   single-value
+                                   v-on:input="saveItemDataToServer"></disa-tags>
+                      </div>
                     </div>
                     
-                    <!-- City -->
+                    <!-- Town -->
 
-                    <div class="form-floating">
-                      <input type="text" class="form-control" id="formInputDISATown" 
-                            aria-label="Town" placeholder="Town"
-                            v-model="currentItem.location_info['City'].name"
-                            v-on:blur="saveItemDataToServer">
-                      <label for="formInputDISATown">Town</label>
+                    <div class="row mb-4">
+                      <label for="formInputDISATown"
+                             class="col-3 col-form-label" 
+                             style="text-align: left;">
+                        Town
+                      </label>
+                      <div class="col-9">
+                        <disa-tags id="formInputDISATown"
+                              v-model="currentItem.location_info['City'].value"
+                              v-bind:suggestions="MENU_OPTIONS.formInputDISATown"
+                              single-value
+                              v-on:input="saveItemDataToServer"></disa-tags>
+                      </div>
                     </div>
+
                     <div class="form-floating">
 
                       <!-- Additional location info -->
