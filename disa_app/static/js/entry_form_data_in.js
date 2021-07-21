@@ -279,6 +279,4 @@ async function getRelationshipsData(itemId, apiDefinition) {
   return preprocessRelationshipsData(dataJSON);
 }
 
-window.getRelationshipsData = getRelationshipsData;
-
 export { getSourceData, getItemData, getRelationshipsData }

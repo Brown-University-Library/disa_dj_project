@@ -29,7 +29,7 @@ async function loadAndInitializeData(initDisplay) {
   if (initDisplay.itemId) {
     dataAndSettings.currentItemId = initDisplay.itemId
   } else if (false && dataAndSettings.formData.doc.references[0] && 
-             dataAndSettings.formData.doc.references[0].id) {
+             dataAndSettings.formData.doc.references[0].id) { // @todo DISABLED
     dataAndSettings.currentItemId = dataAndSettings.formData.doc.references[0].id;
   } else {
     dataAndSettings.currentItemId = -1;

@@ -42,7 +42,7 @@ async function createNewReferentOnServer(currentItemId) {
       id:'name',
       first:'',
       last:'',
-      name_type: "8" // = "Unknown"
+      name_type: '8' // = "Unknown"
     },
     id:'new',
     record_id: currentItemId.toString(),
@@ -69,6 +69,10 @@ async function createNewReferentOnServer(currentItemId) {
     return dataJSON;
   }
 }
+
+// If referent data being submitted is for a new referent,
+//  then create a new (blank) referent on server and gather the ID,
+//  and change the currentReferentId (which triggers a save of the form data)
 
 async function createOrSaveReferentDataToServer() {
   if (this.currentReferent && this.currentReferent.FULL_DATA_LOADED) {
@@ -491,10 +495,11 @@ async function saveItemDataToServer() {
 
     console.log(`SAVE ITEM FETCH OPTIONS - ${httpMethod}ing to ${url}`, fetchOptions);
 
-    if (false) { return }  // Skip send if true
+    if (false) { return }  // DEBUG: Skip send if true
 
     this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
     const response = await fetch(url, fetchOptions);
+
     if (response.ok) {
       const dataJSON = await response.json();
       // this.currentItem.relationships = dataJSON.store;
