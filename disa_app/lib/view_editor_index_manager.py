@@ -105,10 +105,11 @@ def jsonify_entries( doc_list ) -> list:
         ( date, email, citation_obj ) = ( entry[0], entry[1], entry[2] )
         dtstr_date = date.strftime( '%Y-%m-%d')
         dtstr_time = date.strftime( '%I:%M %p' )
+        truncated_display = citation_obj.display if len(citation_obj.display) < 100 else f'{citation_obj.display[0:98]}…'
         entry_dct = {
             'date': {'dt_date': dtstr_date, 'dt_time': dtstr_time},
             'email': email,
-            'doc': {'id': citation_obj.id, 'display': citation_obj.display, 'reference_count': len(citation_obj.references) }
+            'doc': {'id': citation_obj.id, 'display': truncated_display, 'reference_count': len(citation_obj.references) }
             }
         jsonified_entries.append( entry_dct )
     log.debug( f'jsonified_entries (first 3), ```{pprint.pformat(jsonified_entries[0:3])}```' )
