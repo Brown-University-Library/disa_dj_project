@@ -88,6 +88,11 @@ function preprocessSourceData(data) {
     {}
   );
 
+  data.MENU_OPTIONS.formInputDISAPlaceInfo = data.formData.location_stuff.addl_loc_list.reduce(
+    (addLocHash, currAddLoc) => Object.assign(addLocHash, { [currAddLoc.id]: currAddLoc.value }),
+    {}
+  );
+
   data.MENU_OPTIONS.formInputDISAItemType = data.formData.location_stuff.rec_types_list.reduce(
     (recTypeHash, currRecType) => Object.assign(recTypeHash, { [currRecType.id]: currRecType.value }),
     {}
@@ -145,7 +150,7 @@ function preprocessItemData(itemData, oldItemData, relationshipsData, referentDa
     }]);
 
     // Mix in the type from itemData and voila! Easy as pie
-    
+
     return { 
       value: tagifiedValue, 
       type: location2.location_type 

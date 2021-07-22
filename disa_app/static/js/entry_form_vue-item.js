@@ -429,32 +429,6 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
         }
 
         window.location.hash = hash;
-      },
-
-      // Some setters
-
-      setCurrentItemLocationColonyStateId: function (id) {
-
-        const currentItem = this.formData.doc.references.find(
-          item => item.id === this.currentItemId
-        );
-        const [colonyStateValue] = JSON.parse(currentItem.location_info['Colony/State'].value);
-        const colonyStateValueWithId = Object.assign(
-          {}, colonyStateValue, { dbID: id.toString() }
-        );
-        currentItem.location_info['Colony/State'].value = JSON.stringify([colonyStateValueWithId]);
-      },
-
-      setCurrentItemLocationCityId: function (id) {
-
-        const currentItem = this.formData.doc.references.find(
-          item => item.id === this.currentItemId
-        );
-        const [cityValue] = JSON.parse(currentItem.location_info['City'].value);
-        const cityValueWithId = Object.assign(
-          {}, cityValue, { dbID: id.toString() }
-        );
-        currentItem.location_info['City'].value = JSON.stringify([cityValueWithId]);
       }
     }
   });

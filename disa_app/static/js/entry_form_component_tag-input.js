@@ -7,12 +7,13 @@
 //   https://vuejs.org/v2/guide/components.html#Using-v-model-on-Components
 
 const template = `
-    <input v-bind:value="value" vv-on:change="onChange" 
+    <input v-bind:value="value"
            v-on:change="$emit('input', $event.target.value)"
            class="disa-tags-input"></input>
 `;
 
 const componentDefinition = {
+
   template,
   name: 'disa-tags',
   props: {
@@ -52,6 +53,44 @@ const componentDefinition = {
 
     console.log('TAGIFY INIT', {tagifySettings, el: this.$el, elVal: this.value, whitelist});
     this.tagify = new Tagify(this.$el, tagifySettings);
+  },
+
+  methods: {
+
+    // Given a data structure (as returned from the server)
+    // update the field
+
+    updateFromServer(newTagData) {
+
+      function convertDataStructureToTagify(data) {
+        if (data.id && (data.label || data.value)) {
+          return {
+            dbID: data.id,
+            value: (data.label || data.value)
+          }
+        }
+      }
+
+      const newTagDataArr = Array.isArray(newTagData) ? newTagData : [newTagData],
+            newTagDataArr_tagObjects = newTagDataArr.filter(
+              newTag => (typeof newTag === 'object') && (newTag.value || newTag.label)
+            );
+
+      // Check if a tag's ID has changed -- if yes, then update
+
+      newTagDataArr_tagObjects.forEach(newTag => {
+        const newTagValue = newTag.value || newTag.label,
+              matchingOldTagElem = this.tagify.getTagElmByValue(newTagValue);
+        if (matchingOldTagElem) {
+          const matchingOldTagId = this.tagify.tagData(matchingOldTagElem).dbID;
+          if (matchingOldTagId != newTag.id) {
+            console.log('UPDATING', { matchingOldTag: this.tagify.tagData(matchingOldTagElem), newTag });
+            console.log(`this.tagify.replaceTag(matchingOldTagElem, { dbID: ${newTag.id}, value: ${newTagValue} });`)
+            this.tagify.replaceTag(matchingOldTagElem, { dbID: newTag.id.toString(), value: newTagValue });
+          }
+        }
+      });
+    }
   }
 };
 

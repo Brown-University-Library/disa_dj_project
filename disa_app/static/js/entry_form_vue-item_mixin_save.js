@@ -340,17 +340,16 @@ async function saveItemDataToServer() {
     const NEW_LOCATION_ID = -1;
 
     const locations = [],
-          insertIdIntoTagify_functions = [],
           makeLocationObj = (tagifyValue) => {
 
             if (tagifyValue) {
 
               const tagsData = JSON.parse(tagifyValue),
                     tagData = Array.isArray(tagsData) && tagsData[0]
-                      ? tagsData[0] 
+                      ? tagsData[0]
                       : tagsData;
-// @TODO need to look up if this value already exists and get ID
-// (maybe they typed in the text but didn't select the suggest)
+              // @TODO need to look up if this value already exists and get ID
+              // (maybe they typed in the text but didn't select the suggest)
               return {
                 id: tagData.dbID || NEW_LOCATION_ID,
                 label: tagData.value,
@@ -360,46 +359,6 @@ async function saveItemDataToServer() {
               return undefined;
             }
           };
-
-    // Creates a function that extracts the ID from the
-    //  server response and inserts it into the Tagify field
-
-    function getUpdateIdIntoTagify_function(locationValue, idSetter) {
-      return function(serverResponse) {
-        console.log('QWERTY 1', { serverResponse, locationValue, idSetter })
-
-        if (serverResponse.rec.locations && Array.isArray(serverResponse.rec.locations)) {
-          const matchingServerLocation = serverResponse.rec.locations.find(
-            serverLocation => serverLocation.value === locationValue
-          );
-
-          if (matchingServerLocation.id) {
-            console.log('QWERTY 2', { locationValue, newLocations: serverResponse.rec.locations, newId: matchingServerLocation.id });
-            idSetter(matchingServerLocation.id);
-          }
-        }
-      }
-    };
-
-    // TODO CHECK THIS
-/*
-    function makeLocArray(locationArray, locationTypes) {
-      const locationType = shift(locationTypes);
-      if (this.currentItem.location_info[locationType]) {
-        const locObj = makeLocationObj(locationType);
-        if (locObj) {
-          locationArray.push(locObj);
-          return locationTypes.length 
-            ? makeLocArray(locationArray, locationTypes) 
-            : locationArray;
-        } else {
-          return locationArray;
-        }
-      }
-    }
-
-    locations = makeLocArray([], ['Colony/State', 'City', 'Locale']);
-    */
 
     // YIKES!
     // @todo Currently this.currentItem.location_info[<X>]
@@ -413,28 +372,12 @@ async function saveItemDataToServer() {
       );
       if (colStateObj) {
         locations.push(colStateObj);
-        if (colStateObj.id === NEW_LOCATION_ID) {
-          insertIdIntoTagify_functions.push(
-            getUpdateIdIntoTagify_function(
-              colStateObj.value,
-              this.setCurrentItemLocationColonyStateId
-            )
-          );
-        }
         if (this.currentItem.location_info['City']) {
           const cityObj = makeLocationObj(
             this.currentItem.location_info['City'].value
           );
           if (cityObj) {
             locations.push(cityObj);
-            if (cityObj.id === NEW_LOCATION_ID) {
-              insertIdIntoTagify_functions.push(
-                getUpdateIdIntoTagify_function(
-                  cityObj.value,
-                  this.setCurrentItemLocationCityId
-                )
-              );
-            }
             if (this.currentItem.location_info['Locale']) {
               const localeObj = makeLocationObj(
                 this.currentItem.location_info['Locale'].value
@@ -501,6 +444,7 @@ async function saveItemDataToServer() {
     const response = await fetch(url, fetchOptions);
 
     if (response.ok) {
+
       const dataJSON = await response.json();
       // this.currentItem.relationships = dataJSON.store;
       this.saveStatus = this.SAVE_STATUS.SUCCESS;
@@ -521,11 +465,18 @@ async function saveItemDataToServer() {
         }
       }
 
-      // If new tag, then gather the ID and insert it into tagify
+      // Using response data, update tagify fields by Vue ref ID
+      // (calls updateFromServer() method on disa-tag component)
 
-      insertIdIntoTagify_functions.forEach(
-        insertFunction => insertFunction(dataJSON)
-      );
+      const tagUpdateList = [
+        ['colonyStateInput', dataJSON.rec.locations[0]],
+        ['townInput', dataJSON.rec.locations[1]],
+        ['localeInput', dataJSON.rec.locations[2]]
+      ].filter(x => x[1] !== undefined);
+
+      tagUpdateList.forEach(([refID, tagData]) => {
+        this.$refs[refID].updateFromServer(tagData);
+      });
 
     } else { // response NOT ok
       this.saveStatus = this.SAVE_STATUS.ERROR;

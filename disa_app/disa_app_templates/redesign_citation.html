@@ -847,6 +847,7 @@
                                    v-model="currentItem.location_info['Colony/State'].value"
                                    v-bind:suggestions="MENU_OPTIONS.formInputDISAColonyState"
                                    single-value
+                                   ref="colonyStateInput"
                                    v-on:input="saveItemDataToServer"></disa-tags>
                       </div>
                     </div>
@@ -864,19 +865,27 @@
                               v-model="currentItem.location_info['City'].value"
                               v-bind:suggestions="MENU_OPTIONS.formInputDISATown"
                               single-value
+                              ref="townInput"
                               v-on:input="saveItemDataToServer"></disa-tags>
                       </div>
                     </div>
 
-                    <div class="form-floating">
+                    <!-- Additional location info -->
 
-                      <!-- Additional location info -->
-
-                      <input type="text" class="form-control" id="formInputDISAPlaceInfo" 
-                            aria-label="Additional location information" placeholder="Additional location info."
-                            v-model="currentItem.location_info['Locale'].name"
-                            v-on:blur="saveItemDataToServer">
-                      <label for="formInputDISAPlaceInfo">Additional location info.</label>
+                    <div class="row mb-4">
+                      <label for="formInputDISAPlaceInfo"
+                             class="col-3 col-form-label" 
+                             style="text-align: left;">
+                        Additional location info
+                      </label>
+                      <div class="col-9">
+                        <disa-tags id="formInputDISAPlaceInfo"
+                              v-model="currentItem.location_info['Locale'].value"
+                              v-bind:suggestions="MENU_OPTIONS.formInputDISAPlaceInfo"
+                              single-value
+                              ref="localeInput"
+                              v-on:input="saveItemDataToServer"></disa-tags>
+                      </div>
                     </div>
                   </div>
                 </div>
