@@ -413,7 +413,9 @@ async function saveItemDataToServer() {
     const requestBody = {
       locations,
       date,
-      transcription: this.currentItem.kludge.transcription.replace(/ style="[^"]*"/g, ''),
+      transcription: this.currentItem.kludge.transcription
+                      .replace(/ (style|class|id)="[^"]*"/gi, '')
+                      .replace(/&nbsp;/gi, ' '),
       record_type: {
         id: this.currentItem.kludge.reference_type_id,
         value: this.MENU_OPTIONS.formInputDISAItemType[this.currentItem.kludge.reference_type_id],
