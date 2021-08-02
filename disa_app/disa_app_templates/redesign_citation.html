@@ -1229,7 +1229,7 @@
                             <div>
                               <strong>Relationships</strong>
                               <button class="btn btn-link btn-sm"
-                                      v-on:click="newRelationshipFormVisible = true"
+                                      v-on:click.stop.prevent="newRelationshipFormVisible = true"
                                       title="Enter information for a new relationship">
                                 +new
                               </button>
@@ -1303,7 +1303,7 @@
                               <!-- Relationship save button -->
                               <div class="col">
                                 <button title="Save this relationship" class="btn btn-primary btn-sm"
-                                        v-on:click="createRelationship()">
+                                        v-on:click.stop.prevent="createRelationship()">
                                   save
                                 </button>
                               </div>
