@@ -67,6 +67,7 @@ def prepare_logged_in_get_context( django_is_authenticated ):
         'browse_logged_in': True,
         'user_is_authenticated': django_is_authenticated,
         'browse_logged_in': True,  # so `browse-logout` button shows
+        'redesign_citations_url': reverse( 'redesign_citations_url' )
         }
     log.debug( f'context, ``{pprint.pformat(context)}``' )
     return context
