@@ -355,11 +355,19 @@
     const getPersonEntryHTML = function(entry) {
 
       const nameDisplay = NAME_DISPLAY_OVERRIDES[entry.name_first] || entry.name_first,
-            name_text = // entry.description.title
-                        `<a href="#" onclick="populateNameFilter('${nameDisplay}')" title="Show only people named '${nameDisplay}'">${uncleanString(nameDisplay)}</a>`
-                        + (entry.name_last ? ` <a href="#" onclick="populateNameFilter('${entry.name_last}')" title="Show only people with last name '${entry.name_last}'">${uncleanString(entry.name_last)}</a>` : ''),
-            name_forOrIs = NAME_DISPLAY_OVERRIDES[entry.name_first] ? 'for' : 'is',
-            statusDisplay = { // @todo make a global constant?
+            name_forOrIs = NAME_DISPLAY_OVERRIDES[entry.name_first] ? 'for' : 'is';
+
+      let name_text;
+
+      if (nameDisplay || entry.name_last) {
+        name_text = `<a href="#" onclick="populateNameFilter('${nameDisplay}')" title="Show only people named '${nameDisplay}'">${uncleanString(nameDisplay)}</a>`
+        + (entry.name_last ? ` <a href="#" onclick="populateNameFilter('${entry.name_last}')" title="Show only people with last name '${entry.name_last}'">${uncleanString(entry.name_last)}</a>` : '');
+        name_text = `<strong class='referent-name'>${name_text}</strong>`;
+      } else {
+        name_text = 'There '
+      }
+
+      const statusDisplay = { // @todo make a global constant?
               [ENSLAVEMENT_STATUS.ENSLAVED]: 'enslaved',
               [ENSLAVEMENT_STATUS.ENSLAVER]: 'slave-owning',
               [ENSLAVEMENT_STATUS.DEFAULT]: ''
@@ -445,7 +453,7 @@
 
       const html = `<a  class="details-button float-right" onclick="showDetails(${entry.referent_db_id})"
                         title="Show source document and details for ${entry.all_name}">Details</a>` +
-                   `<strong class='referent-name'>${name_text}</strong> ${name_forOrIs} ` +
+                   `${name_text} ${name_forOrIs} ` +
                    (statusDisplay[entry.enslavement_status][0] === 'e' ? 'an ' : 'a ') +
                    statusDisplay[entry.enslavement_status] + ' ' +
                    // (entry.description.tribe ? ` <a href="#" title="Show only ${entry.description.tribe} people" data-filter-function='populateTribeFilter' data-filter-arg="${entry.description.tribe}" onclick="populateTribeFilter('${entry.description.tribe}')">${entry.description.tribe}</a> ` : '') +
