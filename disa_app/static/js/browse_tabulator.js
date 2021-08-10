@@ -161,14 +161,14 @@
       // Load document details into a table
 
       const docDetailsTable = [
-        ['Item type', data.reference_data.reference_type],
-        ['Item ID', `<span class="badge badge-primary">${data.reference_data.reference_db_id}</span>`],
-        ['Item date', data.reference_data.date_display],
-        ['Location of event described in the item', data.reference_data.all_locations],
-        ['National context of item', data.reference_data.national_context],
-        ['Item appears in document with title', `<cite>${ uncleanString(data.citation_data.display)}</cite>`],
-        ['Document type', data.citation_data.citation_type],
-        ['Document ID', `<span class="badge badge-primary">${data.citation_data.citation_db_id}`]
+        ['Record type', data.reference_data.reference_type],
+        ['Record ID', `<span class="badge badge-primary">${data.reference_data.reference_db_id}</span>`],
+        ['Record date', data.reference_data.date_display],
+        ['Location of event described in the record', data.reference_data.all_locations],
+        ['National context of record', data.reference_data.national_context],
+        ['Record appears in document with title', `<cite>${ uncleanString(data.citation_data.display)}</cite>`],
+        ['Source type', data.citation_data.citation_type],
+        ['Source ID', `<span class="badge badge-primary">${data.citation_data.citation_db_id}`]
       ];
 
       docDetailsTable.filter(x => x[1])
