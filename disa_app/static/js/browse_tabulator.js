@@ -1,9 +1,9 @@
 
-(function() { // Open IIFE
+export default function main(sr) {
 
   // Constants
 
-  const DATA_ENDPOINT_URL = document.getElementById('browse_json_url').value,
+  const DATA_ENDPOINT_URL = sr.browse_json_url,
         NAME_DISPLAY_OVERRIDES = {
           'unrecorded': 'No name is recorded ',
           'Unknown': 'No name is known '
@@ -250,9 +250,6 @@
     return index;
   }
 
-  // Main onload routine
-
-  window.addEventListener('DOMContentLoaded', () => {
 
     // General search box listener
     //   When user inputs something, trigger a re-indexing
@@ -700,9 +697,7 @@
         }
       }
     }
-  });
-
-})() // Close IIFE
+}
 
 
 /* DATA STRUCTURE FOR REFERENCE
