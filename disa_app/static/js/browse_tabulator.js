@@ -91,7 +91,10 @@
         addToDocDetailsTable: (label, value) => {
           document.getElementById('source-details-table').innerHTML +=
             `<tr><th>${label}</th><td>${value}</td></tr>`;
-        }
+        },
+        setReferentEditUrl: url => document.getElementById('referent-edit-link').href = url,
+        setRecordEditUrl: url => document.getElementById('record-edit-link').href = url,
+        setSourceEditUrl: url => document.getElementById('source-edit-link').href = url
       }
     }
 
@@ -101,6 +104,24 @@
 
       detailsModal.setName(data.all_name);
       detailsModal.setId(id);
+
+      // Update URLs for edit buttons
+
+      if (sr.user_is_authenticated) {
+        detailsModal.setSourceEditUrl(sr.url.editSource(
+          data.citation_data.citation_db_id
+        ));
+        detailsModal.setRecordEditUrl(sr.url.editRecord(
+          data.citation_data.citation_db_id,
+          data.reference_data.reference_db_id
+        ));
+        detailsModal.setReferentEditUrl(sr.url.editReferent(
+          data.citation_data.citation_db_id,
+          data.reference_data.reference_db_id,
+          id
+        ));
+      }
+
       // detailsModal.transcription(data.comments.replace(/http[^\s]+/,''));
       detailsModal.setTranscription(data.reference_data.transcription);
       detailsModal.setItemImageLink(data.reference_data.image_url);
@@ -453,6 +474,11 @@
 
       const html = `<a  class="details-button float-right" onclick="showDetails(${entry.referent_db_id})"
                         title="Show source document and details for ${entry.all_name}">Details</a>` +
+                    (sr.user_is_authenticated
+                      ? `<a class="details-button float-right" style="margin-right: 1em;" 
+                            href="${sr.url.editReferent(entry.citation_data.citation_db_id, entry.reference_data.reference_db_id, entry.referent_db_id)}"
+                            title="Edit entry for ${entry.all_name}">Edit</a>` 
+                      : '') +
                    `${name_text} ${name_forOrIs} ` +
                    (statusDisplay[entry.enslavement_status][0] === 'e' ? 'an ' : 'a ') +
                    statusDisplay[entry.enslavement_status] + ' ' +

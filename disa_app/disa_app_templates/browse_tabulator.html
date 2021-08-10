@@ -44,15 +44,26 @@
 
 {% block header_options %}
 
+    <script type="module">
+        import srPageSettings from "{% static 'js/browse_tabulator_getPageSettings.js' %}"
+        const editUrlRoot = srPageSettings.redesign_citations_url;
+        window.sr = Object.assign({}, { 
+            url: {
+                editReferent: (sourceId, recordId, referentId) => `${editUrlRoot}${sourceId}/#/${recordId}/${referentId}`,
+                editRecord: (sourceId, recordId) => `${editUrlRoot}${sourceId}/#/${recordId}`,
+                editSource: (sourceId) => `${editUrlRoot}${sourceId}`
+            }
+        }, srPageSettings);
+        console.log('SR PAGE SETTINGS', window.sr);
+    </script>
+
     {% if user_is_authenticated %}
-        <script> window.srUserCanEdit = true; </script>
         {% comment %}
         <li class="nav-item">
             <a class="nav-link text-white" href="{% url 'browse_logout_url' %}">FOO</a>
         </li>
         {% endcomment %}
     {% else %}
-        <script> window.srUserCanEdit = false; </script>
         {% if browse_logged_in %}
         <li class="nav-item">
             <a class="nav-link text-white" href="{% url 'browse_logout_url' %}">browse-logout</a>
@@ -75,6 +86,23 @@
                     Details about <span class="details-title-name"></span>
                 </h1>
                 <div class="badge badge-primary">id <span id="details-id"></span></div>
+                {% if user_is_authenticated %}
+                <br />
+                <div class="btn-group" role="group" id="modal-edit-button-group">
+                    <a type="button" class="btn btn-primary" id="referent-edit-link"
+                       title="Edit the data for this person">
+                        Edit person
+                    </a>
+                    <a type="button" class="btn btn-primary" id="record-edit-link"
+                       title="Edit the data for the record which contains a reference to this person">
+                        Edit record
+                    </a>
+                    <a type="button" class="btn btn-primary" id="source-edit-link"
+                       title="Edit the bibliographic entry for the document that is the source for this information">
+                        Edit source
+                    </a>
+                </div>
+                {% endif %}
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
