@@ -41,8 +41,7 @@ async function createNewReferentOnServer(currentItemId) {
     name:{
       id:'name',
       first:'',
-      last:'',
-      name_type: '8' // = "Unknown"
+      last:''
     },
     id:'new',
     record_id: currentItemId.toString(),
