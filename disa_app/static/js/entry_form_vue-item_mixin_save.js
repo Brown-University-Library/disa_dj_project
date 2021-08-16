@@ -139,7 +139,7 @@ async function saveReferentDataToServer() {
     const requestBody = JSON.stringify({
       id: this.currentReferentId.toString(),
       record_id: this.currentItemId.toString(),
-      age: this.currentReferent.age,
+      age: this.currentReferent.age || '',
       names: this.currentReferent.names.map(
         name => Object.assign({}, name, { id: name.id.toString() })
       ),
