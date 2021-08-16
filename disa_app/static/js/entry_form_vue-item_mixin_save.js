@@ -104,6 +104,9 @@ async function createOrSaveReferentDataToServer() {
   }
 }
 
+// Saves the data for the current referent in 
+//  the current record to the server
+
 async function saveReferentDataToServer() {
 
   console.log('SAVE REFERENT - DATA', this.currentReferent);
@@ -141,7 +144,7 @@ async function saveReferentDataToServer() {
       record_id: this.currentItemId.toString(),
       age: this.currentReferent.age || '',
       names: this.currentReferent.names.map(
-        name => Object.assign({}, name, { id: name.id.toString() })
+        name => Object.assign({ }, name, { id: name.id.toString() })
       ),
       origins: convertFromTagify(this.currentReferent.origins),
       races: convertFromTagify(this.currentReferent.races),

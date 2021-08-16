@@ -684,7 +684,7 @@ export default function main(sr) {
 
         lastSearchTimestamp = Date.now();
 
-        // If this update is becuase of a change in the
+        // If this update is because of a change in the
         //   search field, then schedule a future
         //   search to catch any changes
 
