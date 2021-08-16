@@ -149,7 +149,7 @@ async function saveReferentDataToServer() {
       races: convertFromTagify(this.currentReferent.races),
       roles: [], // @todo ?? this.currentReferent.roles,
       sex: this.currentReferent.sex,
-      statuses: [], // this.currentReferent.statuses, // ??
+      statuses: convertFromTagify(this.currentReferent.status),
       titles: this.currentReferent.titles.map(
         title => {
           title.name = title.label.valueOf();
