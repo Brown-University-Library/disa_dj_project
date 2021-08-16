@@ -1044,19 +1044,22 @@
                             <div class="form-floating col-4">
                               <input type="text" class="form-control" id="formInputDISAItemPersonFirstName"
                                       aria-label="First name" placeholder="First name"
-                                      v-model="referent.names[0].first">
+                                      v-model="referent.names[0].first"
+                                      v-on:blur="saveReferentDataToServer">
                               <label for="formInputDISAItemPersonFirstName">First name</label>
                             </div>
                             <div class="form-floating col-4">
                               <input type="text" class="form-control" id="formInputDISAItemPersonLastName"
                                       aria-label="Last name" placeholder="Last name"
-                                      v-model="referent.names[0].last">
+                                      v-model="referent.names[0].last"
+                                      v-on:blur="saveReferentDataToServer">
                               <label for="formInputDISAItemPersonLastName">Last name</label>
                             </div>
                             <div class="form-floating col-4">
                               <select class="form-select" id="formInputDISAItemPersonNameType" 
                                       aria-label="Name type"
-                                      v-model="referent.names[0].name_type">
+                                      v-model="referent.names[0].name_type"
+                                      v-on:change="saveReferentDataToServer">
                                 <option v-for="(nameTypeMenuLabel, nameTypeId) in MENU_OPTIONS.formInputDISAItemPersonNameType"
                                         v-bind:value="nameTypeId"
                                         v-text="nameTypeMenuLabel">
@@ -1076,7 +1079,8 @@
                               <div class="form-floating">
                                 <select class="form-select" id="formInputDISAPersonGender"
                                         aria-label="New person's gender" placeholder="Gender"
-                                        v-model="referent.sex">
+                                        v-model="referent.sex"
+                                        v-on:change="saveReferentDataToServer">
                                   <option v-for="(genderOption, genderOptionId) in MENU_OPTIONS.formInputDISAPersonGender"
                                           v-bind:value="genderOptionId"
                                           v-text="genderOption">
@@ -1104,10 +1108,13 @@
                                     <option value="2">2 years</option>
                                     <option value="3">3 years</option>
                                   </select>
-                                  <label for="formInputDISAPersonAge_number">Age</label>
+                                  <label for="formInputDISAPersonAge_number">Age</label> -->
                                   <input type="text" class="form-control" id="formInputDISAPersonAge_text" 
-                                        aria-label="New person's age (text)" placeholder="New person's age (text)"
-                                        v-model="referent.age">
+                                        aria-label="New person's age (text)" 
+                                        placeholder="Age"
+                                        v-model="referent.age"
+                                        v-on:blur="saveReferentDataToServer">
+                                  <label for="formInputDISAPersonAge_text">Age</label>
                                   <!-- WAITING FOR NEW MODEL
                                   <div class="form-check" style="margin-top:-6px;">
                                     <input class="form-check-input" style="margin-left:.125em;" type="checkbox" id="formInputSpecifiedByNumber" value="option1">
@@ -1145,6 +1152,7 @@
                                 <div class="col-sm-9">
                                   <disa-tags v-model="currentReferent.vocations"
                                              v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonVocation"
+                                             v-on:blur="saveReferentDataToServer"
                                              id="formInputDISAPersonVocation"></disa-tags>
                                 </div>
                               </div>
@@ -1168,6 +1176,7 @@
                                 <div class="col-sm-8">
                                   <disa-tags v-model="currentReferent.races"
                                           v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonRace"
+                                          v-on:blur="saveReferentDataToServer"
                                           id="formInputDISAPersonRace"></disa-tags>
                                   </div>
                               </div>
@@ -1197,8 +1206,9 @@
                                 <label for="formInputDISAPersonTribe" class="col-sm-4 col-form-label" style="text-align: right;">Tribal Nation</label>
                                 <div class="col-sm-8">
                                 <disa-tags v-model="currentReferent.tribes"
-                                          v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonTribe"
-                                          id="formInputDISAPersonTribe"></disa-tags>
+                                           v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonTribe"
+                                           v-on:blur="saveReferentDataToServer"
+                                           id="formInputDISAPersonTribe"></disa-tags>
                                 </div>
                               </div>
 
@@ -1216,8 +1226,9 @@
                                 <label for="formInputDISAPersonGeoOrigins" class="col-sm-4 col-form-label" style="text-align: right;">Geographic origins</label>
                                 <div class="col-sm-8">
                                 <disa-tags v-model="currentReferent.origins"
-                                  v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonGeoOrigins"
-                                  id="formInputDISAPersonGeoOrigins"></disa-tags>
+                                           v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonGeoOrigins"
+                                           v-on:blur="saveReferentDataToServer"
+                                           id="formInputDISAPersonGeoOrigins"></disa-tags>
                               </div>
 
                             </div>

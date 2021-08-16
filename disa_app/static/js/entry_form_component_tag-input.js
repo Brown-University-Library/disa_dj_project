@@ -20,7 +20,8 @@ const componentDefinition = {
     // settings: Object,
     value: String,
     suggestions: Object,
-    'single-value': Boolean
+    'single-value': Boolean,
+    'on-change': String
   },
 
   mounted() {
@@ -53,6 +54,11 @@ const componentDefinition = {
 
     console.log('TAGIFY INIT', {tagifySettings, el: this.$el, elVal: this.value, whitelist});
     this.tagify = new Tagify(this.$el, tagifySettings);
+
+    // When tagify detects a blur event, pass it up
+    //  to the v-on:blur attribute
+
+    this.tagify.on('blur', () => this.$emit('blur'));
   },
 
   methods: {
