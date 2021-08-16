@@ -55,7 +55,7 @@ const REFERENT_TEMPLATE = {
       first:'',
       id:'name',
       last:'',
-      name_type:'Unknown'
+      name_type:'8' // Needs to have a value or breaks
     }
   ],
   origins:'[]', // Tagify
