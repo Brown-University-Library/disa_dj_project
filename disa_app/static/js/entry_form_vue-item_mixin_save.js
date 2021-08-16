@@ -69,37 +69,17 @@ async function createNewReferentOnServer(currentItemId) {
   }
 }
 
-// If referent data being submitted is for a new referent,
-//  then create a new (blank) referent on server and gather the ID,
-//  and change the currentReferentId (which triggers a save of the form data)
+// Create a new (blank) referent on server and gather the IDs in the response;
+//  update form data
 
-async function createOrSaveReferentDataToServer() {
-  if (this.currentReferent && this.currentReferent.FULL_DATA_LOADED) {
-    if (this.currentReferentId === 'new') {
-      createNewReferentOnServer(this.currentItemId).then(newReferentData => {
-
-        /* NEW REFERENT DATA:
-        {
-          "first": "ABCABCA",
-          "id": 3325,
-          "last": "DFGDFGDFG",
-          "name_id": 3337,
-          "person_id": 3328,
-          "roles": []
-        } */
-        console.log('CREATE REFERENT - CURRENT REFERENT', this.currentReferent);
-
-        this.currentReferent.id = newReferentData.id;
-        this.currentReferentId = newReferentData.id;
-
-        this.currentReferent.names[0].id = newReferentData.name_id;
-        this.currentNameId = newReferentData.name_id;
-        console.log('CREATE REFERENT #2 - CURRENT REFERENT', this.currentReferent);
-        // this.saveReferentDataToServer(); // SAVE HANDLED BY WATCHER
+async function addNewReferentToForm(form) {
+  if (form.currentReferent && form.currentReferent.FULL_DATA_LOADED) {
+      createNewReferentOnServer(form.currentItemId).then(newReferentData => {
+        form.currentReferent.id = newReferentData.id;
+        form.currentReferentId = newReferentData.id;
+        form.currentReferent.names[0].id = newReferentData.name_id;
+        form.currentNameId = newReferentData.name_id;
       })
-    } else {
-      this.saveReferentDataToServer();
-    }
   }
 }
 
@@ -598,11 +578,15 @@ const saveFunctionsMixin = {
 
   watch: {
 
-    // If current referent info changes, save
-    //  (but only if full referent data has been previously loaded)
+    // If current referent ID changes, check if it's for a new Referent;
+    //  if so, call addNewReferentToForm()
 
-    currentReferent: {
-      handler: createOrSaveReferentDataToServer,
+    currentReferentId: {
+      handler: function (refId) {
+        if (refId === 'new') {
+          addNewReferentToForm(this);
+        }
+      },
       deep: true
     },
 
