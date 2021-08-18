@@ -44,9 +44,8 @@ async function loadAndInitializeData(initDisplay) {
 
   dataAndSettings.saveStatus = dataAndSettings.SAVE_STATUS.NO_CHANGE;
 
-  // New relationship register
+  // New relationship form visibility toggle
 
-  dataAndSettings.newRelationship = { obj: null, rel: null };
   dataAndSettings.newRelationshipFormVisible = false;
 
   // Current group ID register

@@ -1261,7 +1261,7 @@
 
                             </div>
                           </div>
-                          <div class="card card-body" style-x="padding-top:10px;clear: both;">
+                          <div class="card card-body" v-if="currentItem.referents.length > 1">
 
                             <!-- Relationships -->
 
@@ -1310,8 +1310,7 @@
 
                               <div class="col-md-4">
                                 <select class="form-select" id="formInputDISARelationship" 
-                                        aria-label="Type of relationship"
-                                        v-model="newRelationship.rel">
+                                        aria-label="Type of relationship">
                                   <option v-for="(relationshipTypeOption, relationshipTypeId) in MENU_OPTIONS.formInputDISARelationship"
                                           v-bind:value="relationshipTypeId"
                                           v-text="relationshipTypeOption"></option>
@@ -1325,9 +1324,10 @@
                                   
                                 <select class="form-select" id="formInputDISARelationshipObject" 
                                         aria-label="Who is in the relationship"
-                                        v-model="newRelationship.obj">
+                                        vv-bind:disabled="currentItem.referents.length === 2">
                                   <option v-for="relationshipObject in currentItem.referents"
                                           v-if="relationshipObject.id != referent.id"
+                                          vv-bind:selected="currentItem.referents.length === 2"
                                           v-bind:value="relationshipObject.id"
                                           v-text="getReferentDisplayLabel(relationshipObject)">
                                   </option>
@@ -1336,10 +1336,15 @@
 
                               <!-- If only one other referent (besides current) just show name as text -->
 
-                              <div v-else class="col-md-4"
-                                  v-text="'... ' + getReferentDisplayLabel(currentItem.referents.find(r => r !== currentReferent))">
+                              <div v-else class="col-md-4">
+                                <input id="formInputDISARelationshipObject" type="hidden"
+                                       v-bind:value="currentItem.referents.find(r => r !== currentReferent).id">
+                                </input>
+                                <span v-text="'... ' + getReferentDisplayLabel(currentItem.referents.find(r => r !== currentReferent))"></span>
                               </div>
+
                               <!-- Relationship save button -->
+
                               <div class="col">
                                 <button title="Save this relationship" class="btn btn-primary btn-sm"
                                         v-on:click.stop.prevent="createRelationship()">

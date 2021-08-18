@@ -301,8 +301,8 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
         const newRelationshipData = {
           subject: this.currentReferentId,
-          relationshipType: parseInt(this.newRelationship.rel),
-          object: parseInt(this.newRelationship.obj),
+          relationshipType: parseInt(document.getElementById('formInputDISARelationship').value),
+          object: parseInt(document.getElementById('formInputDISARelationshipObject').value),
           itemId: this.currentItemId
         };
 
@@ -312,8 +312,7 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
         // Reset & hide new-relationships subform
 
-        this.newRelationship.rel = null;
-        this.newRelationship.obj = null;
+        document.getElementById('formInputDISARelationship').value = null;
         this.newRelationshipFormVisible = false;
 
         this.saveStatus = this.SAVE_STATUS.SUCCESS;
