@@ -1,5 +1,5 @@
 
-function updateCitationFieldVisibility() {
+function updateSourceFieldVisibility() {
 
   const citationTypeId = this.formData.doc.citation_type_id,
         requiredFieldsHeader = document.getElementById('required-fields-header'),
@@ -24,7 +24,7 @@ function updateCitationFieldVisibility() {
   });
 }
 
-async function saveCitationToServer() {
+async function saveSourceToServer() {
 
   function convertFormDatesToAPI(dateString) {
     const [year, monthNumber, day] = dateString.split('-').map(x => parseInt(x)),
@@ -101,21 +101,21 @@ async function saveCitationToServer() {
 
 */
 
-function initializeCitationForm(dataAndSettings) {  
+function initializeSourceForm(dataAndSettings) {  
   new Vue({
-    el: '#citation-form',
+    el: '#source-form',
     data: dataAndSettings,
     watch: {
-      'formData.doc.citation_type_id': updateCitationFieldVisibility
+      'formData.doc.citation_type_id': updateSourceFieldVisibility
     },
     methods: {
       openItemTab: function () {
         document.getElementById('item-tab').click();
       },
-      saveCitationToServer
+      saveSourceToServer
     },
-    mounted: updateCitationFieldVisibility
+    mounted: updateSourceFieldVisibility
   });
 }
 
-export { initializeCitationForm };
+export { initializeSourceForm };

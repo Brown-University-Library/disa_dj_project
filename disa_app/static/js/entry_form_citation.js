@@ -3,7 +3,7 @@ import { getSourceData }              from './entry_form_data_in.js';
 import { DISA_ID_COMPONENT }          from './entry_form_component_id-badge.js';
 import { TAG_INPUT_COMPONENT }        from './entry_form_component_tag-input.js';
 import { SAVE_STATUS_COMPONENT }      from './entry_form_component_save-status.js';
-import { initializeCitationForm }     from './entry_form_vue-citation.js';
+import { initializeSourceForm }       from './entry_form_vue-citation.js';
 import { initializeItemForm }         from './entry_form_vue-item.js';
 
 // Parse URL for item and/or person to display
@@ -86,7 +86,7 @@ async function main() {
 
   // Initialize forms in Vue
 
-  initializeCitationForm(dataAndSettings);
+  initializeSourceForm(dataAndSettings);
   initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPONENT, SAVE_STATUS_COMPONENT});
 }
 

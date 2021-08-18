@@ -240,7 +240,7 @@
          role="tabpanel" aria-labelledby="bib-tab"
          id="Bibliographic-information">
 
-      <form id="citation-form"
+      <form id="source-form"
             vv-on:submit.prevent="onSubmitForm">
         <span class="badge badge-secondary float-right disa-id-badge"
           title="Unique identifier for this citation">
@@ -256,7 +256,7 @@
         <div style="clear: left;margin-bottom: 36px;">
           <select class="form-select" id="document_type"
                   v-model="formData.doc.citation_type_id"
-                  v-on:change="saveCitationToServer">
+                  v-on:change="saveSourceToServer">
             <!-- If unselected, show this at the top -->
             <option value="0" class="initMessage"
                     v-if="!formData.doc.citation_type_id">
@@ -287,7 +287,7 @@
       <input type="text" class="form-control" id="abstractNote-value" 
              aria-label="Abstract Note" placeholder="Abstract Note" 
              v-model="formData.doc.fields.abstractNote"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="abstractNote-value">Abstract Note</label>
     </div>
 
@@ -296,14 +296,14 @@
       <input class="form-control" id="accessDate-value" name="accessDate-value" 
              aria-label="Access Date" placeholder="Access Date" 
              v-model="formData.doc.fields.accessDate"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
     </div>
 
     <div class="citation-field form-floating" id="archive">
       <input type="text" class="form-control" id="archive-value" name="archive-value" 
              aria-label="Archive" placeholder="Archive" 
              v-model="formData.doc.fields.archive"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="archive-value">Archive</label>
     </div>
 
@@ -311,7 +311,7 @@
       <input type="text" class="form-control" id="archiveLocation-value" name="archiveLocation-value" 
              aria-label="Archive Location" placeholder="Archive Location" 
              v-model="formData.doc.fields.archiveLocation"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="archiveLocation-value">Archive Location</label>
     </div>
 
@@ -319,7 +319,7 @@
       <input type="text" class="form-control" id="author-value" name="author-value" 
              aria-label="Author" placeholder="Author (last name comes first)" 
              v-model="formData.doc.fields.author"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="author-value">Author</label>
     </div>
 
@@ -327,7 +327,7 @@
       <input type="text" class="form-control" id="callNumber-value" name="callNumber-value" 
              aria-label="Call Number" placeholder="Call Number" 
              v-model="formData.doc.fields.callNumber"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="callNumber-value">Call Number</label>
     </div>
 
@@ -336,7 +336,7 @@
         style="padding-right:12px;">Date</label>
       <input id="date-value" class="form-control" name="date-value" placeholder="Date"
              v-model="formData.doc.fields.date"
-             v-on:blur="saveCitationToServer" />
+             v-on:blur="saveSourceToServer" />
 
       <!-- Broken out with year/month/day for when we have the new DB model -->
       <!--
@@ -406,7 +406,7 @@
       <input type="text" class="form-control" id="edition-value" name="edition-value" 
              aria-label="Edition" placeholder="Edition" 
              v-model="formData.doc.fields.edition"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="edition-value">Edition</label>
     </div>
 
@@ -414,7 +414,7 @@
       <input type="text" class="form-control" id="extra-value" name="extra-value" 
              aria-label="Extra" placeholder="Extra" 
              v-model="formData.doc.fields.extra"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="extra-value">Extra</label>
     </div>
 
@@ -422,7 +422,7 @@
       <input type="text" class="form-control" id="ISBN-value" name="ISBN-value" 
              aria-label="ISBN" placeholder="ISBN" 
              v-model="formData.doc.fields.ISBN"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="ISBN-value">ISBN</label>
     </div>
 
@@ -430,7 +430,7 @@
       <input type="text" class="form-control" id="ISSN-value" name="ISSN-value" 
              aria-label="ISSN" placeholder="ISSN" 
              v-model="formData.doc.fields.ISSN"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="ISSN-value">ISSN</label>
     </div>
 
@@ -439,7 +439,7 @@
       <input type="text" class="form-control" id="language-value" name="language-value" 
              aria-label="Language" placeholder="Language" 
              v-model="formData.doc.fields.language"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="language-value">Language</label>
     </div>
 
@@ -447,7 +447,7 @@
       <input type="text" class="form-control" id="libraryCatalog-value" name="libraryCatalog-value" 
              aria-label="Library Catalog" placeholder="Library Catalog" 
              v-model="formData.doc.fields.libraryCatalog"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="libraryCatalog-value">Library Catalog</label>
     </div>
 
@@ -455,7 +455,7 @@
       <input type="text" class="form-control" id="pages-value" name="pages-value" 
              aria-label="Pages" placeholder="Pages" 
              v-model="formData.doc.fields.pages"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="pages-value">Pages</label>
     </div>
 
@@ -463,7 +463,7 @@
       <input type="text" class="form-control" id="place-value" name="place-value" 
              aria-label="Place" placeholder="Place" 
              v-model="formData.doc.fields.place"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="place-value">Place</label>
     </div>
 
@@ -471,7 +471,7 @@
       <input type="text" class="form-control" id="publicationTitle-value" name="publicationTitle-value" 
              aria-label="Publication Title" placeholder="Publication Title" 
              v-model="formData.doc.fields.publicationTitle"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="publicationTitle-value">Publication Title</label>
     </div>
 
@@ -480,7 +480,7 @@
              name="publisher-value" aria-label="Publisher"
              placeholder="Publisher"
              v-model="formData.doc.fields.publisher"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="publisher-value">Publisher</label>
     </div>
 
@@ -489,7 +489,7 @@
       <input type="text" class="form-control" id="rights-value" name="rights-value" 
              aria-label="Rights" placeholder="Rights" 
              v-model="formData.doc.fields.rights"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="rights-value">Rights</label>
     </div>
 
@@ -497,7 +497,7 @@
       <input type="text" class="form-control" id="section-value" name="section-value"
              aria-label="Section" placeholder="Section" 
              v-model="formData.doc.fields.section"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="section-value">Section</label>
     </div>
 
@@ -505,7 +505,7 @@
       <input type="text" class="form-control" id="series-value" name="series-value" 
              aria-label="Series" placeholder="Series" 
              v-model="formData.doc.fields.series"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="series-value">Series</label>
     </div>
 
@@ -513,7 +513,7 @@
       <input type="text" class="form-control" id="seriesNumber-value" name="seriesNumber-value" 
              aria-label="Series Number" placeholder="Series Number" 
              v-model="formData.doc.fields.seriesNumber"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="seriesNumber-value">Series Number</label>
     </div>
 
@@ -521,7 +521,7 @@
       <input type="text" class="form-control" id="shortTitle-value" name="shortTitle-value" 
              aria-label="Short Title" placeholder="Short Title" 
              v-model="formData.doc.fields.shortTitle"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="shortTitle-value">Short Title</label>
     </div>
 
@@ -529,7 +529,7 @@
       <input type="text" class="form-control" id="title-value" name="title-value" 
              aria-label="Title" placeholder="Title" 
              v-model="formData.doc.fields.title"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="title-value">Title</label>
     </div>
 
@@ -537,7 +537,7 @@
       <input type="text" class="form-control" id="url-value" name="url-value" 
              aria-label="URL" placeholder="Full website link (URL)" 
              v-model="formData.doc.fields.url"
-             v-on:blur="saveCitationToServer">
+             v-on:blur="saveSourceToServer">
       <label for="url-value">URL</label>
     </div>
   </div>
@@ -546,7 +546,7 @@
       <textarea class="form-control" id="formInputDISAAcknowledgements" 
                 placeholder="Enter notes here..."
                 v-model="formData.doc.acknowledgements"
-                v-on:blur="saveCitationToServer"
+                v-on:blur="saveSourceToServer"
                 style="height: 128px"></textarea>
       <label for="formInputDISAAcknowledgements">Acknowledgements</label>
   </div>
@@ -555,7 +555,7 @@
       <textarea class="form-control" id="formInputDISABiblioResearcherNotes" 
                 placeholder="Enter notes here..." 
                 v-model="formData.doc.comments"
-                v-on:blur="saveCitationToServer"
+                v-on:blur="saveSourceToServer"
                 style="height: 128px"></textarea>
       <label for="formInputDISABiblioResearcherNotes">Researcher notes</label>
       <a class="btn btn-link btn-sm mb-3"
@@ -570,7 +570,7 @@
     &nwarr; save source and exit
   </a>
 
-  <button type="button" class="btn btn-primary btn-md" id="citation-form-submit"
+  <button type="button" class="btn btn-primary btn-md" id="source-form-submit"
           v-on:click="openItemTab">
     save source and continue to enter records &rarr;
   </button>
