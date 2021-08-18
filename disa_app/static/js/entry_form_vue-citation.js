@@ -106,21 +106,15 @@ function initializeCitationForm(dataAndSettings) {
     el: '#citation-form',
     data: dataAndSettings,
     watch: {
-      'formData.doc.citation_type_id': updateCitationFieldVisibility,
-      watchMeToTriggerSave: saveCitationToServer
+      'formData.doc.citation_type_id': updateCitationFieldVisibility
     },
     methods: {
       openItemTab: function () {
         document.getElementById('item-tab').click();
-      }
+      },
+      saveCitationToServer
     },
-    mounted: updateCitationFieldVisibility,
-    computed: {
-      watchMeToTriggerSave: function () {
-        return this.formData.doc.citation_type_id + JSON.stringify(this.formData.doc.fields) +
-               this.formData.doc.acknowledgements + this.formData.doc.comments;
-      }
-    }
+    mounted: updateCitationFieldVisibility
   });
 }
 
