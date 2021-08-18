@@ -38,10 +38,12 @@ async function saveCitationToServer() {
     citation_type_id: this.formData.doc.citation_type_id,
     comments: this.formData.doc.comments,
     acknowledgements: this.formData.doc.acknowledgements,
+    fields: this.formData.doc.fields
+    /* COMMENTED OUT FOR NOW -- until we figure out how to enter dates in a flexible way
     fields: Object.assign({}, this.formData.doc.fields, {
       accessDate: convertFormDatesToAPI(this.formData.doc.fields.accessDate),
       date: convertFormDatesToAPI(this.formData.doc.fields.date)
-    })
+    }) */
   };
 
   const url = `${API_URL_ROOT}documents/${this.formData.doc.id}/`,
