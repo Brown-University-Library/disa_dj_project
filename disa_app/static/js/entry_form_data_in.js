@@ -35,7 +35,7 @@ function prepareForTagify(data) {
 function preprocessSourceData(data) {
 
   // Convert date formats so that they can be inserted into
-  //  date input element
+  //  date input element -- DISABLED, putting dates in a text field for now
 
   function getDateInFormFormat(dbDateString) {
     const date = new Date(dbDateString),
@@ -45,8 +45,10 @@ function preprocessSourceData(data) {
     return `${yyyy}-${mm}-${dd}`;
   }
   
-  data.formData.doc.fields.date = getDateInFormFormat(data.formData.doc.fields.date);
-  data.formData.doc.fields.accessDate = getDateInFormFormat(data.formData.doc.fields.accessDate);
+  // data.formData.doc.fields.date = getDateInFormFormat(data.formData.doc.fields.date);
+  data.formData.doc.fields.date = data.formData.doc.fields.date;
+  // data.formData.doc.fields.accessDate = getDateInFormFormat(data.formData.doc.fields.accessDate);
+  data.formData.doc.fields.accessDate = data.formData.doc.fields.accessDate;
 
   // Merge incoming data with data structure template to create a
   //  full data structure
