@@ -69,6 +69,9 @@
 
 		                <ul class="nav col-12 col-lg-auto me-lg-auto mb-5 justify-content-center mb-md-0">
 		                    {% if user_is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link px-2 text-white" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false">Browse</a>
+                            </li>
 		                    <li class="nav-item">
 		                        <a class="nav-link px-2 text-white" href="{% url 'people_url' %}" tabindex="-1" aria-disabled="false">People</a>
 		                    </li>
@@ -76,7 +79,7 @@
 		                        <a class="nav-link px-2 text-white" href="{% url 'redesign_citations_url' %}" tabindex="-1" aria-disabled="false">Citations</a>
 		                    </li>
 		                    <li class="nav-item">
-		                        <ul class="navbar-text px-2 text-white">(Welcome, {{ user_first_name }})</ul>
+		                        <ul class="navbar-text px-2 text-white">({{ user_first_name }})</ul>
 		                    </li>
 		                    <li class="nav-item">
 		                        {% if logout_next %}
