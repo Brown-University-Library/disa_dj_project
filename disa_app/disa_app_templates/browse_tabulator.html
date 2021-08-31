@@ -226,19 +226,11 @@
 
 <script type="module" defer>
 
-    import srPageSettings from "{% static 'js/browse_tabulator_getPageSettings.js' %}";
+    import {srGlobalObject as sr} from "{% static 'js/browse_tabulator_global-object.js' %}";
     import main from "{% static 'js/browse_tabulator.js' %}";
+    
+    main(sr);
 
-    const editUrlRoot = srPageSettings.redesign_citations_url;
-    const srGlobalObject = Object.assign({}, { 
-        url: {
-            editReferent: (sourceId, recordId, referentId) => `${editUrlRoot}${sourceId}/#/${recordId}/${referentId}`,
-            editRecord: (sourceId, recordId) => `${editUrlRoot}${sourceId}/#/${recordId}`,
-            editSource: (sourceId) => `${editUrlRoot}${sourceId}`
-        }
-    }, srPageSettings);
-
-    main(srGlobalObject);
 </script>
 
 {% endblock %}

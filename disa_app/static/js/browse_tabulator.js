@@ -1,42 +1,6 @@
 
+
 export default function main(sr) {
-
-  // Constants
-
-  const DATA_ENDPOINT_URL = sr.browse_json_url,
-        NAME_DISPLAY_OVERRIDES = {
-          'unrecorded': 'No name is recorded ',
-          'Unknown': 'No name is known '
-        },
-        BIO_THEME_CLASSNAME = 'biographical',
-        VIEW_OPTIONS_RADIO_BUTTONS_ID = 'view-options',
-        MIN_TIME_BETWEEN_LUNR_INDEXES = 1000,
-        ADULT_CHILD_CUTOFF_AGE = 16,
-        ENSLAVED_ROLES = [
-          'Enslaved',
-          'Bought',
-          'Sold',
-          'Shipped',
-          'Arrived',
-          'Escaped',
-          'Captured',
-          'Emancipated'
-        ],
-        ENSLAVER_ROLES = [
-          'Owner',
-          'Captor',
-          'Buyer',
-          'Seller',
-          'Master'
-        ],
-        ENSLAVEMENT_STATUS = {
-          ENSLAVED: 'Enslaved',
-          ENSLAVER: 'Enslaver',
-          DEFAULT: 'Neither or unknown'
-        },
-        MAX_NUMBER_OF_ENTRIES = 100000,
-        REF_COUNT_ELEM_ID = 'ref-count',
-        ITEM_COUNT_ELEM_ID = 'item-count';
 
   // Event handlers
 
@@ -266,8 +230,8 @@ export default function main(sr) {
 
       // Update count stats
 
-      document.getElementById(REF_COUNT_ELEM_ID).innerText = response.meta.referents_count;
-      document.getElementById(ITEM_COUNT_ELEM_ID).innerText = response.referent_list.reduce(
+      document.getElementById(sr.REF_COUNT_ELEM_ID).innerText = response.meta.referents_count;
+      document.getElementById(sr.ITEM_COUNT_ELEM_ID).innerText = response.referent_list.reduce(
         (setOfRefs, currRef) => setOfRefs.add(currRef.reference_data.reference_db_id),
         new Set()
       ).size;
@@ -317,12 +281,12 @@ export default function main(sr) {
           )
         }
 
-        if (includesAny(entry.roles, ENSLAVED_ROLES)) {
-          newEntry.enslavement_status = ENSLAVEMENT_STATUS.ENSLAVED;
-        } else if (includesAny(entry.roles, ENSLAVER_ROLES)) {
-          newEntry.enslavement_status = ENSLAVEMENT_STATUS.ENSLAVER;
+        if (includesAny(entry.roles, sr.ENSLAVED_ROLES)) {
+          newEntry.enslavement_status = sr.ENSLAVEMENT_STATUS.ENSLAVED;
+        } else if (includesAny(entry.roles, sr.ENSLAVER_ROLES)) {
+          newEntry.enslavement_status = sr.ENSLAVEMENT_STATUS.ENSLAVER;
         } else {
-          newEntry.enslavement_status = ENSLAVEMENT_STATUS.DEFAULT;
+          newEntry.enslavement_status = sr.ENSLAVEMENT_STATUS.DEFAULT;
         }
 
         newEntry.all_origins = newEntry.origins.join(', ');
@@ -372,8 +336,8 @@ export default function main(sr) {
 
     const getPersonEntryHTML = function(entry) {
 
-      const nameDisplay = NAME_DISPLAY_OVERRIDES[entry.name_first] || entry.name_first,
-            name_forOrIs = NAME_DISPLAY_OVERRIDES[entry.name_first] ? 'for' : 'is';
+      const nameDisplay = sr.NAME_DISPLAY_OVERRIDES[entry.name_first] || entry.name_first,
+            name_forOrIs = sr.NAME_DISPLAY_OVERRIDES[entry.name_first] ? 'for' : 'is';
 
       let name_text;
 
@@ -386,9 +350,9 @@ export default function main(sr) {
       }
 
       const statusDisplay = { // @todo make a global constant?
-              [ENSLAVEMENT_STATUS.ENSLAVED]: 'enslaved',
-              [ENSLAVEMENT_STATUS.ENSLAVER]: 'slave-owning',
-              [ENSLAVEMENT_STATUS.DEFAULT]: ''
+              [sr.ENSLAVEMENT_STATUS.ENSLAVED]: 'enslaved',
+              [sr.ENSLAVEMENT_STATUS.ENSLAVER]: 'slave-owning',
+              [sr.ENSLAVEMENT_STATUS.DEFAULT]: ''
             },
             locSearchTerms = entry.reference_data.locations.map(
               (_, i, locArr) => locArr.slice(i).map(x => x.location_name).join(', ')
@@ -419,7 +383,7 @@ export default function main(sr) {
             },
             ageAsNumber = parseInt(entry.age.replaceAll(/[^\d]/g, '')),
             age_number = (isNaN(ageAsNumber) ? undefined : ageAsNumber),
-            ageStatus = (age_number && age_number <= ADULT_CHILD_CUTOFF_AGE ? 'child' : 'adult'),
+            ageStatus = (age_number && age_number <= sr.ADULT_CHILD_CUTOFF_AGE ? 'child' : 'adult'),
             age_text = (entry.age === '(not-recorded)' ? undefined : entry.age),
             race_text = (entry.all_races ? `, described as &ldquo;${entry.all_races}&rdquo;,` : ''),
             year = entry.year,
@@ -602,7 +566,7 @@ export default function main(sr) {
       [],
       tabulatorOptions_global,
       {
-        ajaxURL: DATA_ENDPOINT_URL,
+        ajaxURL: sr.DATA_ENDPOINT_URL,
         ajaxResponse: jsonProcessor,
         rowFormatter: rowFormatter
       }
@@ -619,7 +583,7 @@ export default function main(sr) {
     const bioViewOptionInputElem = document.getElementById('biographical-view-option'),
           tableContainer = document.getElementById('data-display');
 
-    document.getElementById(VIEW_OPTIONS_RADIO_BUTTONS_ID).addEventListener('click', () => {
+    document.getElementById(sr.VIEW_OPTIONS_RADIO_BUTTONS_ID).addEventListener('click', () => {
 
       const bioOption = bioViewOptionInputElem.checked;
 
@@ -632,7 +596,7 @@ export default function main(sr) {
       }
 
       table.destroy();
-      tableContainer.classList.toggle(BIO_THEME_CLASSNAME, bioOption);
+      tableContainer.classList.toggle(sr.BIO_THEME_CLASSNAME, bioOption);
 
       table = new Tabulator(
         '#data-display',
@@ -655,7 +619,7 @@ export default function main(sr) {
     document.getElementById('download-data')
             .addEventListener('click', () => {
               const oldPageSize = window.table.getPageSize();
-              window.table.setPageSize(MAX_NUMBER_OF_ENTRIES);
+              window.table.setPageSize(sr.MAX_NUMBER_OF_ENTRIES);
               window.table.download('csv', `disa-data-export_${Date.now()}.csv`);
               window.table.setPageSize(oldPageSize);
             });
@@ -672,7 +636,7 @@ export default function main(sr) {
 
       // If enough time has passed ...
 
-      if (Date.now() - lastSearchTimestamp > MIN_TIME_BETWEEN_LUNR_INDEXES) {
+      if (Date.now() - lastSearchTimestamp > sr.MIN_TIME_BETWEEN_LUNR_INDEXES) {
 
         // Do a search against index & force Tabulator to reapply filters
 
@@ -692,7 +656,7 @@ export default function main(sr) {
           window.clearTimeout(timeOutId);
           timeOutId = window.setTimeout(
             () => { searchAgainstIndex(false) },
-            MIN_TIME_BETWEEN_LUNR_INDEXES + 100
+            sr.MIN_TIME_BETWEEN_LUNR_INDEXES + 100
           );
         }
       }

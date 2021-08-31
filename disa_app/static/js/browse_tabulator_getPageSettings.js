@@ -1,4 +1,18 @@
 
+// Loads the data object associated with this page
+//  (accessed via ?format=json)
+
+/* AS OF 2021/08/31, the structure is:
+
+  {
+    browse_json_url: "/browse.json",
+    browse_logged_in: true,
+    info_image_url: "/static/images/info.png",
+    redesign_citations_url: "/redesign_citations/",
+    user_is_authenticated: true
+  }
+
+*/
 
 const pageSettingsURL = `${window.location.pathname}?format=json`;
 
