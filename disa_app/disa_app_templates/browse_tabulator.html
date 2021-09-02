@@ -28,8 +28,10 @@
 <!-- Tabulator library -->
 
 <!--<link href="https://unpkg.com/tabulator-tables@4.7.2/dist/css/tabulator.min.css" rel="stylesheet">-->
-<link href="https://unpkg.com/tabulator-tables@4.7.2/dist/css/bootstrap/tabulator_bootstrap4.min.css" rel="stylesheet">
+<!-- <link href="https://unpkg.com/tabulator-tables@4.7.2/dist/css/bootstrap/tabulator_bootstrap4.min.css" rel="stylesheet"> -->
 <!-- <script src="https://unpkg.com/tabulator-tables@4.7.2/dist/js/tabulator.min.js"></script> -->
+
+<link rel="stylesheet" href="{% static 'css/tabulator_bootstrap4.min.css' %}" />
 <script src="{% static 'js/tabulator.js' %}"></script>
 
 <!-- Lunr -->
@@ -225,12 +227,8 @@
 {% block scripts%}
 
 <script type="module" defer>
-
-    import {srGlobalObject as sr} from "{% static 'js/browse_tabulator_global-object.js' %}";
     import main from "{% static 'js/browse_tabulator.js' %}";
-    
-    main(sr);
-
+    main();
 </script>
 
 {% endblock %}
