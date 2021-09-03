@@ -4,7 +4,7 @@ import { getShowDetailsFunction }   from './browse_tabulator_details-modal.js';
 import { getGeneralSearch }         from './browse_tabulator_lunr.js';
 import { getTableRenderer }         from './browse_tabulator_init-table.js';
 
-export default function main() {
+function main() {
 
   // MAIN ARCHITECTURAL COMPONENTS
 
@@ -65,6 +65,23 @@ export default function main() {
 
   window.showDetails = showDetailsFunction;
 }
+
+
+main();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* DATA STRUCTURE FOR REFERENCE
