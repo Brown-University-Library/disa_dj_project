@@ -92,90 +92,90 @@
       +source
     </button>
 
-    <h2 class="mt-4">Returning to a previously added source?</h2>
+    <h2 class="mt-4">Open previous</h2>
 
-    {% if user_documents %}
+    <button hidden class="btn btn-primary" id="table-details-toggle">
+      Show all columns
+    </button>
 
-    <h3>
-      Your recent sources
-    </h3>
+    <div class="card mb-6">
+      <div class="card-body">
+        <div class="row">           <!--
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="current-user-only">
+            <label class="form-check-label" for="current-user-only">
+              Show only your entries
+            </label>
+          </div>
+          <div class="form-check form-switch col-6">
+            <input class="form-check-input" type="checkbox" id="show-details">
+            <label class="form-check-label" for="show-details">
+              Show details
+            </label>
+          </div> -->
+        </div>
+        <div class="row">
 
-    <table class="table table-hover">
-      <tbody>
-        {% for entry in user_documents %}
-          <tr>
-            <td class="source-title-cell">
-              <!-- Source title -->
-              <a href="{% url 'redesign_citation_url' entry.doc.id %}">
-                {{ entry.doc.display }}
-              </a>
-            </td>
-            <td class="source-delete-cell">
-              <!-- Delete source button (opens confirmation modal) -->
-              <button type="button" class="btn btn-link btn-sm delete-source"
-                data-delete-url="{{ API_URL_ROOT }}documents/{{ entry.doc.id }}"
-                data-bs-toggle="modal" data-bs-target="#delete-source-modal">
-                &times;&nbsp;delete
-              </button>
-            </td>
-            <td class="source-id-cell">
-              <!-- Source ID badge -->
-              <span title="Unique identifier for this source is {{ entry.doc.id }}" 
-                    class="badge rounded-pill bg-secondary text-light disa-id-badge float-end">
-                ID:{{ entry.doc.id }}
-              </span>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+          <div class="col-6">
+          <!-- Title filter field -->
+              <div class="form-input">
+                  <label for="title-filter" style="width: 5em">Title</label>
+                  <input id="title-filter"></input>
+                </div>
+                <!-- Source ID filter field -->
+                <div class="form-input">
+                  <label for="id-filter" style="width: 5em">ID</label>
+                  <input id="id-filter"></input>
+                </div>
+          </div>
+          <div class="col-6">
+            <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="current-user-only">
+            <label class="form-check-label" for="current-user-only">
+              Show only your entries
+            </label>
+            </div>
+          <!--</div> -->
+            <!-- Editor filter field -->
+            <div class="form-input">
+              <label for="editor-filter" style="width: 5em">Editor</label>
+              <input id="editor-filter"></input>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <h3>
-      All recent sources
-    </h3>
+    <table id="all-sources"></table>
 
-    {% endif %}
-
-    <!-- HIDE UNTIL IMPLEMENTED
-        <a href="#" style="float: right;">Show details ></a>
-    -->
-
-    <table class="table table-hover">
-      <tbody>
-        {% for entry in documents %}
-        <tr>
-          <td class="source-title-cell">
-            <!-- Source title -->
-            <a href="{% url 'redesign_citation_url' entry.doc.id %}">
-              {{ entry.doc.display }}
-            </a>
-          </td>
-          <td class="source-delete-cell">
-            <!-- Delete source button (opens confirmation modal) -->
-            <button type="button" class="btn btn-link btn-sm delete-source"
-                    data-delete-url="{{ API_URL_ROOT }}documents/{{ entry.doc.id }}"
-                    data-bs-toggle="modal" data-bs-target="#delete-source-modal">
-              &times;&nbsp;delete
-            </button>
-          </td>
-          <td class="source-id-cell">
-            <!-- Source ID badge -->
-            <span title="Unique identifier for this source is {{ entry.doc.id }}" 
-                  class="badge rounded-pill bg-secondary text-light disa-id-badge float-end">
-              ID:{{ entry.doc.id }}
-            </span>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
 </div> <!-- /#startpanel -->
 
 {% endblock content %}
 
 
 {% block page_specific_js %}
+
+<!-- Tabulator -->
+
+<link href="https://unpkg.com/tabulator-tables@4.7.2/dist/css/bootstrap/tabulator_bootstrap4.min.css" 
+      rel="stylesheet">
+<script type="text/javascript" src="/static/js/moment.js"></script>
+<script type="text/javascript" src="/static/js/tabulator.js"></script>
+
+<!-- Main page setup -->
+
 <script>
+
+  // Global SR object
+
+  window.sr = {};
+
+  // sr.setModalDeleteUrl called by (x)delete buttons
+
+  const deleteSourceConfirmButton = document.getElementById('delete-source-confirm');
+  window.sr.setModalDeleteUrl = function(url) {
+    deleteSourceConfirmButton.dataset.deleteUrl = url;
+  }
 
   // Create a new Source on server
 
@@ -244,7 +244,7 @@
 
     const deleteSourceConfirmButton = target;
 
-    console.log('DELETE SOURCE ' + deleteSourceConfirmButton.dataset.deleteUrl);
+    console.log('DELETE SOURCE ' + deleteSourceConfirmButton.dataset.deleteUrl, deleteSourceConfirmButton);
 
     const url = deleteSourceConfirmButton.dataset.deleteUrl,
           TOKEN = '{{ csrf_token }}',
@@ -269,6 +269,157 @@
       console.log('FAILED', response);
       // What?? Error handling
     }
+  }
+
+  // Go to Source's edit form
+
+  function openSourceEditPage(sourceId) {
+    window.location.href = `./${sourceId}`;
+  }
+
+  // Set up handler for "show details"
+
+  function initToggleTableDetailsButton(table) {
+    const showDetailsSwitch = document.getElementById('show-details'),
+          showOnlyCurrentUserSwitch = document.getElementById('current-user-only');
+    showDetailsSwitch.addEventListener('change', function () {
+      const colOp = showDetailsSwitch.checked ? 'showColumn' : 'hideColumn';
+      table[colOp]('id');
+      table[colOp]('date');
+      if (!showOnlyCurrentUserSwitch.checked) {
+        table[colOp]('editor');
+      }
+    });
+    showDetailsSwitch.dispatchEvent(new Event('change'));
+  }
+
+  // Set up handler for "show current user" --
+  //  sets "editor" filter field & hides editor column
+
+  function initShowOnlyCurrentUserButton(table, editorFilterElem) {
+    const userEmail = window.sr.userEmail;
+    const showOnlyCurrentUserButton = document.getElementById('current-user-only');
+    showOnlyCurrentUserButton.addEventListener('change', function () {
+      if (showOnlyCurrentUserButton.checked) {
+        editorFilterElem.value = userEmail;
+        editorFilterElem.parentNode.hidden = true;
+        table.hideColumn('editor');
+        editorFilterElem.dispatchEvent(new Event('input'));
+      } else {
+        editorFilterElem.value = '';
+        editorFilterElem.parentNode.hidden = false;
+        table.showColumn('editor');
+        editorFilterElem.dispatchEvent(new Event('input'));
+      }
+    });
+    showOnlyCurrentUserButton.checked = true;
+    showOnlyCurrentUserButton.dispatchEvent(new Event('change'));
+  }
+
+  // Main Tabulator setup
+
+  function initializeTabulator(tableSelector, ajaxURL) {
+
+    // Formatter for incoming JSON
+
+    const ajaxResponse = function(url, params, response) {
+
+      window.sr.userEmail = (response.user_documents.length) 
+        ? response.user_documents[0].email
+        : undefined;
+
+      const rows = response.documents.map(docData => {
+        return {
+          title: docData.doc.display,
+          id: docData.doc.id,
+          date: docData.date.dt_date,
+          editor: docData.email
+        }
+      });
+
+      return rows;
+    }
+
+    const titleColumnFormatter = function(cell, formatterParams, onRendered) {
+      const recordId = cell._cell.row.data.id;
+      return `
+        <a href="./${recordId}">${cell.getValue()}</a>        
+        <button type="button" class="btn btn-link btn-sm delete-source"
+                data-delete-url="{{ API_URL_ROOT }}documents/${recordId}"
+                data-bs-toggle="modal" data-bs-target="#delete-source-modal"
+                onclick="window.sr.setModalDeleteUrl('{{ API_URL_ROOT }}documents/${recordId}')">
+          &times;&nbsp;delete
+        </button>`;
+    }
+
+    const columns = [
+      { title: 'Title', field: 'title', formatter: titleColumnFormatter },
+      { title: 'ID', field: 'id' },
+      { title: 'Date', field: 'date', 
+        formatter: 'datetime', 
+        formatterParams: {
+          inputFormat:"YYYY-MM-DD",
+          outputFormat:"YYYY-MM-DD",
+          invalidPlaceholder:"[Date invalid]"
+        },
+        headerSort: true,
+        sorter: 'date',
+        sorterParams:{
+          format:'YYYY-MM-DD',
+          alignEmptyValues:'top',
+        }
+      },
+      { title: 'Editor', field: 'editor' }
+    ];
+
+    // Row click handler: go to Source edit page (unless user
+    //  was clicking the 'delete' button)
+
+    const rowClick = function(e, row) {
+      const isFromDeleteButton = e.target.classList.contains('delete-source');
+      if (!isFromDeleteButton) {
+        openSourceEditPage(row._row.data.id);
+      }
+    };
+
+    const tabulatorSettings =  {
+      ajaxURL,
+      ajaxResponse,
+      columns,
+      headerSort: false,
+      rowClick,
+      dataLoaded: initTableFilterFields
+    };
+
+    const table = new Tabulator(tableSelector, tabulatorSettings);
+    
+    return table;
+  }
+
+  // Initialize onChange handlers for filters
+
+  function initTableFilterFields() {
+    
+    const table = this,
+          [titleFilterElem, idFilterElem, editorFilterElem] = 
+            ['title-filter', 'id-filter', 'editor-filter'].map(
+              id => document.getElementById(id)
+            );
+
+    function setAllFilters() {
+      console.log('yes');
+      table.setFilter([
+        { field:'title',  type:'like', value: titleFilterElem.value },
+        { field:'id',     type:'like', value: idFilterElem.value },
+        { field:'editor', type:'like', value: editorFilterElem.value },
+      ]);
+    }
+
+    [titleFilterElem, idFilterElem, editorFilterElem].forEach(
+      filterElem => filterElem.oninput = setAllFilters
+    );
+
+    initShowOnlyCurrentUserButton(table, editorFilterElem);
   }
 
   // Main: set up handlers for sidebar documentation and "New Source" button
@@ -296,14 +447,14 @@
     // Initialize confirm button in delete-source modal
 
     const deleteSourceConfirmButton = document.getElementById('delete-source-confirm');
-
-    Array.from(document.getElementsByClassName('delete-source')).forEach(deleteSourceButton => 
-      deleteSourceButton.addEventListener('click', _ => 
-        deleteSourceConfirmButton.dataset.deleteUrl = deleteSourceButton.dataset.deleteUrl
-      )
-    );
-
     deleteSourceConfirmButton.addEventListener('click', deleteSource);
+
+    // Initialize interactive (Tabulator-based) table
+
+    const TABLE_SELECTOR = '#all-sources',
+          TABLE_DATA_URL = './?format=json';
+
+    const table = initializeTabulator(TABLE_SELECTOR, TABLE_DATA_URL);
   });
 
 </script>
