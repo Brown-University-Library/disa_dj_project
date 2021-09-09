@@ -46,13 +46,13 @@
         <div class="wrapper" style="margin-top: 5.125em;">
 
 	    	  <header class="d-flex p-3 bg-dark text-white fixed-top justify-content-between">
-			    <div class="container">
+			    <div class="container-fluid">
 				    <div class="row">
 				      <div class="d-flex flex-wrap align-items-center justify-content-md-between justify-content-end col-12">
 
-				        <a class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none" style="margin-right:3.5%;" href="#"><strong><span style="font-size: 181%;">Stolen Relations</span></strong>&nbsp;&nbsp;&nbsp;<span style="font-size: 67%;letter-spacing: 3!important;font-weight: bold;">Recovering Stories of <br>Indigenous Enslavement in the Americas</span></a>
+				        <a class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none" style="margin-right:1.5%;" href="#"><strong><span style="font-size: 181%;">Stolen Relations</span></strong>&nbsp;&nbsp;&nbsp;<span style="font-size: 67%;letter-spacing: 3!important;font-weight: bold;">Recovering Stories of Indigenous<br>Enslavement in the Americas</span></a>
 
-				        <form class="d-flex col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="{% url 'search_results_url' %}" method="get" style="width:185px!important;margin-top:7px!important;">
+				        <form class="d-flex col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="{% url 'search_results_url' %}" method="get" style="width:21%!important;margin-top:7px!important;margin-right: 0!important;padding-right: 0!important;">
 
 		                    {% if search_query %}
 		                    <input class="form-control mr-sm-2" type="text" placeholder="searched: `{{ search_query }}`" aria-label="Search" id="query" name="query">
@@ -67,19 +67,19 @@
 		                    </button>
 		                </form>
 
-		                <ul class="nav col-12 col-lg-auto me-lg-auto mb-5 justify-content-center mb-md-0">
+		                <ul class="nav col-12 col-xl-auto me-lg-4 mb-5 justify-content-center mb-md-0" style="padding-right: 0!important;margin-right: 0!important;">
 		                    {% if user_is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link px-2 text-white" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false">Browse</a>
+                                <a class="nav-link px-3 text-white" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false">Browse</a>
                             </li>
 		                    <li class="nav-item">
-		                        <a class="nav-link px-2 text-white" href="{% url 'people_url' %}" tabindex="-1" aria-disabled="false">People</a>
+		                        <a class="nav-link px-3 text-white" href="{% url 'people_url' %}" tabindex="-1" aria-disabled="false">People</a>
 		                    </li>
 		                    <li class="nav-item">
-		                        <a class="nav-link px-2 text-white" href="{% url 'redesign_citations_url' %}" tabindex="-1" aria-disabled="false">Citations</a>
+		                        <a class="nav-link px-3 text-white" href="{% url 'redesign_citations_url' %}" tabindex="-1" aria-disabled="false">Citations</a>
 		                    </li>
 		                    <li class="nav-item">
-		                        <ul class="navbar-text px-2 text-white">({{ user_first_name }})</ul>
+		                        <ul class="navbar-text px-3 text-white">({{ user_first_name }})</ul>
 		                    </li>
 		                    <li class="nav-item">
 		                        {% if logout_next %}
