@@ -237,7 +237,8 @@ def handle_shib_login( request ):
         if request.session.get( 'redirect_url', None ):
             redirect_url = request.session['redirect_url']
         else:
-            redirect_url = reverse( 'editor_index_url' )
+            # redirect_url = reverse( 'editor_index_url' )
+            redirect_url = reverse( 'redesign_citations_url' )
     else:
         redirect_url = request.GET['next']  # may be same page
     if request.session.get( 'redirect_url', None ):  # cleanup
