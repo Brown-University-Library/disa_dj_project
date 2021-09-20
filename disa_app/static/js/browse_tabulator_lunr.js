@@ -53,8 +53,9 @@ function getSearchFunction(sr) {
 
 function getGeneralSearch(sr) {
 
-  const lunrIndex = getGeneralSearchIndex(sr.data);
-  let currentResults;
+  const lunrIndex = getGeneralSearchIndex(sr.data),
+        inputElem = document.getElementById(sr.GENERAL_SEARCH_INPUT_ID);
+  let currentResults; // Last search results are cached here
 
   const searchFor = function(searchString) {
     currentResults = lunrIndex.search(searchString)
@@ -66,6 +67,7 @@ function getGeneralSearch(sr) {
 
   return {
     searchFor,
+    get input() { return inputElem.value },
     currentResults: () => currentResults
   }
 }

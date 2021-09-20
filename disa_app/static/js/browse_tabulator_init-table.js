@@ -15,7 +15,7 @@ function transcriptionDownloadAccessor(value) {
   return cleanSpaces;
 }
 
-function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
+function getTabulatorOptions(sr, showDetailsFunction) {
 
   // Columns
 
@@ -34,7 +34,7 @@ function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
         values: [ '"daughter of a Spanish Squaw"', "Apalachee", "Blanco", "Blanea", "Bocotora",
                   "Bousora", "Boustora", "Chaliba", "Cherokee", "Codira", "Cookra", "Creek",
                   "Cuol", "Curero", "Eastern Pequot", "Eastern Tribes", "Mashantucket Pequot",
-                  "Mohegan", "Naragansett", "Natchez", "Nidwa", "Nipmuc", "Noleva", "Nome Lackee",
+                  "Mohegan", "Narragansett", "Natchez", "Nidwa", "Nipmuc", "Noleva", "Nome Lackee",
                   "Nomi Lackee", "Oquelonex", "Pequot", "Portoback", "Rocotora", "Sambo", "Shaliba",
                   "Shalliba", "Shangina", "Shargana", "Shatyana", "Souix,Sioux", "Spanish", "Talusky",
                   "Tanybec", "Tenebec", "Tenybec", "Terriby", "Thalliba", "Toluskey", "Unspecified",
@@ -70,6 +70,8 @@ function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
 
   // Global options
 
+  const tableContainer = document.getElementById(sr.TABULATOR_CONTAINER_ID);
+
   const tabulatorOptions_global = {
     data: sr.data,
     height:'611px',
@@ -79,7 +81,9 @@ function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
     paginationSize: 20,
     paginationSizeSelector:[20,50,100,10000],
     columns: columnDefinitions,
-    downloadRowRange: 'active', /*
+    downloadRowRange: 'active',
+    renderComplete: () => tableContainer.dispatchEvent(new Event('tabulator-render', { bubbles: true }))
+    /*
     renderComplete: (x) => {
       console.log('EEE', x, this);
       document.querySelectorAll("*[data-filter-function]").forEach(
@@ -141,6 +145,10 @@ function getTableRenderer(sr, showDetailsFunction, generalSearch) {
 
   createTable(); // Initialize table
 
+  window.ttt = table;
+
+  const generalSearchElem = document.getElementById(sr.GENERAL_SEARCH_INPUT_ID);
+
   return {
     switchMode: createTable,
     download,
@@ -150,6 +158,22 @@ function getTableRenderer(sr, showDetailsFunction, generalSearch) {
     },
     setHeaderFilterValue: function (headerId, value) { 
       table.setHeaderFilterValue(headerId, value) 
+    },
+    getFilterValues: function () {
+
+      // Get all the filter values as an array of objects, then
+      //  compile them into a hash by field ID
+
+      const filterArray = table
+        .getHeaderFilters()
+        .concat(  generalSearchElem.innerText
+                  ? [{ field: 'generalSearch', value: generalSearchElem.innerText }]
+                  : []);
+
+      return filterArray.reduce(
+        (filterHash, {field, value}) => Object.assign({}, filterHash, { [field]: value }),
+        {}
+      );
     }
   };
 }

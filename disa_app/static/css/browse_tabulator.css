@@ -250,3 +250,11 @@ a#item-facsimile[href=''] {
   margin: 0 0 0 auto;
   float:right;
 }
+
+/* Decolonizing Frame */
+
+#dcf {
+	padding: 0 0 0 1em;
+	border-left: 3px solid #f0f0fc;
+	font-size: 90%;
+}

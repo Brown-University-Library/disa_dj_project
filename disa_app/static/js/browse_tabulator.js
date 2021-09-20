@@ -3,6 +3,8 @@ import { srGlobalObject as sr }     from './browse_tabulator_global-object.js';
 import { getShowDetailsFunction }   from './browse_tabulator_details-modal.js';
 import { getGeneralSearch }         from './browse_tabulator_lunr.js';
 import { getTableRenderer }         from './browse_tabulator_init-table.js';
+import { getDcfUpdateHandler }      from './browse_tabulator_dcf.js';
+import { getSearchStateObject }     from './browse_tabulator_dcf-search-state.js';
 
 function main() {
 
@@ -10,7 +12,12 @@ function main() {
 
   const showDetailsFunction = getShowDetailsFunction(sr),
         generalSearch = getGeneralSearch(sr),
-        table = getTableRenderer(sr, showDetailsFunction, generalSearch);
+        table = getTableRenderer(sr, showDetailsFunction, generalSearch),
+        searchState = getSearchStateObject(table, generalSearch),
+        dcfContentElem = document.getElementById('dcf-content'),
+        updateDcf = getDcfUpdateHandler(searchState, dcfContentElem);
+
+  window.DCF = {searchState, updateDcf, table}; // @todo temp for debugging
 
   // EVENT HANDLERS
 
@@ -20,6 +27,11 @@ function main() {
         viewSelector = document.getElementById(sr.VIEW_OPTIONS_RADIO_BUTTONS_ID),
         downloadButton = document.getElementById(sr.DOWNLOAD_BUTTON_ID),
         generalSearchInput = document.getElementById(sr.GENERAL_SEARCH_INPUT_ID);
+
+  // Handle re-rendering in Tabulator (update DCF)
+
+  window.addEventListener('tabulator-render', updateDcf);
+  updateDcf();
 
   // Handle change of view
 
@@ -47,7 +59,7 @@ function main() {
   window.populateFilter = function(filterId, value) {
     table.setHeaderFilterValue(filterId, value);
   }
-
+  // NOTE Above replaces those below - can I erase these??
   window.populateTribeFilter = function(tribeName) {
     table.setHeaderFilterValue('all_tribes', tribeName);
   }
@@ -61,7 +73,7 @@ function main() {
   }
 
   // Show details as a global function
-  // (used in generated markup)
+  // (referenced in generated markup)
 
   window.showDetails = showDetailsFunction;
 }

@@ -180,37 +180,56 @@
         </div>
     </div>
 
-    <!-- Search query area -->
+    <!-- 2-column layout: query and search results on left, decolonizing frame on right -->
 
-    <div class="top-search-div row">
-        <div class="col-6">
-            <label for="general-search">
-                Search in any field for
-                <input type="text" id="general-search"></input>
-            </label>
-            <em class="text-nowrap">
-                &nbsp;(to focus your search, use the fields below)
-            </em>
+    <div class="row">
+
+        <div class="col-9" id="search-and-results">
+
+            <!-- Search query area -->
+
+            <div class="top-search-div row">
+                <div class="col-6">
+                    <label for="general-search">
+                        Search in any field for
+                        <input type="text" id="general-search"></input>
+                    </label>
+                    <em class="text-nowrap">
+                        &nbsp;(to focus your search, use the fields below)
+                    </em>
+                </div>
+                <div class="col-6">
+                    <p id="view-options">View results as
+                        <input type="radio" id="biographical-view-option" name="view-type" value="biographical" checked>
+                        <label for="biographical-view-option">biographies</label>
+                        <input type="radio" id="tabular-view-option" name="view-type" value="tabular">
+                        <label for="tabular-view-option">a table</label>
+                    </p>
+                    <p>
+                        <button id="download-data" title="Download the results as a CSV file">
+                            Download results
+                        </button>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Container for data table (tabulator library output) -->
+
+            <div id="data-display" class="table-borderless biographical">
+                &nbsp;
+            </div>
         </div>
-        <div class="col-6">
-            <p id="view-options">View results as
-                <input type="radio" id="biographical-view-option" name="view-type" value="biographical" checked>
-                <label for="biographical-view-option">biographies</label>
-                <input type="radio" id="tabular-view-option" name="view-type" value="tabular">
-                <label for="tabular-view-option">a table</label>
-            </p>
-            <p>
-                <button id="download-data" title="Download the results as a CSV file">
-                    Download results
-                </button>
-            </p>
+        <div class="col-3" id="dcf">
+            <h2>Context</h2>
+            <!-- Not current in use, but proposed 
+            <template id="dcf-resource-template">
+                <div class="dcf-resource">
+                    <div class="dcf-resource-text"></div>
+                    <a class="dcf-resource-link" href="${resource.url}">More</a>
+                </div>
+            </template> -->
+            <div id="dcf-content"></div>
         </div>
-    </div>
-
-    <!-- Container for data table (tabulator library output) -->
-
-    <div id="data-display" class="table-borderless biographical">
-        &nbsp;
     </div>
 
     <!-- Footer: Acknowledgements -->

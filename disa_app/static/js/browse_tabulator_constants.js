@@ -39,4 +39,5 @@ export const
   },
   MAX_NUMBER_OF_ENTRIES = 100000,
   REF_COUNT_ELEM_ID = 'ref-count',
-  ITEM_COUNT_ELEM_ID = 'item-count';
+  ITEM_COUNT_ELEM_ID = 'item-count',
+  WP_API_BASE = 'https://api-test.cody.digitalscholarship.brown.edu/blog/wp-json/wp/v2/posts?category=context';
