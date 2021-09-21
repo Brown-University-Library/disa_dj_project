@@ -76,36 +76,25 @@ const dcfResourceTemplate = document.getElementById('dcf-resource-template');
 window.temp = dcfResourceTemplate;
 
 
-// Proposed version uses <template> element instead of JS templating
-// See https://johnpapa.net/render-html-2/#renderingheroeswithtemplates
-function getResourceDisplayHtml_PROPOSED(resourceSelector) {
-  const dcfResources = getDcfResources(resourceSelector);
-  return dcfResources.map(resource => {
-    const resourceCard = document.importNode(dcfResourceTemplate.content, true);
-    resourceCard.querySelector('.dcf-resource-text').textContent = resource.text;
-    resourceCard.querySelector('.dcf-resource-link').href = resource.url;
-  });
-}
-
-// Given an array of resources (compiled from WP-API),
-//  return array of HTML snippets for display
+// Given a resource, use the <template> element in the HTML file
+//  to create snippet of HTML as string
 
 function getResourceDisplayHtml(resource) {
-  console.log('GENRATING HTML FROM: ', resource);
-  return `
-    <div class="dcf-resource card bg-light mb-3">\
-      <div class="card-header">
-        ${resource.title}
-        <a class="dcf-resource-link card-link stretched-link" 
-           href="${resource.url}" target="_BLANK"
-           style="font-weight: bold; font-size: 80%"
-           title="Link to more information about ${resource.title}">More</a>
-      </div>
-      <div class="card-body">
-        ${resource.text}
-      </div>
-    </div>
-  `;
+  const resourceCard = dcfResourceTemplate.content.cloneNode(true),
+        linkToFullResource = resourceCard.querySelector('a.dcf-resource-link');
+
+  // Populate template copy
+
+  resourceCard.querySelector('span.dcf-resource-title').textContent = resource.title;
+  resourceCard.querySelector('span.dcf-resource-text').innerHTML = resource.text;
+  linkToFullResource.href = resource.url;
+  linkToFullResource.title = `Link to more information about ${resource.title}`;
+
+  // Convert document fragment to HTML string
+
+  const finalHtmlContainer = document.createElement('div');
+  finalHtmlContainer.appendChild(resourceCard);
+  return finalHtmlContainer.innerHTML.trim();
 }
 
 // Given the searchState object & the available resources (in WP), 
@@ -126,6 +115,7 @@ function getDcfUpdateHandler(searchState, dcfContentElem) {
             console.log(`START MAPPING FOR RULE #${ruleNumber}`, resources);
             resources.map(r => console.log(`MAPPING FOR RULE #${ruleNumber}`, r));
             const resourceDisplayArr = resources.map(getResourceDisplayHtml);
+
       console.log(`GOT DISPLAY HTML FOR RULE #${ruleNumber}:`, {searchRule, resourceSelector, resourceDisplayArr});
       return () => {
         console.log(`TESTING RULE #${ruleNumber}`, {resourceSelector, resourceDisplayArr, searchState, searchRule, testFunction});
