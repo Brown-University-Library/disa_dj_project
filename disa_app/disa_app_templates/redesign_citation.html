@@ -1158,12 +1158,14 @@
 
                               <!-- Status -->
 
-                              <div class="form-floating-x" style="clear: both">
-                                  <label for="formInputDISAPersonStatus">Status</label>
+                              <div class="row mb-4">
+                                  <label for="formInputDISAPersonStatus" class="col-sm-3 col-form-label" style="text-align: right;">Status</label>
+                                  <div class="col-sm-9">
                                   <disa-tags v-model:value="referent.status"
                                              v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonStatus"
                                              v-on:blur="saveReferentDataToServer"
                                              id="formInputDISAPersonStatus"></disa-tags>
+                                  </div>
                               </div>
 
                               <!-- AWAITING NEW MODEL
@@ -1176,7 +1178,7 @@
                               <!-- Vocation -->
 
                               <div class="row mb-4">
-                                <label for="formInputDISAPersonVocation" class="col-sm-3 col-form-label" style="text-align: left;">Vocation</label>
+                                <label for="formInputDISAPersonVocation" class="col-sm-3 col-form-label" style="text-align: right;">Vocation</label>
                                 <div class="col-sm-9">
                                   <disa-tags v-model="currentReferent.vocations"
                                              v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonVocation"
