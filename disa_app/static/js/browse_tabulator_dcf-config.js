@@ -9,7 +9,11 @@
   Format:
 
     [
-      { searchRule: <SEARCH-RULE>, resources: <RESOURCES>}
+      { 
+        searchRule: <SEARCH-RULE>, 
+        resources: <RESOURCES>
+      } 
+      <... MORE RULES>
     ]
 
   Search rules are:
@@ -19,7 +23,7 @@
     {
       ruleType: <one of: "matches", "equals">,
       fieldId: <string>,
-      value: <string> (if it's a 'matches', then this is a regular expression)
+      value: <string> (if it's a 'matches' rule, then this is a regular expression)
     }
 
     NOTE: Regular expressions need to do the "double backslash" for symbols, 
@@ -38,6 +42,14 @@
     {
       ruleType: 'init'
     }
+
+    You can also check if a filter is not empty:
+
+    {
+      ruleType: 'isNotEmpty',
+      fieldId: <string>
+    }
+
 
   Resources:
 
@@ -58,11 +70,13 @@
 
 */
 
-export default Object.freeze(
 
-  // START RULE DATA
 
-  [
+const rules = 
+
+// START RULE DATA
+
+[
     {
       searchRule: {
         ruleType: 'init'
@@ -74,7 +88,7 @@ export default Object.freeze(
     {
       searchRule: {
         ruleType: 'equals',
-        fieldId: 'all_tribes',
+        fieldId: 'filter.all_tribes',
         value: 'Narragansett'
       },
       resourceSelector: {
@@ -84,7 +98,7 @@ export default Object.freeze(
     {
       searchRule: {
         ruleType: 'equals',
-        fieldId: 'all_tribes',
+        fieldId: 'filter.all_tribes',
         value: 'Eastern Pequot'
       },
       resourceSelector: {
@@ -103,7 +117,7 @@ export default Object.freeze(
     {
       searchRule: {
         ruleType: 'isNotEmpty',
-        fieldId: 'all_tribes'
+        fieldId: 'filter.all_tribes'
       },
       resourceSelector: {
         tag: 6
@@ -112,7 +126,7 @@ export default Object.freeze(
     {
       searchRule: {
         ruleType: 'isNotEmpty',
-        fieldId: 'sex'
+        fieldId: 'filter.sex'
       },
       resourceSelector: {
         tag: 5
@@ -121,7 +135,7 @@ export default Object.freeze(
     {
       searchRule: {
         ruleType: 'isNotEmpty',
-        fieldId: 'all_races'
+        fieldId: 'filter.all_races'
       },
       resourceSelector: {
         tag: 7
@@ -130,14 +144,50 @@ export default Object.freeze(
     {
       searchRule: {
         ruleType: 'isNotEmpty',
-        fieldId: 'reference_data.all_locations'
+        fieldId: 'filter.reference_data.all_locations'
       },
       resourceSelector: {
         tag: 8
       }
+    },
+    {
+      searchRule: {
+        ruleType: 'matches',
+        fieldId: 'record.name_first',
+        value: '^Eliz'
+      },
+      resourceSelector: {
+        id: 88
+      }
+    },
+    {
+      searchRule: {
+        ruleType: 'and',
+        rules: [
+          {
+            ruleType: 'equals',
+            fieldId: 'record.sex',
+            value: '^Eliz'
+          },
+          {
+            ruleType: 'matches',
+            fieldId: 'record.name_last',
+            value: '^Smi'
+          }
+        ]
+      },
+      resourceSelector: {
+        id: 88
+      }
     }
-  ]
-
+  ];
 
 // END RULE DATA
+
+// Add IDs to rules
+
+const rulesWithIDs = rules.map(
+  (rule, index) => Object.assign({}, rule, { id: index })
 );
+
+export default Object.freeze(rulesWithIDs);

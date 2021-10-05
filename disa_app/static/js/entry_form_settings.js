@@ -133,7 +133,7 @@ export const LOCAL_SETTINGS = {
       'Eastern Pequot':'Eastern Pequot',
       'Mashantucket Pequot':'Mashantucket Pequot',
       'Mohegan':'Mohegan',
-      'Naragansett':'Naragansett',
+      'Narragansett':'Narragansett',
       'Pequot':'Pequot',
       'Wampanoag':'Wampanoag',
       'Woolwa':'Woolwa',
@@ -146,7 +146,7 @@ export const LOCAL_SETTINGS = {
       '4':'Eastern Pequot',
       '5':'Mashantucket Pequot',
       '6':'Mohegan',
-      '7':'Naragansett',
+      '7':'Narragansett',
       '10':'Pequot',
       '20':'Wampanoag',
       '21':'Woolwa' */
@@ -213,7 +213,7 @@ export const LOCAL_SETTINGS = {
       '35':'Multi-racial',
       '24':'White' */
     },
-    formInputDISAItemType: {	
+    formInputDISAItemType: {	// @todo @birkin Load from server
       '1':'Baptism',
       '2':'Runaway',
       '3':'Sale',

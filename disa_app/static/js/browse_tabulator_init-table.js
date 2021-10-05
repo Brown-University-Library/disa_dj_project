@@ -82,20 +82,12 @@ function getTabulatorOptions(sr, showDetailsFunction) {
     paginationSizeSelector:[20,50,100,10000],
     columns: columnDefinitions,
     downloadRowRange: 'active',
-    renderComplete: () => tableContainer.dispatchEvent(new Event('tabulator-render', { bubbles: true }))
-    /*
-    renderComplete: (x) => {
-      console.log('EEE', x, this);
-      document.querySelectorAll("*[data-filter-function]").forEach(
-        setFilterLink => { 
-          const onclickFunctionName = x.getAttribute('data-filter-field'),
-                onclickFunctionArg = x.getAttribute('data-filter-value'),
-                // onclickFunction = () => { console.log('YESS'); window[onclickFunctionName](onclickFunctionArg);}
-                onClickFunction = () => setFilterFunction(onclickFunctionName, onclickFunctionArg);
-          setFilterLink.addEventListener('click', onClickFunction, true);
-        }
-      )
-    } */
+    renderComplete: () => tableContainer.dispatchEvent(
+      new Event('tabulator-render', { bubbles: true })
+    ),
+    scrollVertical: () => tableContainer.dispatchEvent(
+      new Event('tabulator-scroll', { bubbles: true })
+    )
   };
 
   // Handler for when a user clicks on a row in tabular format
@@ -145,17 +137,28 @@ function getTableRenderer(sr, showDetailsFunction, generalSearch) {
 
   createTable(); // Initialize table
 
-  window.ttt = table;
-
+  window.tabulatorTable = table; // TEMP
   const generalSearchElem = document.getElementById(sr.GENERAL_SEARCH_INPUT_ID);
+
+  // Check if visible rows have changed
+
+  let oldVisibleDataHash = '';
+  function visibleDataChanged() {
+    const visibleDataHash = JSON.stringify(table.getData('visible'));
+    if (visibleDataHash === oldVisibleDataHash) {
+      return false;
+    } else {
+      oldVisibleDataHash = visibleDataHash;
+      return true;
+    }
+  }
 
   return {
     switchMode: createTable,
     download,
-    refresh: function () {
-      console.log(table);
-      table.refreshFilter();
-    },
+    getVisibleData: () => table.getData('visible'),
+    visibleDataChanged,
+    refresh: () => table.refreshFilter(),
     setHeaderFilterValue: function (headerId, value) { 
       table.setHeaderFilterValue(headerId, value) 
     },

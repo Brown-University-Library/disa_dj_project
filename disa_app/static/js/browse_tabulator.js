@@ -14,9 +14,9 @@ function main() {
         generalSearch = getGeneralSearch(sr),
         table = getTableRenderer(sr, showDetailsFunction, generalSearch),
         searchState = getSearchStateObject(table, generalSearch),
-        dcfContentElem = document.getElementById('dcf-content'),
-        updateDcf = getDcfUpdateHandler(searchState, dcfContentElem);
-
+        dcfContentElem = document.getElementById(sr.CF_CONTENT_ID),
+        updateDcf = getDcfUpdateHandler(searchState, dcfContentElem, table);
+        
   window.DCF = {searchState, updateDcf, table}; // @todo temp for debugging
 
   // EVENT HANDLERS
@@ -31,6 +31,11 @@ function main() {
   // Handle re-rendering in Tabulator (update DCF)
 
   window.addEventListener('tabulator-render', updateDcf);
+  window.addEventListener('tabulator-scroll', function() {
+    if (table.visibleDataChanged()) {
+      updateDcf();
+    }
+  });
   updateDcf();
 
   // Handle change of view

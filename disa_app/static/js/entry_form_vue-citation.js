@@ -66,7 +66,7 @@ async function saveSourceToServer() {
     const dataJSON = await response.json();
     // this.currentItem.relationships = dataJSON.store;
     this.saveStatus = this.SAVE_STATUS.SUCCESS;
-    console.log('RESPONSE', {response, dataJSON}) ;
+    console.log('SAVING SOURCE - RESPONSE', {response, dataJSON}) ;
   } else {
     this.saveStatus = this.SAVE_STATUS.ERROR;
     throw Error(response.statusText);

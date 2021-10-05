@@ -26,12 +26,19 @@ function getSearchStateObject(table, generalSearch) {
   return {
     refreshFilterValues,
     isInitial,
-    getFilterValue(fieldId) {
+    getFieldValue(fieldId) {
+      let valuesArray;
       if (fieldId === 'general-search') {
-        return generalSearch.input.trim() || '';
+        valuesArray = [generalSearch.input.trim() || ''];
+      } else if (fieldId.startsWith('record.')) { // @todo I don't think this is used
+        const propId = fieldId.slice(7);
+        valuesArray = table.getVisibleData().map(record => record[propId]);
       } else {
-        return filterValues[fieldId] || ''
+        const propId = fieldId.startsWith('filter.') ? fieldId.slice(7) : fieldId;
+        valuesArray = [filterValues[propId] || ''];
       }
+      console.log('VALUES ARRAY FOR ' + fieldId, valuesArray);
+      return valuesArray;
     }
   };
 }
