@@ -246,3 +246,7 @@ a#item-facsimile[href=''] {
   display: none;
 }
 
+#modal-edit-button-group {
+  margin: 0 0 0 auto;
+  float:right;
+}

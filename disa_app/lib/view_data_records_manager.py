@@ -138,7 +138,8 @@ def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int ) ->
             'value': rfrnc.reference_type.name, 'id':rfrnc.reference_type.id }
 
         # context =  { 'redirect': reverse( 'edit_record_url', kwargs={'rec_id': rfrnc.id} ) }
-        log.debug( f'data, ```{data}```' )
+        # log.debug( f'data, ```{data}```' )
+        log.debug( f'data, ```{pprint.pformat(data)}```' )
     except:
         log.exception( '\n\nexception...' )
         raise Exception( 'problem; see logs' )

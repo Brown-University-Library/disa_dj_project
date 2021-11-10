@@ -19,3 +19,16 @@
   background: white;
 }
 
+input, textarea {
+	margin-bottom: 12px!important;
+}
+
+#tabs_bibinfoanditems h1 {
+	font-size: 1.75em!important;
+	font-weight: bold;
+	margin-bottom: 1.25em;
+}
+
+.card-body h2 {
+	font-size: 1.75em!important;
+}

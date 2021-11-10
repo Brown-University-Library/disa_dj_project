@@ -1,19 +1,10 @@
 
-import { getSourceData, getItemData } from './entry_form_data_in.js';
-import { DISA_ID_COMPONENT } from './entry_form_component_id-badge.js';
-import { TAG_INPUT_COMPONENT } from './entry_form_component_tag-input.js';
-import { SAVE_STATUS_COMPONENT } from './entry_form_component_save-status.js';
-import { initializeCitationForm } from './entry_form_vue-citation.js';
-import { initializeItemForm } from './entry_form_vue-item.js';
-
-// UUID generator
-// Source: https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid/2117523#2117523
-
-function uuidv4() {
-  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-  );
-}
+import { getSourceData }              from './entry_form_data_in.js';
+import { DISA_ID_COMPONENT }          from './entry_form_component_id-badge.js';
+import { TAG_INPUT_COMPONENT }        from './entry_form_component_tag-input.js';
+import { SAVE_STATUS_COMPONENT }      from './entry_form_component_save-status.js';
+import { initializeSourceForm }       from './entry_form_vue-citation.js';
+import { initializeItemForm }         from './entry_form_vue-item.js';
 
 // Parse URL for item and/or person to display
 //  URL format: <url><DOC ID>/#/<ITEM ID>/<PERSON ID>
@@ -28,35 +19,42 @@ function getRoute() {
 
 async function loadAndInitializeData(initDisplay) {
 
+  // Load the source data
+
   let dataAndSettings = await getSourceData();
 
-  // Set initial item to display:
-  //  from URL, assign to first item, or undefined
+  // Set currentItemId (initial item to display):
+  //  either from URL, or the first item, or undefined
 
-  dataAndSettings.currentItemId = 
-    initDisplay.itemId || 
-    Object.keys(dataAndSettings.formData.doc.references)[0] ||
-    undefined;
+  if (initDisplay.itemId) {
+    dataAndSettings.currentItemId = initDisplay.itemId
+  } else if (false && dataAndSettings.formData.doc.references[0] && 
+             dataAndSettings.formData.doc.references[0].id) { // @todo DISABLED
+    dataAndSettings.currentItemId = dataAndSettings.formData.doc.references[0].id;
+  } else {
+    dataAndSettings.currentItemId = -1;
+  }
 
   // Set first referent to display: from URL or none
 
-  dataAndSettings.currentReferentId = initDisplay.referentId || -1;
-
-  // Load full data for current item
-
-  dataAndSettings.formData.doc.references[dataAndSettings.currentItemId] 
-    = await getItemData(dataAndSettings.currentItemId, 
-                        dataAndSettings.formData.doc.references[dataAndSettings.currentItemId]);
+  const NO_REFERENT = -1;
+  dataAndSettings.currentReferentId = initDisplay.referentId || NO_REFERENT;
 
   // Initialize save status register
 
   dataAndSettings.saveStatus = dataAndSettings.SAVE_STATUS.NO_CHANGE;
 
-  // 'glue' between form fields and data structure
+  // New relationship form visibility toggle
 
-  dataAndSettings.currentItemDate_day = undefined;
-  dataAndSettings.currentItemDate_month = undefined;
-  dataAndSettings.currentItemDate_year = undefined;
+  dataAndSettings.newRelationshipFormVisible = false;
+
+  // Current group ID register
+
+  dataAndSettings.currentGroupId = -1;
+
+  // confirm-delete modal
+
+  dataAndSettings.CONFIRM_DELETE_MODAL = undefined;
 
   return dataAndSettings;
 }
@@ -72,7 +70,7 @@ async function main() {
   // Get the data structure to pass to Vue
 
   let dataAndSettings = await loadAndInitializeData(initDisplay);
-  console.log('MAIN DATA PRIOR TO VUE', dataAndSettings);
+  console.log('SOURCE DATA PRIOR TO VUE (item details not yet loaded)', JSON.stringify(dataAndSettings, null, 2));
 
   // If item specified in URL, select tab
 
@@ -80,9 +78,14 @@ async function main() {
     document.getElementById('item-tab').click();
   }
 
+  // TEMP: Fill in source title at top
+  // @todo this will be better when the two tabs fall under the same Vue instance
+
+  document.getElementById('sourceTitle').innerText = dataAndSettings.formData.doc.fields.title || '[New source]';
+
   // Initialize forms in Vue
 
-  initializeCitationForm(dataAndSettings);
+  initializeSourceForm(dataAndSettings);
   initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPONENT, SAVE_STATUS_COMPONENT});
 }
 
@@ -97,16 +100,3 @@ window.addEventListener('load', () => {
     return new bootstrap.Popover(popoverTriggerEl)
   });
  }) */
-
-
-
-
-/*
-
-  @todo
-  Only have one Vue instance for both tabs
-  Add relationships between people
-  Add GUI editor for transcription (convert to markdown?)
-
-*/
-

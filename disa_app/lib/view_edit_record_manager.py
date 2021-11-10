@@ -91,6 +91,22 @@ def prepare_common_data( session: sqlalchemy.orm.session.Session ):
     addl_loc_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_addl ]
     addl_loc_json = json.dumps( addl_loc_list )
 
+    status_list = [
+        'Indentured Servant',
+        'Servant',
+        'Slave',
+        'Captive',
+        'Threatened Enslavement',
+        'Indenture, Court-Ordered',
+        'Indenture, Parental',
+        'Indenture, Voluntary',
+        'Prospective Enslavement',
+        'Formerly Enslaved',
+        'Free',
+        'Unclear',
+        'Other'
+    ]  # yes, hard-coded for now (table contains 30+ entries). TODO: in remodeling, figure out way to indicate this subset that should appear in drop-downs.
+
     data = {
         'rec_types_list': rec_types_list,   # not used in template; for possible viewing convenience
         'rec_types': rec_types_json,
@@ -104,7 +120,7 @@ def prepare_common_data( session: sqlalchemy.orm.session.Session ):
         'towns': towns_json,
         'addl_loc_list': addl_loc_list,     # not used; for reference
         'addl_loc': addl_loc_json,
-        # 'foo_list_from_django': [ {'aa': 'one', 'bb': "t'w'o"} ]  # test
+        'status_list': status_list
         }
 
     log.debug( 'form-data (i.e. roles-list & towns-list) prepared' )
@@ -112,78 +128,6 @@ def prepare_common_data( session: sqlalchemy.orm.session.Session ):
     return data
 
     ## end def prepare_common_data
-
-
-
-
-# def prep_rec_id_context( rec_id: str, usr_first_name: str, usr_is_authenticated: bool ) -> dict:
-#     """ Preps context for template when a rec_id (meaning a `Reference` id) is included.
-#         Called by views.edit_record() """
-#     context = { 'user_first_name': usr_first_name, 'user_is_authenticated': usr_is_authenticated }
-#     session = make_session()
-
-#     locs = session.query( models_alch.ReferenceLocation ).all()
-
-#     ref_types = session.query( models_alch.ReferenceType ).all()
-#     rec_types_list = [ { 'id': rt.id, 'value': rt.name, 'name': rt.name } for rt in ref_types ]
-#     rec_types_json = json.dumps( rec_types_list )
-
-#     all_roles = session.query( models_alch.Role ).all()
-#     roles_list = [ { 'id': role.id, 'value': role.name, 'name': role.name } for role in all_roles ]
-#     roles_json = json.dumps( roles_list )
-
-#     all_ntl_contexts = session.query( models_alch.NationalContext ).all()
-#     natl_ctxs_list = [ { 'id': nc.id, 'value': nc.name, 'name': nc.name } for nc in all_ntl_contexts ]
-#     natl_ctxs_json = json.dumps( natl_ctxs_list )
-
-#     # uniq_cols = { (l.location.name, l.location_id) for l in locs if l.location_rank == 0 }
-#     uniq_locs = uniq_cols = { (l.location.name, l.location_id) for l in locs if l.location_rank == 0 }  # i think `uniq_cols` was a typo.
-
-#     uniq_town = { (l.location.name, l.location_id) for l in locs if l.location_rank == 1 }
-
-#     uniq_addl = { (l.location.name, l.location_id) for l in locs if l.location_rank == 2 and l.location_id is not None}
-
-#     col_state_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_cols ]  # again, typo?
-#     col_state_json = json.dumps( col_state_list )
-
-#     towns_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_town ]
-#     towns_json = json.dumps( towns_list )
-
-#     addl_loc_list = [ {'id': loc[1], 'value': loc[0],'label': loc[0] } for loc in uniq_addl ]
-#     addl_loc_json = json.dumps( addl_loc_list )
-
-#     rec = session.query( models_alch.Reference ).get( rec_id )
-
-#     log.debug( 'data obtained' )
-
-#     context['rec_id'] = rec.id
-
-#     context['doc_display'] = rec.citation.display
-#     context['doc_id'] = rec.citation.id
-
-#     context['rec_types_list'] = rec_types_list  # not used; for reference
-#     context['rec_types'] = rec_types_json
-
-#     context['roles_list'] = roles_list  # not used; for reference
-#     context['roles'] = roles_json
-
-#     context['natl_ctxs_list'] = natl_ctxs_list  # not used; for reference
-#     context['natl_ctxs'] = natl_ctxs_json
-
-#     context['col_state_list'] = col_state_list  # not used; for reference
-#     context['col_state'] = col_state_json
-
-#     context['towns_list'] = towns_list
-#     context['towns'] = towns_json
-
-#     context['addl_loc_list'] = addl_loc_list
-#     context['addl_loc'] = addl_loc_json
-
-#     log.debug( 'context prepared' )
-#     return context
-
-#     ## end prep_rec_id_context()
-
 
 
 ## from DISA

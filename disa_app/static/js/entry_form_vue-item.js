@@ -1,6 +1,19 @@
-import { getItemData, getReferentData } from './entry_form_data_in.js';
+import { getItemData } from './entry_form_data_in.js';
 import { saveFunctionsMixin } from './entry_form_vue-item_mixin_save.js';
 import { dataBackupMixin } from './entry_form_vue-item_mixin_backup.js';
+import { DATA_TEMPLATES } from './entry_form_data_templates.js';
+import { TinyMCEEditor } from './tinymce-vue.js';
+
+// UUID generator
+// Source: https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid/2117523#2117523
+
+function uuidv4() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
+}
+
+// Routine to initialize the Item form in Vue
 
 function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPONENT, SAVE_STATUS_COMPONENT}) {
 
@@ -18,117 +31,93 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
     components: {
       'disa-id': DISA_ID_COMPONENT,
       'disa-tags': TAG_INPUT_COMPONENT,
-      'disa-save-status': SAVE_STATUS_COMPONENT
+      'disa-save-status': SAVE_STATUS_COMPONENT,
+      'wysiwyg-editor': TinyMCEEditor
     },
 
     mixins: [ saveFunctionsMixin, dataBackupMixin ],
 
-    mounted: function () {
+    // Initializing routine
 
-      // Initialize item date fields
+    created: async function () {
 
-      const itemDate = new Date(this.currentItem.date);
-      this.currentItemDate_day = itemDate.getDate();
-      this.currentItemDate_month = itemDate.getMonth();
-      this.currentItemDate_year = itemDate.getFullYear();
+      // If there are no items, create a new one
+      // If there ARE items, load extra details for current
+
+      if (!this.formData.doc.references || 
+          Object.keys(this.formData.doc.references).length === 0) {
+        console.log('NO ITEMS FOUND - CREATING NEW ITEM');
+        this.createNewItem();
+      } else if (this.currentItemId !== -1) {
+        getItemData(this.currentItemId, this.currentItem, this.formData.user_api_info).then(
+          currentItemDetails => {
+            Object.assign(
+              this.formData.doc.references.find(item => item.id === this.currentItemId),
+              currentItemDetails
+            );
+          }
+        )
+      }
+
+      // Initialize save status
+
+      this.saveStatus = this.SAVE_STATUS.NO_CHANGE;
+
+      // Initialize confirm-delete modal
+
+      // this.CONFIRM_DELETE_MODAL = new bootstrap.Modal(document.getElementById('confirm-delete'));
+
     },
 
     computed: {
 
       currentItem: function() {
-        return this.formData.doc.references[this.currentItemId]
+        return this.formData.doc.references.find(
+          item => item.id === this.currentItemId
+        );
       },
 
-      currentReferent: function () {
-        return this.currentItem.referents[this.currentReferentId]
-      },
+      // THIS MAY NOT BE NECESSARY
 
       currentItemLocationCity: function () {
-        if (this.currentItem.location_info) {
-          const cityLocation = this.currentItem.location_info.find(
-            loc => loc.location_type === 'City'
-          );
-          return cityLocation && cityLocation.location_name 
-            ? cityLocation.location_name : undefined;
-        } else {
-          return undefined;
-        }
+        return currentItem.location_info.find(loc => loc.type === 'City');
+        // currentItem.location_info['City'].name
       },
 
-      currentItemLocationColonyState: function () {
-        if (this.currentItem.location_info) {
-          const colonyStateLocation = this.currentItem.location_info.find(
-            loc => loc.location_type === 'Colony/State'
-          );
-          return colonyStateLocation && colonyStateLocation.location_name 
-            ? colonyStateLocation.location_name : undefined;
-        } else {
-          return undefined;
-        }
-      },
-
-      currentItemLocationLocale: function () {
-        if (this.currentItem.location_info) {
-          const localeLocation = this.currentItem.location_info.find(
-            loc => loc.location_type === 'Locale'
-          );
-          return localeLocation && localeLocation.location_name 
-            ? localeLocation.location_name : undefined;
-        } else {
-          return undefined;
-        }
-      },
-
-      // Computed properties to translate to/from server data structure
-      //  (this is watched for changes to update data structure)
-
-      watchMeToTriggerItemDateSync: function () {
-        return `${this.currentItemDate_month}/${this.currentItemDate_day}/${this.currentItemDate_year}`;
-      },
-
-      // Computed properties for translating to/from 
-      //  Tagify's input requirements
-
-      currentReferentTribesForTagify: {
-        get: function() {
-          if (Array.isArray(this.currentReferent.tribes)) {
-            return JSON.stringify(this.currentReferent.tribes.map(
-              tribe => {
-                return {
-                  value: tribe.value,
-                  dbID: tribe.id
-                }
-              }
-            ));
-          } else {
-            return '';
-          }
-        },
-        set: function(newValue) {
-          console.log('CHANGING TRIBES TO', newValue);
-          this.currentReferent.tribes = JSON.parse(newValue).map(
-            tribeTag => { 
-              return { 
-                label: tribeTag.value, 
-                value: tribeTag.value, 
-                id: tribeTag.dbID 
-              } 
-            }
-          );
-        }
-      },
-
-      currentReferentRaceID: {
+      currentReferent: {
         get: function () {
-          return (Array.isArray(this.currentReferent.races) && this.currentReferent.races.length)
-            ? this.currentReferent.races[0].id 
-            : undefined;
-        },
-        set: function (raceID) {
-          if (! Array.isArray(this.currentReferent.races)) {
-            this.currentReferent.races = [];
+          console.warn(`CurrentRef`, this.currentItem);
+          if (this.currentItem && this.currentItem.referents) {
+            return this.currentItem.referents.find(
+              referent => referent.id === this.currentReferentId
+            );
+          } else {
+            return undefined;
           }
-          this.currentReferent.races[0] = { id: raceID };
+        },
+        set: function (referentData) { // @todo I don't think this is used
+          let oldReferentData = this.currentItem.referents.find(
+            referent => referent.id === this.currentReferentId
+          );
+          if (oldReferentData) {
+            oldReferentData = referentData;
+          }
+        }
+      },
+
+      currentReferentRelationships: function () {
+        return this.currentItem.relationships.filter(
+          relationship => relationship.data.sbj.id === this.currentReferentId
+        )
+      },
+
+      currentGroup: function () {
+        if (this.currentItem && this.currentItem.groups) {
+          return this.currentItem.groups.find(
+            group => group.uuid === this.currentGroupId
+          )
+        } else {
+          return undefined;
         }
       },
 
@@ -156,15 +145,23 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
       // LOAD ROUTINES
 
       // If currentItemId changes, load new item data (if necessary)
-      //  Also update date fields for this item
 
       currentItemId: function(itemId) {
         this.updateUrl();
-        const oldItemData = this.currentItem;
         if (!this.currentItem.FULL_DATA_LOADED) {
-          getItemData(itemId, oldItemData).then(
-            itemData => this.formData.doc.references[itemId] = itemData
-          );
+          const oldItemData = this.currentItem;
+          getItemData(itemId, oldItemData, this.formData.user_api_info).then(itemData => {
+            const currentItemIndex = this.formData.doc.references.findIndex(
+              item => item.id === itemId
+            );
+            console.log("UPDATING ITEM", {
+              currentItemIndex,
+              itemData,
+              references: JSON.stringify(this.formData.doc.references, null, 2)
+            });
+            this.formData.doc.references.splice(currentItemIndex, 1, itemData);
+            // this.currentItem = itemData;
+          });
         }
       },
 
@@ -172,73 +169,185 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
       currentReferentId: function(referentId) {
         this.updateUrl();
+        /* DISABLED FOR NOW
         if (!this.currentReferent.FULL_DATA_LOADED) {
           getReferentData(referentId, this.currentItemId, this.loadCurrentReferentAPI).then(
             referentData => this.currentItem.referents[referentId] = referentData
           );
-        }
-      },
-
-      // If date fields in form change, update data structure with
-      //  form field values
-
-      watchMeToTriggerItemDateSync: function (dateString) {
-        this.currentItem.date = [
-          this.currentItemDate_month,
-          this.currentItemDate_day,
-          this.currentItemDate_year
-        ].join('-');
+        } */
       }
     },
 
     methods: {
 
+      // Referents
+
+      // Called when user clicks on +new referent button
+      //  Adds a blank data structure to .referents array
+
       makeNewReferent: function (e) {
-        const newReferentId = 'new'; // uuidv4();
         e.preventDefault(); // Link doesn't behave like a link
-        /* EVENTUALLY ...
-
-          const newReferent = getReferentData(), // No parameter = new
-                newReferentId = newReferent.id,
-                this.currentItem.referents[newReferentId] = newReferent;
-
-        */
+        const newReferentId = 'new';
 
         // Copy new referent data structure from template
         //  and add to referent hash
 
-        const blankReferentDataStructure = JSON.parse(
-          JSON.stringify(this.NEW_USER_TEMPLATE)
-        );
+        const blankReferentDataStructure = DATA_TEMPLATES.REFERENT,
+              updatedFields = {
+                id: newReferentId,
+                record_id: this.currentItemId
+              },
+              newReferentData = Object.assign({},
+                blankReferentDataStructure, 
+                updatedFields
+              );
 
-        console.log('Adding new referent', blankReferentDataStructure);
+        console.log('CREATE REFERENT DATA', newReferentData);
 
-        blankReferentDataStructure.id = newReferentId;
-        blankReferentDataStructure.FULL_DATA_LOADED = true;
-
-        this.currentItem.referents[newReferentId] = blankReferentDataStructure;
-        this.currentReferentId = newReferentId;
+        this.currentItem.referents.push(newReferentData);
+        this.currentReferentId = newReferentId; // Note: triggers referent save
         return false;
       },
-      // (is this used?)
-      getReferentDisplayLabel: function (referent) {
-        return referent ? `${referent.first} ${referent.last}` : 'Hmmm';
+
+      deleteReferent: function (referent) {
+        console.log('DELETE REFERENT', referent);
+        this.deleteReferentOnServer(referent).then(
+          _ => {
+            const referentIndex = this.currentItem.referents.findIndex(r => r === referent);
+            this.currentItem.referents.splice(referentIndex, 1);
+          }
+        );
       },
+
       makeNewReferentName: function () {
-        const newReferentId = uuidv4();
+        const newReferentId = 'name'; // uuidv4();
+        // @todo this should be made into a data template
         this.currentReferent.names.push({
-          id: newReferentId
+          first: '',
+          last: '',
+          id: newReferentId,
+          name_type: undefined
         });
-        this.currentNameId = newReferentId;
+        this.currentNameId = newReferentId; // Note: triggers name save
       },
-      makeNewItem: function () {
-        const newItemId = uuidv4();
-        this.formData.doc.references[newItemId] = {
+
+      // Groups
+
+      deleteGroup: function(group) {
+        console.log(`Delete group ${group.uuid}`);
+        this.deleteGroupOnServer(group).then(
+          _ => {
+            const groupIndex = this.currentItem.groups.findIndex(g => g === group);
+            this.currentItem.groups.splice(groupIndex, 1);
+            this.currentGroupId = -1;
+          }
+        );
+      },
+
+      // Items
+
+      // Creates a new, empty item in the data structure and make it 
+      //  the current item
+      // NOTE: does not communicate with server -- that is handled
+      //       by the currentItemId watcher
+
+      createNewItem: function () {
+
+        // Add new empty item to references array
+
+        const newItemId = 'new'; // uuidv4();
+        const initData = Object.assign(DATA_TEMPLATES.ITEM, {
           id: newItemId,
-          citation_id: this.formData.doc.id,
-          referents: {}
-        };
+          national_context_id:'2',
+          reference_type_id:'13',
+          FULL_DATA_LOADED: true
+        });
+
+        this.formData.doc.references.push(initData);
+
+        // Update current item
+
+        this.currentNameId = -1;
+        this.currentReferentId = -1;
         this.currentItemId = newItemId;
+      },
+
+      // Delete Item on server, then delete locally.
+      //  Set current Item to first in references array,
+      //  or (if no others exist) create a new Item
+
+      deleteItem: function(item=this.currentItem) {
+        console.log('DELETE ITEM', item);
+        this.deleteItemOnServer(item).then(_ => {
+          console.log('DELETE ITEM LOCALLY');
+          const itemIndex = this.formData.doc.references.findIndex(r => r.id === item.id);
+          this.formData.doc.references.splice(itemIndex, 1);
+          if (this.formData.doc.references.length > 0) {
+            this.currentItemId = this.formData.doc.references[0].id
+          } else {
+            this.createNewItem();
+          }
+        });
+      },
+
+      // Relationships
+
+      createRelationship: async function () {
+
+        this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
+
+        // Ask server to create new relationship;
+        //  sends updated relationships data in Response
+
+        const newRelationshipData = {
+          subject: this.currentReferentId,
+          relationshipType: parseInt(document.getElementById('formInputDISARelationship').value),
+          object: parseInt(document.getElementById('formInputDISARelationshipObject').value),
+          itemId: this.currentItemId
+        };
+
+        const updatedRelationshipData = await this.createRelationshipOnServer(newRelationshipData);
+        this.formData.doc.references.find(r => r.id === this.currentItemId).relationships = updatedRelationshipData;
+        // @todo network error handling?
+
+        // Reset & hide new-relationships subform
+
+        document.getElementById('formInputDISARelationship').value = null;
+        this.newRelationshipFormVisible = false;
+
+        this.saveStatus = this.SAVE_STATUS.SUCCESS;
+      },
+
+      deleteRelationship: async function (relationship) {
+        if (relationship && relationship.id) {
+          this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
+          const updatedRelationshipData = await this.deleteRelationshipOnServer(relationship);
+          this.formData.doc.references.find(r => r.id === this.currentItemId).relationships = updatedRelationshipData;
+          // @todo network error handling?
+          this.saveStatus = this.SAVE_STATUS.SUCCESS;
+        }
+      },
+
+      // Groups
+
+      makeNewGroup: async function(e) {
+
+        e.preventDefault(); // Link doesn't behave like a link
+
+        const initGroupRequest = {
+          count: 0, 
+          count_estimated: false, 
+          description: '',
+          reference_id: this.currentItemId
+        };
+
+        this.createGroupOnServer(initGroupRequest)
+            .then(newGroupData => {
+              this.currentItem.groups.push(newGroupData);
+              this.currentGroupId = newGroupData.uuid;
+            });
+
+        return false;
       },
 
       // Take a long string (especially transcriptions) 
@@ -248,20 +357,77 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
 
         let displayTitle;
 
-        if (item.transcription) {
-          displayTitle = item.transcription.replaceAll(/<[^>]+>/g, '')
-              .slice(0,length) + '…';
+        if (item.kludge.transcription) {
+          const transcriptionNoHTML = item.kludge.transcription.replaceAll(/<[^>]+>/g, ''),
+                truncatedTitle = transcriptionNoHTML.slice(0,length);
+          displayTitle = truncatedTitle + (truncatedTitle.length < transcriptionNoHTML.length ? '…' : '');
         } else {
-          // displayTitle = `Item ID:${this.displayId(item.id)}`;
-          displayTitle = 'New item';
+          const displayDate = ['day', 'month', 'year']
+                  .map(k => item.dateParts[k])
+                  .filter(k => (k && k !== -1))
+                  .map(k => parseInt(k) < 10 ? `0${parseInt(k)}` : k)
+                  .join('‑'),
+                displayDateText = displayDate ? ` from ${displayDate}` : '',
+                displayType = this.MENU_OPTIONS.formInputDISAItemType[item.reference_type_id] + ' record';
+          displayTitle = `${displayType}${displayDateText}`;
         }
         return displayTitle
       },
 
-      // Update URL to reflect current source, item, referent
+      getReferentDisplayLabel: function (referent) {
+
+        let displayLabel;
+
+        if (!referent || !referent.id || referent.id === 'new') {
+          displayLabel = 'New person';
+        } else if (referent.first || referent.last) {
+          displayLabel = (referent.first ? referent.first : '') +
+                          (referent.last ? ' ' + referent.last : '');
+        } else if ( referent.names && referent.names.length && 
+                    (referent.names[0].first || referent.names[0].last)) {
+          displayLabel = `${referent.names[0].first} ${referent.names[0].last}`
+        } else {
+          displayLabel = `Individual-${referent.id}`;
+        }
+
+        return displayLabel;
+      },
+
+      getReferentDisplayLabelById(referentId) {
+        const referent = this.currentItem.referents.find(r => r.id === referentId);
+        return this.getReferentDisplayLabel(referent);
+      },
+
+      getGroupDisplayLabel(group) {
+        let displayText = '';
+
+        if (group.description) {
+          displayText = group.description.slice(0,50)
+            + (group.description.length > 50 ? '...' : '');
+        } else if (group.count) {
+          displayText = `${group.count} individual`
+            + (group.count > 1 ? 's' : '');
+        } else {
+          displayText = `Group-${group.uuid.slice(0,5)}`;
+        }
+
+        return displayText;
+      },
+
+      // Update URL to reflect current item and referent
 
       updateUrl: function () {
-        window.location.hash = `/${this.currentItemId}/${this.currentReferentId}`;
+
+        let hash = '';
+
+        if (this.currentItemId && this.currentItemId !== -1) {
+          hash += `/${this.currentItemId}`;
+          if (this.currentReferentId && this.currentReferentId !== -1) {
+            hash += `/${this.currentReferentId}`;
+          }
+        }
+
+        window.location.hash = hash;
       }
     }
   });

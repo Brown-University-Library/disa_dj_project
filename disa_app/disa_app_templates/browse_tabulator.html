@@ -27,14 +27,12 @@
 
 <!-- Tabulator library -->
 
-<!--<link href="https://unpkg.com/tabulator-tables@4.7.2/dist/css/tabulator.min.css" rel="stylesheet">-->
-<link href="https://unpkg.com/tabulator-tables@4.7.2/dist/css/bootstrap/tabulator_bootstrap4.min.css" rel="stylesheet">
-<!-- <script src="https://unpkg.com/tabulator-tables@4.7.2/dist/js/tabulator.min.js"></script> -->
+<link rel="stylesheet" href="{% static 'css/tabulator_bootstrap4.min.css' %}" />
 <script src="{% static 'js/tabulator.js' %}"></script>
 
 <!-- Lunr -->
 
-<script src="https://unpkg.com/lunr/lunr.js"></script>
+<script src="{% static 'js/lunr.min.js' %}"></script>
 
 {% endblock header_other %}
 
@@ -73,6 +71,23 @@
                     Details about <span class="details-title-name"></span>
                 </h1>
                 <div class="badge badge-primary">id <span id="details-id"></span></div>
+                {% if user_is_authenticated %}
+                <br />
+                <div class="btn-group" role="group" id="modal-edit-button-group">
+                    <a type="button" class="btn btn-primary" id="referent-edit-link"
+                       title="Edit the data for this person">
+                        Edit person
+                    </a>
+                    <a type="button" class="btn btn-primary" id="record-edit-link"
+                       title="Edit the data for the record which contains a reference to this person">
+                        Edit record
+                    </a>
+                    <a type="button" class="btn btn-primary" id="source-edit-link"
+                       title="Edit the bibliographic entry for the document that is the source for this information">
+                        Edit source
+                    </a>
+                </div>
+                {% endif %}
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -96,8 +111,8 @@
                 </table>
                 <h2>About the source</h2>
                 <p style="font-style: italic">
-                    A note on terminology: information about individuals are recorded from "items" (such as an advertisement announcing a person fleeing enslavement)
-                    that are contained in "documents" (such as a newspaper).
+                    A note on terminology: information about individuals are recorded from "records" (such as an advertisement announcing a person fleeing enslavement)
+                    that are contained in "sources" (such as a newspaper).
                 </p>
                 <table id="source-details-table" class="table">
                 </table>
@@ -108,6 +123,20 @@
                     "<span id="details-doc"></span>" dated <span id="details-doc-date"></span>.
                 </p>
                 <div id="details-transcription" class="highlight"></div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- "Loading ..."" modal -->
+
+<div class="modal fade" id="loadingModal" data-backdrop="static" tabindex="-1" role="dialog" 
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="loadingModalMessage">
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                Loading...
             </div>
         </div>
     </div>
@@ -128,12 +157,12 @@
             <em>Welcome, community collaborators!</em> This is a
             preliminary, experimental search portal of the
             <a href="http://indigenousslavery.org">Stolen Relations: Recovering Stories of Indigenous Enslavement in the Americas</a>, which
-            allows you to search
+            allows you to search 
             <span id="ref-count" class="badge badge-secondary"></span>
-            references to individuals drawn from
-            <span id="item-count" class="badge badge-secondary"></span>
-            archival records regarding the enslavement of indigenous
-            populations in the Americas, from the 17<sup>th</sup> to the
+            references to individuals drawn from 
+            <span id="item-count" class="badge badge-secondary"></span> 
+            archival records regarding the enslavement of indigenous 
+            populations in the Americas, from the 17<sup>th</sup> to the 
             19<sup>th</sup> centuries.
         </p>
         <div class="col-6">
@@ -195,39 +224,20 @@
                 Sciences Research Institute</a> (Brown&nbsp;University), <a
                 href="https://www.brown.edu/research/conducting-research-brown/about-office">the Office
                 of the Vice President for Research</a> (Brown&nbsp;University), <a
-                href="https://cssj.brown.edu/">the Center
+                href="https://cssj.brown.edu/">the Center 
                 for the Study of Slavery and Justice</a> (Brown&nbsp;University), and <a
                 href="http://cds.library.brown.edu/">the Center for
                 Digital Scholarship</a> (Brown&nbsp;University&nbsp;Library)</p>
     </div>
-
-    <!--
-    <div class="info-box acknowledgements">
-        <h5>Acknowledgements</h5>
-        <p>Stolen Relations has been generously funded and supported by <a
-                href="https://www.brown.edu/academics/population-studies/">the Population
-                Studies and Training Center</a> (Brown&nbsp;University), <a
-                href="https://www.brown.edu/initiatives/social-science-research/">the Social
-                Sciences Research Institute</a> (Brown&nbsp;University), <a
-                href="https://www.brown.edu/research/conducting-research-brown/about-office">the Office
-                of the Vice President for Research</a> (Brown&nbsp;University), and <a
-                href="http://cds.library.brown.edu/">the Center for
-                Digital Scholarship</a> (Brown&nbsp;University&nbsp;Library)</p>
-    </div>
-    -->
-
-    <!--
-    <input type="hidden" id="denormalized_json_url"
-        name="variable" value="{{ denormalized_json_url }}" />-->
-    <input type="hidden" id="browse_json_url"
-        name="variable" value="{{ browse_json_url }}" />
-    <input type="hidden" id="info_image_url" name="variable"
-        value="{{ info_image_url }}" />
 </div>
 
 {% endblock content %}
 
 
 {% block scripts%}
-    <script src="{% static 'js/browse_tabulator.js' %}"></script>
+
+        <!-- Main setup routine -->
+
+        <script type="module" defer src="{% static 'js/browse_tabulator.js' %}"></script>
+
 {% endblock %}

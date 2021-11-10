@@ -179,8 +179,8 @@
               {% endfor %}
             </td>
             <td>
-              {% comment %}<a href="{{ url_for('get_source', srcId=ref.reference_id) }}">View source</a>{% endcomment %}
-              <a href="{% url 'source_url' ref.rfrnc_id  %}">View source</a>
+              {% comment %}<a href="{% url 'source_url' ref.rfrnc_id  %}">View source</a>{% endcomment %}
+              <a href="{{ ref.source_and_item_url }}">View source</a>
           </tr>
           {% endfor %}
         </tbody>

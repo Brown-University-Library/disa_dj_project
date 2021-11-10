@@ -379,10 +379,10 @@ class Common():
         log.debug( f'data, ```{data}```' )
         if data['id'] == 'name': # what's this 'id' for??
             name = models_alch.ReferentName()
-            log.debug( f'name, ```{name}```' )
+            log.debug( f'name from data-id, ```{name}```' )
         else:
             name = session.query( models_alch.ReferentName ).get( data['id'] )
-            log.debug( f'name, ```{name}```' )
+            log.debug( f'name not from data-id, ```{name}```' )
         name.first = data['first']
         name.last = data['last']
         given = session.query( models_alch.NameType ).filter_by( name='Given' ).first()

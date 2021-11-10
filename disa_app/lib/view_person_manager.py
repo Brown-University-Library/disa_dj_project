@@ -3,12 +3,14 @@
 import datetime, json, logging, os, pprint
 
 import sqlalchemy
-from disa_app import settings_app
 from disa_app import models_sqlalchemy as models_alch
+from disa_app import settings_app
 from disa_app.lib import person_common
 from django.conf import settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+# from django.core.urlresolvers import reverse
 
 
 log = logging.getLogger(__name__)

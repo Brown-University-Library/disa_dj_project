@@ -11,35 +11,12 @@ const template = `
   </span>
 `;
 
-/*
-
-<span data-bs-toggle="popover" 
-      data-bs-content="And here's some amazing content. It's very engaging. Right?" 
-      class="badge rounded-pill bg-secondary text-light float-end" 
-      data-bs-original-title="LLLLLLink" title="Link to this item">
-  ID:895
-</span>
-
-
-*/
-
-/*
-
-  <button type="button" class="btn btn-lg btn-danger" 
-          data-bs-toggle="popover" 
-          title="Popover title" 
-          data-bs-content="And here's some amazing content. It's very engaging. Right?">
-          Click to toggle popover
-  </button>
-
-*/
-
 const componentDefinition = {
   props: ['forthis'],
   template,
   methods: {
     displayId: function (longId) {
-      return longId.toString().slice(-5);
+      return longId.toString().slice(0,5);
     },
     optionsMenu: function(x, e) {
       console.log('options!', x, e);

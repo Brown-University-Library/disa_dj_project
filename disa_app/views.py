@@ -237,7 +237,8 @@ def handle_shib_login( request ):
         if request.session.get( 'redirect_url', None ):
             redirect_url = request.session['redirect_url']
         else:
-            redirect_url = reverse( 'editor_index_url' )
+            # redirect_url = reverse( 'editor_index_url' )
+            redirect_url = reverse( 'redesign_citations_url' )
     else:
         redirect_url = request.GET['next']  # may be same page
     if request.session.get( 'redirect_url', None ):  # cleanup
@@ -568,11 +569,18 @@ def data_documents( request, doc_id=None ):
     return resp
 
 
+def data_root( request ):
+    """ Not called directly; this is a convenience feature for building other urls in javascript
+        Url: '/data/' -- 'data_root_url' """
+    return HttpResponseNotFound( '404 / Not Found' )
+
+
 @shib_login
 def relationships_by_reference( request, rfrnc_id ):
     """ Called via ajax by views.edit_relationships() when page is loaded.
         Url: '/data/sections/<rfrnc_id>/relationships/' -- 'data_reference_relationships_url' """
-    log.debug( f'\n\nstarting relationships_by_reference person(), with rfrnc_id, `{rfrnc_id}`' )
+    log.debug( '\n\nstarting relationships_by_reference()' )
+    log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rfrnc_id, ``{rfrnc_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
     context: dict = v_data_relationships_manager.prepare_relationships_by_reference_data( rfrnc_id )
     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
@@ -582,7 +590,8 @@ def relationships_by_reference( request, rfrnc_id ):
 def data_relationships( request, rltnshp_id=None ):
     """ Called via ajax by views.edit_relationships() when `+` buton is clicked.
         Url: '/data/relationships/' -- 'data_relationships_url' """
-    log.debug( f'\n\nstarting data_relationships(), with method, ```{request.method}```, with a payload of, `{request.body}`' )
+    log.debug( '\n\nstarting data_relationships()' )
+    log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rltnshp_id, ``{rltnshp_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     if request.method == 'POST':
         rfrnc_id: str = v_data_relationships_manager.manage_relationships_post( request.body, user_id )
@@ -685,8 +694,8 @@ def error_check( request ):
 @shib_login
 def redesign_home( request ):
     """ ? """
-    if project_settings.DEBUG == False:
-        return HttpResponse( 'Not yet running on production.' )
+    # if project_settings.DEBUG == False:
+    #     return HttpResponse( 'Not yet running on production.' )
     return HttpResponse( "What should be displayed here?" )
 
 
@@ -694,10 +703,13 @@ def redesign_home( request ):
 def redesign_citations( request ):
     """ Displays main landing page of citations, with user's recently-edited citations first. """
     log.debug( '\n\nstarting redesign_citations()' )
-    if project_settings.DEBUG == False:
-        return HttpResponse( 'Not yet running on production.' )
+    start_time = datetime.datetime.now()
+    # if project_settings.DEBUG == False:
+    #     return HttpResponse( 'Not yet running on production.' )
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
+    context['API_URL_ROOT'] = '%s://%s%s' % ( request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), reverse('data_root_url') )
+    context['elapsed_time'] = str( datetime.datetime.now() - start_time )
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
         context['user_first_name'] = request.user.first_name
@@ -707,13 +719,15 @@ def redesign_citations( request ):
         resp = render( request, 'disa_app_templates/redesign_citations.html', context )
     return resp
 
+    # data['API_URL_ROOT'] = '%s://%s%s' % ( scheme, host, reverse('data_root_url') )
+
 
 @shib_login
 def redesign_citation( request, cite_id=None ):
     """ Displays specific citation. """
     log.debug( '\n\nstarting redesign_citation()' )
-    if project_settings.DEBUG == False:
-        return HttpResponse( 'Not yet running on production.' )
+    # if project_settings.DEBUG == False:
+    #     return HttpResponse( 'Not yet running on production.' )
 
     if cite_id == None:
         return HttpResponseNotFound( '404 / Not Found' )
@@ -723,13 +737,19 @@ def redesign_citation( request, cite_id=None ):
     assert type(scheme) == str
     assert type(host) == str
     context: dict = view_edit_citation_manager.redesign_query_data( cite_id, scheme, host )
-    assert type(context) == dict
+    assert type(context) in [dict, type(None)]  # context can be None if an id is entered that doesn't exist in the db
     if context == None:
         return HttpResponseNotFound( '404 / Not Found' )
+
+    ## temp code to get P.R. location-data
+    sess = view_edit_record_manager.make_session()
+    location_context = view_edit_record_manager.prepare_common_data( sess )
 
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
         context['user_first_name'] = request.user.first_name
+        context['location_stuff'] = location_context
+    # log.debug( f'redesign_citation context, ```{pprint.pformat(context)}```' )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
