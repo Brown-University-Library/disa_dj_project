@@ -19,8 +19,12 @@
   background: white;
 }
 
-input, textarea, div.form-group, div.form-select, div.form-floating {
-	margin-bottom: 24px!important;
+input, textarea {
+	margin-bottom: 12px!important;
+}
+
+tags {
+	margin-bottom: 12px!important;
 }
 
 #tabs_bibinfoanditems h1 {
