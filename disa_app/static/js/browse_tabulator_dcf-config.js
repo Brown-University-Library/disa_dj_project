@@ -154,7 +154,7 @@ const rules =
       searchRule: {
         ruleType: 'matches',
         fieldId: 'record.name_first',
-        value: '^Eliz'
+        value: '^Ephr'
       },
       resourceSelector: {
         id: 88
@@ -167,7 +167,7 @@ const rules =
           {
             ruleType: 'equals',
             fieldId: 'record.sex',
-            value: '^Eliz'
+            value: 'Female'
           },
           {
             ruleType: 'matches',
