@@ -35,7 +35,7 @@ export const
   ENSLAVEMENT_STATUS = {
     ENSLAVED: 'Enslaved',
     ENSLAVER: 'Enslaver',
-    DEFAULT: 'Neither or unknown'
+    DEFAULT: 'Other or unknown'
   },
   MAX_NUMBER_OF_ENTRIES = 100000,
   REF_COUNT_ELEM_ID = 'ref-count',
