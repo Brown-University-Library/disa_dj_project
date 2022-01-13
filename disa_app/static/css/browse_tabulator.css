@@ -259,6 +259,10 @@ a#item-facsimile[href=''] {
 	font-size: 90%;
 }
 
+#dcf .card.highlight {
+	border-color: red;
+}
+
 .cf-footnotes {
 	display: inline-block;
 	margin-left: 1em;
@@ -270,7 +274,6 @@ a#item-facsimile[href=''] {
   display: inline;
   background-color: #00c;
   color: white;
-  font-size: 67%;
   font-weight: bold;
   text-transform: uppercase;
   padding: 0 0.6em;
