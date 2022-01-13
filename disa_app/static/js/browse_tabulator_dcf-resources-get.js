@@ -22,12 +22,3 @@ if (response.ok) {
 } // @todo add better error handling
 
 export default await dcfResourceData;
-
-/*
-
-const colors = fetch('../data/colors.json')
-	.then(response => response.json());
-
-export default await colors;
-
-*/
