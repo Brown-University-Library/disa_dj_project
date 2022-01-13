@@ -1,7 +1,11 @@
 
   // @todo - need to initialize searchState object to respond to table
+
   /*
-    Basically a proxy for getting filter values from the Tabulator table.
+    This module exposes an object that represents the state of the search
+    interface -- its filter values, general search fields.
+    
+    It is basically a proxy for getting filter values from the Tabulator table.
     Caches the results for efficiency (call refreshFilterValues() to update cache)
     @todo - search the text of the displayed table to look for keywords in results.
   */
@@ -37,7 +41,7 @@ function getSearchStateObject(table, generalSearch) {
         const propId = fieldId.startsWith('filter.') ? fieldId.slice(7) : fieldId;
         valuesArray = [filterValues[propId] || ''];
       }
-      console.log('VALUES ARRAY FOR ' + fieldId, valuesArray);
+      // console.log('VALUES ARRAY FOR ' + fieldId, valuesArray);
       return valuesArray;
     }
   };
