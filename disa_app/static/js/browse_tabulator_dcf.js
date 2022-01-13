@@ -2,239 +2,177 @@
 import dcfConfig from './browse_tabulator_dcf-config.js';
 import { getDcfResources } from './browse_tabulator_dcf-resources.js';
 
-
-// BEGIN NEW FOOTNOTE THINGY
-
-const recordTestFactory = {
-  equals: (recordProp, ruleValue) => {
-    return (record) => (record[recordProp] === ruleValue);
-  },
-  matches:  (recordProp, ruleValue) => {
-    const matchRegEx = new RegExp(ruleValue);
-    return (record) => matchRegEx.test(record[recordProp]);
-  }
-};
-
-
-function getRecordTestFunction(cfConfig) {
-
-  // Get all rules that apply to records
-
-  const recordRules = cfConfig.filter(
-    rule => rule.searchRule.fieldId && rule.searchRule.fieldId.startsWith('record.')
-  );
-
-  // For every rule, return an object with: 
-  //  - a function that runs the test on a record and returns a boolean
-  //  - the ID of the rule (which forms the footnote reference)
-
-  const tests = recordRules.map(
-    rule => {
-      const getTest = recordTestFactory[rule.searchRule.ruleType],
-            recordPropertyId = rule.searchRule.fieldId.slice(7);
-      return {
-        func: getTest(recordPropertyId, rule.searchRule.value),
-        id: rule.id
-      }
-    }
-  );
-
-  // Return a function that takes a record and returns an
-  //  array of IDs of rules that pass
-
-  return record => tests.filter(test => test.func(record)).map(test => test.id);
-}
-
-
-// Get a function that goes through each visible table entry
-//  and gets a list of rule IDs that apply, and adds a footnote
-//  at the end of the entry for each
-
-function getVisibleRecordsUpdater(table, cfConfig) {
-  const getRecordFootnoteIDs = getRecordTestFunction(cfConfig);
-  return () => {
-    table.getVisibleData().forEach(
-      entry => {
-        const entryFootnoteElemId = `referent-footnote-id-${entry.referent_db_id}`,
-              entryFootnoteElem = document.getElementById(entryFootnoteElemId),
-              footnoteHtmlArr = getRecordFootnoteIDs(entry)
-                .map((n, i) => `<a class="cf-footnote cf-footnote-${i}">${n}</a>`);
-
-        if (footnoteHtmlArr.length) {
-          entryFootnoteElem.innerHTML = 'Notes:&nbsp;' + footnoteHtmlArr.join();
-        }
-      }
-    )
-  }
-}
-
-// END NEW FOOTNOTE THINGY
-
+// Given a clause, generate test functions
 
 const testFunctionFactories = {
 
-  init: (searchState) => {
-    return () => searchState.isInitial()
+  init: () => { // This is probably better tested by seeing if there are any other notes
+    return () => false;
+    // return data => data.isInitial()
+  }, // The rule could always return true -- IF no other rules, THEN init()
+     // maybe a better name is 'default'
+
+  matches: ({fieldId, value}) => {
+    const matchRegEx = new RegExp(value),
+          matchTestFunc = dataValue => matchRegEx.test(dataValue),
+          testFunc = data => data.getFieldValue(fieldId).some(matchTestFunc);
+    return testFunc;
   },
 
-  and: (searchState, {rules}) => {
-    const rulesAsFunctions = rules.map(rule => getTestFunction(searchState, rule));
-    return () => rulesAsFunctions.every(f => f());
+  equals: ({fieldId, value}) => {
+    const equalityTestFunc = dataValue => dataValue === value;
+    return data => data.getFieldValue(fieldId).some(equalityTestFunc);
   },
 
-  or: (searchState, {rules}) => {
-    const rulesAsFunctions = rules.map(rule => getTestFunction(searchState, rule));
-    return () => rulesAsFunctions.some(f => f());
-  },
-
-  matches: (searchState, {fieldId, value}) => {
-    const matchRegEx = new RegExp(value);
-    return () => {
-      console.log('REGEX TEST', 
-                  { searchState, fieldId, value, matchRegEx, 
-                    matchAgainst: searchState.getFieldValue(fieldId),
-                    result: searchState.getFieldValue(fieldId).some(
-                      dataValue => matchRegEx.test(dataValue)
-                    )
-                  });
-      return searchState.getFieldValue(fieldId).some(
-        dataValue => matchRegEx.test(dataValue)
-      );
-    };
-  },
-
-  equals: (searchState, {fieldId, value}) => {
-    return () => {
-      console.log('EQUALITY TEST', { 
-        searchState, fieldId, value, 
-        matchAgainst: searchState.getFieldValue(fieldId),
-        result: searchState.getFieldValue(fieldId).some(
-          dataValue => dataValue === value
-        )
-      });
-      return searchState.getFieldValue(fieldId).some(
-        dataValue => dataValue === value
-      );
-    };
-  },
-
-  isNotEmpty: (searchState, {fieldId}) => {
-    return () => {
-      console.log('NOT_EMPTY TEST', { 
-        searchState, fieldId,
-        fieldValue: searchState.getFieldValue(fieldId),
-        result: searchState.getFieldValue(fieldId).some(
-          dataValue => dataValue !== undefined && dataValue.trim() !== ''
-        ) 
-      });
-      return searchState.getFieldValue(fieldId).some(
-        dataValue => dataValue !== undefined && dataValue.trim() !== ''
-      );
-    };
-  }
-}
-
-// Given a clause, generate test functions
-
-function getTestFunction(searchState, {ruleType, ...ruleArguments}) {
-
-  try {
-    if (testFunctionFactories[ruleType] === undefined) {
-      console.error(`'${ruleType}' is not a recognized test type (i.e. and, or, matches, equals -- case matters)`);
-      throw('');
-    } else {
-      return testFunctionFactories[ruleType](searchState, ruleArguments);
+  isNotEmpty: ({fieldId}) => {
+    const isNotEmptyTestFunc = dataValue => {
+      return dataValue !== undefined && dataValue.trim() !== ''
     }
-  } catch (err) {
-    throw new Error('DCF config', { cause: err });
+    return data => data.getFieldValue(fieldId).some(isNotEmptyTestFunc);
+  },
+
+  and: ({rules}) => {
+    const rulesAsFunctions = rules.map(rule => getTestFunction(rule));
+    return data => rulesAsFunctions.every(f => f(data));
+  },
+
+  or: ({rules}) => {
+    const rulesAsFunctions = rules.map(rule => getTestFunction(rule));
+    return data => rulesAsFunctions.some(f => f(data));
   }
 }
 
-// Given a resource, use the <template> element in the HTML file
-//  to create snippet of HTML as string
-
-const dcfResourceTemplate = document.getElementById('dcf-resource-template');
-
-function getResourceDisplayHtml(resource) {
-  const resourceCard = dcfResourceTemplate.content.cloneNode(true),
-        linkToFullResource = resourceCard.querySelector('a.dcf-resource-link');
-
-  // Populate template copy
-
-  resourceCard.querySelector('span.dcf-number').textContent = resource.id;
-  resourceCard.querySelector('span.dcf-resource-title').textContent = resource.title;
-  resourceCard.querySelector('span.dcf-resource-text').innerHTML = resource.text;
-  linkToFullResource.href = resource.url;
-  linkToFullResource.title = `Link to more information about ${resource.title}`;
-
-  // Convert document fragment to HTML string
-
-  const finalHtmlContainer = document.createElement('div');
-  finalHtmlContainer.appendChild(resourceCard);
-  return finalHtmlContainer.innerHTML.trim();
+function getTestFunction({ruleType, ...ruleArguments}) {
+  if (testFunctionFactories[ruleType] === undefined) {
+    console.error(`'${ruleType}' is not a recognized test type (i.e. ${Object.keys(testFunctionFactories).join(', ')} -- case matters!)`);
+  } else {
+    return testFunctionFactories[ruleType](ruleArguments);
+  }
 }
 
-// Given the searchState object & the available resources (in WP), 
-//  return a function that can be called to refresh
-//  the Decolonizing Framework sidebar
+function getFootnoteHtmlElem(resource) {
+  const footnoteElem = document.createElement('span');
+  footnoteElem.classList.add('cf-footnote');
+  footnoteElem.innerText = resource.id;
+  footnoteElem.onmouseover = () => {
+    document.getElementById(`dcf-resource-${resource.id}`).classList.add('highlight');
+  }
+  footnoteElem.onmouseleave = () => {
+    document.getElementById(`dcf-resource-${resource.id}`).classList.remove('highlight');
+  }
+  return footnoteElem;
+}
 
 function getDcfUpdateHandler(searchState, dcfContentElem, table) {
 
-  try {
+  // Map rules array (from config) to an array of objects with
+  //  test-functions and resolved resources
 
-    // With the config array, make an array of functions that each
-    // (a) runs the test and (b) returns the HTML snippet if it passes
-    // (HTML is generated in advance)
+  const rules = dcfConfig.map(rule => {
 
-    function getTestAndDisplayFunction({searchRule, resourceSelector}, ruleNumber) {
+    // Get this rule's corresponding test function
+    const testFunction = getTestFunction(rule.searchRule);
 
-      const testFunction = getTestFunction(searchState, searchRule),
-            resources = getDcfResources(resourceSelector);
-            console.log(`START MAPPING FOR RULE #${ruleNumber}`, resources);
-            resources.map(r => console.log(`MAPPING FOR RULE #${ruleNumber}`, r));
-            const resourceDisplayArr = resources.map(getResourceDisplayHtml);
-
-      console.log(`GOT DISPLAY HTML FOR RULE #${ruleNumber}:`, {searchRule, resourceSelector, resourceDisplayArr});
-
-      return () => {
-        console.log(`TESTING RULE #${ruleNumber}`, {resourceSelector, resourceDisplayArr, searchState, searchRule, testFunction});
-        console.log(`RESULT: RULE #${ruleNumber} ` + (testFunction() ? 'PASSES' : 'FAILS'));
-        return testFunction() ? resourceDisplayArr : []
-      };
-    }
-
-    const testAndDisplayFunctions = dcfConfig.map(getTestAndDisplayFunction);
-
-    // Generate a function that runs all test/display functions
-    //  in the array generated above, then
-    //  collects the display HTML (eliminating duplicates)
-    //  and returns the compiled HTML
-
-    const getAllDcfDisplayHtml = function () {
-      searchState.refreshFilterValues();
-      const resourcesDisplayHtml = testAndDisplayFunctions.map(f => f()).flat(),
-            uniqueResourcesDisplayHtml = Array.from((new Set(resourcesDisplayHtml)).values());
-      return uniqueResourcesDisplayHtml.join('');
+    // Create a function for testing an entry
+    const entryPassesFunction = entry => {
+      return testFunction({
+        getFieldValue: (fieldId) => [entry[fieldId.slice(7)]],
+        isInitial: () => false // Entries are never init
+      })
     };
 
-    // Updater for table rows -- adds footnotes
+    // Create a function for testing filter state
+    const filterPassesFunction = () => testFunction(searchState);
 
-    const updateTableRowFootnotes = getVisibleRecordsUpdater(table, dcfConfig);
-    
-    // Final function: updates all HTML in CF sidebar
-    //  and adds footnotes to table rows
-
-    return function () {
-      dcfContentElem.innerHTML = getAllDcfDisplayHtml();
-      updateTableRowFootnotes();
+    // START TEMP
+    if (rule.searchRule.ruleType === 'init') {
+      console.log('EEEEEEEE');
+      console.log({
+        type: rule.searchRule.ruleType,
+        filterPasses: filterPassesFunction,
+        entryPasses: entryPassesFunction,
+        resources: getDcfResources(rule.resourceSelector),
+        resourceSelector: rule.resourceSelector
+      });
+    } // END TEMP
+    return {
+      type: rule.searchRule.ruleType,
+      filterPasses: filterPassesFunction,
+      entryPasses: entryPassesFunction,
+      resources: getDcfResources(rule.resourceSelector)
     }
-  } catch (err) {
-    throw new Error('Error while initializing DeColonizing Frame');
+  });
+
+  // Pull out the default rule (only the first is used)
+
+  const defaultRule = rules.find(rule => rule.type === 'init');
+
+  // Define a function to deduplicate an array
+  //  (used below)
+
+  const filterForUniques = (resource, index, resources) => {
+    return resources.findIndex(r => r.id === resource.id) === index
   }
+  
+  window.srGetTestFunction = getTestFunction;
+  window.srRules = rules;
+
+  // Final function: run test functions against filters and records and
+  //  update the display accordingly
+
+  return function () {
+
+    // Generate the footnotes in the table
+
+    // For each results entry in the table 
+    //  (1) run the tests and get a list of rules that apply
+    //  (2) extract the resources into a list
+    //  (3) deduplicate the list
+    //  (4) convert the list to HTML strings and join
+
+    table.getVisibleData().forEach(entry => {
+      const entryFootnoteElemId = `referent-footnote-id-${entry.referent_db_id}`,
+            entryFootnoteContainerElem = document.getElementById(entryFootnoteElemId);
+
+      if (entryFootnoteContainerElem.innerHTML.trim() === '') {
+        rules.filter(rule => rule.entryPasses(entry)) // 1
+            .reduce((resources, rule) => resources.concat(rule.resources), []) // 2
+            .filter(filterForUniques) // 3
+            .map(r => { console.log('!!', r); return r })
+            .map(resource => getFootnoteHtmlElem(resource)) // 4
+            .forEach(
+              entryFootnoteElem => entryFootnoteContainerElem.appendChild(entryFootnoteElem)
+            );
+      }
+    });
+
+    // Generate the sidebar content
+
+    // For each rule, 
+    //  (1) run the tests against the filter state
+    //  (2) get a list of resources
+    //  (3) deduplicate it
+    //  (4) convert to HTML and join
+    // (If no rules pass, then use the default rule)
+
+    searchState.refreshFilterValues();
+
+    const cfRulesThatPass = rules.filter(rule => rule.filterPasses()), // (1)
+          cfRules = cfRulesThatPass.length ? cfRulesThatPass : [defaultRule];
+
+    const cfHTML = cfRules.reduce((resources, rule) => resources.concat(rule.resources), []) // (2)
+        .filter(filterForUniques) // (3)
+        .map(resource => resource.cfHtml) // (4)
+        .join();
+
+    dcfContentElem.innerHTML = cfHTML;
+  }
+
+  // Get a map of resources to rules
+
 }
 
 // @todo for testing only
-window.testFunctionFactories = testFunctionFactories;
-window.getTestFunction = getTestFunction;
+window.srTestFunctionFactories = testFunctionFactories;
 
 export { getDcfUpdateHandler }
