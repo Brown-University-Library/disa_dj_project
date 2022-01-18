@@ -24,7 +24,7 @@ function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
     { title:'Name',      field:'all_name',          sorter:'string', headerFilter: true }, // mutator: combineNames_mutator },
     { title:'Last name', field:'name_last',         sorter:'string', headerFilter: true, visible: false },
     { title:'Status',    field:'enslavement_status',            sorter:'string', headerFilter: true,
-      headerFilter: 'select', headerFilterParams:{ values: ['Enslaved','Enslaver','Neither'] }, download: true },
+      headerFilter: 'select', headerFilterParams:{ values: Object.values(sr.ENSLAVEMENT_STATUS) }, download: true },
     // { title:'Roles',    field:'roles',              sorter:'string', headerFilter: true },
     { title:'Sex',       field:'sex',   sorter:'string',
       headerFilter: 'select', headerFilterParams:{ values: ['Male','Female', 'Other'] } },
@@ -58,7 +58,7 @@ function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
 
     // Some hidden fields just for downloading and general search
 
-    { title:'Source transcription', field:'reference_data.transcription', visible: false, download: true, 
+    { title:'Source transcription', field:'reference_data.transcription', visible: false, download: true,
       accessorDownload:transcriptionDownloadAccessor },
     { title:'Referent_ID', field:'referent_db_id', visible: false, download: true },
     { title:'Vocation', field:'vocation', visible: false, download: true },
@@ -83,7 +83,7 @@ function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
     renderComplete: (x) => {
       console.log('EEE', x, this);
       document.querySelectorAll("*[data-filter-function]").forEach(
-        setFilterLink => { 
+        setFilterLink => {
           const onclickFunctionName = x.getAttribute('data-filter-field'),
                 onclickFunctionArg = x.getAttribute('data-filter-value'),
                 // onclickFunction = () => { console.log('YESS'); window[onclickFunctionName](onclickFunctionArg);}
@@ -129,7 +129,7 @@ function getTableRenderer(sr, showDetailsFunction, generalSearch) {
     });
   }
 
-  // Download workaround: make the page size a huge number, download, 
+  // Download workaround: make the page size a huge number, download,
   //  then set it back to what it was
 
   function download() {
@@ -148,8 +148,8 @@ function getTableRenderer(sr, showDetailsFunction, generalSearch) {
       console.log(table);
       table.refreshFilter();
     },
-    setHeaderFilterValue: function (headerId, value) { 
-      table.setHeaderFilterValue(headerId, value) 
+    setHeaderFilterValue: function (headerId, value) {
+      table.setHeaderFilterValue(headerId, value)
     }
   };
 }
