@@ -1,6 +1,24 @@
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
 	.bd-placeholder-img-lg {
-	font-size: 3.5rem;
+		font-size: 3.5rem;
+	}
+	.wrapper {
+		clear: both!important;
+		margin-top: 5.125em!important;
+	}
+}
+
+@media (min-width: 0px) and (max-width: 760px) {
+	.wrapper {
+		clear: both!important;
+		margin-top: 12em!important;
+	}
+}
+
+@media (min-width: 761px) and (max-width: 1199px) {
+	.wrapper {
+		clear: both!important;
+		margin-top: 8.125em!important;
 	}
 }
 
