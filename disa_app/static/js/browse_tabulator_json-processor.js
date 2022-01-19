@@ -49,8 +49,6 @@ function processJSON(response, sr) {
       .filter(name => (name))
       .join(' ');
 
-    newEntry.all_tribes = newEntry.tribes.join(', ');
-
     newEntry.reference_data.all_locations = newEntry.reference_data.locations
       .reverse()
       .map(loc => loc.location_name)
