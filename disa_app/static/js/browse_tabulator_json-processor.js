@@ -56,6 +56,9 @@ function processJSON(response, sr) {
       .map(loc => loc.location_name)
       .join(', ');
 
+
+    // Add a derivative field for Enslaved/Enslaver/Other filter
+
     newEntry.all_roles = newEntry.roles.join(', ');
 
     function includesAny(compareArr1, compareArr2) {
@@ -65,9 +68,11 @@ function processJSON(response, sr) {
       )
     }
 
-    if (includesAny(entry.roles, sr.ENSLAVED_ROLES)) {
+    if (includesAny(entry.statuses, sr.ENSLAVED_STATUSES ||
+        includesAny(entry.roles, sr.ENSLAVED_ROLES))) {
       newEntry.enslavement_status = sr.ENSLAVEMENT_STATUS.ENSLAVED;
-    } else if (includesAny(entry.roles, sr.ENSLAVER_ROLES)) {
+    } else if (includesAny(entry.statuses, sr.ENSLAVER_STATUSES) ||
+               includesAny(entry.roles, sr.ENSLAVER_ROLES)) {
       newEntry.enslavement_status = sr.ENSLAVEMENT_STATUS.ENSLAVER;
     } else {
       newEntry.enslavement_status = sr.ENSLAVEMENT_STATUS.DEFAULT;
