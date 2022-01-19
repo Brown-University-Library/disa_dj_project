@@ -43,60 +43,60 @@
 
     <body>
 
-	<header class="d-flex p-3 bg-dark text-white fixed-top justify-content-between">
-	<div class="container-fluid">
-	    <div class="row">
-	      <div class="d-flex flex-wrap align-items-center justify-content-md-between justify-content-end col-12">
+		<header class="d-flex p-3 bg-dark text-white fixed-top justify-content-between">
+		<div class="container-fluid">
+		    <div class="row">
+		      <div class="d-flex flex-wrap align-items-center justify-content-md-between justify-content-end col-12">
 
-	        <a class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none" style="margin-right:1.5%;" href="#"><strong><span style="font-size: 181%;">Stolen Relations</span></strong>&nbsp;&nbsp;&nbsp;<span style="font-size: 67%;letter-spacing: 3!important;font-weight: bold;">Recovering Stories of Indigenous<br>Enslavement in the Americas</span></a>
+		        <a class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none" style="margin-right:1.5%;" href="#"><strong><span style="font-size: 181%;">Stolen Relations</span></strong>&nbsp;&nbsp;&nbsp;<span style="font-size: 67%;letter-spacing: 3!important;font-weight: bold;">Recovering Stories of Indigenous<br>Enslavement in the Americas</span></a>
 
-	        <form class="d-flex col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="{% url 'search_results_url' %}" method="get" style="width:21%!important;margin-top:7px!important;margin-right: 0!important;padding-right: 0!important;">
+		        <form class="d-flex col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="{% url 'search_results_url' %}" method="get" style="width:21%!important;margin-top:7px!important;margin-right: 0!important;padding-right: 0!important;">
 
-	            {% if search_query %}
-	            <input class="form-control mr-sm-2" type="text" placeholder="searched: `{{ search_query }}`" aria-label="Search" id="query" name="query">
-	            <!-- <input type="text" class="searchTerm" placeholder="searched: `{{ search_query }}`" id="query" name="query"> -->
-	            {% else %}
-	            <input class="form-control mr-sm-2" type="text" placeholder="Search for..." aria-label="Search" id="query" name="query">
-	            <!-- <input type="text" class="searchTerm" placeholder="enter search-term" id="query" name="query"> -->
-	            {% endif %}
+		            {% if search_query %}
+		            <input class="form-control mr-sm-2" type="text" placeholder="searched: `{{ search_query }}`" aria-label="Search" id="query" name="query">
+		            <!-- <input type="text" class="searchTerm" placeholder="searched: `{{ search_query }}`" id="query" name="query"> -->
+		            {% else %}
+		            <input class="form-control mr-sm-2" type="text" placeholder="Search for..." aria-label="Search" id="query" name="query">
+		            <!-- <input type="text" class="searchTerm" placeholder="enter search-term" id="query" name="query"> -->
+		            {% endif %}
 
-	            <button class="btn btn-secondary my-2 my-sm-0" style="margin-bottom:11px!important;margin-right:7px;" type="submit" aria-label="search button">
-	                <i class="fas fa-search fa-lg"></i>
-	            </button>
-	        </form>
+		            <button class="btn btn-secondary my-2 my-sm-0" style="margin-bottom:11px!important;margin-right:7px;" type="submit" aria-label="search button">
+		                <i class="fas fa-search fa-lg"></i>
+		            </button>
+		        </form>
 
-	        <ul class="nav col-12 col-xl-auto me-lg-4 mb-5 justify-content-center mb-md-0" style="padding-right: 0!important;margin-right: 0!important;">
-	            {% if user_is_authenticated %}
-	            <li class="nav-item">
-	                <a class="nav-link px-3 text-white" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false">Browse</a>
-	            </li>
-	            <li class="nav-item">
-	                <a class="nav-link px-3 text-white" href="{% url 'people_url' %}" tabindex="-1" aria-disabled="false">People</a>
-	            </li>
-	            <li class="nav-item">
-	                <a class="nav-link px-3 text-white" href="{% url 'redesign_citations_url' %}" tabindex="-1" aria-disabled="false">Citations</a>
-	            </li>
-	            <li class="nav-item">
-	                <ul class="navbar-text px-3 text-white">({{ user_first_name }})</ul>
-	            </li>
-	            <li class="nav-item">
-	                {% if logout_next %}
-	                <a class="nav-link px-2 text-white" href="{% url 'logout_url' %}?next={{ logout_next }}">Logout</a>
-	                {% else %}
-	                <a class="nav-link px-2 text-white" href="{% url 'logout_url' %}?next={% url 'login_url' %}">Logout</a>
-	                {% endif %}
-	            </li>
-	            {% else %}
-	            <li class="nav-item">
-	                <a class="nav-link px-2 text-white" href="{% url 'login_url' %}">Login</a>
-	            </li>
-	            {% endif %}
-	    	</ul>
+		        <ul class="nav col-12 col-xl-auto me-lg-4 mb-5 justify-content-center mb-md-0" style="padding-right: 0!important;margin-right: 0!important;">
+		            {% if user_is_authenticated %}
+		            <li class="nav-item">
+		                <a class="nav-link px-3 text-white" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false">Browse</a>
+		            </li>
+		            <li class="nav-item">
+		                <a class="nav-link px-3 text-white" href="{% url 'people_url' %}" tabindex="-1" aria-disabled="false">People</a>
+		            </li>
+		            <li class="nav-item">
+		                <a class="nav-link px-3 text-white" href="{% url 'redesign_citations_url' %}" tabindex="-1" aria-disabled="false">Citations</a>
+		            </li>
+		            <li class="nav-item">
+		                <ul class="navbar-text px-3 text-white">({{ user_first_name }})</ul>
+		            </li>
+		            <li class="nav-item">
+		                {% if logout_next %}
+		                <a class="nav-link px-2 text-white" href="{% url 'logout_url' %}?next={{ logout_next }}">Logout</a>
+		                {% else %}
+		                <a class="nav-link px-2 text-white" href="{% url 'logout_url' %}?next={% url 'login_url' %}">Logout</a>
+		                {% endif %}
+		            </li>
+		            {% else %}
+		            <li class="nav-item">
+		                <a class="nav-link px-2 text-white" href="{% url 'login_url' %}">Login</a>
+		            </li>
+		            {% endif %}
+		    	</ul>
 
-	      </div>
-	    </div>  
-	</div>
-	</header>
+		      </div>
+		    </div>  
+		</div>
+		</header>
 
         <div class="wrapper">
 
