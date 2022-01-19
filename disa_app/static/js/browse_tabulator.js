@@ -144,7 +144,6 @@ main();
     }
   ],
   "all_name": "Nelly",
-  "all_roles": "Enslaved",
   "enslavement_status": "Enslaved",
   "all_origins": "",
   "year": 1777

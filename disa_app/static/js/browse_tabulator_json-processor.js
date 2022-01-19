@@ -56,10 +56,7 @@ function processJSON(response, sr) {
       .map(loc => loc.location_name)
       .join(', ');
 
-
     // Add a derivative field for Enslaved/Enslaver/Other filter
-
-    newEntry.all_roles = newEntry.roles.join(', ');
 
     function includesAny(compareArr1, compareArr2) {
       return compareArr1.reduce(
