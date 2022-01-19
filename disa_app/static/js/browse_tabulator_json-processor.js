@@ -1,6 +1,5 @@
 
 import { cleanString } from './browse_tabulator_clean-string.js';
-// import { getGeneralSearchFunction } from './browse_tabulator_lunr.js';
 
 // Given the JSON data loaded from the API, 
 // cleans, processes, and prepares that JSON object
