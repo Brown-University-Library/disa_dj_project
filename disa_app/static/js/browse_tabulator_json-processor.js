@@ -1,6 +1,5 @@
 
 import { cleanString } from './browse_tabulator_clean-string.js';
-// import { getGeneralSearchFunction } from './browse_tabulator_lunr.js';
 
 // Given the JSON data loaded from the API, 
 // cleans, processes, and prepares that JSON object
@@ -49,14 +48,16 @@ function processJSON(response, sr) {
       .filter(name => (name))
       .join(' ');
 
-    newEntry.all_tribes = newEntry.tribes.join(', ');
-
     newEntry.reference_data.all_locations = newEntry.reference_data.locations
       .reverse()
       .map(loc => loc.location_name)
       .join(', ');
 
-    newEntry.all_roles = newEntry.roles.join(', ');
+    newEntry.all_tribes = newEntry.tribes.join(', ');
+    newEntry.all_races = newEntry.races.join(', ');
+    newEntry.year = (new Date(entry.reference_data.date_db)).getFullYear();
+
+    // Add a derivative field for Enslaved/Enslaver/Other filter
 
     function includesAny(compareArr1, compareArr2) {
       return compareArr1.reduce(
@@ -65,18 +66,15 @@ function processJSON(response, sr) {
       )
     }
 
-    if (includesAny(entry.roles, sr.ENSLAVED_ROLES)) {
+    if (includesAny(entry.statuses, sr.ENSLAVED_STATUSES ||
+        includesAny(entry.roles, sr.ENSLAVED_ROLES))) {
       newEntry.enslavement_status = sr.ENSLAVEMENT_STATUS.ENSLAVED;
-    } else if (includesAny(entry.roles, sr.ENSLAVER_ROLES)) {
+    } else if (includesAny(entry.statuses, sr.ENSLAVER_STATUSES) ||
+               includesAny(entry.roles, sr.ENSLAVER_ROLES)) {
       newEntry.enslavement_status = sr.ENSLAVEMENT_STATUS.ENSLAVER;
     } else {
       newEntry.enslavement_status = sr.ENSLAVEMENT_STATUS.DEFAULT;
     }
-
-    newEntry.all_origins = newEntry.origins.join(', ');
-    newEntry.all_tribes = newEntry.tribes.join(', ');
-    newEntry.all_races = newEntry.races.join(', ');
-    newEntry.year = (new Date(entry.reference_data.date_db)).getFullYear();
 
     // Some additional fields for Maiah's download
 

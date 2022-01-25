@@ -4,7 +4,13 @@
 async function getStolenRelationsData(url) {
 
   const loadingModalElem = document.getElementById('loadingModal'),
-        loadingModal = new bootstrap.Modal(loadingModalElem);
+        loadingModal = new bootstrap.Modal(loadingModalElem),
+        hideModalOrSchedule = () => {
+          if (loadingModal._isShown) { // Modal can only be hidden once
+            loadingModal.hide();       //   it's finished showing
+            window.setTimeout(hideModalOrSchedule, 500);
+          }
+        };
 
   loadingModal.show();
 
@@ -12,8 +18,7 @@ async function getStolenRelationsData(url) {
     if (!response.ok) {
       throw new Error(`Status ${response.status} (${response.statusText})`);
     } else {
-      // Not sure why, but Bootstrap requires a delay here ...
-      window.setTimeout(() => loadingModal.hide(), 1000);
+      hideModalOrSchedule();
       return response.json();
     }
   })

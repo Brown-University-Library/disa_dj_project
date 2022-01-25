@@ -15,6 +15,15 @@ export const
   GENERAL_SEARCH_INPUT_ID = 'general-search',
   MIN_TIME_BETWEEN_LUNR_INDEXES = 1000,
   ADULT_CHILD_CUTOFF_AGE = 16,
+  ENSLAVED_STATUSES = [
+    "Freed", "Captive", "Captive to be sold", "Enslaved", 
+    "Formerly Enslaved", "Indenture, Court-Ordered", "Indenture, Parental",
+    "Indenture, Voluntary", "Indentured Servant",  "Maidservant",
+    "Manservant", "Manslave", "Paid for", "Possible servant or slave",
+    "Prisoner", "Prospective Enslavement", "Runaway", "Servant",
+    "Slave", "Slave, Court-Ordered", "Threatened Enslavement",
+    "Woman Servant", "Unlawfully Detained"
+  ],
   ENSLAVED_ROLES = [
     'Enslaved',
     'Bought',
@@ -25,12 +34,11 @@ export const
     'Captured',
     'Emancipated'
   ],
+  ENSLAVER_STATUSES = [
+    "Owner", "captor", "Enslaver", "Master", "propery owner"
+  ],
   ENSLAVER_ROLES = [
-    'Owner',
-    'Captor',
-    'Buyer',
-    'Seller',
-    'Master'
+    'Owner', 'Captor', 'Buyer', 'Seller', 'Master'
   ],
   ENSLAVEMENT_STATUS = {
     ENSLAVED: 'Enslaved',
