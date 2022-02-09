@@ -28,7 +28,7 @@ function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
     // { title:'Roles',    field:'roles',              sorter:'string', headerFilter: true },
     { title:'Sex',       field:'sex',   sorter:'string',
       headerFilter: 'select', headerFilterParams:{ values: ['Male','Female', 'Other'] } },
-    { title:'Tribe',     field:'all_tribes', sorter:'string',
+    { title:'Nation',     field:'all_tribes', sorter:'string',
       headerFilter: 'select',
       headerFilterParams: {
         values: [ '"daughter of a Spanish Squaw"', "Apalachee", "Blanco", "Blanea", "Bocotora",
