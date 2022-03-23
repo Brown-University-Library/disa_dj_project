@@ -189,6 +189,29 @@
 <!-- Just a note that we could have page-specific sidebar documentation here, if desired. -->
 
 {% block sidebar %}
+
+<div id="sidebar" style="padding-top: 2.5em;">
+  <div class="sidebar-header">
+      <div style="margin-right: -1.25em!important;">
+          <div style="float: right;margin-top: -1.33em;">
+              <button type="button" id="sidebarCollapse" class="btn btn-info">
+                  <span style="font-weight: bold;">Toggle&nbsp;<br></span>
+                  <i class="fas fa-info-circle fa-3x"></i>
+              </button>
+          </div>
+      </div>
+      <h3><strong>Help</strong></h3>
+      <p>
+        For more information on the use of this form:<br />
+        <a href="https://docs.google.com/document/d/1e6d1bsxpGnj5kak2jLBUb3qYnIS2vsDwv0Ejf2AlPo8/edit" 
+           class="btn btn-light"
+           target="_blank">
+          open the style guide
+        </a>
+      </p>
+  </div>
+</div> <!-- /#sidebar -->
+
 {% endblock sidebar %}
 
 <!-- The content-block html below is within the redesign_base.html template's `<main class="container">` element. -->
@@ -1553,6 +1576,28 @@
 
 
 {% block page_specific_js %}
+
+<script>
+
+  // Set up handler for sidebar documentation
+
+  window.addEventListener('DOMContentLoaded', () => {
+
+    // Initialize sidebar (with its local storage to determine if it's open or closed)
+
+    const sidebarClassList = document.getElementById('sidebar').classList;
+    document.getElementById('sidebarCollapse')
+            .addEventListener('click', () => {
+              sidebarClassList.toggle('active');
+              localStorage.setItem('citationsInfoSidebarClosed', sidebarClassList.contains('active'));
+            });
+
+    if (localStorage.getItem('citationsInfoSidebarClosed') === 'true') {
+      sidebarClassList.add('active');
+    }
+  });
+
+</script>
 
 
 {% endblock page_specific_js %}
