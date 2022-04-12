@@ -156,7 +156,7 @@ class Details_Updater():
         self.session = None
         self.common = None
 
-    def manage_details_put( self, payload: bytes, request_user_id: int, rfrnt_id: str ) -> HttpResponse:
+    def manage_details_put( self, payload: bytes, request_user_id: int, rfrnt_id: str ) -> dict:
         """ Manages data/api ajax 'PUT'.
             Called by views.data_entrants_details(), triggered by views.edit_person() webpage. """
         log.debug( 'starting manage_details_put' )
