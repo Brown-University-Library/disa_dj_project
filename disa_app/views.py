@@ -105,8 +105,8 @@ def browse_logout( request ):
 
 def people( request ):
     log.debug( '\n\nstarting people()' )
-    people: List(dict) = view_people_manager.query_people()
-    context = { 'people': people }
+    people: list = view_people_manager.query_people()
+    context = { 'people': people, 'user_is_authenticated': False }
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
         context['user_first_name'] = request.user.first_name
@@ -115,6 +115,20 @@ def people( request ):
     else:
         resp = render( request, 'disa_app_templates/people.html', context )
     return resp
+
+
+# def people( request ):
+#     log.debug( '\n\nstarting people()' )
+#     people: List(dict) = view_people_manager.query_people()
+#     context = { 'people': people }
+#     if request.user.is_authenticated:
+#         context['user_is_authenticated'] = True
+#         context['user_first_name'] = request.user.first_name
+#     if request.GET.get('format', '') == 'json':
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         resp = render( request, 'disa_app_templates/people.html', context )
+#     return resp
 
 
 def person( request, prsn_id ):
@@ -187,7 +201,7 @@ def datafile( request ):
     """ Prepares complete denormalized datafile. """
     log.debug( '\n\nstarting datafile()' )
     srch_txt = request.GET.get( 'query', None )
-    data: dict = denormalizer_document.denormalize()
+    data: list = denormalizer_document.denormalize()
     j_string = json.dumps(data, sort_keys=True, indent=2)
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( j_string, content_type='application/json; charset=utf-8' )
