@@ -176,11 +176,10 @@ def manage_put( cite_id: str, user_id: int, payload: bytes ) -> dict:
         }
 
         return_data['doc'] = doc_dct
-        log.debug( f'data, ```{pprint.pformat(return_data)}```' )
+        log.debug( f'return_data, ```{pprint.pformat(return_data)}```' )
 
     except:
         log.exception( 'problem on api PUT; traceback follows...' )
-    log.debug( f'return_data (put-context), ``{pprint.pformat(return_data)}``' )
     return return_data
 
     ## end def manage_put()
