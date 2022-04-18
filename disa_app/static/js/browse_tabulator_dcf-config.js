@@ -63,7 +63,7 @@
     PLUS the IDs. For example, you can't select for an item that has a tag, but 
     only if it's in a category.
 
-  See schema for this data structure at browse_tabulator_dcf-config_schema.js
+  See schema for this data structure at browse_tabulator_dcf-config_schema.json
 
   You can validate this config by putting the array (i.e. the code between "START/END RULE DATA") 
   and the schema into https://www.jsonschemavalidator.net/

@@ -1,4 +1,3 @@
-
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "array",
@@ -59,22 +58,26 @@
     "fieldId": {
       "$id": "fieldId",
       "enum": [
-        "all_name", 
-        "name_last", 
-        "enslavement_status", 
-        "sex", 
-        "all_tribes", 
-        "all_races", 
-        "reference_data.all_locations", 
+        "filter.all_name", 
+        "record.name_last", , 
+        "record.name_first", 
+        "filter.enslavement_status", , 
+        "record.enslavement_status", 
+        "filter.sex", 
+        "record.sex",
+        "filter.all_tribes", 
+        "filter.all_races", 
+        "filter.reference_data.all_locations", 
         "year", 
-        "reference_data.transcription", 
-        "referent_db_id", 
-        "vocation", 
-        "age", 
+        "filter.reference_data.transcription", 
+        "record.referent_db_id", 
+        "filter.vocation",
+        "record.vocation", 
+        "record.age", 
         "reference_data.reference_db_id", 
         "enslaved_by", 
         "enslaved",
-        "general-search"
+        "filter.general-search"
       ]
     },
     "searchRule": {
@@ -212,4 +215,3 @@
     }
   }
 }
-
