@@ -252,7 +252,7 @@ def manage_post( payload: bytes, request_user_id: int ) -> dict:
     return context
 
 
-def manage_reference_delete( rfrnc_id: str ) -> HttpResponseRedirect:  # or, much less likely, HttpResponseNotFound
+def manage_reference_delete( rfrnc_id: str ) -> dict:  # or, much less likely, HttpResponseNotFound
     """ Handles api call when red `x` button is clicked...
         ...and then the 'Confirm delete' button is clicked in, eg, <http://127.0.0.1:8000/editor/documents/(123)/>.
         Called by views.data_reference()

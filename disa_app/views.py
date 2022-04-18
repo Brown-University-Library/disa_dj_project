@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import datetime, json, logging, os, pprint, time
-from typing import List
+# from typing import List
 
 import requests
+
+# from disa_app.lib import basic_auth
+# from django.shortcuts import get_object_or_404, render
 from disa_app import settings_app
-from disa_app.lib import basic_auth
 from disa_app.lib import denormalizer_document
 from disa_app.lib import user_pass_auth
 from disa_app.lib import utility_manager
@@ -26,7 +28,7 @@ from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, HttpResponseRedirect, HttpResponseServerError
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 
 
 log = logging.getLogger(__name__)
