@@ -502,6 +502,7 @@ def data_records( request, rec_id=None ):
         Url: '/data/records/<rec_id>/' -- 'data_record_url' """
     log.debug( '\n\nstarting data_records' )
     # log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
+    context = {}
     try:
         log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rec_id, ``{rec_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
         assert ( rec_id == None or type(rec_id) == str )
@@ -556,6 +557,7 @@ def data_documents( request, doc_id=None ):
     user_uuid = request.user.profile.uu_id
     user_email = request.user.profile.email
     log.debug( f'user_id, ```{user_id}```' )
+    context = {}
     if request.method == 'GET' and doc_id:
         context: dict = v_data_document_manager.manage_get( doc_id, user_id )
     elif request.method == 'GET':  # called when clicking 'New document' button
@@ -574,7 +576,9 @@ def data_documents( request, doc_id=None ):
     log.debug( f'context, ``{context}``' )
     if context == 'error':  # TODO: merge this response into `400 / Bad Request`
         resp = HttpResponseBadRequest( '400 / Bad Request' )
-    elif context == '400 / Bad Request':
+    # elif context == '400 / Bad Request':
+    #     resp = HttpResponseBadRequest( '400 / Bad Request' )
+    elif type(context) == dict and 'err' in context.keys() and context['err'] == '400 / Bad Request':
         resp = HttpResponseBadRequest( '400 / Bad Request' )
     elif context == 'not_found':
         resp = HttpResponseNotFound( '404 / Not Found' )
