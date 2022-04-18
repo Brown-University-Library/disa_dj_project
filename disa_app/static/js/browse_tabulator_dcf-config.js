@@ -77,110 +77,60 @@ const rules =
 // START RULE DATA
 
 [
-    {
-      searchRule: {
-        ruleType: 'init'
-      },
-      resourceSelector: {
-        tag: 9
-      }
+  {
+  	searchRule: {
+	  	ruleType: 'init'
     },
-    {
-      searchRule: {
-        ruleType: 'equals',
-        fieldId: 'filter.all_tribes',
-        value: 'Narragansett'
-      },
-      resourceSelector: {
-        tag: 15
-      }
-    },
-    {
-      searchRule: {
-        ruleType: 'equals',
-        fieldId: 'filter.all_tribes',
-        value: 'Eastern Pequot'
-      },
-      resourceSelector: {
-        tag: 14
-      }
-    },
-    {
-      searchRule: {
-        ruleType: 'isNotEmpty',
-        fieldId: 'general-search'
-      },
-      resourceSelector: {
-        tag: 36
-      }
-    },
-    {
-      searchRule: {
-        ruleType: 'isNotEmpty',
-        fieldId: 'filter.all_tribes'
-      },
-      resourceSelector: {
-        tag: 6
-      }
-    },
-    {
-      searchRule: {
-        ruleType: 'isNotEmpty',
-        fieldId: 'filter.sex'
-      },
-      resourceSelector: {
-        tag: 5
-      }
-    },
-    {
-      searchRule: {
-        ruleType: 'isNotEmpty',
-        fieldId: 'filter.all_races'
-      },
-      resourceSelector: {
-        tag: 7
-      }
-    },
-    {
-      searchRule: {
-        ruleType: 'isNotEmpty',
-        fieldId: 'filter.reference_data.all_locations'
-      },
-      resourceSelector: {
-        tag: 8
-      }
-    },
-    {
-      searchRule: {
-        ruleType: 'matches',
-        fieldId: 'record.name_first',
-        value: '^Ephr'
-      },
-      resourceSelector: {
-        id: 88
-      }
-    },
-    {
-      searchRule: {
-        ruleType: 'and',
-        rules: [
-          {
-            ruleType: 'equals',
-            fieldId: 'record.sex',
-            value: 'Female'
-          },
-          {
-            ruleType: 'matches',
-            fieldId: 'record.name_last',
-            value: '^Smi'
-          }
-        ]
-      },
-      resourceSelector: {
-        id: 88
-      }
+    resourceSelector: {
+    	id: 123
     }
-  ];
+  },
+  {
+  	searchRule: {
+      ruleType: 'isNotEmpty',
+      fieldId: 'filter.all_name'
+    },
+    resourceSelector: {
+    	id: 125
+    }
+  },
+  {
+  	searchRule: {
+    	ruleType: 'isNotEmpty',
+		fieldId: 'filter.sex'
+    },
+    resourceSelector: {
+    	id: 127
+    }
+  },
+  {
+  	searchRule: {
+    	ruleType: 'isNotEmpty',
+		fieldId: 'filter.all_races'
+    },
+    resourceSelector: {
+    	id: 129
+    }
+  },
+  {
+  	searchRule: {
+    	ruleType: 'isNotEmpty',
+		fieldId: 'filter.reference_data.all_locations'
+    },
+    resourceSelector: {
+    	id: 131
+    }
+  },
+  {
+  	searchRule: {
+    	ruleType: 'isNotEmpty',
+		fieldId: 'filter.all_tribes'
+    },
+    resourceSelector: {
+    	id: 133
+    }
+  }
+];
 
 // END RULE DATA
 
