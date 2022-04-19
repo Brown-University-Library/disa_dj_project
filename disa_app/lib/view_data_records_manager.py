@@ -210,9 +210,11 @@ def manage_reference_delete( rfrnc_id: str ) -> dict:  # or, much less likely, H
         assert type(rfrnc_id) == str
         if rfrnc_id == 'undefined':
             context = { 'err': '400 / Bad Request' }
+            log.warning( f'should not receive `undefined` rfrnc_id' )
     except Exception as e:
         log.exception( 'Bad reference-id.' )
         context = { 'err': '400 / Bad Request' }
+        log.warning( f'should not receive a rfrnc_id of, ``{rfrnc_id}``' )
     if context == {}:
         try:
             session = make_session()
@@ -226,6 +228,7 @@ def manage_reference_delete( rfrnc_id: str ) -> dict:  # or, much less likely, H
                 context =  { 'redirect': redirect_url }
             else:
                 context = { 'err': '404 / Not Found' }
+                log.warning( f'should not receive a not-found rfrnc_id of, ``{rfrnc_id}``' )
         except Exception as e:
             log.exception( 'Problem deleting reference.' )
     log.debug( f'context, ``{context}``' )
