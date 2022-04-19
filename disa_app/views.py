@@ -542,8 +542,30 @@ def data_reference( request, rfrnc_id ):
     log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rfrnc_id, ``{rfrnc_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
     assert type(rfrnc_id) == str
     context: dict = view_data_records_manager.manage_reference_delete( rfrnc_id )
-    rspns = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    rspns = None
+    if 'err' in context.keys():
+        if context['err'] == '400 / Bad Request':
+            rspns = HttpResponseBadRequest( '400 / Bad Request' )
+        elif context['err'] == '404 / Not Found':
+            rspns = HttpResponseNotFound( '404 / Not Found' )
+    else:
+        rspns = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return rspns
+
+
+# @shib_login
+# def data_reference( request, rfrnc_id ):
+#     """ Called via ajax by views.edit_citation() on DELETE
+#         Handles api call when red `x` button is clicked in, eg, <http://127.0.0.1:8000/editor/documents/(123)/>
+#         Url: '/data/reference/<rfrnc_id>/' -- 'data_reference_url'
+#         TODO: Why isn't this part of the above data_records() function??!!
+#         """
+#     log.debug( f'\n\nstarting data_reference()' )
+#     log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rfrnc_id, ``{rfrnc_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
+#     assert type(rfrnc_id) == str
+#     context: dict = view_data_records_manager.manage_reference_delete( rfrnc_id )
+#     rspns = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     return rspns
 
 
 @shib_login
