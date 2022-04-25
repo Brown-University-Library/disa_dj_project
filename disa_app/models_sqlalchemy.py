@@ -496,7 +496,7 @@ class Referent(Base):
     __tablename__ = '5_referents'
 
     id = Column(Integer, primary_key=True)
-    # uuid = Column( String(32) )
+    uuid = Column( String(32) )
     age = Column(String(255))
     sex = Column(String(255))
     primary_name_id = Column(Integer,
@@ -764,3 +764,16 @@ class ReferenceEdit(Base):
 
     def __repr__(self):
         return f'<ReferenceEdit {self.id}>'
+
+
+class ReferentMatch( Base ):
+    __tablename__ = 'referent_matches'
+
+    uuid = Column( String(32), primary_key=True )
+    referent_A_uuid = Column( String, ForeignKey('5_referents.uuid') )
+    referent_B_uuid = Column( String, ForeignKey('5_referents.uuid') )
+    date_created = Column( DateTime() )
+    date_edited = Column( DateTime() )
+    researcher_notes = Column( UnicodeText() )
+    confidence = Column( Integer )  # optional?
+
