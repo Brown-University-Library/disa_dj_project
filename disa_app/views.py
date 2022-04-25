@@ -59,6 +59,7 @@ def browse_tabulator( request ):
     log.debug( f'request.session.items(), ``{pprint.pformat(request.session.items())}``' )
     ( submitted_username, submitted_password ) = ( request.POST.get('browse_login_username', ''), request.POST.get('browse_login_password', '') )
     assert type(submitted_username) == str; assert type(submitted_password) == str
+    resp = HttpResponseNotFound( '404 / Not Found' )
     if request.method == 'POST':  # user has submitted browse login credentials
         credentials_valid = view_browse_manager.check_credentials_on_post( submitted_username, submitted_password )
         assert type( credentials_valid ) == bool
@@ -70,7 +71,6 @@ def browse_tabulator( request ):
             ( request.session['errant_browse_login_username'], request.session['errant_browse_login_password'] ) = ( submitted_username, submitted_password )
         request.session.modified = True
         resp = view_browse_manager.prepare_self_redirect_on_post()
-        return resp
     if request.method == 'GET':
         log.debug( 'handling GET' )
         is_browse_logged_in = view_browse_manager.check_browse_logged_in_on_get( dict(request.session), bool(request.user.is_authenticated) )
@@ -91,7 +91,48 @@ def browse_tabulator( request ):
             context = view_browse_manager.prepare_non_logged_in_get_context( errant_submitted_username, errant_submitted_password )
             resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_login.html' )
             log.debug( 'ok should render the browse-login template' )
-        return resp
+    return resp
+    
+
+# def browse_tabulator( request ):
+#     """ Displays tabulator page. """
+#     log.info( '\n\nstarting browse_tabulator()' )
+#     log.debug( f'request.session.items(), ``{pprint.pformat(request.session.items())}``' )
+#     ( submitted_username, submitted_password ) = ( request.POST.get('browse_login_username', ''), request.POST.get('browse_login_password', '') )
+#     assert type(submitted_username) == str; assert type(submitted_password) == str
+#     if request.method == 'POST':  # user has submitted browse login credentials
+#         credentials_valid = view_browse_manager.check_credentials_on_post( submitted_username, submitted_password )
+#         assert type( credentials_valid ) == bool
+#         if credentials_valid:  # redirect to a GET to show the browse data
+#             request.session['browse_logged_in'] = 'yes'
+#             request.session.pop( 'errant_browse_login_username', None )  # <https://stackoverflow.com/questions/11277432/how-can-i-remove-a-key-from-a-python-dictionary/15206537#15206537>
+#             request.session.pop( 'errant_browse_login_password', None )
+#         else:  # store any entered data to the session and redirect to a GET to the login form again
+#             ( request.session['errant_browse_login_username'], request.session['errant_browse_login_password'] ) = ( submitted_username, submitted_password )
+#         request.session.modified = True
+#         resp = view_browse_manager.prepare_self_redirect_on_post()
+#         return resp
+#     if request.method == 'GET':
+#         log.debug( 'handling GET' )
+#         is_browse_logged_in = view_browse_manager.check_browse_logged_in_on_get( dict(request.session), bool(request.user.is_authenticated) )
+#         assert type(is_browse_logged_in) == bool
+#         if is_browse_logged_in:  # show the browse data
+#             log.debug( 'logged-in path' )
+#             # request.session.pop( 'browse_logged_in', None )
+#             # request.session.modified = True
+#             context = view_browse_manager.prepare_logged_in_get_context( bool(request.user.is_authenticated) )
+#             resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_tabulator.html' )
+#         else:  # show the login form
+#             log.debug( 'not logged-in path' )
+#             ( errant_submitted_username, errant_submitted_password ) = ( request.session.get('errant_browse_login_username', ''), request.session.get('errant_browse_login_password', '') )
+#             assert type( errant_submitted_username ) == str; assert type( errant_submitted_password ) == str
+#             request.session.pop( 'errant_browse_login_username', None )
+#             request.session.pop( 'errant_browse_login_password', None )
+#             request.session.modified = True
+#             context = view_browse_manager.prepare_non_logged_in_get_context( errant_submitted_username, errant_submitted_password )
+#             resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_login.html' )
+#             log.debug( 'ok should render the browse-login template' )
+#         return resp
 
 
 def browse_logout( request ):
@@ -117,20 +158,6 @@ def people( request ):
     else:
         resp = render( request, 'disa_app_templates/people.html', context )
     return resp
-
-
-# def people( request ):
-#     log.debug( '\n\nstarting people()' )
-#     people: List(dict) = view_people_manager.query_people()
-#     context = { 'people': people }
-#     if request.user.is_authenticated:
-#         context['user_is_authenticated'] = True
-#         context['user_first_name'] = request.user.first_name
-#     if request.GET.get('format', '') == 'json':
-#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     else:
-#         resp = render( request, 'disa_app_templates/people.html', context )
-#     return resp
 
 
 def person( request, prsn_id ):
@@ -542,7 +569,7 @@ def data_reference( request, rfrnc_id ):
     log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rfrnc_id, ``{rfrnc_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
     assert type(rfrnc_id) == str
     context: dict = view_data_records_manager.manage_reference_delete( rfrnc_id )
-    rspns = None
+    rspns = HttpResponseNotFound( '404 / Not Found' )
     if 'err' in context.keys():
         if context['err'] == '400 / Bad Request':
             rspns = HttpResponseBadRequest( '400 / Bad Request' )
@@ -564,7 +591,14 @@ def data_reference( request, rfrnc_id ):
 #     log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rfrnc_id, ``{rfrnc_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
 #     assert type(rfrnc_id) == str
 #     context: dict = view_data_records_manager.manage_reference_delete( rfrnc_id )
-#     rspns = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     rspns = None
+#     if 'err' in context.keys():
+#         if context['err'] == '400 / Bad Request':
+#             rspns = HttpResponseBadRequest( '400 / Bad Request' )
+#         elif context['err'] == '404 / Not Found':
+#             rspns = HttpResponseNotFound( '404 / Not Found' )
+#     else:
+#         rspns = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
 #     return rspns
 
 
