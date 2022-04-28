@@ -51,7 +51,7 @@
     }
 
 
-  Resources:
+  Resources — what appears when the rule is TRUE?
 
     {
       tag: <either a single integer, or an array of integers>,
@@ -59,10 +59,11 @@
       id:  <either a single integer, or an array of integers>
     }
 
-    These are ORed together -- so the designated tags PLUS the designated categories
-    PLUS the IDs. For example, you can't select for an item that has a tag, but 
-    only if it's in a category.
-
+    You can use one or more of tag/category/id — these are combined together,
+    so that we fetch the designated tags PLUS the designated categories PLUS the IDs. 
+    (A current limitation is that you can't do complex category/tag combinations — 
+    e.g. ask for items that has the tag "apple" but only if it's the category "fruit")
+    
   See schema for this data structure at browse_tabulator_dcf-config_schema.json
 
   You can validate this config by putting the array (i.e. the code between "START/END RULE DATA") 
