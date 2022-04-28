@@ -28,7 +28,7 @@ function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
     // { title:'Roles',    field:'roles',              sorter:'string', headerFilter: true },
     { title:'Sex',       field:'sex',   sorter:'string',
       headerFilter: 'select', headerFilterParams:{ values: ['Male','Female', 'Other'] } },
-    { title:'Nation',     field:'all_tribes', sorter:'string',
+    { title:'Tribal nation',     field:'all_tribes', sorter:'string',
       headerFilter: 'select',
       headerFilterParams: {
         values: [ '"daughter of a Spanish Squaw"', "Apalachee", "Blanco", "Blanea", "Bocotora",
@@ -42,7 +42,7 @@ function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
                   "Weyanoke", "Woolwa", "de Nacion Caribe Cuchibero" ]
       }
     },
-    { title:'Race',      field:'all_races',  sorter:'string',
+    { title:'Racial descriptor',      field:'all_races',  sorter:'string',
       headerFilter: 'select',
       headerFilterParams: {
         values: [ "Asiatic", "Black", "Carolina Indian", "Creole", "Creole", "Dark melattress",
