@@ -276,11 +276,12 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
       //  Set current Item to first in references array,
       //  or (if no others exist) create a new Item
 
-      deleteItem: function(item=this.currentItem) {
-        console.log('DELETE ITEM', item);
-        this.deleteItemOnServer(item).then(_ => {
+      deleteItem: function() {
+        const itemToDelete = this.currentItem
+        console.log('DELETE ITEM', itemToDelete);
+        this.deleteItemOnServer(itemToDelete).then(_ => {
           console.log('DELETE ITEM LOCALLY');
-          const itemIndex = this.formData.doc.references.findIndex(r => r.id === item.id);
+          const itemIndex = this.formData.doc.references.findIndex(r => r.id === itemToDelete.id);
           this.formData.doc.references.splice(itemIndex, 1);
           if (this.formData.doc.references.length > 0) {
             this.currentItemId = this.formData.doc.references[0].id
