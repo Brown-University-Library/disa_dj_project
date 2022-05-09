@@ -106,13 +106,6 @@ async function saveReferentDataToServer() {
         dataStructure = [];
       }
 
-      /*
-      if (tagifyString) {
-        dataStructure = JSON.parse(tagifyString || '[]').map(
-          tagData => { return { id: tagData.dbID, name: tagData.value } }
-        );
-      } */
-
       return dataStructure;
     }
 
@@ -491,6 +484,7 @@ async function deleteItemOnServer(item) {
 
 
 // Relationships
+// Note that relationships cannot be edited -- only created and deleted
 
 async function createRelationshipOnServer(relationshipData) {
   
@@ -566,10 +560,7 @@ const saveFunctionsMixin = {
   computed: {
 
     // Computed properties that are watched to trigger saves
-
-    watchMeToTriggerReferentSave: function () { // (may not be necessary)
-      return JSON.stringify(this.currentReferent);
-    },
+    // @TODO CHECK THIS - I SMELL TROUBLE
 
     watchMeToTriggerGroupSave: function () {
       return JSON.stringify(this.currentGroup);
@@ -610,3 +601,21 @@ const saveFunctionsMixin = {
 
 export { saveFunctionsMixin }
 
+/*
+
+Proper error handling -- from
+https://www.tjvantoll.com/2015/09/13/fetch-and-errors/
+
+function handleErrors(response) {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;
+}
+fetch("http://httpstat.us/500")
+    .then(handleErrors)
+    .then(response => console.log("ok") )
+    .catch(error => console.log(error) );
+
+
+*/

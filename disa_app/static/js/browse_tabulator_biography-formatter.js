@@ -125,7 +125,8 @@ function getPersonEntryHTML(entry, sr) {
                 ` in ${locationDisplay}` +
                 (year ? ` in ${year}` : '') +
                 '.' + 
-                relationshipsHTML;
+                relationshipsHTML + 
+                `<span id="referent-footnote-id-${entry.referent_db_id}" class="cf-footnotes"></span>`;
 
   return html;
 }
