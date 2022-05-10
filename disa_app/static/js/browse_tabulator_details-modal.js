@@ -92,7 +92,7 @@ function getShowDetailsFunction(sr) {
         ['Location', data.reference_data.all_locations],
         ['First name', data.name_first],
         ['Last name', data.name_last],
-        ['Role(s)', data.all_roles],
+        ['Role(s)', data.roles.join(', ')],
         // ['Date', new Date(data.date.year, data.date.month, data.date.day).toDateString()],
         ['Tribe', data.all_tribes],
         ['Sex', data.sex],

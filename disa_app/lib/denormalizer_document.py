@@ -19,9 +19,10 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-def denormalize():
+def denormalize() -> list:
     """ Produces denormalized document-based json representing all data entered.
-        Called manually for now. """
+        Called manually for now. 
+        Under Construction; TODO- build out. """
     log.debug( 'starting json_for_browse()' )
     start_time = datetime.datetime.now()
 

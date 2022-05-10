@@ -100,8 +100,8 @@ function preprocessSourceData(data) {
     {}
   );
 
-  data.MENU_OPTIONS.formInputDISAPersonStatus = data.formData.location_stuff.roles_list.reduce(
-    (statusHash, currStatus) => Object.assign(statusHash, { [currStatus.id]: currStatus.value }),
+  data.MENU_OPTIONS.formInputDISAPersonStatus = data.formData.location_stuff.status_list.reduce(
+    (statusHash, currStatus) => Object.assign(statusHash, { [currStatus]: currStatus }),
     {}
   );
 

@@ -99,36 +99,41 @@ def manage_get_all( user_id: int ) -> dict:
     return data
 
 
-def manage_put( cite_id: str, user_id: int, payload: bytes ):
+def manage_put( cite_id: str, user_id: int, payload: bytes ) -> dict:
     """ Updates document.
         Called by views.data_documents() on PUT """
     assert type(cite_id) == str; assert type(user_id) == int; assert type(payload) == bytes
     session = make_session()
+    return_data = {}
 
     try:
-        data: dict = json.loads( payload )
-        log.debug( f'data (from payload), ``{pprint.pformat(data)}``' )
+        # data: dict = json.loads( payload )
+        incoming_data: dict = json.loads( payload )
+        log.debug( f'incoming_data (from payload), ``{pprint.pformat(incoming_data)}``' )
     except:
         log.exception( 'problem parsing payload; error will be returned' )
-        return '400 / Bad Request'
+        # return '400 / Bad Request'
+        return { 'err': '400 / Bad Request' }
 
     try:  # temp; remove after debugging
+        import copy
+        data_to_process: dict = copy.deepcopy( incoming_data )
         unspec = session.query( models_alch.CitationType ).filter_by( name='Document' ).first()
 
-        data['citation_type_id'] = data['citation_type_id'] or unspec.id
+        data_to_process['citation_type_id'] = incoming_data['citation_type_id'] or unspec.id
 
         cite = session.query( models_alch.Citation ).get( cite_id )
 
-        cite.citation_type_id = data['citation_type_id']
+        cite.citation_type_id = data_to_process['citation_type_id']
         # doc.zotero_id = data['zotero_id']
-        cite.comments = data['comments']
-        cite.acknowledgements = data['acknowledgements']
+        cite.comments = incoming_data['comments']
+        cite.acknowledgements = incoming_data['acknowledgements']
         field_order_map = { f.zotero_field.name: f.rank
             for f in cite.citation_type.zotero_type.template_fields }
         citation_display = []
         cite.citation_data = []
         addendums = []
-        for field, val in data['fields'].items():
+        for field, val in incoming_data['fields'].items():
             if val == '':
                 continue
 
@@ -150,28 +155,109 @@ def manage_put( cite_id: str, user_id: int, payload: bytes ):
         session.add( cite )
         session.commit()
 
-        data = { 'doc': {} }
-        included = [ 'Book', 'Book Section', 'Document', 'Interview',
+        # data = { 'doc': {} }
+        return_data: dict = { 'doc': {}, 'doc_types': [] }
+
+        included = [ 
+            'Book', 'Book Section', 'Document', 'Interview',
             'Journal Article', 'Magazine Article', 'Manuscript',
             'Newspaper Article', 'Thesis', 'Webpage' ]
 
         ct = session.query( models_alch.CitationType ).filter( models_alch.CitationType.name.in_(included) ).all()
 
-        data['doc_types'] = [ { 'id': c.id, 'name': c.name } for c in ct ]
-        data['doc']['id'] = cite.id
-        data['doc']['citation'] = cite.display
-        # data['doc']['zotero_id'] = doc.zotero_id
-        data['doc']['comments'] = cite.comments
-        data['doc']['acknowledgements'] = cite.acknowledgements
-        data['doc']['citation_type_id'] = cite.citation_type_id
-        log.debug( f'data, ```{pprint.pformat(data)}```' )
+        return_data['doc_types'] = [ { 'id': c.id, 'name': c.name } for c in ct ]
+
+        doc_dct: dict = { 
+            'id': cite_id,
+            'citation': cite.display,
+            'comments': cite.comments,
+            'acknowledgements': cite.acknowledgements,
+            'citation_type_id': cite.citation_type_id
+        }
+
+        return_data['doc'] = doc_dct
+        log.debug( f'return_data, ```{pprint.pformat(return_data)}```' )
 
     except:
         log.exception( 'problem on api PUT; traceback follows...' )
-    log.debug( f'data (put-context), ``{pprint.pformat(data)}``' )
-    return data
+    return return_data
 
     ## end def manage_put()
+
+
+# def manage_put( cite_id: str, user_id: int, payload: bytes ):
+#     """ Updates document.
+#         Called by views.data_documents() on PUT """
+#     assert type(cite_id) == str; assert type(user_id) == int; assert type(payload) == bytes
+#     session = make_session()
+
+#     try:
+#         data: dict = json.loads( payload )
+#         log.debug( f'data (from payload), ``{pprint.pformat(data)}``' )
+#     except:
+#         log.exception( 'problem parsing payload; error will be returned' )
+#         return '400 / Bad Request'
+
+#     try:  # temp; remove after debugging
+#         unspec = session.query( models_alch.CitationType ).filter_by( name='Document' ).first()
+
+#         data['citation_type_id'] = data['citation_type_id'] or unspec.id
+
+#         cite = session.query( models_alch.Citation ).get( cite_id )
+
+#         cite.citation_type_id = data['citation_type_id']
+#         # doc.zotero_id = data['zotero_id']
+#         cite.comments = data['comments']
+#         cite.acknowledgements = data['acknowledgements']
+#         field_order_map = { f.zotero_field.name: f.rank
+#             for f in cite.citation_type.zotero_type.template_fields }
+#         citation_display = []
+#         cite.citation_data = []
+#         addendums = []
+#         for field, val in data['fields'].items():
+#             if val == '':
+#                 continue
+
+#             zfield = session.query( models_alch.ZoteroField ).filter_by( name=field ).first()
+
+#             cfield = models_alch.CitationField(citation_id=cite.id,
+#                 field_id=zfield.id, field_data=val)
+#             try:
+#                 citation_display.append( (field_order_map[zfield.name], val) )
+#             except KeyError:
+#                 addendums.append(val)
+#             session.add(cfield)
+#         if len(citation_display) == 0:
+#             now = datetime.datetime.utcnow()
+#             cite.display = 'Document :: {}'.format(now.strftime('%Y %B %d'))
+#         else:
+#             vals = [ v[1] for v in sorted(citation_display) ]
+#             cite.display = ', '.join(vals + addendums)
+#         session.add( cite )
+#         session.commit()
+
+#         data = { 'doc': {} }
+#         included = [ 'Book', 'Book Section', 'Document', 'Interview',
+#             'Journal Article', 'Magazine Article', 'Manuscript',
+#             'Newspaper Article', 'Thesis', 'Webpage' ]
+
+#         ct = session.query( models_alch.CitationType ).filter( models_alch.CitationType.name.in_(included) ).all()
+
+#         data['doc_types'] = [ { 'id': c.id, 'name': c.name } for c in ct ]
+#         data['doc']['id'] = cite.id
+#         data['doc']['citation'] = cite.display
+#         # data['doc']['zotero_id'] = doc.zotero_id
+#         data['doc']['comments'] = cite.comments
+#         data['doc']['acknowledgements'] = cite.acknowledgements
+#         data['doc']['citation_type_id'] = cite.citation_type_id
+#         log.debug( f'data, ```{pprint.pformat(data)}```' )
+
+#     except:
+#         log.exception( 'problem on api PUT; traceback follows...' )
+#     log.debug( f'data (put-context), ``{pprint.pformat(data)}``' )
+#     return data
+
+#     ## end def manage_put()
 
 
 def manage_post( user_id, payload ):

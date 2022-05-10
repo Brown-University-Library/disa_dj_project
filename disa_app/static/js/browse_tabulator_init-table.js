@@ -23,13 +23,15 @@ function getTabulatorOptions(sr, showDetailsFunction) {
 
     { title:'Name',      field:'all_name',          sorter:'string', headerFilter: true }, // mutator: combineNames_mutator },
     { title:'Last name', field:'name_last',         sorter:'string', headerFilter: true, visible: false },
-    { title:'Status',    field:'enslavement_status',            sorter:'string', headerFilter: true,
-      // headerFilter: 'select', headerFilterParams:{ values: ['Enslaved','Enslaver','Other'] }, download: true },
-      headerFilter: 'select', headerFilterParams:{ values: Object.values(sr.ENSLAVEMENT_STATUS) }, download: true },
+    { title:'Status',    field:'enslavement_status',sorter:'string', headerFilter: true,
+      // headerFilter: 'select', headerFilterParams:{ values: ['Enslaved','Enslaver','Other'] },
+      headerFilter: 'select', headerFilterParams:{ values: Object.values(sr.ENSLAVEMENT_STATUS) }, 
+      download: true 
+    },
     // { title:'Roles',    field:'roles',              sorter:'string', headerFilter: true },
     { title:'Sex',       field:'sex',   sorter:'string',
       headerFilter: 'select', headerFilterParams:{ values: ['Male','Female', 'Other'] } },
-    { title:'Tribe',     field:'all_tribes', sorter:'string',
+    { title:'Tribal nation',     field:'all_tribes', sorter:'string',
       headerFilter: 'select',
       headerFilterParams: {
         values: [ '"daughter of a Spanish Squaw"', "Apalachee", "Blanco", "Blanea", "Bocotora",
@@ -43,7 +45,7 @@ function getTabulatorOptions(sr, showDetailsFunction) {
                   "Weyanoke", "Woolwa", "de Nacion Caribe Cuchibero" ]
       }
     },
-    { title:'Race',      field:'all_races',  sorter:'string',
+    { title:'Racial descriptor',      field:'all_races',  sorter:'string',
       headerFilter: 'select',
       headerFilterParams: {
         values: [ "Asiatic", "Black", "Carolina Indian", "Creole", "Creole", "Dark melattress",
@@ -59,7 +61,7 @@ function getTabulatorOptions(sr, showDetailsFunction) {
 
     // Some hidden fields just for downloading and general search
 
-    { title:'Source transcription', field:'reference_data.transcription', visible: false, download: true, 
+    { title:'Source transcription', field:'reference_data.transcription', visible: false, download: true,
       accessorDownload:transcriptionDownloadAccessor },
     { title:'Referent_ID', field:'referent_db_id', visible: false, download: true },
     { title:'Vocation', field:'vocation', visible: false, download: true },
@@ -126,7 +128,7 @@ function getTableRenderer(sr, showDetailsFunction, generalSearch) {
     });
   }
 
-  // Download workaround: make the page size a huge number, download, 
+  // Download workaround: make the page size a huge number, download,
   //  then set it back to what it was
 
   function download() {

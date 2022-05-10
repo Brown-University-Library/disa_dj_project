@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import datetime, json, logging, os, pprint, time
-from typing import List
+# from typing import List
 
 import requests
+
+# from disa_app.lib import basic_auth
+# from django.shortcuts import get_object_or_404, render
 from disa_app import settings_app
-from disa_app.lib import basic_auth
 from disa_app.lib import denormalizer_document
 from disa_app.lib import user_pass_auth
 from disa_app.lib import utility_manager
@@ -26,7 +28,7 @@ from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, HttpResponseRedirect, HttpResponseServerError
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 
 
 log = logging.getLogger(__name__)
@@ -57,6 +59,7 @@ def browse_tabulator( request ):
     log.debug( f'request.session.items(), ``{pprint.pformat(request.session.items())}``' )
     ( submitted_username, submitted_password ) = ( request.POST.get('browse_login_username', ''), request.POST.get('browse_login_password', '') )
     assert type(submitted_username) == str; assert type(submitted_password) == str
+    resp = HttpResponseNotFound( '404 / Not Found' )
     if request.method == 'POST':  # user has submitted browse login credentials
         credentials_valid = view_browse_manager.check_credentials_on_post( submitted_username, submitted_password )
         assert type( credentials_valid ) == bool
@@ -68,7 +71,6 @@ def browse_tabulator( request ):
             ( request.session['errant_browse_login_username'], request.session['errant_browse_login_password'] ) = ( submitted_username, submitted_password )
         request.session.modified = True
         resp = view_browse_manager.prepare_self_redirect_on_post()
-        return resp
     if request.method == 'GET':
         log.debug( 'handling GET' )
         is_browse_logged_in = view_browse_manager.check_browse_logged_in_on_get( dict(request.session), bool(request.user.is_authenticated) )
@@ -89,7 +91,48 @@ def browse_tabulator( request ):
             context = view_browse_manager.prepare_non_logged_in_get_context( errant_submitted_username, errant_submitted_password )
             resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_login.html' )
             log.debug( 'ok should render the browse-login template' )
-        return resp
+    return resp
+    
+
+# def browse_tabulator( request ):
+#     """ Displays tabulator page. """
+#     log.info( '\n\nstarting browse_tabulator()' )
+#     log.debug( f'request.session.items(), ``{pprint.pformat(request.session.items())}``' )
+#     ( submitted_username, submitted_password ) = ( request.POST.get('browse_login_username', ''), request.POST.get('browse_login_password', '') )
+#     assert type(submitted_username) == str; assert type(submitted_password) == str
+#     if request.method == 'POST':  # user has submitted browse login credentials
+#         credentials_valid = view_browse_manager.check_credentials_on_post( submitted_username, submitted_password )
+#         assert type( credentials_valid ) == bool
+#         if credentials_valid:  # redirect to a GET to show the browse data
+#             request.session['browse_logged_in'] = 'yes'
+#             request.session.pop( 'errant_browse_login_username', None )  # <https://stackoverflow.com/questions/11277432/how-can-i-remove-a-key-from-a-python-dictionary/15206537#15206537>
+#             request.session.pop( 'errant_browse_login_password', None )
+#         else:  # store any entered data to the session and redirect to a GET to the login form again
+#             ( request.session['errant_browse_login_username'], request.session['errant_browse_login_password'] ) = ( submitted_username, submitted_password )
+#         request.session.modified = True
+#         resp = view_browse_manager.prepare_self_redirect_on_post()
+#         return resp
+#     if request.method == 'GET':
+#         log.debug( 'handling GET' )
+#         is_browse_logged_in = view_browse_manager.check_browse_logged_in_on_get( dict(request.session), bool(request.user.is_authenticated) )
+#         assert type(is_browse_logged_in) == bool
+#         if is_browse_logged_in:  # show the browse data
+#             log.debug( 'logged-in path' )
+#             # request.session.pop( 'browse_logged_in', None )
+#             # request.session.modified = True
+#             context = view_browse_manager.prepare_logged_in_get_context( bool(request.user.is_authenticated) )
+#             resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_tabulator.html' )
+#         else:  # show the login form
+#             log.debug( 'not logged-in path' )
+#             ( errant_submitted_username, errant_submitted_password ) = ( request.session.get('errant_browse_login_username', ''), request.session.get('errant_browse_login_password', '') )
+#             assert type( errant_submitted_username ) == str; assert type( errant_submitted_password ) == str
+#             request.session.pop( 'errant_browse_login_username', None )
+#             request.session.pop( 'errant_browse_login_password', None )
+#             request.session.modified = True
+#             context = view_browse_manager.prepare_non_logged_in_get_context( errant_submitted_username, errant_submitted_password )
+#             resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_login.html' )
+#             log.debug( 'ok should render the browse-login template' )
+#         return resp
 
 
 def browse_logout( request ):
@@ -105,8 +148,8 @@ def browse_logout( request ):
 
 def people( request ):
     log.debug( '\n\nstarting people()' )
-    people: List(dict) = view_people_manager.query_people()
-    context = { 'people': people }
+    people: list = view_people_manager.query_people()
+    context = { 'people': people, 'user_is_authenticated': False }
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
         context['user_first_name'] = request.user.first_name
@@ -187,7 +230,7 @@ def datafile( request ):
     """ Prepares complete denormalized datafile. """
     log.debug( '\n\nstarting datafile()' )
     srch_txt = request.GET.get( 'query', None )
-    data: dict = denormalizer_document.denormalize()
+    data: list = denormalizer_document.denormalize()
     j_string = json.dumps(data, sort_keys=True, indent=2)
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( j_string, content_type='application/json; charset=utf-8' )
@@ -237,7 +280,8 @@ def handle_shib_login( request ):
         if request.session.get( 'redirect_url', None ):
             redirect_url = request.session['redirect_url']
         else:
-            redirect_url = reverse( 'editor_index_url' )
+            # redirect_url = reverse( 'editor_index_url' )
+            redirect_url = reverse( 'redesign_citations_url' )
     else:
         redirect_url = request.GET['next']  # may be same page
     if request.session.get( 'redirect_url', None ):  # cleanup
@@ -485,6 +529,7 @@ def data_records( request, rec_id=None ):
         Url: '/data/records/<rec_id>/' -- 'data_record_url' """
     log.debug( '\n\nstarting data_records' )
     # log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
+    context = {}
     try:
         log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rec_id, ``{rec_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
         assert ( rec_id == None or type(rec_id) == str )
@@ -524,8 +569,37 @@ def data_reference( request, rfrnc_id ):
     log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rfrnc_id, ``{rfrnc_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
     assert type(rfrnc_id) == str
     context: dict = view_data_records_manager.manage_reference_delete( rfrnc_id )
-    rspns = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    rspns = HttpResponseNotFound( '404 / Not Found' )
+    if 'err' in context.keys():
+        if context['err'] == '400 / Bad Request':
+            rspns = HttpResponseBadRequest( '400 / Bad Request' )
+        elif context['err'] == '404 / Not Found':
+            rspns = HttpResponseNotFound( '404 / Not Found' )
+    else:
+        rspns = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return rspns
+
+
+# @shib_login
+# def data_reference( request, rfrnc_id ):
+#     """ Called via ajax by views.edit_citation() on DELETE
+#         Handles api call when red `x` button is clicked in, eg, <http://127.0.0.1:8000/editor/documents/(123)/>
+#         Url: '/data/reference/<rfrnc_id>/' -- 'data_reference_url'
+#         TODO: Why isn't this part of the above data_records() function??!!
+#         """
+#     log.debug( f'\n\nstarting data_reference()' )
+#     log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rfrnc_id, ``{rfrnc_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
+#     assert type(rfrnc_id) == str
+#     context: dict = view_data_records_manager.manage_reference_delete( rfrnc_id )
+#     rspns = None
+#     if 'err' in context.keys():
+#         if context['err'] == '400 / Bad Request':
+#             rspns = HttpResponseBadRequest( '400 / Bad Request' )
+#         elif context['err'] == '404 / Not Found':
+#             rspns = HttpResponseNotFound( '404 / Not Found' )
+#     else:
+#         rspns = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     return rspns
 
 
 @shib_login
@@ -539,6 +613,7 @@ def data_documents( request, doc_id=None ):
     user_uuid = request.user.profile.uu_id
     user_email = request.user.profile.email
     log.debug( f'user_id, ```{user_id}```' )
+    context = {}
     if request.method == 'GET' and doc_id:
         context: dict = v_data_document_manager.manage_get( doc_id, user_id )
     elif request.method == 'GET':  # called when clicking 'New document' button
@@ -557,7 +632,9 @@ def data_documents( request, doc_id=None ):
     log.debug( f'context, ``{context}``' )
     if context == 'error':  # TODO: merge this response into `400 / Bad Request`
         resp = HttpResponseBadRequest( '400 / Bad Request' )
-    elif context == '400 / Bad Request':
+    # elif context == '400 / Bad Request':
+    #     resp = HttpResponseBadRequest( '400 / Bad Request' )
+    elif type(context) == dict and 'err' in context.keys() and context['err'] == '400 / Bad Request':
         resp = HttpResponseBadRequest( '400 / Bad Request' )
     elif context == 'not_found':
         resp = HttpResponseNotFound( '404 / Not Found' )
@@ -693,27 +770,9 @@ def error_check( request ):
 @shib_login
 def redesign_home( request ):
     """ ? """
-    if project_settings.DEBUG == False:
-        return HttpResponse( 'Not yet running on production.' )
+    # if project_settings.DEBUG == False:
+    #     return HttpResponse( 'Not yet running on production.' )
     return HttpResponse( "What should be displayed here?" )
-
-
-# @shib_login
-# def redesign_citations( request ):
-#     """ Displays main landing page of citations, with user's recently-edited citations first. """
-#     log.debug( '\n\nstarting redesign_citations()' )
-#     if project_settings.DEBUG == False:
-#         return HttpResponse( 'Not yet running on production.' )
-#     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
-#     context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
-#     if request.user.is_authenticated:
-#         context['user_is_authenticated'] = True
-#         context['user_first_name'] = request.user.first_name
-#     if request.GET.get('format', '') == 'json':
-#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-#     else:
-#         resp = render( request, 'disa_app_templates/redesign_citations.html', context )
-#     return resp
 
 
 @shib_login
@@ -721,8 +780,8 @@ def redesign_citations( request ):
     """ Displays main landing page of citations, with user's recently-edited citations first. """
     log.debug( '\n\nstarting redesign_citations()' )
     start_time = datetime.datetime.now()
-    if project_settings.DEBUG == False:
-        return HttpResponse( 'Not yet running on production.' )
+    # if project_settings.DEBUG == False:
+    #     return HttpResponse( 'Not yet running on production.' )
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
     context['API_URL_ROOT'] = '%s://%s%s' % ( request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), reverse('data_root_url') )
@@ -743,8 +802,8 @@ def redesign_citations( request ):
 def redesign_citation( request, cite_id=None ):
     """ Displays specific citation. """
     log.debug( '\n\nstarting redesign_citation()' )
-    if project_settings.DEBUG == False:
-        return HttpResponse( 'Not yet running on production.' )
+    # if project_settings.DEBUG == False:
+    #     return HttpResponse( 'Not yet running on production.' )
 
     if cite_id == None:
         return HttpResponseNotFound( '404 / Not Found' )

@@ -4,10 +4,13 @@ Manages sqlalchemy setup and queries.
 Resources...
 - <https://stackoverflow.com/questions/19406859/sqlalchemy-convert-select-query-result-to-a-list-of-dicts/20078977>
 - <https://stackoverflow.com/questions/2828248/sqlalchemy-returns-tuple-not-dictionary>
+- re type-annotations, the pattern ``foo = cast( mew-type, the-var )`` is used for two reasons:
+  - that pattern does not actually cast, at run-time, "the-var" into the "new-type"; it's used for type-annotations.
+  - this works with sqlalchemy since when evaluated at runtime, a Column( DateTime() ) will become a datetime.datetime() object.
 """
 
 import datetime, logging, operator, pprint
-from typing import List
+from typing import cast  # just used for type-annotation
 
 import sqlalchemy
 from disa_app import settings_app
@@ -19,13 +22,13 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import sessionmaker
-
+from sqlalchemy.orm.session import Session as alch_Session  # just used for type-annotation
 
 log = logging.getLogger(__name__)
 Base = declarative_base()
 
 
-def make_session() -> sqlalchemy.orm.session.Session:
+def make_session() -> alch_Session:
     engine = create_engine( settings_app.DB_URL, echo=True )
     Session = sessionmaker( bind=engine )
     session = Session()
@@ -244,15 +247,30 @@ class Reference(Base):
     groups = relationship(
         'Group', backref='reference', lazy=True, cascade="delete")
 
+    # def last_edit(self):
+    #     """ Note: self.edits is possible because of ReferenceEdit() """
+    #     edits: list[tuple] = sorted([ (e.timestamp, e) for e in self.edits ],
+    #          key=operator.itemgetter(0), reverse=True)
+    #     log.debug( f'edits, ```{edits}```' )
+    #     if edits:
+    #         return_edits = edits[0][1]
+    #     else:
+    #         return_edits = []
+    #     log.debug( f'return_edits, ``{return_edits}``' )
+    #     log.debug( f'type(return_edits), ``{type(return_edits)}``' )
+    #     return return_edits
+
     def last_edit(self):
         """ Note: self.edits is possible because of ReferenceEdit() """
-        edits: List(tuple) = sorted([ (e.timestamp, e) for e in self.edits ],
+        edits: list[tuple] = sorted([ (e.timestamp, e) for e in self.edits ],
              key=operator.itemgetter(0), reverse=True)
         log.debug( f'edits, ```{edits}```' )
         if edits:
             return_edits = edits[0][1]
         else:
-            return_edits = []
+            return_edits = None
+        log.debug( f'return_edits, ``{return_edits}``' )
+        log.debug( f'type(return_edits), ``{type(return_edits)}``' )
         return return_edits
 
     def display_date(self):
@@ -278,10 +296,10 @@ class Reference(Base):
             locations_lst.append( loc_dct )
         return locations_lst
 
-
     def dictify( self ):
         if self.date:
-            isodate = datetime.date.isoformat( self.date )
+            datetime_obj = cast( datetime.datetime, self.date )
+            isodate = datetime.date.isoformat( datetime_obj )
         else:
             isodate = ''
         jsn_referents = []
@@ -289,7 +307,9 @@ class Reference(Base):
             jsn_referents.append( {'id': rfrnt.id, 'age': rfrnt.age, 'sex': rfrnt.sex} )
         last_edit = self.last_edit()
         if last_edit:
-            last_edit = last_edit.timestamp.strftime( '%Y-%m-%d' )
+            last_edit_str: str = last_edit.timestamp.strftime( '%Y-%m-%d' )
+        else: 
+            last_edit_str = ''
         data = {
             'id': self.id,
             'citation_id': self.citation_id,
@@ -299,15 +319,40 @@ class Reference(Base):
             'date': isodate,
             'transcription': self.transcription,
             'referents': jsn_referents,
-            'last_edit': last_edit,
+            'last_edit': last_edit_str,
             'location_info': self.display_location_info()
             }
         return data
 
+    # def dictify( self ):
+    #     if self.date:
+    #         isodate = datetime.date.isoformat( self.date )
+    #     else:
+    #         isodate = ''
+    #     jsn_referents = []
+    #     for rfrnt in self.referents:
+    #         jsn_referents.append( {'id': rfrnt.id, 'age': rfrnt.age, 'sex': rfrnt.sex} )
+    #     last_edit = self.last_edit()
+    #     if last_edit:
+    #         last_edit = last_edit.timestamp.strftime( '%Y-%m-%d' )
+    #     data = {
+    #         'id': self.id,
+    #         'citation_id': self.citation_id,
+    #         'reference_type_id': self.reference_type_id,
+    #         'reference_type_name': self.reference_type.name,  # NB: this appears to be an sqlalchemy convention -- that if there is a ForeignKey, I can just go ahead and refernce the property name.
+    #         'national_context_id': self.national_context_id,
+    #         'date': isodate,
+    #         'transcription': self.transcription,
+    #         'referents': jsn_referents,
+    #         'last_edit': last_edit,
+    #         'location_info': self.display_location_info()
+    #         }
+    #     return data
+
     def __repr__(self):
         return '<Reference {0}>'.format(self.id)
 
-    ## end class ReferenceType
+    ## end class ReferenceType()
 
 
 class ReferenceType(Base):
@@ -445,68 +490,6 @@ class ReferentName(Base):
 
     def __repr__(self):
         return f'<Referent id, ``{self.referent_id}``; first, ``{self.first}``; last, ``{self.last}``>'
-
-
-# class Referent(Base):
-#     __tablename__ = '5_referents'
-
-#     id = Column( Integer, primary_key=True )
-#     uuid = Column( String(32) )                 # patrick, this too is new
-#     age = Column( String(255) )
-#     sex = Column( String(255) )
-#     count = Column( Integer )                   # individual = 1
-#     count_estimated = Column( Boolean )         # individual = False
-#     group_description = Column( UnicodeText() ) # individual = ''
-#     primary_name_id = Column(Integer,
-#         ForeignKey('6_referent_names.id'),
-#         nullable=True)
-#     reference_id = Column(Integer, ForeignKey('4_references.id'),
-#         nullable=False)
-#     person_id = Column(Integer, ForeignKey('1_people.id'),
-#         nullable=True)
-#     names = relationship(
-#         'ReferentName',
-#         primaryjoin=(id == ReferentName.referent_id),
-#         backref='referent',
-#         cascade='delete')
-#     primary_name = relationship(
-#         'ReferentName',
-#         primaryjoin=(primary_name_id == ReferentName.id),
-#         post_update=True )
-#     roles = relationship(
-#         'Role',
-#         secondary=has_role,
-#         back_populates='referents' )
-#     tribes = relationship(
-#         'Tribe',
-#         secondary=has_tribe,
-#         back_populates='referents' )
-#     races = relationship(
-#         'Race',
-#         secondary=has_race,
-#         back_populates='referents')
-#     titles = relationship('Title',
-#         secondary=has_title, back_populates='referents')
-#     vocations = relationship('Vocation',
-#         secondary=has_vocation, back_populates='referents')
-#     origins = relationship('Location',
-#         secondary=has_origin, back_populates='origin_for')
-#     enslavements = relationship('EnslavementType',
-#         secondary=enslaved_as, back_populates='referents')
-
-#     def __repr__(self):
-#         return '<Referent {0}: {1}>'.format(
-#             self.id, self.display_name() )
-
-#     def display_name(self):
-#         display = "{0} {1}".format(
-#             self.primary_name.first, self.primary_name.last).strip()
-#         if display == "":
-#             return "Unknown"
-#         else:
-#             return display
-
-#     ## end class Referent
 
 
 class Referent(Base):
@@ -764,41 +747,6 @@ class User(Base):
     last_login = Column(DateTime())
     password_hash = Column(String(128))
 
-    # def set_password(self, password):
-    #     self.password_hash = security.generate_password_hash(password)
-
-    # def check_password(self, password):
-    #     try:
-    #         return security.check_password_hash(self.password_hash, password)
-    #     except:
-    #         return None
-
-
-# class User(UserMixin, db.Model):
-#     __tablename__ = '1_users'
-
-#     id = db.Column(db.Integer, primary_key=True)
-#     role = db.Column(db.String(64))
-#     name = db.Column(db.String(64))
-#     email = db.Column(db.String(120))
-#     created = db.Column(db.DateTime())
-#     last_login = db.Column(db.DateTime())
-#     password_hash = db.Column(db.String(128))
-
-#     def set_password(self, password):
-#         self.password_hash = security.generate_password_hash(password)
-
-#     def check_password(self, password):
-#         try:
-#             return security.check_password_hash(self.password_hash, password)
-#         except:
-#             return None
-
-
-# @login.user_loader
-# def load_user(id):
-#     return User.query.get(int(id))
-
 
 class ReferenceEdit(Base):
     __tablename__ = '5_reference_edits'
@@ -816,18 +764,3 @@ class ReferenceEdit(Base):
 
     def __repr__(self):
         return f'<ReferenceEdit {self.id}>'
-
-
-# class ReferenceEdit(db.Model):
-#     __tablename__ = '5_reference_edits'
-
-#     id = db.Column(db.Integer, primary_key=True)
-#     reference_id = db.Column(db.Integer, db.ForeignKey('4_references.id'))
-#     user_id = db.Column(db.Integer, db.ForeignKey('1_users.id'))
-#     timestamp = db.Column(db.DateTime())
-#     edited = db.relationship(Reference,
-#         primaryjoin=(reference_id == Reference.id),
-#         backref='edits')
-#     edited_by = db.relationship(User,
-#         primaryjoin=(user_id == User.id),
-#         backref='edits')
