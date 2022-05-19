@@ -15,7 +15,7 @@ function transcriptionDownloadAccessor(value) {
   return cleanSpaces;
 }
 
-function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
+function getTabulatorOptions(sr, showDetailsFunction) {
 
   // Columns
 
@@ -23,18 +23,21 @@ function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
 
     { title:'Name',      field:'all_name',          sorter:'string', headerFilter: true }, // mutator: combineNames_mutator },
     { title:'Last name', field:'name_last',         sorter:'string', headerFilter: true, visible: false },
-    { title:'Status',    field:'enslavement_status',            sorter:'string', headerFilter: true,
-      headerFilter: 'select', headerFilterParams:{ values: Object.values(sr.ENSLAVEMENT_STATUS) }, download: true },
+    { title:'Status',    field:'enslavement_status',sorter:'string', headerFilter: true,
+      // headerFilter: 'select', headerFilterParams:{ values: ['Enslaved','Enslaver','Other'] },
+      headerFilter: 'select', headerFilterParams:{ values: Object.values(sr.ENSLAVEMENT_STATUS) }, 
+      download: true 
+    },
     // { title:'Roles',    field:'roles',              sorter:'string', headerFilter: true },
     { title:'Sex',       field:'sex',   sorter:'string',
       headerFilter: 'select', headerFilterParams:{ values: ['Male','Female', 'Other'] } },
-    { title:'Nation',     field:'all_tribes', sorter:'string',
+    { title:'Tribal nation',     field:'all_tribes', sorter:'string',
       headerFilter: 'select',
       headerFilterParams: {
         values: [ '"daughter of a Spanish Squaw"', "Apalachee", "Blanco", "Blanea", "Bocotora",
                   "Bousora", "Boustora", "Chaliba", "Cherokee", "Codira", "Cookra", "Creek",
                   "Cuol", "Curero", "Eastern Pequot", "Eastern Tribes", "Mashantucket Pequot",
-                  "Mohegan", "Naragansett", "Natchez", "Nidwa", "Nipmuc", "Noleva", "Nome Lackee",
+                  "Mohegan", "Narragansett", "Natchez", "Nidwa", "Nipmuc", "Noleva", "Nome Lackee",
                   "Nomi Lackee", "Oquelonex", "Pequot", "Portoback", "Rocotora", "Sambo", "Shaliba",
                   "Shalliba", "Shangina", "Shargana", "Shatyana", "Souix,Sioux", "Spanish", "Talusky",
                   "Tanybec", "Tenebec", "Tenybec", "Terriby", "Thalliba", "Toluskey", "Unspecified",
@@ -42,7 +45,7 @@ function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
                   "Weyanoke", "Woolwa", "de Nacion Caribe Cuchibero" ]
       }
     },
-    { title:'Race',      field:'all_races',  sorter:'string',
+    { title:'Racial descriptor',      field:'all_races',  sorter:'string',
       headerFilter: 'select',
       headerFilterParams: {
         values: [ "Asiatic", "Black", "Carolina Indian", "Creole", "Creole", "Dark melattress",
@@ -70,6 +73,8 @@ function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
 
   // Global options
 
+  const tableContainer = document.getElementById(sr.TABULATOR_CONTAINER_ID);
+
   const tabulatorOptions_global = {
     data: sr.data,
     height:'611px',
@@ -79,19 +84,13 @@ function getTabulatorOptions(sr, showDetailsFunction, setFilterFunction) {
     paginationSize: 20,
     paginationSizeSelector:[20,50,100,10000],
     columns: columnDefinitions,
-    downloadRowRange: 'active', /*
-    renderComplete: (x) => {
-      console.log('EEE', x, this);
-      document.querySelectorAll("*[data-filter-function]").forEach(
-        setFilterLink => {
-          const onclickFunctionName = x.getAttribute('data-filter-field'),
-                onclickFunctionArg = x.getAttribute('data-filter-value'),
-                // onclickFunction = () => { console.log('YESS'); window[onclickFunctionName](onclickFunctionArg);}
-                onClickFunction = () => setFilterFunction(onclickFunctionName, onclickFunctionArg);
-          setFilterLink.addEventListener('click', onClickFunction, true);
-        }
-      )
-    } */
+    downloadRowRange: 'active',
+    renderComplete: () => tableContainer.dispatchEvent(
+      new Event('tabulator-render', { bubbles: true })
+    ),
+    scrollVertical: () => tableContainer.dispatchEvent(
+      new Event('tabulator-scroll', { bubbles: true })
+    )
   };
 
   // Handler for when a user clicks on a row in tabular format
@@ -141,15 +140,46 @@ function getTableRenderer(sr, showDetailsFunction, generalSearch) {
 
   createTable(); // Initialize table
 
+  window.tabulatorTable = table; // TEMP
+  const generalSearchElem = document.getElementById(sr.GENERAL_SEARCH_INPUT_ID);
+
+  // Check if visible rows have changed
+
+  let oldVisibleDataHash = '';
+  function visibleDataChanged() {
+    const visibleDataHash = JSON.stringify(table.getData('visible'));
+    if (visibleDataHash === oldVisibleDataHash) {
+      return false;
+    } else {
+      oldVisibleDataHash = visibleDataHash;
+      return true;
+    }
+  }
+
   return {
     switchMode: createTable,
     download,
-    refresh: function () {
-      console.log(table);
-      table.refreshFilter();
+    getVisibleData: () => table.getData('visible'),
+    visibleDataChanged,
+    refresh: () => table.refreshFilter(),
+    setHeaderFilterValue: function (headerId, value) { 
+      table.setHeaderFilterValue(headerId, value) 
     },
-    setHeaderFilterValue: function (headerId, value) {
-      table.setHeaderFilterValue(headerId, value)
+    getFilterValues: function () {
+
+      // Get all the filter values as an array of objects, then
+      //  compile them into a hash by field ID
+
+      const filterArray = table
+        .getHeaderFilters()
+        .concat(  generalSearchElem.innerText
+                  ? [{ field: 'generalSearch', value: generalSearchElem.innerText }]
+                  : []);
+
+      return filterArray.reduce(
+        (filterHash, {field, value}) => Object.assign({}, filterHash, { [field]: value }),
+        {}
+      );
     }
   };
 }
