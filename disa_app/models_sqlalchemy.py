@@ -556,13 +556,25 @@ class Referent(Base):
 class Group(Base):
     __tablename__ = 'groups'
 
-    uuid = Column( String(32), primary_key=True )
-    count = Column( Integer )
-    count_estimated = Column( Boolean )
-    description = Column( UnicodeText() )
-    date_created = Column( DateTime() )
-    date_modified = Column( DateTime() )
-    reference_id = Column( Integer, ForeignKey('4_references.id'), nullable=False )
+    uuid: str = cast( str, Column(String(32), primary_key=True) )
+    count: int = cast( int, Column(Integer) )
+    count_estimated: bool = cast( bool, Column(Boolean) )
+    description: str = cast( str, Column(UnicodeText()) )
+    date_created: datetime.datetime = cast( datetime.datetime, Column(DateTime()) )
+    date_modified: datetime.datetime = cast( datetime.datetime, Column(DateTime()) )
+    reference_id: int = cast( int, Column(Integer, ForeignKey('4_references.id'), nullable=False) )
+
+
+# class Group(Base):
+#     __tablename__ = 'groups'
+
+#     uuid = Column( String(32), primary_key=True )
+#     count = Column( Integer )
+#     count_estimated = Column( Boolean )
+#     description = Column( UnicodeText() )
+#     date_created = Column( DateTime() )
+#     date_modified = Column( DateTime() )
+#     reference_id = Column( Integer, ForeignKey('4_references.id'), nullable=False )
 
 
 class Title(Base):
