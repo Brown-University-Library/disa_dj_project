@@ -439,7 +439,8 @@ class ReferentName(Base):
 
     id = Column(Integer, primary_key=True)
     referent_id = Column(Integer, ForeignKey('5_referents.id'))
-    name_type_id = Column(Integer, ForeignKey('1_name_types.id'))
+    # name_type_id = Column(Integer, ForeignKey('1_name_types.id'))
+    name_type_id: int = cast( int, Column(Integer, ForeignKey('1_name_types.id')) )
     first = Column(String(255))
     last = Column(String(255))
     name_type = relationship(
@@ -454,7 +455,7 @@ class Referent(Base):
     __tablename__ = '5_referents'
 
     id = Column(Integer, primary_key=True)
-    uuid = Column( String(32) )
+    uuid: str = cast( str, Column(String(32)) )
     age = Column(String(255))
     sex = Column(String(255))
     primary_name_id = Column(Integer,
