@@ -247,19 +247,6 @@ class Reference(Base):
     groups = relationship(
         'Group', backref='reference', lazy=True, cascade="delete")
 
-    # def last_edit(self):
-    #     """ Note: self.edits is possible because of ReferenceEdit() """
-    #     edits: list[tuple] = sorted([ (e.timestamp, e) for e in self.edits ],
-    #          key=operator.itemgetter(0), reverse=True)
-    #     log.debug( f'edits, ```{edits}```' )
-    #     if edits:
-    #         return_edits = edits[0][1]
-    #     else:
-    #         return_edits = []
-    #     log.debug( f'return_edits, ``{return_edits}``' )
-    #     log.debug( f'type(return_edits), ``{type(return_edits)}``' )
-    #     return return_edits
-
     def last_edit(self):
         """ Note: self.edits is possible because of ReferenceEdit() """
         edits: list[tuple] = sorted([ (e.timestamp, e) for e in self.edits ],
@@ -323,31 +310,6 @@ class Reference(Base):
             'location_info': self.display_location_info()
             }
         return data
-
-    # def dictify( self ):
-    #     if self.date:
-    #         isodate = datetime.date.isoformat( self.date )
-    #     else:
-    #         isodate = ''
-    #     jsn_referents = []
-    #     for rfrnt in self.referents:
-    #         jsn_referents.append( {'id': rfrnt.id, 'age': rfrnt.age, 'sex': rfrnt.sex} )
-    #     last_edit = self.last_edit()
-    #     if last_edit:
-    #         last_edit = last_edit.timestamp.strftime( '%Y-%m-%d' )
-    #     data = {
-    #         'id': self.id,
-    #         'citation_id': self.citation_id,
-    #         'reference_type_id': self.reference_type_id,
-    #         'reference_type_name': self.reference_type.name,  # NB: this appears to be an sqlalchemy convention -- that if there is a ForeignKey, I can just go ahead and refernce the property name.
-    #         'national_context_id': self.national_context_id,
-    #         'date': isodate,
-    #         'transcription': self.transcription,
-    #         'referents': jsn_referents,
-    #         'last_edit': last_edit,
-    #         'location_info': self.display_location_info()
-    #         }
-    #     return data
 
     def __repr__(self):
         return '<Reference {0}>'.format(self.id)
@@ -453,10 +415,6 @@ class Person(Base):
     def __repr__(self):
         display_repr = f'<Person {self.id}: {self.display_name()}>'
         return display_repr
-
-    # def __repr__(self):
-    #     return '<Referent {0}: {1}>'.format(
-    #         self.id, self.display_name() )
 
     ## end class Person
 
