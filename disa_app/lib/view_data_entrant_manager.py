@@ -293,7 +293,7 @@ class Poster():
             Called by manage_post() """
         prs = self.initialize_person()
         rfrnt = models_alch.Referent( reference_id=data['record_id'] )
-        # rfrnt.uuid = uuid.uuid4().hex
+        rfrnt.uuid = uuid.uuid4().hex
         rfrnt.person = prs
         primary_name: str = self.common.update_referent_name( data['name'], self.session )
         rfrnt.names.append( primary_name )
