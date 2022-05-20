@@ -386,7 +386,9 @@ class Common():
         name.first = data['first']
         name.last = data['last']
         given = session.query( models_alch.NameType ).filter_by( name='Given' ).first()
-        name.name_type_id: int = data.get('name_type', given.id)
+        # name.name_type_id: int = data.get('name_type', given.id)
+        temp_name_type_id: int = data.get('name_type', given.id)
+        name.name_type_id = temp_name_type_id
         log.debug( 'returning name' )
         return name
 
