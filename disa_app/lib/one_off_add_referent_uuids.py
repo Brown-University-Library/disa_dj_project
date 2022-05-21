@@ -10,10 +10,10 @@ Usage:
 - $ python3 ./disa_app/lib/one_off_add_referent_uuids.py
 """
 
-import logging, os, sys
+import logging, os, pprint, sys
 
 import django, sqlalchemy
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
 
 ## configure django paths
@@ -44,9 +44,17 @@ def manage_add_uuids() -> None:
         Called by if name == main... """
     log.debug( 'starting manage_add_uuids()' )
     session = make_session()
-    ## get referents ------------------------------------------------
+    ## count all referents ------------------------------------------
     referents_all = session.query( models_alch.Referent ).all()
     log.debug( f'referents_all count, ``{len(referents_all)}``' )
+    ## get relevant referents ---------------------------------------
+    qset_rfrnts = session.query( models_alch.Referent ).filter(
+        or_(
+            models_alch.Referent.uuid == None
+            ) ).all()
+    log.debug( f'empty referents count, ``{len(qset_rfrnts)}``' )
+    log.debug( f'Referents, ``{pprint.pformat(qset_rfrnts)}``' )
+    return
         
 
 def make_session() -> sqlalchemy.orm.session.Session:
