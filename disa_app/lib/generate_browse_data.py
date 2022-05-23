@@ -13,6 +13,8 @@ import django, sqlalchemy
 from django.urls import reverse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.session import Session as alch_session  # just for type-checking
+
 
 ## configure django paths
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
@@ -106,7 +108,7 @@ def manage_generation():
     ## end manage_generation()
 
 
-def make_session() -> sqlalchemy.orm.session.Session:
+def make_session() -> alch_session:
     """ Sets up sqlalchemy session.
         Called by manage_generation() controller. """
     engine = create_engine( settings_app.DB_URL, echo=False )
@@ -163,7 +165,7 @@ def populate_output( referent, output_dct, initialized_referent_dct ):
     #     return
     referent_dct = initialized_referent_dct.copy()
     referent_dct['referent_db_id'] = referent.id
-    referent_dct['referent_uuid'] = '(not-recorded)'
+    referent_dct['referent_uuid'] = referent.uuid
     ( first_name, last_name ) = get_name( referent )
     referent_dct['name_first'] = first_name
     referent_dct['name_last'] = last_name
@@ -222,17 +224,34 @@ def get_relationships( referent ):
     return relationships
 
 
-def get_name( referent ):
+def get_name( referent ) -> tuple:
     """ Creates name-tuple.
         Possible TODO- instead, or also, supply fielded first-name and last-name.
         Called by populate_output() """
     log.debug( f'referent.names, ``{referent.names}``' )
     for name in referent.names:
         log.debug( f'referent-name.name_type, ``{name.name_type}``')
-    name = referent.names[0]
-    name_tuple = ( name.first, name.last )
+    try:
+        name = referent.names[0]
+        name_tuple = ( name.first, name.last )
+    except Exception as e:
+        log.exception( 'problem getting name; processing continues, returned name-tuple will contain `Unknown` entries' )
+        name_tuple = ( 'zUnknown', 'zUnknown' )
     log.debug( f'name_tuple, ``{name_tuple}``' )
     return name_tuple
+
+
+# def get_name( referent ):
+#     """ Creates name-tuple.
+#         Possible TODO- instead, or also, supply fielded first-name and last-name.
+#         Called by populate_output() """
+#     log.debug( f'referent.names, ``{referent.names}``' )
+#     for name in referent.names:
+#         log.debug( f'referent-name.name_type, ``{name.name_type}``')
+#     name = referent.names[0]
+#     name_tuple = ( name.first, name.last )
+#     log.debug( f'name_tuple, ``{name_tuple}``' )
+#     return name_tuple
 
 
 def get_tribes( referent ):

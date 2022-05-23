@@ -293,7 +293,7 @@ class Poster():
             Called by manage_post() """
         prs = self.initialize_person()
         rfrnt = models_alch.Referent( reference_id=data['record_id'] )
-        # rfrnt.uuid = uuid.uuid4().hex
+        rfrnt.uuid = uuid.uuid4().hex
         rfrnt.person = prs
         primary_name: str = self.common.update_referent_name( data['name'], self.session )
         rfrnt.names.append( primary_name )
@@ -386,7 +386,9 @@ class Common():
         name.first = data['first']
         name.last = data['last']
         given = session.query( models_alch.NameType ).filter_by( name='Given' ).first()
-        name.name_type_id: int = data.get('name_type', given.id)
+        # name.name_type_id: int = data.get('name_type', given.id)
+        temp_name_type_id: int = data.get('name_type', given.id)
+        name.name_type_id = temp_name_type_id
         log.debug( 'returning name' )
         return name
 
