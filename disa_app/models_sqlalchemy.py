@@ -247,19 +247,6 @@ class Reference(Base):
     groups = relationship(
         'Group', backref='reference', lazy=True, cascade="delete")
 
-    # def last_edit(self):
-    #     """ Note: self.edits is possible because of ReferenceEdit() """
-    #     edits: list[tuple] = sorted([ (e.timestamp, e) for e in self.edits ],
-    #          key=operator.itemgetter(0), reverse=True)
-    #     log.debug( f'edits, ```{edits}```' )
-    #     if edits:
-    #         return_edits = edits[0][1]
-    #     else:
-    #         return_edits = []
-    #     log.debug( f'return_edits, ``{return_edits}``' )
-    #     log.debug( f'type(return_edits), ``{type(return_edits)}``' )
-    #     return return_edits
-
     def last_edit(self):
         """ Note: self.edits is possible because of ReferenceEdit() """
         edits: list[tuple] = sorted([ (e.timestamp, e) for e in self.edits ],
@@ -323,31 +310,6 @@ class Reference(Base):
             'location_info': self.display_location_info()
             }
         return data
-
-    # def dictify( self ):
-    #     if self.date:
-    #         isodate = datetime.date.isoformat( self.date )
-    #     else:
-    #         isodate = ''
-    #     jsn_referents = []
-    #     for rfrnt in self.referents:
-    #         jsn_referents.append( {'id': rfrnt.id, 'age': rfrnt.age, 'sex': rfrnt.sex} )
-    #     last_edit = self.last_edit()
-    #     if last_edit:
-    #         last_edit = last_edit.timestamp.strftime( '%Y-%m-%d' )
-    #     data = {
-    #         'id': self.id,
-    #         'citation_id': self.citation_id,
-    #         'reference_type_id': self.reference_type_id,
-    #         'reference_type_name': self.reference_type.name,  # NB: this appears to be an sqlalchemy convention -- that if there is a ForeignKey, I can just go ahead and refernce the property name.
-    #         'national_context_id': self.national_context_id,
-    #         'date': isodate,
-    #         'transcription': self.transcription,
-    #         'referents': jsn_referents,
-    #         'last_edit': last_edit,
-    #         'location_info': self.display_location_info()
-    #         }
-    #     return data
 
     def __repr__(self):
         return '<Reference {0}>'.format(self.id)
@@ -454,10 +416,6 @@ class Person(Base):
         display_repr = f'<Person {self.id}: {self.display_name()}>'
         return display_repr
 
-    # def __repr__(self):
-    #     return '<Referent {0}: {1}>'.format(
-    #         self.id, self.display_name() )
-
     ## end class Person
 
 
@@ -481,7 +439,8 @@ class ReferentName(Base):
 
     id = Column(Integer, primary_key=True)
     referent_id = Column(Integer, ForeignKey('5_referents.id'))
-    name_type_id = Column(Integer, ForeignKey('1_name_types.id'))
+    # name_type_id = Column(Integer, ForeignKey('1_name_types.id'))
+    name_type_id: int = cast( int, Column(Integer, ForeignKey('1_name_types.id')) )
     first = Column(String(255))
     last = Column(String(255))
     name_type = relationship(
@@ -598,13 +557,25 @@ class Referent(Base):
 class Group(Base):
     __tablename__ = 'groups'
 
-    uuid = Column( String(32), primary_key=True )
-    count = Column( Integer )
-    count_estimated = Column( Boolean )
-    description = Column( UnicodeText() )
-    date_created = Column( DateTime() )
-    date_modified = Column( DateTime() )
-    reference_id = Column( Integer, ForeignKey('4_references.id'), nullable=False )
+    uuid: str = cast( str, Column(String(32), primary_key=True) )
+    count: int = cast( int, Column(Integer) )
+    count_estimated: bool = cast( bool, Column(Boolean) )
+    description: str = cast( str, Column(UnicodeText()) )
+    date_created: datetime.datetime = cast( datetime.datetime, Column(DateTime()) )
+    date_modified: datetime.datetime = cast( datetime.datetime, Column(DateTime()) )
+    reference_id: int = cast( int, Column(Integer, ForeignKey('4_references.id'), nullable=False) )
+
+
+# class Group(Base):
+#     __tablename__ = 'groups'
+
+#     uuid = Column( String(32), primary_key=True )
+#     count = Column( Integer )
+#     count_estimated = Column( Boolean )
+#     description = Column( UnicodeText() )
+#     date_created = Column( DateTime() )
+#     date_modified = Column( DateTime() )
+#     reference_id = Column( Integer, ForeignKey('4_references.id'), nullable=False )
 
 
 class Title(Base):
