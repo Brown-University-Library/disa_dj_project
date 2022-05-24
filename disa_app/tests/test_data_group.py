@@ -45,6 +45,7 @@ class Client_ReferenceGroup_Test( TestCase ):
         response = self.client.post( post_url, data=jsn, content_type='application/json' )
         self.assertEqual( 200, response.status_code )
         self.post_resp_dct = json.loads( response.content )
+        log.debug( f'self.post_resp_dct, ``{pprint.pformat(self.post_resp_dct)}``' )
         self.new_uuid = self.post_resp_dct['response']['group_data']['uuid']
         log.debug( f'self.new_uuid, ``{self.new_uuid}``' )
 
