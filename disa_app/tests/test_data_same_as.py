@@ -1,6 +1,6 @@
 """ Tests the Referent-A is the same individual as Referent-B feature/api. """
 
-import json, logging, pprint, secrets
+import json, logging, pprint, random
 
 from django.test import TestCase  # TestCase requires db, so if no db is needed, try ``from django.test import SimpleTestCase as TestCase``
 from django.core.urlresolvers import reverse
@@ -14,7 +14,53 @@ class Client_ReferentMatch_API_Test( TestCase ):
     def setUp(self):
         pass
 
-    # ## HELPERS ====================
+    ## HELPERS ====================
+
+    def create_referent_match(self):
+        """ Creates a ReferentMatch entry for tests. """
+        ## create referent-1
+        self.create_new_referent()
+        ## create referent-2
+        self.create_new_referent()
+        ## create referent_match entry
+        post_url = reverse( 'data_group_url', kwargs={'incoming_uuid': 'new'} )
+        log.debug( f'post-url, ``{post_url}``' )
+        payload = {
+            'count': 7,
+            'count_estimated': True,
+            'description': 'the description',
+            'reference_id': 49
+        }
+        jsn = json.dumps( payload )
+        response = self.client.post( post_url, data=jsn, content_type='application/json' )
+        self.assertEqual( 200, response.status_code )
+        self.post_resp_dct = json.loads( response.content )
+        log.debug( f'self.post_resp_dct, ``{pprint.pformat(self.post_resp_dct)}``' )
+        self.new_uuid = self.post_resp_dct['response']['group_data']['uuid']
+        log.debug( f'self.new_uuid, ``{self.new_uuid}``' )
+
+    def create_new_referent(self):
+        """ Creates a referent for tests. """
+        post_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'new'} )
+        log.debug( f'post-url, ``{post_url}``' )
+        name_code = str( random.randint(1000, 9999) )
+        payload = {
+            'id': 'new',
+            'name': {'first': f'test-first-{name_code}', 'id': 'name', 'last': f'test-last-{name_code}'},
+            'record_id': '49',
+            'roles': [
+                {'id': '3', 'name': 'Priest'},
+                {'id': '30', 'name': 'Previous Owner'}
+            ]
+        }
+        jsn = json.dumps( payload )
+        response = self.client.post( post_url, data=jsn, content_type='application/json' )
+        self.assertEqual( 200, response.status_code )
+        self.post_resp_dct: dict = json.loads( response.content )  # type: ignore
+        log.debug( f'post_resp_dct, ``{pprint.pformat(self.post_resp_dct)}``' )
+        self.new_db_id = self.post_resp_dct['id']
+        self.assertEqual( type(self.new_db_id), int )
+        log.debug( f'self.new_db_id, ``{self.new_db_id}``' )
 
     ## GET =======================
 
