@@ -24,8 +24,8 @@ class Client_Referent_API_Test( TestCase ):
 
     def setUp(self):
         self.new_db_id = None
-        self.post_resp_dct = None
-        self.delete_resp_dct = None
+        self.post_resp_dct = {}
+        self.delete_resp_dct = {}
         log.debug( f'initial self.new_db_id, ``{self.new_db_id}``' )
         log.debug( f'self.post_resp_dct, ``{self.post_resp_dct}``' )
         log.debug( f'self.delete_resp_dct, ``{self.delete_resp_dct}``' )
@@ -48,7 +48,7 @@ class Client_Referent_API_Test( TestCase ):
         jsn = json.dumps( payload )
         response = self.client.post( post_url, data=jsn, content_type='application/json' )
         self.assertEqual( 200, response.status_code )
-        self.post_resp_dct = json.loads( response.content )
+        self.post_resp_dct: dict = json.loads( response.content )  # type: ignore
         log.debug( f'post_resp_dct, ``{pprint.pformat(self.post_resp_dct)}``' )
         self.new_db_id = self.post_resp_dct['id']
         self.assertEqual( type(self.new_db_id), int )
@@ -59,7 +59,7 @@ class Client_Referent_API_Test( TestCase ):
         delete_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': self.new_db_id} )
         response = self.client.delete( delete_url )
         self.assertEqual( 200, response.status_code )
-        self.delete_resp_dct = json.loads( response.content )
+        self.delete_resp_dct: dict = json.loads( response.content )  # type: ignore
         log.debug( f'delete_resp_dct, ``{pprint.pformat(self.delete_resp_dct)}``' )
 
     ## GET =======================
@@ -70,7 +70,7 @@ class Client_Referent_API_Test( TestCase ):
         log.debug( f'get_url, ``{get_url}``' )
         response = self.client.get( get_url )
         self.assertEqual( 404, response.status_code )
-        self.assertTrue( b'Not Found' in response.content )
+        self.assertTrue( b'Not Found' in response.content )  # type: ignore
 
     def test_get_good(self):
         """ Checks good GET of `http://127.0.0.1:8000/data/entrants/1234/`. """
@@ -83,7 +83,7 @@ class Client_Referent_API_Test( TestCase ):
         response = self.client.get( get_url )
         ## tests
         self.assertEqual( 200, response.status_code )
-        resp_dct = json.loads( response.content )
+        resp_dct: dict = json.loads( response.content )  # type: ignore
         self.assertEqual( ['ent'], sorted(resp_dct.keys()) )
         rfrnt_data_keys = sorted( resp_dct['ent'].keys() )
         # self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
@@ -106,7 +106,7 @@ class Client_Referent_API_Test( TestCase ):
         jsn = json.dumps( payload )
         response = self.client.post( post_url, data=jsn, content_type='application/json' )
         self.assertEqual( 400, response.status_code )
-        self.assertTrue( b'Bad Request' in response.content )
+        self.assertTrue( b'Bad Request' in response.content )  # type: ignore
 
     def test_post_good(self):
         """ Checks POST to `http://127.0.0.1:8000/data/entrants/1234/` w/good params. """
@@ -124,7 +124,7 @@ class Client_Referent_API_Test( TestCase ):
         put_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'foo'} )
         put_response = self.client.put( put_url )  # will fail; no payload
         self.assertEqual( 400, put_response.status_code )
-        self.assertTrue( b'Bad Request' in put_response.content )
+        self.assertTrue( b'Bad Request' in put_response.content )  # type: ignore
 
     def test_put_good(self):
         """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/1234/`. """
@@ -145,10 +145,9 @@ class Client_Referent_API_Test( TestCase ):
         }
         jsn = json.dumps( put_payload )
         put_response = self.client.put( put_url, data=jsn, content_type='application/json' )
-        put_resp_dct = json.loads( put_response.content )
         ## tests
         self.assertEqual( 200, put_response.status_code )
-        resp_dct = json.loads( put_response.content )
+        resp_dct: dict = json.loads( put_response.content )  # type: ignore
         self.assertEqual( ['first', 'id', 'last', 'name_id', 'person_id', 'roles'], sorted(resp_dct.keys()) )
         self.assertEqual( f'test-first-{random_name_part}', resp_dct['first'] )
         self.assertEqual( f'test-last-{random_name_part}', resp_dct['last'] )
@@ -162,7 +161,7 @@ class Client_Referent_API_Test( TestCase ):
         delete_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'foo'} )
         delete_response = self.client.delete( delete_url )
         self.assertEqual( 500, delete_response.status_code )
-        self.assertTrue( b'Server Error' in delete_response.content )
+        self.assertTrue( b'Server Error' in delete_response.content )  # type: ignore
 
     def test_delete_good(self):
         """ Checks good DELETE of `http://127.0.0.1:8000/data/entrants/1234/`. """
@@ -217,7 +216,7 @@ class Client_Referent_Details_API_Test( TestCase ):
         }
         jsn = json.dumps( put_details_payload )
         put_details_response = self.client.put( put_details_url, data=jsn, content_type='application/json' )
-        put_details_resp_dct = json.loads( put_details_response.content )  # should be, i.e., `{'redirect': '/editor/records/895/'}`
+        put_details_resp_dct: dict = json.loads( put_details_response.content )  # type: ignore -- should be, i.e., `{'redirect': '/editor/records/895/'}`
         log.debug( f'put_details_resp_dct, ``{pprint.pformat(put_details_resp_dct)}``' )
         ## tests -- response
         self.assertEqual( 200, put_details_response.status_code )
@@ -228,8 +227,7 @@ class Client_Referent_Details_API_Test( TestCase ):
         get_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 2033} )
         log.debug( f'get_url for details comparison, ``{get_url}``' )
         get_response = self.client.get( get_url )
-        get_resp_dct = json.loads( get_response.content )
-        # print( f'get_resp_dct, ``{pprint.pformat(get_resp_dct)}``' )
+        get_resp_dct: dict = json.loads( get_response.content )  # type: ignore
         self.assertEqual(
             [{'first': f'test-first-{random_name_part}', 'id': 2033, 'last': f'test-last-{random_name_part}', 'name_type': 'Given'}],
             get_resp_dct['ent']['names'],
