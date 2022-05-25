@@ -230,7 +230,6 @@ class Client_Referent_Details_API_Test( TestCase ):
         log.debug( f'get_url for details comparison, ``{get_url}``' )
         get_response = self.client.get( get_url )
         get_resp_dct: dict = json.loads( get_response.content )  # type: ignore
-        # print( f'get_resp_dct, ``{pprint.pformat(get_resp_dct)}``' )
         self.assertEqual(
             [{'first': f'test-first-{random_name_part}', 'id': 2033, 'last': f'test-last-{random_name_part}', 'name_type': 'Given'}],
             get_resp_dct['ent']['names'],
