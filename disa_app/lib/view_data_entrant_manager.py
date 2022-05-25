@@ -51,6 +51,7 @@ class Getter():
             Called by manage_get() """
         data = { 'ent': {} }
         data['ent']['id'] = rfrnt.id
+        data['ent']['uuid'] = rfrnt.uuid
         data['ent']['names'] = [
             { 'first': n.first, 'last': n.last,
                 'name_type': n.name_type.name,
