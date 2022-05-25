@@ -145,11 +145,12 @@ class Client_Referent_API_Test( TestCase ):
         }
         jsn = json.dumps( put_payload )
         put_response = self.client.put( put_url, data=jsn, content_type='application/json' )
-        # put_resp_dct = json.loads( put_response.content )
         ## tests
         self.assertEqual( 200, put_response.status_code )
-        resp_dct = json.loads( put_response.content )  # type: ignore
-        self.assertEqual( ['first', 'id', 'last', 'name_id', 'person_id', 'roles'], sorted(resp_dct.keys()) )
+        resp_dct: dict = json.loads( put_response.content )  # type: ignore
+        self.assertEqual( 
+            ['first', 'id', 'last', 'name_id', 'person_id', 'roles', 'uuid'], 
+            sorted(resp_dct.keys()) )
         self.assertEqual( f'test-first-{random_name_part}', resp_dct['first'] )
         self.assertEqual( f'test-last-{random_name_part}', resp_dct['last'] )
         ## cleanup
