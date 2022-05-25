@@ -53,6 +53,7 @@ class Client_Referent_API_Test( TestCase ):
         self.new_db_id = self.post_resp_dct['id']
         self.assertEqual( type(self.new_db_id), int )
         log.debug( f'self.new_db_id, ``{self.new_db_id}``' )
+        self.assertEqual( str, type(self.post_resp_dct["uuid"]) )
 
     def delete_new_referent(self):
         """ Deletes referent used by tests."""
@@ -113,7 +114,9 @@ class Client_Referent_API_Test( TestCase ):
         ## create referent
         self.create_new_referent()
         ## tests
-        self.assertEqual( ['first', 'id', 'last', 'name_id', 'person_id', 'roles'], sorted(self.post_resp_dct.keys()) )
+        self.assertEqual( 
+            ['first', 'id', 'last', 'name_id', 'person_id', 'roles', 'uuid'], 
+            sorted(self.post_resp_dct.keys()) )
         ## cleanup
         self.delete_new_referent()
 
@@ -148,7 +151,9 @@ class Client_Referent_API_Test( TestCase ):
         ## tests
         self.assertEqual( 200, put_response.status_code )
         resp_dct: dict = json.loads( put_response.content )  # type: ignore
-        self.assertEqual( ['first', 'id', 'last', 'name_id', 'person_id', 'roles'], sorted(resp_dct.keys()) )
+        self.assertEqual( 
+            ['first', 'id', 'last', 'name_id', 'person_id', 'roles', 'uuid'], 
+            sorted(resp_dct.keys()) )
         self.assertEqual( f'test-first-{random_name_part}', resp_dct['first'] )
         self.assertEqual( f'test-last-{random_name_part}', resp_dct['last'] )
         ## cleanup
