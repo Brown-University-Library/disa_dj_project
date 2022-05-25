@@ -24,8 +24,8 @@ class Client_Referent_API_Test( TestCase ):
 
     def setUp(self):
         self.new_db_id = None
-        self.post_resp_dct: dict = {}
-        self.delete_resp_dct: dict = {}
+        self.post_resp_dct = {}
+        self.delete_resp_dct = {}
         log.debug( f'initial self.new_db_id, ``{self.new_db_id}``' )
         log.debug( f'self.post_resp_dct, ``{self.post_resp_dct}``' )
         log.debug( f'self.delete_resp_dct, ``{self.delete_resp_dct}``' )
