@@ -12,31 +12,32 @@ class Client_ReferentMatch_API_Test( TestCase ):
     """ Checks `/referent_match/1234/` api urls. """
 
     def setUp(self):
-        pass
+        self.new_uuid: str = ''
 
     ## HELPERS ====================
 
     def create_referent_match(self):
         """ Creates a ReferentMatch entry for tests. """
-        ## create referent-1
-        referent_uuid_1 = self.create_new_referent()
-        ## create referent-2
-        referent_uuid_2 = self.create_new_referent()
+        ## create `subject` referent
+        rfrnt_sub_uuid: str = self.create_new_referent()
+        ## create `object` referent
+        rfrnt_obj_uuid: str = self.create_new_referent()
         ## create referent_match entry
         post_url = reverse( 'referent_match_url' )
         log.debug( f'post-url, ``{post_url}``' )
+    
         payload = {
-            'count': 7,
-            'count_estimated': True,
-            'description': 'the description',
-            'reference_id': 49
+            'rfrnt_sub_uuid': rfrnt_sub_uuid,
+            'rfrnt_obj_uuid': rfrnt_obj_uuid,
+            'researcher_notes': 'the notes',
+            'confidence': 100
         }
         jsn = json.dumps( payload )
         response = self.client.post( post_url, data=jsn, content_type='application/json' )
         self.assertEqual( 200, response.status_code )
-        self.post_resp_dct = json.loads( response.content )
+        self.post_resp_dct: dict = json.loads( response.content )  # type: ignore
         log.debug( f'self.post_resp_dct, ``{pprint.pformat(self.post_resp_dct)}``' )
-        self.new_uuid = self.post_resp_dct['response']['group_data']['uuid']
+        self.new_uuid: str = self.post_resp_dct['response']['referent_uuid']
         log.debug( f'self.new_uuid, ``{self.new_uuid}``' )
 
     def create_new_referent(self) -> str:
