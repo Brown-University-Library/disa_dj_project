@@ -26,11 +26,11 @@ BASE_DIR = os.path.dirname( os.path.dirname(os.path.abspath(__file__)) )
 SECRET_KEY = os.environ['DISA_DJ__SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = json.loads( os.environ['DISA_DJ__DEBUG_JSON'] )  # will be True or False
+DEBUG: bool = json.loads( os.environ['DISA_DJ__DEBUG_JSON'] )  # will be True or False
 
-ADMINS = json.loads( os.environ['DISA_DJ__ADMINS_JSON'] )
+ADMINS: list = json.loads( os.environ['DISA_DJ__ADMINS_JSON'] )
 
-ALLOWED_HOSTS = json.loads( os.environ['DISA_DJ__ALLOWED_HOSTS'] )  # list
+ALLOWED_HOSTS: list = json.loads( os.environ['DISA_DJ__ALLOWED_HOSTS'] )  # list
 
 
 # Application definition

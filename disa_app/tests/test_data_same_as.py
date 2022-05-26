@@ -2,8 +2,9 @@
 
 import json, logging, pprint, random
 
-from django.test import TestCase  # TestCase requires db, so if no db is needed, try ``from django.test import SimpleTestCase as TestCase``
+from django.conf import settings as project_settings
 from django.core.urlresolvers import reverse
+from django.test import TestCase  # TestCase requires db, so if no db is needed, try ``from django.test import SimpleTestCase as TestCase``
 
 log = logging.getLogger(__name__)
 
@@ -12,7 +13,7 @@ class Client_ReferentMatch_API_Test( TestCase ):
     """ Checks `/referent_match/1234/` api urls. """
 
     def setUp(self):
-        self.new_uuid: str = ''
+        self.new_referent_uuid: str = ''
 
     ## HELPERS ====================
 
@@ -64,6 +65,12 @@ class Client_ReferentMatch_API_Test( TestCase ):
         return referent_uuid
 
     ## GET =======================
+
+    def test_get_good(self):
+        """ Checks good GET of `http://127.0.0.1:8000/data/referent_match/abcd/`. """
+        if project_settings.ALLOWED_HOSTS == ['127.0.0.1']:
+            raise Exception( 'Not running test, because it will create data in the real database.' )
+        self.assertEqual( 1, 2 )
 
     ## CREATE ====================
 
