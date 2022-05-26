@@ -740,11 +740,11 @@ class ReferenceEdit(Base):
 class ReferentMatch( Base ):
     __tablename__ = 'referent_matches'
 
-    uuid = Column( String(32), primary_key=True )
-    referent_A_uuid = Column( String(32), ForeignKey('5_referents.uuid') )
-    referent_B_uuid = Column( String(32), ForeignKey('5_referents.uuid') )
-    date_created = Column( DateTime() )
-    date_edited = Column( DateTime() )
-    researcher_notes = Column( UnicodeText() )
-    confidence = Column( Integer )  # optional?
+    uuid: str = cast( str, Column(String(32), primary_key=True, nullable=False) )
+    referent_A_uuid: str = cast( str, Column(String(32), ForeignKey('5_referents.uuid'), nullable=False) )
+    referent_B_uuid: str = cast( str, Column(String(32), ForeignKey('5_referents.uuid'), nullable=False) )
+    date_created: datetime.datetime = cast( datetime.datetime, Column(DateTime(), nullable=False) )
+    date_edited: datetime.datetime = cast( datetime.datetime, Column(DateTime(), nullable=False) )
+    researcher_notes: str = cast( str, Column(UnicodeText()) )
+    confidence: int = cast( int, Column(Integer) )  
 
