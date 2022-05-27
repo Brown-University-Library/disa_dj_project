@@ -645,6 +645,15 @@ def data_documents( request, doc_id=None ):
     return resp
 
 
+
+
+def data_referent_match( request, incoming_identifier ):
+    resp = HttpResponse( 'coming!' )
+    return resp
+
+
+
+
 def data_root( request ):
     """ Not called directly; this is a convenience feature for building other urls in javascript
         Url: '/data/' -- 'data_root_url' """

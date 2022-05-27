@@ -28,7 +28,7 @@ class Client_ReferentMatch_API_Test( TestCase ):
         rfrnt_obj_uuid: str = self.create_new_referent()
         log.debug( f'rfrnt_obj_uuid, ``{rfrnt_obj_uuid}``' )
         ## create referent_match entry
-        post_url = reverse( 'referent_match_url' )
+        post_url = reverse( 'data_referent_match_url' )
         log.debug( f'post-url, ``{post_url}``' )
         payload = {
             'rfrnt_sub_uuid': rfrnt_subj_uuid,
