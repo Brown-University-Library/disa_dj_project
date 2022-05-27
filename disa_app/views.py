@@ -1,16 +1,12 @@
-# -*- coding: utf-8 -*-
-
 import datetime, json, logging, os, pprint, time
-# from typing import List
 
 import requests
 
-# from disa_app.lib import basic_auth
-# from django.shortcuts import get_object_or_404, render
 from disa_app import settings_app
 from disa_app.lib import denormalizer_document
 from disa_app.lib import user_pass_auth
 from disa_app.lib import utility_manager
+from disa_app.lib import v_data__rfrnt_mtch_manager
 from disa_app.lib import v_data_document_manager  # api/documents
 from disa_app.lib import v_data_relationships_manager  # api/relationship-by-reference
 from disa_app.lib import view_browse_manager
@@ -652,7 +648,8 @@ def data_referent_match( request, incoming_identifier: str ):
         Handles CRUD calls for data-referent-matching.
         Url: '/data/referent_match/<incoming_identifier>/' -- 'data_referent_match_url' """
     log.debug( f'\n\nstarting data_referent_match, with incoming_identifier, `{incoming_identifier}`; with method, ```{request.method}```, with a payload of, `{request.body}`' )
-
+    ## prep context -----------------------------
+    context: dict = {}
     if request.method == 'GET':
         if incoming_identifier == 'meta':
             context: dict = v_data__rfrnt_mtch_manager.manage_get_meta()
@@ -661,21 +658,22 @@ def data_referent_match( request, incoming_identifier: str ):
         elif len( incoming_identifier ) == 32:
             context: dict = v_data__rfrnt_mtch_manager.manage_get_uuid( incoming_identifier )
         else:
-            context = '400 / Bad Request'
-
+            context = { 'msg': '400 / Bad Request' }
     elif request.method == 'PUT':
-        context: dict = v_data__rfrnt_mtch_manager.manage_put( doc_id, user_id, request.body )
+        context: dict = v_data__rfrnt_mtch_manager.manage_put( incoming_identifier, request.body )
     elif request.method == 'POST':
-        context: dict = v_data__rfrnt_mtch_manager.manage_post( user_id, request.body )
+        context: dict = v_data__rfrnt_mtch_manager.manage_post( request.body )
     elif request.method == 'DELETE':
-        log.debug( 'DELETE detected' )
-        context: dict = v_data__rfrnt_mtch_manager.manage_delete( doc_id, user_uuid.hex, user_email )
+        context: dict = v_data__rfrnt_mtch_manager.manage_delete( incoming_identifier )
     else:
-        msg = 'data_documents() other request.method handling coming'
-        log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
-        resp = HttpResponse( msg )
-    
-    resp = HttpResponse( 'coming!' )
+        log.warning( f'odd request.method perceived: ``{request.method}``' )
+        context = { 'msg': '400 / Bad Request' }
+    ## prep response ----------------------------
+    log.debug( f'context, ``{pprint.pformat(context)}``')
+    if context == { 'msg': '400 / Bad Request' }:
+        resp = HttpResponseBadRequest( context['msg'])
+    else:
+        resp = HttpResponse( 'coming!' )
     return resp
 
 
