@@ -648,7 +648,33 @@ def data_documents( request, doc_id=None ):
 
 
 def data_referent_match( request, incoming_identifier: str ):
+    """ Called via TBD
+        Handles CRUD calls for data-referent-matching.
+        Url: '/data/referent_match/<incoming_identifier>/' -- 'data_referent_match_url' """
     log.debug( f'\n\nstarting data_referent_match, with incoming_identifier, `{incoming_identifier}`; with method, ```{request.method}```, with a payload of, `{request.body}`' )
+
+    if request.method == 'GET':
+        if incoming_identifier == 'meta':
+            context: dict = v_data__rfrnt_mtch_manager.manage_get_meta()
+        elif incoming_identifier == 'all':
+            context: dict = v_data__rfrnt_mtch_manager.manage_get_all()
+        elif len( incoming_identifier ) == 32:
+            context: dict = v_data__rfrnt_mtch_manager.manage_get_uuid( incoming_identifier )
+        else:
+            context = '400 / Bad Request'
+
+    elif request.method == 'PUT':
+        context: dict = v_data__rfrnt_mtch_manager.manage_put( doc_id, user_id, request.body )
+    elif request.method == 'POST':
+        context: dict = v_data__rfrnt_mtch_manager.manage_post( user_id, request.body )
+    elif request.method == 'DELETE':
+        log.debug( 'DELETE detected' )
+        context: dict = v_data__rfrnt_mtch_manager.manage_delete( doc_id, user_uuid.hex, user_email )
+    else:
+        msg = 'data_documents() other request.method handling coming'
+        log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
+        resp = HttpResponse( msg )
+    
     resp = HttpResponse( 'coming!' )
     return resp
 
