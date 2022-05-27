@@ -13,22 +13,25 @@ class Client_ReferentMatch_API_Test( TestCase ):
     """ Checks `/referent_match/1234/` api urls. """
 
     def setUp(self):
-        self.new_referent_uuid: str = ''
+        # self.new_subj_rfrnt_uuid: str = ''
+        # self.new_obj_rfrnt_uuid: str = ''
+        self.post_resp_dct: dict = {}
 
     ## HELPERS ====================
 
-    def create_referent_match(self):
+    def create_referent_match_via_post(self):
         """ Creates a ReferentMatch entry for tests. """
         ## create `subject` referent
-        rfrnt_sub_uuid: str = self.create_new_referent()
+        rfrnt_subj_uuid: str = self.create_new_referent()
+        log.debug( f'rfrnt_subj_uuid, ``{rfrnt_subj_uuid}``' )
         ## create `object` referent
         rfrnt_obj_uuid: str = self.create_new_referent()
+        log.debug( f'rfrnt_obj_uuid, ``{rfrnt_obj_uuid}``' )
         ## create referent_match entry
         post_url = reverse( 'referent_match_url' )
         log.debug( f'post-url, ``{post_url}``' )
-    
         payload = {
-            'rfrnt_sub_uuid': rfrnt_sub_uuid,
+            'rfrnt_sub_uuid': rfrnt_subj_uuid,
             'rfrnt_obj_uuid': rfrnt_obj_uuid,
             'researcher_notes': 'the notes',
             'confidence': 100
@@ -66,13 +69,54 @@ class Client_ReferentMatch_API_Test( TestCase ):
 
     ## GET =======================
 
-    def test_get_good(self):
-        """ Checks good GET of `http://127.0.0.1:8000/data/referent_match/abcd/`. """
-        if project_settings.ALLOWED_HOSTS == ['127.0.0.1']:
-            raise Exception( 'Not running test, because it will create data in the real database.' )
-        self.assertEqual( 1, 2 )
+    # def test_get_good(self):
+    #     """ Checks good GET of `http://127.0.0.1:8000/data/referent_match/abcd/`. """
+    #     log.debug( f'allowed_hosts, ``{project_settings.ALLOWED_HOSTS}``' )
+    #     if '127.0.0.1' not in project_settings.ALLOWED_HOSTS and 'localhost' not in project_settings.ALLOWED_HOSTS:
+    #         raise Exception( 'Not running test, because it will create data in the real database.' )
+    #     ## create referents
+    #     self.new_subj_rfrnt_uuid = self.create_new_referent()
+    #     self.new_obj_rfrnt_uuid = self.create_referent_match()
+
+    #     self.assertEqual( 1, 2 )
 
     ## CREATE ====================
+
+    def test_post_good(self):
+        if '127.0.0.1' not in project_settings.ALLOWED_HOSTS and 'localhost' not in project_settings.ALLOWED_HOSTS:
+            raise Exception( 'Not running test, because it will create data in the real database.' )
+        ## create referent_match
+        self.create_referent_match_via_post()
+        ## tests -- generic
+        self.assertEqual( ['request', 'response'], sorted(self.post_resp_dct.keys()) )
+        req_keys = sorted( self.post_resp_dct['request'].keys() )
+        self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
+        ## tests -- specific
+        response_req_keys: list = sorted( self.post_resp_dct['request'].keys() )
+        self.assertEqual( ['foo', 'bar'], response_req_keys )
+
+        response_rsp_keys: list = sorted( self.post_resp_dct['response'].keys() )
+        self.assertEqual( ['foo2', 'bar2'], response_req_keys )
+
+        self.assertEqual( 1, 2 )
+
+        # self.delete_new_referent_match()
+
+
+        # ## create group
+        # self.create_new_group()
+        # ## tests
+        # self.assertEqual( ['request', 'response'], sorted(self.post_resp_dct.keys()) )
+        # req_keys = sorted( self.post_resp_dct['request'].keys() )
+        # self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
+        # req_payload_keys = sorted( self.post_resp_dct['request']['payload'].keys() )
+        # self.assertEqual( ['count', 'count_estimated', 'description', 'reference_id'], req_payload_keys )
+        # resp_keys = sorted( self.post_resp_dct['response'].keys() )
+        # self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
+        # resp_group_data_keys = sorted( self.post_resp_dct['response']['group_data'].keys() )
+        # self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
+        # ## cleanup
+        # self.delete_new_group()
 
     ## UPDATE ====================
 
