@@ -646,25 +646,29 @@ def data_documents( request, doc_id=None ):
 def data_referent_match( request, incoming_identifier: str ):
     """ Called via TBD
         Handles CRUD calls for data-referent-matching.
-        Url: '/data/referent_match/<incoming_identifier>/' -- 'data_referent_match_url' """
+        Url: '/data/referent_match/<incoming_identifier>/' -- 'data_referent_match_url' 
+        TODO: pass in request_url, start_time on class-instantiation. """
     log.debug( f'\n\nstarting data_referent_match, with incoming_identifier, `{incoming_identifier}`; with method, ```{request.method}```, with a payload of, `{request.body}`' )
+    start_time = datetime.datetime.now()
+    request_url = '%s://%s%s' % (
+        request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), request.META.get('REQUEST_URI', request.META['PATH_INFO']) )  # some info not available from client-test
     ## prep context -----------------------------
     context: dict = {}
     if request.method == 'GET':
         if incoming_identifier == 'meta':
-            context: dict = v_data__rfrnt_mtch_manager.manage_get_meta()
+            context: dict = v_data__rfrnt_mtch_manager.manage_get_meta( request_url, start_time )
         elif incoming_identifier == 'all':
-            context: dict = v_data__rfrnt_mtch_manager.manage_get_all()
+            context: dict = v_data__rfrnt_mtch_manager.manage_get_all( request_url, start_time )
         elif len( incoming_identifier ) == 32:
-            context: dict = v_data__rfrnt_mtch_manager.manage_get_uuid( incoming_identifier )
+            context: dict = v_data__rfrnt_mtch_manager.manage_get_uuid( incoming_identifier, request_url, start_time )
         else:
             context = { 'msg': '400 / Bad Request' }
     elif request.method == 'PUT':
-        context: dict = v_data__rfrnt_mtch_manager.manage_put( incoming_identifier, request.body )
+        context: dict = v_data__rfrnt_mtch_manager.manage_put( incoming_identifier, request.body, request_url, start_time )
     elif request.method == 'POST':
-        context: dict = v_data__rfrnt_mtch_manager.manage_post( request.body )
+        context: dict = v_data__rfrnt_mtch_manager.manage_post( request.body, request_url, start_time )
     elif request.method == 'DELETE':
-        context: dict = v_data__rfrnt_mtch_manager.manage_delete( incoming_identifier )
+        context: dict = v_data__rfrnt_mtch_manager.manage_delete( incoming_identifier, request_url, start_time )
     else:
         log.warning( f'odd request.method perceived: ``{request.method}``' )
         context = { 'msg': '400 / Bad Request' }
