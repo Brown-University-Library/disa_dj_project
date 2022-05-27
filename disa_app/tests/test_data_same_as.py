@@ -28,7 +28,7 @@ class Client_ReferentMatch_API_Test( TestCase ):
         rfrnt_obj_uuid: str = self.create_new_referent()
         log.debug( f'rfrnt_obj_uuid, ``{rfrnt_obj_uuid}``' )
         ## create referent_match entry
-        post_url = reverse( 'data_referent_match_url' )
+        post_url = reverse( 'data_referent_match_url', kwargs={'incoming_identifier': 'new'} )
         log.debug( f'post-url, ``{post_url}``' )
         payload = {
             'rfrnt_sub_uuid': rfrnt_subj_uuid,
@@ -36,6 +36,7 @@ class Client_ReferentMatch_API_Test( TestCase ):
             'researcher_notes': 'the notes',
             'confidence': 100
         }
+        log.debug( f'create-referent-match-payload, ``{pprint.pformat(payload)}``' )
         jsn = json.dumps( payload )
         response = self.client.post( post_url, data=jsn, content_type='application/json' )
         self.assertEqual( 200, response.status_code )
