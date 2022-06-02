@@ -644,7 +644,7 @@ def data_documents( request, doc_id=None ):
 
 
 def data_referent_match( request, incoming_identifier: str ):
-    """ Called via TBD
+    """ Called via TBD (will be some js-call; client-tests at the moment)
         Handles CRUD calls for data-referent-matching.
         Url: '/data/referent_match/<incoming_identifier>/' -- 'data_referent_match_url' 
         TODO: pass in request_url, start_time on class-instantiation. """
@@ -666,7 +666,9 @@ def data_referent_match( request, incoming_identifier: str ):
     elif request.method == 'PUT':
         context: dict = v_data_rfrnt_mtch_manager.manage_put( incoming_identifier, request.body, request_url, start_time )
     elif request.method == 'POST':
-        context: dict = v_data_rfrnt_mtch_manager.manage_post( request.body, request_url, start_time )
+        log.debug( 'perceiving POST' )
+        context: dict = v_data_rfrnt_mtch_manager.manage_post( request.body.decode('utf-8'), request_url, start_time )
+        log.debug( f'context, ``{context}``' )
     elif request.method == 'DELETE':
         context: dict = v_data_rfrnt_mtch_manager.manage_delete( incoming_identifier, request_url, start_time )
     else:
