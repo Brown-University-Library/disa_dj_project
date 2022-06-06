@@ -741,8 +741,8 @@ class ReferentMatch( Base ):
     __tablename__ = 'referent_matches'
 
     uuid: str = cast( str, Column(String(32), primary_key=True, nullable=False) )
-    referent_A_uuid: str = cast( str, Column(String(32), ForeignKey('5_referents.uuid'), nullable=False) )
-    referent_B_uuid: str = cast( str, Column(String(32), ForeignKey('5_referents.uuid'), nullable=False) )
+    referent_sbj_uuid: str = cast( str, Column(String(32), ForeignKey('5_referents.uuid'), nullable=False) )
+    referent_obj_uuid: str = cast( str, Column(String(32), ForeignKey('5_referents.uuid'), nullable=False) )
     date_created: datetime.datetime = cast( datetime.datetime, Column(DateTime(), nullable=False) )
     date_edited: datetime.datetime = cast( datetime.datetime, Column(DateTime(), nullable=False) )
     researcher_notes: str = cast( str, Column(UnicodeText()) )

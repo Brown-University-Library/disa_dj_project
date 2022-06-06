@@ -28,10 +28,10 @@ def manage_put( incoming_identifier: str, request_body, request_url: str, start_
 def manage_post( request_body: str, request_url: str, start_time: datetime.datetime ) -> dict:
     log.debug( f'request_body, ``{request_body}``' )
     log.debug( f'request_url, ``{request_url}``' ) 
-    ## extract data -----------------------------
+    ## extract data from post payload -----------
     post_data: dict = json.loads( request_body )
     log.debug( f'post_data, ``{pprint.pformat(post_data)}``' )
-    rfrnt_sub_uuid: str = post_data['rfrnt_sub_uuid']
+    rfrnt_sbj_uuid: str = post_data['rfrnt_sbj_uuid']
     rfrnt_obj_uuid: str = post_data['rfrnt_obj_uuid']
     researcher_notes: str = post_data['researcher_notes']
     confidence: int = post_data['confidence']
@@ -39,8 +39,8 @@ def manage_post( request_body: str, request_url: str, start_time: datetime.datet
     ## create new entry -------------------------
     match = models_alch.ReferentMatch()
     match.uuid = uid
-    match.referent_A_uuid = rfrnt_sub_uuid
-    match.referent_B_uuid = rfrnt_obj_uuid
+    match.referent_sbj_uuid = rfrnt_sbj_uuid
+    match.referent_obj_uuid = rfrnt_obj_uuid
     match.confidence = confidence
     match.researcher_notes = researcher_notes
     match.date_created = datetime.datetime.now()
@@ -49,8 +49,18 @@ def manage_post( request_body: str, request_url: str, start_time: datetime.datet
     session_instance = make_session()
     session_instance.add( match )
     session_instance.commit()  # returns None, so no way to verify success
-    match_data: dict = { 'match_uuid': match.uuid }
-    return match_data
+    ## prepare response -------------------------
+    response_dct: dict = prepare_common_response_dct( match, start_time )
+    context = {
+        'request': {
+            'url': request_url,
+            'method': 'POST',
+            'payload': post_data,
+            'timestamp': str( start_time )
+        },
+        'response': response_dct
+    }
+    return context
 
 
 def make_session() -> orm.session.Session:
@@ -60,28 +70,33 @@ def make_session() -> orm.session.Session:
     return session_instance
 
 
-    # def execute_post_save( self, count, count_estimated, description, reference_id, user_id ) -> dict:
-    #     """ Updates db and returns data.
-    #         Called by manage_post() """
-    #     log.debug( 'starting Poster.execute_save()' )
-    #     assert ( type(count), type(count_estimated), type(description), type(reference_id), type(user_id) ) == (
-    #         int, bool, str, int, int )
-    #     grp = models_alch.Group()
-    #     uid = uuid.uuid4().hex
-    #     assert type(uid) == str
-    #     grp.uuid = uid
-    #     grp.count = count
-    #     grp.count_estimated = count_estimated
-    #     grp.description = description
-    #     grp.reference_id = reference_id
-    #     grp.date_created = datetime.datetime.now()
-    #     grp.date_modified = datetime.datetime.now()
-    #     self.session.add( grp )
-    #     self.session.commit()  # returns None, so no way to verify success
-    #     self.common.stamp_edit( user_id, grp.reference, self.session )
-    #     log.debug( f'returning uuid, ``{uid}``' )
-    #     return grp.uuid
+def prepare_common_response_dct( mtch: models_alch.ReferentMatch, start_time: datetime.datetime ) -> dict:
+    """ Builds the response-dict.
+        Called by manage_post() and probably manage_get_uuid() """
+    # assert type(mtch) == models_alch.ReferentMatch
+    response_dct = {
+        'referent_match_data': {
+            'uuid': mtch.uuid,
+            'referent_sbj_uuid': mtch.referent_sbj_uuid,
+            'referent_obj_uuid': mtch.referent_obj_uuid,
+            'date_created': str( mtch.date_created ),
+            'date_edited': str( mtch.date_edited ),
+            'researcher_notes': mtch.researcher_notes,
+            'confidence': mtch.confidence,
+        },
+        'elapsed_time': str( datetime.datetime.now() - start_time )
+    }
+    log.debug( f'response_dct, ``{pprint.pformat(response_dct)}``' )
+    return response_dct
 
+
+    # uuid: str = cast( str, Column(String(32), primary_key=True, nullable=False) )
+    # referent_sbj_uuid: str = cast( str, Column(String(32), ForeignKey('5_referents.uuid'), nullable=False) )
+    # referent_obj_uuid: str = cast( str, Column(String(32), ForeignKey('5_referents.uuid'), nullable=False) )
+    # date_created: datetime.datetime = cast( datetime.datetime, Column(DateTime(), nullable=False) )
+    # date_edited: datetime.datetime = cast( datetime.datetime, Column(DateTime(), nullable=False) )
+    # researcher_notes: str = cast( str, Column(UnicodeText()) )
+    # confidence: int = cast( int, Column(Integer) )  
 
 
 def manage_delete( incoming_identifier: str, request_url: str, start_time: datetime.datetime ):

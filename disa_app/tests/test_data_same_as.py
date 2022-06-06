@@ -31,10 +31,10 @@ class Client_ReferentMatch_API_Test( TestCase ):
         post_url = reverse( 'data_referent_match_url', kwargs={'incoming_identifier': 'new'} )
         log.debug( f'post-url, ``{post_url}``' )
         payload = {
-            'rfrnt_sub_uuid': rfrnt_subj_uuid,
+            'rfrnt_sbj_uuid': rfrnt_subj_uuid,
             'rfrnt_obj_uuid': rfrnt_obj_uuid,
             'researcher_notes': 'the notes',
-            'confidence': 100
+            'confidence': 100  # temporary experiment; for now always 100; explore replacing with an rdf-predicate that could be more-flexible
         }
         log.debug( f'create-referent-match-payload, ``{pprint.pformat(payload)}``' )
         jsn = json.dumps( payload )
@@ -42,7 +42,7 @@ class Client_ReferentMatch_API_Test( TestCase ):
         self.assertEqual( 200, response.status_code )
         self.post_resp_dct: dict = json.loads( response.content )  # type: ignore
         log.debug( f'self.post_resp_dct, ``{pprint.pformat(self.post_resp_dct)}``' )
-        self.new_uuid: str = self.post_resp_dct['response']['referent_uuid']
+        self.new_uuid: str = self.post_resp_dct['response']['referent_match_data']['uuid']
         log.debug( f'self.new_uuid, ``{self.new_uuid}``' )
 
     def create_new_referent(self) -> str:
@@ -86,38 +86,29 @@ class Client_ReferentMatch_API_Test( TestCase ):
     def test_post_good(self):
         if '127.0.0.1' not in project_settings.ALLOWED_HOSTS and 'localhost' not in project_settings.ALLOWED_HOSTS:
             raise Exception( 'Not running test, because it will create data in the real database.' )
-        ## create referent_match
+        ## create referent_match ----------------
         self.create_referent_match_via_post()
-        ## tests -- generic
+        ## tests --------------------------------
+        ## test post-response main keys
         self.assertEqual( ['request', 'response'], sorted(self.post_resp_dct.keys()) )
+        ## test indicated sent payload
         req_keys = sorted( self.post_resp_dct['request'].keys() )
         self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-        ## tests -- specific
-        response_req_keys: list = sorted( self.post_resp_dct['request'].keys() )
-        self.assertEqual( ['foo', 'bar'], response_req_keys )
-
-        response_rsp_keys: list = sorted( self.post_resp_dct['response'].keys() )
-        self.assertEqual( ['foo2', 'bar2'], response_req_keys )
-
-        self.assertEqual( 1, 2 )
-
-        # self.delete_new_referent_match()
-
-
-        # ## create group
-        # self.create_new_group()
-        # ## tests
-        # self.assertEqual( ['request', 'response'], sorted(self.post_resp_dct.keys()) )
-        # req_keys = sorted( self.post_resp_dct['request'].keys() )
-        # self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
-        # req_payload_keys = sorted( self.post_resp_dct['request']['payload'].keys() )
-        # self.assertEqual( ['count', 'count_estimated', 'description', 'reference_id'], req_payload_keys )
-        # resp_keys = sorted( self.post_resp_dct['response'].keys() )
-        # self.assertEqual( ['elapsed_time', 'group_data'], resp_keys )
-        # resp_group_data_keys = sorted( self.post_resp_dct['response']['group_data'].keys() )
-        # self.assertEqual( ['count', 'count_estimated', 'date_created', 'date_modified', 'description', 'reference_id', 'uuid' ], resp_group_data_keys )
-        # ## cleanup
-        # self.delete_new_group()
+        ## test post-response "response" keys
+        rsp_keys: list = sorted( self.post_resp_dct['response'].keys() )
+        self.assertEqual( ['elapsed_time', 'referent_match_data'], rsp_keys )
+        ## test post-response relationship keys
+        new_relationship_keys = sorted( self.post_resp_dct['response']['referent_match_data'].keys() )
+        self.assertEqual( [
+            'confidence',
+            'date_created',
+            'date_edited',
+            'referent_obj_uuid',
+            'referent_sbj_uuid',
+            'researcher_notes', 
+            'uuid'], new_relationship_keys )
+        ## cleanup ------------------------------
+        # self.delete_new_referent_match() -- and also brand-new referents?
 
     ## UPDATE ====================
 

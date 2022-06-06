@@ -679,7 +679,7 @@ def data_referent_match( request, incoming_identifier: str ):
     if context == { 'msg': '400 / Bad Request' }:
         resp = HttpResponseBadRequest( context['msg'])
     else:
-        resp = HttpResponse( 'coming!' )
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
 
 
