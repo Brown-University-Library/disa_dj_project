@@ -4,6 +4,7 @@ import sqlalchemy
 from disa_app import models_sqlalchemy as models_alch
 from disa_app import settings_app
 from sqlalchemy import orm
+from sqlalchemy import or_
 
 
 log = logging.getLogger(__name__)
@@ -74,13 +75,30 @@ def manage_put( incoming_identifier: str, request_body, request_url: str, start_
 ## DELETE -----------------------------------------------------------
 
 
-def manage_delete( incoming_identifier: str, request_url: str, start_time: datetime.datetime ):
-    ## try search on sbj-uuid
-
-    ## if fails, try search on obj-uuid
-
-    ## if fails, return 404
-    return {}
+def manage_delete( incoming_identifier: str, request_url: str, start_time: datetime.datetime ) -> dict:
+    """ Manages referent-match deletion.
+        Returns context.
+        Called by tests, and views.data_referent_match() """
+    log.debug( 'starting manage_delete()' )
+    log.debug( f'incoming_identifier, ``{incoming_identifier}``' )
+    context = {}
+    try:
+        session_instance = make_session()
+        match_result = session_instance.query( models_alch.ReferentMatch ).filter( 
+            models_alch.ReferentMatch.uuid == incoming_identifier ).first()
+        assert type(match_result) == models_alch.ReferentMatch or isinstance(match_result, type(None))
+        if match_result:
+            session_instance.delete( match_result )
+            session_instance.commit()
+            context = { '200': 'OK' }
+        else:
+            context = { '404': 'Not Found' }
+    except:
+        msg = 'problem with delete, or with response-prep; see logs'
+        log.exception( msg )
+        context = { '500': msg }
+    log.debug( f'context, ``{context}``' )
+    return context
 
 
 ## HELPERS ==========================================================
@@ -112,3 +130,13 @@ def prepare_common_response_dct( mtch: models_alch.ReferentMatch, start_time: da
     }
     log.debug( f'response_dct, ``{pprint.pformat(response_dct)}``' )
     return response_dct
+
+
+
+        # match_result = session_instance.query( models_alch.ReferentMatch ).filter( 
+        #     or_(
+        #         models_alch.ReferentMatch.referent_sbj_uuid == incoming_identifier, 
+        #         models_alch.ReferentMatch.referent_obj_uuid == incoming_identifier
+        #     ) 
+        # ).all()
+
