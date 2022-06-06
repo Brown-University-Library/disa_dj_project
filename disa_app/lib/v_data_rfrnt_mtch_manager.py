@@ -9,21 +9,7 @@ from sqlalchemy import orm
 log = logging.getLogger(__name__)
 
 
-def manage_get_meta( request_url: str, start_time: datetime.datetime ):
-    return {}
-
-
-def manage_get_all( request_url: str, start_time: datetime.datetime ):
-    return {}
-
-
-def manage_get_uuid( incoming_identifier: str, request_url: str, start_time: datetime.datetime ):
-    return {}
-
-
-def manage_put( incoming_identifier: str, request_body, request_url: str, start_time: datetime.datetime ):
-    return {}
-
+## CREATE -----------------------------------------------------------
 
 def manage_post( request_body: str, request_url: str, start_time: datetime.datetime ) -> dict:
     log.debug( f'request_body, ``{request_body}``' )
@@ -63,7 +49,45 @@ def manage_post( request_body: str, request_url: str, start_time: datetime.datet
     return context
 
 
+## READ -------------------------------------------------------------
+
+
+def manage_get_meta( request_url: str, start_time: datetime.datetime ):
+    return {}
+
+
+def manage_get_all( request_url: str, start_time: datetime.datetime ):
+    return {}
+
+
+def manage_get_uuid( incoming_identifier: str, request_url: str, start_time: datetime.datetime ):
+    return {}
+
+
+## UPDATE -----------------------------------------------------------
+
+
+def manage_put( incoming_identifier: str, request_body, request_url: str, start_time: datetime.datetime ):
+    return {}
+
+
+## DELETE -----------------------------------------------------------
+
+
+def manage_delete( incoming_identifier: str, request_url: str, start_time: datetime.datetime ):
+    ## try search on sbj-uuid
+
+    ## if fails, try search on obj-uuid
+
+    ## if fails, return 404
+    return {}
+
+
+## HELPERS ==========================================================
+
+
 def make_session() -> orm.session.Session:
+    """ Called by all CRUD types. """
     engine = sqlalchemy.create_engine( settings_app.DB_URL, echo=True )
     Session = orm.sessionmaker( bind=engine )
     session_instance = Session()
@@ -88,16 +112,3 @@ def prepare_common_response_dct( mtch: models_alch.ReferentMatch, start_time: da
     }
     log.debug( f'response_dct, ``{pprint.pformat(response_dct)}``' )
     return response_dct
-
-
-    # uuid: str = cast( str, Column(String(32), primary_key=True, nullable=False) )
-    # referent_sbj_uuid: str = cast( str, Column(String(32), ForeignKey('5_referents.uuid'), nullable=False) )
-    # referent_obj_uuid: str = cast( str, Column(String(32), ForeignKey('5_referents.uuid'), nullable=False) )
-    # date_created: datetime.datetime = cast( datetime.datetime, Column(DateTime(), nullable=False) )
-    # date_edited: datetime.datetime = cast( datetime.datetime, Column(DateTime(), nullable=False) )
-    # researcher_notes: str = cast( str, Column(UnicodeText()) )
-    # confidence: int = cast( int, Column(Integer) )  
-
-
-def manage_delete( incoming_identifier: str, request_url: str, start_time: datetime.datetime ):
-    return {}
