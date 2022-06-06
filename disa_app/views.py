@@ -678,7 +678,9 @@ def data_referent_match( request, incoming_identifier: str ):
     log.debug( f'context, ``{pprint.pformat(context)}``')
     if context == { 'msg': '400 / Bad Request' }:
         resp = HttpResponseBadRequest( context['msg'] )
-    elif context == { '500': 'problem with delete, or with response-prep; see logs' }:
+    elif context == {'500': 'problem with creation, or with response-prep; see logs'}:  # POST
+        resp = HttpResponseServerError( context['500'] )
+    elif context == { '500': 'problem with delete, or with response-prep; see logs' }:  # DELETE
         resp = HttpResponseServerError( context['500'] )
     else:
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )

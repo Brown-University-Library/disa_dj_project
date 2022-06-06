@@ -13,40 +13,52 @@ log = logging.getLogger(__name__)
 ## CREATE -----------------------------------------------------------
 
 def manage_post( request_body: str, request_url: str, start_time: datetime.datetime ) -> dict:
-    log.debug( f'request_body, ``{request_body}``' )
-    log.debug( f'request_url, ``{request_url}``' ) 
-    ## extract data from post payload -----------
-    post_data: dict = json.loads( request_body )
-    log.debug( f'post_data, ``{pprint.pformat(post_data)}``' )
-    rfrnt_sbj_uuid: str = post_data['rfrnt_sbj_uuid']
-    rfrnt_obj_uuid: str = post_data['rfrnt_obj_uuid']
-    researcher_notes: str = post_data['researcher_notes']
-    confidence: int = post_data['confidence']
-    uid: str = uuid.uuid4().hex
-    ## create new entry -------------------------
-    match = models_alch.ReferentMatch()
-    match.uuid = uid
-    match.referent_sbj_uuid = rfrnt_sbj_uuid
-    match.referent_obj_uuid = rfrnt_obj_uuid
-    match.confidence = confidence
-    match.researcher_notes = researcher_notes
-    match.date_created = datetime.datetime.now()
-    match.date_edited = datetime.datetime.now()
-    ## save it ----------------------------------
-    session_instance = make_session()
-    session_instance.add( match )
-    session_instance.commit()  # returns None, so no way to verify success
-    ## prepare response -------------------------
-    response_dct: dict = prepare_common_response_dct( match, start_time )
-    context = {
-        'request': {
-            'url': request_url,
-            'method': 'POST',
-            'payload': post_data,
-            'timestamp': str( start_time )
-        },
-        'response': response_dct
-    }
+    """ Manages referent-match creation.
+        Returns context.
+        Called by tests, and views.data_referent_match() """
+    try:
+        log.debug( f'request_body, ``{request_body}``' )
+        log.debug( f'request_url, ``{request_url}``' ) 
+        ## extract data from post payload ---------------------------
+        post_data: dict = json.loads( request_body )
+        log.debug( f'post_data, ``{pprint.pformat(post_data)}``' )
+        rfrnt_sbj_uuid: str = post_data['rfrnt_sbj_uuid']
+        rfrnt_obj_uuid: str = post_data['rfrnt_obj_uuid']
+        researcher_notes: str = post_data['researcher_notes']
+        confidence: int = post_data['confidence']
+        uid: str = uuid.uuid4().hex
+        ## see if entry already exists ------------------------------
+        1/0
+        ## create new entry -----------------------------------------
+        match = models_alch.ReferentMatch()
+        match.uuid = uid
+        match.referent_sbj_uuid = rfrnt_sbj_uuid
+        match.referent_obj_uuid = rfrnt_obj_uuid
+        match.confidence = confidence
+        match.researcher_notes = researcher_notes
+        match.date_created = datetime.datetime.now()
+        match.date_edited = datetime.datetime.now()
+        ## save it --------------------------------------------------
+        session_instance = make_session()
+        session_instance.add( match )
+        session_instance.commit()  # returns None, so no way to verify success
+        ## prepare response -----------------------------------------
+        response_dct: dict = prepare_common_response_dct( match, start_time )
+        context = {
+            'request': {
+                'url': request_url,
+                'method': 'POST',
+                'payload': post_data,
+                'timestamp': str( start_time )
+            },
+            'response': response_dct
+        }
+    except Exception as e:
+        log.error( f'e, ``{repr(e)}``')
+        msg = 'problem with creation, or with response-prep; see logs'
+        log.exception( msg )
+        context = { '500': msg }
+    log.debug( f'context, ``{context}``' )
     return context
 
 
