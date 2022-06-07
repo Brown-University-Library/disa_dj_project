@@ -19,6 +19,7 @@ def manage_post( request_body: str, request_url: str, start_time: datetime.datet
     try:
         log.debug( f'request_body, ``{request_body}``' )
         log.debug( f'request_url, ``{request_url}``' ) 
+        context = {}
         ## extract data from post payload ---------------------------
         post_data: dict = json.loads( request_body )
         log.debug( f'post_data, ``{pprint.pformat(post_data)}``' )
@@ -28,7 +29,21 @@ def manage_post( request_body: str, request_url: str, start_time: datetime.datet
         confidence: int = post_data['confidence']
         uid: str = uuid.uuid4().hex
         ## see if entry already exists ------------------------------
-        1/0
+        session_instance = make_session()
+        duplicate_check_1: list = session_instance.query( models_alch.ReferentMatch ).filter( 
+            models_alch.ReferentMatch.referent_sbj_uuid == rfrnt_sbj_uuid).filter(
+            models_alch.ReferentMatch.referent_obj_uuid == rfrnt_obj_uuid ).all()
+        if len( duplicate_check_1 ) > 0:
+            log.warning( 'duplicate found in first check; returning `400`' )
+            context = { '400': 'Bad Request; match already exists'}
+            return context            
+        duplicate_check_2: list = session_instance.query( models_alch.ReferentMatch ).filter( 
+                models_alch.ReferentMatch.referent_sbj_uuid == rfrnt_sbj_uuid).filter(
+                models_alch.ReferentMatch.referent_obj_uuid == rfrnt_obj_uuid ).all()
+        if len( duplicate_check_2 ) > 0:
+            log.warning( 'duplicate found in second check; returning `400`' )
+            context = { '400': 'Bad Request; match already exists'}
+            return context            
         ## create new entry -----------------------------------------
         match = models_alch.ReferentMatch()
         match.uuid = uid
@@ -39,7 +54,6 @@ def manage_post( request_body: str, request_url: str, start_time: datetime.datet
         match.date_created = datetime.datetime.now()
         match.date_edited = datetime.datetime.now()
         ## save it --------------------------------------------------
-        session_instance = make_session()
         session_instance.add( match )
         session_instance.commit()  # returns None, so no way to verify success
         ## prepare response -----------------------------------------

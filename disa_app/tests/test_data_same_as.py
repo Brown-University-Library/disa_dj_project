@@ -71,7 +71,7 @@ class Client_ReferentMatch_API_Test( TestCase ):
         existing_obj_uuid = self.post_resp_dct['response']['referent_match_data']['referent_obj_uuid']
         log.debug( f'existing_obj_uuid, ``{existing_obj_uuid}``' )
         django_http_response_2  = self.create_referent_match_via_post( incoming_sbj_uuid=existing_sbj_uuid, incoming_obj_uuid=existing_obj_uuid )
-        self.assertEqual( 999, django_http_response_2.status_code )
+        self.assertEqual( 400, django_http_response_2.status_code )
         # log.debug( f'second_post_resp_dct, ``{pprint.pformat(second_post_resp_dct)}``' )
         ## tests --------------------------------
         # self.assertEqual( )
@@ -143,7 +143,6 @@ class Client_ReferentMatch_API_Test( TestCase ):
         # return post_resp_dct
 
         django_http_response = self.client.post( post_url, data=jsn, content_type='application/json' )
-        log.debug( f'type(django_http_response), ``{type(django_http_response)}``' )
         return django_http_response
 
 
