@@ -58,13 +58,13 @@ class Client_ReferentMatch_API_Test( TestCase ):
     def test_post_relationship_already_exists(self):
         """ Checks that already-existing-relationship POST TO `http://127.0.0.1:8000/data/referent_match/new/`... 
             ...should fail with a `400 / Bad Request` """
-        ## create referent-match ----------------
+        ## create referent-match ------------------------------------
         django_http_response = self.create_referent_match_via_post()
         self.assertEqual( 200, django_http_response.status_code )
         post_resp_dct: dict = json.loads( django_http_response.content )  # type: ignore
         self.post_resp_dct = post_resp_dct
         log.debug( f'duplicate-try response-dict, ``{pprint.pformat(self.post_resp_dct)}``' )
-        ## try another referent-match -----------
+        ## try duplicate referent-match -----------------------------
         log.debug( f'about to try another referent-match')
         existing_sbj_uuid = self.post_resp_dct['response']['referent_match_data']['referent_sbj_uuid']
         log.debug( f'existing_sbj_uuid, ``{existing_sbj_uuid}``' )
@@ -72,9 +72,8 @@ class Client_ReferentMatch_API_Test( TestCase ):
         log.debug( f'existing_obj_uuid, ``{existing_obj_uuid}``' )
         django_http_response_2  = self.create_referent_match_via_post( incoming_sbj_uuid=existing_sbj_uuid, incoming_obj_uuid=existing_obj_uuid )
         self.assertEqual( 400, django_http_response_2.status_code )
-        # log.debug( f'second_post_resp_dct, ``{pprint.pformat(second_post_resp_dct)}``' )
-        ## tests --------------------------------
-        # self.assertEqual( )
+        ## try duplicate referent-match reversed --------------------
+        1/0
         ## cleanup
         relationship_uuid = self.post_resp_dct['response']['referent_match_data']['uuid']
         self.delete_referent_match_via_delete( relationship_uuid )
