@@ -826,8 +826,17 @@
 
                       <h6>Transcription</h6>
                       <wysiwyg-editor api-key="ondkaoffzc1dnoz0vypajv5qg9fvnun0bss1ew22yncnvquc" 
-                                      toolbar="bold italic fullscreen"
-                                      :init="{ height:200,menubar:false,plugins:['fullscreen'], toolbar_mode: 'floating'}"
+                                      toolbar="bold italic underline strikethrough fullscreen"
+                                      :init="{ 
+                                        height:200,
+                                        menubar:false, 
+                                        plugins:['fullscreen'], 
+                                        toolbar_mode: 'floating', 
+                                        formats: {
+                                          underline: { inline: 'u' },
+                                          strikethrough: { inline: 's' }
+                                        }
+                                      }"
                                       v-model="currentItem.kludge.transcription"
                                       v-on:blur="saveItemDataToServer"></wysiwyg-editor>
                     </div>
