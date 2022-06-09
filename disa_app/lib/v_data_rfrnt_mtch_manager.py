@@ -38,12 +38,13 @@ def manage_post( request_body: str, request_url: str, start_time: datetime.datet
             context = { '400': 'Bad Request; match already exists'}
             return context            
         duplicate_check_2: list = session_instance.query( models_alch.ReferentMatch ).filter( 
-                models_alch.ReferentMatch.referent_sbj_uuid == rfrnt_sbj_uuid).filter(
-                models_alch.ReferentMatch.referent_obj_uuid == rfrnt_obj_uuid ).all()
+                models_alch.ReferentMatch.referent_sbj_uuid == rfrnt_obj_uuid).filter(
+                models_alch.ReferentMatch.referent_obj_uuid == rfrnt_sbj_uuid ).all()
         if len( duplicate_check_2 ) > 0:
             log.warning( 'duplicate found in second check; returning `400`' )
             context = { '400': 'Bad Request; match already exists'}
-            return context            
+            return context
+        log.debug( 'no duplicates found; will create new entry' )
         ## create new entry -----------------------------------------
         match = models_alch.ReferentMatch()
         match.uuid = uid

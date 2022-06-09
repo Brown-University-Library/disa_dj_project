@@ -73,7 +73,8 @@ class Client_ReferentMatch_API_Test( TestCase ):
         django_http_response_2  = self.create_referent_match_via_post( incoming_sbj_uuid=existing_sbj_uuid, incoming_obj_uuid=existing_obj_uuid )
         self.assertEqual( 400, django_http_response_2.status_code )
         ## try duplicate referent-match reversed --------------------
-        1/0
+        django_http_response_3  = self.create_referent_match_via_post( incoming_sbj_uuid=existing_obj_uuid, incoming_obj_uuid=existing_sbj_uuid )
+        self.assertEqual( 999, django_http_response_3.status_code )
         ## cleanup
         relationship_uuid = self.post_resp_dct['response']['referent_match_data']['uuid']
         self.delete_referent_match_via_delete( relationship_uuid )
