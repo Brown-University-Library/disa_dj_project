@@ -63,9 +63,9 @@ class Client_ReferentMatch_API_Test( TestCase ):
         self.assertEqual( 200, django_http_response.status_code )
         post_resp_dct: dict = json.loads( django_http_response.content )  # type: ignore
         self.post_resp_dct = post_resp_dct
-        log.debug( f'duplicate-try response-dict, ``{pprint.pformat(self.post_resp_dct)}``' )
+        log.debug( f'good-creation response-dict, ``{pprint.pformat(self.post_resp_dct)}``' )
         ## try duplicate referent-match -----------------------------
-        log.debug( f'about to try another referent-match')
+        log.debug( f'about to try a duplicate referent-match')
         existing_sbj_uuid = self.post_resp_dct['response']['referent_match_data']['referent_sbj_uuid']
         log.debug( f'existing_sbj_uuid, ``{existing_sbj_uuid}``' )
         existing_obj_uuid = self.post_resp_dct['response']['referent_match_data']['referent_obj_uuid']
@@ -74,7 +74,7 @@ class Client_ReferentMatch_API_Test( TestCase ):
         self.assertEqual( 400, django_http_response_2.status_code )
         ## try duplicate referent-match reversed --------------------
         django_http_response_3  = self.create_referent_match_via_post( incoming_sbj_uuid=existing_obj_uuid, incoming_obj_uuid=existing_sbj_uuid )
-        self.assertEqual( 999, django_http_response_3.status_code )
+        self.assertEqual( 400, django_http_response_3.status_code )
         ## cleanup
         relationship_uuid = self.post_resp_dct['response']['referent_match_data']['uuid']
         self.delete_referent_match_via_delete( relationship_uuid )
@@ -82,7 +82,24 @@ class Client_ReferentMatch_API_Test( TestCase ):
     def test_post_relationship_existing_referent_to_new_referent(self):
         """ Checks that already-existing-referent--to--new-referent POST TO `http://127.0.0.1:8000/data/referent_match/new/`... 
             ...should succeed """
-        self.assertEqual( 1, 2 )
+        ## create referent-match ------------------------------------
+        django_http_response = self.create_referent_match_via_post()
+        self.assertEqual( 200, django_http_response.status_code )
+        post_resp_dct: dict = json.loads( django_http_response.content )  # type: ignore
+        self.post_resp_dct = post_resp_dct
+        log.debug( f'good-creation response-dict, ``{pprint.pformat(self.post_resp_dct)}``' )
+        existing_sbj_uuid = self.post_resp_dct['response']['referent_match_data']['referent_sbj_uuid']
+        ## create 3rd referent --------------------------------------
+        third_rfrnt_uuid: str = self.create_new_referent()
+        ## create new referent-match with 3rd referent --------------
+        django_http_response_2 = self.create_referent_match_via_post( incoming_sbj_uuid=existing_sbj_uuid, incoming_obj_uuid=third_rfrnt_uuid )
+        ## confirm it worked ----------------------------------------
+        self.assertEqual( 200, django_http_response_2.status_code )
+        ## TODO: clean up extra relationship
+
+
+## TODO -- for GET-tests, do this and confirm  querying a rfrnt-uuid returns both matches
+
 
     ## READ (get) ===============================
 
