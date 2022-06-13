@@ -18,14 +18,14 @@ class Client_ReferentMatch_API_Test( TestCase ):
         self.new_obj_rfrnt_uuid: str = ''
         self.new_uuid: str = ''
         self.post_resp_dct: dict = {}
+        if '127.0.0.1' not in project_settings.ALLOWED_HOSTS and 'localhost' not in project_settings.ALLOWED_HOSTS:
+            raise Exception( 'Not running test, because for now, it will create data in the real database.' )
 
     ## CREATE (post) ============================
 
     def test_post_good(self):
         """ Checks that good POST TO `http://127.0.0.1:8000/data/referent_match/new/`...
             ...should succeed. """
-        if '127.0.0.1' not in project_settings.ALLOWED_HOSTS and 'localhost' not in project_settings.ALLOWED_HOSTS:
-            raise Exception( 'Not running test, because it will create data in the real database.' )
         ## create referent_match ----------------
         django_http_response = self.create_referent_match_via_post()
         ## tests --------------------------------
@@ -97,22 +97,35 @@ class Client_ReferentMatch_API_Test( TestCase ):
         self.assertEqual( 200, django_http_response_2.status_code )
         ## TODO: clean up extra relationship
 
-
 ## TODO -- for GET-tests, do this and confirm  querying a rfrnt-uuid returns both matches
 
-
     ## READ (get) ===============================
+    """ Interesting issue... 
+        Should the GET be for the relationship-uuid? 
+        For a referent-uuid? 
+        Should it handle both?
+        Or should a minimal referent-API GET call return one or more relationship-UUIDs, and then one would call...
+          ...the referent_match-API to get more info about that relationshp?
+    """
 
-    # def test_get_good(self):
-    #     """ Checks good GET of `http://127.0.0.1:8000/data/referent_match/abcd/`. """
-    #     log.debug( f'allowed_hosts, ``{project_settings.ALLOWED_HOSTS}``' )
-    #     if '127.0.0.1' not in project_settings.ALLOWED_HOSTS and 'localhost' not in project_settings.ALLOWED_HOSTS:
-    #         raise Exception( 'Not running test, because it will create data in the real database.' )
-    #     ## create referents
-    #     self.new_subj_rfrnt_uuid = self.create_new_referent()
-    #     self.new_obj_rfrnt_uuid = self.create_referent_match()
-
-    #     self.assertEqual( 1, 2 )
+    def test_get_good(self):
+        """ Checks good GET of: 
+            `http://127.0.0.1:8000/data/referent_match/abcd.../` should succeed. """
+        ## create referent_match ----------------
+        django_post_response = self.create_referent_match_via_post()
+        post_resp_dct: dict = json.loads( django_post_response.content )  # type: ignore
+        relationship_uuid = post_resp_dct['response']['referent_match_data']['uuid']
+        ## call GET api -------------------------
+        url = reverse( 'data_referent_match_url', kwargs={'incoming_identifier': relationship_uuid} )  # eg `http://127.0.0.1:8000/data/referent_match/abcd.../`
+        django_get_response = self.client.get( url )
+        assert type(django_get_response) == HttpResponse
+        ## tests --------------------------------
+        self.assertEqual( 999, django_get_response.status_code )
+        created_sbj_uuid = post_resp_dct['response']['referent_match_data']['referent_sbj_uuid']
+        created_obj_uuid = post_resp_dct['response']['referent_match_data']['referent_obj_uuid']
+        get_resp_dct: dict = json.loads( django_get_response.content )  # type: ignore
+        self.assertEqual( created_sbj_uuid, get_resp_dct['response']['referent_match_data']['referent_sbj_uuid'] )
+        self.assertEqual( created_obj_uuid, get_resp_dct['response']['referent_match_data']['referent_obj_uuid'] )
 
     ## UPDATE (put) =============================
 

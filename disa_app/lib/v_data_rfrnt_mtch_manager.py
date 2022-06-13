@@ -76,6 +76,8 @@ def manage_post( request_body: str, request_url: str, start_time: datetime.datet
     log.debug( f'context, ``{context}``' )
     return context
 
+    ## end def manage_post()
+
 
 ## READ -------------------------------------------------------------
 
@@ -89,7 +91,19 @@ def manage_get_all( request_url: str, start_time: datetime.datetime ):
 
 
 def manage_get_uuid( incoming_identifier: str, request_url: str, start_time: datetime.datetime ):
-    return {}
+    log.debug( 'starting' )
+    try:
+        context = {}
+        1/0
+        ## get entry ----------------------------------------------------
+        ## prepare response ---------------------------------------------
+    except Exception as e:
+        log.error( f'e, ``{repr(e)}``')
+        msg = 'problem with get, or with response-prep; see logs'
+        log.exception( msg )
+        context = { '500': msg }
+    log.debug( f'context, ``{context}``' )
+    return context
 
 
 ## UPDATE -----------------------------------------------------------
