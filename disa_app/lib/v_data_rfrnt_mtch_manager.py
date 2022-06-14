@@ -133,8 +133,9 @@ def manage_put( relationship_uuid: str, request_body, request_url: str, start_ti
     log.debug( 'starting' )
     ## validate notes payload ---------------------------------------
     context = {}
+    put_payload_dct = {}
     try:
-        put_payload_dct = json.loads( request_body )
+        put_payload_dct: dict = json.loads( request_body )
     except Exception as e:
         msg = 'Bad Request; problem accessing updated researcher-notes'
         log.exception( msg )
@@ -164,6 +165,7 @@ def manage_put( relationship_uuid: str, request_body, request_url: str, start_ti
                         'request': {
                             'url': request_url,
                             'method': 'PUT',
+                            'payload': put_payload_dct,
                             'timestamp': str( start_time )
                         },
                         'response': response_dct
