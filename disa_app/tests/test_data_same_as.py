@@ -1,14 +1,14 @@
 """ Tests the Referent-Match API. 
 
-Docmentation...
+Documentation...
 
 Notes
 - All data API endpoints assume authentication.
-- 'confidence' shown in response and some payloads; experimental; not used;
-  ...will likely be replaced with ``predicate: is_same_as``
+- Re 'confidence' shown in response and some payloads: it's experimental; not used; will very likely be replaced with ``predicate: is_same_as``.
 - PUT for now only allows modification of notes, so for clarity, that's all the payload shows.
-  (http PUT spec implies full payload replaces all existing data -- functionally this is a PATCH)
-- All payloads shown as dicts; they should be sent as json.
+  (http PUT spec implies full payload replaces all existing data -- functionally this is a PATCH).
+- All payloads shown as dicts for convenience; they should be sent as json byte-strings.
+- Responses shown as dicts, for convenience, are actually json byte-strings.
 
 ## create -----------------------------------------------------------
 
@@ -66,6 +66,7 @@ response...
 ## update -----------------------------------------------------------
 
 url...
+<http://127.0.0.1/data/referent_match/7a0a05c091c54564981fec37a97a503d/>
 
 payload (dict shown, but sent as json)...
 { 'researcher_notes': 'updated notes' }
@@ -86,6 +87,13 @@ response...
 
 ## delete -----------------------------------------------------------
 
+url...
+
+payload...
+N/A
+
+response...
+b'200 / OK'
 """
 
 import json, logging, pprint, random, uuid
@@ -269,7 +277,29 @@ class Client_ReferentMatch_API_Test( TestCase ):
 
     ## DELETE ===================================
 
-    ## HELPERS ----------------------------------
+    def test_good_delete(self):
+        """ Checks that a DELETE to: 
+            `http://127.0.0.1:8000/data/referent_match/existing_relationship_uuid/` should... 
+            ...return a 200. """
+        ## create referent_match ------------------------------------
+        django_post_response = self.create_referent_match_via_post()
+        post_resp_dct: dict = json.loads( django_post_response.content )  # type: ignore
+        relationship_uuid = post_resp_dct['response']['referent_match_data']['uuid']
+        ## call delete-api ------------------------------------------
+        delete_url = reverse( 'data_referent_match_url', kwargs={'incoming_identifier': relationship_uuid} )  # eg `http://127.0.0.1:8000/data/referent_match/abcd.../`        
+        delete_response = self.client.delete( delete_url )
+        ## tests ----------------------------------------------------
+        self.assertEqual( type(delete_response), HttpResponse )
+        self.assertEqual( 200, delete_response.status_code )
+        self.assertEqual( b'200 / OK', delete_response.content )  # type: ignore
+        ## try delete-api call a second time for 404 test -----------
+        delete_response2 = self.client.delete( delete_url )
+        ## tests ----------------------------------------------------
+        self.assertEqual( type(delete_response2), HttpResponseNotFound )
+        self.assertEqual( 404, delete_response2.status_code )
+        return
+
+    ## HELPERS ------------------------------------------------------
 
     def create_referent_match_via_post(self, incoming_sbj_uuid=None, incoming_obj_uuid=None ):
         """ Creates a ReferentMatch entry for tests. 

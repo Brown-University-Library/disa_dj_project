@@ -676,7 +676,9 @@ def data_referent_match( request, incoming_identifier: str ):
         context = { 'msg': '400 / Bad Request' }
     ## prep response ----------------------------
     log.debug( f'context, ``{pprint.pformat(context)}``')
-    if context == { 'msg': '400 / Bad Request' }:
+    if context ==  { '200': 'OK' }:  # DELETE
+        resp = HttpResponse( '200 / OK' )
+    elif context == { 'msg': '400 / Bad Request' }:
         resp = HttpResponseBadRequest( context['msg'] )
     elif context == {'404': 'Not Found'}:  # GET
         resp = HttpResponseNotFound( context['404'] )
