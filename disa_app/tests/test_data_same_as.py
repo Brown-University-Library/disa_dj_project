@@ -1,4 +1,92 @@
-""" Tests the Referent-A is the same individual as Referent-B feature/api. """
+""" Tests the Referent-Match API. 
+
+Docmentation...
+
+Notes
+- All data API endpoints assume authentication.
+- 'confidence' shown in response and some payloads; experimental; not used;
+  ...will likely be replaced with ``predicate: is_same_as``
+- PUT for now only allows modification of notes, so for clarity, that's all the payload shows.
+  (http PUT spec implies full payload replaces all existing data -- functionally this is a PATCH)
+- All payloads shown as dicts; they should be sent as json.
+
+## create -----------------------------------------------------------
+
+url... 
+<http://127.0.0.1/data/referent_match/new/>
+
+payload (dict shown, but sent as json)...
+{
+    'confidence': 100,  # experimental; not used; will likely be replaced with ``predicate: is_same_as``
+    'researcher_notes': 'the notes',
+    'rfrnt_obj_uuid': 'f30cc74cb2014a5b9d98d0aa45ea4b3e',
+    'rfrnt_sbj_uuid': '9d937d545ec943a3b5e436868dc0a2ce'
+}
+
+response...
+{'request': {'method': 'POST',
+             'payload': {'confidence': 100,
+                         'researcher_notes': 'the notes',
+                         'rfrnt_obj_uuid': 'fa9a027d152d43d394831d3a88757519',
+                         'rfrnt_sbj_uuid': '12a3012c1ffc4d0b90ad3b8cd1e4229c'},
+             'timestamp': '2022-06-14 06:01:36.726913',
+             'url': 'http://127.0.0.1/data/referent_match/new/'},
+ 'response': {'elapsed_time': '0:00:00.004249',
+              'referent_match_data': {'confidence': 100,
+                                      'date_created': '2022-06-14 '
+                                                      '06:01:36.728822',
+                                      'date_edited': '2022-06-14 '
+                                                     '06:01:36.728824',
+                                      'referent_obj_uuid': 'fa9a027d152d43d394831d3a88757519',
+                                      'referent_sbj_uuid': '12a3012c1ffc4d0b90ad3b8cd1e4229c',
+                                      'researcher_notes': 'the notes',
+                                      'uuid': 'a0f5c69ec0d84ea39e08b1f1a806ba4d'}}}
+
+## read -------------------------------------------------------------
+
+url...
+<http://127.0.0.1/data/referent_match/a0f5c69ec0d84ea39e08b1f1a806ba4d/>
+
+payload...
+N/A
+
+response...
+{'request': {'method': 'GET',
+             'timestamp': '2022-06-14 06:01:36.732193',
+             'url': 'http://127.0.0.1/data/referent_match/a0f5c69ec0d84ea39e08b1f1a806ba4d/'},
+ 'response': {'elapsed_time': '0:00:00.001842',
+              'referent_match_data': {'confidence': 100,
+                                      'date_created': '2022-06-14 06:01:36.728822',
+                                      'date_edited': '2022-06-14 06:01:36.728824',
+                                      'referent_obj_uuid': 'fa9a027d152d43d394831d3a88757519',
+                                      'referent_sbj_uuid': '12a3012c1ffc4d0b90ad3b8cd1e4229c',
+                                      'researcher_notes': 'the notes',
+                                      'uuid': 'a0f5c69ec0d84ea39e08b1f1a806ba4d'}}}
+
+## update -----------------------------------------------------------
+
+url...
+
+payload (dict shown, but sent as json)...
+{ 'researcher_notes': 'updated notes' }
+
+response...
+{'request': {'method': 'PUT',
+             'payload': {'researcher_notes': 'updated notes'},             
+             'timestamp': '2022-06-14 06:08:35.834779',
+             'url': 'http://127.0.0.1/data/referent_match/7a0a05c091c54564981fec37a97a503d/'},
+ 'response': {'elapsed_time': '0:00:00.003936',
+              'referent_match_data': {'confidence': 100,
+                                      'date_created': '2022-06-13 09:08:35.831508',
+                                      'date_edited': '2022-06-14 06:08:35.836694',
+                                      'referent_obj_uuid': '23d1acc16a2f48e693e3676c212ee4e3',
+                                      'referent_sbj_uuid': '3c0a074b9ec24207b36f9c70eaa2890f',
+                                      'researcher_notes': 'updated notes',
+                                      'uuid': '7a0a05c091c54564981fec37a97a503d'}}}
+
+## delete -----------------------------------------------------------
+
+"""
 
 import json, logging, pprint, random, uuid
 
@@ -251,28 +339,6 @@ class Client_ReferentMatch_API_Test( TestCase ):
         ## see test_delete() for tests
         return
 
-
-    # def delete_new_group(self):
-    #     """ Deletes group used by tests."""
-    #     delete_url = reverse( 'data_group_url', kwargs={'incoming_uuid': self.new_uuid} )
-    #     response = self.client.delete( delete_url )
-    #     self.assertEqual( 200, response.status_code )
-    #     self.delete_resp_dct = json.loads( response.content )
-    #     log.debug( f'delete_resp_dct, ``{pprint.pformat(self.delete_resp_dct)}``' )
-
-
     ## end Client_ReferentMatch_API_Test()
 
 
-
-
-# class ReferentMatch( Base ):
-#     __tablename__ = 'referent_matches'
-
-#     uuid = Column( String(32), primary_key=True )
-#     referent_A_uuid = Column( String(32), ForeignKey('5_referents.uuid') )
-#     referent_B_uuid = Column( String(32), ForeignKey('5_referents.uuid') )
-#     date_created = Column( DateTime() )
-#     date_edited = Column( DateTime() )
-#     researcher_notes = Column( UnicodeText() )
-#     confidence = Column( Integer )  # optional?
