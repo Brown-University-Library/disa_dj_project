@@ -4,7 +4,7 @@ import json, logging, pprint, random
 
 from django.conf import settings as project_settings
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseServerError
 from django.test import TestCase  # TestCase requires db, so if no db is needed, try ``from django.test import SimpleTestCase as TestCase``
 
 log = logging.getLogger(__name__)
@@ -118,9 +118,9 @@ class Client_ReferentMatch_API_Test( TestCase ):
         ## call GET api -------------------------
         url = reverse( 'data_referent_match_url', kwargs={'incoming_identifier': relationship_uuid} )  # eg `http://127.0.0.1:8000/data/referent_match/abcd.../`
         django_get_response = self.client.get( url )
-        assert type(django_get_response) == HttpResponse
+        assert type(django_get_response) in [ HttpResponse, HttpResponseServerError ] 
         ## tests --------------------------------
-        self.assertEqual( 999, django_get_response.status_code )
+        self.assertEqual( 200, django_get_response.status_code )
         created_sbj_uuid = post_resp_dct['response']['referent_match_data']['referent_sbj_uuid']
         created_obj_uuid = post_resp_dct['response']['referent_match_data']['referent_obj_uuid']
         get_resp_dct: dict = json.loads( django_get_response.content )  # type: ignore

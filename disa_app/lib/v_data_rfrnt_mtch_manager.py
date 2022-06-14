@@ -90,13 +90,27 @@ def manage_get_all( request_url: str, start_time: datetime.datetime ):
     return {}
 
 
-def manage_get_uuid( incoming_identifier: str, request_url: str, start_time: datetime.datetime ):
+def manage_get_uuid( relationship_uuid: str, request_url: str, start_time: datetime.datetime ):
     log.debug( 'starting' )
     try:
         context = {}
-        1/0
         ## get entry ----------------------------------------------------
+        session_instance = make_session()        
+        match = session_instance.query( models_alch.ReferentMatch ).get( relationship_uuid )
+        assert type(match) == models_alch.ReferentMatch or isinstance(match, type(None))
         ## prepare response ---------------------------------------------
+        if match:
+            response_dct: dict = prepare_common_response_dct( match, start_time )        
+            context = {
+                'request': {
+                    'url': request_url,
+                    'method': 'GET',
+                    'timestamp': str( start_time )
+                },
+                'response': response_dct
+            }
+        else:
+            context = { '404': 'Not Found' }
     except Exception as e:
         log.error( f'e, ``{repr(e)}``')
         msg = 'problem with get, or with response-prep; see logs'

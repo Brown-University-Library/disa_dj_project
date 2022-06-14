@@ -338,7 +338,7 @@ class Poster():
             log.debug( f'grp.__dict__, ``{pprint.pformat(grp.__dict__)}``' )
         except:
             log.exception( f'problem querying Group on uuid, ``{uid}``; traceback follows; exception will be raised' )
-            raise exception( f'unable to query just-saved Group entry' )
+            raise Exception( f'unable to query just-saved Group entry' )
         response_dct = self.common.prepare_common_response_dct( grp )
         assert type(response_dct) == dict
         return_dct = {

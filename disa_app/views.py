@@ -678,6 +678,8 @@ def data_referent_match( request, incoming_identifier: str ):
     log.debug( f'context, ``{pprint.pformat(context)}``')
     if context == { 'msg': '400 / Bad Request' }:
         resp = HttpResponseBadRequest( context['msg'] )
+    elif context == { '500': 'problem with get, or with response-prep; see logs' }:  # GET
+        resp = HttpResponseServerError( context['500'] )
     elif context == { '500': 'problem with creation, or with response-prep; see logs' }:  # POST
         resp = HttpResponseServerError( context['500'] )
     elif context == { '400': 'Bad Request; match already exists'}:  # POST
