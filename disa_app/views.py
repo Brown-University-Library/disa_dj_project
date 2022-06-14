@@ -662,7 +662,7 @@ def data_referent_match( request, incoming_identifier: str ):
         elif len( incoming_identifier ) == 32:
             context: dict = v_data_rfrnt_mtch_manager.manage_get_uuid( incoming_identifier, request_url, start_time )
         else:
-            context = { 'msg': '400 / Bad Request' }
+            context = { '400': 'Bad Request; not a valid UUID' }
     elif request.method == 'PUT':
         context: dict = v_data_rfrnt_mtch_manager.manage_put( incoming_identifier, request.body, request_url, start_time )
     elif request.method == 'POST':
@@ -678,6 +678,10 @@ def data_referent_match( request, incoming_identifier: str ):
     log.debug( f'context, ``{pprint.pformat(context)}``')
     if context == { 'msg': '400 / Bad Request' }:
         resp = HttpResponseBadRequest( context['msg'] )
+    elif context == {'404': 'Not Found'}:  # GET
+        resp = HttpResponseNotFound( context['404'] )
+    elif context == { '400': 'Bad Request; not a valid UUID' }:  # GET
+        resp = HttpResponseBadRequest( context['400'] )
     elif context == { '500': 'problem with get, or with response-prep; see logs' }:  # GET
         resp = HttpResponseServerError( context['500'] )
     elif context == { '500': 'problem with creation, or with response-prep; see logs' }:  # POST
