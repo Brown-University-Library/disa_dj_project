@@ -148,7 +148,36 @@ class Client_ReferentMatch_API_Test( TestCase ):
         self.assertEqual( type(django_get_response), HttpResponseNotFound )
         self.assertEqual( 404, django_get_response.status_code )
 
+
     ## UPDATE (put) =============================
+
+
+    def test_good_put(self):
+        """ Checks that PUT to: 
+            `http://127.0.0.1:8000/data/referent_match/good_relationship_uuid/` should... 
+            ...return a 200, and full item data. """
+        ## create referent_match ----------------
+        django_post_response = self.create_referent_match_via_post()
+        post_resp_dct: dict = json.loads( django_post_response.content )  # type: ignore
+        relationship_uuid = post_resp_dct['response']['referent_match_data']['uuid']
+        ## call put-api -------------------------
+        put_url = reverse( 'data_referent_match_url', kwargs={'incoming_identifier': relationship_uuid} )  # eg `http://127.0.0.1:8000/data/referent_match/abcd.../`        
+        put_payload = {
+            'researcher_notes': 'updated notes',
+            # 'confidence': 100  # ignoring this; only allowing notes to be updated for now.
+        }
+        jsn = json.dumps( put_payload )
+        put_response = self.client.put( put_url, data=jsn, content_type='application/json' )
+        ## tests --------------------------------
+        self.assertEqual( type(put_response), HttpResponse )
+        self.assertEqual( 200, put_response.status_code )
+        put_response_dict: dict = json.loads( put_response.content )  # type: ignore
+        log.debug( f'put_response_dict, ``{pprint.pformat(put_response_dict)}``' )
+        updated_notes: str = put_response_dict['response']['referent_match_data']['researcher_notes']
+        self.assertEqual( 'updated notes', updated_notes )
+        ## cleanup ------------------------------
+        self.delete_referent_match_via_delete( relationship_uuid )
+
 
     ## DELETE ===================================
 
@@ -184,17 +213,9 @@ class Client_ReferentMatch_API_Test( TestCase ):
         }
         log.debug( f'create-referent-match-payload, ``{pprint.pformat(payload)}``' )
         jsn = json.dumps( payload )
-
-        # response = self.client.post( post_url, data=jsn, content_type='application/json' )
-        # self.assertEqual( 200, response.status_code )
-        # post_resp_dct: dict = json.loads( response.content )  # type: ignore
-        # log.debug( f'self.post_resp_dct, ``{pprint.pformat(post_resp_dct)}``' )
-        # new_uuid: str = post_resp_dct['response']['referent_match_data']['uuid']
-        # log.debug( f'new_uuid, ``{new_uuid}``' )
-        # return post_resp_dct
-
         django_http_response = self.client.post( post_url, data=jsn, content_type='application/json' )
         return django_http_response
+        ## end def create_referent_match_via_post()
 
 
     def create_new_referent(self) -> str:

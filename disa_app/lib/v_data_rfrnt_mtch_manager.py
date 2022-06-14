@@ -91,6 +91,9 @@ def manage_get_all( request_url: str, start_time: datetime.datetime ):
 
 
 def manage_get_uuid( relationship_uuid: str, request_url: str, start_time: datetime.datetime ):
+    """ Manages referent-match get.
+        Returns context.
+        Called by tests, and views.data_referent_match() """
     log.debug( 'starting' )
     try:
         context = {}
@@ -123,8 +126,58 @@ def manage_get_uuid( relationship_uuid: str, request_url: str, start_time: datet
 ## UPDATE -----------------------------------------------------------
 
 
-def manage_put( incoming_identifier: str, request_body, request_url: str, start_time: datetime.datetime ):
-    return {}
+def manage_put( relationship_uuid: str, request_body, request_url: str, start_time: datetime.datetime ):
+    """ Manages referent-match updating -- currently only notes.
+        Returns context.
+        Called by tests, and views.data_referent_match() """
+    log.debug( 'starting' )
+    ## validate notes payload ---------------------------------------
+    context = {}
+    try:
+        put_payload_dct = json.loads( request_body )
+    except Exception as e:
+        msg = 'Bad Request; problem accessing updated researcher-notes'
+        log.exception( msg )
+        context = { '400': msg }
+    ## notes payload is good, so proceed ----------------------------
+    try:
+        if context == {}:
+            ## get entry --------------------------------------------
+            session_instance = make_session()        
+            match = session_instance.query( models_alch.ReferentMatch ).get( relationship_uuid )
+            assert type(match) == models_alch.ReferentMatch or isinstance(match, type(None))
+            ## update notes -----------------------------------------
+            if match:
+                match.date_edited = datetime.datetime.now()
+                match.researcher_notes = put_payload_dct['researcher_notes']
+                session_instance.add( match )
+                session_instance.commit()  # returns None, so no way to verify success
+            else:
+                context = { '404': 'Not Found' }
+            ## prepare response -------------------------------------
+            if context == {}:
+                match_after_put = session_instance.query( models_alch.ReferentMatch ).get( relationship_uuid )
+                assert type(match_after_put) == models_alch.ReferentMatch or isinstance(match_after_put, type(None))
+                if match_after_put:
+                    response_dct: dict = prepare_common_response_dct( match_after_put, start_time )        
+                    context = {
+                        'request': {
+                            'url': request_url,
+                            'method': 'PUT',
+                            'timestamp': str( start_time )
+                        },
+                        'response': response_dct
+                    }
+                else:
+                    context = { '500': 'Server Error; PUT unsuccessful' }
+    except Exception as e:
+        log.error( f'e, ``{repr(e)}``')
+        msg = 'problem with put, or with response-prep; see logs'
+        log.exception( msg )
+        context = { '500': msg }
+    log.debug( f'context, ``{context}``' )
+    return context
+    ## end def manage_put()
 
 
 ## DELETE -----------------------------------------------------------
