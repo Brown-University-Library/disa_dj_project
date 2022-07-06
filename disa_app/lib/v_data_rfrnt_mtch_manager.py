@@ -87,11 +87,48 @@ def manage_get_meta( request_url: str, start_time: datetime.datetime ):
 
 
 def manage_get_all( request_url: str, start_time: datetime.datetime ):
-    return {}
+    """ Manages referent-match get for all matches.
+        Returns context.
+        Called by tests, and views.data_referent_match() """
+    try:
+        context = {
+            'request': {
+                'url': request_url,
+                'method': 'GET',
+                'timestamp': str( start_time )
+            },
+            'response': {
+                'meta': {},
+                'relationship_matches': [],
+            }
+        }
+        session_instance = make_session()
+        resultset = session_instance.query( models_alch.ReferentMatch )
+        # log.debug( f'type(resultset), ``{type(resultset)}``' )
+        matches = []
+        for entry in resultset:
+            dct = {
+                'relationship_uuid': entry.uuid,
+                'referent_subject_uuid': entry.referent_sbj_uuid,
+                'referent_object_uuid': entry.referent_obj_uuid,
+                'researcher_notes': entry.researcher_notes,
+                'confidence': entry.confidence
+            }
+            matches.append( dct )
+        context['response']['relationship_matches'] = matches
+        # log.debug( f'type(resulset.count), ``{type(resultset.count())}``' )
+        context['response']['meta'] = { 'count': resultset.count() }
+    except Exception as e:
+        log.error( f'e, ``{repr(e)}``')
+        msg = 'problem with get all, or with its response-prep; see logs'
+        log.exception( msg )
+        context = { '500': msg }
+    log.debug( f'context, ``{context}``' )
+    return context
 
 
 def manage_get_uuid( relationship_uuid: str, request_url: str, start_time: datetime.datetime ):
-    """ Manages referent-match get.
+    """ Manages referent-match get for specific uuid.
         Returns context.
         Called by tests, and views.data_referent_match() """
     log.debug( 'starting' )
