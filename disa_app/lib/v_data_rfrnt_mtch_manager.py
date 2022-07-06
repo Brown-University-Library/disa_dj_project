@@ -1,8 +1,11 @@
 import datetime, json, logging, pprint, uuid
+from urllib.parse import urlparse
+        
 
 import sqlalchemy
 from disa_app import models_sqlalchemy as models_alch
 from disa_app import settings_app
+from django.core.urlresolvers import reverse
 from sqlalchemy import orm
 from sqlalchemy import or_
 
@@ -90,6 +93,7 @@ def manage_get_all( request_url: str, start_time: datetime.datetime ):
     """ Manages referent-match get for all matches.
         Returns context.
         Called by tests, and views.data_referent_match() """
+    log.debug( f'request_url, ``{request_url}``' )
     try:
         context = {
             'request': {
@@ -106,11 +110,23 @@ def manage_get_all( request_url: str, start_time: datetime.datetime ):
         resultset = session_instance.query( models_alch.ReferentMatch )
         # log.debug( f'type(resultset), ``{type(resultset)}``' )
         matches = []
+        url_parts = urlparse( request_url )
+        relationship_match_pattern = reverse( 'data_referent_match_url', kwargs={'incoming_identifier': 'FOO'} )
+        referent_match_pattern = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'BAR'} )
         for entry in resultset:
+            relationship_match_pattern = relationship_match_pattern.replace( 'FOO', entry.uuid )
+            relationship_uuid_url = '%s://%s%s' % ( url_parts.scheme, url_parts.netloc, relationship_match_pattern )
+            subject_match_pattern = referent_match_pattern.replace( 'BAR', f'uuid/{entry.referent_sbj_uuid}' )
+            subject_url = '(coming-soon)%s://%s%s' % ( url_parts.scheme, url_parts.netloc, subject_match_pattern )
+            object_match_pattern = referent_match_pattern.replace( 'BAR', f'uuid/{entry.referent_obj_uuid}' )
+            object_url = '(coming-soon)%s://%s%s' % ( url_parts.scheme, url_parts.netloc, object_match_pattern )
             dct = {
                 'relationship_uuid': entry.uuid,
+                'relationship_uuid_url': relationship_uuid_url,
                 'referent_subject_uuid': entry.referent_sbj_uuid,
+                'referent_subject_url': subject_url,
                 'referent_object_uuid': entry.referent_obj_uuid,
+                'referent_object_url': object_url,
                 'researcher_notes': entry.researcher_notes,
                 'confidence': entry.confidence
             }
