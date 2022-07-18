@@ -29,13 +29,15 @@ class Getter():
 
     def manage_get( self, rfrnt_id: str ) -> HttpResponse:
         """ Manages data/api ajax 'GET'.
-            Called by views.data_entrants(), which is triggered by views.edit_person() webpage.
-            TODO: handle 'not-found' (returns None) on referent lookup. """
+            Called by views.data_entrants(), which is triggered by views.edit_person() webpage. """
         log.debug( 'starting manage_get' )
         log.debug( f'rfrnt_id, ```{rfrnt_id}```' )
         self.session = make_session()
         try:
-            rfrnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
+            if len(rfrnt_id) == 32:
+                rfrnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).filter_by( uuid=rfrnt_id ).all()[0]
+            else:
+                rfrnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
             log.debug( f'rfrnt.__dict__, ``{pprint.pformat(rfrnt.__dict__)}``' )
             context: dict = self.prep_get_response( rfrnt )
             resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
@@ -45,6 +47,25 @@ class Getter():
             resp = HttpResponseNotFound( msg )
         log.debug( 'returning response' )
         return resp
+
+    # def manage_get( self, rfrnt_id: str ) -> HttpResponse:
+    #     """ Manages data/api ajax 'GET'.
+    #         Called by views.data_entrants(), which is triggered by views.edit_person() webpage.
+    #         TODO: handle 'not-found' (returns None) on referent lookup. """
+    #     log.debug( 'starting manage_get' )
+    #     log.debug( f'rfrnt_id, ```{rfrnt_id}```' )
+    #     self.session = make_session()
+    #     try:
+    #         rfrnt: models_sqlalchemy.Referent = self.session.query( models_alch.Referent ).get( rfrnt_id )
+    #         log.debug( f'rfrnt.__dict__, ``{pprint.pformat(rfrnt.__dict__)}``' )
+    #         context: dict = self.prep_get_response( rfrnt )
+    #         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    #     except:
+    #         msg = 'Not Found -- possible problem with update, or with response-prep; see logs'
+    #         log.exception( msg )
+    #         resp = HttpResponseNotFound( msg )
+    #     log.debug( 'returning response' )
+    #     return resp
 
     def prep_get_response( self, rfrnt: models_alch.Referent ) -> dict:
         """ Prepares context.
