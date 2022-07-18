@@ -24,9 +24,11 @@ class Client_Referent_API_Test( TestCase ):
 
     def setUp(self):
         self.new_db_id = None
+        self.new_UUID: str = ''
         self.post_resp_dct = {}
         self.delete_resp_dct = {}
         log.debug( f'initial self.new_db_id, ``{self.new_db_id}``' )
+        log.debug( f'initial self.new_UUID, ``{self.new_UUID}``' )
         log.debug( f'self.post_resp_dct, ``{self.post_resp_dct}``' )
         log.debug( f'self.delete_resp_dct, ``{self.delete_resp_dct}``' )
 
@@ -51,9 +53,11 @@ class Client_Referent_API_Test( TestCase ):
         self.post_resp_dct: dict = json.loads( response.content )  # type: ignore
         log.debug( f'post_resp_dct, ``{pprint.pformat(self.post_resp_dct)}``' )
         self.new_db_id = self.post_resp_dct['id']
-        self.assertEqual( type(self.new_db_id), int )
+        # self.assertEqual( type(self.new_db_id), int )
+        self.assertEqual( int, type(self.new_db_id) )
         log.debug( f'self.new_db_id, ``{self.new_db_id}``' )
-        self.assertEqual( str, type(self.post_resp_dct["uuid"]) )
+        self.new_UUID = self.post_resp_dct['uuid']
+        self.assertEqual( str, type(self.new_UUID) )
 
     def delete_new_referent(self):
         """ Deletes referent used by tests."""
@@ -73,8 +77,34 @@ class Client_Referent_API_Test( TestCase ):
         self.assertEqual( 404, response.status_code )
         self.assertTrue( b'Not Found' in response.content )  # type: ignore
 
-    def test_get_good(self):
-        """ Checks good GET of `http://127.0.0.1:8000/data/entrants/1234/`. """
+
+
+    def test_get_good_UUID(self):
+        """ Checks good GET of `http://127.0.0.1:8000/data/entrants/1234(UUID)/`. """
+        ## create referent
+        self.create_new_referent()
+        log.debug( f'new_uuid, ``{self.new_UUID}``' )
+        ## GET
+        get_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': self.new_UUID} )
+        log.debug( f'get_url, ``{get_url}``' )
+        response = self.client.get( get_url )
+        ## tests
+        self.assertEqual( 200, response.status_code )
+        resp_dct: dict = json.loads( response.content )  # type: ignore
+        self.assertEqual( ['ent'], sorted(resp_dct.keys()) )
+        rfrnt_data_keys = sorted( resp_dct['ent'].keys() )
+        # self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
+        self.assertEqual(
+            ['age', 'enslavements', 'id', 'names', 'origins', 'races', 'sex', 'titles', 'tribes', 'uuid', 'vocations'],
+            rfrnt_data_keys
+            )
+        ## cleanup
+        self.delete_new_referent()
+
+
+
+    def test_get_good_dbID(self):
+        """ Checks good GET of `http://127.0.0.1:8000/data/entrants/1234(db-ID)/`. """
         ## create referent
         self.create_new_referent()
         log.debug( f'new_db_id, ``{self.new_db_id}``' )
