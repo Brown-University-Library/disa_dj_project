@@ -55,7 +55,7 @@ function getPersonEntryHTML(entry, sr) {
         age_number = (isNaN(ageAsNumber) ? undefined : ageAsNumber),
         ageStatus = (age_number && age_number <= sr.ADULT_CHILD_CUTOFF_AGE ? 'child' : 'adult'),
         age_text = (entry.age === '(not-recorded)' ? undefined : entry.age),
-        race_text = (entry.all_races ? `, described as &ldquo;${entry.all_races}&rdquo;,` : ''),
+        race_text = (entry.all_races ? `, described as &ldquo;${entry.raceDescriptor}&rdquo;,` : ''),
         year = entry.year,
         proNounCap = sexDisplay.pronoun[entry.sex].cap,
         toBe_conj = sexDisplay.pronoun[entry.sex].be_conj;

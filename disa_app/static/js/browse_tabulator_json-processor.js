@@ -1,5 +1,6 @@
 
 import { cleanString } from './browse_tabulator_clean-string.js';
+import { raceValueMap } from './browse_tabulator_json-processor_race-value-map.js';
 
 // Given the JSON data loaded from the API, 
 // cleans, processes, and prepares that JSON object
@@ -54,7 +55,20 @@ function processJSON(response, sr) {
       .join(', ');
 
     newEntry.all_tribes = newEntry.tribes.join(', ');
-    newEntry.all_races = newEntry.races.join(', ');
+
+    // Stopgap measure to replace source racial terms with categories - July 25, 2022
+    // (@TODO to be replaced by real cleaning of the data)
+
+    newEntry.raceDescriptor = newEntry.races.join(', '); // For biographic display
+    
+    let uniqueRaceDescriptors = new Set();
+    newEntry.races.forEach(raceDescriptor => {
+      if (raceValueMap[raceDescriptor.toLowerCase()]) {
+        raceValueMap[raceDescriptor.toLowerCase()].forEach(r => uniqueRaceDescriptors.add(r))
+      }
+    });
+
+    newEntry.all_races = [...uniqueRaceDescriptors].join(', ');
     newEntry.year = (new Date(entry.reference_data.date_db)).getFullYear();
 
     // Add a derivative field for Enslaved/Enslaver/Other filter
