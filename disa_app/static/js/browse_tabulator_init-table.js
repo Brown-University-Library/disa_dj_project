@@ -48,11 +48,7 @@ function getTabulatorOptions(sr, showDetailsFunction) {
     { title:'Racial descriptor',      field:'all_races',  sorter:'string',
       headerFilter: 'select',
       headerFilterParams: {
-        values: [ "Asiatic", "Black", "Carolina Indian", "Creole", "Creole", "Dark melattress",
-                  "Dark mulatto", "East India Negro", "East-India Indian", "East-Indian", "Griffon",
-                  "Half Indian", "Half Indian", "Half Negro", "Indian", "Indian Mulatto", "Irish",
-                  "Martha's Vineyard Indian", "Mulatto", "Mustee", "Negro", "Sambo", "Spanish Indian",
-                  "Surinam Indian", "White" ]
+        values: [ "Black", "Indian", "Multi-racial", "White", "Not specified" ]
       }
     },
     // { title:'Age',       field:'description.age',   sorter:'string', headerFilter: true },
