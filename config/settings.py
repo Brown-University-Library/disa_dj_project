@@ -58,7 +58,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
-# template_dirs = json.loads( os.environ['DISA_DJ__TEMPLATES_JSON'] )  # if template-directory info is complex
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
