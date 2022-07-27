@@ -48,7 +48,7 @@ function getTabulatorOptions(sr, showDetailsFunction) {
     { title:'Racial descriptor',      field:'all_races',  sorter:'string',
       headerFilter: 'select',
       headerFilterParams: {
-        values: [ "Black", "Indian", "Multi-racial", "White", "Not specified" ]
+        values: [ "Black", "Indigenous", "Multi-racial", "White", "Not specified" ]
       }
     },
     // { title:'Age',       field:'description.age',   sorter:'string', headerFilter: true },
