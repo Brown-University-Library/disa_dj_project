@@ -1,13 +1,16 @@
 
-
 import { uncleanString } from './browse_tabulator_clean-string.js';
 
 // Given an entry, create a biographical sketch in HTML
 
 function getPersonEntryHTML(entry, sr) {
 
+  // NAME_DISPLAY_OVERRIDES maps things like 'unrecorded' to 'no name is recorded' (for ...)
+
   const nameDisplay = sr.NAME_DISPLAY_OVERRIDES[entry.name_first] || entry.name_first,
-        name_forOrIs = sr.NAME_DISPLAY_OVERRIDES[entry.name_first] ? 'for' : 'is';
+        name_forOrIs = sr.NAME_DISPLAY_OVERRIDES[entry.name_first] ? 'for' : 'was';
+
+  // Set name text, including clickable anchor
 
   let name_text;
 
@@ -19,46 +22,60 @@ function getPersonEntryHTML(entry, sr) {
     name_text = 'There '
   }
 
+  // Enslavement status
+
   const statusDisplay = { // @todo make a global constant?
-          [sr.ENSLAVEMENT_STATUS.ENSLAVED]: 'enslaved',
-          [sr.ENSLAVEMENT_STATUS.ENSLAVER]: 'slave-owning',
-          [sr.ENSLAVEMENT_STATUS.DEFAULT]: ''
+    [sr.ENSLAVEMENT_STATUS.ENSLAVED]: 'enslaved',
+    [sr.ENSLAVEMENT_STATUS.ENSLAVER]: 'slave-owning',
+    [sr.ENSLAVEMENT_STATUS.DEFAULT]: ''
+  };
+
+  // Location
+
+  const locSearchTerms = entry.reference_data.locations.map(
+    (_, i, locArr) => locArr.slice(i).map(x => x.location_name).join(', ')
+  ),
+  locationDisplay = entry.reference_data.locations.map((loc, i) => {
+    return `<a  href="#" onclick="populateFilter('reference_data.all_locations', '${locSearchTerms[i]}')"
+                title="Show only people located in ${locSearchTerms[i]}">${uncleanString(loc.location_name)}</a>`
+  }).join(', ');
+
+  // Sex-related terms
+
+  const sexDisplay = { // @todo make a global constant?
+        'child': {
+          'Female' : 'girl',
+          'Male': 'boy',
+          'Other': 'child',
+          '': 'child'
         },
-        locSearchTerms = entry.reference_data.locations.map(
-          (_, i, locArr) => locArr.slice(i).map(x => x.location_name).join(', ')
-        ),
-        locationDisplay = entry.reference_data.locations.map((loc, i) => {
-          return `<a  href="#" onclick="populateFilter('reference_data.all_locations', '${locSearchTerms[i]}')"
-                      title="Show only people located in ${locSearchTerms[i]}">${uncleanString(loc.location_name)}</a>`
-        }).join(', '),
-        sexDisplay = { // @todo make a global constant?
-          'child': {
-            'Female' : 'girl',
-            'Male': 'boy',
-            'Other': 'child',
-            '': 'child'
-          },
-          'adult': {
-            'Female': 'woman',
-            'Male': 'man',
-            'Other': 'individual',
-            '': 'individual'
-          },
-          'pronoun': {
-            'Female': { cap: 'She', nocap: 'she', be_conj: 'was'},
-            'Male': { cap: 'He', nocap: 'he', be_conj: 'was'},
-            'Other': { cap: 'They', nocap: 'they', be_conj: 'were'},
-            '': { cap: 'They', nocap: 'they', be_conj: 'were'}
-          }
+        'adult': {
+          'Female': 'woman',
+          'Male': 'man',
+          'Other': 'individual',
+          '': 'individual'
         },
-        ageAsNumber = parseInt(entry.age.replaceAll(/[^\d]/g, '')),
+        'pronoun': {
+          'Female': { cap: 'She', nocap: 'she', be_conj: 'was'},
+          'Male': { cap: 'He', nocap: 'he', be_conj: 'was'},
+          'Other': { cap: 'They', nocap: 'they', be_conj: 'were'},
+          '': { cap: 'They', nocap: 'they', be_conj: 'were'}
+        }
+      },
+      proNounCap = sexDisplay.pronoun[entry.sex].cap,
+      toBe_conj = sexDisplay.pronoun[entry.sex].be_conj;
+
+  // Age-related terms
+
+  const ageAsNumber = parseInt(entry.age.replaceAll(/[^\d]/g, '')),
         age_number = (isNaN(ageAsNumber) ? undefined : ageAsNumber),
         ageStatus = (age_number && age_number <= sr.ADULT_CHILD_CUTOFF_AGE ? 'child' : 'adult'),
-        age_text = (entry.age === '(not-recorded)' ? undefined : entry.age),
-        race_text = (entry.all_races ? `, described as &ldquo;${entry.raceDescriptor}&rdquo;,` : ''),
-        year = entry.year,
-        proNounCap = sexDisplay.pronoun[entry.sex].cap,
-        toBe_conj = sexDisplay.pronoun[entry.sex].be_conj;
+        age_text = (entry.age === '(not-recorded)' ? undefined : entry.age);
+
+  // Misc
+
+  const race_text = (entry.all_races ? `, described as &ldquo;${entry.raceDescriptor}&rdquo;,` : ''),
+        year = entry.year;
 
   // GENERATE RELATIONSHIPS DESCRIPTION
   
@@ -131,12 +148,13 @@ function getPersonEntryHTML(entry, sr) {
   return html;
 }
 
+// Row formatter function for Tabulator
+
 function getBiographyRowFormatter(sr) {
   return function(row) {
     let entry = row.getData();
     row.getElement().innerHTML = getPersonEntryHTML(entry, sr);
   };
 }
-
 
 export { getBiographyRowFormatter }
