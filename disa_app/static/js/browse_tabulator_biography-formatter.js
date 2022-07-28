@@ -5,10 +5,10 @@ import { uncleanString } from './browse_tabulator_clean-string.js';
 
 function getPersonEntryHTML(entry, sr) {
 
-  // NAME_DISPLAY_OVERRIDES maps things like 'unrecorded' to 'no name is recorded' (for ...)
+  // BIO_NAME_DISPLAY_OVERRIDES maps things like 'unrecorded' to 'no name is recorded' (for ...)
 
-  const nameDisplay = sr.NAME_DISPLAY_OVERRIDES[entry.name_first] || entry.name_first,
-        name_forOrIs = sr.NAME_DISPLAY_OVERRIDES[entry.name_first] ? 'for' : 'was';
+  const nameDisplay = sr.BIO_NAME_DISPLAY_OVERRIDES[entry.name_first] || entry.name_first,
+        name_forOrIs = sr.BIO_NAME_DISPLAY_OVERRIDES[entry.name_first] ? 'for' : 'was';
 
   // Set name text, including clickable anchor
 
@@ -34,36 +34,12 @@ function getPersonEntryHTML(entry, sr) {
 
   const locSearchTerms = entry.reference_data.locations.map(
     (_, i, locArr) => locArr.slice(i).map(x => x.location_name).join(', ')
-  ),
-  locationDisplay = entry.reference_data.locations.map((loc, i) => {
+  );
+  
+  const locationDisplay = entry.reference_data.locations.map((loc, i) => {
     return `<a  href="#" onclick="populateFilter('reference_data.all_locations', '${locSearchTerms[i]}')"
                 title="Show only people located in ${locSearchTerms[i]}">${uncleanString(loc.location_name)}</a>`
   }).join(', ');
-
-  // Sex-related terms
-
-  const sexDisplay = { // @todo make a global constant?
-        'child': {
-          'Female' : 'girl',
-          'Male': 'boy',
-          'Other': 'child',
-          '': 'child'
-        },
-        'adult': {
-          'Female': 'woman',
-          'Male': 'man',
-          'Other': 'individual',
-          '': 'individual'
-        },
-        'pronoun': {
-          'Female': { cap: 'She', nocap: 'she', be_conj: 'was'},
-          'Male': { cap: 'He', nocap: 'he', be_conj: 'was'},
-          'Other': { cap: 'They', nocap: 'they', be_conj: 'were'},
-          '': { cap: 'They', nocap: 'they', be_conj: 'were'}
-        }
-      },
-      proNounCap = sexDisplay.pronoun[entry.sex].cap,
-      toBe_conj = sexDisplay.pronoun[entry.sex].be_conj;
 
   // Age-related terms
 
@@ -72,13 +48,18 @@ function getPersonEntryHTML(entry, sr) {
         ageStatus = (age_number && age_number <= sr.ADULT_CHILD_CUTOFF_AGE ? 'child' : 'adult'),
         age_text = (entry.age === '(not-recorded)' ? undefined : entry.age);
 
-  // Misc
+  // Sex-related terms
 
-  const race_text = (entry.all_races ? `, described as &ldquo;${entry.raceDescriptor}&rdquo;,` : ''),
-        year = entry.year;
+  const proNounCap = sr.BIO_SEX_DISPLAY_TERMS.pronoun[entry.sex].cap,
+        toBe_conj = sr.BIO_SEX_DISPLAY_TERMS.pronoun[entry.sex].be_conj;
 
-  // GENERATE RELATIONSHIPS DESCRIPTION
+  const personNoun = sr.BIO_SEX_DISPLAY_TERMS[ageStatus][entry.sex],
+        personArticle = 'aeiouAEIOU'.includes(personNoun[0]) ? 'an ' : 'a ';
+
+  // Relationships
   
+  let hasImpliedEnslavement;
+
   const relationshipsArrayHTML = entry.relationships.map(relationship => {
     let html;
     const relRefInfo = relationship.related_referent_info,
@@ -89,12 +70,19 @@ function getPersonEntryHTML(entry, sr) {
                                 title='Details about ${relRefName}'>${relRefName}</a>`;
     if (relationship.description === 'enslaved by') {
       html = `${toBe_conj} enslaved by ${relRefNameLink}`;
+      hasImpliedEnslavement = true;
     } else if (relationship.description === 'owner of') {
-      html = `enslaved ${relRefNameLink}`;
+      if (relRefName != '') {
+        html = `enslaved ${relRefNameLink}`;
+      } else {
+        html = `were an enslaver`;
+      }
     } else if (relationship.description === 'escaped from') {
       html = `escaped from ${relRefNameLink}`;
+      hasImpliedEnslavement = true;
     } else if (relationship.description === 'sold by') {
       html = `${toBe_conj} sold by ${relRefNameLink}`;
+      hasImpliedEnslavement = true;
     } else if (relationship.description === 'mother of' || relationship.description === 'father of') {
       html = `had a child, ${relRefNameLink}`;
     } else if (relationship.description === 'child of') {
@@ -104,6 +92,15 @@ function getPersonEntryHTML(entry, sr) {
     }
     return html;
   }).filter(r => r !== undefined);
+
+  // If enslavement isn't implied in relationship, then
+  //  explicitly name it
+
+  if (hasImpliedEnslavement !== true && entry.enslavement_status === sr.ENSLAVEMENT_STATUS.ENSLAVED) {
+    relationshipsArrayHTML.unshift(`was enslaved`);
+  }
+
+  // Put all the relationships together into a single HTML snippet
 
   let relationshipsHTML;
 
@@ -117,29 +114,38 @@ function getPersonEntryHTML(entry, sr) {
   } else {
     relationshipsHTML = ''
   }
-  
-  // COMPILE FINAL HTML
 
-  const html = `<a  class="details-button float-right" onclick="showDetails(${entry.referent_db_id})"
-                    title="Show source document and details for ${entry.all_name}">Details</a>` +
-                (sr.user_is_authenticated
-                  ? `<a class="details-button float-right" style="margin-right: 1em;" 
-                        href="${sr.url.editReferent(entry.citation_data.citation_db_id, entry.reference_data.reference_db_id, entry.referent_db_id)}"
-                        title="Edit entry for ${entry.all_name}">Edit</a>` 
-                  : '') +
+  // Tribal nation (link to filter)
+
+  const nationLink = entry.tribes[0] 
+    ? ` <a href="#" title="Show only ${entry.tribes[0]} people" onclick="populateFilter('all_tribes', '${entry.tribes[0]}')">${entry.tribes[0]}</a> ` 
+    : '';
+
+  // Buttons: details, edit
+
+  const detailsButton = `<a  class="details-button float-right" onclick="showDetails(${entry.referent_db_id})"
+                         title="Show source document and details for ${entry.all_name}">Details</a>`;
+
+  const editButton = `<a class="details-button float-right" style="margin-right: 1em;" 
+                         href="${sr.url.editReferent(entry.citation_data.citation_db_id, entry.reference_data.reference_db_id, entry.referent_db_id)}"
+                         title="Edit entry for ${entry.all_name}">Edit</a>`;
+
+  // Misc
+
+  const racialDescriptor = (entry.all_races ? `, described as &ldquo;${entry.raceDescriptor}&rdquo;,` : ''),
+        year = entry.year;
+
+  // COMPILE FINAL NARRATIVE HTML
+
+  const html =  detailsButton +
+                (sr.user_is_authenticated ? editButton : '') +
                 `${name_text} ${name_forOrIs} ` +
-                (statusDisplay[entry.enslavement_status][0] === 'e' ? 'an ' : 'a ') +
-                statusDisplay[entry.enslavement_status] + ' ' +
-                // (entry.description.tribe ? ` <a href="#" title="Show only ${entry.description.tribe} people" data-filter-function='populateTribeFilter' data-filter-arg="${entry.description.tribe}" onclick="populateTribeFilter('${entry.description.tribe}')">${entry.description.tribe}</a> ` : '') +
-                // (entry.tribes[0] ? ` <a href="#" title="Show only ${entry.tribes[0]} people" data-filter-field='all_tribes' data-filter-value="${entry.tribes[0]}">${entry.tribes[0]}</a> ` : '') +
-                (entry.tribes[0] ? ` <a href="#" title="Show only ${entry.tribes[0]} people" onclick="populateFilter('all_tribes', '${entry.tribes[0]}')">${entry.tribes[0]}</a> ` : '') +
-                
-                sexDisplay[ageStatus][entry.sex] +
-                // `:: ${ageStatus}  / ${entry.sex} ::` +
+                personArticle +
+                nationLink +
+                personNoun +
                 (age_text ? `, age ${age_text}` : '') +
-                race_text +
-                ' who lived' +
-                ` in ${locationDisplay}` +
+                racialDescriptor +
+                ` who lived in ${locationDisplay}` +
                 (year ? ` in ${year}` : '') +
                 '.' + 
                 relationshipsHTML + 
