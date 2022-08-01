@@ -14,10 +14,10 @@ export let raceValueMap = {
   "part african and part indian":[
     "Multi-racial",
     "Black",
-    "Indian"
+    "Indigenous"
   ],
   "carolina indian":[
-    "Indian"
+    "Indigenous"
   ],
   "creole":[
     "Multi-racial",
@@ -34,30 +34,30 @@ export let raceValueMap = {
   ],
   "half indian":[
     "Multi-racial",
-    "Indian"
+    "Indigenous"
   ],
   "indian":[
-    "Indian"
+    "Indigenous"
   ],
   "indian mulatto":[
     "Multi-racial",
-    "Indian",
+    "Indigenous",
     "Black"
   ],
   "indio":[
-    "Indian"
+    "Indigenous"
   ],
   "martha's vineyard indian":[
-    "Indian"
+    "Indigenous"
   ],
   "mestiza":[
     "Multi-racial",
-    "Indian",
+    "Indigenous",
     "White"
   ],
   "mestizo":[
     "Multi-racial",
-    "Indian",
+    "Indigenous",
     "White"
   ],
   "mulatto":[
@@ -76,13 +76,13 @@ export let raceValueMap = {
   "spanish indian":[
     "Multi-racial",
     "White",
-    "Indian"
+    "Indigenous"
   ],
   "surinam indian":[
     
   ],
   "surrinam indian":[
-    "Indian"
+    "Indigenous"
   ],
   "west india mulatto":[
     "Multi-racial",
@@ -110,12 +110,12 @@ export let raceValueMap = {
   "white indian":[
     "Multi-racial",
     "White",
-    "Indian"
+    "Indigenous"
   ],
   "negro-indian":[
     "Multi-racial",
     "Black",
-    "Indian"
+    "Indigenous"
   ],
   "half negro":[
     "Multi-racial",
@@ -145,13 +145,13 @@ export let raceValueMap = {
     "White"
   ],
   "\"looks much like an indian\"":[
-    "Indian"
+    "Indigenous"
   ],
   "\"resembles an indian in colour\"":[
-    "Indian"
+    "Indigenous"
   ],
   "\"he resembles an indian, as his father was one\"":[
-    "Indian"
+    "Indigenous"
   ],
   "mulattoe":[
     "Multi-racial",
@@ -159,16 +159,16 @@ export let raceValueMap = {
     "White"
   ],
   "\"has an indian look\"":[
-    "Indian"
+    "Indigenous"
   ],
   "\"half indian and half irish\"":[
     "Multi-racial",
-    "Indian",
+    "Indigenous",
     "White"
   ],
   "\"half indian (his father being an indian and his mother a white woman)\"":[
     "Multi-racial",
-    "Indian",
+    "Indigenous",
     "White"
   ],
   "\"of dark complection\"":[
@@ -182,7 +182,7 @@ export let raceValueMap = {
   "\"of a negroe father, and an indian mother\"":[
     "Multi-racial",
     "Black",
-    "Indian"
+    "Indigenous"
   ],
   "molatto":[
     "Multi-racial",
@@ -196,24 +196,24 @@ export let raceValueMap = {
     
   ],
   "\"some what the color of an indian\"":[
-    "Indian"
+    "Indigenous"
   ],
   "mulatto indian":[
     "Multi-racial",
-    "Indian"
+    "Indigenous"
   ],
   "dark melattress or light griffon":[
     "Multi-racial",
     "Black"
   ],
   "indi":[
-    "Indian"
+    "Indigenous"
   ],
   "unclear":[
     "Not specified"
   ],
   "indian wench":[
-    "Indian"
+    "Indigenous"
   ],
   "multi-racial":[
     "Multi-racial"
