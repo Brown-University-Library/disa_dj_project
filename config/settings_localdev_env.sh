@@ -27,7 +27,7 @@ export DISA_DJ__ADMINS_JSON='
     ]
     '
 
-export DISA_DJ__ALLOWED_HOSTS='["127.0.0.1", "0.0.0.0"]'  # must be json
+export DISA_DJ__ALLOWED_HOSTS='["127.0.0.1", "0.0.0.0", "localhost:8000"]'  # must be json
 
 export DISA_DJ__DATABASES_JSON='
     {
