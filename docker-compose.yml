@@ -1,0 +1,32 @@
+version: "3.9"
+   
+services:
+  web:
+    build: .
+    container_name: django-web-container
+    volumes:
+      - ../:/sr_project_stuff
+      - ../DBs:/sr_project_stuff/DBs
+      - ../logs:/sr_project_stuff/logs
+      - .:/sr_project_stuff/code
+    ports:
+      - "8000:8000"
+
+    environment:
+      - FOO_KEY=bar_val
+      - DISA_DJ__ENV_SETTINGS_PATH=config/settings_localdev_env.sh
+
+    env_file: ./config/settings_localdev_env.sh
+
+    ## copies the starting DBs from the git-cloned start-data if necessary
+    ## ...then copies the big json files from the git-cloned start-data if necessary
+    ## ...then starts a _background_ process to update the big json files
+    ## ...then calls runserver.
+    command: /bin/bash -c "
+      if test -f ../DBs/DISA.sqlite; then echo 'DISA.sqlite-file-exists-not-copying'; else cp ../stolen_relations_start_data/DISA.db ../DBs/DISA.sqlite; fi
+      && if test -f ../DBs/dj_disa.sqlite; then echo 'dj_disa.sqlite-file-exists-not-copying'; else cp ../stolen_relations_start_data/dj_disa.db ../DBs/dj_disa.sqlite; fi
+      && if test -f ./disa_app/static/data/browse_formatted.json; then echo 'browse_formatted.json-file-exists-not-copying'; else cp ../stolen_relations_start_data/browse_formatted.json ./disa_app/static/data/browse_formatted.json; fi
+      && if test -f ./disa_app/static/data/browse.json; then echo 'browse.json-file-exists-not-copying'; else cp ../stolen_relations_start_data/browse.json ./disa_app/static/data/browse.json; fi
+      && python disa_app/lib/generate_browse_data_in_background.py 
+      && python manage.py runserver 0.0.0.0:8000
+      "
