@@ -3,12 +3,12 @@
 ## python 3.9x needed due to an error I didn't log
 FROM python:3.9
 
-## set shell to bash instead of sh
-SHELL ["/bin/bash", "-ec"]
-
 ## the tutorials include these; todo- figure out what they do
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+
+## set shell to bash instead of sh
+# RUN chsh -s /bin/bash  # doesn't work; hmm...
 
 ## who doesn't love a "stuff" directory!  :)
 WORKDIR /sr_project_stuff/code
