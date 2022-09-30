@@ -1,0 +1,57 @@
+<div class="modal fade" id="details-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title">
+                    Details about <span class="details-title-name"></span>
+                </h1>
+                <div class="badge badge-primary">id <span id="details-id"></span></div>
+                {% if user_is_authenticated %}
+                <br />
+                <div class="btn-group" role="group" id="modal-edit-button-group">
+                    <a type="button" class="btn btn-primary" id="referent-edit-link"
+                       title="Edit the data for this person">
+                        Edit person
+                    </a>
+                    <a type="button" class="btn btn-primary" id="record-edit-link"
+                       title="Edit the data for the record which contains a reference to this person">
+                        Edit record
+                    </a>
+                    <a type="button" class="btn btn-primary" id="source-edit-link"
+                       title="Edit the bibliographic entry for the document that is the source for this information">
+                        Edit source
+                    </a>
+                </div>
+                {% endif %}
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        From <em id="details-doc"></em>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text" id="details-transcription"></p>
+                        <a href="" id="item-facsimile" target="_blank"
+                            class="badge badge-secondary"
+                            title="Link to scanned image of this document. May require permission.">
+                          Document image
+                        </a>
+                    </div>
+                </div>
+                <h2>Personal details</h2>
+                <table id="details-table" class="table">
+                </table>
+                <h2>About the source</h2>
+                <p style="font-style: italic">
+                    A note on terminology: information about individuals are recorded from "records" (such as an advertisement announcing a person fleeing enslavement)
+                    that are contained in "sources" (such as a newspaper).
+                </p>
+                <table id="source-details-table" class="table">
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,28 +1,7 @@
 {% extends "disa_app_templates/base.html" %}
 {% load staticfiles %}
 
-
-{# in <head> #}
-
-
-{% block header_other %}
-<link rel="stylesheet" href="{%  static 'lib/bootstrap-4.1.2-dist/css/bootstrap.min.css' %}">
-{% endblock header_other %}
-
-
-{# in <body> #}
-
-
-{% block header_options %}
-{% endblock header_options %}
-
-
 {% block content %}
-
-<br/>
-<br/>
-<br/>
-
-<p>You're probably looking for <a href="{{ redirect_url }}">{{ redirect_url }}</a>.</p>
+<div class="alert alert-warning"><i class="fa-solid fa-hand-point-right"></i> You're probably looking for <a class="alert_link" href="{{ redirect_url }}">{{ redirect_url }}</a>.</div>
 
 {% endblock content %}

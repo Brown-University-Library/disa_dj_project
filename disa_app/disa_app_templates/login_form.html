@@ -1,88 +1,32 @@
 {% extends "disa_app_templates/base.html" %}
 {% load staticfiles %}
 
-
-{# in <head> #}
-
-
-{% block header_other %}
-
-<link rel="stylesheet" href="{%  static 'lib/bootstrap-4.1.2-dist/css/bootstrap.min.css' %}">
-
-<style type="text/css">
-    h1#page_heading {
-        margin-top: .5em;
-        margin-bottom: .5em;
-        font-family: 'Source Sans Pro', sans-serif;
-        font-size: 32px;
-    }
-
-    div#two_boxes {
-        display: flex;
-    }
-
-    h2.login_instructions {
-        font-size: 24px;
-    }
-
-    form#shib_form {
-        padding-right: 1em;
-    }
-    input#shib {
-        margin-top: 1em;
-    }
-
-    form#non_shib_form {
-        padding-left: 1em;
-    }
-    p#username_field_label {
-        margin-top: 1em;
-        margin-bottom: .25em;
-    }
-    input#username_field_input {
-        margin-bottom: 1em;
-    }
-    p#password_field_label {
-        margin-bottom: .25em;
-    }
-    input#password_field_input {
-        margin-bottom: 2em;
-    }
-
-</style>
-
-{% endblock %}
-
-
-{# in <body> #}
-
-
 {% block content %}
 
-<h1 id="page_heading">Login...</h1>
+<h1>Welcome!</h1>
 
-<div id="two_boxes">
+<div class="row">
 
-    <form id="shib_form" action="{{ login_then_citations_url }}" method="GET">
-        <h2 id="please_shib" class="login_instructions">Login via Brown-Shibboleth...</h3>
-        <div id="shib">
-            <input id="shib" type="submit" value="Brown Shibboleth Login" name="type">
-        </div>
+    <form id="shib_form" action="{{ login_then_citations_url }}" method="GET" class="col">
+        <h2>Login via Brown-Shibboleth...</h3>
+            <input class="btn btn-primary" id="shib" type="submit" value="Brown Shibboleth Login" name="type">
     </form>
 
-    <form id="non_shib_form" action={{ user_pass_handler_url }} method="POST">{% csrf_token %}
-        <h2 id="please_barcode" class="login_instructions">...or with your username and password</h3>
-        <p id="username_field_label">username:</p>
-        <input id="username_field_input" type="text" name="manual_login_username" value="{{ manual_login_username }}">
-        <p id="password_field_label">password:</p>
+    <form class="col" id="non_shib_form" action={{ user_pass_handler_url }} method="POST">{% csrf_token %}
+        <h2>...or with your username and password</h2>
+        <div class="mb-3">
+        <label for="username_field_input" class="form-label">Username:</label>
+        <input id="username_field_input" type="text" name="manual_login_username" value="{{ manual_login_username }}"></div>
+        <div class="mb-3">
+        <label for="password_field_label" class="form-label">Password:</label>
         <input id="password_field_input" type="password" name="manual_login_password" value="{{ manual_login_password }}">
+    </div>
         {% if manual_login_error %}
-        <p class="login_error">Problem: based on your login, it appears you're not authorized to use this requesting service.</p>
-        <p class="login_error">If you believe you should be able to login to this system, please contact {{ LOGIN_PROBLEM_EMAIL|urlize }} for assistance.</p>
+        <p class="invalid-feedback">Problem: based on your login, it appears you're not authorized to use this requesting service.</p>
+        <p class="invalid-feedback">If you believe you should be able to login to this system, please contact {{ LOGIN_PROBLEM_EMAIL|urlize }} for assistance.</p>
         {% endif %}
-        <br /><input id="manual_login_button" type="submit" value="Log in">
+        <button id="manual_login_button" type="submit" value="Log in" class="btn btn-primary">Log in</button>
     </form>
-
 </div>
 
 {% endblock %}

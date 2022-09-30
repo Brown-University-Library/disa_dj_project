@@ -1,471 +1,346 @@
-{% extends "disa_app_templates/redesign_base.html" %}
-{% load staticfiles %}
-
-<!-- The sidebar-block html below is within the redesign_base.html template's `<div class="wrapper" style="margin-top: 3.5em;">` element. -->
-
-{% block sidebar %}
-
-<div id="sidebar" style="padding-top: 2.5em;">
-    <div class="sidebar-header">
-        <div style="margin-right: -1.25em!important;">
-            <div style="float: right;margin-top: -1.33em;">
-                <button type="button" id="sidebarCollapse" class="btn btn-info">
-                    <span style="font-weight: bold;">Toggle&nbsp;<br></span>
-                    <i class="fas fa-info-circle fa-3x"></i>
-                </button>
-            </div>
-        </div>
-        <h3><strong>Welcome to Stolen Relations</strong></h3>
-        <p>
-          This project, housed at Brown University, is a collaborative effort to build a database record of enslaved indigenous people throughout time, all across the Americas. Thank you for contributing to this project.
-        </p>
-        <hr />
-        <p style="font-weight: bold;">
-          Here's how to start adding information:
-        </p>
-        <p>
-          <i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> CLICK <span class="sidebar-info-highlight">+source</span> if you are entering people from a document that has not previously been added.
-        </p>
-        <p>
-          <i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> SEARCH under <span class="sidebar-info-highlight">Open previous</span> <!--or <span class="action-highlight">All recent</span>--> if you are opening a document that you or someone else previously created.
-        </p>
-        <!--<p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> The documents listed under <span class="sidebar-info-highlight">Open previous</span> offer the last fifteen documents you worked on.</p>-->
-        <p>
-          <i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> Toggle-off <span class="sidebar-info-highlight">Show only your entries</span> to list the documents that anyone entering information into DISA has created.
-        </p>
-        <!--<p><i class="fas fa-arrow-right fa-lg" style="opacity: .55;"></i> CLICK <span class="sidebar-info-highlight">Show details</span> to see a timestamp and the username of the person who last edited each document.</p>-->
-        <hr />
-        <p style="font-weight: bold;">
-          For more information on the use of this form
-        </p>
-        <p>
-          <a href="https://docs.google.com/document/d/1e6d1bsxpGnj5kak2jLBUb3qYnIS2vsDwv0Ejf2AlPo8/edit" 
-             class="btn btn-light"
-             target="_blank">
-            open the style guide
-          </a>
-        </p>
-    </div>
-</div> <!-- /#sidebar -->
-
-{% endblock sidebar %}
-
-
-<!-- The content-block html below is within the redesign_base.html template's `<main class="container">` element. -->
-
+{% extends "disa_app_templates/base.html" %}
+{% load static %}
+{% block header_other %}
+<link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+{% endblock header_other %}
+{% block nav_options %}
+<li class="nav-item"><button class="btn btn-outline-info" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas">
+        Info
+    </button></li>
+{% endblock nav_options %}
 {% block content %}
-
-<style>
-
-.source-title-cell {
-  width: 200px;
-}
-
-.source-title-cell a {
-  display: block;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.source-delete-cell {
-  text-align: right;
-  width: 5em;
-}
-
-.source-id-cell {
-  width: 5em;
-}
-
-</style>
-
-<!-- Delete confirmation modal -->
-
-<div class="modal" tabindex="-1" id="delete-source-modal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title">
-          Are you sure you want to delete this source?
-        </h1>
-      </div>
-      <div class="modal-body">
-        <button type="button" class="btn" data-bs-dismiss="modal">No! Don't delete</button>
-        <a class="btn btn-danger btn-ok" data-delete-url="#" 
-           id="delete-source-confirm"
-           data-bs-dismiss="modal">Yes, delete!</a>
-      </div>
-    </div>
-  </div>
-</div>
-
+<!-- insert offcanvas info -->
+{% include "disa_app_templates/modals/info_aside.html" %}
 <!-- Main panel -->
-
-<div id="startpanel" style="padding-top: 2.5em;">
-
-    <h1 class="text-secondary">Choose a source</h1>
-
-    <!-- Add new source -->
-
-    <h2>Create new</h2>
-
-    <button type="button" class="btn btn-primary btn-md" id="createNewSourceButton"
-            style="font-weight: bold" title="Create a new source">
-      +source
-    </button>
-
-    <h2 class="mt-4">Open previous</h2>
-
-    <button hidden class="btn btn-primary" id="table-details-toggle">
-      Show all columns
-    </button>
-
-    <div class="card mb-6">
-      <div class="card-body">
-        <div class="row">           <!--
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="current-user-only">
-            <label class="form-check-label" for="current-user-only">
-              Show only your entries
-            </label>
-          </div>
-          <div class="form-check form-switch col-6">
-            <input class="form-check-input" type="checkbox" id="show-details">
-            <label class="form-check-label" for="show-details">
-              Show details
-            </label>
-          </div> -->
+<!-- Add new source -->
+<div class="col-sm-12 col-md-4">
+    <div class="card text-center">
+        <h1 class="card-header h2">
+            <i class="fa-solid fa-square-plus"></i> Create a new source
+        </h1>
+        <div class="card-body">
+            <p class="card-text">Please double-check that a source does not already exist before you start entering information!</p>
+            <button type="button" class="btn btn-primary btn-lg" id="createNewSourceButton" title="Create a new source"><i class="fa-solid fa-square-plus"></i> Create a new source
+            </button>
         </div>
-        <div class="row">
-
-          <div class="col-6">
-          <!-- Title filter field -->
-              <div class="form-input">
-                  <label for="title-filter" style="width: 5em">Title</label>
-                  <input id="title-filter"></input>
+    </div>
+</div>
+<div class="col-sm-12 col-md-8">
+    <div class="card">
+        <h2 class="card-header"><i class="fa-solid fa-pen-nib"></i> Find an existing source</h2>
+        <div class="card-body row">
+            <div class="col">
+                <!-- Title filter field -->
+                <div class="form-input">
+                    <label for="title-filter" class="col-2 form-label">Title</label>
+                    <input id="title-filter"></input>
                 </div>
                 <!-- Source ID filter field -->
                 <div class="form-input">
-                  <label for="id-filter" style="width: 5em">ID</label>
-                  <input id="id-filter"></input>
+                    <label for="id-filter" class="col-2 form-label">ID</label>
+                    <input id="id-filter"></input>
                 </div>
-          </div>
-          <div class="col-6">
-            <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="current-user-only">
-            <label class="form-check-label" for="current-user-only">
-              Show only your entries
-            </label>
             </div>
-          <!--</div> -->
-            <!-- Editor filter field -->
-            <div class="form-input">
-              <label for="editor-filter" style="width: 5em">Editor</label>
-              <input id="editor-filter"></input>
+            <div class="col">
+                <!-- toggle all entries vs my entries -->
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="current-user-only">
+                    <label class="form-check-label" for="current-user-only">
+                        Show only your entries
+                    </label>
+                </div>
+                <!-- Editor filter field -->
+                <div class="form-input">
+                    <label for="editor-filter" class="form-label col-2">Editor</label>
+                    <input id="editor-filter"></input>
+                </div>
+                <button hidden class="btn btn-primary" id="table-details-toggle">Show all columns</button>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-
-    <table id="all-sources"></table>
-
-</div> <!-- /#startpanel -->
-
+</div>
+</div>
+<table id="all-sources"></table>
+<!-- Delete confirmation modal -->
+{% include "disa_app_templates/modals/confirm_deletion.html" %}
 {% endblock content %}
-
-
+{% block footer %}
+{% include "disa_app_templates/acknowledgements.html" %}
+ {% endblock footer %}
 {% block page_specific_js %}
-
 <!-- Tabulator -->
-
-<link href="https://unpkg.com/tabulator-tables@4.7.2/dist/css/bootstrap/tabulator_bootstrap4.min.css" 
-      rel="stylesheet">
-
+<!--<link href="https://unpkg.com/tabulator-tables@4.7.2/dist/css/bootstrap/tabulator_bootstrap4.min.css" rel="stylesheet">-->
+<script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 <script src="{% static 'js/moment.js' %}"></script>
 <script src="{% static 'js/tabulator.js' %}"></script>
-
 <!-- Main page setup -->
-
 <script>
+// Global SR object
 
-  // Global SR object
+window.sr = {};
 
-  window.sr = {};
+// sr.setModalDeleteUrl called by (x)delete buttons
 
-  // sr.setModalDeleteUrl called by (x)delete buttons
-
-  const deleteSourceConfirmButton = document.getElementById('delete-source-confirm');
-  window.sr.setModalDeleteUrl = function(url) {
+const deleteSourceConfirmButton = document.getElementById('delete-source-confirm');
+window.sr.setModalDeleteUrl = function(url) {
     deleteSourceConfirmButton.dataset.deleteUrl = url;
-  }
+}
 
-  // Create a new Source on server
+// Create a new Source on server
 
-  async function createNewSource() {
+async function createNewSource() {
 
     const url = "{{ API_URL_ROOT }}documents/",
-          TOKEN = '{{ csrf_token }}',
-          requestBody = {
+        TOKEN = '{{ csrf_token }}',
+        requestBody = {
             'acknowledgements': '',
-            'citation_type_id': 20,  // means the fields below will be 'Book' fields
+            'citation_type_id': 20, // means the fields below will be 'Book' fields
             'comments': '',
             'fields': {
-              'ISBN': '',
-              'abstractNote': '',
-              'accessDate': '',
-              'archive': '',
-              'archiveLocation': '',
-              'author': '',
-              'callNumber': '',
-              'date': '',
-              'edition': '',
-              'extra': '',
-              'language': '',
-              'libraryCatalog': '',
-              'numPages': '',
-              'numberOfVolumes': '',
-              'pages': '',
-              'place': '',
-              'publisher': '',
-              'rights': '',
-              'series': '',
-              'seriesNumber': '',
-              'shortTitle': '',
-              'title': '',
-              'url': '',
-              'volume': ''
+                'ISBN': '',
+                'abstractNote': '',
+                'accessDate': '',
+                'archive': '',
+                'archiveLocation': '',
+                'author': '',
+                'callNumber': '',
+                'date': '',
+                'edition': '',
+                'extra': '',
+                'language': '',
+                'libraryCatalog': '',
+                'numPages': '',
+                'numberOfVolumes': '',
+                'pages': '',
+                'place': '',
+                'publisher': '',
+                'rights': '',
+                'series': '',
+                'seriesNumber': '',
+                'shortTitle': '',
+                'title': '',
+                'url': '',
+                'volume': ''
             }
-          },
-          fetchOptions = {
+        },
+        fetchOptions = {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': TOKEN
+                'Content-Type': 'application/json',
+                'X-CSRFToken': TOKEN
             },
             body: JSON.stringify(requestBody)
-          };
-    
+        };
+
     const response = await fetch(url, fetchOptions);
 
     if (response.ok) {
 
-      const dataJSON = await response.json(),
+        const dataJSON = await response.json(),
             sourceIdMatch = dataJSON.redirect.match('/editor/documents/([^/]+)/');
 
-      if (sourceIdMatch && sourceIdMatch[1]) {
-        window.location.href = `${sourceIdMatch[1]}/`;
-      } else {
-        console.error(`Can't create new source: redirect URL format error`, dataJSON);
-      }
+        if (sourceIdMatch && sourceIdMatch[1]) {
+            window.location.href = `${sourceIdMatch[1]}/`;
+        } else {
+            console.error(`Can't create new source: redirect URL format error`, dataJSON);
+        }
     } else {
-      console.error("Error on server creating new Source", { fetchOptions, response });
+        console.error("Error on server creating new Source", { fetchOptions, response });
     }
-  }
+}
 
-  async function deleteSource({target}) {
+async function deleteSource({ target }) {
 
     const deleteSourceConfirmButton = target;
 
     console.log('DELETE SOURCE ' + deleteSourceConfirmButton.dataset.deleteUrl, deleteSourceConfirmButton);
 
     const url = deleteSourceConfirmButton.dataset.deleteUrl,
-          TOKEN = '{{ csrf_token }}',
-          fetchOptions = {
+        TOKEN = '{{ csrf_token }}',
+        fetchOptions = {
             method: 'DELETE',
             headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': TOKEN
+                'Content-Type': 'application/json',
+                'X-CSRFToken': TOKEN
             }
-          };
-    
+        };
+
     console.log('DELETING SOURCE', {
-      url, fetchOptions
+        url,
+        fetchOptions
     });
 
     const response = await fetch(url, fetchOptions);
 
     if (response.ok) {
-      console.log(response);
-      location.reload();
+        console.log(response);
+        location.reload();
     } else {
-      console.log('FAILED', response);
-      // What?? Error handling
+        console.log('FAILED', response);
+        // What?? Error handling
     }
-  }
+}
 
-  // Go to Source's edit form
+// Go to Source's edit form
 
-  function openSourceEditPage(sourceId) {
+function openSourceEditPage(sourceId) {
     window.location.href = `./${sourceId}`;
-  }
+}
 
-  // Set up handler for "show details"
+// Set up handler for "show details"
 
-  function initToggleTableDetailsButton(table) {
+function initToggleTableDetailsButton(table) {
     const showDetailsSwitch = document.getElementById('show-details'),
-          showOnlyCurrentUserSwitch = document.getElementById('current-user-only');
-    showDetailsSwitch.addEventListener('change', function () {
-      const colOp = showDetailsSwitch.checked ? 'showColumn' : 'hideColumn';
-      table[colOp]('id');
-      table[colOp]('date');
-      if (!showOnlyCurrentUserSwitch.checked) {
-        table[colOp]('editor');
-      }
+        showOnlyCurrentUserSwitch = document.getElementById('current-user-only');
+    showDetailsSwitch.addEventListener('change', function() {
+        const colOp = showDetailsSwitch.checked ? 'showColumn' : 'hideColumn';
+        table[colOp]('id');
+        table[colOp]('date');
+        if (!showOnlyCurrentUserSwitch.checked) {
+            table[colOp]('editor');
+        }
     });
     showDetailsSwitch.dispatchEvent(new Event('change'));
-  }
+}
 
-  // Set up handler for "show current user" --
-  //  sets "editor" filter field & hides editor column
+// Set up handler for "show current user" --
+//  sets "editor" filter field & hides editor column
 
-  function initShowOnlyCurrentUserButton(table, editorFilterElem) {
+function initShowOnlyCurrentUserButton(table, editorFilterElem) {
     const userEmail = window.sr.userEmail;
     const showOnlyCurrentUserButton = document.getElementById('current-user-only');
-    showOnlyCurrentUserButton.addEventListener('change', function () {
-      if (showOnlyCurrentUserButton.checked) {
-        editorFilterElem.value = userEmail;
-        editorFilterElem.parentNode.hidden = true;
-        table.hideColumn('editor');
-        editorFilterElem.dispatchEvent(new Event('input'));
-      } else {
-        editorFilterElem.value = '';
-        editorFilterElem.parentNode.hidden = false;
-        table.showColumn('editor');
-        editorFilterElem.dispatchEvent(new Event('input'));
-      }
+    showOnlyCurrentUserButton.addEventListener('change', function() {
+        if (showOnlyCurrentUserButton.checked) {
+            editorFilterElem.value = userEmail;
+            editorFilterElem.parentNode.hidden = true;
+            table.hideColumn('editor');
+            editorFilterElem.dispatchEvent(new Event('input'));
+        } else {
+            editorFilterElem.value = '';
+            editorFilterElem.parentNode.hidden = false;
+            table.showColumn('editor');
+            editorFilterElem.dispatchEvent(new Event('input'));
+        }
     });
     showOnlyCurrentUserButton.checked = true;
     showOnlyCurrentUserButton.dispatchEvent(new Event('change'));
-  }
+}
 
-  // Main Tabulator setup
+// Main Tabulator setup
 
-  function initializeTabulator(tableSelector, ajaxURL) {
+function initializeTabulator(tableSelector, ajaxURL) {
 
     // Formatter for incoming JSON
 
     const ajaxResponse = function(url, params, response) {
 
-      window.sr.userEmail = (response.user_documents.length) 
-        ? response.user_documents[0].email
-        : undefined;
+        window.sr.userEmail = (response.user_documents.length) ?
+            response.user_documents[0].email :
+            undefined;
 
-      const rows = response.documents.map(docData => {
-        return {
-          title: docData.doc.display,
-          id: docData.doc.id,
-          date: docData.date.dt_date,
-          editor: docData.email
-        }
-      });
+        const rows = response.documents.map(docData => {
+            return {
+                title: docData.doc.display,
+                id: docData.doc.id,
+                date: docData.date.dt_date,
+                editor: docData.email
+            }
+        });
 
-      return rows;
+        return rows;
     }
 
     const titleColumnFormatter = function(cell, formatterParams, onRendered) {
-      const recordId = cell._cell.row.data.id;
-      return `
-        <a href="./${recordId}">${cell.getValue()}</a>        
-        <button type="button" class="btn btn-link btn-sm delete-source"
+        const recordId = cell._cell.row.data.id;
+        return `
+        <a href="./${recordId}">${cell.getValue()}</a>
+        <button type="button" class="btn btn-outline-danger btn-sm float-end delete-source"
                 data-delete-url="{{ API_URL_ROOT }}documents/${recordId}"
                 data-bs-toggle="modal" data-bs-target="#delete-source-modal"
                 onclick="window.sr.setModalDeleteUrl('{{ API_URL_ROOT }}documents/${recordId}')">
-          &times;&nbsp;delete
+          delete
         </button>`;
     }
 
     const columns = [
-      { title: 'Title', field: 'title', formatter: titleColumnFormatter },
-      { title: 'ID', field: 'id' },
-      { title: 'Date', field: 'date', 
-        formatter: 'datetime', 
-        formatterParams: {
-          inputFormat:"YYYY-MM-DD",
-          outputFormat:"YYYY-MM-DD",
-          invalidPlaceholder:"[Date invalid]"
+        { title: 'Title', field: 'title', formatter: titleColumnFormatter },
+        { title: 'ID', field: 'id' },
+        {
+            title: 'Date',
+            field: 'date',
+            formatter: 'datetime',
+            formatterParams: {
+                inputFormat: "YYYY-MM-DD",
+                outputFormat: "YYYY-MM-DD",
+                invalidPlaceholder: "[Date invalid]"
+            },
+            headerSort: true,
+            sorter: 'date',
+            sorterParams: {
+                format: 'YYYY-MM-DD',
+                alignEmptyValues: 'top',
+            }
         },
-        headerSort: true,
-        sorter: 'date',
-        sorterParams:{
-          format:'YYYY-MM-DD',
-          alignEmptyValues:'top',
-        }
-      },
-      { title: 'Editor', field: 'editor' }
+        { title: 'Editor', field: 'editor' }
     ];
 
     // Row click handler: go to Source edit page (unless user
     //  was clicking the 'delete' button)
 
     const rowClick = function(e, row) {
-      const isFromDeleteButton = e.target.classList.contains('delete-source');
-      if (!isFromDeleteButton) {
-        openSourceEditPage(row._row.data.id);
-      }
+        const isFromDeleteButton = e.target.classList.contains('delete-source');
+        if (!isFromDeleteButton) {
+            openSourceEditPage(row._row.data.id);
+        }
     };
 
-    const tabulatorSettings =  {
-      ajaxURL,
-      ajaxResponse,
-      columns,
-      headerSort: false,
-      rowClick,
-      dataLoaded: initTableFilterFields
+    const tabulatorSettings = {
+        ajaxURL,
+        ajaxResponse,
+        columns,
+        headerSort: false,
+        rowClick,
+        dataLoaded: initTableFilterFields
     };
 
     const table = new Tabulator(tableSelector, tabulatorSettings);
-    
+
     return table;
-  }
+}
 
-  // Initialize onChange handlers for filters
+// Initialize onChange handlers for filters
 
-  function initTableFilterFields() {
-    
+function initTableFilterFields() {
+
     const table = this,
-          [titleFilterElem, idFilterElem, editorFilterElem] = 
-            ['title-filter', 'id-filter', 'editor-filter'].map(
-              id => document.getElementById(id)
-            );
+        [titleFilterElem, idFilterElem, editorFilterElem] = ['title-filter', 'id-filter', 'editor-filter'].map(
+            id => document.getElementById(id)
+        );
 
     function setAllFilters() {
-      console.log('yes');
-      table.setFilter([
-        { field:'title',  type:'like', value: titleFilterElem.value },
-        { field:'id',     type:'like', value: idFilterElem.value },
-        { field:'editor', type:'like', value: editorFilterElem.value },
-      ]);
+        //console.log('yes');
+        table.setFilter([
+            { field: 'title', type: 'like', value: titleFilterElem.value },
+            { field: 'id', type: 'like', value: idFilterElem.value },
+            { field: 'editor', type: 'like', value: editorFilterElem.value },
+        ]);
     }
 
     [titleFilterElem, idFilterElem, editorFilterElem].forEach(
-      filterElem => filterElem.oninput = setAllFilters
+        filterElem => filterElem.oninput = setAllFilters
     );
 
     initShowOnlyCurrentUserButton(table, editorFilterElem);
-  }
+}
 
-  // Main: set up handlers for sidebar documentation and "New Source" button
+// Main: set up handlers for sidebar documentation and "New Source" button
 
-  window.addEventListener('DOMContentLoaded', () => {
-
-    // Initialize sidebar (with its local storage to determine if it's open or closed)
-
-    const sidebarClassList = document.getElementById('sidebar').classList;
-    document.getElementById('sidebarCollapse')
-            .addEventListener('click', () => {
-              sidebarClassList.toggle('active');
-              localStorage.setItem('citationsInfoSidebarClosed', sidebarClassList.contains('active'));
-            });
-
-    if (localStorage.getItem('citationsInfoSidebarClosed') === 'true') {
-      sidebarClassList.add('active');
-    }
+window.addEventListener('DOMContentLoaded', () => {
 
     // Initialize new-source button
 
     document.getElementById('createNewSourceButton')
-      .addEventListener('click', createNewSource);
+        .addEventListener('click', createNewSource);
 
     // Initialize confirm button in delete-source modal
 
@@ -475,10 +350,10 @@
     // Initialize interactive (Tabulator-based) table
 
     const TABLE_SELECTOR = '#all-sources',
-          TABLE_DATA_URL = './?format=json';
+        TABLE_DATA_URL = './?format=json';
 
     const table = initializeTabulator(TABLE_SELECTOR, TABLE_DATA_URL);
-  });
+});
 
 </script>
 {% endblock page_specific_js %}
