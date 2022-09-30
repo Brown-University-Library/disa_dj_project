@@ -1,0 +1,25 @@
+<div class="modal" tabindex="-1" id="item-selector-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">
+          Select a record to edit
+        </h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-start"
+              data-bs-dismiss="modal"
+              v-for="item in formData.doc.references"
+              v-on:click="currentItemId = item.id">
+            <div class="ms-2 me-auto"
+                 v-text="makeItemDisplayTitle(item, 50)">
+            </div>
+            <disa-id v-bind:forthis="item" class="float-end"></disa-id>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

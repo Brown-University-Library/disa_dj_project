@@ -1,0 +1,51 @@
+{
+  "name": "stolen_relations",
+  "version": "2.5.0",
+  "description": "Database of enslaved and unfree indigenous people throughout time across the Americas",
+  "directories": {
+    "tests": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx stylelint --fix static/**/*.scss",
+    "pretty": "prettier --write static/scss/**/*.scss",
+    "compile": "sass --style=compressed static/scss/style.scss:static/css/style.css",
+    "prefix": "postcss -u autoprefixer -r static/css/*.css",
+    "watch": "sass --watch static/scss/style.scss:static/css/style.css",
+    "build-prod": "run-s lint pretty compile prefix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brown-University-Library/disa_dj_project.git"
+  },
+  "author": "Brown University Library",
+  "license": "LICENSE-MIT",
+  "bugs": {
+    "url": "https://github.com/Brown-University-Library/disa_dj_project/issues"
+  },
+  "homepage": "https://indigenousslavery.org/",
+  "devDependencies": {
+    "autoprefixer": "^10.4.8",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.16",
+    "postcss-cli": "^10.0.0",
+    "prettier": "2.7.1",
+    "sass": "^1.54.8",
+    "stylelint": "^14.11.0",
+    "stylelint-config-prettier-scss": "^0.0.1",
+    "stylelint-config-standard-scss": "^5.0.0",
+    "stylelint-scss": "^4.3.0"
+  },
+  "browserslist": [
+    "defaults"
+  ],
+  "stylelint": {
+    "extends": [
+      "stylelint-config-standard-scss",
+      "stylelint-config-prettier-scss"
+    ]
+  },
+  "dependencies": {
+    "bootstrap": "^5.2.1"
+  }
+}

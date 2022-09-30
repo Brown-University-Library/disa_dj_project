@@ -1,0 +1,14 @@
+#source-form {
+  /* Set the header source order
+so the fields can get order properties conditionally set
+based on the value of "source type" */
+  #required-fields-header {
+    order: 100;
+  }
+  #optional-fields-header {
+    order: 200;
+  }
+  textarea {
+    height: 5rem;
+  }
+}

@@ -1,0 +1,12 @@
+/* controlling TK label key */
+figure {
+  img[src^="https://localcontexts.org/wp-content/uploads"]
+  {
+    height: auto;
+    width: 2rem;
+    margin-right: $spacer;
+    &:hover {
+      filter: hue-rotate(90deg);
+    }
+  }
+}

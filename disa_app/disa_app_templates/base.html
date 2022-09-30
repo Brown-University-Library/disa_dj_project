@@ -1,149 +1,85 @@
-{% load static %}
-
-<!DOCTYPE html>
+{% load staticfiles %}
+<!doctype html>
 <html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        {% if title %}
-        <title>{{ title }}</title>
-        {% else %}
-        <title>Stolen Relations</title>
-        {% endif %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Database of enslaved and unfree indigenous people throughout time across the Americas">
+    <meta name="author" content="Brown University Library">
+    {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <title>Stolen Relations</title>
+    {% endif %}
+    <link type="text/css" rel="stylesheet" media="screen" href="{% static '/css/style.css' %}" />
+    {% block header_other %}
+    {% endblock header_other %}
+</head>
 
-        <link rel="stylesheet" type="text/css" href="{% static 'lib/jquery-ui-themes-1.12.1/themes/base/jquery-ui.min.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'lib/select2-dist/css/select2.min.css' %}">
-
-        <style type="text/css">
-            .navbar-nav > li {
-                margin-right:30px;
-            }
-            div.container {
-                width: 100%;
-                padding-right: 15px;
-                padding-left: 15px;
-                margin-right: 7.5em;
-                margin-left: 7.5em;
-            }
-            /*input.searchTerm {*/
-            input#query {
-                padding-left: 10px;
-                font-size: 12px;
-                height: 25px;
-                padding-top: 0;
-                padding-bottom: 0;
-                border: 0;
-            }
-            button.searchButton {
-                cursor: pointer;
-                font-size: 13px;
-                line-height: inherit;
-                text-transform: none;
-                border-radius: 0;
-            }
-        </style>
-
-        <!-- <script src="{% static 'lib/jquery/jquery-3.3.1.min.js' %}"></script> -->
-        <script src="{% static 'lib/jquery/jquery-3.5.0.min.js' %}"></script>
-
-        <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
-        <script src="{% static 'lib/bootstrap-4.1.2-dist/js/bootstrap.min.js' %}"></script>
-        <script src="{% static 'lib/fontawesome-free-5.1.1-web/js/all.js' %}"></script>
-        <script src="{% static 'lib/select2-dist/js/select2.min.js' %}"></script>
-        <script type="text/javascript">
-            var base_url_segment = "{{ base_url_segment }}"; // enables js ajax calls to work for localdev and on unix-servers
-        </script>
-        <link rel="shortcut icon" href="{% static 'images/disa_favicon.png' type='image/x-icon' %}">
-        {% block header_other %}{% endblock %}
-    </head>
-
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-secondary">
-            <a class="navbar-brand text-white" href="{% url 'browse_url' %}">Stolen Relations: Recovering Stories of Indigenous Enslavement in the Americas</a>
-            <ul class="navbar-nav ml-auto">
-
-                {% block header_options %}
-
-                {% if user_is_authenticated %}
-                <li class="nav-item">
-                    <!--
-                    ***********************************************************************
-                    search box
-                    (based on <https://codepen.io/huange/pen/rbqsD>...
-                    ...from <https://www.mockplus.com/blog/post/search-bar-design>)
-                    ***********************************************************************/
-                    -->
-                    <div class="search_wrap nav-link text-white">
-                        <div class="search">
-                            <form action="{% url 'search_results_url' %}" method="get">
-                                {% if search_query %}
-                                <input type="text" class="searchTerm" placeholder="searched: `{{ search_query }}`" id="query" name="query">
-                                {% else %}
-                                <input type="text" class="searchTerm" placeholder="enter search-term" id="query" name="query">
-                                {% endif %}
-                                <button type="submit" class="searchButton">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </li>
-                {% endif %}
-
-                {% if user_is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'people_url' %}">index</a>
-                </li>
-                {% endif %}
-
-                {% if user_is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'editor_index_url' %}">editor</a>
-                </li>
-                <li class="nav-item">
-                    <span class="navbar-text text-white">(Welcome {{ user_first_name }})</span>
-                </li>
-                <li class="nav-item">
-                    {% if logout_next %}
-                    <a class="nav-link text-white" href="{% url 'logout_url' %}?next={{ logout_next }}">logout</a>
-                    {% else %}
-                    <a class="nav-link text-white" href="{% url 'logout_url' %}?next={% url 'people_url' %}">logout</a>
-                    {% endif %}
-                </li>
+<body class="container-fluid">
+    <header class="d-flex py-2 row  justify-content-between bg-primary">
+        <h1 class="col-md-4"><a href="/" class="link-light">Stolen Relations: <span>Recovering Stories of Indigenous Enslavement in the Americas</span></a></h1>
+        <form class="col-md-4 mx-2" role="search" class="" action="{% url 'search_results_url' %}" method="get">
+            <label for="query" class="visually-hidden">Search</label>
+            {% if search_query %}
+            <input class="form-control" type="text" placeholder="searched: `{{ search_query }}`" aria-label="Search" id="query" name="query">
+            {% else %}
+            <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" id="query" name="query">
+            {% endif %}
+        </form>
+    </header>
+    <nav class="navbar navbar-expand-sm navbar-dark text-light bg-primary d-flex row">
+        <ul class="navbar-nav justify-content-center">
+            {% if user_is_authenticated %}
+            {% block nav_options %}
+            {% endblock nav_options %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false"><i class="fa-solid fa-rectangle-list"></i> Browse</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'people_url' %}" tabindex="-1" aria-disabled="false"><i class="fa-solid fa-people-group"></i> People</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'redesign_citations_url' %}" tabindex="-1" aria-disabled="false"><i class="fa-solid fa-book-bookmark"></i> Citations</a>
+            </li>
+            <li class="navbar-text">
+                <i class="fa-solid fa-circle-user"></i> Hi, {{ user_first_name }}!
+            </li>
+            <li class="nav-item">
+                {% if logout_next %}
+                <a class="nav-link btn btn-outline-light" href="{% url 'logout_url' %}?next={{ logout_next }}">Logout</a>
                 {% else %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'login_url' %}">login</a>
-                </li>
+                <a class="nav-link btn btn-outline-light" href="{% url 'logout_url' %}?next={% url 'login_url' %}">Logout</a>
                 {% endif %}
-
-                {% comment %}
-                {% if not logged_in %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'login_url' %}">login</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'editor_index_url' %}">editor</a>
-                </li>
-                <li class="nav-item">
-                    <span class="navbar-text text-white">Welcome {{ username }}</span>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'logout_url' %}">logout</a>
-                </li>
-                {% endif %}
-                {% endcomment %}
-
-                {% endblock header_options %}
-
-            </ul>
-        </nav>
-        {% comment %} {% with messages = get_flashed_messages() %} {% endcomment %}
-        {% comment %} {% endwith %}                                {% endcomment %}
-        <div class="container">
-            {% block content %}{% endblock %}
-        </div>
-        {% block scripts %}{% endblock %}
-    </body>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link btn btn-outline-light" href="{% url 'login_url' %}"><i class="fa-solid fa-circle-user"></i> Login</a>
+            </li>
+            {% endif %}
+        </ul>
+        </div><!-- container -->
+    </nav>
+    <section class="container">
+        <main class="row">
+            {% block content %}
+            {% endblock content %}
+        </main>
+        {% block sidebar %}
+        {% block sidebar_content %}{% endblock sidebar_content %}
+        {% endblock sidebar %}
+    </section>
+    <footer class="container border-top my-2">
+    {% block footer %}{% endblock footer %}
+    </footer>
+    <!-- Bootstrap 5 JS via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <!-- Font Awesome 6 JS, using EY's kit -->
+    <script src="https://kit.fontawesome.com/c3d52c1b1f.js" crossorigin="anonymous"></script>
+    {% block page_specific_js %}
+    {% endblock page_specific_js %}
+</body>
 
 </html>

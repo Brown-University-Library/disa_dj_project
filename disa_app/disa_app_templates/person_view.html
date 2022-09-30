@@ -1,194 +1,125 @@
 {% extends "disa_app_templates/base.html" %}
-{% load static %}
-
-
-{# in <head> #}
-
-
-{% block header_other %}
-<link rel="stylesheet" href="{% static 'lib/bootstrap-4.1.2-dist/css/bootstrap.min.css' %}">
-
-<style type="text/css">
-    div.container-fluid {
-        margin-left: 4em;
-        width: 80%;
-        margin-right: -20em;
-    }
-    h1#list_heading {
-        margin-top: .5em;
-        font-family: 'Source Sans Pro', sans-serif;
-        font-size: 32px;
-    }
-    th,td {
-        font-family: 'Source Sans Pro', sans-serif;
-    }
-    .table caption {
-      padding: 0;
-      caption-side: top;
-      color: #6c757d;
-      text-align: left;
-    }
-
-/*
-    div.col-md-8 {
-      margin-top: -5em;
-    }
-*/
-    span.not_listed{
-        font-style: italic;
-        font-size: small;
-        color: brown;
-        vertical-align: text-bottom;
-    }
-</style>
-{% endblock header_other %}
-
-
-{# in <body> #}
-
-
+{% load staticfiles %}
 {% block content %}
-<!-- <div class="container-fluid"> -->
-
-<!--
-  <header>
-    <h2>{{ name }}</h2>
-    <p>ID: {{ dbId }}</p>
-  </header>
- -->
-  <div>
+<div>
     <h1 id="list_heading">{{ name }}</h2>
-    <p>ID: {{ dbId }}</p>
-    <hr/>
-  </div>
-
-  <div class="row">
-    <div class="col-md-2">
-    <dl>
-
-      <dt>Origin</dt>
-      <dd>
-      {% if origins == "Not Listed" %}
-        <span class="not_listed">({{ origins }})<span>
-      {% else %}
-        {{ origins }}
-      {% endif %}
-      </dd>
-
-      <dt>Tribe</dt>
-      <dd>
-      {% if tribes == "Not Listed" %}
-        <span class="not_listed">({{ tribes }})<span>
-      {% else %}
-        {{ tribes }}
-      {% endif %}
-      </dd>
-
-      <dt>Race</dt>
-      <dd>
-      {% if races == "Not Listed" %}
-        <span class="not_listed">({{ races }})<span>
-      {% else %}
-        {{ races }}
-      {% endif %}
-      </dd>
-
-    </dl>
+        <p class="badge rounded-pill bg-secondary text-light disa-id-badge float-end">ID: {{ dbId }}</p>
+        <hr />
+</div>
+<div class="row">
+    <div class="card col-md-4">
+        <div class="card-body row">
+            <div class="col-md-6">
+                <dl>
+                    <dt>Origin</dt>
+                    <dd>
+                        {% if origins == "Not Listed" %}
+                        <mark><i class="fa-solid fa-file-circle-question"></i> {{ origins }}<mark>
+                                {% else %}
+                                {{ origins }}
+                                {% endif %}
+                    </dd>
+                    <dt>Tribe</dt>
+                    <dd>
+                        {% if tribes == "Not Listed" %}
+                        <mark><i class="fa-solid fa-file-circle-question"></i> {{ tribes }})</mark>
+                        {% else %}
+                        {{ tribes }}
+                        {% endif %}
+                    </dd>
+                    <dt>Race</dt>
+                    <dd>
+                        {% if races == "Not Listed" %}
+                        <mark><i class="fa-solid fa-file-circle-question"></i> {{ races }})</mark>
+                        {% else %}
+                        {{ races }}
+                        {% endif %}
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl>
+                    <dt>Status</dt>
+                    <dd>
+                        {% if statuses == "Not Listed" %}
+                        <mark><i class="fa-solid fa-file-circle-question"></i> {{ statuses }}</mark>
+                        {% else %}
+                        {{ statuses }}
+                        {% endif %}
+                    </dd>
+                    <dt>Title</dt>
+                    <dd>
+                        {% if titles == "Not Listed" %}
+                        <mark><i class="fa-solid fa-file-circle-question"></i> {{ titles }})</mark>
+                        {% else %}
+                        {{ titles }}
+                        {% endif %}
+                    </dd>
+                    <dt>Vocation</dt>
+                    <dd>
+                        {% if vocations == "Not Listed" %}
+                        <mark><i class="fa-solid fa-file-circle-question"></i> {{ vocations }}</mark>
+                        {% else %}
+                        {{ vocations }}
+                        {% endif %}
+                    </dd>
+                </dl>
+            </div>
+        </div>
     </div>
-    <div class="col-md-2">
-    <dl>
-
-      <dt>Status</dt>
-      <dd>
-      {% if statuses == "Not Listed" %}
-        <span class="not_listed">({{ statuses }})<span>
-      {% else %}
-        {{ statuses }}
-      {% endif %}
-      </dd>
-
-      <dt>Title</dt>
-      <dd>
-      {% if titles == "Not Listed" %}
-        <span class="not_listed">({{ titles }})<span>
-      {% else %}
-        {{ titles }}
-      {% endif %}
-      </dd>
-
-      <dt>Vocation</dt>
-      <dd>
-      {% if vocations == "Not Listed" %}
-        <span class="not_listed">({{ vocations }})<span>
-      {% else %}
-        {{ vocations }}
-      {% endif %}
-      </dd>
-
-    </dl>
-    </div>
-    <div class="col-md-4">
-      <table class="table relations">
-        <caption>Relations</caption>
-        <tbody id="refs">
-          {% for rel in relations %}
-          <tr>
-            <td>{{ rel.type }}</td>
-            <td>
-              <ul class="relations">
-                {% for person in rel.related %}
-                <li>
-                  {% comment %}<a href="{{ url_for('get_person', persId=person.id) }}">{{ person.name }}</a>{% endcomment %}
-                  <a href="{% url 'person_url' person.id  %}">{{ person.name }}</a>
-                </li>
-                {% endfor%}
-              </ul>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-8 offset-md-4">
-      <table class="table timeline">
-        <caption>Timeline</caption>
-        <tbody id="refs">
-          {% for ref in refs %}  {# Note: `refs` here is person.references #}
-          <tr>
-            {% comment %}<td>{{ ref.reference.display_date() }}</td>{% endcomment %}
-            <td>{{ ref.rfrnc_display_date }}</td>
-            <td>
-
-            {% comment %}
-                {% for role in ref.roles %}
-                  <span>{{ role.name }}</span>
+    <div class="col-md-3">
+        <table class="table caption-top table-striped relations">
+            <caption>Relations</caption>
+            <tbody id="refs">
+                {% for rel in relations %}
+                <tr>
+                    <td>{{ rel.type }}</td>
+                    <td>
+                        <ul class="list-unstyled relations">
+                            {% for person in rel.related %}
+                            <li>
+                                {% comment %}<a href="{{ url_for('get_person', persId=person.id) }}">{{ person.name }}</a>{% endcomment %}
+                                <i class="fa-solid fa-person"></i> <a href="{% url 'person_url' person.id  %}">{{ person.name }}</a>
+                            </li>
+                            {% endfor%}
+                        </ul>
+                    </td>
+                </tr>
                 {% endfor %}
-            {% endcomment %}
-
-            {% for role in ref.rfnrt_role_names %}
-              <span>{{ role }}</span>
-            {% endfor %}
-
-            </td>
-            <td>
-              {% comment %}{% for loc in ref.reference.locations | reverse %}{% endcomment %}
-              {% for loc in ref.rfrnc_location_names %}
-              <span class="location">{{ loc }}</span>
-              {% endfor %}
-            </td>
-            <td>
-              {% comment %}<a href="{% url 'source_url' ref.rfrnc_id  %}">View source</a>{% endcomment %}
-              <a href="{{ ref.source_and_item_url }}">View source</a>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+            </tbody>
+        </table>
     </div>
-  </div>
-<!-- </div> -->
-
-
-
+    <div class="col-md-5">
+        <table class="table caption-top table-striped timeline">
+            <caption>Timeline</caption>
+            <tbody id="refs">
+                {% for ref in refs %} {# Note: `refs` here is person.references #}
+                <tr>
+                    {% comment %}<td>{{ ref.reference.display_date() }}</td>{% endcomment %}
+                    <td><i class="fa-solid fa-calendar"></i> {{ ref.rfrnc_display_date }}</td>
+                    <td>
+                        {% comment %}
+                        {% for role in ref.roles %}
+                        <span>{{ role.name }}</span>
+                        {% endfor %}
+                        {% endcomment %}
+                        {% for role in ref.rfnrt_role_names %}
+                        {{ role }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% comment %}{% for loc in ref.reference.locations | reverse %}{% endcomment %}
+                        <i class="fa-solid fa-earth-americas"></i> {% for loc in ref.rfrnc_location_names %}
+                        {{ loc }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% comment %}<a href="{% url 'source_url' ref.rfrnc_id  %}">View source</a>{% endcomment %}
+                        <a href="{{ ref.source_and_item_url }}">View source</a>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock content %}

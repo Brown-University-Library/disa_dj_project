@@ -1,163 +1,12 @@
 {% extends "disa_app_templates/base.html" %}
-{% load static %}
-
-
-{# in <head> #}
-
-
-{% block header_other %}
-
-<link rel="stylesheet" href="{% static 'lib/bootstrap-4.1.2-dist/css/bootstrap.min.css' %}">
-
-<style type="text/css">
-    div.container-fluid {
-        margin-left: 4em;
-        width: 80%;
-        margin-right: -20em;
-    }
-    h1#list_heading {
-        margin-top: .5em;
-        font-family: 'Source Sans Pro', sans-serif;
-        font-size: 32px;
-    }
-    span.not_listed{
-        font-style: italic;
-        font-size: small;
-        color: brown;
-        vertical-align: text-bottom;
-    }
-</style>
-
-<!-- Accordian effect
-     (based on KH's <https://github.com/Brown-University-Library/web_pattern_library/blob/master/examples/bul_pl_accordion_examples.html>)
-     -->
-<script>
-    document.addEventListener('click', function (bul_pl_accordion_event) {
-        var bul_pl_accordion_content = document.querySelector(bul_pl_accordion_event.target.hash);
-        console.log( "event-content, ", bul_pl_accordion_content );
-
-        if (!bul_pl_accordion_content) return;
-        bul_pl_accordion_event.preventDefault();
-
-        console.log( "beginning evaluation" );
-
-        if (bul_pl_accordion_content.classList.contains('bul_pl_accordion_active')) {
-
-            console.log( "assuming user wants 'less'" );
-
-            if ( bul_pl_accordion_content.id == "content-1" ) {
-                console.log( "will change `content-1` from less to more" );
-                document.getElementById( "content_1_a_element" ).innerHTML = "more";
-            } else if ( bul_pl_accordion_content.id == "content-2" ) {
-                console.log( "will change `content-2` from less to more" );
-                document.getElementById( "content_2_a_element" ).innerHTML = "more";
-            } else if ( bul_pl_accordion_content.id == "content-3" ) {
-                console.log( "will change `content-3` from less to more" );
-                document.getElementById( "content_3_a_element" ).innerHTML = "more";
-            }
-
-            bul_pl_accordion_content.classList.remove('bul_pl_accordion_active');
-            return;
-        } else {
-
-            console.log( "assuming user wants 'more'" );
-
-            if ( bul_pl_accordion_content.id == "content-1" ) {
-                console.log( "will change `content-1` from more to less" );
-                document.getElementById( "content_1_a_element" ).innerHTML = "less";
-            } else if ( bul_pl_accordion_content.id == "content-2" ) {
-                console.log( "will change `content-2` from more to less" );
-                document.getElementById( "content_2_a_element" ).innerHTML = "less";
-            } else if ( bul_pl_accordion_content.id == "content-3" ) {
-                console.log( "will change `content-3` from more to less" );
-                document.getElementById( "content_3_a_element" ).innerHTML = "less";
-            }
-
-        }
-        bul_pl_accordion_content.classList.toggle('bul_pl_accordion_active');
-    })
-</script>
-
-<style>
-    /***********************************************************************
-     accordion functionality
-     (based on KH's <https://library.brown.edu/common/css/bul_patterns.css>)
-     ***********************************************************************/
-    .bul_pl_accordion-group {
-        margin : 10px ;
-    }
-    .bul_pl_accordion-content {
-        height : 15ex ; /* this is the height when the item is closed */
-        transition: ease-in 1s ;
-        overflow : hidden  ;
-        clear : both ;
-    }
-    /* this is the height when the item is open */
-    .bul_pl_accordion-content.bul_pl_accordion_active {
-        height : fit-content ;
-        transition: ease-in 1s ;
-    }
-    .bul_pl_accordion-container {
-        /* These are optional/custom display styles. Add your own custom styles here */
-        margin-bottom : 3ex ;
-        border : 1px solid #999 ;
-        padding : 2ex ;
-    }
-    .bul_pl_accordion-toggle {
-        /* These are optional/custom display styles. Add your own custom styles here -- this styles the link that fires off the accordion action */
-        display : block ;
-        text-align : right ;
-        font-weight : bold ;
-    }
-    td.transcription {
-        font-size: smaller;
-    }
-    td.nbsp {
-        white-space: nowrap;
-    }
-</style>
-
-<script type="text/javascript" src="{% static 'js/hilitor.js' %}"></script>
-
-<!--
-<script type="text/javascript">
-    var myHilitor = new Hilitor("search_results_id"); // id of the element to parse
-    console.log( "myHilitor, ", myHilitor );
-    {% if search_query %}
-        var search_term = "{{ search_query}}";
-        console.log( "search_term, ", search_term );
-        // myHilitor.setMatchType("right");
-        myHilitor.apply( "comments" );
-    {% endif %}
-</script>
--->
-
-{% endblock header_other %}
-
-
-{# in <body> #}
-
-
+{% load staticfiles %}
 {% block content %}
-
-<!-- <div class="search_wrap">
-   <div class="search">
-      <input type="text" class="searchTerm" placeholder="Search">
-      <button type="submit" class="searchButton">
-        <i class="fa fa-search"></i>
-     </button>
-   </div>
-</div>
- -->
 <div id="search_results_id" class="search_results">
     <h1 id="list_heading">Search Results</h1>
-    <hr/>
-
     <div class="bul_pl_accordion-group">
-
         <div class="people bul_pl_accordion-container">
             <div class="bul_pl_accordion-toggle-container">
-                <a id=content_1_a_element href="#content-1" class="bul_pl_accordion-toggle">more</a>
+                <a id="content_1_a_element" href="#content-1" class="bul_pl_accordion-toggle">more</a>
             </div>
             <div class="bul_pl_accordion-content" id="content-1">
                 <h2>People...</h2>
@@ -192,11 +41,9 @@
                         {% endfor %}
                     </tbody>
                 </table>
-            </div>  <!-- end of ```<div class="bul_pl_accordion-content" id="content-1">``` -->
-        </div>  <!-- end of ```<div class="people bul_pl_accordion-container">``` -->
-
-        <hr/>
-
+            </div> <!-- end of ```<div class="bul_pl_accordion-content" id="content-1">``` -->
+        </div> <!-- end of ```<div class="people bul_pl_accordion-container">``` -->
+        <hr />
         <div class="citations bul_pl_accordion-container">
             <div class="bul_pl_accordion-toggle-container">
                 <a id=content_2_a_element href="#content-2" class="bul_pl_accordion-toggle">more</a>
@@ -221,7 +68,7 @@
                             <td>{{ cite.display }}</td>
                             <td>{{ cite.comments }}</td>
                             {% comment %} {# delete after 2022-Feb-22 (3-months) #}
-                                <td><a href="{% url 'edit_citation_url' cite.id  %}">view-document</a></td>
+                            <td><a href="{% url 'edit_citation_url' cite.id  %}">view-document</a></td>
                             {% endcomment %}
                             <td><a href="{% url 'redesign_citation_url' cite.id  %}">view-document</a></td>
                         </tr>
@@ -230,9 +77,7 @@
                 </table>
             </div>
         </div>
-
-        <hr/>
-
+        <hr />
         <div class="items bul_pl_accordion-container">
             <div class="bul_pl_accordion-toggle-container">
                 <a id=content_3_a_element href="#content-3" class="bul_pl_accordion-toggle">more</a>
@@ -241,7 +86,6 @@
                 <h2>Items...</h2>
                 <p>(Count: {{ item_results.count }})</p>
                 <p>(Fields searched: {{ item_results.fields_searched|join:', ' }})</p>
-
                 <table class="table">
                     <thead>
                         <tr>
@@ -258,7 +102,7 @@
                             <!-- <td class="transcription">{{ rfrnc.transcription|truncatewords:1000 }}</td> -->
                             <td class="transcription">
                                 {% for segment in rfrnc.transcription %}
-                                    <p class="transcription_excerpt">{{ segment }}</p>
+                                <p class="transcription_excerpt">{{ segment }}</p>
                                 {% endfor %}
                             </td>
                             <!-- <td>location_info: {{ rfrnc.location_info }}</td> -->
@@ -271,11 +115,11 @@
                             </td>
                             <td class="nbsp">
                                 {% comment %} {# delete after 2022-Feb-22 (3-months) #}
-                                    <a href="{% url 'edit_record_w_recid_url' rfrnc.id  %}">item</a> / <a href="{% url 'edit_citation_url' rfrnc.citation_id  %}">document</a>
+                                <a href="{% url 'edit_record_w_recid_url' rfrnc.id  %}">item</a> / <a href="{% url 'edit_citation_url' rfrnc.citation_id  %}">document</a>
                                 }
                                 {% endcomment %}
                                 {% comment %} {# delete after 2022-Feb-22 (3-months) #}
-                                    <a href="{% url 'edit_record_w_recid_url' rfrnc.id  %}">item</a> / <a href="{% url 'redesign_citation_url' rfrnc.citation_id  %}">document</a>
+                                <a href="{% url 'edit_record_w_recid_url' rfrnc.id  %}">item</a> / <a href="{% url 'redesign_citation_url' rfrnc.citation_id  %}">document</a>
                                 {% endcomment %}
                                 <a href="{% url 'redesign_citation_url' rfrnc.citation_id  %}#/{{ rfrnc.id }}">item</a> / <a href="{% url 'redesign_citation_url' rfrnc.citation_id  %}">document</a>
                             </td>
@@ -283,25 +127,20 @@
                         {% endfor %}
                     </tbody>
                 </table>
-
             </div>
         </div>
-
-    </div>  <!-- end of ```<div class="bul_pl_accordion-group">``` -->
-
+    </div> <!-- end of ```<div class="bul_pl_accordion-group">``` -->
     <script type="text/javascript">
-        $( document ).ready(function() {
-            var myHilitor = new Hilitor("search_results_id"); // id of the element to parse
-            console.log( "myHilitor, ", myHilitor );
-            {% if search_query %}
-                var search_term = "{{ search_query}}";
-                console.log( "search_term, ", search_term );
-                myHilitor.setMatchType("open");
-                // myHilitor.apply( "comments" );
-                myHilitor.apply( search_term );
-            {% endif %}
-        });
-    </script>
+    $(document).ready(function() {
+        var myHilitor = new Hilitor("search_results_id"); // id of the element to parse
+        console.log("myHilitor, ", myHilitor); { % if search_query % }
+        var search_term = "{{ search_query}}";
+        console.log("search_term, ", search_term);
+        myHilitor.setMatchType("open");
+        // myHilitor.apply( "comments" );
+        myHilitor.apply(search_term); { % endif % }
+    });
 
+    </script>
 </div>
 {% endblock content %}

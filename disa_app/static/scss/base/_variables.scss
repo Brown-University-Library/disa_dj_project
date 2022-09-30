@@ -1,0 +1,36 @@
+/* Colors from Brown Visual Identity */
+$main-red: #ed1c24;
+$main-brown: #4e3629;
+$accent-gold: #ffc72c;
+$accent-gray: #98a4ae;
+$secondary-blue: #59cbe8;
+$secondary-emerald: #00b398;
+$secondary-navy: #003c71;
+$secondary-taupe: #b7b09c;
+
+/* these colors are derived from a photograph of Aquinnah and a photograph of wampum jeweley, with contrasts generated from coolors.co */
+$bone: #f0f0f0;
+$canary: #fffd82;
+$carolina: #4aa3d9;
+$dark-black: #222222;
+$emerald: #5b9279;
+$lilac: #785d98;
+$mango: #ff8c42;
+$sapphire: #184e68;
+
+// tweaking Bootstrap default colors to use generated color palette
+$primary: $lilac;
+$secondary: $sapphire;
+$success: $emerald;
+$info: $carolina;
+$warning: $canary;
+$danger: $mango;
+$light: $bone;
+$dark: $dark-black;
+
+/* Typography */
+$font-family-serif: "Playfair Display", serif;
+$font-family-sans-serif: "Raleway", sans-serif;
+
+$headings-font-family: $font-family-serif;
+$font-family-base: $font-family-sans-serif;
