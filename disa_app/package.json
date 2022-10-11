@@ -2,21 +2,25 @@
   "name": "stolen_relations",
   "version": "2.5.0",
   "description": "Database of enslaved and unfree indigenous people throughout time across the Americas",
+  "private": true,
   "directories": {
     "tests": "tests"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf static/css/*",
     "lint": "npx stylelint --fix static/**/*.scss",
     "pretty": "prettier --write static/scss/**/*.scss",
-    "compile": "sass --style=compressed static/scss/style.scss:static/css/style.css",
+    "compile": "rm -rf static/css/* && sass static/scss/style.scss:static/css/style.css",
+    "compile:prod": "rm -rf static/css/* && sass --style=compressed --no-source-map static/scss/style.scss:static/css/style.css",
     "prefix": "postcss -u autoprefixer -r static/css/*.css",
+    "squish": "postcss cssnano static/css/style.css > static/css/style.css",
     "watch": "sass --watch static/scss/style.scss:static/css/style.css",
-    "build-prod": "run-s lint pretty compile prefix"
+    "build-dev": "run-s clean pretty lint compile prefix",
+    "build-prod": "run-s clean pretty lint compile:prod prefix squish"
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Brown-University-Library/disa_dj_project.git"
+    "url": "github:Brown-University-Library/disa_dj_project"
   },
   "author": "Brown University Library",
   "license": "LICENSE-MIT",
@@ -26,6 +30,7 @@
   "homepage": "https://indigenousslavery.org/",
   "devDependencies": {
     "autoprefixer": "^10.4.8",
+    "cssnano": "^5.1.13",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.16",
     "postcss-cli": "^10.0.0",
