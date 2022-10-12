@@ -9985,7 +9985,7 @@ details {
   border: solid 1px #785d98;
 }
 
-.tagify .tagify_input {
+.tagify .tagify__input {
   min-width: 10rem;
 }
 

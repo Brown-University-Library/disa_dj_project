@@ -37,12 +37,12 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
     <h1 id="sourceTitle"></h1>
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="bib-tab" data-bs-toggle="tab" data-bs-target="#Bibliographic-information" type="button" role="tab" aria-controls="Bibliographic-information" aria-selected="true">
+            <button class="nav-link active" id="bib-tab" data-bs-toggle="tab" data-bs-target="#Bibliographic-information" type="button" role="tab" aria-controls="Bibliographic-information" aria-selected="true">
                 About the source
             </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="item-tab" data-bs-toggle="tab" data-bs-target="#Items" type="button" role="tab" aria-controls="Items" aria-selected="false">
+            <button class="nav-link" id="item-tab" data-bs-toggle="tab" data-bs-target="#Items" type="button" role="tab" aria-controls="Items" aria-selected="false">
                 Records in this source
             </button>
         </li>
@@ -53,16 +53,16 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
     <!-- TAB CONTENT -->
     <div class="tab-content">
         <!-- Source Tab -->
-        <div class="tab-pane" role="tabpanel" aria-labelledby="bib-tab" id="Bibliographic-information">
+        <div class="tab-pane show active" role="tabpanel" aria-labelledby="bib-tab" id="Bibliographic-information">
             {% include "disa_app_templates/forms/citation.html" %}
         </div> <!-- /.tab-pane for Source -->
         <!-- Record Tab -->
-        <div class="tab-pane show active" role="tabpanel" aria-labelledby="item-tab" id="Items">
+        <div class="tab-pane" role="tabpanel" aria-labelledby="item-tab" id="Items">
             <!-- "Save status" indicator -->
             <disa-save-status class="badge sticky-top float-end" ref="database"></disa-save-status>
             <!-- Actual Record tab content -->
-            <div class="not-tab-content">
-                <div class="not-tab-pane why-active" role="tabpanel" aria-labelledby="New-Item" id="New-Item">
+            <div>
+                <div aria-labelledby="New-Item" id="New-Item">
                     <!-- If no Record currently selected, then show list of all Records -->
                     <div v-if="currentItemId === -1 || !currentItemId">
                         <h2>
@@ -129,8 +129,7 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
                                 </div>
                                 <details class="card" v-for="group in currentItem.groups">
                                     <!-- Main (clickable accordion) header for this group -->
-                                    <summary class="card-header card-title" v-on:click="currentGroupId = (currentGroupId === group.uuid) ? -1 : group.uuid" v-text="getGroupDisplayLabel(group)">
-                                        </h5>
+                                    <summary class="card-header card-title" v-on:click="currentGroupId = (currentGroupId === group.uuid) ? -1 : group.uuid" v-text="getGroupDisplayLabel(group)"></summary>
                                         <section class="card-body">
                                             {% include "disa_app_templates/forms/group.html" %}
                                         </section>

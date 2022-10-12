@@ -2,6 +2,8 @@
 {% load staticfiles %}
 {% block header_other %}
 <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+<script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+<script src="{% static 'js/lunr.min.js' %}"></script>
 {% endblock header_other %}
 
 {% block nav_options %}
@@ -16,7 +18,7 @@
 {% include "disa_app_templates/modals/record_details.html" %}
 
 <!-- "Loading ..." modal -->
-<!--
+
 <div class="modal fade" id="loadingModal" data-backdrop="static" tabindex="-1" role="dialog" 
      aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -28,7 +30,6 @@
         </div>
     </div>
 </div>
--->
 <!-- Main content container: search and results -->
 
 <section class="" id="main-content">
@@ -75,7 +76,7 @@
 
     <div class="top-search-div row">
 
-        <div class="col-9" id="search-and-results">
+        <div class="col-md-9" id="search-and-results">
 
             <!-- Search query area -->
 
@@ -110,7 +111,7 @@
                 &nbsp;
             </div>
         </div>
-        <div class="col-3" id="dcf">
+        <div class="col-md-3 order-md-last" id="dcf">
             <h2>Notes</h2>
             <template id="dcf-resource-template">
                 <div class="dcf-resource card bg-light mb-3">
@@ -140,11 +141,10 @@
 
 {% block page_specific_js%}
 <!-- Main setup routine -->
-<script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 <script type="module" defer src="{% static 'js/browse_tabulator.js' %}"></script>
 <!-- trigger warningModal onload -->
 <script>
-var warningModal= new bootstrap.Modal('#warningModal').show()
+var warningModal= new bootstrap.Modal('#warningModal').show();
 </script>
 
 {% endblock page_specific_js %}
