@@ -1,0 +1,6 @@
+// Overriding some specific elements of the tagify CSS from CDN to enhance legibility
+.tagify {
+	.tagify_input {
+		min-width: 10rem;
+	}
+}
