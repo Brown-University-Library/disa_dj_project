@@ -228,9 +228,9 @@ def get_name( referent ) -> tuple:
     """ Creates name-tuple.
         Possible TODO- instead, or also, supply fielded first-name and last-name.
         Called by populate_output() """
-    log.debug( f'referent.names, ``{referent.names}``' )
-    for name in referent.names:
-        log.debug( f'referent-name.name_type, ``{name.name_type}``')
+    # log.debug( f'referent.names, ``{referent.names}``' )
+    # for name in referent.names:
+    #     log.debug( f'referent-name.name_type, ``{name.name_type}``')
     try:
         name = referent.names[0]
         name_tuple = ( name.first, name.last )
@@ -364,14 +364,19 @@ class FilterDeleted():
         self.deleted_referent_ids = None  # added this for output dct
 
     def manage_filtration( self, referents_all, session ):
+        """ Filters out referents marked for deletion, and referents to ignore.
+            Called by manage_generation() """
         deleted_referent_ids = self.get_deleted_referent_ids()
         self.deleted_referent_ids = deleted_referent_ids
         referents_to_ignore = self.get_deleted_referent_objs( deleted_referent_ids, session )
         # persons_to_ignore = self.get_persons_to_ignore( deleted_referent_objs, session )
         filtered_referents = self.apply_filter( referents_all, referents_to_ignore, session )
+        log.debug( f'returning ``{len(filtered_referents)}`` filtered-referents' )
         return filtered_referents
 
     def get_deleted_referent_ids( self ):
+        """ Gets the referent-ids from the django-db of marked-for-deletion docs. 
+            Called by manage_filtration() """
         referent_ids = []
         marked_entries = MarkedForDeletion.objects.all()
         for entry in marked_entries:
@@ -388,10 +393,16 @@ class FilterDeleted():
         return sorted_referent_ids
 
     def get_deleted_referent_objs( self, deleted_referent_ids, session ):
+        """ Creates deleted referent-objects from the deleted_referent_ids. 
+            Called by manage_filtration() """
         objs = []
         for referent_id in deleted_referent_ids:
             referent_obj = session.query( models_alch.Referent ).filter_by( id=referent_id ).first()
-            objs.append( referent_obj )
+            if referent_obj == None:  # because the actual referent in the db may actually have  been deleted
+                log.debug( f'not creating obj for referent_id, ``{referent_id}``, because although it\'s in the marked-for-deletion doc-data, the actual db-entry has been deleted.' )
+                pass
+            else:
+                objs.append( referent_obj )
         log.debug( f'referent objs, ``{objs}``' )
         return objs
 
@@ -408,6 +419,7 @@ class FilterDeleted():
             else:
                 log.debug( f'filtering out referent, ``{referent}``' )
                 referent_check = 'init'
+        log.debug( f'filtered_referents, ``{pprint.pformat(filtered_referents)}``' )
         return filtered_referents
 
     ## end class FilterDeleted()
