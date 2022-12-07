@@ -77,7 +77,7 @@ function getTabulatorOptions(sr, showDetailsFunction) {
 
   const tabulatorOptions_global = {
     data: sr.data,
-    height:'611px',
+    height:'70vh',
     layout:'fitColumns',
     placeholder: sr.NO_RESULTS_MESSAGE,
     pagination: 'local',
