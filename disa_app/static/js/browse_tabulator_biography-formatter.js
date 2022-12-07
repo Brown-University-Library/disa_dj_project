@@ -103,22 +103,12 @@ function getPersonEntryHTML(entry, sr) {
   
   // COMPILE FINAL HTML
 
-  const html = `<a  class="details-button float-right" onclick="showDetails(${entry.referent_db_id})"
-                    title="Show source document and details for ${entry.all_name}">Details</a>` +
-                (sr.user_is_authenticated
-                  ? `<a class="details-button float-right" style="margin-right: 1em;" 
-                        href="${sr.url.editReferent(entry.citation_data.citation_db_id, entry.reference_data.reference_db_id, entry.referent_db_id)}"
-                        title="Edit entry for ${entry.all_name}">Edit</a>` 
-                  : '') +
-                `${name_text} ${name_forOrIs} ` +
+  const html = `<p>${name_text} ${name_forOrIs} ` +
                 (statusDisplay[entry.enslavement_status][0] === 'e' ? 'an ' : 'a ') +
                 statusDisplay[entry.enslavement_status] + ' ' +
-                // (entry.description.tribe ? ` <a href="#" title="Show only ${entry.description.tribe} people" data-filter-function='populateTribeFilter' data-filter-arg="${entry.description.tribe}" onclick="populateTribeFilter('${entry.description.tribe}')">${entry.description.tribe}</a> ` : '') +
-                // (entry.tribes[0] ? ` <a href="#" title="Show only ${entry.tribes[0]} people" data-filter-field='all_tribes' data-filter-value="${entry.tribes[0]}">${entry.tribes[0]}</a> ` : '') +
                 (entry.tribes[0] ? ` <a href="#" title="Show only ${entry.tribes[0]} people" onclick="populateFilter('all_tribes', '${entry.tribes[0]}')">${entry.tribes[0]}</a> ` : '') +
                 
                 sexDisplay[ageStatus][entry.sex] +
-                // `:: ${ageStatus}  / ${entry.sex} ::` +
                 (age_text ? `, age ${age_text}` : '') +
                 race_text +
                 ' who lived' +
@@ -126,7 +116,13 @@ function getPersonEntryHTML(entry, sr) {
                 (year ? ` in ${year}` : '') +
                 '.' + 
                 relationshipsHTML + 
-                `<span id="referent-footnote-id-${entry.referent_db_id}" class="cf-footnotes"></span>`;
+                `<span id="referent-footnote-id-${entry.referent_db_id}" class="cf-footnotes"></span></p><div class="btn-group">` + `<a class="details-button btn btn-primary btn-sm" onclick="showDetails(${entry.referent_db_id})"
+                    title="Show source document and details for ${entry.all_name}">Details</a>` +
+                (sr.user_is_authenticated
+                  ? `<a class="details-button btn btn-outline-primary btn-sm"
+                        href="${sr.url.editReferent(entry.citation_data.citation_db_id, entry.reference_data.reference_db_id, entry.referent_db_id)}"
+                        title="Edit entry for ${entry.all_name}">Edit</a>`
+                  : '') + `</div>`;
 
   return html;
 }
