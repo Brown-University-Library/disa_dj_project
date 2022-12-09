@@ -137,7 +137,8 @@ function getDcfUpdateHandler(searchState, dcfContentElem, table) {
         rules.filter(rule => rule.entryPasses(entry)) // 1
             .reduce((resources, rule) => resources.concat(rule.resources), []) // 2
             .filter(filterForUniques) // 3
-            .map(r => { console.log('!!', r); return r })
+            .map(r => { //console.log('!!', r);
+              return r })
             .map(resource => getFootnoteHtmlElem(resource)) // 4
             .forEach(
               entryFootnoteElem => entryFootnoteContainerElem.appendChild(entryFootnoteElem)

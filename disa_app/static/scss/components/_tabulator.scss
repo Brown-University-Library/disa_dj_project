@@ -1,0 +1,15 @@
+#data-display {
+  &.biographical {
+    .tabulator-row {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+  &.tabulator {
+    .tabulator-footer {
+      position: absolute;
+      text-align: center;
+      width: 100%;
+    }
+  }
+}

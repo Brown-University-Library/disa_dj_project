@@ -116,13 +116,13 @@ function getPersonEntryHTML(entry, sr) {
                 (year ? ` in ${year}` : '') +
                 '.' + 
                 relationshipsHTML + 
-                `<span id="referent-footnote-id-${entry.referent_db_id}" class="cf-footnotes"></span></p><div class="btn-group">` + `<a class="details-button btn btn-primary btn-sm" onclick="showDetails(${entry.referent_db_id})"
+                `<span id="referent-footnote-id-${entry.referent_db_id}" class="cf-footnotes"></span></p><p>` + `<a class="details-button btn btn-primary btn-sm" onclick="showDetails(${entry.referent_db_id})"
                     title="Show source document and details for ${entry.all_name}">Details</a>` +
                 (sr.user_is_authenticated
                   ? `<a class="details-button btn btn-outline-primary btn-sm"
                         href="${sr.url.editReferent(entry.citation_data.citation_db_id, entry.reference_data.reference_db_id, entry.referent_db_id)}"
                         title="Edit entry for ${entry.all_name}">Edit</a>`
-                  : '') + `</div>`;
+                  : '') + `</p>`;
 
   return html;
 }
