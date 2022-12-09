@@ -19,7 +19,7 @@ function initializeModalApi() {
         setDocDetailsTable = getModalContentSetter('source-details-table', HTML);
 
   const detailsModal = {
-    show: () => $('#details-modal').modal('show'),
+    show: () => document.getElementById('details-modal').showModal(),
     setId: getModalContentSetter('details-id', TEXT),
     setName: getModalContentSetter('details-title-name', TEXT),
     setDocTitle: getModalContentSetter('details-doc', TEXT),
