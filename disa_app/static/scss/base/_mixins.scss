@@ -1,0 +1,10 @@
+/* unset sizing and positioning for print */
+@mixin print-unset {
+  display: block;
+  float: none;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  position: relative !important;
+  width: 100%;
+}

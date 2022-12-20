@@ -1,6 +1,15 @@
 // Overriding some specific elements of the tagify CSS from CDN to enhance legibility
 .tagify {
-  .tagify__input {
-    min-width: 10rem;
+  &.form-control {
+    height: auto;
+  }
+  &.tagify--select {
+    display: flex;
+    &:after {
+      content: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>");
+      width: 0.625rem;
+      height: 0.625rem;
+      transform: translate(-150%, -50%) rotate(0deg);
+    }
   }
 }

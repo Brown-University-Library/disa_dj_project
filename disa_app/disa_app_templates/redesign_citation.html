@@ -105,10 +105,12 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
                                 <legend class="visually-hidden">People</legend>
                                 <!-- Add new referents and group button -->
                                 <h3>People</h3>
-                                    <button class="btn btn-sm" v-if="currentItem.referents.length === 0" v-on:click="makeNewReferent" title="Enter information for a new person">
+                                <div class="btn-group col-3" role="group" aria-label="Add new people or groups">
+                                    <button class="btn btn-primary btn-sm" v-if="currentItem.referents.length === 0" v-on:click="makeNewReferent" title="Enter information for a new person">
                                         Add new individual
                                     </button>
                                     <button class="btn btn-primary btn-sm" v-if="currentItem.groups.length === 0" v-on:click="makeNewGroup" title="Enter information for a new group">Add new group</button>
+                                    </div>
                                 <!-- Individuals-->
                                 <div v-if="currentItem.referents.length > 0">
                                     <h4>Individuals</h4>
@@ -134,9 +136,9 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
                                             {% include "disa_app_templates/forms/group.html" %}
                                         </section>
                                 </details>
-                                <a type="button" class="btn btn-primary btn-md" v-on:click="saveItemDataToServer" href="../../redesign_citations/">
+                                <div class="col-3"><a type="button" class="btn btn-primary btn-md" v-on:click="saveItemDataToServer" href="../../redesign_citations/">
                                     Save record and return to citations list
-                                </a>
+                                </a></div>
                         </form>
                     </div><!-- end v-else Record -->
                 </div> <!-- /.tab-pane for Record -->

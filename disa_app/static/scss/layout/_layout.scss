@@ -5,6 +5,7 @@ figure {
     height: auto;
     width: 2rem;
     margin-right: $spacer;
+
     &:hover {
       filter: hue-rotate(90deg);
     }
