@@ -9,7 +9,7 @@
 const template = `
     <input v-bind:value="value"
            v-on:change="$emit('input', $event.target.value)"
-           class="disa-tags-input"></input>
+           class="disa-tags-input form-select"></input>
 `;
 
 const componentDefinition = {

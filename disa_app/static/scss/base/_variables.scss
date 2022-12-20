@@ -8,11 +8,11 @@ $secondary-emerald: #00b398;
 $secondary-navy: #003c71;
 $secondary-taupe: #b7b09c;
 
-/* these colors are derived from a photograph of Aquinnah and a photograph of wampum jeweley, with contrasts generated from coolors.co */
+/* these colors are derived from a photograph of Aquinnah Head and a photograph of wampum jeweley, with contrasts generated from coolors.co */
 $bone: #f0f0f0;
 $canary: #fffd82;
 $carolina: #4aa3d9;
-$dark-black: #222222;
+$dark-black: #222;
 $emerald: #5b9279;
 $lilac: #785d98;
 $mango: #ff8c42;
@@ -20,9 +20,9 @@ $sand: #eccca2;
 
 // tweaking Bootstrap default colors to use generated color palette
 $primary: $lilac;
-$secondary: $sand;
+$secondary: $carolina;
 $success: $emerald;
-$info: $carolina;
+$info: mix($carolina, $canary);
 $warning: $canary;
 $danger: $mango;
 $light: $bone;
@@ -31,6 +31,5 @@ $dark: $dark-black;
 /* Typography */
 $font-family-serif: "Playfair Display", serif;
 $font-family-sans-serif: "Raleway", sans-serif;
-
 $headings-font-family: $font-family-serif;
 $font-family-base: $font-family-sans-serif;

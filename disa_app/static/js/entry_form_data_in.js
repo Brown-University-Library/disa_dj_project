@@ -162,7 +162,7 @@ function preprocessItemData(itemData, oldItemData, relationshipsData, referentDa
   const locationDefaults = {
       Locale: { value: '' },
       City: { value: '' },
-      'Colony/State': { value: '' }
+      Colony\/State: { value: '' }
     },
     locationInfoByType = locationInfo.reduce(
       (locationHash, location) => Object.assign(
