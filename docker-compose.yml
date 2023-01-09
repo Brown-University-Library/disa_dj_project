@@ -2,7 +2,9 @@ version: "3.9"
    
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     container_name: django-web-container
     volumes:
       - ../:/sr_project_stuff
