@@ -5,7 +5,7 @@ import collections, datetime, json, logging, os, pprint
 import sqlalchemy
 # from disa_app import settings_app
 from disa_app import models_sqlalchemy as models_alch
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 # from django.conf import settings
 # from sqlalchemy import create_engine
 # from sqlalchemy.orm import sessionmaker

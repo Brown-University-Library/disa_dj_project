@@ -10,7 +10,7 @@ from django.conf import settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-# from django.core.urlresolvers import reverse
+# from django.urls import reverse
 
 
 log = logging.getLogger(__name__)
