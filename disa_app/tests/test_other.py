@@ -44,14 +44,18 @@ class Client_Misc_Test( TestCase ):
         """ Checks '/root_url' (with no slash). """
         response = self.client.get( '' )  # project root part of url is assumed
         self.assertEqual( 302, response.status_code )  # permanent redirect
-        redirect_url = response._headers['location'][1]
+        # redirect_url = response._headers['location'][1]
+        redirect_url = response.headers['location']  # type: ignore
         self.assertEqual(  '/info/', redirect_url )
 
     def test_root_url_slash(self):
         """ Checks '/root_url/' (with slash). """
         response = self.client.get( '/' )  # project root part of url is assumed
         self.assertEqual( 302, response.status_code )  # permanent redirect
-        redirect_url = response._headers['location'][1]
+        # redirect_url = response._headers['location'][1]
+        # log.debug( f'response, ``{response}``' )
+        # log.debug( f'response.__dict__, ``{pprint.pformat(response.__dict__)}``' )
+        redirect_url = response.headers['location']  # type: ignore
         self.assertEqual(  '/info/', redirect_url )
 
     @override_settings(DEBUG=True)
@@ -114,15 +118,6 @@ class ClientDocDataTest( TestCase ):
         response = self.client.get( '/data/documents/1/' )
         log.debug( f'response, ``{response}``' )
         log.debug( f'response.__dict__, ``{response.__dict__}``' )
-        self.assertEqual( 200, response.status_code )  # not yet working -- should be 200, but redirects to login
-
-    def test_good_doc_get_logged_in(self):
-        """ Checks that logged-in docoumet-GET, for existing citation, returns response. """
-        usr = User.objects.create( username='test_user' )
-        usr.save()  # creates a UserProfile object
-        client = Client()
-        client.force_login( usr )  # does not get past shib-decorator -- request.user.is_authenticated stays False; added host-check to shib-decorator
-        response = self.client.get( '/editor/documents/1/' )
         self.assertEqual( 200, response.status_code )  # not yet working -- should be 200, but redirects to login
 
     def test_good_doc_get_logged_in(self):
