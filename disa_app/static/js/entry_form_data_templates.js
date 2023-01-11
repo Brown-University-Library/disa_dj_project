@@ -26,7 +26,7 @@ const ITEM_TEMPLATE = {
       name: undefined,
       type: 'City'
     },
-    Colony\/State:{
+    'Colony/State':{
       id: undefined,
       name: undefined,
       type: 'Colony/State'
