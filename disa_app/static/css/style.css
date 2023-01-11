@@ -9998,10 +9998,10 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
-h1 a, .h1 a {
+header h1 a, header .h1 a {
   text-decoration: none;
 }
-h1 span, .h1 span {
+header h1 span, header .h1 span {
   font-style: italic;
   display: block;
   font-size: 0.8rem;

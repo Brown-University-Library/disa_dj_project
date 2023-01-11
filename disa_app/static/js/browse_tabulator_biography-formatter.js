@@ -68,7 +68,7 @@ function getPersonEntryHTML(entry, sr) {
           relRefName = [relRefInfo.related_referent_first_name, relRefInfo.related_referent_last_name]
                         .filter(x => x.length)
                         .join(' '),
-          relRefNameLink = `<a href='#' onclick='showDetails(${relRefInfo.related_referent_db_id})' 
+          relRefNameLink = `<a href='#' data-bs-toggle="modal" data-bs-target="#details-modal" onclick='showDetails(${relRefInfo.related_referent_db_id})'
                                 title='Details about ${relRefName}'>${relRefName}</a>`;
     if (relationship.description === 'enslaved by') {
       html = `${toBe_conj} enslaved by ${relRefNameLink}`;
@@ -103,7 +103,7 @@ function getPersonEntryHTML(entry, sr) {
   
   // COMPILE FINAL HTML
 
-  const html = `<p>${name_text} ${name_forOrIs} ` +
+  const html = `<p class="col-md-9">${name_text} ${name_forOrIs} ` +
                 (statusDisplay[entry.enslavement_status][0] === 'e' ? 'an ' : 'a ') +
                 statusDisplay[entry.enslavement_status] + ' ' +
                 (entry.tribes[0] ? ` <a href="#" title="Show only ${entry.tribes[0]} people" onclick="populateFilter('all_tribes', '${entry.tribes[0]}')">${entry.tribes[0]}</a> ` : '') +
@@ -116,10 +116,10 @@ function getPersonEntryHTML(entry, sr) {
                 (year ? ` in ${year}` : '') +
                 '.' + 
                 relationshipsHTML + 
-                `<span id="referent-footnote-id-${entry.referent_db_id}" class="cf-footnotes"></span></p><p>` + `<a class="details-button btn btn-primary btn-sm" onclick="showDetails(${entry.referent_db_id})"
+                `</p><p class="col-md-2 offset-md-1"><a id="referent-footnote-id-${entry.referent_db_id}" class="details-button btn btn-primary btn-sm" onclick="showDetails(${entry.referent_db_id})"
                     title="Show source document and details for ${entry.all_name}">Details</a>` +
                 (sr.user_is_authenticated
-                  ? `<a class="details-button btn btn-outline-primary btn-sm"
+                  ? `<a class="btn btn-outline-primary btn-sm"
                         href="${sr.url.editReferent(entry.citation_data.citation_db_id, entry.reference_data.reference_db_id, entry.referent_db_id)}"
                         title="Edit entry for ${entry.all_name}">Edit</a>`
                   : '') + `</p>`;

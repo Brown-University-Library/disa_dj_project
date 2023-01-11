@@ -128,7 +128,7 @@ function getDcfResources(resourceSelector) {
 
   // TEMP WORKAROUND - END
 
-  console.log('RESOURCES COLLECTED FOR RULE', uniqueResourceListWithHTML);
+  //console.log('RESOURCES COLLECTED FOR RULE', uniqueResourceListWithHTML);
   window.ttt = uniqueResourceListWithHTML;
   return uniqueResourceListWithHTML;
 }
