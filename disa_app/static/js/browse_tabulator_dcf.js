@@ -54,6 +54,7 @@ function getFootnoteHtmlElem(resource) {
   const footnoteElem = document.createElement('span');
   footnoteElem.classList.add('cf-footnote', 'badge', 'rounded-pill', 'text-bg-primary');
   footnoteElem.innerText = resource.id;
+  footnoteElem.setAttribute('id',resource.id);
   /* footnoteElem.onmouseover = () => {
     //document.getElementById(`dcf-resource-${resource.id}`).classList.add('highlight');
   }

@@ -16,10 +16,11 @@ function initializeModalApi() {
 
   const HTML = 'HTML', TEXT = 'Text',
         setDetailsTable = getModalContentSetter('details-table', HTML),
-        setDocDetailsTable = getModalContentSetter('source-details-table', HTML);
+        setDocDetailsTable = getModalContentSetter('source-details-table', HTML),
+        theDetailsModal = new bootstrap.Modal(document.getElementById('details-modal'));
 
   const detailsModal = {
-    show: () => document.getElementById('details-modal').showModal(),
+    show: () => theDetailsModal.show(),
     setId: getModalContentSetter('details-id', TEXT),
     setName: getModalContentSetter('details-title-name', TEXT),
     setDocTitle: getModalContentSetter('details-doc', TEXT),
@@ -60,8 +61,8 @@ function getShowDetailsFunction(sr) {
   
     if (data) {
   
-      detailsModal.setName(data.all_name);
-      detailsModal.setId(id);
+    detailsModal.setId(id);
+    detailsModal.setName(data.all_name);
   
       // Update URLs for edit buttons
   

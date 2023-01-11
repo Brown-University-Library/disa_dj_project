@@ -89,9 +89,9 @@
                         Search in any field for
                         <input type="text" id="general-search"></input>
                     </label>
-                    <em class="text-nowrap">
-                        &nbsp;(to focus your search, use the fields below)
-                    </em>
+                    <div class="form-text">
+                        (to focus your search, use the fields below)
+                    </div>
                 </div>
                 <div class="col-6">
                     <p id="view-options">View results as
@@ -101,7 +101,7 @@
                         <label for="tabular-view-option">a table</label>
                     </p>
                     <p>
-                        <button id="download-data" title="Download the results as a CSV file">
+                        <button class="btn btn-info" id="download-data" title="Download the results as a CSV file">
                             Download results
                         </button>
                     </p>
@@ -110,7 +110,7 @@
 
             <!-- Container for data table (tabulator library output) -->
 
-            <div id="data-display" class="border table-striped biographical">
+            <div id="data-display" class="table-striped biographical">
             </div>
         </div>
         <div class="col-md-3 order-sm-first order-md-last" id="dcf">
@@ -118,7 +118,7 @@
             <template id="dcf-resource-template">
                 <div class="dcf-resource card bg-light mb-3">
                     <div class="card-header">
-                        <span class="dcf-number badge bg-primary text-light"></span>
+                        <span class="dcf-number d-none badge bg-primary text-light"></span>
                         <span class="dcf-resource-title"></span>
                         <a class="dcf-resource-link card-link"
                             href="#" target="_BLANK"
