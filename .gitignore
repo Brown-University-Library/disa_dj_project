@@ -1,10 +1,11 @@
-*.pyc
 .DS_Store
 .hg
 .svn
-browse.json
+.vscode
+*.pyc
 browse_formatted.json
-denormalized.json
+browse.json
 denormalized_formatted.json
+denormalized.json
 env
 migrations

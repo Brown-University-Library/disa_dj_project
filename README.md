@@ -1,7 +1,3 @@
-##### (under construction)
-
-
-
 ### Glossary...
 
 (terms sometimes used interchangeably in code, with clarifications)
@@ -22,5 +18,22 @@
 
     - The interface currently allows for relationships to be defined between `Referent` entries.
 
-----
+-----
 
+### Installation...
+
+(Assumes [Docker](https://www.docker.com) is installed and running.)
+
+- Create a local "stuff" directory (name it anything) -- and from your terminal, cd into it (one-time step)
+
+From the terminal...
+
+- Run `git clone git@github.com:Brown-University-Library/stolen_relations_start_data.git` (a private repo, for now; the data is not yet publicly available) (one-time step)
+
+- Run `git clone git@github.com:Brown-University-Library/disa_dj_project.git` -- and cd into it (one-time step)
+
+- Run `docker-compose up`
+
+The webapp should be running; from a browser, go to <http://127.0.0.1:8000/version/> or <http://127.0.0.1:8000/login/>. 
+
+---

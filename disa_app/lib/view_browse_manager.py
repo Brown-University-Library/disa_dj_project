@@ -4,7 +4,7 @@ import json, logging, pprint
 
 from disa_app import settings_app
 from django.conf import settings as project_settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 

@@ -8,7 +8,7 @@ from disa_app.lib import view_search_results_manager
 from disa_app.models import UserProfile
 from django.conf import settings as project_settings
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import Client
 from django.test import TestCase  # from django.test import SimpleTestCase as TestCase    ## TestCase requires db, so if you're not using a db, and want tests, try this
 from django.test.utils import override_settings
