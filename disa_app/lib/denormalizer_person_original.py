@@ -12,7 +12,7 @@ Usage...
 import collections, datetime, json, logging, os, pathlib, pprint, sys
 import django, sqlalchemy
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 

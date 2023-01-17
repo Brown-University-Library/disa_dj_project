@@ -14,9 +14,12 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import json, logging, os
 
+log = logging.getLogger(__name__)
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname( os.path.dirname(os.path.abspath(__file__)) )
+# log.debug( f'BASE_DIR, ``{BASE_DIR}``' )
 # BASE_DIR is the path to the project (no end-slash)
 
 # Quick-start development settings - unsuitable for production
@@ -83,6 +86,8 @@ WSGI_APPLICATION = 'config.passenger_wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = json.loads( os.environ['DISA_DJ__DATABASES_JSON'] )
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'  # <https://docs.djangoproject.com/en/3.2/releases/3.2/#customizing-type-of-auto-created-primary-keys>cache
 
 
 # Password validation
