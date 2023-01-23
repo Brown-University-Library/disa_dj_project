@@ -1,3 +1,9 @@
+on this page...
+- Glossary
+- Installation
+- Typical usage
+
+---
 ### Glossary...
 
 (terms sometimes used interchangeably in code, with clarifications)
@@ -35,5 +41,19 @@ From the terminal...
 - Run `docker-compose up`
 
 The webapp should be running; from a browser, go to <http://127.0.0.1:8000/version/> or <http://127.0.0.1:8000/login/>. 
+
+---
+
+### Typical usage...
+
+- cd to the project directory
+
+- Run `docker-compose up` to create the container (which starts the webapp). That's it.
+
+- Note: if a code-update installs a new python-package, either...
+
+    - delete the `disa_dj_project-web` image which should force it to be rebuilt (best option), or...
+    
+    - run `docker-compose build` to force the container to be rebuilt. (I don't think this actually creates a new image, so subsequent runs of `docker-compose up` will still use the old image.)
 
 ---
