@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: django-web-container
+    container_name: django32-web-container
     volumes:
       - ../:/sr_project_stuff
       - ../DBs:/sr_project_stuff/DBs
