@@ -54,6 +54,6 @@ The webapp should be running; from a browser, go to <http://127.0.0.1:8000/versi
 
     - delete the `disa_dj_project-web` image which should force it to be rebuilt (best option), or...
     
-    - run `docker-compose build` to force the container to be rebuilt. (I don't think this actually creates a new image, so subsequent runs of `docker-compose up` will still use the old image.)
+    - run `docker-compose up --build` to force the container to be rebuilt. (I don't think this actually creates a new image, so subsequent runs of `docker-compose up` will still use the old image.)
 
 ---
