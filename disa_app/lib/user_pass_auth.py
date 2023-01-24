@@ -4,7 +4,7 @@ from disa_app.models import UserProfile
 # from django.contrib.auth import get_backends, login
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 
 

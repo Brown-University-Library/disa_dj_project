@@ -3,7 +3,7 @@
 import datetime, json, logging, os, subprocess
 from disa_app import settings_app
 from django.conf import settings
-# from django.core.urlresolvers import reverse
+# from django.urls import reverse
 
 
 log = logging.getLogger(__name__)

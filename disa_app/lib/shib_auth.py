@@ -11,7 +11,7 @@ import copy, json, logging, os, pprint
 
 from django.contrib.auth import authenticate, get_backends, login
 from django.contrib.auth.models import User, Group
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from disa_app import settings_app
 
