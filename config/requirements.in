@@ -1,3 +1,4 @@
+django-compressor==4.3.1
 Django==3.2.16
 git+https://github.com/birkin/shellvars-py.git
 pip-tools==6.12.1
