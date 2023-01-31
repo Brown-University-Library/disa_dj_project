@@ -7,10 +7,9 @@ log = logging.getLogger(__name__)
 user_data_structure = {
   'user_first_name': str,
   'user_last_name': str,
+  'user_full_name': str,
   'user_email_address': str,
   'user_eppn': str,
-  'shib_conf_path': str,
-  'shib_conf_backup_dir_path': str,
 }
 
 
@@ -19,7 +18,7 @@ def add( user_json_path: str ):
         Triggered by `$ python ./manage.py add_shib_user --user_json_path="/path/to/add_user.json" """
     is_valid: bool = validate_json( user_json_path )
     if not is_valid:
-        print( 'shib user json-file check: problem; invalid' )
+        print( 'shib user json-file check -- problem invalid path or file' )
         sys.exit()
     else:
         print( 'shib user json-file check: good' )
@@ -61,10 +60,13 @@ def validate_json( user_json_path: str ) -> bool:
     try:
         with open( user_json_path, 'r' ) as f:
             user_info: dict = json.loads( f.read() )
-            expected_keys: list = user_data_structure.keys().sorted()
-            supplied_keys: list = user_info.keys().sorted()
+            # expected_keys: list = user_data_structure.keys().sorted()
+            expected_keys: list = sorted( user_data_structure.keys() )
+            # supplied_keys: list = user_info.keys().sorted()
+            supplied_keys: list = sorted( user_info.keys() )
             assert expected_keys == supplied_keys
             for ( key, val ) in user_info.items():
+                log.debug( f'checking key, ``{key}``' )
                 expected_type = user_data_structure[key]
                 supplied_type = type( user_info[key] )
                 supplied_data = user_info[key]
