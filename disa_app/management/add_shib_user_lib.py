@@ -13,43 +13,59 @@ user_data_structure = {
 }
 
 
+# def add( user_json_path: str ):
+#     """ Controller for adding shib-user.
+#         Triggered by `$ python ./manage.py add_shib_user --user_json_path="/path/to/add_user.json" """
+#     is_valid: bool = validate_json( user_json_path )
+#     if not is_valid:
+#         print( 'shib user json-file check -- problem invalid path or file' )
+#         sys.exit()
+#     else:
+#         print( 'shib user json-file check: good' )
+#     shib_backed_up = check_for_shib_backup()
+#     if not shib_backed_up:
+#         print( 'shib-backup check: problem; back up shib file' )
+#         sys.exit()
+#     else:
+#         print( 'shib-backup check: good' )
+#     if not user_added_to_shib:
+#         print( 'shib file check: problem; add shib user to shib file' )
+#         sys.exit()
+#     else:
+#         print( 'shib file check: good' )
+#     if not user_in_DISA_db():
+#         print( 'DISA-db check: shib user does not exist; will add' )
+#         if add_user_to_DISA_db():
+#             print( 'DISA-db check: shib user added' )
+#         else:
+#             print( 'DISA-db check: problem adding shib user' )
+#     else:
+#         print( 'DISA-db check: good' )
+#     if not user_in_django_db():
+#         print( 'django-db check: shib user does not exist; will add' )
+#         if add_user_to_django_db():
+#             print( 'django-db check: shib user added' )
+#         else:
+#             print( 'django-db check: problem adding shib user' )
+
+#     else:
+#         print( 'django-db check: good' )
+
+#     ## end def add()
+
+
 def add( user_json_path: str ):
     """ Controller for adding shib-user.
         Triggered by `$ python ./manage.py add_shib_user --user_json_path="/path/to/add_user.json" """
+    ## validate json ------------------------------------------------
     is_valid: bool = validate_json( user_json_path )
     if not is_valid:
         print( 'shib user json-file check -- problem invalid path or file' )
         sys.exit()
     else:
         print( 'shib user json-file check: good' )
-    shib_backed_up = check_for_shib_backup()
-    if not shib_backed_up:
-        print( 'shib-backup check: problem; back up shib file' )
-        sys.exit()
-    else:
-        print( 'shib-backup check: good' )
-    if not user_added_to_shib:
-        print( 'shib file check: problem; add shib user to shib file' )
-        sys.exit()
-    else:
-        print( 'shib file check: good' )
-    if not user_in_DISA_db():
-        print( 'DISA-db check: shib user does not exist; will add' )
-        if add_user_to_DISA_db():
-            print( 'DISA-db check: shib user added' )
-        else:
-            print( 'DISA-db check: problem adding shib user' )
-    else:
-        print( 'DISA-db check: good' )
-    if not user_in_django_db():
-        print( 'django-db check: shib user does not exist; will add' )
-        if add_user_to_django_db():
-            print( 'django-db check: shib user added' )
-        else:
-            print( 'django-db check: problem adding shib user' )
-
-    else:
-        print( 'django-db check: good' )
+    ## update disa-db -----------------------------------------------
+    user_set_in_disa_db: bool = handle_disa_db( user_json_path )
 
     ## end def add()
 
@@ -72,7 +88,6 @@ def validate_json( user_json_path: str ) -> bool:
                 supplied_data = user_info[key]
                 assert expected_type == supplied_type
                 assert len( supplied_data ) > 0
-            assert user_info['old_db_id'] > 0
         log.debug( 'opening and reading file was successful' )
         return_val = True
     except:
@@ -83,8 +98,16 @@ def validate_json( user_json_path: str ) -> bool:
 
     ## end def validate_json()
 
-
-def check_for_shib_backup() -> bool:
-    """ Checks whether shib file has been backed up recently.
+def handle_disa_db( user_json_path: str ):
+    """ Checks disa-db for user.
         Called by add() """
-    raise Exception( 'not yet implemented' )
+    user_set_in_disa_db: bool = False
+    ## see if user is in disa-db ------------------------------------
+
+    ## add user to disa-db if necessary -----------------------------
+
+    ## store 'old-db-id' --------------------------------------------
+
+    return user_set_in_disa_db
+
+    ## end def handle_disa_db()
