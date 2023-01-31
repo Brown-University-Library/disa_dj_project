@@ -44,7 +44,8 @@ export DISA_DJ__DATABASES_JSON='
     '
 
 export DISA_DJ__STATIC_URL="/static/"
-export DISA_DJ__STATIC_ROOT="/static/"
+# export DISA_DJ__STATIC_ROOT="/static/"
+export DISA_DJ__STATIC_ROOT="static/"
 
 export DISA_DJ__EMAIL_HOST="localhost"  
 export DISA_DJ__EMAIL_PORT="1026"  # will be converted to int in settings.py

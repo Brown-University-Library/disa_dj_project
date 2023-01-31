@@ -128,7 +128,12 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+]
+
 
 STATIC_URL = os.environ['DISA_DJ__STATIC_URL']
 STATIC_ROOT = os.environ['DISA_DJ__STATIC_ROOT']  # needed for collectstatic command
