@@ -50,7 +50,7 @@ function getTestFunction({ruleType, ...ruleArguments}) {
   }
 }
 
-function getFootnoteHtmlElem(resource) {
+/*function getFootnoteHtmlElem(resource) {
   const footnoteElem = document.createElement('span');
   footnoteElem.classList.add('cf-footnote', 'badge', 'rounded-pill', 'text-bg-primary');
   footnoteElem.innerText = resource.id;
@@ -60,9 +60,9 @@ function getFootnoteHtmlElem(resource) {
   }
   footnoteElem.onmouseleave = () => {
     //document.getElementById(`dcf-resource-${resource.id}`).classList.remove('highlight');
-  }*/
+  }
   return footnoteElem;
-}
+}*/
 
 function getDcfUpdateHandler(searchState, dcfContentElem, table) {
 
