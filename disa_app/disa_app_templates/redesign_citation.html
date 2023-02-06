@@ -1,5 +1,6 @@
 {% extends "disa_app_templates/redesign_base.html" %}
 {% load static %}
+{% load compress %}
 
 {% block header_other %}
 
@@ -174,7 +175,20 @@
 <!-- Bundle of JS modules -->
 <!--<script src="{% static 'js/bundle.js' %}" type="module"></script> -->
 <!-- Non-bundled JS modules -->
+
+<!-- compress `entry_form_citation.js` -->
+<!-- The compress doesn't work. 
+     It _does_ compress the js, but because of where the compressed files are loaded, 
+     the unchanged import-paths called at the beginning of the script end up being wrong.
+     So am reverting to the uncompressed call. -->
+{# <script src="{% static 'js/entry_form_citation.js' %}" type="module"></script> #}
 <script src="{% static 'js/entry_form_citation.js' %}" type="module"></script>
+{% comment %}
+    {% compress js %}
+    <script src="{% static 'js/entry_form_citation.js' %}" type="module"></script>
+    {% endcompress %}
+{% endcomment %}
+<!-- end compress `entry_form_citation.js` -->
 
 <!-- <script src="{% static 'js/tinymce.min.js' %}"></script> -->
 <script src="https://cdn.tiny.cloud/1/ondkaoffzc1dnoz0vypajv5qg9fvnun0bss1ew22yncnvquc/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
