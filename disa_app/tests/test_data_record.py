@@ -319,12 +319,15 @@ class Record_Test( TestCase ):
             Note that, for no good reason, this root url is _different_ from the normal `http://127.0.0.1:8000/data/records/abcd/` """
         ## create record
         self.create_new_record()
+        log.debug( 'created new record' )
         ## DELETE
         self.delete_new_record()
+        log.debug( 'deleted new record' )
         ## tests
         self.assertEqual( 200, self.delete_resp_statuscode )
         self.assertEqual(
-            {'redirect': '/editor/documents/768/'},
+            # {'redirect': '/editor/documents/768/'},
+            {'redirect': '/redesign_citations/768/'},
             self.delete_resp_dct )  # for now, we're hard-coding new adds to citation-document #768
 
     ## end Record_Test()
