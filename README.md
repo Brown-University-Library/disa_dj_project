@@ -26,13 +26,13 @@ on this page...
 
 -----
 
-### Installation...
+### Installation
 
 (Assumes [Docker](https://www.docker.com) is installed and running.)
 
 - Create a local "stuff" directory (name it anything) -- and from your terminal, cd into it (one-time step)
 
-From the terminal...
+From the terminal:
 
 - Run `git clone git@github.com:Brown-University-Library/stolen_relations_start_data.git` (a private repo, for now; the data is not yet publicly available) (one-time step)
 
@@ -44,7 +44,7 @@ The webapp should be running; from a browser, go to <http://127.0.0.1:8000/versi
 
 ---
 
-### Typical usage...
+### Typical usage
 
 - cd to the project directory
 
