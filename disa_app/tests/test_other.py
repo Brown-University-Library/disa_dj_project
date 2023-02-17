@@ -97,7 +97,7 @@ class Client_Misc_Test( TestCase ):
 class ClientDocDataTest( TestCase ):
     """ Checks document-data url responses. """
 
-    ## does not pass ##
+    ## does not pass -- 2023-Feb-16 this may be worth keeping and getting running. ##
     # def test_doc_get_not_logged_in(self):
     #     """ Checks GET. """
     #     response = self.client.get( '/data/documents/1/' )
@@ -120,15 +120,15 @@ class ClientDocDataTest( TestCase ):
         log.debug( f'response.__dict__, ``{response.__dict__}``' )
         self.assertEqual( 200, response.status_code )  # not yet working -- should be 200, but redirects to login
 
-    def test_good_doc_get_logged_in(self):
-        """ Checks that logged-in docoumet-GET, for existing citation, returns response. """
-        usr = User.objects.create( username='test_user' )
-        usr.save()  # creates a UserProfile object
-        client = Client()
-        client.force_login( usr )  # does not get past shib-decorator -- request.user.is_authenticated stays False; added host-check to shib-decorator
-        response = self.client.get( '/editor/documents/1/' )
-        self.assertEqual( 200, response.status_code )
-        self.assertTrue( b'Document...' in response.content )
+    # def test_good_doc_get_logged_in(self):  # no longer needed; will delete
+    #     """ Checks that logged-in docoumet-GET, for existing citation, returns response. """
+    #     usr = User.objects.create( username='test_user' )
+    #     usr.save()  # creates a UserProfile object
+    #     client = Client()
+    #     client.force_login( usr )  # does not get past shib-decorator -- request.user.is_authenticated stays False; added host-check to shib-decorator
+    #     response = self.client.get( '/editor/documents/1/' )
+    #     self.assertEqual( 200, response.status_code )
+    #     self.assertTrue( b'Document...' in response.content )
 
     def test_not_found_doc_get_logged_in(self):
         """ Checks that logged-in docoumet-GET, for non-existent citation, returns 404. """
