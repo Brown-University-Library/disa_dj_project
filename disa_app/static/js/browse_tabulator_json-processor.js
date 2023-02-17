@@ -54,7 +54,6 @@ function processJSON(response, sr) {
       .join(', ');
 
     newEntry.all_tribes = newEntry.tribes.join(', ');
-    newEntry.all_races = newEntry.races.join(', ');
     newEntry.year = (new Date(entry.reference_data.date_db)).getFullYear();
 
     // Add a derivative field for Enslaved/Enslaver/Other filter
@@ -75,6 +74,16 @@ function processJSON(response, sr) {
     } else {
       newEntry.enslavement_status = sr.ENSLAVEMENT_STATUS.DEFAULT;
     }
+
+    // Change values for "Race" dropdown
+    // (this is a temporary change for the UI 
+    //  while we're cleaning the field in the DB)
+
+    newEntry.all_races_menu = newEntry.races.map(
+      (race) => sr.RACIAL_DESIGNATION[race.toLowerCase()] || 'Other'
+    );
+    
+    newEntry.all_races = newEntry.races.join(', ');
 
     // Some additional fields for Maiah's download
 

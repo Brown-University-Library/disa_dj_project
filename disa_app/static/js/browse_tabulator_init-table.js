@@ -45,14 +45,16 @@ function getTabulatorOptions(sr, showDetailsFunction) {
                   "Weyanoke", "Woolwa", "de Nacion Caribe Cuchibero" ]
       }
     },
-    { title:'Racial descriptor',      field:'all_races',  sorter:'string',
+    { title:'Racial descriptor',      field:'all_races_menu',  sorter:'string',
       headerFilter: 'select',
-      headerFilterParams: {
+      headerFilterParams: { 
+        values: ["Indian","Multi-racial","Black", "White", "Other"]
+        /*
         values: [ "Asiatic", "Black", "Carolina Indian", "Creole", "Creole", "Dark melattress",
                   "Dark mulatto", "East India Negro", "East-India Indian", "East-Indian", "Griffon",
                   "Half Indian", "Half Indian", "Half Negro", "Indian", "Indian Mulatto", "Irish",
                   "Martha's Vineyard Indian", "Mulatto", "Mustee", "Negro", "Sambo", "Spanish Indian",
-                  "Surinam Indian", "White" ]
+                  "Surinam Indian", "White" ] */
       }
     },
     // { title:'Age',       field:'description.age',   sorter:'string', headerFilter: true },
