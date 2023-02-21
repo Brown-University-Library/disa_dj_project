@@ -137,7 +137,7 @@ async function createNewSource() {
     if (response.ok) {
 
         const dataJSON = await response.json(),
-            sourceIdMatch = dataJSON.redirect.match('/editor/documents/([^/]+)/');
+            sourceIdMatch = dataJSON.redirect.match('/redesign_citations/([^/]+)/');
 
         if (sourceIdMatch && sourceIdMatch[1]) {
             window.location.href = `${sourceIdMatch[1]}/`;
