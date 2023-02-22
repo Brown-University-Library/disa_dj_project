@@ -23,8 +23,8 @@ urlpatterns = [
     url( r'^browse/$', views.browse_tabulator, name='browse_url' ),
     url( r'^browse_logout/$', views.browse_logout, name='browse_logout_url' ),
 
-    url( r'^editor/documents/$', views.edit_citation, name='edit_citation_url' ),
-    url( r'^editor/documents/(?P<cite_id>.*)/$', views.edit_citation, name='edit_citation_url' ),
+    # url( r'^editor/documents/$', views.edit_citation, name='edit_citation_url' ),  # no longer used; will delete
+    # url( r'^editor/documents/(?P<cite_id>.*)/$', views.edit_citation, name='edit_citation_url' ),  # no longer used; will delete
 
     url( r'^editor/records/$', views.edit_record, name='edit_record_url' ),
     url( r'^editor/records/(?P<rec_id>.*)/$', views.edit_record_w_recid, name='edit_record_w_recid_url' ),

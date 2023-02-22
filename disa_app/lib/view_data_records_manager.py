@@ -224,7 +224,8 @@ def manage_reference_delete( rfrnc_id: str ) -> dict:  # or, much less likely, H
                 cite = existing.citation  # why did I get this?
                 session.delete( existing )
                 session.commit()
-                redirect_url = reverse( 'edit_citation_url', kwargs={'cite_id': cite.id} )
+                # redirect_url = reverse( 'edit_citation_url', kwargs={'cite_id': cite.id} )
+                redirect_url = reverse( 'redesign_citation_url', kwargs={'cite_id': cite.id} )
                 context =  { 'redirect': redirect_url }
             else:
                 context = { 'err': '404 / Not Found' }

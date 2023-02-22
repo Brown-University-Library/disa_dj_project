@@ -1,154 +1,24 @@
 {% extends "disa_app_templates/base.html" %}
 {% load static %}
 
-
-{# in <head> #}
-
-
 {% block header_other %}
-<link rel="shortcut icon" type="image/ico"
-    href="favicon.ico" />
-<link rel="stylesheet" href="{% static 'css/browse_tabulator.css' %}" />
-
-<!-- Bootstrap -->
-
-<link   rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-        crossorigin="anonymous" />
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-
-<!-- Tabulator library -->
-
-<link rel="stylesheet" href="{% static 'css/tabulator_bootstrap4.min.css' %}" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@5/dist/css/tabulator.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@5/dist/css/tabulator_bootstrap5.min.css">
+<script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5/dist/js/tabulator.min.js"></script>
 <script src="{% static 'js/tabulator.js' %}"></script>
-
-<!-- Lunr -->
-
 <script src="{% static 'js/lunr.min.js' %}"></script>
-
 {% endblock header_other %}
 
-
-{# in <body> #}
-
-
-{% block header_options %}
-
-    {% if user_is_authenticated %}
-        {% comment %}
-        <li class="nav-item">
-            <a class="nav-link text-white" href="{% url 'browse_logout_url' %}">FOO</a>
-        </li>
-        {% endcomment %}
-    {% else %}
-        {% if browse_logged_in %}
-        <li class="nav-item">
-            <a class="nav-link text-white" href="{% url 'browse_logout_url' %}">browse-logout</a>
-        </li>
-        {% endif %}
-    {% endif %}
-
-{% endblock header_options %}
-
+{% block nav_options %}
+{% endblock nav_options %}
 
 {% block content %}
 
-<!-- Introductory text modal (initialize immediately) -->
-
-<div class="modal" id="opening-message" data-show="true" role="dialog" style="z-index:1000000">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Welcome to Stolen Relations</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>
-                    Please note: The headings and terms below are largely derived archival documents, which often contain terms, phrases, and biases that reduce, minimize, or alter Native identities and views of the world.
-                </p>
-                <p>
-                    As part of our commitment to decolonize and recontextualize these sources, please consult the tab on the right to understand how to better interpret and understand the headings and terms given in the primary sources.
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    $('#opening-message').modal();
-</script>
+<!-- language warning modal, appears immediately on load -->
+{% include "disa_app_templates/modals/warn_language.html" %}
 
 <!-- Details modal -->
-
-<div class="modal fade" id="details-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title">
-                    Details about <span class="details-title-name"></span>
-                </h1>
-                <div class="badge badge-primary">id <span id="details-id"></span></div>
-                {% if user_is_authenticated %}
-                <br />
-                <div class="btn-group" role="group" id="modal-edit-button-group">
-                    <a type="button" class="btn btn-primary" id="referent-edit-link"
-                       title="Edit the data for this person">
-                        Edit person
-                    </a>
-                    <a type="button" class="btn btn-primary" id="record-edit-link"
-                       title="Edit the data for the record which contains a reference to this person">
-                        Edit record
-                    </a>
-                    <a type="button" class="btn btn-primary" id="source-edit-link"
-                       title="Edit the bibliographic entry for the document that is the source for this information">
-                        Edit source
-                    </a>
-                </div>
-                {% endif %}
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="card">
-                    <div class="card-header">
-                        From <em id="details-doc"></em>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text" id="details-transcription"></p>
-                        <a href="" id="item-facsimile" target="_blank"
-                            class="badge badge-secondary"
-                            title="Link to scanned image of this document. May require permission.">
-                          Document image
-                        </a>
-                    </div>
-                </div>
-                <h2>Personal details</h2>
-                <table id="details-table" class="table">
-                </table>
-                <h2>About the source</h2>
-                <p style="font-style: italic">
-                    A note on terminology: information about individuals are recorded from "records" (such as an advertisement announcing a person fleeing enslavement)
-                    that are contained in "sources" (such as a newspaper).
-                </p>
-                <table id="source-details-table" class="table">
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+{% include "disa_app_templates/modals/record_details.html" %}
 
 <!-- "Loading ..." modal -->
 
@@ -163,34 +33,23 @@
         </div>
     </div>
 </div>
-
 <!-- Main content container: search and results -->
 
-<div class="col-12 mt-4" id="main-content">
-
-    <!-- Title and information header -->
-
-    <h1>
-        Stolen Relations<br />
-        <i style="font-size: 80%; color: #555">
-            Recovering Stories of Indigenous Enslavement in the Americas
-        </i>
-    </h1>
-
+<section class="" id="main-content">
     <div class="row">
-        <p class="col-6">
+        <p class="col-md-6">
             <em>Welcome, community collaborators!</em> This is a
             preliminary, experimental search portal of the
             <a href="http://indigenousslavery.org">Stolen Relations: Recovering Stories of Indigenous Enslavement in the Americas</a>, which
             allows you to search 
-            <span id="ref-count" class="badge badge-secondary"></span>
-            references to individuals drawn from 
-            <span id="item-count" class="badge badge-secondary"></span> 
-            archival records regarding the enslavement of indigenous 
-            populations in the Americas, from the 17<sup>th</sup> to the 
+            <span id="ref-count" class="badge bg-primary"></span>
+            references to individuals drawn from
+            <span id="item-count" class="badge bg-primary"></span>
+            archival records regarding the enslavement of indigenous
+            populations in the Americas, from the 17<sup>th</sup> to the
             19<sup>th</sup> centuries.
         </p>
-        <div class="col-6">
+        <div class="col-md-6">
             <p>
                 As you explore, please understand that <em>this
                 database is currently under development and may
@@ -200,13 +59,19 @@
             <p>
                 We welcome any and all feedback, corrections,
                 and suggestions for future development &mdash;
-                please contact <a href="mailto:linford_fisher@brown.edu">linford_fisher@brown.edu</a>.
+                please contact <a href="mailto:linford_fisher@brown.edu">Lin Fisher</a>.
             </p>
             <div>
-                <a href="https://localcontexts.org/label/tk-community-voice/"><img src="https://localcontexts.org/wp-content/uploads/2020/11/tk_label_cv.png" style="width:2em" /></a>
-                <a href="https://localcontexts.org/label/tk-non-commercial/"><img src="https://localcontexts.org/wp-content/uploads/2020/11/tk_label_nc.png" style="width:2em" /></a>
-                <a href="https://localcontexts.org/label/tk-community-voice/">TK Community Voice</a>, <a href="https://localcontexts.org/label/tk-non-commercial/">Non-Commercial</a>
+                <figure class="d-flex figure">
+                    <a href="https://localcontexts.org/label/tk-community-voice/" class="flex-shrink-0"><img src="https://localcontexts.org/wp-content/uploads/2020/11/tk_label_cv.png" class="figure-img"></a>
+                    <figcaption class="flex-grow figure-caption"><a href="https://localcontexts.org/label/tk-community-voice/">TK Community Voice</a></figcaption>
+                </figure>
+                <figure class="d-flex figure">
+                    <a href="https://localcontexts.org/label/tk-non-commercial/" class="flex-shrink-0"><img class="figure-img" src="https://localcontexts.org/wp-content/uploads/2020/11/tk_label_nc.png" /></a>
+                    <figcaption class="flex-grow-1 figure-caption"><a href="https://localcontexts.org/label/tk-non-commercial/">Non-Commercial</a></figcaption>
+                </figure>
             </div>
+
         </div>
     </div>
 
@@ -214,7 +79,7 @@
 
     <div class="top-search-div row">
 
-        <div class="col-9" id="search-and-results">
+        <div class="col-md-9" id="search-and-results">
 
             <!-- Search query area -->
 
@@ -224,9 +89,9 @@
                         Search in any field for
                         <input type="text" id="general-search"></input>
                     </label>
-                    <em class="text-nowrap">
-                        &nbsp;(to focus your search, use the fields below)
-                    </em>
+                    <div class="form-text">
+                        (to focus your search, use the fields below)
+                    </div>
                 </div>
                 <div class="col-6">
                     <p id="view-options">View results as
@@ -236,7 +101,7 @@
                         <label for="tabular-view-option">a table</label>
                     </p>
                     <p>
-                        <button id="download-data" title="Download the results as a CSV file">
+                        <button class="btn btn-info" id="download-data" title="Download the results as a CSV file">
                             Download results
                         </button>
                     </p>
@@ -245,24 +110,22 @@
 
             <!-- Container for data table (tabulator library output) -->
 
-            <div id="data-display" class="table-borderless biographical">
-                &nbsp;
+            <div id="data-display" class="table-striped biographical">
             </div>
         </div>
-        <div class="col-3" id="dcf">
+        <div class="col-md-3 order-sm-first order-md-last" id="dcf">
             <h2>Notes</h2>
             <template id="dcf-resource-template">
                 <div class="dcf-resource card bg-light mb-3">
                     <div class="card-header">
-                        <span class="dcf-number badge bg-primary text-light"></span>
+                        <span class="dcf-number d-none badge bg-primary text-light"></span>
                         <span class="dcf-resource-title"></span>
-                        <a class="dcf-resource-link card-link stretched-link" 
+                        <a class="dcf-resource-link card-link"
                             href="#" target="_BLANK"
-                            style="font-weight: bold; font-size: 80%"
-                            title="">&nbsp;</a>
+                            title=""><i class="fa-solid fa-asterisk"></i></a>
                     </div>
                     <div class="card-body">
-                        <img class="dcf-featured-image" src="" alt="" />
+                        <!--<img class="dcf-featured-image" src="" alt="" />-->
                         <span class="dcf-resource-text"></span>
                     </div>
                 </div>
@@ -270,31 +133,19 @@
             <div id="dcf-content"></div>
         </div>
     </div>
-
-    <!-- Footer: Acknowledgements -->
-    <div class="info-box acknowledgements">
-        <h5>Acknowledgements</h5>
-        <p>Stolen Relations has been generously funded and supported by <a
-                href="https://www.brown.edu/academics/population-studies/">the Population
-                Studies and Training Center</a> (Brown&nbsp;University), <a
-                href="https://www.brown.edu/initiatives/social-science-research/">the Social
-                Sciences Research Institute</a> (Brown&nbsp;University), <a
-                href="https://www.brown.edu/research/conducting-research-brown/about-office">the Office
-                of the Vice President for Research</a> (Brown&nbsp;University), <a
-                href="https://cssj.brown.edu/">the Center 
-                for the Study of Slavery and Justice</a> (Brown&nbsp;University), and <a
-                href="http://cds.library.brown.edu/">the Center for
-                Digital Scholarship</a> (Brown&nbsp;University&nbsp;Library)</p>
-    </div>
-</div>
+</section>
 
 {% endblock content %}
+{% block footer %}
+{% include "disa_app_templates/acknowledgements.html" %}
+ {% endblock footer %}
 
+{% block page_specific_js%}
+<!-- Main setup routine -->
+<script type="module" defer src="{% static 'js/browse_tabulator.js' %}"></script>
+<!-- trigger warningModal onload -->
+<script>
+var warningModal= new bootstrap.Modal('#warningModal').show();
+</script>
 
-{% block scripts%}
-
-        <!-- Main setup routine -->
-
-        <script type="module" defer src="{% static 'js/browse_tabulator.js' %}"></script>
-
-{% endblock %}
+{% endblock page_specific_js %}

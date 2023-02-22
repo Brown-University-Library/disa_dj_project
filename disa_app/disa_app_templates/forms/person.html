@@ -1,0 +1,136 @@
+<fieldset class="row">
+    <legend class="visually-hidden">Name</legend>
+    <h3>Name</h3>
+    <div class="col-4">
+        <div class="form-floating">
+            <input type="text" class="form-control" id="formInputDISAItemPersonFirstName" aria-label="First name" placeholder="First name" v-model="referent.names[0].first" v-on:blur="saveReferentDataToServer">
+            <label for="formInputDISAItemPersonFirstName">First name</label>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-floating">
+            <input type="text" class="form-control" id="formInputDISAItemPersonLastName" aria-label="Last name" placeholder="Last name" v-model="referent.names[0].last" v-on:blur="saveReferentDataToServer">
+            <label for="formInputDISAItemPersonLastName">Last name</label>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-floating">
+            <select class="form-select" id="formInputDISAItemPersonNameType" aria-label="Name type" v-model="referent.names[0].name_type" v-on:change="saveReferentDataToServer">
+                <option v-for="(nameTypeMenuLabel, nameTypeId) in MENU_OPTIONS.formInputDISAItemPersonNameType" v-bind:value="nameTypeId" v-text="nameTypeMenuLabel">
+                </option>
+            </select>
+            <label for="formInputDISAItemPersonNameType">Name type</label>
+        </div>
+    </div>
+</fieldset>
+<!-- END - SINGLE, SIMPLE NAME INTERFACE -->
+<fieldset class="row">
+    <legend class="visually-hidden">Demographics</legend>
+    <h3>Demographics</h3>
+    <div class="col-md-6">
+        <!-- Gender -->
+        <div class="form-floating">
+            <select class="form-select" id="formInputDISAPersonGender" aria-label="New person's gender" placeholder="Gender" v-model="referent.sex" v-on:change="saveReferentDataToServer">
+                <option v-for="(genderOption, genderOptionId) in MENU_OPTIONS.formInputDISAPersonGender" v-bind:value="genderOptionId" v-text="genderOption">
+            </select>
+            <label for="formInputDISAPersonGender">Gender</label>
+        </div>
+        <!-- Age -->
+        <div class="form-group">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="formInputDISAPersonAge_text" aria-label="New person's age (text)" placeholder="Age" v-model="referent.age" v-on:blur="saveReferentDataToServer">
+                <label for="formInputDISAPersonAge_text">Age</label>
+            </div>
+        </div>
+        <!-- Status -->
+        <div class="form-group">
+            <div class="form-floating">
+                <disa-tags class="form-control" v-model="currentReferent.status" v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonStatus" v-on:blur="saveReferentDataToServer" id="formInputDISAPersonStatus" aria-label="Status"></disa-tags>
+                <label for="formInputDISAPersonStatus">Status</label>
+            </div>
+        </div>
+        <!-- Vocation -->
+        <div class="form-group">
+            <div class="form-floating">
+                <disa-tags class="form-control" v-model="currentReferent.vocations" v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonVocation" v-on:blur="saveReferentDataToServer" id="formInputDISAPersonVocation" aria-label="Vocation"></disa-tags>
+                <label for="formInputDISAPersonVocation">Vocation</label>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <!-- Race -->
+        <div class="form-group">
+            <div class="form-floating">
+                <disa-tags class="form-control" v-model="currentReferent.races" v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonRace" v-on:blur="saveReferentDataToServer" id="formInputDISAPersonRace" aria-label="Race"></disa-tags>
+                <label for="formInputDISAPersonRace">Race</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-floating">
+                <disa-tags class="form-control" v-model="currentReferent.tribes" v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonTribe" v-on:blur="saveReferentDataToServer" id="formInputDISAPersonTribe"></disa-tags>
+                <label for="formInputDISAPersonTribe" aria-label="Tribal nation">Tribal Nation</label>
+            </div>
+        </div>
+        <!-- Geographical origins -->
+        <div class="form-group">
+            <div class="form-floating">
+                <disa-tags class="form-control" v-model="currentReferent.origins" v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonGeoOrigins" v-on:blur="saveReferentDataToServer" id="formInputDISAPersonGeoOrigins" aria-label="Geographic origins"></disa-tags>
+                <label for="formInputDISAPersonGeoOrigins">Geographic origins</label>
+            </div>
+        </div>
+    </div>
+</fieldset>
+<fieldset v-if="currentItem.referents.length > 1">
+    <!-- Relationships <-->
+    <legend class="visually-hidden">Relationships</legend>
+    <h3>Relationships</h3>
+    <button class="btn btn-primary btn-sm" v-on:click.stop.prevent="newRelationshipFormVisible = true" title="Enter information for a new relationship">Add new relationship</button>
+    <!-- Existing relationships -->
+    <div v-for="relationship in currentReferentRelationships">
+        <!-- Subject of relationship (i.e. the current referent) -->
+        <p>
+            <disa-id v-bind:forthis="relationship" class="float-end-x"></disa-id>
+            <span v-text="getReferentDisplayLabel(referent)"></span> is
+            <!-- Relationship type -->
+            <span v-text="MENU_OPTIONS.formInputDISARelationship[relationship.data.rel.id]"></span>
+            <!-- Object of relationship -->
+            <span v-text="getReferentDisplayLabelById(relationship.data.obj.id)"></span>
+        </p>
+        <button type="button" title="Delete this relationship" class="btn btn-outline-danger btn-sm" v-on:click="deleteRelationship(relationship)">
+            Delete relationship
+        </button>
+    </div>
+    <!-- New relationship -->
+    <div v-if="newRelationshipFormVisible">
+        <!-- Subject of relationship (i.e. the current referent) -->
+        <p>Add a new relationship</p>
+        <div class="row">
+            <div class="col-md-3">
+                <span v-text="getReferentDisplayLabel(referent)"></span> is ...
+            </div>
+            <!-- Relationship type -->
+            <div class="col-md-4">
+                <select class="form-select" id="formInputDISARelationship" aria-label="Type of relationship">
+                    <option v-for="(relationshipTypeOption, relationshipTypeId) in MENU_OPTIONS.formInputDISARelationship" v-bind:value="relationshipTypeId" v-text="relationshipTypeOption"></option>
+                </select>
+            </div>
+            <!-- Object of relationship (only show dropdown if there are more than 2 referents) -->
+            <div v-if="currentItem.referents.length > 2" class="col-md-4">
+                <select class="form-select" id="formInputDISARelationshipObject" aria-label="Who is in the relationship" vv-bind:disabled="currentItem.referents.length === 2">
+                    <option v-for="relationshipObject in currentItem.referents" v-if="relationshipObject.id != referent.id" vv-bind:selected="currentItem.referents.length === 2" v-bind:value="relationshipObject.id" v-text="getReferentDisplayLabel(relationshipObject)">
+                    </option>
+                </select>
+            </div>
+            <!-- If only one other referent (besides current) just show name as text -->
+            <div v-else class="col-md-4">
+                <input id="formInputDISARelationshipObject" type="hidden" v-bind:value="currentItem.referents.find(r => r !== currentReferent).id">
+                </input>
+                <span v-text="'... ' + getReferentDisplayLabel(currentItem.referents.find(r => r !== currentReferent))"></span>
+            </div>
+        </div>
+        <!-- Relationship save button -->
+        <button type="button" title="Save this relationship" class="btn btn-primary btn-sm" v-on:click.stop.prevent="createRelationship()">
+            Save this relationship
+        </button>
+    </div><!-- end new relationship form -->
+</fieldset>

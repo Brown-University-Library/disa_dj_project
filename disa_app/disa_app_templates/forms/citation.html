@@ -1,0 +1,138 @@
+<form id="source-form" vv-on:submit.prevent="onSubmitForm">
+    <span class="badge top-sticky float-end" title="Unique identifier for this citation">
+        {{ doc.id }}
+    </span>
+    <!-- Source type drop-down selector:
+             determines the ordering of the remaining fields -->
+    <label class="h2" for="document_type">Source type</label>
+    <select class="form-select" id="document_type" v-model="formData.doc.citation_type_id" v-on:change="saveSourceToServer">
+        <!-- If unselected, show this at the top -->
+        <option value="0" class="initMessage" v-if="!formData.doc.citation_type_id">
+            Select a document type:
+        </option>
+        <option v-for="(docTypeName, docTypeId) in MENU_OPTIONS.document_type" v-bind:value="docTypeId" v-text="docTypeName">
+        </option>
+    </select>
+    <div id="citation-fields">
+        <!-- HEADERS: Priority vs Optional -->
+        <h2 id="required-fields-header" hidden>
+            Priority information
+        </h2>
+        <h2 id="optional-fields-header" hidden>
+            Additional information
+        </h2>
+        <!-- FIELDS: Dynamically moved under headings via flexbox order property -->
+        <div class="citation-field form-floating" id="abstractNote">
+            <input type="text" class="form-control" id="abstractNote-value" aria-label="Abstract Note" placeholder="Abstract Note" v-model="formData.doc.fields.abstractNote" v-on:blur="saveSourceToServer">
+            <label for="abstractNote-value">Abstract Note</label>
+        </div>
+        <div class="citation-field form-floating" id="accessDate">
+            <label for="accessDate-value">Access Date</label>
+            <input class="form-control" id="accessDate-value" name="accessDate-value" aria-label="Access Date" placeholder="Access Date" v-model="formData.doc.fields.accessDate" v-on:blur="saveSourceToServer">
+        </div>
+        <div class="citation-field form-floating" id="archive">
+            <input type="text" class="form-control" id="archive-value" name="archive-value" aria-label="Archive" placeholder="Archive" v-model="formData.doc.fields.archive" v-on:blur="saveSourceToServer">
+            <label for="archive-value">Archive</label>
+        </div>
+        <div class="citation-field form-floating" id="archiveLocation">
+            <input type="text" class="form-control" id="archiveLocation-value" name="archiveLocation-value" aria-label="Archive Location" placeholder="Archive Location" v-model="formData.doc.fields.archiveLocation" v-on:blur="saveSourceToServer">
+            <label for="archiveLocation-value">Archive Location</label>
+        </div>
+        <div class="citation-field form-floating" id="author">
+            <input type="text" class="form-control" id="author-value" name="author-value" aria-label="Author" placeholder="Author (last name comes first)" v-model="formData.doc.fields.author" v-on:blur="saveSourceToServer">
+            <label for="author-value">Author</label>
+        </div>
+        <div class="citation-field form-floating" id="callNumber">
+            <input type="text" class="form-control" id="callNumber-value" name="callNumber-value" aria-label="Call Number" placeholder="Call Number" v-model="formData.doc.fields.callNumber" v-on:blur="saveSourceToServer">
+            <label for="callNumber-value">Call Number</label>
+        </div>
+        <div class="citation-field form-group col" id="date">
+            <label for="date-value">Date</label>
+            <input id="date-value" class="form-control" name="date-value" placeholder="Date" v-model="formData.doc.fields.date" v-on:blur="saveSourceToServer" />
+        </div>
+        <div class="citation-field form-floating" id="edition">
+            <input type="text" class="form-control" id="edition-value" name="edition-value" aria-label="Edition" placeholder="Edition" v-model="formData.doc.fields.edition" v-on:blur="saveSourceToServer">
+            <label for="edition-value">Edition</label>
+        </div>
+        <div class="citation-field form-floating" id="extra">
+            <input type="text" class="form-control" id="extra-value" name="extra-value" aria-label="Extra" placeholder="Extra" v-model="formData.doc.fields.extra" v-on:blur="saveSourceToServer">
+            <label for="extra-value">Extra</label>
+        </div>
+        <div class="citation-field form-floating" id="ISBN">
+            <input type="text" class="form-control" id="ISBN-value" name="ISBN-value" aria-label="ISBN" placeholder="ISBN" v-model="formData.doc.fields.ISBN" v-on:blur="saveSourceToServer">
+            <label for="ISBN-value">ISBN</label>
+        </div>
+        <div class="citation-field form-floating" id="ISSN">
+            <input type="text" class="form-control" id="ISSN-value" name="ISSN-value" aria-label="ISSN" placeholder="ISSN" v-model="formData.doc.fields.ISSN" v-on:blur="saveSourceToServer">
+            <label for="ISSN-value">ISSN</label>
+        </div>
+        <div class="citation-field form-floating" id="language">
+            <!-- @todo SHOULD BE A DROPDOWN? -->
+            <input type="text" class="form-control" id="language-value" name="language-value" aria-label="Language" placeholder="Language" v-model="formData.doc.fields.language" v-on:blur="saveSourceToServer">
+            <label for="language-value">Language</label>
+        </div>
+        <div class="citation-field form-floating" id="libraryCatalog">
+            <input type="text" class="form-control" id="libraryCatalog-value" name="libraryCatalog-value" aria-label="Library Catalog" placeholder="Library Catalog" v-model="formData.doc.fields.libraryCatalog" v-on:blur="saveSourceToServer">
+            <label for="libraryCatalog-value">Library Catalog</label>
+        </div>
+        <div class="citation-field form-floating" id="pages">
+            <input type="text" class="form-control" id="pages-value" name="pages-value" aria-label="Pages" placeholder="Pages" v-model="formData.doc.fields.pages" v-on:blur="saveSourceToServer">
+            <label for="pages-value">Pages</label>
+        </div>
+        <div class="citation-field form-floating" id="place">
+            <input type="text" class="form-control" id="place-value" name="place-value" aria-label="Place" placeholder="Place" v-model="formData.doc.fields.place" v-on:blur="saveSourceToServer">
+            <label for="place-value">Place</label>
+        </div>
+        <div class="citation-field form-floating" id="publicationTitle">
+            <input type="text" class="form-control" id="publicationTitle-value" name="publicationTitle-value" aria-label="Publication Title" placeholder="Publication Title" v-model="formData.doc.fields.publicationTitle" v-on:blur="saveSourceToServer">
+            <label for="publicationTitle-value">Publication Title</label>
+        </div>
+        <div class="citation-field form-floating" id="publisher">
+            <input type="text" class="form-control" id="publisher-value" name="publisher-value" aria-label="Publisher" placeholder="Publisher" v-model="formData.doc.fields.publisher" v-on:blur="saveSourceToServer">
+            <label for="publisher-value">Publisher</label>
+        </div>
+        <div class="citation-field form-floating" id="rights">
+            <!-- @todo DROPDOWN? -->
+            <input type="text" class="form-control" id="rights-value" name="rights-value" aria-label="Rights" placeholder="Rights" v-model="formData.doc.fields.rights" v-on:blur="saveSourceToServer">
+            <label for="rights-value">Rights</label>
+        </div>
+        <div class="citation-field form-floating" id="section">
+            <input type="text" class="form-control" id="section-value" name="section-value" aria-label="Section" placeholder="Section" v-model="formData.doc.fields.section" v-on:blur="saveSourceToServer">
+            <label for="section-value">Section</label>
+        </div>
+        <div class="citation-field form-floating" id="series">
+            <input type="text" class="form-control" id="series-value" name="series-value" aria-label="Series" placeholder="Series" v-model="formData.doc.fields.series" v-on:blur="saveSourceToServer">
+            <label for="series-value">Series</label>
+        </div>
+        <div class="citation-field form-floating" id="seriesNumber">
+            <input type="text" class="form-control" id="seriesNumber-value" name="seriesNumber-value" aria-label="Series Number" placeholder="Series Number" v-model="formData.doc.fields.seriesNumber" v-on:blur="saveSourceToServer">
+            <label for="seriesNumber-value">Series Number</label>
+        </div>
+        <div class="citation-field form-floating" id="shortTitle">
+            <input type="text" class="form-control" id="shortTitle-value" name="shortTitle-value" aria-label="Short Title" placeholder="Short Title" v-model="formData.doc.fields.shortTitle" v-on:blur="saveSourceToServer">
+            <label for="shortTitle-value">Short Title</label>
+        </div>
+        <div class="citation-field form-floating" id="title">
+            <input type="text" class="form-control" id="title-value" name="title-value" aria-label="Title" placeholder="Title" v-model="formData.doc.fields.title" v-on:blur="saveSourceToServer">
+            <label for="title-value">Title</label>
+        </div>
+        <div class="citation-field form-floating" id="url">
+            <input type="text" class="form-control" id="url-value" name="url-value" aria-label="URL" placeholder="Full website link (URL)" v-model="formData.doc.fields.url" v-on:blur="saveSourceToServer">
+            <label for="url-value">URL</label>
+        </div>
+    </div><!-- end citation fields -->
+    <div class="form-floating">
+        <textarea class="form-control" id="formInputDISAAcknowledgements" placeholder="Enter notes here..." v-model="formData.doc.acknowledgements" v-on:blur="saveSourceToServer"></textarea>
+        <label for="formInputDISAAcknowledgements">Acknowledgements</label>
+    </div>
+    <div class="form-floating">
+        <textarea class="form-control" id="formInputDISABiblioResearcherNotes" placeholder="Enter notes here..." v-model="formData.doc.comments" v-on:blur="saveSourceToServer"></textarea>
+        <label for="formInputDISABiblioResearcherNotes">Researcher notes</label>
+    </div>
+    <a type="button" class="btn btn-primary btn-md" href="../../redesign_citations/">
+        Save source and exit
+    </a>
+    <button type="button" class="btn btn-primary btn-md" id="source-form-submit" v-on:click="openItemTab">
+        Save source and continue to enter records
+    </button>
+</form>

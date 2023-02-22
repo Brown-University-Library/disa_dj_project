@@ -1,0 +1,23 @@
+<disa-id v-bind:forthis="group" class="float-end"></disa-id>
+<button title="Delete this group" class="btn btn-outline-danger btn-sm delete-link" v-on:click.self="deleteGroup(group)">
+    Delete this group
+</button>
+<div v-if="currentGroupId === group.uuid">
+    <!-- Group description -->
+    <div class="form-floating">
+        <textarea class="form-control" id="formInputGroupDescription" placeholder="Description from source" v-model="group.description"></textarea>
+        <label for="formInputGroupDescription">Description</label>
+    </div>
+    <div class="row g-2">
+        <!-- Group Count -->
+        <div class="col-1"><input type="number" class="form-control col-sm-1" id="formInputDISAGroupCount" aria-label="Count of people in group" placeholder="" v-model="group.count"></div>
+        <label class="col-3 col-form-label" for="formInputDISAGroupCount">Number of individuals in group</label>
+        <!-- Group count - estimated -->
+        <div class="form-check col">
+            <input class="form-check-input mt-2" type="checkbox" id="formInputDISAGroupCountEstimated" v-model="group.count_estimated">
+            <label class="form-check-label col-form-label" for="formInputDISAGroupCountEstimated">
+                Estimated
+            </label>
+        </div>
+    </div>
+</div>

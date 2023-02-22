@@ -248,11 +248,17 @@ def login( request ):
     """ Displays form offering shib & non-shib logins.
         Called by click on header login link. """
     log.debug( '\n\nstarting login()' )
+    # context = {
+    #     'login_then_citations_url': '%s?next=%s' % ( reverse('shib_login_url'), reverse('edit_citation_url') ),
+    #     'user_pass_handler_url': reverse('user_pass_handler_url')
+    # }
     context = {
-        'login_then_citations_url': '%s?next=%s' % ( reverse('shib_login_url'), reverse('edit_citation_url') ),
+        'login_then_citations_url': '%s?next=%s' % ( reverse('shib_login_url'), reverse('redesign_citations_url') ),
         'user_pass_handler_url': reverse('user_pass_handler_url')
     }
+    log.debug( f'initial default context, ``{pprint.pformat(context)}``' )
     if request.GET.get('format', '') == 'json':
+        log.debug( f'json-context, ``{pprint.pformat(context)}``' )
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
         pre_entered_username = request.session.get( 'manual_login_username', None )
@@ -263,7 +269,7 @@ def login( request ):
             context['manual_login_password'] = request.session.get( 'manual_login_password', None )
         context['manual_login_error'] = request.session.get( 'manual_login_error', None )
         context['LOGIN_PROBLEM_EMAIL'] = settings_app.LOGIN_PROBLEM_EMAIL
-        log.debug( f'context, ``{pprint.pformat(context)}``' )
+        log.debug( f'non-json-context, ``{pprint.pformat(context)}``' )
         resp = render( request, 'disa_app_templates/login_form.html', context )
     return resp
 
@@ -319,29 +325,30 @@ def user_pass_handler( request ):
 # editor urls
 # ===========================
 
+## TODO: 2023-Feb-16 -- many if not all editor url functions may be able to be deleted
 
-@shib_login
-def edit_citation( request, cite_id=None ):
-    """ Url: 'editor/documents/<cite_id>/' -- 'edit_citation_url' """
-    log.debug( '\n\nstarting edit_citation()' )
-    if cite_id:
-        log.debug( f'will hit citation-manager with cite_id, ```{cite_id}```' )
-        context: dict = view_edit_citation_manager.query_data( cite_id )
-        if context == None:
-            return HttpResponseNotFound( '404 / Not Found' )
-    else:
-        log.debug( 'will hit citation-manager with no cite_id' )
-        user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
-        context: dict = view_edit_citation_manager.manage_create( user_id )
-    if request.user.is_authenticated:
-        context['user_is_authenticated'] = True
-        context['user_first_name'] = request.user.first_name
-        context['can_delete_doc'] = request.user.profile.can_delete_doc
-    if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    else:
-        resp = render( request, 'disa_app_templates/document_edit.html', context )
-    return resp
+# @shib_login  # no longer needed; will delete
+# def edit_citation( request, cite_id=None ):
+#     """ Url: 'editor/documents/<cite_id>/' -- 'edit_citation_url' """
+#     log.debug( '\n\nstarting edit_citation()' )
+#     if cite_id:
+#         log.debug( f'will hit citation-manager with cite_id, ```{cite_id}```' )
+#         context: dict = view_edit_citation_manager.query_data( cite_id )
+#         if context == None:
+#             return HttpResponseNotFound( '404 / Not Found' )
+#     else:
+#         log.debug( 'will hit citation-manager with no cite_id' )
+#         user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+#         context: dict = view_edit_citation_manager.manage_create( user_id )
+#     if request.user.is_authenticated:
+#         context['user_is_authenticated'] = True
+#         context['user_first_name'] = request.user.first_name
+#         context['can_delete_doc'] = request.user.profile.can_delete_doc
+#     if request.GET.get('format', '') == 'json':
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         resp = render( request, 'disa_app_templates/document_edit.html', context )
+#     return resp
 
 
 @shib_login

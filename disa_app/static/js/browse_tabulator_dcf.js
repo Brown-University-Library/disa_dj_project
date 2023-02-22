@@ -50,18 +50,19 @@ function getTestFunction({ruleType, ...ruleArguments}) {
   }
 }
 
-function getFootnoteHtmlElem(resource) {
+/*function getFootnoteHtmlElem(resource) {
   const footnoteElem = document.createElement('span');
-  footnoteElem.classList.add('cf-footnote');
+  footnoteElem.classList.add('cf-footnote', 'badge', 'rounded-pill', 'text-bg-primary');
   footnoteElem.innerText = resource.id;
-  footnoteElem.onmouseover = () => {
-    document.getElementById(`dcf-resource-${resource.id}`).classList.add('highlight');
+  footnoteElem.setAttribute('id',resource.id);
+  /* footnoteElem.onmouseover = () => {
+    //document.getElementById(`dcf-resource-${resource.id}`).classList.add('highlight');
   }
   footnoteElem.onmouseleave = () => {
-    document.getElementById(`dcf-resource-${resource.id}`).classList.remove('highlight');
+    //document.getElementById(`dcf-resource-${resource.id}`).classList.remove('highlight');
   }
   return footnoteElem;
-}
+}*/
 
 function getDcfUpdateHandler(searchState, dcfContentElem, table) {
 
@@ -86,14 +87,13 @@ function getDcfUpdateHandler(searchState, dcfContentElem, table) {
 
     // START TEMP
     if (rule.searchRule.ruleType === 'init') {
-      console.log('EEEEEEEE');
-      console.log({
+      /*console.log({
         type: rule.searchRule.ruleType,
         filterPasses: filterPassesFunction,
         entryPasses: entryPassesFunction,
         resources: getDcfResources(rule.resourceSelector),
         resourceSelector: rule.resourceSelector
-      });
+      });*/
     } // END TEMP
     return {
       type: rule.searchRule.ruleType,
@@ -138,7 +138,8 @@ function getDcfUpdateHandler(searchState, dcfContentElem, table) {
         rules.filter(rule => rule.entryPasses(entry)) // 1
             .reduce((resources, rule) => resources.concat(rule.resources), []) // 2
             .filter(filterForUniques) // 3
-            .map(r => { console.log('!!', r); return r })
+            .map(r => { //console.log('!!', r);
+              return r })
             .map(resource => getFootnoteHtmlElem(resource)) // 4
             .forEach(
               entryFootnoteElem => entryFootnoteContainerElem.appendChild(entryFootnoteElem)
