@@ -9,15 +9,15 @@
                 {% if user_is_authenticated %}
                 <br />
                 <div class="btn-group" role="group" id="modal-edit-button-group">
-                    <a type="button" class="btn btn-primary" id="referent-edit-link"
+                    <a role="button" class="btn btn-primary" id="referent-edit-link"
                        title="Edit the data for this person">
                         Edit person
                     </a>
-                    <a type="button" class="btn btn-primary" id="record-edit-link"
+                    <a role="button" class="btn btn-primary" id="record-edit-link"
                        title="Edit the data for the record which contains a reference to this person">
                         Edit record
                     </a>
-                    <a type="button" class="btn btn-primary" id="source-edit-link"
+                    <a role="button" class="btn btn-primary" id="source-edit-link"
                        title="Edit the bibliographic entry for the document that is the source for this information">
                         Edit source
                     </a>
@@ -32,10 +32,8 @@
                     </div>
                     <div class="card-body">
                         <p class="card-text" id="details-transcription"></p>
-                        <a href="" id="item-facsimile" target="_blank"
-                            class="badge badge-secondary"
-                            title="Link to scanned image of this document. May require permission.">
-                          Document image
+                        <a href="" id="item-facsimile" target="_blank" role="button" class="btn btn-primary" title="Link to scanned image of this document. May require permission.">
+                          Document image <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         </a>
                     </div>
                 </div>
