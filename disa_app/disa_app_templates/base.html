@@ -20,7 +20,7 @@
 
 <body class="container-fluid">
     <header class="d-flex py-2 row  justify-content-between bg-primary">
-        <h1 class="col-md-4"><a href="/" class="link-light">Stolen Relations: <span>Recovering Stories of Indigenous Enslavement in the Americas</span></a></h1>
+        <h1 class="col-md-4"><a href="{% url 'info_url' %}" class="link-light">Stolen Relations: <span>Recovering Stories of Indigenous Enslavement in the Americas</span></a></h1>
         <form class="col-md-4 mx-2" role="search" class="" action="{% url 'search_results_url' %}" method="get">
             <label for="query" class="visually-hidden">Search</label>
             {% if search_query %}
