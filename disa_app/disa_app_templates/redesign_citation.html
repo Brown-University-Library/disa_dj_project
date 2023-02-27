@@ -48,7 +48,9 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
         </li>
         <!-- I hate the URL structure in this link, but until we put a real root in urls.py, I don't see an alternative. EY, 23 February 2023 -->
         <li class="nav-item" role="presentation">
-            <a href="http://{{ request.get_host }}/redesign_citations" class="nav-link" id="item-tab" role="tab" aria-controls="Change source" aria-selected="false">Change to another source
+            <!-- <a href="http://{{ request.get_host }}/redesign_citations" class="nav-link" id="item-tab" role="tab" aria-controls="Change source" aria-selected="false">Change to another source
+            </a> -->
+            <a href="{% url 'redesign_citations_url' %}" class="nav-link" id="item-tab" role="tab" aria-controls="Change source" aria-selected="false">Change to another source
             </a>
         </li>
     </ul>
