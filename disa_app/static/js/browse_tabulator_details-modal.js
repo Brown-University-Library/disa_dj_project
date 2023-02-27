@@ -109,7 +109,7 @@ function getShowDetailsFunction(sr) {
           r.description.charAt(0).toUpperCase() + r.description.slice(1),
           [ r.related_referent_info.related_referent_first_name,
             r.related_referent_info.related_referent_last_name
-          ].join(' ') + `&nbsp;<div class="badge badge-primary">id <span id="details-id">${r.related_referent_info.related_referent_db_id}</span></div>`
+          ].join(' ') + `&nbsp;<div class="badge text-bg-badge-primary">id <span id="details-id">${r.related_referent_info.related_referent_db_id}</span></div>`
         ])
       });
   
@@ -120,13 +120,13 @@ function getShowDetailsFunction(sr) {
   
       const docDetailsTable = [
         ['Record type', data.reference_data.reference_type],
-        ['Record ID', `<span class="badge badge-primary">${data.reference_data.reference_db_id}</span>`],
+        ['Record ID', `<span class="badge text-bg-primary">${data.reference_data.reference_db_id}</span>`],
         ['Record date', data.reference_data.date_display],
         ['Location of event described in the record', data.reference_data.all_locations],
         ['National context of record', data.reference_data.national_context],
         ['Record appears in document with title', `<cite>${ uncleanString(data.citation_data.display)}</cite>`],
         ['Source type', data.citation_data.citation_type],
-        ['Source ID', `<span class="badge badge-primary">${data.citation_data.citation_db_id}`]
+        ['Source ID', `<span class="badge text-bg-primary">${data.citation_data.citation_db_id}`]
       ];
   
       docDetailsTable.filter(x => x[1])
