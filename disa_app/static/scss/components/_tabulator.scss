@@ -30,7 +30,8 @@
   box-shadow: $box-shadow;
   .tabulator-edit-select-list-item {
     padding: 0.25rem 0.5rem;
-    &:hover {
+    &:hover,
+    &.active {
       background-color: $info;
     }
   }
