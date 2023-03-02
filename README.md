@@ -26,11 +26,12 @@ on this page...
 
 -----
 
-### Installation...
+### Installation
 
 (Assumes [Docker](https://www.docker.com) is installed and running.)
 
 - Create a local "stuff" directory (name it anything) -- and from your terminal, cd into it (one-time step)
+
 
 From the terminal, run:
 
@@ -46,7 +47,7 @@ The webapp should be running; from a browser, go to `http://127.0.0.1:8000/versi
 
 ---
 
-### Typical usage...
+### Typical usage
 
 - `cd <SOME_PATH>/disa_dj_project`<br />_Sets the current directory to disa\_dj\_project_
 
