@@ -7,7 +7,7 @@ from disa_app import settings_app
 from disa_app import models_sqlalchemy as models_alch
 from disa_app.lib import person_common
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseNotFound, HttpResponseRedirect
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -224,7 +224,8 @@ def manage_reference_delete( rfrnc_id: str ) -> dict:  # or, much less likely, H
                 cite = existing.citation  # why did I get this?
                 session.delete( existing )
                 session.commit()
-                redirect_url = reverse( 'edit_citation_url', kwargs={'cite_id': cite.id} )
+                # redirect_url = reverse( 'edit_citation_url', kwargs={'cite_id': cite.id} )
+                redirect_url = reverse( 'redesign_citation_url', kwargs={'cite_id': cite.id} )
                 context =  { 'redirect': redirect_url }
             else:
                 context = { 'err': '404 / Not Found' }

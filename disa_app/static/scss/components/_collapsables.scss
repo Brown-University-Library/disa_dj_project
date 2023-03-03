@@ -1,3 +1,4 @@
-details {
-  border: solid 1px $primary;
+.clickable:hover {
+  cursor: pointer;
+  color: $primary;
 }

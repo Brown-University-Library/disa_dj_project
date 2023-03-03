@@ -8,7 +8,7 @@ from disa_app.lib import view_search_results_manager
 from disa_app.models import UserProfile
 from django.conf import settings as project_settings
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import Client
 from django.test import TestCase  # from django.test import SimpleTestCase as TestCase    ## TestCase requires db, so if you're not using a db, and want tests, try this
 from django.test.utils import override_settings
@@ -44,14 +44,18 @@ class Client_Misc_Test( TestCase ):
         """ Checks '/root_url' (with no slash). """
         response = self.client.get( '' )  # project root part of url is assumed
         self.assertEqual( 302, response.status_code )  # permanent redirect
-        redirect_url = response._headers['location'][1]
+        # redirect_url = response._headers['location'][1]
+        redirect_url = response.headers['location']  # type: ignore
         self.assertEqual(  '/info/', redirect_url )
 
     def test_root_url_slash(self):
         """ Checks '/root_url/' (with slash). """
         response = self.client.get( '/' )  # project root part of url is assumed
         self.assertEqual( 302, response.status_code )  # permanent redirect
-        redirect_url = response._headers['location'][1]
+        # redirect_url = response._headers['location'][1]
+        # log.debug( f'response, ``{response}``' )
+        # log.debug( f'response.__dict__, ``{pprint.pformat(response.__dict__)}``' )
+        redirect_url = response.headers['location']  # type: ignore
         self.assertEqual(  '/info/', redirect_url )
 
     @override_settings(DEBUG=True)
@@ -93,7 +97,7 @@ class Client_Misc_Test( TestCase ):
 class ClientDocDataTest( TestCase ):
     """ Checks document-data url responses. """
 
-    ## does not pass ##
+    ## does not pass -- 2023-Feb-16 this may be worth keeping and getting running. ##
     # def test_doc_get_not_logged_in(self):
     #     """ Checks GET. """
     #     response = self.client.get( '/data/documents/1/' )
@@ -116,24 +120,15 @@ class ClientDocDataTest( TestCase ):
         log.debug( f'response.__dict__, ``{response.__dict__}``' )
         self.assertEqual( 200, response.status_code )  # not yet working -- should be 200, but redirects to login
 
-    def test_good_doc_get_logged_in(self):
-        """ Checks that logged-in docoumet-GET, for existing citation, returns response. """
-        usr = User.objects.create( username='test_user' )
-        usr.save()  # creates a UserProfile object
-        client = Client()
-        client.force_login( usr )  # does not get past shib-decorator -- request.user.is_authenticated stays False; added host-check to shib-decorator
-        response = self.client.get( '/editor/documents/1/' )
-        self.assertEqual( 200, response.status_code )  # not yet working -- should be 200, but redirects to login
-
-    def test_good_doc_get_logged_in(self):
-        """ Checks that logged-in docoumet-GET, for existing citation, returns response. """
-        usr = User.objects.create( username='test_user' )
-        usr.save()  # creates a UserProfile object
-        client = Client()
-        client.force_login( usr )  # does not get past shib-decorator -- request.user.is_authenticated stays False; added host-check to shib-decorator
-        response = self.client.get( '/editor/documents/1/' )
-        self.assertEqual( 200, response.status_code )
-        self.assertTrue( b'Document...' in response.content )
+    # def test_good_doc_get_logged_in(self):  # no longer needed; will delete
+    #     """ Checks that logged-in docoumet-GET, for existing citation, returns response. """
+    #     usr = User.objects.create( username='test_user' )
+    #     usr.save()  # creates a UserProfile object
+    #     client = Client()
+    #     client.force_login( usr )  # does not get past shib-decorator -- request.user.is_authenticated stays False; added host-check to shib-decorator
+    #     response = self.client.get( '/editor/documents/1/' )
+    #     self.assertEqual( 200, response.status_code )
+    #     self.assertTrue( b'Document...' in response.content )
 
     def test_not_found_doc_get_logged_in(self):
         """ Checks that logged-in docoumet-GET, for non-existent citation, returns 404. """

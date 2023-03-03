@@ -7,7 +7,7 @@ from disa_app import models_sqlalchemy as models_alch
 from disa_app import settings_app
 from disa_app.lib import person_common
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest, HttpResponseServerError
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker

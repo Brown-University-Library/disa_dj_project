@@ -8,7 +8,7 @@ from disa_app.lib import view_search_results_manager
 from disa_app.models import UserProfile
 from django.conf import settings as project_settings
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import Client
 from django.test import TestCase
 from django.test.utils import override_settings
@@ -319,12 +319,15 @@ class Record_Test( TestCase ):
             Note that, for no good reason, this root url is _different_ from the normal `http://127.0.0.1:8000/data/records/abcd/` """
         ## create record
         self.create_new_record()
+        log.debug( 'created new record' )
         ## DELETE
         self.delete_new_record()
+        log.debug( 'deleted new record' )
         ## tests
         self.assertEqual( 200, self.delete_resp_statuscode )
         self.assertEqual(
-            {'redirect': '/editor/documents/768/'},
+            # {'redirect': '/editor/documents/768/'},
+            {'redirect': '/redesign_citations/768/'},
             self.delete_resp_dct )  # for now, we're hard-coding new adds to citation-document #768
 
     ## end Record_Test()

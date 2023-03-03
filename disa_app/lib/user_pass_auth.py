@@ -4,7 +4,7 @@ from disa_app.models import UserProfile
 # from django.contrib.auth import get_backends, login
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 
 
@@ -17,7 +17,7 @@ def run_authentication( request ):
         Called by views.user_pass_handler() """
     log.debug( f'initial request.session.__dict__, ``{pprint.pformat(request.session.__dict__)}``' )
     return_val = False
-    log.debug( 'request.POST, `%s`' % pprint.pformat(request.POST) )
+    log.debug( 'request.POST, `%s`' % pprint.pformat(request.POST.keys()) )  # do _not_ log full post; will log passwords
     if sorted( request.POST.keys() ) == [ 'csrfmiddlewaretoken', 'manual_login_password', 'manual_login_username' ]:
         log.debug( 'keys good' )
         received_username = request.POST['manual_login_username']

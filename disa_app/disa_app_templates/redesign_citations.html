@@ -8,6 +8,7 @@
         Info
     </button></li>
 {% endblock nav_options %}
+
 {% block content %}
 <!-- insert offcanvas info -->
 {% include "disa_app_templates/modals/info_aside.html" %}
@@ -136,7 +137,7 @@ async function createNewSource() {
     if (response.ok) {
 
         const dataJSON = await response.json(),
-            sourceIdMatch = dataJSON.redirect.match('/editor/documents/([^/]+)/');
+            sourceIdMatch = dataJSON.redirect.match('/redesign_citations/([^/]+)/');
 
         if (sourceIdMatch && sourceIdMatch[1]) {
             window.location.href = `${sourceIdMatch[1]}/`;
@@ -297,13 +298,15 @@ function initializeTabulator(tableSelector, ajaxURL) {
         ajaxURL,
         ajaxResponse,
         columns,
-        dataLoaded: initTableFilterFields,
+        //dataProcessed: initTableFilterFields,
         pagination: true,
         paginationSize: 20,
         paginationSizeSelector: [20, 50, 100],
     };
 
+
     const table = new Tabulator(tableSelector, tabulatorSettings);
+    table.on("dataProcessed", initTableFilterFields);
 
     return table;
 }
@@ -318,7 +321,6 @@ function initTableFilterFields() {
         );
 
     function setAllFilters() {
-        //console.log('yes');
         table.setFilter([
             { field: 'title', type: 'like', value: titleFilterElem.value },
             { field: 'id', type: 'like', value: idFilterElem.value },

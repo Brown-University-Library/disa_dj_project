@@ -8,7 +8,7 @@ from disa_app import settings_app
 from disa_app.lib import person_common
 from disa_app.models import MarkedForDeletion
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -324,7 +324,8 @@ def manage_post( user_id, payload ):
         session.add(cite)  # I assume this simply updates the existing citation in mysql
         session.commit()
 
-        context = { 'redirect': reverse( 'edit_citation_url', kwargs={'cite_id': cite.id} ) }
+        # context = { 'redirect': reverse( 'edit_citation_url', kwargs={'cite_id': cite.id} ) }
+        context = { 'redirect': reverse( 'redesign_citation_url', kwargs={'cite_id': cite.id} ) }
 
     except:
         log.exception( 'problem on api POST; traceback follows; processing will continue.' )
