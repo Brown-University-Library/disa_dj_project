@@ -74,7 +74,7 @@ export const LOCAL_SETTINGS = {
     },
     // Newspaper Article
     39: {
-      required: ["date", "edition", "place", "title"],
+      required: ["date", "edition", "place", "publicationTitle", "title"],
       optional: [
         "abstractNote",
         "archive",
