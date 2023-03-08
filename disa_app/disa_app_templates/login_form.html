@@ -1,7 +1,7 @@
 {% extends "disa_app_templates/base.html" %}
 {% load static %}
 {% block content %}
-<h1>Welcome to editing Stole Relations!</h1>
+<h1>Welcome to editing Stolen Relations!</h1>
 <div class="row">
     <form id="shib_form" action="{{ login_then_citations_url }}" method="GET" class="col">
         <h2>Login via Brown-Shibboleth...</h3>
@@ -19,8 +19,8 @@
         <button id="manual_login_button" type="submit" value="Log in" class="btn btn-primary">Log in</button>
         {% if manual_login_error %}
         <div class="alert alert-danger">
-            <p><i class="fa-solid fa-circle-exclamation"></i> Problem: based on your login, it appears you're not authorized to edit this database.</p>
-            <p>If you believe you should be able to login to this system, please contact someone on the <a href="{{ contact_url }}">Stolen Relations team</a> for help.<!--{{ LOGIN_PROBLEM_EMAIL|urlize }} for help.--></p>
+            <p><i class="fa-solid fa-circle-exclamation"></i> Based on the information you've provided, it appears you're not authorized to edit this database. Please double-check the username and password you've entered.</p>
+            <p>If you believe you should be able to login to this system, please contact {{ LOGIN_PROBLEM_EMAIL|urlize }} for help.</p>
         </div>
         {% endif %}
     </form>

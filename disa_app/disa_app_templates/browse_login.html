@@ -26,8 +26,8 @@
         <button class="btn btn-primary" id="browse_login_button" type="submit">Log in</button>
         {% if browse_login_error %}
         <div class="alert alert-danger">
-            <p><i class="fa-solid fa-circle-exclamation"></i> Based on the information you've provided, it appears you're not authorized to browse this database.</p>
-            <p>If you believe you should be able to login to this system, please contact someone on the <a href="{{ contact_url }}">Stolen Relations team</a> for help. </p>
+            <p><i class="fa-solid fa-circle-exclamation"></i> Based on the information you've provided, it appears you're not authorized to browse this database. Please double-check the username and password you've entered.</p>
+            <p>If you believe you should be able to login to this system, please contact the <a href="{{ contact_url }}">Stolen Relations team</a> for help.</p>
         </div>
         {% endif %}
     </form>
