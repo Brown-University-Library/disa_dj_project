@@ -65,7 +65,7 @@ function main() {
     table.setHeaderFilterValue(filterId, value);
   }
   // NOTE Above replaces those below - can I erase these??
-  window.populateTribeFilter = function(tribeName) {
+  /* window.populateTribeFilter = function(tribeName) {
     table.setHeaderFilterValue('all_tribes', tribeName);
   }
 
@@ -76,11 +76,20 @@ function main() {
   window.populateLocationFilter = function(locationSearchText) {
     table.setHeaderFilterValue('reference_data.all_locations', locationSearchText);
   }
-
+*/
   // Show details as a global function
   // (referenced in generated markup)
 
   window.showDetails = showDetailsFunction;
+
+  // reset filters with button, why is table.clearFilter not a function???
+/*
+let resetFilters = document.getElementById('reset-filters');
+ resetFilters.addEventListener("click", function(){
+    table.clearFilter();
+  });
+  */
+
 }
 
 
