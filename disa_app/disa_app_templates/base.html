@@ -21,7 +21,6 @@
 <body class="container-fluid {% if user.is_authenticated %}user-editor {% endif %}">
     <header class="d-flex py-2 row  justify-content-between bg-primary">
         <h1 class="col-md-4"><a href="{% url 'info_url' %}" class="link-light">Stolen Relations: <span>Recovering Stories of Indigenous Enslavement in the Americas</span></a></h1>
-        {% if user_is_authenticated %}
         <form class="col-md-4 mx-2" role="search" class="" action="{% url 'search_results_url' %}" method="get">
             <label for="query" class="visually-hidden">Search</label>
             {% if search_query %}
@@ -30,7 +29,6 @@
             <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" id="query" name="query">
             {% endif %}
         </form>
-        {% endif %}
     </header>
     <nav class="navbar navbar-expand-sm navbar-dark text-light bg-primary d-flex row">
         <ul class="navbar-nav justify-content-center">
