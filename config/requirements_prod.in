@@ -1,5 +1,5 @@
 ## Some packages are downgraded for python 3.6x compatibility.
-Django==3.2.16
+Django==3.2.18
 git+https://github.com/birkin/shellvars-py.git
 pip-tools==6.4.0
 pymysql==1.0.2
