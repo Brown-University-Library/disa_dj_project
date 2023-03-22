@@ -18,7 +18,7 @@
     {% endblock header_other %}
 </head>
 
-<body class="container-fluid">
+<body class="container-fluid {% if user.is_authenticated %}user-editor {% endif %}">
     <header class="d-flex py-2 row  justify-content-between bg-primary">
         <h1 class="col-md-4"><a href="{% url 'info_url' %}" class="link-light">Stolen Relations: <span>Recovering Stories of Indigenous Enslavement in the Americas</span></a></h1>
         <form class="col-md-4 mx-2" role="search" class="" action="{% url 'search_results_url' %}" method="get">
@@ -32,9 +32,9 @@
     </header>
     <nav class="navbar navbar-expand-sm navbar-dark text-light bg-primary d-flex row">
         <ul class="navbar-nav justify-content-center">
-            {% if user_is_authenticated %}
             {% block nav_options %}
             {% endblock nav_options %}
+            {% if user_is_authenticated %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false"><i class="fa-solid fa-rectangle-list"></i> Browse</a>
             </li>
@@ -48,15 +48,11 @@
                 <i class="fa-solid fa-circle-user"></i> Hi, {{ user_first_name }}!
             </li>
             <li class="nav-item">
-                {% if logout_next %}
-                <a class="nav-link btn btn-outline-light" href="{% url 'logout_url' %}?next={{ logout_next }}">Logout</a>
-                {% else %}
-                <a class="nav-link btn btn-outline-light" href="{% url 'logout_url' %}?next={% url 'login_url' %}">Logout</a>
-                {% endif %}
+                <a class="nav-link btn btn-outline-info" href="{% url 'logout_url' %}?next={% url 'login_url' %}">Logout</a>
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link btn btn-outline-light" href="{% url 'login_url' %}"><i class="fa-solid fa-circle-user"></i> Login</a>
+                <a class="nav-link btn btn-outline-info mx-2" href="{% url 'login_url' %}"><i class="fa-solid fa-circle-user"></i> Editor login</a>
             </li>
             {% endif %}
         </ul>

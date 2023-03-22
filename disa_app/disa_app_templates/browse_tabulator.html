@@ -1,60 +1,53 @@
 {% extends "disa_app_templates/base.html" %}
 {% load static %}
-
 {% block header_other %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@5/dist/css/tabulator.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@5/dist/css/tabulator_bootstrap5.min.css">
 <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5/dist/js/tabulator.min.js"></script>
+<!-- note to future selves: the DCF currently *onlly* works if we link the 4.9.3 library locally, because Reasons -->
 <script src="{% static 'js/tabulator.js' %}"></script>
 <script src="{% static 'js/lunr.min.js' %}"></script>
 {% endblock header_other %}
-
 {% block nav_options %}
+{{ logout_next }}
+{% if not user.is_authenticated %}<li class="nav-item"><a class="nav-link btn btn-outline-info" href="{% url 'logout_url' %}?next={{ logout_next }}">Logout</a>
+</li>
+{% endif %}
 {% endblock nav_options %}
-
 {% block content %}
-
 <!-- language warning modal, appears immediately on load -->
 {% include "disa_app_templates/modals/warn_language.html" %}
-
 <!-- Details modal -->
 {% include "disa_app_templates/modals/record_details.html" %}
-
 <!-- "Loading ..." modal -->
-
-<div class="modal fade" id="loadingModal" data-backdrop="static" tabindex="-1" role="dialog" 
-     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="loadingModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body" id="loadingModalMessage">
-                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                <i class="fa-solid fa-spinner fa-spin-pulse"></i>
                 Loading...
             </div>
         </div>
     </div>
 </div>
 <!-- Main content container: search and results -->
-
 <section class="" id="main-content">
     <div class="row">
-        <p class="col-md-6">
-            <em>Welcome, community collaborators!</em> This is a
-            preliminary, experimental search portal of the
-            <a href="http://indigenousslavery.org">Stolen Relations: Recovering Stories of Indigenous Enslavement in the Americas</a>, which
-            allows you to search 
-            <span id="ref-count" class="badge bg-primary"></span>
-            references to individuals drawn from
-            <span id="item-count" class="badge bg-primary"></span>
-            archival records regarding the enslavement of indigenous
-            populations in the Americas, from the 17<sup>th</sup> to the
-            19<sup>th</sup> centuries.
-        </p>
+        <div class="col-md-6">
+            <p>
+            {% if user.is_authenticated %}
+            {% else %}
+            <em>Welcome, community collaborators!</em>
+            {% endif %}
+            This is a preliminary, experimental search portal of the <a href="http://indigenousslavery.org">Stolen Relations: Recovering Stories of Indigenous Enslavement in the Americas</a>, which allows you to search <span id="ref-count" class="badge bg-primary"></span> references to individuals drawn from <span id="item-count" class="badge bg-primary"></span> archival records regarding the enslavement of indigenous populations in the Americas, from the 17<sup>th</sup> to the 19<sup>th</sup> centuries.
+            </p>
+        </div>
         <div class="col-md-6">
             <p>
                 As you explore, please understand that <em>this
-                database is currently under development and may
-                contain errors, and will continuously be
-                updated</em>.
+                    database is currently under development and may
+                    contain errors, and will continuously be
+                    updated</em>.
             </p>
             <p>
                 We welcome any and all feedback, corrections,
@@ -71,18 +64,12 @@
                     <figcaption class="flex-grow-1 figure-caption"><a href="https://localcontexts.org/label/tk-non-commercial/">Non-Commercial</a></figcaption>
                 </figure>
             </div>
-
         </div>
     </div>
-
     <!-- 2-column layout: query and search results on left, decolonizing frame on right -->
-
     <div class="top-search-div row">
-
         <div class="col-md-9" id="search-and-results">
-
             <!-- Search query area -->
-
             <div class="top-search-div row">
                 <div class="col-6">
                     <label for="general-search">
@@ -104,12 +91,11 @@
                         <button class="btn btn-info" id="download-data" title="Download the results as a CSV file">
                             Download results
                         </button>
+                        <!--<button id="reset-filters" class="btn btn-secondary mx-1">Reset Filters</button>-->
                     </p>
                 </div>
             </div>
-
             <!-- Container for data table (tabulator library output) -->
-
             <div id="data-display" class="table-striped biographical">
             </div>
         </div>
@@ -120,9 +106,7 @@
                     <div class="card-header">
                         <span class="dcf-number d-none badge bg-primary text-light"></span>
                         <span class="dcf-resource-title"></span>
-                        <a class="dcf-resource-link card-link"
-                            href="#" target="_BLANK"
-                            title=""><i class="fa-solid fa-asterisk"></i></a>
+                        <a class="dcf-resource-link card-link" href="#" target="_BLANK" title=""><i class="fa-solid fa-asterisk"></i></a>
                     </div>
                     <div class="card-body">
                         <!--<img class="dcf-featured-image" src="" alt="" />-->
@@ -134,18 +118,16 @@
         </div>
     </div>
 </section>
-
 {% endblock content %}
 {% block footer %}
 {% include "disa_app_templates/acknowledgements.html" %}
- {% endblock footer %}
-
+{% endblock footer %}
 {% block page_specific_js%}
 <!-- Main setup routine -->
 <script type="module" defer src="{% static 'js/browse_tabulator.js' %}"></script>
 <!-- trigger warningModal onload -->
 <script>
-var warningModal= new bootstrap.Modal('#warningModal').show();
-</script>
+var warningModal = new bootstrap.Modal('#warningModal').show();
 
+</script>
 {% endblock page_specific_js %}

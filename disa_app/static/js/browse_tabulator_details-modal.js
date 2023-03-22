@@ -109,7 +109,7 @@ function getShowDetailsFunction(sr) {
           r.description.charAt(0).toUpperCase() + r.description.slice(1),
           [ r.related_referent_info.related_referent_first_name,
             r.related_referent_info.related_referent_last_name
-          ].join(' ') + `&nbsp;<div class="badge text-bg-badge-primary">id <span id="details-id">${r.related_referent_info.related_referent_db_id}</span></div>`
+          ].join(' ') + `&nbsp;<div class="badge text-bg-primary">id <span id="details-id">${r.related_referent_info.related_referent_db_id}</span></div>`
         ])
       });
   

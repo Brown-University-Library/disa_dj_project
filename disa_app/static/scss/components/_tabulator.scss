@@ -1,38 +1,51 @@
 // general styles
-.tabulator {
-  &#data-display {
+.tabulator#data-display {
     /* stylelint-disable-next-line selector-class-pattern -- 3rd-party-defined class (tabulator) */
     .tabulator-tableHolder {
-      overflow: scroll;
+        overflow: scroll;
     }
     .tabulator-footer {
-      position: absolute;
-      text-align: center;
-      width: 100%;
+        position: absolute;
+        text-align: center;
+        width: 100%;
     }
-  }
+    &.biographical {
+        .tabulator-row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    }
+    // filters!
+    .tabulator-col {
+        &.tabulator-sortable {
+            &[aria-sort="desc"] .tabulator-arrow {
+              border-bottom-color: $success !important;
+            }
+            &[aria-sort="asc"] .tabulator-arrow {
+                border-top: 6px solid $success;
+                border-bottom-color: transparent;
+            }
+        }
+        // highlight active filters
+        input:not(:placeholder-shown) {
+            background-color: rgba($success, 0.3);
+            border-color: $success;
+        }
+
+    }
 }
 
-#data-display {
-  &.biographical {
-    .tabulator-row {
-      display: flex;
-      flex-wrap: wrap;
-    }
-  }
-}
-
-// facet dropdowns
+// facet dropdowns, outside the .tabulator table
 .tabulator-edit-select-list {
-  position: absolute;
-  border: solid 1px rgba($info, 0.5);
-  border-width: 0 1px 1px 1px;
-  box-shadow: $box-shadow;
-  .tabulator-edit-select-list-item {
-    padding: 0.25rem 0.5rem;
-    &:hover,
-    &.active {
-      background-color: $info;
+    position: absolute;
+    border: solid 1px rgba($info, 0.5);
+    border-width: 0 1px 1px 1px;
+    box-shadow: $box-shadow;
+    .tabulator-edit-select-list-item {
+        padding: 0.25rem 0.5rem;
+        &:hover,
+        &.active {
+            background-color: $info;
+        }
     }
-  }
 }
