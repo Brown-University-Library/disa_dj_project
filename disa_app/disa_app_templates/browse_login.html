@@ -1,33 +1,19 @@
 {% extends "disa_app_templates/base.html" %}
 {% load static %}
-{# in <head> #}
-
-
-{% block header_other %}
-
-    <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
-
-{% endblock header_other %}
-
-{% block nav_options %}
-{% endblock nav_options %}
-
-{# in <body> #}
-
 {% block content %}
-
-    <form id="non_shib_form" action="{{ browse_url }}" method="POST">{% csrf_token %}
-        <h1>Welcome community-partner!</h1>
-        <h2>Please login with your username and password</h2>
-        <label for="username_field_input">Username:</label>
-        <input id="username_field_input" type="text" name="browse_login_username" value="{{ browse_login_username }}">
-        <label for="password_field_input">Password:</label>
-        <input id="password_field_input" type="password" name="browse_login_password" value="{{ browse_login_password }}">
-        {% if browse_login_error %}
-            <p>Problem: based on your login, it appears you're not authorized to use this database-browser.</p>
-            <p>If you believe you should be able to login to this system, please contact someone at this <a href="{{ contact_url }}">{{ contact_url }}</a> web-page for assistance.</p>
-        {% endif %}
-        <button class="btn" id="browse_login_button" type="submit">Log in</button>
-    </form>
-
+<form id="non_shib_form" action="{{ browse_url }}" method="POST">{% csrf_token %}
+    <h1>Welcome!</h1>
+    <h2>Please login with your username and password</h2>
+    <div class="mb-3"><label for="username_field_input" class="form-label">Username:</label>
+        <input id="username_field_input" type="text" name="browse_login_username" value="{{ browse_login_username }}"></div>
+    <div class="mb-3"><label for="password_field_input" class="form-label">Password:</label>
+        <input id="password_field_input" type="password" name="browse_login_password" value="{{ browse_login_password }}"></div>
+    <button class="btn btn-primary" id="browse_login_button" type="submit" value="Log in">Log in</button>
+    {% if browse_login_error %}
+    <div class="alert alert-danger">
+        <p><i class="fa-solid fa-circle-exclamation"></i> Based on the information you've provided, it appears you're not authorized to browse this database. Please double-check the username and password you've entered.</p>
+        <p>If you believe you should be able to login to this system, please contact the <a href="{{ contact_url }}">Stolen Relations team</a> for help.</p>
+    </div>
+    {% endif %}
+</form>
 {% endblock content %}
