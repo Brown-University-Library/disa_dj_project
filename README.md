@@ -78,7 +78,7 @@ which maps to the function definition in [disa_dj_project/disa_app/views.py](htt
 def edit_citation( request, cite_id=None ):
 ```
 
-## (disa_dj_project/disa_app/admin.py)[https://github.com/Brown-University-Library/disa_dj_project/blob/main/disa_app/admin.py]
+## [disa_dj_project/disa_app/admin.py](https://github.com/Brown-University-Library/disa_dj_project/blob/main/disa_app/admin.py)
 
 Seems to extend administrative functions, and handles the "marked for deletion" system. Contains 3 class definitions:
 
@@ -90,7 +90,7 @@ Seems to extend administrative functions, and handles the "marked for deletion" 
 
 The templates for the public pages. These files are referenced in `disa_app/views.py`.
 
-# [disa_dj_project/disa_app/lib](https://github.com/Brown-University-Library/disa_dj_project/tree/main/disa_app/lib)
+## [disa_dj_project/disa_app/lib](https://github.com/Brown-University-Library/disa_dj_project/tree/main/disa_app/lib)
 
 A bunch of DISA-specific python code. This seems to be the main code area. 
 
