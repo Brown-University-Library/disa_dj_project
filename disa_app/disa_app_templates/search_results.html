@@ -1,147 +1,154 @@
 {% extends "disa_app_templates/base.html" %}
 {% load static %}
-
 {% block content %}
+<div class="alert alert-info">
+    <p>You searched for <strong>{{ search_query}}</strong>. Search is not case-sensitive.</p>
+    <p>There are <span class="badge bg-primary">{{ people_results.count }}</span> results in the {{ people_results.fields_searched|join:', ' }} fields for <a href="#people_results">People</a>. There are <span class="badge bg-primary">{{ citation_results.count }}</span> results in the {{ citation_results.fields_searched|join:', ' }} fields in <a href="#citation_results">Citations</a>. There are <span class="badge bg-primary">{{ item_results.count }}</span> results in the {{ item_results.fields_searched|join:', ' }} fields for <a href="#item_results">Items</a>.</p>
+</div>
 <div id="search_results_id" class="search_results">
-    <h1 id="list_heading">Search Results</h1>
-    <div class="bul_pl_accordion-group">
-        <div class="people bul_pl_accordion-container">
-            <div class="bul_pl_accordion-toggle-container">
-                <a id="content_1_a_element" href="#content-1" class="bul_pl_accordion-toggle">more</a>
-            </div>
-            <div class="bul_pl_accordion-content" id="content-1">
-                <h2>People...</h2>
-                <p>(Count: {{ people_results.count }})</p>
-                <p>(Fields searched: {{ people_results.fields_searched|join:', ' }})</p>
-                <p>(Explanation: "enslavement-statuses" come from the `person` data-entry form; "relationship-roles" come from the `relationships` data-entry form.)</p>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th class="tbl_id">id</th>
-                            <th class="tbl_name">first-name</th>
-                            <th class="tbl_fixed">last-name</th>
-                            <th class="tbl_fixed">comments</th>
-                            <th class="tbl_fixed">enslavement-statuses</th>
-                            <th class="tbl_fixed">relationship-roles</th>
-                            <th class="tbl_fixed">tribes</th>
-                            <th class="tbl_view">link</th>
-                        </tr>
-                    </thead>
-                    <tbody id="people">
-                        {% for pers in people_results.people %}
-                        <tr>
-                            <td>{{ pers.id }}</td>
-                            <td>{{ pers.first_name }}</td>
-                            <td>{{ pers.last_name }}</td>
-                            <td>{{ pers.comments }}</td>
-                            <td>{{ pers.enslavements|join:', ' }}</td>
-                            <td>{{ pers.roles|join:', ' }}</td>
-                            <td>{{ pers.tribes|join:', ' }}</td>
-                            <td><a href="{% url 'person_url' pers.id  %}">view-person</a></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div> <!-- end of ```<div class="bul_pl_accordion-content" id="content-1">``` -->
-        </div> <!-- end of ```<div class="people bul_pl_accordion-container">``` -->
-        <hr />
-        <div class="citations bul_pl_accordion-container">
-            <div class="bul_pl_accordion-toggle-container">
-                <a id=content_2_a_element href="#content-2" class="bul_pl_accordion-toggle">more</a>
-            </div>
-            <div class="bul_pl_accordion-content" id="content-2">
-                <h2>Citations...</h2>
-                <p>(Count: {{ citation_results.count }})</p>
-                <p>(Fields searched: {{ citation_results.fields_searched|join:', ' }})</p>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th class="tbl_id">doc_id</th>
-                            <th class="tbl_fixed">display</th>
-                            <th class="tbl_fixed">comments</th>
-                            <th class="tbl_view">link</th>
-                        </tr>
-                    </thead>
-                    <tbody id="citation">
-                        {% for cite in citation_results.citations %}
-                        <tr>
-                            <td>{{ cite.id }}</td>
-                            <td>{{ cite.display }}</td>
-                            <td>{{ cite.comments }}</td>
-                            {% comment %} {# delete after 2022-Feb-22 (3-months) #}
-                            <td><a href="{% url 'edit_citation_url' cite.id  %}">view-document</a></td>
-                            {% endcomment %}
-                            <td><a href="{% url 'redesign_citation_url' cite.id  %}">view-document</a></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+    <h1>Search Results</h1>
+    <h2 id="people_results">People</h2>
+    <details>
+        <summary>
+            <p>There are {{ people_results.count }} results, searching in the <strong>{{ people_results.fields_searched|join:', ' }}</strong> fields.</p>
+        </summary>
+        <div class="row">
+            <p>(Explanation: "enslavement-statuses" come from the `person` data-entry form; "relationship-roles" come from the `relationships` data-entry form.)</p>
+            <table class="table table-striped">
+                <thead class="sticky-top table-light">
+                    <tr>
+                        <th class="tbl_id">id</th>
+                        <th class="tbl_name">first-name</th>
+                        <th class="tbl_fixed">last-name</th>
+                        <th class="tbl_fixed">comments</th>
+                        <th class="tbl_fixed">enslavement-statuses</th>
+                        <th class="tbl_fixed">relationship-roles</th>
+                        <th class="tbl_fixed">tribes</th>
+                        <th class="tbl_view">link</th>
+                    </tr>
+                </thead>
+                <tbody id="people">
+                    {% for pers in people_results.people %}
+                    <tr>
+                        <td>{{ pers.id }}</td>
+                        <td>{{ pers.first_name }}</td>
+                        <td>{{ pers.last_name }}</td>
+                        <td>{{ pers.comments }}</td>
+                        <td>{{ pers.enslavements|join:', ' }}</td>
+                        <td>{{ pers.roles|join:', ' }}</td>
+                        <td>{{ pers.tribes|join:', ' }}</td>
+                        <td><a href="{% url 'person_url' pers.id  %}">view-person</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-        <hr />
-        <div class="items bul_pl_accordion-container">
-            <div class="bul_pl_accordion-toggle-container">
-                <a id=content_3_a_element href="#content-3" class="bul_pl_accordion-toggle">more</a>
-            </div>
-            <div class="bul_pl_accordion-content" id="content-3">
-                <h2>Items...</h2>
-                <p>(Count: {{ item_results.count }})</p>
-                <p>(Fields searched: {{ item_results.fields_searched|join:', ' }})</p>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th class="tbl_id">reference_id</th>
-                            <th class="tbl_fixed">transcription</th>
-                            <th class="tbl_fixed">location</th>
-                            <th class="tbl_view">links</th>
-                        </tr>
-                    </thead>
-                    <tbody id="citation">
-                        {% for rfrnc in item_results.references %}
-                        <tr>
-                            <td>{{ rfrnc.id }}</td>
-                            <!-- <td class="transcription">{{ rfrnc.transcription|truncatewords:1000 }}</td> -->
-                            <td class="transcription">
-                                {% for segment in rfrnc.transcription %}
-                                <p class="transcription_excerpt">{{ segment }}</p>
+    </details>
+    <h2 id="citation_results">Citations</h2>
+    <details>
+        <summary>
+            <p>There are {{ citation_results.count }} results, searching in the <strong>{{ citation_results.fields_searched|join:', ' }}</strong> fields.</p>
+        </summary>
+        <div class="row">
+            <table class="table table-striped">
+                <thead class="sticky-top table-light">
+                    <tr>
+                        <th class="tbl_id">doc_id</th>
+                        <th class="tbl_fixed">display</th>
+                        <th class="tbl_fixed">comments</th>
+                        <th class="tbl_view">link</th>
+                    </tr>
+                </thead>
+                <tbody id="citation">
+                    {% for cite in citation_results.citations %}
+                    <tr>
+                        <td>{{ cite.id }}</td>
+                        <td>{{ cite.display }}</td>
+                        <td>{{ cite.comments }}</td>
+                        {% comment %} {# delete after 2022-Feb-22 (3-months) #}
+                        <td><a href="{% url 'edit_citation_url' cite.id  %}">view-document</a></td>
+                        {% endcomment %}
+                        <td><a href="{% url 'redesign_citation_url' cite.id  %}">view-document</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </details>
+    <h2 id="item_results">Items</h2>
+    <details>
+        <summary>
+            <p>There are {{ item_results.count }} results in the <strong>{{ item_results.fields_searched|join:', ' }}</strong> fields.</p>
+        </summary>
+        <div class="row">
+            <table class="table table-striped">
+                <thead class="sticky-top table-light">
+                    <tr>
+                        <th class="tbl_id">reference_id</th>
+                        <th class="tbl_fixed">transcription</th>
+                        <th class="tbl_fixed">location</th>
+                        <th class="tbl_view">links</th>
+                    </tr>
+                </thead>
+                <tbody id="citation">
+                    {% for rfrnc in item_results.references %}
+                    <tr>
+                        <td>{{ rfrnc.id }}</td>
+                        <!-- <td class="transcription">{{ rfrnc.transcription|truncatewords:1000 }}</td> -->
+                        <td class="transcription">
+                            {% for segment in rfrnc.transcription %}
+                            <p class="transcription_excerpt">{{ segment }}</p>
+                            {% endfor %}
+                        </td>
+                        <!-- <td>location_info: {{ rfrnc.location_info }}</td> -->
+                        <td>
+                            <ul>
+                                {% for loc in rfrnc.location_info %}
+                                <li>{{ loc.location_name }} {% if loc.location_type %} ({{ loc.location_type}}) {% endif %} </li>
                                 {% endfor %}
-                            </td>
-                            <!-- <td>location_info: {{ rfrnc.location_info }}</td> -->
-                            <td>
-                                <ul>
-                                    {% for loc in rfrnc.location_info %}
-                                    <li>{{ loc.location_name }} {% if loc.location_type %} ({{ loc.location_type}}) {% endif %} </li>
-                                    {% endfor %}
-                                </ul>
-                            </td>
-                            <td class="nbsp">
-                                {% comment %} {# delete after 2022-Feb-22 (3-months) #}
-                                <a href="{% url 'edit_record_w_recid_url' rfrnc.id  %}">item</a> / <a href="{% url 'edit_citation_url' rfrnc.citation_id  %}">document</a>
-                                }
-                                {% endcomment %}
-                                {% comment %} {# delete after 2022-Feb-22 (3-months) #}
-                                <a href="{% url 'edit_record_w_recid_url' rfrnc.id  %}">item</a> / <a href="{% url 'redesign_citation_url' rfrnc.citation_id  %}">document</a>
-                                {% endcomment %}
-                                <a href="{% url 'redesign_citation_url' rfrnc.citation_id  %}#/{{ rfrnc.id }}">item</a> / <a href="{% url 'redesign_citation_url' rfrnc.citation_id  %}">document</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                            </ul>
+                        </td>
+                        <td class="nbsp">
+                            {% comment %} {# delete after 2022-Feb-22 (3-months) #}
+                            <a href="{% url 'edit_record_w_recid_url' rfrnc.id  %}">item</a> / <a href="{% url 'edit_citation_url' rfrnc.citation_id  %}">document</a>
+                            }
+                            {% endcomment %}
+                            {% comment %} {# delete after 2022-Feb-22 (3-months) #}
+                            <a href="{% url 'edit_record_w_recid_url' rfrnc.id  %}">item</a> / <a href="{% url 'redesign_citation_url' rfrnc.citation_id  %}">document</a>
+                            {% endcomment %}
+                            <a href="{% url 'redesign_citation_url' rfrnc.citation_id  %}#/{{ rfrnc.id }}">item</a> / <a href="{% url 'redesign_citation_url' rfrnc.citation_id  %}">document</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-    </div> <!-- end of ```<div class="bul_pl_accordion-group">``` -->
-    <script type="text/javascript">
-    $(document).ready(function() {
-        var myHilitor = new Hilitor("search_results_id"); // id of the element to parse
-        console.log("myHilitor, ", myHilitor); { % if search_query % }
-        var search_term = "{{ search_query}}";
-        console.log("search_term, ", search_term);
-        myHilitor.setMatchType("open");
-        // myHilitor.apply( "comments" );
-        myHilitor.apply(search_term); { % endif % }
-    });
-
-    </script>
+    </details>
 </div>
 {% endblock content %}
+{% block footer %}
+{% include "disa_app_templates/acknowledgements.html" %}
+{% endblock footer %}
+{% block page_specific_js %}
+<script src="{% static 'js/hilitor.js' %}"></script>
+<script type="text/javascript">
+function ready(fn) {
+    if (document.readyState !== 'loading') {
+        fn();
+    } else {
+        document.addEventListener('DOMContentLoaded', fn);
+    }
+}
+
+ready(function() {
+    var myHilitor = new Hilitor("search_results_id"); // id of the element to parse
+    console.log("myHilitor, ", myHilitor);
+    var search_term = "{{ search_query}}";
+    console.log("search_term, ", search_term);
+    myHilitor.setMatchType("open");
+    // myHilitor.apply( "comments" );
+    myHilitor.apply(search_term);
+});
+
+</script>
+{% endblock page_specific_js %}
