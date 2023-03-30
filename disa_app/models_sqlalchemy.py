@@ -67,7 +67,7 @@ has_race = Table('6_has_race',
     Base.metadata,
     Column('id', Integer, primary_key=True),
     Column('referent', Integer, ForeignKey('5_referents.id')),
-    Column('race', Integer, ForeignKey('1_races.id'))
+    Column('race', Integer, ForeignKey('1_races.uuid'))
 )
 
 
@@ -524,7 +524,7 @@ class Referent(Base):
             origins.append( {'origin_db_id': origin.id, 'origin_name': origin.name} )
         races = []
         for race in self.races:
-            races.append( {'race_db_id': race.id, 'race_name': race.name} )
+            races.append( {'race_db_id': race.id, 'race_db_uuid': race.uuid, 'race_name': race.name} )
         roles = []
         for role in self.roles:
             roles.append( {'enslavement_db_id': role.id, 'enslavement_name': role.name} )
@@ -590,7 +590,8 @@ class Title(Base):
 class Race(Base):
     __tablename__ = '1_races'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer)
+    uuid = Column(String(32), primary_key=True)
     name = Column(String(255))
     referents = relationship(
         'Referent',
