@@ -60,7 +60,7 @@ class Getter():
         data['ent']['sex'] = rfrnt.sex
         data['ent']['races'] = [
             { 'label': r.name, 'value': r.name,
-                'id': r.name } for r in rfrnt.races ]
+                'id': r.name, 'uuid': r.name } for r in rfrnt.races ]
         data['ent']['tribes'] = [
             { 'label': t.name, 'value': t.name,
                 'id': t.name } for t in rfrnt.tribes ]
