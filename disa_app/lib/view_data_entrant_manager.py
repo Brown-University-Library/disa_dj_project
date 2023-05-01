@@ -60,7 +60,7 @@ class Getter():
         data['ent']['sex'] = rfrnt.sex
         data['ent']['races'] = [
             { 'label': r.name, 'value': r.name,
-                'id': r.name, 'uuid': r.name } for r in rfrnt.races ]
+                'id': r.name } for r in rfrnt.races ]
         data['ent']['tribes'] = [
             { 'label': t.name, 'value': t.name,
                 'id': t.name } for t in rfrnt.tribes ]
@@ -78,6 +78,39 @@ class Getter():
                 'id': e.name } for e in rfrnt.enslavements ]
         log.debug( f'data, ```{pprint.pformat(data)}```' )
         return data
+
+    # def prep_get_response( self, rfrnt: models_alch.Referent ) -> dict:
+    #     """ Prepares context.
+    #         Called by manage_get() """
+    #     data = { 'ent': {} }
+    #     data['ent']['id'] = rfrnt.id
+    #     data['ent']['uuid'] = rfrnt.uuid
+    #     data['ent']['names'] = [
+    #         { 'first': n.first, 'last': n.last,
+    #             'name_type': n.name_type.name,
+    #             'id': n.id } for n in rfrnt.names ]
+    #     data['ent']['age'] = rfrnt.age
+    #     data['ent']['sex'] = rfrnt.sex
+    #     data['ent']['races'] = [
+    #         { 'label': r.name, 'value': r.name,
+    #             'id': r.name, 'uuid': r.name } for r in rfrnt.races ]
+    #     data['ent']['tribes'] = [
+    #         { 'label': t.name, 'value': t.name,
+    #             'id': t.name } for t in rfrnt.tribes ]
+    #     data['ent']['origins'] = [
+    #         { 'label': o.name, 'value': o.name,
+    #             'id': o.name } for o in rfrnt.origins ]
+    #     data['ent']['titles'] = [
+    #         { 'label': t.name, 'value': t.name,
+    #             'id': t.name } for t in rfrnt.titles ]
+    #     data['ent']['vocations'] = [
+    #         { 'label': v.name, 'value': v.name,
+    #             'id': v.name } for v in rfrnt.vocations ]
+    #     data['ent']['enslavements'] = [
+    #         { 'label': e.name, 'value': e.name,
+    #             'id': e.name } for e in rfrnt.enslavements ]
+    #     log.debug( f'data, ```{pprint.pformat(data)}```' )
+    #     return data
 
     ## end class Getter()
 
