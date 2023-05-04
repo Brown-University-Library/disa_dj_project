@@ -1,6 +1,14 @@
 {% extends "disa_app_templates/base.html" %}
 {% load static %}
 {% block content %}
+{% if flag_maintenance %}
+<article class="flag_maintenance alert alert-danger my-3">
+    <h1>We'll be back soon!</h1>
+    <div>
+        <p>The Stolen Relations database is down for maintenance. Login is currently disabled. In the meantime, check out the <a href="https://indigenousslavery.org/">blog</a>.</p>
+    </div>
+</article>
+{% else %}
 <form id="non_shib_form" action="{{ browse_url }}" method="POST">{% csrf_token %}
     <h1>Welcome!</h1>
     <h2>Please login with your username and password</h2>
@@ -16,4 +24,5 @@
     </div>
     {% endif %}
 </form>
+{% endif %}
 {% endblock content %}
