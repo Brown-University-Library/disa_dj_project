@@ -243,18 +243,14 @@ def datafile( request ):
 # auth urls
 # ===========================
 
-
 def login( request ):
     """ Displays form offering shib & non-shib logins.
         Called by click on header login link. """
     log.debug( '\n\nstarting login()' )
-    # context = {
-    #     'login_then_citations_url': '%s?next=%s' % ( reverse('shib_login_url'), reverse('edit_citation_url') ),
-    #     'user_pass_handler_url': reverse('user_pass_handler_url')
-    # }
     context = {
         'login_then_citations_url': '%s?next=%s' % ( reverse('shib_login_url'), reverse('redesign_citations_url') ),
-        'user_pass_handler_url': reverse('user_pass_handler_url')
+        'user_pass_handler_url': reverse('user_pass_handler_url'),
+        'flag_maintenance': settings_app.MAINTENANCE_MODE
     }
     log.debug( f'initial default context, ``{pprint.pformat(context)}``' )
     if request.GET.get('format', '') == 'json':

@@ -77,6 +77,12 @@ export DISA_DJ__CACHES_JSON='
 
 export DISA_DJ__README_URL="https://github.com/Brown-University-Library/disa_dj_project/blob/main/README.md"
 
+export DISA_DJ__MAINTENANCE_MODE_JSON="false"
+
+####################
+## browse-page
+####################
+
 export DISA_DJ__DENORMALIZED_JSON_PATH="./disa_app/static/data/denormalized.json"
 export DISA_DJ__DENORMALIZED_JSON_URL="http://127.0.0.1:8000/static/data/denormalized.json"
 
@@ -122,7 +128,7 @@ export DISA_DJ__BROWSE_USERPASS_JSON='[
 export DISA_DJ__DATABASE_URL="sqlite:///../DBs/DISA.sqlite"
 
 ####################
-## TEMP GROUPS
+## TEMP GROUPS (TODO - document what this is; remove if not needed)
 ####################
 
 export DISA_DJ__TEMP_GROUPS_ENABLED_JSON="true"
