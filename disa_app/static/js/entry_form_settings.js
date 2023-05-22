@@ -164,19 +164,32 @@ export const LOCAL_SETTINGS = {
       '9': 'Sadler',
       '10': 'Ship Captain',
       '11': 'Shopkeeper'
-    }, /* NOW LOADED FROM SERVER
+    },
+    // Temporary client-side override for summer `23 data cleaning
+    // (the status menu items usually come from the server)
+    // See also entry_form_data_in.js
     formInputDISAPersonStatus: {
-      'status0':'None specified',
-      'status1':'Free',
-      'status2':'Indentured Servant, Court-Ordered',
-      'status3':'Indentured Servant, General',
-      'status4':'Indentured Servant, Parental',
-      'status5':'Indentured Servant, Voluntary',
-      'status6':'Servant',
-      'status7':'Slave',
-      'status8':'Unclear',
-      'status9':'Other'
-    }, */
+      'free person':'free person',
+      'free person ▸ enslaver or owner':'free person ▸ enslaver or owner',
+      'free person ▸ non-slaver':'free person ▸ non-slaver',
+      'free person ▸ unspecified':'free person ▸ unspecified',
+      'unfree person':'unfree person',
+      'unfree person ▸ unspecified':'unfree person ▸ unspecified',
+      'enslaved person':'enslaved person',
+      'enslaved person ▸ diplomatically traded or gifted ':'enslaved person ▸ diplomatically traded or gifted ',
+      'term-limited unfree person':'term-limited unfree person',
+      'term-limited unfree person ▸ indenture':'term-limited unfree person ▸ indenture',
+      'term-limited unfree person ▸ apprentice':'term-limited unfree person ▸ apprentice',
+      'term-limited unfree person ▸ boarding school student':'term-limited unfree person ▸ boarding school student',
+      'liminal status person':'liminal status person',
+      'liminal status person ▸ self-emancipated':'liminal status person ▸ self-emancipated',
+      'liminal status person ▸ awaiting criminal charges of enslavement':'liminal status person ▸ awaiting criminal charges of enslavement',
+      'liminal status person ▸ captive':'liminal status person ▸ captive',
+      'formerly unfree person':'formerly unfree person',
+      'formerly unfree person ▸ self-purchased':'formerly unfree person ▸ self-purchased',
+      'formerly unfree person ▸ manumitted':'formerly unfree person ▸ manumitted',
+      'prospective unfree person':'prospective unfree person'
+    },
     formInputDISAPersonGender: {
       '0': 'Not specified',
       'Male': 'Male',

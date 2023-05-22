@@ -100,10 +100,13 @@ function preprocessSourceData(data) {
     {}
   );
 
-  data.MENU_OPTIONS.formInputDISAPersonStatus = data.formData.location_stuff.status_list.reduce(
-    (statusHash, currStatus) => Object.assign(statusHash, { [currStatus]: currStatus }),
-    {}
-  );
+// Commented out for temporarily overriding for summer `23 data cleaning
+// (the status menu values will come from entry_form_settings.js instead of the server)
+//
+//data.MENU_OPTIONS.formInputDISAPersonStatus = data.formData.location_stuff.status_list.reduce(
+//  (statusHash, currStatus) => Object.assign(statusHash, { [currStatus]: currStatus }),
+//  {}
+//);
 
   // more stuff in data.formData.location_stuff dealt with here ...
   // addl_loc_list
