@@ -41,7 +41,8 @@ const componentDefinition = {
           tagifySettings = { 
             whitelist,
             dropdown: {
-              enabled: 0 // show suggestions on focus
+              enabled: 0, // show suggestions on focus
+              maxItems: 1000
             }
           };
 
