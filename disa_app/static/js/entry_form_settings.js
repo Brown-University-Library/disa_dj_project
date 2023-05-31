@@ -235,7 +235,7 @@ export const LOCAL_SETTINGS = {
     formInputDISAPersonRace: {
       'Not specified':'Not specified',
       'Black':'Black',
-      'Indian':'Indian',
+      'Indigenous':'Indigenous',
       'Multi-racial':'Multi-racial',
       'White':'White'
       /*
