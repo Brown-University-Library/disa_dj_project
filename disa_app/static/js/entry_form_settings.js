@@ -206,6 +206,7 @@ export const LOCAL_SETTINGS = {
       'formerly unfree person':'formerly unfree person',
       'formerly unfree person ▸ self-purchased':'formerly unfree person ▸ self-purchased',
       'formerly unfree person ▸ manumitted':'formerly unfree person ▸ manumitted',
+      'formerly unfree person ▸ emancipated':'formerly unfree person ▸ emancipated',
       'formerly unfree person ▸ other':'formerly unfree person ▸ other'
     },
     formInputDISAPersonGender: {
