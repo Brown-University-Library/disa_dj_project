@@ -49,6 +49,28 @@ def about ( request ):
         resp = render( request, 'disa_app_templates/about.html', context )
     return resp
 
+def learn ( request ):
+    log.debug('\n\nstarting learn()')
+    context = {
+        'redirect_url': 'https://indigenousslavery.org'
+        }
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/learn.html', context )
+    return resp
+
+def educate ( request ):
+    log.debug('\n\nstarting educate()')
+    context = {
+        'redirect_url': 'https://indigenousslavery.org'
+        }
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/educate.html', context )
+    return resp
+
 def home( request ):
     """ Displays temporary home page which will redirect to the public disa page.
         TODO: implement auto-redirect after a few seconds. """

@@ -14,6 +14,8 @@ urlpatterns = [
     ## primary app urls...
 
     url( r'^about/$', views.about, name='about_url' ),
+    url( r'^learn/$', views.learn, name='learn_url' ),
+    url( r'^educate/$', views.educate, name='educate_url' ),
 
     url( r'^home/$', views.home, name='home_url' ),
 

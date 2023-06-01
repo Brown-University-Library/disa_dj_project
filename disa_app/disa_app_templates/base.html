@@ -30,13 +30,10 @@
         <ul class="navbar-nav">
             {% block nav_options %}
             {% endblock nav_options %}
-            <li class="nav-item">
-                <a href="#" tabindex="-1" aria-disabled="false" class="nav-link">About</a></li>
-            <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link">Learn</a></li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false">Explore</a>
-            </li>
-            <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link">Educate</a></li>
+            <li class="nav-item"><a href="{% url 'about_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'about' in request.path %} active{% endif %}">About</a></li>
+            <li class="nav-item"><a href="{% url 'learn_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'learn' in request.path %} active{% endif %}">Learn</a></li>
+            <li class="nav-item"><a class="nav-link{% if 'browse' in request.path %} active{% endif %}" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false">Explore</a></li>
+            <li class="nav-item"><a href="{% url 'educate_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'educate' in request.path %} active{% endif %}">Educate</a></li>
             <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link">Tribal Partners</a></li>
             <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link">How to Contribute</a></li>
             <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link">Blog</a></li>
