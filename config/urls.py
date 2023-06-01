@@ -13,7 +13,9 @@ urlpatterns = [
 
     ## primary app urls...
 
-    url( r'^info/$', views.info, name='info_url' ),
+    url( r'^about/$', views.about, name='about_url' ),
+
+    url( r'^home/$', views.home, name='home_url' ),
 
     url( r'^login/$', views.login, name='login_url' ),
     url( r'^logout/$', views.logout, name='logout_url' ),
@@ -94,14 +96,15 @@ urlpatterns = [
     url( r'^error_check/$', views.error_check, name='error_check_url' ),
 
     # url( r'^$', RedirectView.as_view(pattern_name='browse_url') ),
-    url( r'^$', RedirectView.as_view(pattern_name='info_url') ),
+    # url( r'^$', RedirectView.as_view(pattern_name='info_url') ),
+    url( r'^$', RedirectView.as_view(pattern_name='home_url') ),
 
 
     ## testing
 
-    url( r'^js_demo_1/$', views.js_demo_1, name='js_demo_1_url' ),
-    url( r'^js_demo_2/$', views.js_demo_2, name='js_demo_2_url' ),
-    url( r'^js_demo_3/$', views.js_demo_3, name='js_demo_3_url' ),
+    # url( r'^js_demo_1/$', views.js_demo_1, name='js_demo_1_url' ),
+    # url( r'^js_demo_2/$', views.js_demo_2, name='js_demo_2_url' ),
+    # url( r'^js_demo_3/$', views.js_demo_3, name='js_demo_3_url' ),
 
     ]
 

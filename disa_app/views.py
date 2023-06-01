@@ -38,18 +38,28 @@ log = logging.getLogger(__name__)
 # main urls
 # ===========================
 
-
-def info( request ):
-    """ Displays temporary home page which will redirect to the public disa page.
-        TODO: implement auto-redirect after a few seconds. """
-    log.debug( '\n\nstarting info()' )
+def about ( request ):
+    log.debug('\n\nstarting about()')
     context = {
         'redirect_url': 'https://indigenousslavery.org'
         }
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/info.html', context )
+        resp = render( request, 'disa_app_templates/about.html', context )
+    return resp
+
+def home( request ):
+    """ Displays temporary home page which will redirect to the public disa page.
+        TODO: implement auto-redirect after a few seconds. """
+    log.debug( '\n\nstarting home()' )
+    context = {
+        'redirect_url': 'https://indigenousslavery.org'
+        }
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/home.html', context )
     return resp
 
 
@@ -297,7 +307,7 @@ def logout( request ):
         Called by click on Welcome/Logout link in header-bar. """
     redirect_url = request.GET.get( 'next', None )
     if not redirect_url:
-        redirect_url = reverse( 'info_url' )
+        redirect_url = reverse( 'home_url' )
     django_logout( request )
     log.debug( 'redirect_url, ```%s```' % redirect_url )
     return HttpResponseRedirect( redirect_url )
