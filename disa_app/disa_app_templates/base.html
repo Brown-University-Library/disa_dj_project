@@ -18,7 +18,7 @@
 </head>
 
 <body class="container-fluid {% if user.is_authenticated %}user-editor {% endif %}">
-    <header class="d-flex py-2 row  justify-content-between bg-primary">
+    <header class="d-flex py-2 row justify-content-between bg-primary">
         <h1 class="col-md-4"><a href="{% url 'home_url' %}" class="link-light">Stolen Relations: <span>Recovering Stories of Indigenous Enslavement in the Americas</span></a></h1>
         {% if user.is_authenticated %}
         <a href="{% url 'logout_url' %}?next={% url 'login_url' %}" class="text-bg-primary col-2"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
@@ -27,23 +27,19 @@
         {% endif %}
     </header>
     <nav class="navbar navbar-expand-sm navbar-dark text-light bg-primary d-flex row">
-        <ul class="navbar-nav justify-content-center">
+        <ul class="navbar-nav">
             {% block nav_options %}
             {% endblock nav_options %}
-            {% if user_is_authenticated %}
-            <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link">About</a></li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false"><i class="fa-solid fa-rectangle-list"></i> Explore</a>
-            </li>
+                <a href="#" tabindex="-1" aria-disabled="false" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link">Learn</a></li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'people_url' %}" tabindex="-1" aria-disabled="false"><i class="fa-solid fa-people-group"></i> People</a>
+                <a class="nav-link" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false">Explore</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'redesign_citations_url' %}" tabindex="-1" aria-disabled="false"><i class="fa-solid fa-book-bookmark"></i> Records</a>
-            </li>
-            {% else %}
-            <li class="nav-item"><a href="{% url 'login_url' %}"><i class="fa-solid fa-right-to-bracket"></i> Community partner login</a></li>
-            {% endif %}
+            <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link">Educate</a></li>
+            <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link">Tribal Partners</a></li>
+            <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link">How to Contribute</a></li>
+            <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link">Blog</a></li>
         </ul>
         </div><!-- container -->
     </nav>
@@ -52,9 +48,6 @@
             {% block content %}
             {% endblock content %}
         </main>
-        {% block sidebar %}
-        {% block sidebar_content %}{% endblock sidebar_content %}
-        {% endblock sidebar %}
     </section>
     <footer class="container border-top my-2">
         {% block footer %}
