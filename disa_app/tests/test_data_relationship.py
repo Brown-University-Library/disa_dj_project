@@ -32,10 +32,17 @@ class Relationship_Test( TestCase ):
         """
         # self.assertEqual( 1, 2)
 
+
+
     ## POST =======================
 
-    def test_post_relationship(self):
+    def test_post_relationship__relationship_does_not_exist(self):
         """ Checks good POST of a relationship.
+            NOTE: 
+            - The response to relationship-create is the same whether or not the relationship already exists.
+            - The response either way is simply a redirect to the item-record.
+            - If the relationship already exists, the relationship is not duplicated.
+            - So these two post-tests really just allow for inspecting the logs to see the processing-flow.
             Sample api url: 'https://project_root_url/data/relationships/' (no relationship-id)
             Sample payload: {'obj': 3394, 'rel': 1, 'sbj': 2033, 'section': 895}
                ...where `3394` is a referent-id
@@ -48,7 +55,47 @@ class Relationship_Test( TestCase ):
                            But not all relationships do this.
                   Patrick, this is not something you have to address, but should be aware of.
         """
-        # self.assertEqual( 1, 2 )
+        ## Try to create relationship -------------------------------
+        post_url = reverse( 'data_relationships_url', kwargs={'rltnshp_id': None} )
+        log.debug( f'post-url, ``{post_url}``' )
+        payload = {
+            'sbj': 3703,
+            'rel': 8,
+            'obj': 3704,
+            'section': 1524  # this is the item-record-id
+        }
+        jsn = json.dumps( payload )
+        response = self.client.post( post_url, data=jsn, content_type='application/json' )
+        log.debug( f'response.__dict__, ``{pprint.pformat(response.__dict__)}``' )
+        log.debug( f'response.content, ``{response.content}``' )
+        self.assertEqual( 302, response.status_code )
+        self.assertEqual( b'', response.content )  # test does distinguish between b'' and ''
+        self.assertEqual( '/data/sections/1524/relationships/', response.headers['location'] )  # type: ignore
+        ## Clean up: delete the relationship ------------------------
+        self.assertEqual( 1, 2)
+
+
+    def test_post_relationship__relationship_already_exists(self):
+        """ Checks POST of already-existing relationship.
+            See "NOTE" above.
+        """
+        ## Try to create relationship -------------------------------
+        post_url = reverse( 'data_relationships_url', kwargs={'rltnshp_id': None} )
+        log.debug( f'post-url, ``{post_url}``' )
+        payload = {
+            'sbj': 3703,
+            'rel': 7,
+            'obj': 3704,
+            'section': 1524  # this is the item-record-id
+        }
+        jsn = json.dumps( payload )
+        response = self.client.post( post_url, data=jsn, content_type='application/json' )
+        log.debug( f'response.__dict__, ``{pprint.pformat(response.__dict__)}``' )
+        log.debug( f'response.content, ``{response.content}``' )
+        self.assertEqual( 302, response.status_code )
+        self.assertEqual( b'', response.content )  # test does distinguish between b'' and ''
+        self.assertEqual( '/data/sections/1524/relationships/', response.headers['location'] )  # type: ignore
+
 
     ## GET LIST ===================
 
