@@ -120,6 +120,25 @@ def partners ( request ):
         resp = render( request, 'disa_app_templates/partners.html', context )
     return resp
 
+# duplicating the existing view for redesign_citations
+@shib_login
+def dashboard ( request ):
+    log.debug('\n\nstarting the dashboard for editors page')
+    start_time = datetime.datetime.now()
+    # if project_settings.DEBUG == False:
+    #     return HttpResponse( 'Not yet running on production.' )
+    user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+    context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
+    context['API_URL_ROOT'] = '%s://%s%s' % ( request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), reverse('data_root_url') )
+    context['elapsed_time'] = str( datetime.datetime.now() - start_time )
+    if request.user.is_authenticated:
+        context['user_is_authenticated'] = True
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/dashboard.html', context )
+    return resp
+
 def browse_tabulator( request ):
     """ Displays tabulator page. """
     log.info( '\n\nstarting browse_tabulator()' )

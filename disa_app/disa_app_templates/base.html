@@ -21,9 +21,24 @@
     <header class="d-flex py-2 row justify-content-between bg-primary">
         <h1 class="col-md-4"><a href="{% url 'home_url' %}" class="link-light">Stolen Relations: <span>Recovering Stories of Indigenous Enslavement in the Americas</span></a></h1>
         {% if user.is_authenticated %}
-        <a href="{% url 'logout_url' %}?next={% url 'login_url' %}" class="text-bg-primary col-2"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+        <div class="d-flex align-items-center col-md-2">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Admin</button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
+                <li><a class="dropdown-item" href="{% url 'logout_url' %}?next={% url 'login_url' %}">Logout</a></li>
+            </ul>
+        </div>
+        <!-- When we have a flag for "logged-in community partner":
+            elif <a class="col-md-4 text-light" href="{% url 'logout_url' %}?next={% url 'login_url' %}">Logout</a>
+        -->
         {% else %}
-        <a href="{% url 'login_url' %}" class="text-bg-primary col-2"><i class="fa-solid fa-right-to-bracket"></i> Editor login</a>
+        <div class="d-flex align-items-center col-md-2">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Logins</button>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'login_url' %}" class="dropdown-item">Editor login</a></li>
+                <li><a href="{% url 'browse_url' %}" class="dropdown-item">Community Partner login</a></li>
+            </ul>
+        </div>
         {% endif %}
     </header>
     <nav class="navbar navbar-expand-sm navbar-dark text-light bg-primary d-flex row">
@@ -32,13 +47,13 @@
             {% endblock nav_options %}
             <li class="nav-item">
                 <div class="d-flex align-items-center"><a href="{% url 'about_url' %}" tabindex="-1" aria-expanded="false" class="nav-link{% if 'about' in request.path %} active{% endif %}">About</a>
-                <span id="about-trigger" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></span>
-                <ul class="dropdown-menu">
-                    <!-- TODO: @Birkin, these should link to {% verbatim %}{% url team_url %} and {% url contact_url %}{% endverbatim %} but this breaks reverse? -->
-                    <li><a href="/about/team" class="dropdown-item">Team</a></li>
-                    <li><a href="/about/contact" class="dropdown-item">Contact</a></li>
-                </ul>
-            </div>
+                    <span id="about-trigger" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></span>
+                    <ul class="dropdown-menu">
+                        <!-- TODO: @Birkin, these should link to {% verbatim %}{% url team_url %} and {% url contact_url %}{% endverbatim %} but this breaks reverse? -->
+                        <li><a href="/about/team" class="dropdown-item">Team</a></li>
+                        <li><a href="/about/contact" class="dropdown-item">Contact</a></li>
+                    </ul>
+                </div>
             </li>
             <li class="nav-item"><a href="{% url 'learn_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'learn' in request.path %} active{% endif %}">Learn</a></li>
             <li class="nav-item"><a class="nav-link{% if 'browse' in request.path %} active{% endif %}" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false">Explore</a></li>
