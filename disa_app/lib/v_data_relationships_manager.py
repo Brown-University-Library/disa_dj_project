@@ -65,16 +65,44 @@ def manage_relationships_post( payload: bytes, request_user_id: int ) -> str:
             subject_id=data['sbj'], role_id=data['rel'],
             object_id=data['obj']).first()
         if not existing:
+            log.debug( 'relationship does not exist; will create it' )
             add_posted_relationships( data, request_user_id, rfrnc, session )
-    except:
+        else:
+            log.debug( 'relationship already exists' )
+            log.debug( f'existing.__dict__, ``{pprint.pformat(existing.__dict__)}``' )
+    except Exception as e:
         log.exception( 'problem with post...' )
-    log.debug( 'returning rfrnc_id for redirect, `{rfrnc_id}`' )
+        raise Exception( f'exception, ```{e}```' )
+    log.debug( f'returning rfrnc_id for redirect, `{rfrnc_id}`' )
     return rfrnc_id
+
+
+# def manage_relationships_post( payload: bytes, request_user_id: int ) -> str:
+#     """ Handles ajax api call; creates relationship entry.
+#         Called by views.data_relationships() """
+#     log.debug( 'starting manage_relationships_post()' )
+#     try:
+#         session = make_session()
+#         data: dict = json.loads( payload )
+#         log.debug( f'data, ``{pprint.pformat(data)}``' )
+#         section: int = data['section']  # seems to be the 'reference-id'
+#         rfrnc = session.query( models_alch.Reference ).get( section )
+#         rfrnc_id = rfrnc.id
+#         existing = session.query( models_alch.ReferentRelationship ).filter_by(
+#             subject_id=data['sbj'], role_id=data['rel'],
+#             object_id=data['obj']).first()
+#         if not existing:
+#             add_posted_relationships( data, request_user_id, rfrnc, session )
+#     except:
+#         log.exception( 'problem with post...' )
+#     log.debug( 'returning rfrnc_id for redirect, `{rfrnc_id}`' )
+#     return rfrnc_id
 
 
 def add_posted_relationships( data: dict, request_user_id: int, rfrnc: models_alch.Reference, session: sqlalchemy.orm.session.Session ) -> None:
     """ Creates relationship data, and implied inverse relationship data.
         Called by manage_relationships_post() """
+    log.debug( 'starting add_posted_relationships()' )
     relt = models_alch.ReferentRelationship(
         subject_id=data['sbj'], role_id=data['rel'],
         object_id=data['obj'])
