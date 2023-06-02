@@ -10,11 +10,15 @@ import { initializeItemForm }         from './entry_form_vue-item.js';
 //  URL format: <url><DOC ID>/#/<ITEM ID>/<PERSON ID>
 
 function getRoute() {
-  const [itemId, personId] = window.location.hash.replace(/^[#\/]+/, '').split('/');
-  return { 
-    itemId: parseInt(itemId) || undefined,
-    referentId: parseInt(personId) || undefined
-  };
+
+  const searchParams = new URLSearchParams(window.location.search),
+        recordId = parseInt(searchParams.get('record')),
+        referentId = parseInt(searchParams.get('referent'));
+
+  return {
+    itemId: isNaN(recordId) ? undefined : recordId,
+    referentId: isNaN(referentId) ? undefined : referentId
+  }
 }
 
 async function loadAndInitializeData(initDisplay) {

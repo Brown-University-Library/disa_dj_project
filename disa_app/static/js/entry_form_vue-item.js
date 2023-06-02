@@ -416,19 +416,28 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
       },
 
       // Update URL to reflect current item and referent
+      // For updating the URL without refreshing the page, 
+      //   I used code from https://stackoverflow.com/a/70591485
+      // @TODO also add group ID 
+      // (but will have to close Referents if Group is opened, and vice versa)
 
       updateUrl: function () {
 
-        let hash = '';
+        const pageURL = new URL(window.location);
 
-        if (this.currentItemId && this.currentItemId !== -1) {
-          hash += `/${this.currentItemId}`;
+        if (this.currentItemId && this.currentItemId !== -1) { 
+          pageURL.searchParams.set('record', this.currentItemId);
+
           if (this.currentReferentId && this.currentReferentId !== -1) {
-            hash += `/${this.currentReferentId}`;
+            pageURL.searchParams.set('referent', this.currentReferentId);
+          } else {
+            pageURL.searchParams.delete('referent');
           }
+        } else {
+          pageURL.searchParams.delete('record');
         }
 
-        window.location.hash = hash;
+        window.history.pushState(null, '', pageURL.toString());
       }
     }
   });
