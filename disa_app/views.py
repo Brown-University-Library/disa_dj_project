@@ -84,6 +84,41 @@ def home( request ):
         resp = render( request, 'disa_app_templates/home.html', context )
     return resp
 
+def team ( request ):
+    log.debug('\n\nstarting the team page')
+    context = {'foo': 'bar', 'foo2': 'bar2'}
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/team.html', context )
+    return resp
+
+def contact ( request ):
+    log.debug('\n\nstarting the contact page')
+    context = {'foo': 'bar', 'foo2': 'bar2'}
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/contact.html', context )
+    return resp
+
+def contribute ( request ):
+    log.debug('\n\nstarting the contribute page')
+    context = {'foo': 'bar', 'foo2': 'bar2'}
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/contribute.html', context )
+    return resp
+
+def partners ( request ):
+    log.debug('\n\nstarting the tribal partners page')
+    context = {'foo': 'bar', 'foo2': 'bar2'}
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/partners.html', context )
+    return resp
 
 def browse_tabulator( request ):
     """ Displays tabulator page. """

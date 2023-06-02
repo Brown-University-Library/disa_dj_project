@@ -14,8 +14,13 @@ urlpatterns = [
     ## primary app urls...
 
     url( r'^about/$', views.about, name='about_url' ),
+    url( r'^about/team/$', views.team, name='team_url' ),
+    url( r'^about/contact/$', views.contact, name='contact_url' ),
+
     url( r'^learn/$', views.learn, name='learn_url' ),
     url( r'^educate/$', views.educate, name='educate_url' ),
+    url( r'^contribute/$', views.contribute, name='contribute_url' ),
+    url( r'^partners/$', views.partners, name='partners_url' ),
 
     url( r'^home/$', views.home, name='home_url' ),
 

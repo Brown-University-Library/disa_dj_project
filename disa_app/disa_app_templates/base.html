@@ -30,13 +30,22 @@
         <ul class="navbar-nav">
             {% block nav_options %}
             {% endblock nav_options %}
-            <li class="nav-item"><a href="{% url 'about_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'about' in request.path %} active{% endif %}">About</a></li>
+            <li class="nav-item">
+                <div class="d-flex align-items-center"><a href="{% url 'about_url' %}" tabindex="-1" aria-expanded="false" class="nav-link{% if 'about' in request.path %} active{% endif %}">About</a>
+                <span id="about-trigger" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></span>
+                <ul class="dropdown-menu">
+                    <!-- TODO: @Birkin, these should link to {% verbatim %}{% url team_url %} and {% url contact_url %}{% endverbatim %} but this breaks reverse? -->
+                    <li><a href="/about/team" class="dropdown-item">Team</a></li>
+                    <li><a href="/about/contact" class="dropdown-item">Contact</a></li>
+                </ul>
+            </div>
+            </li>
             <li class="nav-item"><a href="{% url 'learn_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'learn' in request.path %} active{% endif %}">Learn</a></li>
             <li class="nav-item"><a class="nav-link{% if 'browse' in request.path %} active{% endif %}" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false">Explore</a></li>
             <li class="nav-item"><a href="{% url 'educate_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'educate' in request.path %} active{% endif %}">Educate</a></li>
-            <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link">Tribal Partners</a></li>
-            <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link">How to Contribute</a></li>
-            <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link">Blog</a></li>
+            <li class="nav-item"><a href="{% url 'partners_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'partners' in request.path %} active{% endif %}">Tribal Partners</a></li>
+            <li class="nav-item"><a href="{% url 'contribute_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'contribute' in request.path %} active{% endif %}">How to Contribute</a></li>
+            <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link disabled" title="see indigenoussslavery.org for now!">Blog</a></li>
         </ul>
         </div><!-- container -->
     </nav>
