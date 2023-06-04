@@ -69,9 +69,14 @@ class Relationship_Test( TestCase ):
         log.debug( f'response.__dict__, ``{pprint.pformat(response.__dict__)}``' )
         log.debug( f'response.content, ``{response.content}``' )
         self.assertEqual( 302, response.status_code )
-        self.assertEqual( b'', response.content )  # test does distinguish between b'' and ''
+        cntnt_dct = json.loads( response.content )
+        self.assertEqual( ['relationship_id', 'relationship_is_new', 'rfrnc_id'], sorted(cntnt_dct.keys()) )
+        self.assertEqual( 1524, cntnt_dct['rfrnc_id'] )
+        # self.assertEqual( True, cntnt_dct['relationship_is_new'] )  
         self.assertEqual( '/data/sections/1524/relationships/', response.headers['location'] )  # type: ignore
         ## Clean up: delete the relationship ------------------------
+        log.debug( f'starting relationship-delete for relationship_id, ``{cntnt_dct["relationship_id"]}``' )
+        payload = {}
         self.assertEqual( 1, 2)
 
 
@@ -93,7 +98,9 @@ class Relationship_Test( TestCase ):
         log.debug( f'response.__dict__, ``{pprint.pformat(response.__dict__)}``' )
         log.debug( f'response.content, ``{response.content}``' )
         self.assertEqual( 302, response.status_code )
-        self.assertEqual( b'', response.content )  # test does distinguish between b'' and ''
+        cntnt_dct = json.loads( response.content )
+        self.assertEqual( ['relationship_id', 'relationship_is_new', 'rfrnc_id'], sorted(cntnt_dct.keys()) )
+        self.assertEqual( b'{"rfrnc_id": 1524, "relationship_id": 9500, "relationship_is_new": false}', response.content )  # test does distinguish between bytes and str
         self.assertEqual( '/data/sections/1524/relationships/', response.headers['location'] )  # type: ignore
 
 
