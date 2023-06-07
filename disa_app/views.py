@@ -679,6 +679,7 @@ def data_relationships( request, rltnshp_id=None ):
     log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rltnshp_id, ``{rltnshp_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     if request.method == 'POST':
+        log.debug( 'starting POST flow handling' )
         relationship_dict: dict = v_data_relationships_manager.manage_relationships_post( request.body, user_id )
         rfrnc_id = relationship_dict['rfrnc_id']; assert type(rfrnc_id) == int
         relationship_id = relationship_dict['relationship_id']; assert type(relationship_id) == int
@@ -690,12 +691,13 @@ def data_relationships( request, rltnshp_id=None ):
         content_json = json.dumps( relationship_dict )
         resp = HttpResponseRedirect( redirect_to=redirect_url, content=content_json )
     elif request.method == 'DELETE':
-        ## Note: keep the commented out code. As of 2023-June, no payload is being sent on a delete, so no reference-id can be extracted. But we may add that back.
-        # rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, request.body, user_id )
-        # redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
-        # resp = HttpResponseRedirect( redirect_url )
-        v_data_relationships_manager.manage_relationships_delete( rltnshp_id, request.body, user_id )
-        resp = HttpResponse( '200 / OK' )
+        log.debug( 'starting DELETE flow handling' )
+        reference_id = request.GET['reference_id']
+        log.debug( f'reference_id, ``{reference_id}``')
+        assert type(reference_id) == str
+        rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, reference_id, user_id )  # type: ignore
+        redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+        resp = HttpResponseRedirect( redirect_url )
     else:
         log.warning( f'we shouldn\'t get here' )
         resp = HttpResponse( 'problem; see logs' )

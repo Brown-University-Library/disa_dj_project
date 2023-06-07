@@ -74,10 +74,17 @@ class Relationship_Test( TestCase ):
         self.assertEqual( 1524, cntnt_dct['rfrnc_id'] )
         # self.assertEqual( True, cntnt_dct['relationship_is_new'] )  
         self.assertEqual( '/data/sections/1524/relationships/', response.headers['location'] )  # type: ignore
+        
         ## Clean up: delete the relationship ------------------------
-        log.debug( f'starting relationship-delete for relationship_id, ``{cntnt_dct["relationship_id"]}``' )
-        payload = {}
-        self.assertEqual( 1, 2)
+        new_relationship_id = cntnt_dct['relationship_id']
+        log.debug( f'starting relationship-delete for relationship_id, ``{new_relationship_id}``' )
+        base_delete_url = reverse( 'data_relationships_url', kwargs={'rltnshp_id': new_relationship_id} )
+        log.debug( f'base_delete_url, ``{base_delete_url}``' )
+        delete_url = f'{base_delete_url}?reference_id=1524'  # this is the item-record-id
+        response = self.client.delete( delete_url, data=jsn, content_type='application/json' )
+        log.debug( f'response.__dict__, ``{pprint.pformat(response.__dict__)}``' )
+        self.assertEqual( 302, response.status_code )
+        self.assertEqual( '/data/sections/1524/relationships/', response.headers['location'] )  # type: ignore
 
 
     def test_post_relationship__relationship_already_exists(self):
