@@ -529,7 +529,7 @@ async function createRelationshipOnServer(relationshipData) {
 
 async function deleteRelationshipOnServer(relationship) {
   console.log(`DELETING RELATIONSHIP ON SERVER ID: ${relationship.id}`);
-  const url = `${API_URL_ROOT}relationships/${relationship.id}/record_${this.currentItemId}`,
+  const url = `${API_URL_ROOT}relationships/${relationship.id}/record_${this.currentItemId}/`,
         fetchOptions = {
           method: 'DELETE',
           headers: {
