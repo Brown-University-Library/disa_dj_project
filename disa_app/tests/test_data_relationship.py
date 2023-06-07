@@ -74,7 +74,6 @@ class Relationship_Test( TestCase ):
         self.assertEqual( 1524, cntnt_dct['rfrnc_id'] )
         # self.assertEqual( True, cntnt_dct['relationship_is_new'] )  
         self.assertEqual( '/data/sections/1524/relationships/', response.headers['location'] )  # type: ignore
-        
         ## Clean up: delete the relationship ------------------------
         new_relationship_id = cntnt_dct['relationship_id']
         log.debug( f'starting relationship-delete for relationship_id, ``{new_relationship_id}``' )
