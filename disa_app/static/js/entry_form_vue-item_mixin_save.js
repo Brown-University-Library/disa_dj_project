@@ -537,6 +537,8 @@ async function deleteRelationshipOnServer(relationship) {
           }
         };
   
+  console.log(`DELETE relationship request sent to: ${url}`);
+
   const response = await fetch(url, fetchOptions);
 
   if (response.ok) {
