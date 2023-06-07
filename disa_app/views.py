@@ -697,6 +697,7 @@ def data_relationships( request, rltnshp_id=None, record_id=None ):
         log.debug( f'record_id, ``{record_id}``')
         rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, record_id, user_id )  # type: ignore
         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+        log.debug( f'redirect_url, ``{redirect_url}```' )
         resp = HttpResponseRedirect( redirect_url )
     else:
         log.warning( f'we shouldn\'t get here' )
