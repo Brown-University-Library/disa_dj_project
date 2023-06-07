@@ -79,7 +79,7 @@ class Relationship_Test( TestCase ):
         log.debug( f'starting relationship-delete for relationship_id, ``{new_relationship_id}``' )
         base_delete_url = reverse( 'data_relationships_url', kwargs={'rltnshp_id': new_relationship_id} )
         log.debug( f'base_delete_url, ``{base_delete_url}``' )
-        delete_url = f'{base_delete_url}?reference_id=1524'  # this is the item-record-id
+        delete_url = f'{base_delete_url}?record=1524'  # this is the item-record-id
         response = self.client.delete( delete_url, data=jsn, content_type='application/json' )
         log.debug( f'response.__dict__, ``{pprint.pformat(response.__dict__)}``' )
         self.assertEqual( 302, response.status_code )

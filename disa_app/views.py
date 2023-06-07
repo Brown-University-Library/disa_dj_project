@@ -692,7 +692,7 @@ def data_relationships( request, rltnshp_id=None ):
         resp = HttpResponseRedirect( redirect_to=redirect_url, content=content_json )
     elif request.method == 'DELETE':
         log.debug( 'starting DELETE flow handling' )
-        reference_id = request.GET['reference_id']
+        reference_id = request.GET['record']
         log.debug( f'reference_id, ``{reference_id}``')
         assert type(reference_id) == str
         rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, reference_id, user_id )  # type: ignore
