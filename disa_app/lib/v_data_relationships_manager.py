@@ -191,8 +191,7 @@ def add_posted_relationships( data: dict, request_user_id: int, rfrnc: models_al
     log.debug( 'relationship entry(s) created.' )
     return
 
-
-def manage_relationships_delete( rltnshp_id: str, payload: bytes, request_user_id: int ) -> str:
+def manage_relationships_delete( rltnshp_id: str, reference_id: str, request_user_id: int ) -> str:
     """ Handles ajax api call; deletes relationship entry.
         Called by views.data_relationships() 
         2023-June NOTE...
@@ -202,7 +201,7 @@ def manage_relationships_delete( rltnshp_id: str, payload: bytes, request_user_i
         """
     log.debug( 'starting manage_relationships_delete()' )
     log.debug( f'rltnshp_id, ``{rltnshp_id}``' ); assert type( rltnshp_id ) == str, type(rltnshp_id)
-    log.debug( f'payload, ``{payload}``' ); assert type( payload ) == bytes, type(payload)
+    log.debug( f'reference_id, ``{reference_id}``' ); assert type( reference_id ) == str, type(reference_id)
     log.debug( f'request_user_id, ``{request_user_id}``' ); assert type( request_user_id ) == int, type(request_user_id)
     try:
         session = make_session()
@@ -218,10 +217,69 @@ def manage_relationships_delete( rltnshp_id: str, payload: bytes, request_user_i
             # stamp_edit( request_user_id, rfrnc, session )
     except:
         log.exception( 'problem with delete...' )
-    # log.debug( 'returning rfrnc_id for redirect, `{rfrnc_id}`' )
-    # return rfrnc_id
-    log.debug( 'no longer returning rfrnc_id for redirect' )
-    return
+    log.debug( f'returning reference_id for redirect, `{reference_id}`' )
+    return reference_id
+
+# def manage_relationships_delete( rltnshp_id: str, payload: bytes, request_user_id: int ) -> str:
+#     """ Handles ajax api call; deletes relationship entry.
+#         Called by views.data_relationships() 
+#         2023-June NOTE...
+#         - current implementation has empty payload. 
+#         - the expected payload contained an item-record-id... which is normally used to update a table of who is changing what record.
+#         - TODO: re-add this item-record-id to the payload.
+#         """
+#     log.debug( 'starting manage_relationships_delete()' )
+#     log.debug( f'rltnshp_id, ``{rltnshp_id}``' ); assert type( rltnshp_id ) == str, type(rltnshp_id)
+#     log.debug( f'payload, ``{payload}``' ); assert type( payload ) == bytes, type(payload)
+#     log.debug( f'request_user_id, ``{request_user_id}``' ); assert type( request_user_id ) == int, type(request_user_id)
+#     try:
+#         session = make_session()
+#         # data: dict = json.loads( payload )
+#         # section: int = data['section']  # seems to be the 'reference-id'
+#         # rfrnc = session.query( models_alch.Reference ).get( section )
+#         # rfrnc_id = rfrnc.id
+#         existing = session.query( models_alch.ReferentRelationship ).get( rltnshp_id )
+#         if existing:
+#             session.delete( existing )
+#             session.commit()
+#             session.close()
+#             # stamp_edit( request_user_id, rfrnc, session )
+#     except:
+#         log.exception( 'problem with delete...' )
+#     log.debug( 'returning rfrnc_id for redirect, `{rfrnc_id}`' )
+#     return rfrnc_id
+
+
+# def manage_relationships_delete( rltnshp_id: str, payload: bytes, request_user_id: int ) -> str:
+#     """ Handles ajax api call; deletes relationship entry.
+#         Called by views.data_relationships() 
+#         2023-June NOTE...
+#         - current implementation has empty payload. 
+#         - the expected payload contained an item-record-id... which is normally used to update a table of who is changing what record.
+#         - TODO: re-add this item-record-id to the payload.
+#         """
+#     log.debug( 'starting manage_relationships_delete()' )
+#     log.debug( f'rltnshp_id, ``{rltnshp_id}``' ); assert type( rltnshp_id ) == str, type(rltnshp_id)
+#     log.debug( f'payload, ``{payload}``' ); assert type( payload ) == bytes, type(payload)
+#     log.debug( f'request_user_id, ``{request_user_id}``' ); assert type( request_user_id ) == int, type(request_user_id)
+#     try:
+#         session = make_session()
+#         # data: dict = json.loads( payload )
+#         # section: int = data['section']  # seems to be the 'reference-id'
+#         # rfrnc = session.query( models_alch.Reference ).get( section )
+#         # rfrnc_id = rfrnc.id
+#         existing = session.query( models_alch.ReferentRelationship ).get( rltnshp_id )
+#         if existing:
+#             session.delete( existing )
+#             session.commit()
+#             session.close()
+#             # stamp_edit( request_user_id, rfrnc, session )
+#     except:
+#         log.exception( 'problem with delete...' )
+#     # log.debug( 'returning rfrnc_id for redirect, `{rfrnc_id}`' )
+#     # return rfrnc_id
+#     log.debug( 'no longer returning rfrnc_id for redirect' )
+#     return
 
 
 # def manage_relationships_delete( rltnshp_id, payload: bytes, request_user_id: int ) -> str:
