@@ -664,27 +664,114 @@ def relationships_by_reference( request, rfrnc_id ):
     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
 
-
 @shib_login
-def data_relationships( request, rltnshp_id=None ):
+def data_relationships( request, rltnshp_id=None, record_id=None ):
     """ Called via ajax by views.edit_relationships() when `+` buton is clicked.
-        Url: '/data/relationships/' -- 'data_relationships_url' """
+        Url: '/data/relationships/' -- 'data_relationships_url' 
+        NOTE: 
+        - the response will be a redirect to the record (the "reference").
+        - the response.content will contain a json-string showing, eg, `{"relationship_id": 123, "new_relationship": true}`.
+        - the reason for the new_relationship boolean is to distinguish, in testing, whether the relationship was created or already-existing.
+        - as of 2023-June, the response.content is not being used by the front-end javascript.
+        """
     log.debug( '\n\nstarting data_relationships()' )
     log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rltnshp_id, ``{rltnshp_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     if request.method == 'POST':
-        rfrnc_id: str = v_data_relationships_manager.manage_relationships_post( request.body, user_id )
+        log.debug( 'starting POST flow handling' )
+        relationship_dict: dict = v_data_relationships_manager.manage_relationships_post( request.body, user_id )
+        rfrnc_id = relationship_dict['rfrnc_id']; assert type(rfrnc_id) == int
+        relationship_id = relationship_dict['relationship_id']; assert type(relationship_id) == int
+        relationship_is_new = relationship_dict['relationship_is_new']; assert type(relationship_is_new) == bool
         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
         log.debug( f'redirect_url, ```{redirect_url}```' )
-        resp = HttpResponseRedirect( redirect_url )
+        # resp = HttpResponseRedirect( redirect_url )
+        # resp = HttpResponseRedirect( redirect_url, 'FOO2' )
+        content_json = json.dumps( relationship_dict )
+        resp = HttpResponseRedirect( redirect_to=redirect_url, content=content_json )
     elif request.method == 'DELETE':
-        rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, request.body, user_id )
+        log.debug( 'starting DELETE flow handling' )
+        record_id = str( record_id )
+        assert type(record_id) == str
+        # reference_id = record_id
+        log.debug( f'record_id, ``{record_id}``')
+        rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, record_id, user_id )  # type: ignore
         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+        log.debug( f'redirect_url, ``{redirect_url}```' )
         resp = HttpResponseRedirect( redirect_url )
     else:
         log.warning( f'we shouldn\'t get here' )
         resp = HttpResponse( 'problem; see logs' )
     return resp
+
+
+# @shib_login
+# def data_relationships( request, rltnshp_id=None ):
+#     """ Called via ajax by views.edit_relationships() when `+` buton is clicked.
+#         Url: '/data/relationships/' -- 'data_relationships_url' 
+#         NOTE: 
+#         - the response will be a redirect to the record (the "reference").
+#         - the response.content will contain a json-string showing, eg, `{"relationship_id": 123, "new_relationship": true}`.
+#         - the reason for the new_relationship boolean is to distinguish, in testing, whether the relationship was created or already-existing.
+#         - as of 2023-June, the response.content is not being used by the front-end javascript.
+#         """
+#     log.debug( '\n\nstarting data_relationships()' )
+#     log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rltnshp_id, ``{rltnshp_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
+#     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+#     if request.method == 'POST':
+#         log.debug( 'starting POST flow handling' )
+#         relationship_dict: dict = v_data_relationships_manager.manage_relationships_post( request.body, user_id )
+#         rfrnc_id = relationship_dict['rfrnc_id']; assert type(rfrnc_id) == int
+#         relationship_id = relationship_dict['relationship_id']; assert type(relationship_id) == int
+#         relationship_is_new = relationship_dict['relationship_is_new']; assert type(relationship_is_new) == bool
+#         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+#         log.debug( f'redirect_url, ```{redirect_url}```' )
+#         # resp = HttpResponseRedirect( redirect_url )
+#         # resp = HttpResponseRedirect( redirect_url, 'FOO2' )
+#         content_json = json.dumps( relationship_dict )
+#         resp = HttpResponseRedirect( redirect_to=redirect_url, content=content_json )
+#     elif request.method == 'DELETE':
+#         log.debug( 'starting DELETE flow handling' )
+#         reference_id = request.GET['record']
+#         log.debug( f'reference_id, ``{reference_id}``')
+#         assert type(reference_id) == str
+#         rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, reference_id, user_id )  # type: ignore
+#         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+#         resp = HttpResponseRedirect( redirect_url )
+#     else:
+#         log.warning( f'we shouldn\'t get here' )
+#         resp = HttpResponse( 'problem; see logs' )
+#     return resp
+
+
+# @shib_login
+# def data_relationships( request, rltnshp_id=None ):
+#     """ Called via ajax by views.edit_relationships() when `+` buton is clicked.
+#         Url: '/data/relationships/' -- 'data_relationships_url' 
+#         NOTE: 
+#         - the response will be a redirect to the record (the "reference").
+#         - the response.content will contain a json-string showing, eg, `{"relationship_id": 123, "new_relationship": true}`.
+#         - the reason for the new_relationship boolean is to distinguish, in testing, whether the relationship was created or already-existing.
+#         - as of 2023-June, the response.content is not being used by the front-end javascript.
+#         """
+#     log.debug( '\n\nstarting data_relationships()' )
+#     log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rltnshp_id, ``{rltnshp_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
+#     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+#     if request.method == 'POST':
+#         rfrnc_id: str = v_data_relationships_manager.manage_relationships_post( request.body, user_id )
+#         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+#         log.debug( f'redirect_url, ```{redirect_url}```' )
+#         # resp = HttpResponseRedirect( redirect_url )
+#         # resp = HttpResponseRedirect( redirect_url, 'FOO2' )
+#         resp = HttpResponseRedirect( redirect_to=redirect_url, content='FOO4' )
+#     elif request.method == 'DELETE':
+#         rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, request.body, user_id )
+#         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+#         resp = HttpResponseRedirect( redirect_url )
+#     else:
+#         log.warning( f'we shouldn\'t get here' )
+#         resp = HttpResponse( 'problem; see logs' )
+#     return resp
 
 
 # ===========================
