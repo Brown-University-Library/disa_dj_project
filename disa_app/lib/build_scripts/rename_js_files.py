@@ -1,35 +1,76 @@
 import os
+import logging
+import pprint
 import re
 import subprocess
 import hashlib
 
 
-def main(project_directory):
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s', 
+    datefmt='%d/%b/%Y %H:%M:%S' )
+log = logging.getLogger(__name__)
+
+
+def main( project_directory ):
+    """ Controller function.
+        Called by dunder-main. """
+    log.debug( 'starting main()' )
+    log.debug( f'project_directory, ``{project_directory}``' )
     js_directory = os.path.join(project_directory, "disa_app/static/js/")
-    
+    log.debug( f'js_directory, ``{js_directory}``' )
     if not os.path.exists(js_directory):
-        print(f"Directory {js_directory} does not exist.")
+        raise Exception( f"Directory ``{js_directory}`` does not exist." )
         return
     
-    for filename in os.listdir(js_directory):
+    ## prep list relevant files -------------------------------------
+    relevant_file_paths = get_relevant_file_paths( js_directory )
+
+    ## create tracker-dict ------------------------------------------
+    tracker_dict = make_tracker_dict( relevant_file_paths: list )
+
+    1/0
+
+    return
+
+    # for filename in os.listdir(js_directory):
+    #     if filename.endswith('.js'):
+    #         file_path = os.path.join(js_directory, filename)
+    #         log.debug( f'file_path, ``{file_path}``' )
+    #         pre_existing_hash = re.search(r'__(\w+)\.js', filename)
+    #         log.debug( f'pre_existing_hash, ``{pre_existing_hash}``' )
+    #         if pre_existing_hash:
+    #             pre_existing_hash = pre_existing_hash.group(1)
+    #             actual_hash = md5(file_path)
+
+    #         else:
+    #             log.debug(f"File {filename} does not have a pre-existing hash in its name")
+
+def get_relevant_file_paths( js_directory_path: str ) -> list:
+    """ Compiles list of relevant file-paths.
+        Called by main() """
+    assert type(js_directory_path) == str
+    log.debug( f'js_directory_path, ``{js_directory_path}``' )
+    relevant_file_paths = []
+    for filename in os.listdir(js_directory_path):
         if filename.endswith('.js'):
-            file_path = os.path.join(js_directory, filename)
-            pre_existing_hash = re.search(r'__(\w+)\.js', filename)
-            if pre_existing_hash:
-                pre_existing_hash = pre_existing_hash.group(1)
-                actual_hash = md5(file_path)
+            file_path = os.path.join(js_directory_path, filename)
+            relevant_file_paths.append( file_path )
+    log.debug( f'relevant_file_paths, ``{pprint.pformat(relevant_file_paths)}``' )
+    return relevant_file_paths
 
-                if actual_hash != pre_existing_hash:
-                    new_filename = re.sub(r'__(\w+)\.js', f'__{actual_hash}.js', filename)
-                    new_file_path = os.path.join(js_directory, new_filename)
-                    os.rename(file_path, new_file_path)
-                    update_references(project_directory, filename, new_filename)
-                    print(f"Updated {filename} to {new_filename}")
-                else:
-                    print(f"Hash matched for {filename}")
-            else:
-                print(f"File {filename} does not have a pre-existing hash in its name")
 
+def rename_file(file_path, new_filename):
+        if actual_hash != pre_existing_hash:
+            new_filename = re.sub(r'__(\w+)\.js', f'__{actual_hash}.js', filename)
+            new_file_path = os.path.join(js_directory, new_filename)
+            log.debug( f'new_file_path, ``{new_file_path}``' )
+            os.rename(file_path, new_file_path)
+            update_references(project_directory, filename, new_filename)
+            log.debug(f"Updated {filename} to {new_filename}")
+        else:
+            log.debug(f"Hash matched for {filename}")
 
 def md5(file_path):
     hash_md5 = hashlib.md5()
