@@ -5,7 +5,7 @@ import hashlib
 
 
 def main(project_directory):
-    js_directory = os.path.join(project_directory, "app/static/js/")
+    js_directory = os.path.join(project_directory, "disa_app/static/js/")
     
     if not os.path.exists(js_directory):
         print(f"Directory {js_directory} does not exist.")
