@@ -19,28 +19,36 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 
-def main( project_directory ):
-    """ Controller function.
-        Called by dunder-main. """
-    log.debug( 'starting main()' )
-    log.debug( f'project_directory, ``{project_directory}``' )
-    js_directory = os.path.join(project_directory, "disa_app/static/js/")
-    log.debug( f'js_directory, ``{js_directory}``' )
-    if not os.path.exists(js_directory):
-        raise Exception( f"Directory ``{js_directory}`` does not exist." )
+EXCLUDES = [
+    'hilitor.js',
+    'lunr.min.js',
+    'moment.js',
+    'tabulator.js',
+    'tagify.min.js',
+    'tinymce-vue.js',
+]
+
+
+class Renamer():
+
+    def __init__(self) -> None:
+        tracker_dict = {}
+
+    def manage_renames( self, project_directory ):
+        """ Controller function.
+            Called by dunder-main. """
+        log.debug( 'starting manage_renames()' )
+        ## prep list relevant files -------------------------------------
+        relevant_file_paths = self.get_relevant_file_paths( project_directory )
+
+        1/0
+
+        ## create tracker-dict ------------------------------------------
+        # tracker_dict = make_tracker_dict( relevant_file_paths: list )
+
+        # 1/0
+
         return
-    
-    ## prep list relevant files -------------------------------------
-    relevant_file_paths = get_relevant_file_paths( js_directory )
-
-    1/0
-
-    ## create tracker-dict ------------------------------------------
-    # tracker_dict = make_tracker_dict( relevant_file_paths: list )
-
-    # 1/0
-
-    return
 
     # for filename in os.listdir(js_directory):
     #     if filename.endswith('.js'):
@@ -55,18 +63,31 @@ def main( project_directory ):
     #         else:
     #             log.debug(f"File {filename} does not have a pre-existing hash in its name")
 
-def get_relevant_file_paths( js_directory_path: str ) -> list:
-    """ Compiles list of relevant file-paths.
-        Called by main() """
-    assert type(js_directory_path) == str
-    log.debug( f'js_directory_path, ``{js_directory_path}``' )
-    relevant_file_paths = []
-    for filename in os.listdir(js_directory_path):
-        if filename.endswith('.js'):
-            file_path = os.path.join(js_directory_path, filename)
-            relevant_file_paths.append( file_path )
-    log.debug( f'relevant_file_paths, ``{pprint.pformat(relevant_file_paths)}``' )
-    return relevant_file_paths
+
+    def get_relevant_file_paths( self, project_dir_path: str ) -> list:
+        """ Compiles list of relevant file-paths.
+            Called by main() """
+        log.debug( f'project_dir_path, ``{project_dir_path}``' )
+        # identify js-directory -------------------------------------
+        js_dir_path = os.path.join(project_dir_path, "disa_app/static/js/")
+        log.debug( f'js_dir_path, ``{js_dir_path}``' )
+        if not os.path.exists(js_dir_path):
+            raise Exception( f"Directory ``{js_dir_path}`` does not exist." )
+            return
+        assert type(js_dir_path) == str
+        log.debug( f'js_directory_path, ``{js_dir_path}``' )
+        relevant_file_paths = []
+        for filename in os.listdir(js_dir_path):
+            if filename.endswith('.js'):
+                if filename in EXCLUDES:
+                    log.debug( f'skipping excluded file, ``{filename}``' )
+                    continue
+                ## add to tracker-dict ------------------------------
+                HEREZZ
+                file_path = os.path.join(js_dir_path, filename)
+                relevant_file_paths.append( file_path )
+        log.debug( f'relevant_file_paths, ``{pprint.pformat(relevant_file_paths)}``' )
+        return relevant_file_paths
 
 
 def rename_file(file_path, new_filename):
@@ -107,7 +128,8 @@ def update_references(directory, old_filename, new_filename):
 
 if __name__ == "__main__":
     log.debug( '\n\nstarting dunder-main' )
+    renamer = Renamer()
     PROJECT_DIR_PATH = os.curdir; assert type(PROJECT_DIR_PATH) == str  
     project_dir_fullpath = os.path.abspath(PROJECT_DIR_PATH); assert type(project_dir_fullpath) == str
     log.debug( f'project_dir_fullpath, ``{project_dir_fullpath}``' )
-    main( project_dir_fullpath )
+    renamer.manage_renames( project_dir_fullpath )
