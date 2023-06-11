@@ -1,3 +1,9 @@
+"""
+Usage:
+- $ cd /to/project_root (where manage.py is)
+- $ python ./disa_app.lib.build_scripts.rename_js_files
+"""
+
 import os
 import logging
 import pprint
@@ -27,10 +33,12 @@ def main( project_directory ):
     ## prep list relevant files -------------------------------------
     relevant_file_paths = get_relevant_file_paths( js_directory )
 
-    ## create tracker-dict ------------------------------------------
-    tracker_dict = make_tracker_dict( relevant_file_paths: list )
-
     1/0
+
+    ## create tracker-dict ------------------------------------------
+    # tracker_dict = make_tracker_dict( relevant_file_paths: list )
+
+    # 1/0
 
     return
 
@@ -98,5 +106,8 @@ def update_references(directory, old_filename, new_filename):
 
 
 if __name__ == "__main__":
-    PROJECT_DIR_PATH = os.environ['DISA_DJ__PROJECT_DIR_PATH']
-    main( PROJECT_DIR_PATH )
+    log.debug( '\n\nstarting dunder-main' )
+    PROJECT_DIR_PATH = os.curdir; assert type(PROJECT_DIR_PATH) == str  
+    project_dir_fullpath = os.path.abspath(PROJECT_DIR_PATH); assert type(project_dir_fullpath) == str
+    log.debug( f'project_dir_fullpath, ``{project_dir_fullpath}``' )
+    main( project_dir_fullpath )
