@@ -32,14 +32,14 @@ EXCLUDES = [
 class Renamer():
 
     def __init__(self) -> None:
-        tracker_dict = {}
+        self.tracker_dict = {}
 
     def manage_renames( self, project_directory ):
         """ Controller function.
             Called by dunder-main. """
         log.debug( 'starting manage_renames()' )
         ## prep list relevant files -------------------------------------
-        relevant_file_paths = self.get_relevant_file_paths( project_directory )
+        self.get_relevant_file_paths( project_directory )  # initializes self.tracker_dict
 
         1/0
 
@@ -64,11 +64,11 @@ class Renamer():
     #             log.debug(f"File {filename} does not have a pre-existing hash in its name")
 
 
-    def get_relevant_file_paths( self, project_dir_path: str ) -> list:
+    def get_relevant_file_paths( self, project_dir_path: str ) -> None:
         """ Compiles list of relevant file-paths.
             Called by main() """
         log.debug( f'project_dir_path, ``{project_dir_path}``' )
-        # identify js-directory -------------------------------------
+        ## identify js-directory ------------------------------------
         js_dir_path = os.path.join(project_dir_path, "disa_app/static/js/")
         log.debug( f'js_dir_path, ``{js_dir_path}``' )
         if not os.path.exists(js_dir_path):
@@ -76,18 +76,21 @@ class Renamer():
             return
         assert type(js_dir_path) == str
         log.debug( f'js_directory_path, ``{js_dir_path}``' )
-        relevant_file_paths = []
-        for filename in os.listdir(js_dir_path):
-            if filename.endswith('.js'):
-                if filename in EXCLUDES:
-                    log.debug( f'skipping excluded file, ``{filename}``' )
+        dir_contents: list = os.listdir(js_dir_path)
+        log.debug( f'dir_contents, ``{pprint.pformat(dir_contents)}``' )
+        ## identify relevant files ----------------------------------
+        for entry in dir_contents:
+            log.debug( f'processing entry, ``{entry}``' )
+            if entry.endswith('.js'):
+                if entry in EXCLUDES:
+                    log.debug( f'skipping excluded file, ``{entry}``' )
                     continue
                 ## add to tracker-dict ------------------------------
-                HEREZZ
-                file_path = os.path.join(js_dir_path, filename)
-                relevant_file_paths.append( file_path )
-        log.debug( f'relevant_file_paths, ``{pprint.pformat(relevant_file_paths)}``' )
-        return relevant_file_paths
+                self.tracker_dict[entry] = {}
+                file_path = os.path.join(js_dir_path, entry)
+                self.tracker_dict[entry]['file_path'] = file_path
+        log.debug( f'tracker_dict after initialization, ``{pprint.pformat(self.tracker_dict)}``' )
+        return
 
 
 def rename_file(file_path, new_filename):
