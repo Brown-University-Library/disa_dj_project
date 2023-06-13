@@ -59,18 +59,35 @@ class Renamer():
             file_path = file_info['file_path']; assert type(file_path) == str
             log.debug( f'processing file_path, ``{file_path}``' )
             ## look for pre-existing hash -------------------------------
-            HEREZZ
-        
-            if actual_hash != pre_existing_hash:
-                new_filename = re.sub(r'__(\w+)\.js', f'__{actual_hash}.js', filename)
-                new_file_path = os.path.join(js_directory, new_filename)
-                log.debug( f'new_file_path, ``{new_file_path}``' )
-                os.rename(file_path, new_file_path)
-                update_references(project_directory, filename, new_filename)
-                log.debug(f"Updated {filename} to {new_filename}")
+            match_obj = re.search(r'__(\w+)\.js', filename)
+            assert match_obj is None or type(match_obj) == re.Match
+            log.debug( f'match_obj, ``{match_obj}``' )
+            if match_obj:
+                # assert type(match_obj) == re.Match
+                pre_existing_hash = match_obj.group(1); assert type(pre_existing_hash) == str
+                log.debug( f'pre_existing_hash, ``{pre_existing_hash}``' )
+                self.tracker_dict[filename]['pre_existing_hash'] = pre_existing_hash
+                
+                # actual_hash = md5(file_path)
             else:
-                log.debug(f"Hash matched for {filename}")
+                log.debug( f'no pre-existing hash found in filename, ``{filename}``' )
+                self.tracker_dict[filename]['pre_existing_hash'] = None
 
+
+            # 2/0
+        
+            # if actual_hash != pre_existing_hash:
+            #     new_filename = re.sub(r'__(\w+)\.js', f'__{actual_hash}.js', filename)
+            #     new_file_path = os.path.join(js_directory, new_filename)
+            #     log.debug( f'new_file_path, ``{new_file_path}``' )
+            #     os.rename(file_path, new_file_path)
+            #     update_references(project_directory, filename, new_filename)
+            #     log.debug(f"Updated {filename} to {new_filename}")
+            # else:
+            #     log.debug(f"Hash matched for {filename}")
+
+        log.debug( f'tracker_dict after rename, ``{pprint.pformat(self.tracker_dict)}``' )    
+        return
 
     def get_relevant_file_paths( self, project_dir_path: str ) -> None:
         """ Compiles list of relevant file-paths.
