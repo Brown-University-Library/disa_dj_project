@@ -46,32 +46,50 @@ class Renamer():
             self.rename_file( filename, file_info )
         return
 
+    ## main helper functions ----------------------------------------
+
+    def get_relevant_file_paths( self, project_dir_path: str ) -> None:
+        """ Compiles list of relevant file-paths.
+            Initializes tracker-dict.
+            Called by main() """
+        log.debug( f'project_dir_path, ``{project_dir_path}``' ); assert type(project_dir_path) == str
+        ## identify js-directory ------------------------------------
+        js_dir_path = os.path.join(project_dir_path, "disa_app/static/js/"); assert type(js_dir_path) == str
+        log.debug( f'js_dir_path, ``{js_dir_path}``' )
+        if not os.path.exists(js_dir_path):
+            raise Exception( f"Directory ``{js_dir_path}`` does not exist." )
+        self.js_dir_path = js_dir_path
+        ## identify relevant files ----------------------------------
+        dir_contents: list = os.listdir(js_dir_path)
+        log.debug( f'dir_contents, ``{pprint.pformat(dir_contents)}``' )
+        for entry in dir_contents:
+            log.debug( f'processing entry, ``{entry}``' )
+            if entry.endswith('.js'):
+                if entry in EXCLUDES:
+                    log.debug( f'skipping excluded file, ``{entry}``' )
+                    continue
+                ## add to tracker-dict ------------------------------
+                self.tracker_dict[entry] = {}
+                self.tracker_dict[entry]['file_path'] = os.path.join(js_dir_path, entry)
+        log.debug( f'tracker_dict after initialization, ``{pprint.pformat(self.tracker_dict)}``' )
+        return
+
     def rename_file( self, filename: str, file_info: dict ):
-        """ Coordinate filename rename step.
+        """ Coordinates filename rename step.
             Called by manage_renames(). """
-        log.debug( 'starting rename_file()' )
-        assert type(filename) == str
-        assert type(file_info) == dict
-        file_path = file_info['file_path']; assert type(file_path) == str
+        log.debug( 'starting rename_file()' ); assert type(filename) == str; assert type(file_info) == dict
+        file_path: str = file_info['file_path']; assert type(file_path) == str
         log.debug( f'processing file_path, ``{file_path}``' )
-        ## look for pre-existing hash -------------------------------
-        pre_existing_hash = ''
-        match_obj = re.search(r'__(\w+)\.js', filename)
-        assert ( match_obj is None ) or ( type(match_obj) == re.Match )
-        log.debug( f'match_obj, ``{match_obj}``' )
-        if match_obj:
-            pre_existing_hash = match_obj.group(1); assert type(pre_existing_hash) == str
-            log.debug( f'pre_existing_hash, ``{pre_existing_hash}``' )
-            self.tracker_dict[filename]['pre_existing_hash'] = pre_existing_hash
-        else:
-            log.debug( f'no pre-existing hash found in filename, ``{filename}``' )
-            self.tracker_dict[filename]['pre_existing_hash'] = None
+        ## determine pre-existing hash ------------------------------
+        pre_existing_hash: str = self.determine_pre_existing_hash( filename ); assert type(pre_existing_hash) == str
+
         ## determine actual hash ------------------------------------
         actual_hash: str = determine_md5( file_path ); assert type(actual_hash) == str
         log.debug( f'actual_hash, ``{actual_hash}``' )
         log.debug( f'type(actual_hash), ``{type(actual_hash)}``' )
         ## rename file if needed ------------------------------------
         if actual_hash != pre_existing_hash:
+            # HEREZZ - this isn't working yet (and break it out so it can be tested)
             log.debug( 'hashes do not match; renaming' )
             if '__' in filename:
                 parts = filename.split('.')  # splitting 'foo.js' into ['foo', 'js']
@@ -89,6 +107,26 @@ class Renamer():
 
         log.debug( f'tracker_dict after rename, ``{pprint.pformat(self.tracker_dict)}``' )    
         return
+    
+        ## sub-helper functions -------------------------------------
+
+    def determine_pre_existing_hash( self, filename: str ) -> str:
+        """ Returns pre-existing hash from filename.
+            Called by rename_file() """
+        assert type(filename) == str
+        pre_existing_hash: str = ''
+        match_obj = re.search(r'__(\w+)\.js', filename)
+        assert ( match_obj is None ) or ( type(match_obj) == re.Match )
+        log.debug( f'match_obj, ``{match_obj}``' )
+        if match_obj:
+            pre_existing_hash = match_obj.group(1); assert type(pre_existing_hash) == str
+            log.debug( f'pre_existing_hash, ``{pre_existing_hash}``' )
+        else:
+            log.debug( f'no pre-existing hash found in filename, ``{filename}``' )
+        return pre_existing_hash
+
+    
+    ## end class Renamer()
 
     # def rename_files( self ):
     #     """ Coordinate filename rename step.
@@ -130,35 +168,6 @@ class Renamer():
     #     log.debug( f'tracker_dict after rename, ``{pprint.pformat(self.tracker_dict)}``' )    
     #     return
 
-    def get_relevant_file_paths( self, project_dir_path: str ) -> None:
-        """ Compiles list of relevant file-paths.
-            Initializes tracker-dict.
-            Called by main() """
-        log.debug( f'project_dir_path, ``{project_dir_path}``' )
-        ## identify js-directory ------------------------------------
-        js_dir_path = os.path.join(project_dir_path, "disa_app/static/js/")
-        log.debug( f'js_dir_path, ``{js_dir_path}``' )
-        if not os.path.exists(js_dir_path):
-            raise Exception( f"Directory ``{js_dir_path}`` does not exist." )
-            return
-        assert type(js_dir_path) == str
-        self.js_dir_path = js_dir_path
-        ## identify relevant files ----------------------------------
-        log.debug( f'js_directory_path, ``{js_dir_path}``' )
-        dir_contents: list = os.listdir(js_dir_path)
-        log.debug( f'dir_contents, ``{pprint.pformat(dir_contents)}``' )
-        for entry in dir_contents:
-            log.debug( f'processing entry, ``{entry}``' )
-            if entry.endswith('.js'):
-                if entry in EXCLUDES:
-                    log.debug( f'skipping excluded file, ``{entry}``' )
-                    continue
-                ## add to tracker-dict ------------------------------
-                self.tracker_dict[entry] = {}
-                file_path = os.path.join(js_dir_path, entry)
-                self.tracker_dict[entry]['file_path'] = file_path
-        log.debug( f'tracker_dict after initialization, ``{pprint.pformat(self.tracker_dict)}``' )
-        return
 
 
 # def rename_file(file_path, new_filename):
