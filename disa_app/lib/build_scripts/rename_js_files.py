@@ -72,15 +72,20 @@ class Renamer():
         log.debug( f'type(actual_hash), ``{type(actual_hash)}``' )
         ## rename file if needed ------------------------------------
         if actual_hash != pre_existing_hash:
-            new_filename = re.sub(r'__(\w+)\.js', f'__{actual_hash}.js', filename)
-            new_file_path = os.path.join(self.js_dir_path, new_filename)
+            log.debug( 'hashes do not match; renaming' )
+            if '__' in filename:
+                parts = filename.split('.')  # splitting 'foo.js' into ['foo', 'js']
+                new_filename = parts[0] + '__' + actual_hash + '.js'
+            else:
+                new_filename = re.sub(r'__(\w+)\.js', f'__{actual_hash}.js', filename)
+            new_file_path = os.path.join( self.js_dir_path, new_filename )
             log.debug( f'new_file_path, ``{new_file_path}``' )
             os.rename(file_path, new_file_path)
             # update_references(project_directory, filename, new_filename)  # TODO
             log.debug(f"Updated {filename} to {new_filename}")
             self.tracker_dict[filename]['new_filename'] = new_filename
         else:
-            log.debug(f"Hash matched for {filename}")
+            log.debug(f"hashes matched for {filename}")
 
         log.debug( f'tracker_dict after rename, ``{pprint.pformat(self.tracker_dict)}``' )    
         return
