@@ -33,6 +33,7 @@ class Renamer():
 
     def __init__(self) -> None:
         self.tracker_dict = {}
+        self.js_dir_path = ''  # set in get_relevant_file_paths()
 
     def manage_renames( self, project_directory ):
         """ Controller function.
@@ -40,54 +41,89 @@ class Renamer():
         log.debug( 'starting manage_renames()' )
         ## prep list relevant files ---------------------------------
         self.get_relevant_file_paths( project_directory )  # initializes self.tracker_dict
-
         ## run file-renames -----------------------------------------
-        self.rename_files()
-
-        ## run reference-updates ------------------------------------
-        #TODO
-
+        for filename, file_info in self.tracker_dict.items():
+            self.rename_file( filename, file_info )
         return
 
-    def rename_files( self ):
+    def rename_file( self, filename: str, file_info: dict ):
         """ Coordinate filename rename step.
             Called by manage_renames(). """
-        log.debug( 'starting rename_files()' )
-        for filename, file_info in self.tracker_dict.items():
-            assert type(filename) == str
-            assert type(file_info) == dict
-            file_path = file_info['file_path']; assert type(file_path) == str
-            log.debug( f'processing file_path, ``{file_path}``' )
-            ## look for pre-existing hash -------------------------------
-            match_obj = re.search(r'__(\w+)\.js', filename)
-            assert match_obj is None or type(match_obj) == re.Match
-            log.debug( f'match_obj, ``{match_obj}``' )
-            if match_obj:
-                # assert type(match_obj) == re.Match
-                pre_existing_hash = match_obj.group(1); assert type(pre_existing_hash) == str
-                log.debug( f'pre_existing_hash, ``{pre_existing_hash}``' )
-                self.tracker_dict[filename]['pre_existing_hash'] = pre_existing_hash
-                
-                # actual_hash = md5(file_path)
-            else:
-                log.debug( f'no pre-existing hash found in filename, ``{filename}``' )
-                self.tracker_dict[filename]['pre_existing_hash'] = None
-
-
-            # 2/0
-        
-            # if actual_hash != pre_existing_hash:
-            #     new_filename = re.sub(r'__(\w+)\.js', f'__{actual_hash}.js', filename)
-            #     new_file_path = os.path.join(js_directory, new_filename)
-            #     log.debug( f'new_file_path, ``{new_file_path}``' )
-            #     os.rename(file_path, new_file_path)
-            #     update_references(project_directory, filename, new_filename)
-            #     log.debug(f"Updated {filename} to {new_filename}")
-            # else:
-            #     log.debug(f"Hash matched for {filename}")
+        log.debug( 'starting rename_file()' )
+        assert type(filename) == str
+        assert type(file_info) == dict
+        file_path = file_info['file_path']; assert type(file_path) == str
+        log.debug( f'processing file_path, ``{file_path}``' )
+        ## look for pre-existing hash -------------------------------
+        pre_existing_hash = ''
+        match_obj = re.search(r'__(\w+)\.js', filename)
+        assert ( match_obj is None ) or ( type(match_obj) == re.Match )
+        log.debug( f'match_obj, ``{match_obj}``' )
+        if match_obj:
+            pre_existing_hash = match_obj.group(1); assert type(pre_existing_hash) == str
+            log.debug( f'pre_existing_hash, ``{pre_existing_hash}``' )
+            self.tracker_dict[filename]['pre_existing_hash'] = pre_existing_hash
+        else:
+            log.debug( f'no pre-existing hash found in filename, ``{filename}``' )
+            self.tracker_dict[filename]['pre_existing_hash'] = None
+        ## determine actual hash ------------------------------------
+        actual_hash: str = determine_md5( file_path ); assert type(actual_hash) == str
+        log.debug( f'actual_hash, ``{actual_hash}``' )
+        log.debug( f'type(actual_hash), ``{type(actual_hash)}``' )
+        ## rename file if needed ------------------------------------
+        if actual_hash != pre_existing_hash:
+            new_filename = re.sub(r'__(\w+)\.js', f'__{actual_hash}.js', filename)
+            new_file_path = os.path.join(self.js_dir_path, new_filename)
+            log.debug( f'new_file_path, ``{new_file_path}``' )
+            os.rename(file_path, new_file_path)
+            # update_references(project_directory, filename, new_filename)  # TODO
+            log.debug(f"Updated {filename} to {new_filename}")
+            self.tracker_dict[filename]['new_filename'] = new_filename
+        else:
+            log.debug(f"Hash matched for {filename}")
 
         log.debug( f'tracker_dict after rename, ``{pprint.pformat(self.tracker_dict)}``' )    
         return
+
+    # def rename_files( self ):
+    #     """ Coordinate filename rename step.
+    #         Called by manage_renames(). """
+    #     log.debug( 'starting rename_files()' )
+    #     for filename, file_info in self.tracker_dict.items():
+    #         assert type(filename) == str
+    #         assert type(file_info) == dict
+    #         file_path = file_info['file_path']; assert type(file_path) == str
+    #         log.debug( f'processing file_path, ``{file_path}``' )
+    #         ## look for pre-existing hash -------------------------------
+    #         match_obj = re.search(r'__(\w+)\.js', filename)
+    #         assert match_obj is None or type(match_obj) == re.Match
+    #         log.debug( f'match_obj, ``{match_obj}``' )
+    #         if match_obj:
+    #             # assert type(match_obj) == re.Match
+    #             pre_existing_hash = match_obj.group(1); assert type(pre_existing_hash) == str
+    #             log.debug( f'pre_existing_hash, ``{pre_existing_hash}``' )
+    #             self.tracker_dict[filename]['pre_existing_hash'] = pre_existing_hash
+                
+    #             # actual_hash = md5(file_path)
+    #         else:
+    #             log.debug( f'no pre-existing hash found in filename, ``{filename}``' )
+    #             self.tracker_dict[filename]['pre_existing_hash'] = None
+
+
+    #         # 2/0
+        
+    #         # if actual_hash != pre_existing_hash:
+    #         #     new_filename = re.sub(r'__(\w+)\.js', f'__{actual_hash}.js', filename)
+    #         #     new_file_path = os.path.join(js_directory, new_filename)
+    #         #     log.debug( f'new_file_path, ``{new_file_path}``' )
+    #         #     os.rename(file_path, new_file_path)
+    #         #     update_references(project_directory, filename, new_filename)
+    #         #     log.debug(f"Updated {filename} to {new_filename}")
+    #         # else:
+    #         #     log.debug(f"Hash matched for {filename}")
+
+    #     log.debug( f'tracker_dict after rename, ``{pprint.pformat(self.tracker_dict)}``' )    
+    #     return
 
     def get_relevant_file_paths( self, project_dir_path: str ) -> None:
         """ Compiles list of relevant file-paths.
@@ -101,10 +137,11 @@ class Renamer():
             raise Exception( f"Directory ``{js_dir_path}`` does not exist." )
             return
         assert type(js_dir_path) == str
+        self.js_dir_path = js_dir_path
+        ## identify relevant files ----------------------------------
         log.debug( f'js_directory_path, ``{js_dir_path}``' )
         dir_contents: list = os.listdir(js_dir_path)
         log.debug( f'dir_contents, ``{pprint.pformat(dir_contents)}``' )
-        ## identify relevant files ----------------------------------
         for entry in dir_contents:
             log.debug( f'processing entry, ``{entry}``' )
             if entry.endswith('.js'):
@@ -130,12 +167,17 @@ class Renamer():
 #         else:
 #             log.debug(f"Hash matched for {filename}")
 
-# def md5(file_path):
-#     hash_md5 = hashlib.md5()
-#     with open(file_path, "rb") as f:
-#         for chunk in iter(lambda: f.read(4096), b""):
-#             hash_md5.update(chunk)
-#     return hash_md5.hexdigest()
+def determine_md5( file_path: str ) -> str:
+    """ Returns md5 hash of file.
+        Called by rename_file() """
+    assert type(file_path) == str
+    hash_md5 = hashlib.md5()
+    with open( file_path, 'rb' ) as f:
+        for chunk in iter( lambda: f.read(4096), b'' ):
+            hash_md5.update( chunk )
+    return_hash: str = hash_md5.hexdigest(); assert type(return_hash) == str
+    log.debug( f'return_hash, ``{return_hash}``' )
+    return return_hash
 
 
 # def update_references(directory, old_filename, new_filename):
