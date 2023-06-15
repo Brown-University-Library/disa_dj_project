@@ -33,25 +33,27 @@ class Renamer():
 
     def __init__(self) -> None:
         self.tracker_dict = {}
-        self.js_dir_path = ''  # set in get_relevant_file_paths()
-        # self.temp_renamed_filename = ''
+        self.js_dir_path = ''   # set in get_relevant_file_paths()
+        self.html_list = []     # set in get_relevant_html_paths()
 
     def manage_renames( self, project_directory ):
         """ Controller function.
             Called by dunder-main. """
         log.debug( 'starting manage_renames()' )
         ## prep list relevant files ---------------------------------
-        self.get_relevant_file_paths( project_directory )  # initializes self.tracker_dict
+        self.get_relevant_js_paths( project_directory )     # initializes self.tracker_dict
+        self.get_html_paths( project_directory )   # initializes self.html_list
         ## run file-renames -----------------------------------------
         for filename, file_info in self.tracker_dict.items():
             new_filename = self.rename_file( filename, file_info )  # `new_filename` will be '' if no rename needed
             ## rename references ------------------------------------
-            self.rename_references( filename, new_filename )  
+            self.rename_js_references( filename, new_filename )  
+            self.rename_html_references( filename, new_filename )
         return
 
     ## main helper functions ----------------------------------------
 
-    def get_relevant_file_paths( self, project_dir_path: str ) -> None:
+    def get_relevant_js_paths( self, project_dir_path: str ) -> None:
         """ Compiles list of relevant file-paths.
             Initializes tracker-dict.
             Called by manage_renames() """
@@ -76,7 +78,24 @@ class Renamer():
                 self.tracker_dict[entry]['file_path'] = os.path.join(js_dir_path, entry)
         log.debug( f'tracker_dict after initialization, ``{pprint.pformat(self.tracker_dict)}``' )
         return
-
+    
+    def get_html_paths( self, project_dir_path: str ) -> None:
+        """ Gets list of html paths.
+            Called by manage_renames() """
+        html_dir_path = os.path.join(project_dir_path, "disa_app/disa_app_templates"); assert type(html_dir_path) == str
+        log.debug( f'html_dir_path, ``{html_dir_path}``' )
+        ## identify relevant files ----------------------------------
+        for dirpath, dirnames, filenames in os.walk( project_dir_path ):
+            for filename in filenames:
+                ## check for .html file -
+                if filename.endswith( '.html' ):
+                    ## get full path --------------------------------
+                    full_path = os.path.join(dirpath, filename)
+                    ## add to list ----------------------------------
+                    self.html_list.append(full_path)
+        log.debug( f'self.html_list after initialization, ``{pprint.pformat(self.html_list)}``' )
+        return
+    
     def rename_file( self, filename: str, file_info: dict ) -> str:
         """ Coordinates filename rename step.
             Called by manage_renames(). """
@@ -92,8 +111,8 @@ class Renamer():
         # log.debug( f'tracker_dict after rename, ``{pprint.pformat(self.tracker_dict)}``' )    
         return new_filename
 
-    def rename_references( self, original_filename: str, new_filename: str ) -> None:
-        """ Renames references to renamed file.
+    def rename_js_references( self, original_filename: str, new_filename: str ) -> None:
+        """ Renames references in js files.
             Called by manage_renames() """
         log.debug( f'original_filename, ``{original_filename}``; new_filename, ``{new_filename}``' )
         if new_filename:
@@ -120,6 +139,25 @@ class Renamer():
                             f.write( new_file_path )
         return
 
+    def rename_html_references( self, original_filename: str, new_filename: str ) -> None:
+        """ Renames references in html files.
+            Called by manage_renames() """
+        log.debug( f'original_filename, ``{original_filename}``; new_filename, ``{new_filename}``' )
+        if new_filename:
+            for html_path in self.html_list:
+                try:
+                    filedata: str = ''
+                    with open( html_path, 'r', encoding='utf-8', errors='ignore' ) as f:
+                        filedata: str = f.read(); assert type(filedata) == str
+                    if original_filename in filedata:
+                        log.debug( f'original_filename will be updated to new_filename in html_path, ``{html_path}``' )
+                        new_data: str = filedata.replace( original_filename, new_filename ); assert type(new_data) == str
+                        with open( html_path, 'w', encoding='utf-8', errors='ignore' ) as f:
+                            f.write( new_data )
+                except Exception as e:
+                    log.exception( f'problem renaming references in html-file, ``{html_path}``; traceback follows; processing continues' )
+        return
+    
     ## sub-helper functions -------------------------------------
 
     def determine_pre_existing_hash( self, filename: str ) -> str:
