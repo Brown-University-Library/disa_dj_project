@@ -128,10 +128,12 @@ class Renamer():
                         new_data: str = filedata_A.replace( original_filename, new_filename ); assert type(new_data) == str
                         with open( file_path, 'w', encoding='utf-8', errors='ignore' ) as f:
                             f.write( new_data )
+                    else:
+                        log.debug( f'original_filename, ``{original_filename}`` not found in original-file-path, ``{file_path}``' )
                 except Exception as e:
                     # log.exception( f'problem renaming references in file, ``{file_path}``; traceback follows, then continuing' )
                     log.debug( f'file_path, ``{file_path}`` not found; likely has changed.' )
-                    new_file_path: str = f'{self.js_dir_path}/{new_filename}'
+                    new_file_path: str = f'{self.js_dir_path}{new_filename}'
                     log.debug( f'checking for references in new_file_path, ``{new_file_path}``' )
                     filedata_B: str = ''
                     with open( new_file_path, 'r', encoding='utf-8', errors='ignore' ) as f:
@@ -141,6 +143,8 @@ class Renamer():
                         new_data: str = filedata_B.replace( original_filename, new_filename ); assert type(new_data) == str
                         with open( new_file_path, 'w', encoding='utf-8', errors='ignore' ) as f:
                             f.write( new_file_path )
+                    else:
+                        log.debug( f'original_filename, ``{original_filename}`` not found in new-file-path, ``{new_file_path}``' )
         return
 
     def rename_html_references( self, original_filename: str, new_filename: str ) -> None:
