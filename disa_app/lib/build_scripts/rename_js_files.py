@@ -44,7 +44,9 @@ class Renamer():
         self.get_relevant_file_paths( project_directory )  # initializes self.tracker_dict
         ## run file-renames -----------------------------------------
         for filename, file_info in self.tracker_dict.items():
-            self.rename_file( filename, file_info )
+            new_filename = self.rename_file( filename, file_info )  # `new_filename` will be '' if no rename needed
+            ## rename references ------------------------------------
+            new_filename = self.rename_references( filename, new_filename )  
         return
 
     ## main helper functions ----------------------------------------
@@ -75,7 +77,7 @@ class Renamer():
         log.debug( f'tracker_dict after initialization, ``{pprint.pformat(self.tracker_dict)}``' )
         return
 
-    def rename_file( self, filename: str, file_info: dict ) -> None:
+    def rename_file( self, filename: str, file_info: dict ) -> str:
         """ Coordinates filename rename step.
             Called by manage_renames(). """
         log.debug( 'starting rename_file()' ); assert type(filename) == str; assert type(file_info) == dict
@@ -87,11 +89,21 @@ class Renamer():
         actual_hash: str = self.determine_md5_hash( file_path ); assert type(actual_hash) == str
         ## rename file if needed ------------------------------------
         new_filename: str = self.rename_if_needed( filename, file_path, pre_existing_hash, actual_hash ); assert type(new_filename) == str
-        log.debug( f'tracker_dict after rename, ``{pprint.pformat(self.tracker_dict)}``' )    
-
-        ## rename references ----------------------------------------
-        ## TODO
-
+        # log.debug( f'tracker_dict after rename, ``{pprint.pformat(self.tracker_dict)}``' )    
+        return new_filename
+    
+    def rename_references( self, original_filename: str, new_filename: str ) -> None:
+        """ Renames references to renamed file.
+            Called by manage_renames() """
+        log.debug( f'original_filename, ``{original_filename}``; new_filename, ``{new_filename}``' )
+        if new_filename:
+            for filename, file_info in self.tracker_dict.items():
+                file_path: str = file_info['file_path']; assert type(file_path) == str
+                with open( file_path, 'r', encoding='utf-8', errors='ignore' ) as f:
+                    filedata: str = f.read(); assert type(filedata) == str
+                new_data: str = filedata.replace( original_filename, new_filename ); assert type(new_data) == str
+                with open( file_path, 'w', encoding='utf-8', errors='ignore' ) as f:
+                    f.write( new_data )
         return
     
     ## sub-helper functions -------------------------------------
