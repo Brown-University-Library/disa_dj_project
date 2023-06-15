@@ -47,7 +47,6 @@ class Renamer():
             new_filename = self.rename_file( filename, file_info )  # `new_filename` will be '' if no rename needed
             ## rename references ------------------------------------
             self.rename_references( filename, new_filename )  
-            1/0
         return
 
     ## main helper functions ----------------------------------------
@@ -55,7 +54,7 @@ class Renamer():
     def get_relevant_file_paths( self, project_dir_path: str ) -> None:
         """ Compiles list of relevant file-paths.
             Initializes tracker-dict.
-            Called by main() """
+            Called by manage_renames() """
         log.debug( f'project_dir_path, ``{project_dir_path}``' ); assert type(project_dir_path) == str
         ## identify js-directory ------------------------------------
         js_dir_path = os.path.join(project_dir_path, "disa_app/static/js/"); assert type(js_dir_path) == str
@@ -121,30 +120,6 @@ class Renamer():
                             f.write( new_file_path )
         return
 
-    # def rename_references( self, original_filename: str, new_filename: str ) -> None:
-    #     """ Renames references to renamed file.
-    #         Called by manage_renames() """
-    #     log.debug( f'original_filename, ``{original_filename}``; new_filename, ``{new_filename}``' )
-    #     if new_filename:
-    #         for filename, file_info in self.tracker_dict.items():
-    #             file_path: str = file_info['file_path']; assert type(file_path) == str
-    #             try:
-    #                 with open( file_path, 'r', encoding='utf-8', errors='ignore' ) as f:
-    #                     filedata: str = f.read(); assert type(filedata) == str
-    #                 new_data: str = filedata.replace( original_filename, new_filename ); assert type(new_data) == str
-    #                 with open( file_path, 'w', encoding='utf-8', errors='ignore' ) as f:
-    #                     f.write( new_data )
-    #             except Exception as e:
-    #                 log.exception( f'problem renaming references in file, ``{file_path}``; traceback follows, then continuing' )
-    #                 new_file_path: str = f'{self.js_dir_path}/{new_filename}'
-    #                 log.debug( f'new_file_path, ``{new_file_path}``' )
-    #                 with open( new_file_path, 'r', encoding='utf-8', errors='ignore' ) as f:
-    #                     filedata: str = f.read(); assert type(filedata) == str
-    #                 new_data: str = filedata.replace( original_filename, new_filename ); assert type(new_data) == str
-    #                 with open( new_file_path, 'w', encoding='utf-8', errors='ignore' ) as f:
-    #                     f.write( new_file_path )
-    #     return
-
     ## sub-helper functions -------------------------------------
 
     def determine_pre_existing_hash( self, filename: str ) -> str:
@@ -200,21 +175,6 @@ class Renamer():
         return new_filename
 
     ## end class Renamer()
-
-
-# def update_references(directory, old_filename, new_filename):
-#     for foldername, subfolders, filenames in os.walk(directory):
-#         for filename in filenames:
-#             file_path = os.path.join(foldername, filename)
-#             with open(file_path, 'r', encoding='utf-8', errors='ignore') as file:
-#                 filedata = file.read()
-            
-#             # Replace the target string
-#             new_data = filedata.replace(old_filename, new_filename)
-            
-#             # Write the file out again
-#             with open(file_path, 'w', encoding='utf-8', errors='ignore') as file:
-#                 file.write(new_data)
 
 
 if __name__ == "__main__":
