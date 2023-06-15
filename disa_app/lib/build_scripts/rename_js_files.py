@@ -117,6 +117,7 @@ class Renamer():
         """ Compiles simple js-paths for renaming js-references.
             Called by manage_renames() """
         log.debug( 'starting update_js_list()' )
+        new_js_list = []
         ## identify relevant files ----------------------------------
         dir_contents: list = os.listdir( self.js_dir_path )
         log.debug( f'dir_contents, ``{pprint.pformat(dir_contents)}``' )
@@ -127,7 +128,8 @@ class Renamer():
                     log.debug( f'skipping excluded file, ``{entry}``' )
                     continue
                 ## add to self.js_list ------------------------------
-                self.js_list.append( os.path.join(self.js_dir_path, entry) )
+                new_js_list.append( os.path.join(self.js_dir_path, entry) )
+        self.js_list = new_js_list
         log.debug( f'self.js_list, ``{pprint.pformat(self.js_list)}``' )
         return
 
