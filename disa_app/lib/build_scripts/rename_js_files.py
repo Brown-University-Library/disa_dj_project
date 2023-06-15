@@ -46,7 +46,7 @@ class Renamer():
         for filename, file_info in self.tracker_dict.items():
             new_filename = self.rename_file( filename, file_info )  # `new_filename` will be '' if no rename needed
             ## rename references ------------------------------------
-            new_filename = self.rename_references( filename, new_filename )  
+            self.rename_references( filename, new_filename )  
         return
 
     ## main helper functions ----------------------------------------
