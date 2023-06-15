@@ -91,7 +91,7 @@ class Renamer():
         new_filename: str = self.rename_if_needed( filename, file_path, pre_existing_hash, actual_hash ); assert type(new_filename) == str
         # log.debug( f'tracker_dict after rename, ``{pprint.pformat(self.tracker_dict)}``' )    
         return new_filename
-    
+
     def rename_references( self, original_filename: str, new_filename: str ) -> None:
         """ Renames references to renamed file.
             Called by manage_renames() """
@@ -99,12 +99,35 @@ class Renamer():
         if new_filename:
             for filename, file_info in self.tracker_dict.items():
                 file_path: str = file_info['file_path']; assert type(file_path) == str
-                with open( file_path, 'r', encoding='utf-8', errors='ignore' ) as f:
-                    filedata: str = f.read(); assert type(filedata) == str
-                new_data: str = filedata.replace( original_filename, new_filename ); assert type(new_data) == str
-                with open( file_path, 'w', encoding='utf-8', errors='ignore' ) as f:
-                    f.write( new_data )
+                try:
+                    with open( file_path, 'r', encoding='utf-8', errors='ignore' ) as f:
+                        filedata: str = f.read(); assert type(filedata) == str
+                    new_data: str = filedata.replace( original_filename, new_filename ); assert type(new_data) == str
+                    with open( file_path, 'w', encoding='utf-8', errors='ignore' ) as f:
+                        f.write( new_data )
+                except Exception as e:
+                    log.exception( f'problem renaming references in file, ``{file_path}``; traceback follows, then continuing' )
+                    new_file_path: str = f'self.js_dir_path/{new_filename}'
+                    with open( new_file_path, 'r', encoding='utf-8', errors='ignore' ) as f:
+                        filedata: str = f.read(); assert type(filedata) == str
+                    new_data: str = filedata.replace( original_filename, new_filename ); assert type(new_data) == str
+                    with open( new_file_path, 'w', encoding='utf-8', errors='ignore' ) as f:
+                        f.write( new_file_path )
         return
+
+    # def rename_references( self, original_filename: str, new_filename: str ) -> None:
+    #     """ Renames references to renamed file.
+    #         Called by manage_renames() """
+    #     log.debug( f'original_filename, ``{original_filename}``; new_filename, ``{new_filename}``' )
+    #     if new_filename:
+    #         for filename, file_info in self.tracker_dict.items():
+    #             file_path: str = file_info['file_path']; assert type(file_path) == str
+    #             with open( file_path, 'r', encoding='utf-8', errors='ignore' ) as f:
+    #                 filedata: str = f.read(); assert type(filedata) == str
+    #             new_data: str = filedata.replace( original_filename, new_filename ); assert type(new_data) == str
+    #             with open( file_path, 'w', encoding='utf-8', errors='ignore' ) as f:
+    #                 f.write( new_data )
+    #     return
     
     ## sub-helper functions -------------------------------------
 
