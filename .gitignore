@@ -3,6 +3,7 @@
 .svn
 .vscode
 *.pyc
+*pycache*
 browse_formatted.json
 browse.json
 denormalized_formatted.json
