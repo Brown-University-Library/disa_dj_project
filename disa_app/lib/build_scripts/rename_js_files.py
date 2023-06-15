@@ -107,7 +107,8 @@ class Renamer():
                         f.write( new_data )
                 except Exception as e:
                     log.exception( f'problem renaming references in file, ``{file_path}``; traceback follows, then continuing' )
-                    new_file_path: str = f'self.js_dir_path/{new_filename}'
+                    new_file_path: str = f'{self.js_dir_path}/{new_filename}'
+                    log.debug( f'new_file_path, ``{new_file_path}``' )
                     with open( new_file_path, 'r', encoding='utf-8', errors='ignore' ) as f:
                         filedata: str = f.read(); assert type(filedata) == str
                     new_data: str = filedata.replace( original_filename, new_filename ); assert type(new_data) == str
