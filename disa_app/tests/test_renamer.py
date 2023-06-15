@@ -25,8 +25,8 @@ class Renamer_Test( TestCase ):
 
     def test_determine_actual_hash(self):
         """ Checks actual hash. """
-        filepath = './disa_app/static/js/browse_tabulator.js'
-        self.assertEqual( 'e8c2913fb1f278a73804145e3cfc3739', self.renamer.determine_md5_hash( filepath ) )
+        filepath = './disa_app/tests/test_renamer_files/uses_foo.js'
+        self.assertEqual( 'c73d51adb19783f83c721aa66bd69ed6', self.renamer.determine_md5_hash( filepath ) )
 
     def test_rename_if_needed__neededA(self):
         """ Checks for updated-filename where hashes are different."""
@@ -54,33 +54,6 @@ class Renamer_Test( TestCase ):
         actual_hash = 'abc'
         new_filename = self.renamer.rename_if_needed( filename, filepath, previous_hash, actual_hash )
         self.assertEqual( '', new_filename )
-
-    # def test_rename_if_needed__neededA(self):
-    #     """ Checks renaming."""
-    #     filename = 'foo__abc.js'
-    #     filepath = f'./disa_app/tests/test_renamer_files/{filename}'
-    #     previous_hash = 'abc'
-    #     actual_hash = 'def'
-    #     self.renamer.rename_if_needed( filename, filepath, previous_hash, actual_hash )
-    #     self.assertEqual( 'foo__def.js', self.renamer.temp_renamed_filename )
-
-    # def test_rename_if_needed__neededB(self):
-    #     """ Checks renaming."""
-    #     filename = 'foo.js'
-    #     filepath = f'./disa_app/tests/test_renamer_files/{filename}'
-    #     previous_hash = ''
-    #     actual_hash = 'def'
-    #     self.renamer.rename_if_needed( filename, filepath, previous_hash, actual_hash )
-    #     self.assertEqual( 'foo__def.js', self.renamer.temp_renamed_filename )
-
-    # def test_rename_if_needed__not_needed(self):
-    #     """ Checks renaming."""
-    #     filename = 'foo__abc.js'
-    #     filepath = f'./disa_app/tests/test_renamer_files/{filename}'
-    #     previous_hash = 'abc'
-    #     actual_hash = 'abc'
-    #     self.renamer.rename_if_needed( filename, filepath, previous_hash, actual_hash )
-    #     self.assertEqual( 'foo__abc.js', self.renamer.temp_renamed_filename )
 
     ## helper -------------------------------------------------------
 
