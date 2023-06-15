@@ -118,22 +118,26 @@ class Renamer():
         if new_filename:
             for filename, file_info in self.tracker_dict.items():
                 file_path: str = file_info['file_path']; assert type(file_path) == str
+                log.debug( f'checking for references in file_path, ``{file_path}``' )
                 try:
                     filedata_A: str = ''
                     with open( file_path, 'r', encoding='utf-8', errors='ignore' ) as f:
                         filedata_A: str = f.read(); assert type(filedata_A) == str
                     if original_filename in filedata_A:
+                        log.debug( f'found original-filename-reference; will update' )
                         new_data: str = filedata_A.replace( original_filename, new_filename ); assert type(new_data) == str
                         with open( file_path, 'w', encoding='utf-8', errors='ignore' ) as f:
                             f.write( new_data )
                 except Exception as e:
-                    log.exception( f'problem renaming references in file, ``{file_path}``; traceback follows, then continuing' )
+                    # log.exception( f'problem renaming references in file, ``{file_path}``; traceback follows, then continuing' )
+                    log.debug( f'file_path, ``{file_path}`` not found; likely has changed.' )
                     new_file_path: str = f'{self.js_dir_path}/{new_filename}'
-                    log.debug( f'new_file_path, ``{new_file_path}``' )
+                    log.debug( f'checking for references in new_file_path, ``{new_file_path}``' )
                     filedata_B: str = ''
                     with open( new_file_path, 'r', encoding='utf-8', errors='ignore' ) as f:
                         filedata_B: str = f.read(); assert type(filedata_B) == str
-                    if new_filename in filedata_B:
+                    if original_filename in filedata_B:
+                        log.debug( f'found original-filename-reference; will update' )
                         new_data: str = filedata_B.replace( original_filename, new_filename ); assert type(new_data) == str
                         with open( new_file_path, 'w', encoding='utf-8', errors='ignore' ) as f:
                             f.write( new_file_path )
