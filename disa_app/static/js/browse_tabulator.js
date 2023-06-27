@@ -3,8 +3,6 @@ import { srGlobalObject as sr }     from './browse_tabulator_global-object.js';
 import { getShowDetailsFunction }   from './browse_tabulator_details-modal.js';
 import { getGeneralSearch }         from './browse_tabulator_lunr.js';
 import { getTableRenderer }         from './browse_tabulator_init-table.js';
-import { getDcfUpdateHandler }      from './browse_tabulator_dcf.js';
-import { getSearchStateObject }     from './browse_tabulator_dcf-search-state.js';
 
 function main() {
 
@@ -13,11 +11,6 @@ function main() {
   const showDetailsFunction = getShowDetailsFunction(sr),
         generalSearch = getGeneralSearch(sr),
         table = getTableRenderer(sr, showDetailsFunction, generalSearch),
-        searchState = getSearchStateObject(table, generalSearch),
-        dcfContentElem = document.getElementById(sr.CF_CONTENT_ID),
-        updateDcf = getDcfUpdateHandler(searchState, dcfContentElem, table);
-        
-  window.DCF = {searchState, updateDcf, table}; // @todo temp for debugging
 
   // EVENT HANDLERS
 
@@ -27,22 +20,11 @@ function main() {
         viewSelector = document.getElementById(sr.VIEW_OPTIONS_RADIO_BUTTONS_ID),
         downloadButton = document.getElementById(sr.DOWNLOAD_BUTTON_ID),
         generalSearchInput = document.getElementById(sr.GENERAL_SEARCH_INPUT_ID);
+        tableMode = bioViewOption.classList;
 
-  // Handle re-rendering in Tabulator (update DCF)
-
-  window.addEventListener('tabulator-render', updateDcf);
-  window.addEventListener('tabulator-scroll', function() {
-    if (table.visibleDataChanged()) {
-      updateDcf();
-    }
-  });
-  updateDcf();
-
-  // Handle change of view
-
-  viewSelector.addEventListener('click', () => {
-    const tableMode = bioViewOption.checked ? 'BIOGRAPHICAL' : 'TABULAR';
-    table.switchMode(tableMode);
+  // Toggle cards vs table
+  bioViewOption.addEventListener("click", () => {
+    const result = tableMode.toggle("biographical");
   });
 
   // Handle download button click
@@ -64,31 +46,17 @@ function main() {
   window.populateFilter = function(filterId, value) {
     table.setHeaderFilterValue(filterId, value);
   }
-  // NOTE Above replaces those below - can I erase these??
-  /* window.populateTribeFilter = function(tribeName) {
-    table.setHeaderFilterValue('all_tribes', tribeName);
-  }
-
-  window.populateNameFilter = function(nameSearchText) {
-    table.setHeaderFilterValue('all_name', nameSearchText);
-  }
-
-  window.populateLocationFilter = function(locationSearchText) {
-    table.setHeaderFilterValue('reference_data.all_locations', locationSearchText);
-  }
-*/
   // Show details as a global function
   // (referenced in generated markup)
 
   window.showDetails = showDetailsFunction;
 
   // reset filters with button, why is table.clearFilter not a function???
-/*
+
 let resetFilters = document.getElementById('reset-filters');
  resetFilters.addEventListener("click", function(){
     table.clearFilter();
   });
-  */
 
 }
 
