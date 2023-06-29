@@ -3,6 +3,7 @@
 {% block header_other %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/leaflet-extras/leaflet-providers/leaflet-providers.js"></script>
 {% endblock header_other %}
 {% block content %}
 <div id="map-container" style="height:80vh"></div>
@@ -13,10 +14,32 @@
 <script>
 var map = L.map('map-container').setView([41, -71], 7);
 
-L.tileLayer('https://tile.opentopomap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
+const basemaps = {
+
+    Terrain: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.{ext}', {
+        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        subdomains: 'abcd',
+        minZoom: 0,
+        maxZoom: 18,
+        ext: 'png'
+    }),
+    Labels: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', {
+        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        subdomains: 'abcd',
+        minZoom: 0,
+        maxZoom: 20,
+        ext: 'png'
+    }),
+    Stamen_Watercolor: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        subdomains: 'abcd',
+        minZoom: 1,
+        maxZoom: 16,
+        ext: 'jpg'
+    })
+};
+L.control.layers(basemaps).addTo(map);
+basemaps.Terrain.addTo(map);
 
 var mapData = [];
 
@@ -27,23 +50,23 @@ var mapData = [];
         }
         return response.json();
       })
-	.then((data) => {
-    		mapData.push(data);
-    	});
+    .then((data) => {
+            mapData.push(data);
+        });
 
     console.log(mapData);
 */
 
 async function populate() {
-  const requestURL =
-    "/static/data/sr_latlong.json";
-  const request = new Request(requestURL);
+    const requestURL =
+        "/static/data/sr_latlong.json";
+    const request = new Request(requestURL);
 
-  const response = await fetch(request);
-  const sr_data = await response.json();
+    const response = await fetch(request);
+    const sr_data = await response.json();
 
-  mapData.push(sr_data);
-  console.log(mapData);
+    mapData.push(sr_data);
+    console.log(mapData);
 }
 populate();
 
@@ -113,15 +136,16 @@ populate();
     */
 var jsonFeatures = [];
 
-mapData.forEach(function(point){
+mapData.forEach(function(point) {
     var lat = point.latitude;
     var lon = point.longitude;
 
-    var feature = {type: 'Feature',
+    var feature = {
+        type: 'Feature',
         properties: point,
         geometry: {
             type: 'Point',
-            coordinates: [lon,lat]
+            coordinates: [lon, lat]
         }
     };
 
@@ -130,21 +154,21 @@ mapData.forEach(function(point){
 
 var geoJson = { type: 'FeatureCollection', features: jsonFeatures };
 var geojsonMarkerOptions = {
-            radius: 10,
-            fillColor: "rgb(255,0,195)",
-            color: "#fff",
-            weight: 2,
-            opacity: 1,
-            fillOpacity: 1
-        };
+    radius: 10,
+    fillColor: "rgb(255,0,195)",
+    color: "#fff",
+    weight: 2,
+    opacity: 1,
+    fillOpacity: 1
+};
 
 L.geoJson(geoJson, {
-            pointToLayer: function (feature, latlng) {
-                var popupOptions = {maxWidth: 200};
-                var popupContent = feature.properties.first_name + ' ' + feature.properties.last_name + ', ' + feature.properties.category + ' ' + feature.properties.gender;
-                return L.circleMarker(latlng, geojsonMarkerOptions).bindPopup(popupContent,popupOptions);
-            }
-        }).addTo(map);
+    pointToLayer: function(feature, latlng) {
+        var popupOptions = { maxWidth: 200 };
+        var popupContent = feature.properties.first_name + ' ' + feature.properties.last_name + ', ' + feature.properties.category + ' ' + feature.properties.gender;
+        return L.circleMarker(latlng, geojsonMarkerOptions).bindPopup(popupContent, popupOptions);
+    }
+}).addTo(map);
 
 </script>
 {% endblock page_specific_js %}
