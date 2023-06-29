@@ -19,6 +19,7 @@
 </head>
 
 <body class="container-fluid {% if user.is_authenticated %}user-editor {% endif %}">
+    <a class="row skip-link visually-hidden-focusable" href='#main'>Skip to page main content</a>
     <header class="d-flex py-2 row  justify-content-between bg-primary">
         <h1 class="col-md-4"><a href="{% url 'info_url' %}" class="link-light">Stolen Relations: <span>Recovering Stories of Indigenous Enslavement in the Americas</span></a></h1>
         {% if not flag_maintenance %}
@@ -61,7 +62,7 @@
         </div><!-- container -->
     </nav>
     <section class="container">
-        <main class="row">
+        <main id="main" class="row">
             {% block content %}
             {% endblock content %}
         </main>
