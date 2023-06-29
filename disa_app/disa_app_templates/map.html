@@ -1,0 +1,150 @@
+{% extends "disa_app_templates/base.html" %}
+{% load static %}
+{% block header_other %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+{% endblock header_other %}
+{% block content %}
+<div id="map-container" style="height:80vh"></div>
+{% endblock content %}
+{% block footer %}
+{% endblock footer %}
+{% block page_specific_js %}
+<script>
+var map = L.map('map-container').setView([41, -71], 7);
+
+L.tileLayer('https://tile.opentopomap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+
+var mapData = [];
+
+/*fetch('/static/data/sr_latlong.json')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error, status = ${response.status}`);
+        }
+        return response.json();
+      })
+	.then((data) => {
+    		mapData.push(data);
+    	});
+
+    console.log(mapData);
+*/
+
+async function populate() {
+  const requestURL =
+    "/static/data/sr_latlong.json";
+  const request = new Request(requestURL);
+
+  const response = await fetch(request);
+  const sr_data = await response.json();
+
+  mapData.push(sr_data);
+  console.log(mapData);
+}
+populate();
+
+/*var mapData = [{
+        "uuid": 2,
+        "first_name": "Ruben",
+        "last_name": "Darbyshire",
+        "gender": "Male",
+        "latitude": 14.3839328,
+        "longitude": 121.050126,
+        "category": "unfree"
+    },
+    {
+        "uuid": 3,
+        "first_name": "Morlee",
+        "last_name": "Grimston",
+        "gender": "Agender",
+        "latitude": -16.4,
+        "longitude": -70.733333,
+        "category": "free"
+    },
+    {
+        "uuid": 4,
+        "first_name": null,
+        "last_name": "Killough",
+        "gender": "Female",
+        "latitude": 30.97213,
+        "longitude": 119.310773,
+        "category": "free"
+    },
+    {
+        "uuid": 2,
+        "first_name": "Conrade",
+        "last_name": "Primo",
+        "gender": null,
+        "latitude": 56.3072493,
+        "longitude": 38.701054,
+        "category": "unfree"
+    },
+    {
+        "uuid": 1,
+        "first_name": "Herschel",
+        "last_name": null,
+        "gender": null,
+        "latitude": 29.584292,
+        "longitude": 111.380014,
+        "category": "unfree"
+    },
+    {
+        "uuid": 4,
+        "first_name": "Ermentrude",
+        "last_name": "Physic",
+        "gender": "Bigender",
+        "latitude": 54.9790861,
+        "longitude": 37.2249417,
+        "category": "free"
+    },
+    {
+        "uuid": 1,
+        "first_name": "Miller",
+        "last_name": "Josephy",
+        "gender": "Male",
+        "latitude": 49.6404353,
+        "longitude": 13.5196266,
+        "category": "unfree"
+    }]
+    */
+var jsonFeatures = [];
+
+mapData.forEach(function(point){
+    var lat = point.latitude;
+    var lon = point.longitude;
+
+    var feature = {type: 'Feature',
+        properties: point,
+        geometry: {
+            type: 'Point',
+            coordinates: [lon,lat]
+        }
+    };
+
+    jsonFeatures.push(feature);
+});
+
+var geoJson = { type: 'FeatureCollection', features: jsonFeatures };
+var geojsonMarkerOptions = {
+            radius: 10,
+            fillColor: "rgb(255,0,195)",
+            color: "#fff",
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 1
+        };
+
+L.geoJson(geoJson, {
+            pointToLayer: function (feature, latlng) {
+                var popupOptions = {maxWidth: 200};
+                var popupContent = feature.properties.first_name + ' ' + feature.properties.last_name + ', ' + feature.properties.category + ' ' + feature.properties.gender;
+                return L.circleMarker(latlng, geojsonMarkerOptions).bindPopup(popupContent,popupOptions);
+            }
+        }).addTo(map);
+
+</script>
+{% endblock page_specific_js %}

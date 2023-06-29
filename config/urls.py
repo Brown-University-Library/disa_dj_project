@@ -41,6 +41,8 @@ urlpatterns = [
 
     url( r'^search_results/$', views.search_results, name='search_results_url' ),
 
+    url( r'^map/$', views.map, name='map_url' ),
+
 
     # --------------------
     # redesign...
