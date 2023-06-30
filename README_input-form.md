@@ -4,15 +4,15 @@
 
 ```mermaid
 graph TD;
-    entry_form_citation.js-->entry_form_data_in.js;
-    entry_form_citation.js-->entry_form_component_id-badge.js;
-    entry_form_citation.js-->entry_form_component_tag-input.js;
-    entry_form_citation.js-->entry_form_component_save-status.js;
-    entry_form_citation.js-->entry_form_vue-citation.js;
-    entry_form_citation.js-->entry_form_vue-item.js;
+    entry_form_data_in.js-->entry_form_citation.js;
+    entry_form_component_id-badge.js-->entry_form_citation.js;
+    entry_form_component_tag-input.js-->entry_form_citation.js;
+    entry_form_component_save-status.js-->entry_form_citation.js;
+    entry_form_vue-citation.js-->entry_form_citation.js;
+    entry_form_vue-item.js-->entry_form_citation.js;
 
-    entry_form_data_in.js-->entry_form_settings.js;
-    entry_form_data_in.js-->entry_form_data_templates.js;
+    entry_form_settings.js-->entry_form_data_in.js;
+    entry_form_data_templates.js-->entry_form_data_in.js;
 ```
 
 ## Module descriptions
