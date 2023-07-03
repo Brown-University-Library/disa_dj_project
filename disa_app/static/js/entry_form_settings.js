@@ -198,7 +198,7 @@ export const LOCAL_SETTINGS = {
       'unfree person ▸ enslaved':'unfree person ▸ enslaved',
       'unfree person ▸ enslaved ▸ diplomatically traded/gifted':'unfree person ▸ enslaved ▸ diplomatically traded/gifted',
       'unfree person ▸ enslaved ▸ judicial enslavement':'unfree person ▸ enslaved ▸ judicial enslavement',
-      'unfree person ▸ liminal':'unfre person ▸ liminal',
+      'unfree person ▸ liminal':'unfree person ▸ liminal',
       'unfree person ▸ liminal ▸ captive':'unfree person ▸ liminal ▸ captive',
       'unfree person ▸ liminal ▸ self-emancipated':'unfree person ▸ liminal ▸ self-emancipated',
       'unfree person ▸ term-limited':'unfree person ▸ term-limited',
