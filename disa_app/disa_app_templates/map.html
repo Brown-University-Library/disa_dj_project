@@ -4,6 +4,9 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/leaflet-extras/leaflet-providers/leaflet-providers.js"></script>
+<script type="text/javascript" src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+<link rel="stylesheet" href="ttps://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" crossorigin="" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" crossorigin="" />
 {% endblock header_other %}
 {% block content %}
 <div id="map-container" style="height:80vh"></div>
@@ -12,10 +15,9 @@
 {% endblock footer %}
 {% block page_specific_js %}
 <script>
-var map = L.map('map-container').setView([41, -71], 7);
+var map = L.map('map-container').setView([41, -71], 5);
 
 const basemaps = {
-
     Terrain: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.{ext}', {
         attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         subdomains: 'abcd',
@@ -30,7 +32,7 @@ const basemaps = {
         maxZoom: 20,
         ext: 'png'
     }),
-    Stamen_Watercolor: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+    Watercolor: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
         attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         subdomains: 'abcd',
         minZoom: 1,
@@ -55,7 +57,6 @@ var mapData = [];
         });
 
     console.log(mapData);
-*/
 
 async function populate() {
     const requestURL =
@@ -69,8 +70,8 @@ async function populate() {
     console.log(mapData);
 }
 populate();
-
-/*var mapData = [
+*/
+var mapData = [
     {
       "uuid" : "d340317ed09f418998c37423f9559e2d",
       "first_name" : "Elizabeth",
@@ -19044,16 +19045,18 @@ populate();
       "category" : "[\"Servant\", \"Slave\"]",
     }
   ];
-    */
+
 var jsonFeatures = [];
 
 mapData.forEach(function(point) {
     var lat = point.latitude;
     var lon = point.longitude;
+    var label = point.first_name + " " + point.last_name;
 
     var feature = {
         type: 'Feature',
         properties: point,
+        label: label,
         geometry: {
             type: 'Point',
             coordinates: [lon, lat]
@@ -19063,8 +19066,10 @@ mapData.forEach(function(point) {
     jsonFeatures.push(feature);
 });
 
-var geoJson = { type: 'FeatureCollection', features: jsonFeatures };
-var geojsonMarkerOptions = {
+var geoJsonData = { type: 'FeatureCollection', features: jsonFeatures };
+
+//For individual points, one per person
+/*var geojsonMarkerOptions = {
     radius: 10,
     fillColor: "rgb(255,0,195)",
     color: "#fff",
@@ -19073,13 +19078,23 @@ var geojsonMarkerOptions = {
     fillOpacity: 1
 };
 
-L.geoJson(geoJson, {
+L.geoJson(geoJsonData, {
     pointToLayer: function(feature, latlng) {
         var popupOptions = { maxWidth: 200 };
         var popupContent = feature.properties.first_name + ' ' + feature.properties.last_name + ', ' + feature.properties.category + ' ' + feature.properties.gender;
         return L.circleMarker(latlng, geojsonMarkerOptions).bindPopup(popupContent, popupOptions);
     }
 }).addTo(map);
+*/
+// for clustered points
+var markers = L.markerClusterGroup({ chunkedLoading: true });
 
+var geoJsonLayer = L.geoJson(geoJsonData, {
+  onEachFeature: function (feature, layer) {
+    layer.bindPopup(feature.label);
+  }
+});
+markers.addLayer(geoJsonLayer);
+map.addLayer(markers);
 </script>
 {% endblock page_specific_js %}
