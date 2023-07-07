@@ -29,28 +29,28 @@
     <h3>Demographics</h3>
     <div class="col-md-6">
         <!-- Gender -->
-        <div class="form-floating">
+        <div class="form-floating my-2">
             <select class="form-select" id="formInputDISAPersonGender" aria-label="New person's gender" placeholder="Gender" v-model="referent.sex" v-on:change="saveReferentDataToServer">
                 <option v-for="(genderOption, genderOptionId) in MENU_OPTIONS.formInputDISAPersonGender" v-bind:value="genderOptionId" v-text="genderOption">
             </select>
             <label for="formInputDISAPersonGender">Gender</label>
         </div>
         <!-- Age -->
-        <div class="form-group">
+        <div class="form-group my-2">
             <div class="form-floating">
                 <input type="text" class="form-control" id="formInputDISAPersonAge_text" aria-label="New person's age (text)" placeholder="Age" v-model="referent.age" v-on:blur="saveReferentDataToServer">
                 <label for="formInputDISAPersonAge_text">Age</label>
             </div>
         </div>
         <!-- Status -->
-        <div class="form-floating">
+        <div class="form-floating my-2">
             <select class="form-select" v-model="currentReferent.status" v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonStatus" v-on:blur="saveReferentDataToServer" id="formInputDISAPersonStatus" aria-label="Status">
                 <option v-for="(statusOption, statusOptionID) in MENU_OPTIONS.formInputDISAPersonStatus" v-bind:value="statusOptionId" v-text="statusOption"></option>
             </select>
             <label for="formInputDISAPersonStatus">Status</label>
         </div>
         <!-- Occupation (Vocation in DB) -->
-        <div class="form-group">
+        <div class="form-group my-2">
             <div class="form-floating">
                 <disa-tags class="form-control" v-model="currentReferent.vocations" v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonVocation" v-on:blur="saveReferentDataToServer" id="formInputDISAPersonVocation" aria-label="Vocation"></disa-tags>
                 <label for="formInputDISAPersonVocation">Occupation</label>
@@ -59,20 +59,20 @@
     </div>
     <div class="col-md-6">
         <!-- Race -->
-        <div class="form-group">
+        <div class="form-group my-2">
             <div class="form-floating">
                 <disa-tags class="form-control" v-model="currentReferent.races" v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonRace" v-on:blur="saveReferentDataToServer" id="formInputDISAPersonRace" aria-label="Race"></disa-tags>
                 <label for="formInputDISAPersonRace">Race</label>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group my-2">
             <div class="form-floating">
                 <disa-tags class="form-control" v-model="currentReferent.tribes" v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonTribe" v-on:blur="saveReferentDataToServer" id="formInputDISAPersonTribe"></disa-tags>
                 <label for="formInputDISAPersonTribe" aria-label="Tribal nation">Tribal Nation</label>
             </div>
         </div>
         <!-- Geographical origins -->
-        <div class="form-group">
+        <div class="form-group my-2">
             <div class="form-floating">
                 <disa-tags class="form-control" v-model="currentReferent.origins" v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonGeoOrigins" v-on:blur="saveReferentDataToServer" id="formInputDISAPersonGeoOrigins" aria-label="Geographic origins"></disa-tags>
                 <label for="formInputDISAPersonGeoOrigins">Geographic origins</label>
