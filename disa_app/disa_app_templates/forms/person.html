@@ -43,11 +43,11 @@
             </div>
         </div>
         <!-- Status -->
-        <div class="form-floating my-2">
-            <select class="form-select" v-model="currentReferent.status" v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonStatus" v-on:blur="saveReferentDataToServer" id="formInputDISAPersonStatus" aria-label="Status">
-                <option v-for="(statusOption, statusOptionID) in MENU_OPTIONS.formInputDISAPersonStatus" v-bind:value="statusOptionId" v-text="statusOption"></option>
-            </select>
-            <label for="formInputDISAPersonStatus">Status</label>
+        <div class="form-group my-2">
+            <div class="form-floating">
+                <disa-tags class="form-control" v-model="currentReferent.status" v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonStatus" v-on:blur="saveReferentDataToServer" id="formInputDISAPersonStatus" aria-label="Status"></disa-tags>
+                <label for="formInputDISAPersonStatus">Status</label>
+            </div>
         </div>
         <!-- Occupation (Vocation in DB) -->
         <div class="form-group my-2">
