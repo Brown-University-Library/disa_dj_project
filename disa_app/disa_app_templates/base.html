@@ -36,7 +36,7 @@
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Logins</button>
             <ul class="dropdown-menu">
                 <li><a href="{% url 'login_url' %}" class="dropdown-item">Editor login</a></li>
-                <li><a href="{% url 'browse_url' %}" class="dropdown-item">Community Partner login</a></li>
+                <!--<li><a href="{% url 'explore_url' %}" class="dropdown-item">Community Partner login</a></li>-->
             </ul>
         </div>
         {% endif %}
@@ -56,7 +56,7 @@
                 </div>
             </li>
             <li class="nav-item"><a href="{% url 'learn_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'learn' in request.path %} active{% endif %}">Learn</a></li>
-            <li class="nav-item"><a class="nav-link{% if 'browse' in request.path %} active{% endif %}" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false">Explore</a></li>
+            <li class="nav-item"><a class="nav-link{% if 'explore' in request.path %} active{% endif %}" href="{% url 'explore_url' %}" tabindex="-1" aria-disabled="false">Explore</a></li>
             <li class="nav-item"><a href="{% url 'educate_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'educate' in request.path %} active{% endif %}">Educate</a></li>
             <li class="nav-item"><a href="{% url 'partners_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'partners' in request.path %} active{% endif %}">Tribal Partners</a></li>
             <li class="nav-item"><a href="{% url 'contribute_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'contribute' in request.path %} active{% endif %}">How to Contribute</a></li>

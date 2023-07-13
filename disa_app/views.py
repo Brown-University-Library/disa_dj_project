@@ -139,44 +139,16 @@ def dashboard ( request ):
         resp = render( request, 'disa_app_templates/dashboard.html', context )
     return resp
 
-def browse_tabulator( request ):
+def explore( request ):
     """ Displays tabulator page. """
-    log.info( '\n\nstarting browse_tabulator()' )
+    log.info( '\n\nstarting explore()' )
     log.debug( f'request.session.items(), ``{pprint.pformat(request.session.items())}``' )
-    ( submitted_username, submitted_password ) = ( request.POST.get('browse_login_username', ''), request.POST.get('browse_login_password', '') )
-    assert type(submitted_username) == str; assert type(submitted_password) == str
-    resp = HttpResponseNotFound( '404 / Not Found' )
-    if request.method == 'POST':  # user has submitted browse login credentials
-        credentials_valid = view_browse_manager.check_credentials_on_post( submitted_username, submitted_password )
-        assert type( credentials_valid ) == bool
-        if credentials_valid:  # redirect to a GET to show the browse data
-            request.session['browse_logged_in'] = 'yes'
-            request.session.pop( 'errant_browse_login_username', None )  # <https://stackoverflow.com/questions/11277432/how-can-i-remove-a-key-from-a-python-dictionary/15206537#15206537>
-            request.session.pop( 'errant_browse_login_password', None )
-        else:  # store any entered data to the session and redirect to a GET to the login form again
-            ( request.session['errant_browse_login_username'], request.session['errant_browse_login_password'] ) = ( submitted_username, submitted_password )
-        request.session.modified = True
-        resp = view_browse_manager.prepare_self_redirect_on_post()
-    if request.method == 'GET':
-        log.debug( 'handling GET' )
-        is_browse_logged_in = view_browse_manager.check_browse_logged_in_on_get( dict(request.session), bool(request.user.is_authenticated) )
-        assert type(is_browse_logged_in) == bool
-        if is_browse_logged_in:  # show the browse data
-            log.debug( 'logged-in path' )
-            # request.session.pop( 'browse_logged_in', None )
-            # request.session.modified = True
-            context = view_browse_manager.prepare_logged_in_get_context( bool(request.user.is_authenticated) )
-            resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_tabulator.html' )
-        else:  # show the login form
-            log.debug( 'not logged-in path' )
-            ( errant_submitted_username, errant_submitted_password ) = ( request.session.get('errant_browse_login_username', ''), request.session.get('errant_browse_login_password', '') )
-            assert type( errant_submitted_username ) == str; assert type( errant_submitted_password ) == str
-            request.session.pop( 'errant_browse_login_username', None )
-            request.session.pop( 'errant_browse_login_password', None )
-            request.session.modified = True
-            context = view_browse_manager.prepare_non_logged_in_get_context( errant_submitted_username, errant_submitted_password )
-            resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_login.html' )
-            log.debug( 'ok should render the browse-login template' )
+    people: list = view_people_manager.query_people()
+    context = { 'data': people, 'user_is_authenticated': False }
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/explore.html', context )
     return resp
     
 
