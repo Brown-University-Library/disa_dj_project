@@ -10054,4 +10054,28 @@ figure img[src^="https://localcontexts.org/wp-content/uploads"]:hover {
   background-color: #a5d0ae;
 }
 
+.glider-track {
+  scrollbar-width: none;
+}
+
+@-moz-document url-prefix() {
+  .glider-track {
+    margin-bottom: 17px;
+  }
+  .glider-contain {
+    overflow: hidden;
+  }
+}
+.glider-contain .card {
+  background-color: #785d98;
+  color: #fff;
+  padding: 2rem 1rem;
+  margin-right: 1rem;
+}
+.glider-contain button {
+  background-color: transparent;
+  border: solid 2px #785d98;
+  border-radius: 50%;
+}
+
 /*# sourceMappingURL=style.css.map */

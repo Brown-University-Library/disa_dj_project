@@ -1,13 +1,15 @@
 {% extends "disa_app_templates/base.html" %}
 {% load static %}
+{% block header_other %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.css">
+{% endblock header_other %}
 {% block content %}
 <div class="alert alert-warning"><i class="fa-solid fa-hand-point-right"></i> You're probably looking for <a class="alert_link" href="{{ redirect_url }}">{{ redirect_url }}</a>.</div>
-<div class="alert alert-info"><i class="fa-solid fa-magnifying-glass-arrow-right"></i> If you're a community partner, please <a href="../browse">log in</a> to search the database.</div>
 <section class="hero row">
     <div class="col-md-4">
         <p class="h1">Between 2.5 and 5 million Natives were enslaved in the Americas between 1492 and 1900.</p>
         <p class="h1">This site begins to tell their stories.</p>
-        <a class="btn btn-primary" href="#">Find out more</a>
+        <a class="btn btn-primary" href="{{ learn_url }}">Find out more</a>
     </div>
     <div class="col-md-8"><svg id="visual" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
             <path d="M0 85L10.7 85C21.3 85 42.7 85 64.2 85C85.7 85 107.3 85 128.8 89C150.3 93 171.7 101 193 97C214.3 93 235.7 77 257 72C278.3 67 299.7 73 321.2 81C342.7 89 364.3 99 385.8 104C407.3 109 428.7 109 450 107C471.3 105 492.7 101 514.2 103C535.7 105 557.3 113 578.8 104C600.3 95 621.7 69 643 59C664.3 49 685.7 55 707 61C728.3 67 749.7 73 771.2 73C792.7 73 814.3 67 835.8 61C857.3 55 878.7 49 889.3 46L900 43L900 0L889.3 0C878.7 0 857.3 0 835.8 0C814.3 0 792.7 0 771.2 0C749.7 0 728.3 0 707 0C685.7 0 664.3 0 643 0C621.7 0 600.3 0 578.8 0C557.3 0 535.7 0 514.2 0C492.7 0 471.3 0 450 0C428.7 0 407.3 0 385.8 0C364.3 0 342.7 0 321.2 0C299.7 0 278.3 0 257 0C235.7 0 214.3 0 193 0C171.7 0 150.3 0 128.8 0C107.3 0 85.7 0 64.2 0C42.7 0 21.3 0 10.7 0L0 0Z" fill="#9e8ab6"></path>
@@ -19,8 +21,20 @@
 </section>
 <p class="lead px-5 py-3 my-3 border-top border-bottom"><a href="">Stolen Relations: Recovering Stories of Indigenous Enslavement in the Americas is a community-based project</a> that seeks to understand and illuminate the significance of the enslavement of Indigenous peoples in settler colonialism through the recovery of individual stories.</p>
 <h2>Explore</h2>
+<h3>Stories</h3>
+<section class="glider-contain">
+    <div class="glider-stories">
+        <div class="card">one.</div>
+        <div class="card">two</div>
+        <div class="card">three</div>
+        <div class="card">four</div>
+        <div class="card">five</div>
+    </div>
+    <button aria-label="Previous" class="glider-stories-prev">«</button>
+    <button aria-label="Next" class="glider-stories-next">»</button>
+</section>
 <h2>Database</h2>
-<p class="col-md-4"><a href="{% url 'browse_url' %}">Research information about <span id="ref-count" class="badge bg-primary">over 4000</span> people</a>, exploring by tribe, region, and more.</p>
+<p class="col-md-4"><a href="{% url 'explore_url' %}">Research information about <span id="ref-count" class="badge bg-primary">over 4000</span> people</a>, exploring by tribe, region, and more.</p>
 <div class="col-md-8">
     <label for="general-search">
         Search in any field for
@@ -30,4 +44,20 @@
 <h2>Map</h2>
 <h2>Timeline</h2>
 <h2>Indigenous voices</h2>
+<section class="glider-contain">
+    <div class="glider-voices">
+        <div class="card">voice 1</div>
+        <div class="card">voice 2</div>
+        <div class="card">voice 3</div>
+        <div class="card">voice 4</div>
+        <div class="card">voice 5</div>
+        <div class="card">voice 6</div>
+    </div>
+    <button aria-label="Previous" class="glider-voices-prev">«</button>
+    <button aria-label="Next" class="glider-voices-next">»</button>
+</section>
 {% endblock content %}
+{% block page_specific_js %}
+<script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
+<script src="{% static 'js/sliders.js' %}"></script>
+{% endblock page_specific_js %}
