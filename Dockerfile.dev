@@ -21,7 +21,7 @@ RUN pip install -r ./requirements.txt
 
 ## set up SSH access per <https://dev.to/alvarocavalcanti/setting-up-a-python-remote-interpreter-using-docker-1i24>
 RUN apt-get update \
- && apt-get install -y openssh-server netcat \
+ && apt-get install -y openssh-server netcat-traditional \
  && mkdir /var/run/sshd \
  && echo 'root:password' | chpasswd \
  && sed -i 's/\#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
