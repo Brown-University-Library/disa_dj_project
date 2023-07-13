@@ -275,6 +275,7 @@ function preprocessReferentData(referentData) {
   referentData.races     = prepareForTagify(referentData.races);
   referentData.tribes    = prepareForTagify(referentData.tribes);
   referentData.vocations = prepareForTagify(referentData.vocations);
+  referentData.status    = prepareForTagify(referentData.enslavements);
   referentData.origins   = prepareForTagify(referentData.origins);
 
   delete referentData.enslavements;
