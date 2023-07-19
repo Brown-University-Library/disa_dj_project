@@ -76,6 +76,7 @@ var geoJsonData = new L.GeoJSON.AJAX(
 // cluster points
 var markers = L.markerClusterGroup({
     chunkedLoading: true,
+    maxClusterRadius: 40,
 });
 //geojson ajax listener
 geoJsonData.on('data:loaded', function() {
@@ -84,7 +85,6 @@ geoJsonData.on('data:loaded', function() {
     map.addLayer(markers);
 });
 markers.on('clusterclick', function(a) {
-    //a.layer.zoomToBounds({ padding: [20, 20] });
     var clusterCount = a.layer.getChildCount();
     var clusterChildren = a.layer.getAllChildMarkers();
     var clusterLocation = [];
