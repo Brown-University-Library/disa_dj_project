@@ -24,9 +24,12 @@ def make_session() -> sqlalchemy.orm.session.Session:
 
 def query_documents( username: str, old_usr_db_id: int ) -> dict:
     """ Queries and massages data.
-        Called by views.editor_index() """
+        Called by views.redesign_citations() """
+    log.debug( 'starting query_documents()' )
     log.debug( f'username, ``{username}``; old_usr_db_id, ``{old_usr_db_id}``' )
     marked = MarkedForDeletion.objects.all()
+    log.debug( f'marked, ``{marked}``' )
+    log.debug( f'count of marked, ``{marked.count()}``' )
     marked_ids = []
     all_cites = []
     session = make_session()
@@ -38,24 +41,33 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
             if cite.id not in marked_ids:
                 all_cites.append( cite )
             else:
-                log.debug( f'skipping site, ``{cite}``' )
+                log.debug( f'skipping cite, ``{cite}``' )
     else:
         all_cites = cites_result_set
+    log.debug( 'marked_ids and all_cites lists populated' )  # ok, to this point, only one query which takes no time.
 
     data = {}
     log.debug( f'type(all_cites), ``{type(all_cites)}``')
     no_refs = [ (cite, old_usr_db_id, datetime.datetime.now(), '')
         for cite in all_cites if len(cite.references) == 0 ]
+    log.debug( 'about to build has_refs list' )
     has_refs = [ cite
         for cite in all_cites if len(cite.references) > 0 ]
+    log.debug( 'has_refs list built; about to build wrapped_refs' )
     wrapped_refs = make_wrapped_refs( has_refs )
+    log.debug( 'wrapped_refs built; about to build user_cites list' )
     user_cites = [ wrapped
         for wrapped in wrapped_refs if wrapped[1] == old_usr_db_id ]
+    log.debug( 'user_cites list built; about to build srtd_all' )
     srtd_all = sort_documents( wrapped_refs )  # was ```srtd_all = sort_documents(no_refs + wrapped_refs)```
+    log.debug( 'srtd_all built; about to build srtd_user' )
     srtd_user = sort_documents( user_cites )
+    log.debug( 'srtd_user built; about to build user_documents' )
     data['user_documents'] = jsonify_entries( srtd_user[0:10] )
+    log.debug( 'user_documents built; about to build documents' )
     data['documents'] = jsonify_entries( srtd_all )
     log.debug( f'data (first 1K chars), ```{pprint.pformat(data)[0:1000]}...```' )
+    log.debug( 'returning data' )
     return data
 
 
