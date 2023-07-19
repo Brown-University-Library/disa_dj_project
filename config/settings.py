@@ -183,7 +183,7 @@ LOGGING = {
             },
         'disa_app': {
             # 'handlers': ['logfile', 'console'],  # leaving here as reminder that this is how to show output in the terminal
-            'handlers': ['logfile'],
+            'handlers': ['logfile', 'console'],
             'level': os.environ.get(u'DISA_DJ__LOG_LEVEL'),
             'propagate': False
         },
