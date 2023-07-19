@@ -43,7 +43,6 @@ urlpatterns = [
 
     url( r'^map/$', views.map, name='map_url' ),
 
-
     # --------------------
     # redesign...
     # --------------------

@@ -176,7 +176,6 @@ def map ( request ):
     resp = render( request, 'disa_app_templates/map.html' )
     return resp
 
-
 def source( request, src_id ):
     log.debug( f'\n\nstarting source(), with src_id, `{src_id}`' )
     redirect_url = reverse( 'edit_record_w_recid_url', kwargs={'rec_id': src_id} )
