@@ -71,6 +71,8 @@ async function createNewSource() {
     }
 }
 
+// Delete source on server
+
 async function deleteSource({ target }) {
 
     const deleteSourceConfirmButton = target;
@@ -124,5 +126,5 @@ function main() {
 
     const table = initializeTabulator(TABLE_SELECTOR, TABLE_DATA_URL);    
 }
-console.log('fjsk');
+
 window.addEventListener('DOMContentLoaded', main);
