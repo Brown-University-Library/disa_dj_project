@@ -69,6 +69,14 @@
 {% endblock footer %}
 {% block page_specific_js %}
 <!-- Tabulator -->
+
+<script>
+
+    window.sr = {};
+    window.sr.api_url_root = "{{ API_URL_ROOT }}";
+    window.sr.csrf_token = "{{ csrf_token }}";
+
+</script>
 <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5/dist/js/tabulator.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment@2/moment.min.js"></script>
