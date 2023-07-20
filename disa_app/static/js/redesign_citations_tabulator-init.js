@@ -1,6 +1,57 @@
 
 import { openSourceEditPage, initShowOnlyCurrentUserButton } from './redesign_citations_UI-handlers.js';
 
+const CACHE_EXPIRY_DAYS = 1,
+      CACHE_EXPIRY_MS = CACHE_EXPIRY_DAYS * 86400000;
+
+const DATA_CACHE_ID = 'sr-data-cache',
+      DATA_TIME_ID = 'sr-data-cache-timestamp';
+
+function fetchDataAndSetCache(url, resolve, reject) {
+  fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    localStorage.setItem(DATA_CACHE_ID, JSON.stringify(data));
+    localStorage.setItem(DATA_TIME_ID, (new Date()).valueOf())
+    resolve(data);
+  })
+  .catch(error => reject(error));
+}
+
+// Overrides Tabulator's built-in Request routine
+//  (implements a simple cache using localStorage)
+
+function ajaxRequestFunc(url) {
+
+  return new Promise(function(resolve, reject) {
+
+    // Check if data already cached
+
+    const dataCache = localStorage.getItem(DATA_CACHE_ID),
+          dataCacheTimestamp_stored = localStorage.getItem(DATA_TIME_ID),
+          dataCacheTimestamp = Number.parseInt(dataCacheTimestamp_stored),
+          now = (new Date()).valueOf();
+
+    const haveCachedData = (dataCache !== null),
+          cacheIsFresh = (Number.isInteger(dataCacheTimestamp) && (now - dataCacheTimestamp < CACHE_EXPIRY_MS));
+
+    console.log('DATE', {dataCacheTimestamp, now, CACHE_EXPIRY_MS, interval: now - dataCacheTimestamp, cacheIsFresh})
+
+    if (haveCachedData && cacheIsFresh) {
+      console.log("Pulling from cached data");
+      const data = JSON.parse(dataCache);
+      resolve(data);
+    // } else if (haveCachedData && !cacheIsFresh) { 
+    // TODO if cached data exists, but it's old, then give Tabulator the old data
+    //   but fetch the new data and refresh Tabulator when the new data arrives
+    } else {
+      console.log("Loading data & initializing cache");
+      fetchDataAndSetCache(url, resolve, reject);
+    }
+  });
+};
+
+
 // Main Tabulator setup
 
 function initializeTabulator(tableSelector, ajaxURL) {
@@ -71,6 +122,7 @@ function initializeTabulator(tableSelector, ajaxURL) {
 
   const tabulatorSettings = {
       ajaxURL,
+      ajaxRequestFunc,
       ajaxResponse,
       columns,
       //dataProcessed: initTableFilterFields,
