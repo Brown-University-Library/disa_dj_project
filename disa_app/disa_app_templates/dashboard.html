@@ -8,44 +8,47 @@
 {% block content %}
 <div class="row my-2">
     <!-- Add new source -->
-    <div class="col-sm-12 col-md-4">
+    <div class="col-sm-6 col-md-4">
         <div class="card">
             <h2 class="card-header"><i class="fa-solid fa-circle-info"></i> Dashboard</h2>
             <div class="card-body">
                 <p>Data last updated: {{ meta.date_produced|date:"M j L" }}, {{ meta.date_produced|time:"P e" }}</p>
-                <details>
-                <summary>Reminders</summary>
+                <h3>Links</h3>
+                <p><small>All of these links open in a new tab.</small></p>
                 <ul>
-                    <li>If you are entering information from a document that has not previously been added: you are <mark>creating a new source</mark>.
+                    <li>
+                        <a href="https://docs.google.com/document/d/1e6d1bsxpGnj5kak2jLBUb3qYnIS2vsDwv0Ejf2AlPo8/edit" target="_blank">
+                            RA guide
+                        </a>
                     </li>
-                    <li>if you are editing a document that you or someone else previously created: search under <mark>Find an existing source</mark>.
-                    </li>
-                    <li>To list the documents that <em>anyone</em> entering information into Stolen Relations has created: uncheck <mark>Show only your entries</mark>.
-                    </li>
+                    <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScy4I14ew7R9YetXUTfejAcWK0YbNo2ATRqAl7ChmB6gcXC2Q/viewform" target="_blank" title="Link to Google form for submitting problem reports or requests for help">Report problems or ask for help</a></li>
+                    <li><a href="https://docs.google.com/document/d/1SmDSyShMIDhDIojJJS258rBUpfSF43YgM-xlTwyBTYI/edit?usp=sharing" target="_blank">Who to contact with questions</a></li>
+                    <li><a href="https://docs.google.com/spreadsheets/d/15gyNU_T_4JdM4SriUs2UkekOixAAx9T-8d8vn2WjuEU/edit#gid=0" target="_blank">Additional information spreadsheet</a></li>
+                    <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSeVq22dlWBUz3YDDUC2hCxv0iLs0wb2EuCayEsOEwjmsDn4CA/viewform" target="_blank">Image uploads form</a></li>
                 </ul>
-            </details>
-                <p>
-                    For more information on entering data,
-                    <a href="https://docs.google.com/document/d/1e6d1bsxpGnj5kak2jLBUb3qYnIS2vsDwv0Ejf2AlPo8/edit" target="_blank">
-                        <i class="fa-solid fa-file-lines"></i> open the style guide in a new tab
-                    </a>. You can <a href="https://docs.google.com/forms/d/e/1FAIpQLScy4I14ew7R9YetXUTfejAcWK0YbNo2ATRqAl7ChmB6gcXC2Q/viewform" target="_blank" title="Link to Google form for submitting problem reports or requests for help"><i class="fa-solid fa-file-circle-question"></i> report problems or ask for help in a new tab</a>.
-                </p>
             </div>
         </div>
     </div>
-    <div class="col-sm-12 col-md-4">
-        <div class="card text-center">
+    <div class="col-sm-6 col-md-4">
+        <div class="card">
             <h1 class="card-header h2">
                 <i class="fa-solid fa-square-plus"></i> Create a new source
             </h1>
-            <div class="card-body">
+            <div class="card-body text-center">
                 <p class="card-text">Please double-check that a source does not already exist before you start entering information!</p>
                 <button type="button" class="btn btn-primary btn-lg" id="createNewSourceButton" title="Create a new source"><i class="fa-solid fa-square-plus"></i> Create a new source
                 </button>
             </div>
+            <div class="card-footer">
+                <ul>
+                    <li>Does it mention specific people or groups of people?</li>
+                    <li>Is this person/group of Indigenous descent?</li>
+                    <li>Is this Indigenous person/group in some way unfree or coerced into labor (even if it's implied)?</li>
+                </ul>
+            </div>
         </div>
     </div>
-    <div class="col-sm-12 col-md-4">
+    <div class="col-sm-6 col-md-4">
         <div class="card">
             <h2 class="card-header"><i class="fa-solid fa-pen-nib"></i> Find an existing source</h2>
             <div class="card-body row">
