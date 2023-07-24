@@ -4,58 +4,73 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@5/dist/css/tabulator_bootstrap5.min.css">
 {% endblock header_other %}
 {% block nav_options %}
-<li class="nav-item"><button class="btn btn-outline-info" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas">
-        Info
-    </button></li>
 {% endblock nav_options %}
-
 {% block content %}
-<!-- insert offcanvas info -->
-{% include "disa_app_templates/modals/info_aside.html" %}
-<!-- Main panel -->
-<!-- Add new source -->
-<div class="col-sm-12 col-md-4">
-    <div class="card text-center">
-        <h1 class="card-header h2">
-            <i class="fa-solid fa-square-plus"></i> Create a new source
-        </h1>
-        <div class="card-body">
-            <p class="card-text">Please double-check that a source does not already exist before you start entering information!</p>
-            <button type="button" class="btn btn-primary btn-lg" id="createNewSourceButton" title="Create a new source"><i class="fa-solid fa-square-plus"></i> Create a new source
-            </button>
+<div class="row my-2">
+    <!-- Add new source -->
+    <div class="col-sm-12 col-md-4">
+        <div class="card">
+            <h2 class="card-header"><i class="fa-solid fa-circle-info"></i> Dashboard</h2>
+            <div class="card-body">
+                <p>Data last updated: {{ meta.date_produced|date:"M j L" }}, {{ meta.date_produced|time:"P e" }}</p>
+                <details>
+                <summary>Reminders</summary>
+                <ul>
+                    <li>If you are entering information from a document that has not previously been added: you are <mark>creating a new source</mark>.
+                    </li>
+                    <li>if you are editing a document that you or someone else previously created: search under <mark>Find an existing source</mark>.
+                    </li>
+                    <li>To list the documents that <em>anyone</em> entering information into Stolen Relations has created: uncheck <mark>Show only your entries</mark>.
+                    </li>
+                </ul>
+            </details>
+                <p>
+                    For more information on entering data,
+                    <a href="https://docs.google.com/document/d/1e6d1bsxpGnj5kak2jLBUb3qYnIS2vsDwv0Ejf2AlPo8/edit" target="_blank">
+                        <i class="fa-solid fa-file-lines"></i> open the style guide in a new tab
+                    </a>. You can <a href="https://docs.google.com/forms/d/e/1FAIpQLScy4I14ew7R9YetXUTfejAcWK0YbNo2ATRqAl7ChmB6gcXC2Q/viewform" target="_blank" title="Link to Google form for submitting problem reports or requests for help"><i class="fa-solid fa-file-circle-question"></i> report problems or ask for help in a new tab</a>.
+                </p>
+            </div>
         </div>
     </div>
-</div>
-<div class="col-sm-12 col-md-8">
-    <div class="card">
-        <h2 class="card-header"><i class="fa-solid fa-pen-nib"></i> Find an existing source</h2>
-        <div class="card-body row">
-            <div class="col">
+    <div class="col-sm-12 col-md-4">
+        <div class="card text-center">
+            <h1 class="card-header h2">
+                <i class="fa-solid fa-square-plus"></i> Create a new source
+            </h1>
+            <div class="card-body">
+                <p class="card-text">Please double-check that a source does not already exist before you start entering information!</p>
+                <button type="button" class="btn btn-primary btn-lg" id="createNewSourceButton" title="Create a new source"><i class="fa-solid fa-square-plus"></i> Create a new source
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <div class="card">
+            <h2 class="card-header"><i class="fa-solid fa-pen-nib"></i> Find an existing source</h2>
+            <div class="card-body row">
                 <!-- Title filter field -->
                 <div class="form-input">
-                    <label for="title-filter" class="col-2 form-label">Title</label>
+                    <label for="title-filter" class="col-3 form-label">Title</label>
                     <input id="title-filter"></input>
                 </div>
                 <!-- Source ID filter field -->
                 <div class="form-input">
-                    <label for="id-filter" class="col-2 form-label">ID</label>
+                    <label for="id-filter" class="col-3 form-label">Source ID</label>
                     <input id="id-filter"></input>
                 </div>
-            </div>
-            <div class="col">
                 <!-- toggle all entries vs my entries -->
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="current-user-only">
-                    <label class="form-check-label" for="current-user-only">
+                <div class="form-input">
+                    <label class="form-check-label col-6" for="current-user-only">
                         Show only your entries
                     </label>
+                    <input class="form-check-input" type="checkbox" id="current-user-only">
                 </div>
                 <!-- Editor filter field -->
                 <div class="form-input">
-                    <label for="editor-filter" class="form-label col-2">Editor</label>
+                    <label for="editor-filter" class="form-label col-3">Editor</label>
                     <input id="editor-filter"></input>
                 </div>
-                <button hidden class="btn btn-primary" id="table-details-toggle">Show all columns</button>
             </div>
         </div>
     </div>
