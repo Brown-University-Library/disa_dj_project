@@ -1,0 +1,6605 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "1",
+        "first_name": "Rabbi",
+        "last_name": "Garvan",
+        "name": "Rabbi Garvan",
+        "gender": "",
+        "city": "",
+        "state": "",
+        "country": "Philippines",
+        "location": ", , Philippines",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.8612609,
+          14.1526544
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "2",
+        "first_name": "Fenelia",
+        "last_name": "Baylis",
+        "name": "Fenelia Baylis",
+        "gender": "Female",
+        "city": "Trasak",
+        "state": "",
+        "country": "",
+        "location": "Trasak, , ",
+        "year": "1885"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.5282081,
+          -7.1274078
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "3",
+        "first_name": "Harriette",
+        "last_name": "",
+        "name": "Harriette ",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "China",
+        "location": ", , China",
+        "year": "1587"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          102.283399,
+          33.423008
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "4",
+        "first_name": "Colleen",
+        "last_name": "Gohn",
+        "name": "Colleen Gohn",
+        "gender": "",
+        "city": "Kŭrdzhali",
+        "state": "",
+        "country": "Bulgaria",
+        "location": "Kŭrdzhali, , Bulgaria",
+        "year": "1883"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.3726469,
+          41.7220316
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "5",
+        "first_name": "",
+        "last_name": "Dyhouse",
+        "name": "Dyhouse",
+        "gender": "Non-binary",
+        "city": "Kuantan",
+        "state": "Pahang",
+        "country": "Malaysia",
+        "location": "Kuantan, Pahang, Malaysia",
+        "year": "1607"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.40391,
+          3.9671435
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "6",
+        "first_name": "Oliviero",
+        "last_name": "Wightman",
+        "name": "Oliviero Wightman",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Poland",
+        "location": ", , Poland",
+        "year": "1696"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.1228461,
+          52.7440595
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "7",
+        "first_name": "Israel",
+        "last_name": "Kiossel",
+        "name": "Israel Kiossel",
+        "gender": "Male",
+        "city": "Seremban",
+        "state": "Negeri Sembilan",
+        "country": "Malaysia",
+        "location": "Seremban, Negeri Sembilan, Malaysia",
+        "year": "1581"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          101.9476452,
+          2.7239834
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "8",
+        "first_name": "Robinia",
+        "last_name": "",
+        "name": "Robinia ",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Afghanistan",
+        "location": ", , Afghanistan",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.666667,
+          34.433333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "9",
+        "first_name": "Boigie",
+        "last_name": "Osborn",
+        "name": "Boigie Osborn",
+        "gender": "Male",
+        "city": "Staroutkinsk",
+        "state": "",
+        "country": "Russia",
+        "location": "Staroutkinsk, , Russia",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          59.3184961,
+          57.2287633
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "10",
+        "first_name": "Valentino",
+        "last_name": "Dabnor",
+        "name": "Valentino Dabnor",
+        "gender": "",
+        "city": "",
+        "state": "",
+        "country": "South Africa",
+        "location": ", , South Africa",
+        "year": "1523"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.7322135,
+          -33.4692269
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "11",
+        "first_name": "Simonne",
+        "last_name": "Ferrario",
+        "name": "Simonne Ferrario",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Philippines",
+        "location": ", , Philippines",
+        "year": "1511"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.9978,
+          10.151
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "12",
+        "first_name": "Elvera",
+        "last_name": "Rizzotto",
+        "name": "Elvera Rizzotto",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "China",
+        "location": ", , China",
+        "year": "1660"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.370479,
+          30.240579
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "13",
+        "first_name": "Berry",
+        "last_name": "Freyn",
+        "name": "Berry Freyn",
+        "gender": "Female",
+        "city": "Boucinhas",
+        "state": "",
+        "country": "Portugal",
+        "location": "Boucinhas, , Portugal",
+        "year": "1509"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.2103678,
+          41.3532895
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "14",
+        "first_name": "Monty",
+        "last_name": "Wellfare",
+        "name": "Monty Wellfare",
+        "gender": "Genderqueer",
+        "city": "Balzar",
+        "state": "",
+        "country": "Ecuador",
+        "location": "Balzar, , Ecuador",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -79.8996789,
+          -1.3664276
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "15",
+        "first_name": "Kaile",
+        "last_name": "Edgington",
+        "name": "Kaile Edgington",
+        "gender": "Female",
+        "city": "Теарце",
+        "state": "",
+        "country": "",
+        "location": "Теарце, , ",
+        "year": "1800"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.0523541,
+          42.075123
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "16",
+        "first_name": "Jolynn",
+        "last_name": "Sidnell",
+        "name": "Jolynn Sidnell",
+        "gender": "Polygender",
+        "city": "Brejos",
+        "state": "Setúbal",
+        "country": "Portugal",
+        "location": "Brejos, Setúbal, Portugal",
+        "year": "1795"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.9867334,
+          38.6223709
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "17",
+        "first_name": "Pincas",
+        "last_name": "Rimour",
+        "name": "Pincas Rimour",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Indonesia",
+        "location": ", , Indonesia",
+        "year": "1831"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.6694,
+          -8.0412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "18",
+        "first_name": "Alie",
+        "last_name": "Belly",
+        "name": "Alie Belly",
+        "gender": "",
+        "city": "Bira",
+        "state": "",
+        "country": "",
+        "location": "Bira, , ",
+        "year": "1618"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.4671327,
+          49.0026196
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "19",
+        "first_name": "Stillman",
+        "last_name": "Keneford",
+        "name": "Stillman Keneford",
+        "gender": "Male",
+        "city": "Podedwórze",
+        "state": "",
+        "country": "Poland",
+        "location": "Podedwórze, , Poland",
+        "year": "1608"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.1996378,
+          51.6878774
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "20",
+        "first_name": "Myles",
+        "last_name": "Huckleby",
+        "name": "Myles Huckleby",
+        "gender": "Male",
+        "city": "Xitan",
+        "state": "",
+        "country": "China",
+        "location": "Xitan, , China",
+        "year": "1793"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.819425,
+          31.282537
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "21",
+        "first_name": "Felizio",
+        "last_name": "",
+        "name": "Felizio",
+        "gender": "Male",
+        "city": "Zagora",
+        "state": "",
+        "country": "Morocco",
+        "location": "Zagora, , Morocco",
+        "year": "1651"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.8406587,
+          30.3458998
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "22",
+        "first_name": "Bran",
+        "last_name": "Abbes",
+        "name": "Bran Abbes",
+        "gender": "Male",
+        "city": "San Vicente",
+        "state": "",
+        "country": "",
+        "location": "San Vicente, , ",
+        "year": "1582"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.0589081,
+          14.7596318
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "23",
+        "first_name": "Norri",
+        "last_name": "Lengthorn",
+        "name": "Norri Lengthorn",
+        "gender": "Non-binary",
+        "city": "",
+        "state": "",
+        "country": "Philippines",
+        "location": ", , Philippines",
+        "year": "1634"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.341507,
+          15.884783
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "24",
+        "first_name": "Nichol",
+        "last_name": "",
+        "name": "Nichol ",
+        "gender": "Female",
+        "city": "Pulau Pinang",
+        "state": "Pulau Pinang",
+        "country": "Malaysia",
+        "location": "Pulau Pinang, Pulau Pinang, Malaysia",
+        "year": "1511"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.329744,
+          5.414515
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "25",
+        "first_name": "Angelle",
+        "last_name": "Covington",
+        "name": "Angelle Covington",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "",
+        "location": ", , ",
+        "year": "1750"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.3845966,
+          -6.8230945
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "26",
+        "first_name": "Fletch",
+        "last_name": "Ranking",
+        "name": "Fletch Ranking",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Indonesia",
+        "location": ", , Indonesia",
+        "year": "1801"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.8994,
+          -6.3192
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "27",
+        "first_name": "Moise",
+        "last_name": "",
+        "name": "Moise",
+        "gender": "",
+        "city": "Longjin",
+        "state": "",
+        "country": "China",
+        "location": "Longjin, , China",
+        "year": "1677"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.427066,
+          42.76631
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "28",
+        "first_name": "Hadleigh",
+        "last_name": "Filip",
+        "name": "Hadleigh Filip",
+        "gender": "Non-binary",
+        "city": "",
+        "state": "",
+        "country": "Colombia",
+        "location": ", , Colombia",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.4944768,
+          8.9410756
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "29",
+        "first_name": "Kara-lynn",
+        "last_name": "Buyers",
+        "name": "Kara-lynn Buyers",
+        "gender": "Female",
+        "city": "Hudson",
+        "state": "Québec",
+        "country": "",
+        "location": "Hudson, Québec, ",
+        "year": "1841"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.1406654,
+          45.4585439
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "30",
+        "first_name": "Arabelle",
+        "last_name": "Janusz",
+        "name": "Arabelle Janusz",
+        "gender": "Genderfluid",
+        "city": "Qiulu",
+        "state": "",
+        "country": "",
+        "location": "Qiulu, , ",
+        "year": "1509"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.181069,
+          30.713107
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "31",
+        "first_name": "Herold",
+        "last_name": "",
+        "name": "Herold ",
+        "gender": "Male",
+        "city": "Sävedalen",
+        "state": "Västra Götaland",
+        "country": "Sweden",
+        "location": "Sävedalen, Västra Götaland, Sweden",
+        "year": "1750"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.0887312,
+          57.7238408
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "32",
+        "first_name": "Errick",
+        "last_name": "Ducarne",
+        "name": "Errick Ducarne",
+        "gender": "Male",
+        "city": "Amfíkleia",
+        "state": "",
+        "country": "Greece",
+        "location": "Amfíkleia, , Greece",
+        "year": "1573"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          22.5927946,
+          38.6390583
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "33",
+        "first_name": "Mariellen",
+        "last_name": "Inkpen",
+        "name": "Mariellen Inkpen",
+        "gender": "Female",
+        "city": "Jīwani",
+        "state": "",
+        "country": "Pakistan",
+        "location": "Jīwani, , Pakistan",
+        "year": "1665"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          61.8951809,
+          25.2284355
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "34",
+        "first_name": "Baxter",
+        "last_name": "Kilbey",
+        "name": "Baxter Kilbey",
+        "gender": "Male",
+        "city": "Babakankadu",
+        "state": "",
+        "country": "",
+        "location": "Babakankadu, , ",
+        "year": "1706"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          108.21101,
+          -7.36795
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "35",
+        "first_name": "Arny",
+        "last_name": "Burkart",
+        "name": "Arny Burkart",
+        "gender": "Bigender",
+        "city": "Tama",
+        "state": "",
+        "country": "Argentina",
+        "location": "Tama, , Argentina",
+        "year": "1872"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.8349174,
+          -29.4075749
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "36",
+        "first_name": "Olly",
+        "last_name": "Bickerstasse",
+        "name": "Olly Bickerstasse",
+        "gender": "Male",
+        "city": "Donggaocun",
+        "state": "",
+        "country": "China",
+        "location": "Donggaocun, , China",
+        "year": "1694"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.116756,
+          40.104785
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "37",
+        "first_name": "Tabitha",
+        "last_name": "Austen",
+        "name": "Tabitha Austen",
+        "gender": "Female",
+        "city": "Iguape",
+        "state": "",
+        "country": "Brazil",
+        "location": "Iguape, , Brazil",
+        "year": "1498"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -47.5275422,
+          -24.5082407
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "38",
+        "first_name": "Erminia",
+        "last_name": "Faccini",
+        "name": "Erminia Faccini",
+        "gender": "",
+        "city": "",
+        "state": "",
+        "country": "China",
+        "location": ", , China",
+        "year": "1518"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.531622,
+          32.874735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "39",
+        "first_name": "Elysia",
+        "last_name": "Steventon",
+        "name": "Elysia Steventon",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Ireland",
+        "location": ", , Ireland",
+        "year": "1848"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.2892907,
+          53.310122
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "40",
+        "first_name": "Marina",
+        "last_name": "Cauthra",
+        "name": "Marina Cauthra",
+        "gender": "",
+        "city": "Emiliano Zapata",
+        "state": "Veracruz Llave",
+        "country": "Mexico",
+        "location": "Emiliano Zapata, Veracruz Llave, Mexico",
+        "year": "1843"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1843676,
+          18.8478608
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "41",
+        "first_name": "Letty",
+        "last_name": "Gibbins",
+        "name": "Letty Gibbins",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Philippines",
+        "location": ", , Philippines",
+        "year": "1636"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.1138058,
+          14.6688068
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "42",
+        "first_name": "Rowen",
+        "last_name": "",
+        "name": "Rowen ",
+        "gender": "Male",
+        "city": "Changgai",
+        "state": "",
+        "country": "China",
+        "location": "Changgai, , China",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          99.197234,
+          30.577776
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "43",
+        "first_name": "Rosabelle",
+        "last_name": "Druett",
+        "name": "Rosabelle Druett",
+        "gender": "Female",
+        "city": "",
+        "state": "Centre",
+        "country": "France",
+        "location": ", Centre, France",
+        "year": "1686"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.7259705,
+          47.3640936
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "44",
+        "first_name": "Bat",
+        "last_name": "Jenner",
+        "name": "Bat Jenner",
+        "gender": "Male",
+        "city": "Cartagena del Chairá",
+        "state": "",
+        "country": "Colombia",
+        "location": "Cartagena del Chairá, , Colombia",
+        "year": "1602"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.4994517,
+          0.9463536
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "45",
+        "first_name": "Torrence",
+        "last_name": "",
+        "name": "Torrence ",
+        "gender": "Male",
+        "city": "Chixi",
+        "state": "",
+        "country": "China",
+        "location": "Chixi, , China",
+        "year": "1570"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.266579,
+          30.169665
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "46",
+        "first_name": "Aldridge",
+        "last_name": "Skouling",
+        "name": "Aldridge Skouling",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Indonesia",
+        "location": ", , Indonesia",
+        "year": "1738"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.9390257,
+          -6.864462
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "47",
+        "first_name": "Horten",
+        "last_name": "Toms",
+        "name": "Horten Toms",
+        "gender": "Genderfluid",
+        "city": "Luoshe",
+        "state": "",
+        "country": "China",
+        "location": "Luoshe, , China",
+        "year": "1853"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.016536,
+          33.580873
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "48",
+        "first_name": "Tani",
+        "last_name": "Paterno",
+        "name": "Tani Paterno",
+        "gender": "Female",
+        "city": "Sigli",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Sigli, , Indonesia",
+        "year": "1665"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.9602371,
+          5.3847763
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "49",
+        "first_name": "Carmon",
+        "last_name": "Kardos-Stowe",
+        "name": "Carmon Kardos-Stowe",
+        "gender": "Genderfluid",
+        "city": "",
+        "state": "",
+        "country": "South Africa",
+        "location": ", , South Africa",
+        "year": "1852"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.10324,
+          -30.3078
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "50",
+        "first_name": "Sashenka",
+        "last_name": "",
+        "name": "Sashenka ",
+        "gender": "",
+        "city": "Doña Remedios Trinidad",
+        "state": "",
+        "country": "",
+        "location": "Doña Remedios Trinidad, , ",
+        "year": "1568"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.8947635,
+          14.9619281
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "51",
+        "first_name": "",
+        "last_name": "Bowller",
+        "name": "Bowller",
+        "gender": "Female",
+        "city": "Shujāābād",
+        "state": "",
+        "country": "Pakistan",
+        "location": "Shujāābād, , Pakistan",
+        "year": "1702"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.3099509,
+          29.8626871
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "52",
+        "first_name": "Roxane",
+        "last_name": "Barby",
+        "name": "Roxane Barby",
+        "gender": "",
+        "city": "",
+        "state": "",
+        "country": "Guatemala",
+        "location": ", , Guatemala",
+        "year": "1592"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -89.8909572,
+          16.9296881
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "53",
+        "first_name": "Hillier",
+        "last_name": "Saffe",
+        "name": "Hillier Saffe",
+        "gender": "Male",
+        "city": "Dong’ao",
+        "state": "",
+        "country": "China",
+        "location": "Dong’ao, , China",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.401814,
+          18.714928
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "54",
+        "first_name": "Normie",
+        "last_name": "Bulman",
+        "name": "Normie Bulman",
+        "gender": "Agender",
+        "city": "Fangzheng",
+        "state": "",
+        "country": "China",
+        "location": "Fangzheng, , China",
+        "year": "1825"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.8295359,
+          45.851694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "55",
+        "first_name": "Ogdan",
+        "last_name": "",
+        "name": "Ogdan ",
+        "gender": "Male",
+        "city": "Gal’bshtadt",
+        "state": "",
+        "country": "Russia",
+        "location": "Gal’bshtadt, , Russia",
+        "year": "1821"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.9845,
+          53.2264
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "56",
+        "first_name": "Rey",
+        "last_name": "",
+        "name": "Rey ",
+        "gender": "Female",
+        "city": "Kanye",
+        "state": "",
+        "country": "Botswana",
+        "location": "Kanye, , Botswana",
+        "year": "1855"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.3430203,
+          -24.988061
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "57",
+        "first_name": "Alexandro",
+        "last_name": "Wiggam",
+        "name": "Alexandro Wiggam",
+        "gender": "Male",
+        "city": "Ngilengan",
+        "state": "",
+        "country": "",
+        "location": "Ngilengan, , ",
+        "year": "1509"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.633,
+          -6.7228
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "58",
+        "first_name": "Parrnell",
+        "last_name": "",
+        "name": "Parrnell ",
+        "gender": "Polygender",
+        "city": "",
+        "state": "",
+        "country": "",
+        "location": ", , ",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -58.4475091,
+          -34.6601867
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "59",
+        "first_name": "Web",
+        "last_name": "Weathey",
+        "name": "Web Weathey",
+        "gender": "Male",
+        "city": "Santa Teresita",
+        "state": "",
+        "country": "Philippines",
+        "location": "Santa Teresita, , Philippines",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.972283,
+          13.874099
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "60",
+        "first_name": "Hali",
+        "last_name": "",
+        "name": "Hali ",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Brazil",
+        "location": ", , Brazil",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -40.37156,
+          -7.0743223
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "61",
+        "first_name": "Kerianne",
+        "last_name": "",
+        "name": "Kerianne ",
+        "gender": "Female",
+        "city": "Liuzikou",
+        "state": "",
+        "country": "China",
+        "location": "Liuzikou, , China",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.355421,
+          39.876176
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "62",
+        "first_name": "Tania",
+        "last_name": "Lewens",
+        "name": "Tania Lewens",
+        "gender": "Female",
+        "city": "Hongxing",
+        "state": "",
+        "country": "China",
+        "location": "Hongxing, , China",
+        "year": "1606"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3909831,
+          48.239431
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "63",
+        "first_name": "Octavia",
+        "last_name": "",
+        "name": "Octavia ",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "United States",
+        "location": ", , United States",
+        "year": "1652"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.4970294,
+          38.5603056
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "64",
+        "first_name": "",
+        "last_name": "Gilliver",
+        "name": " Gilliver",
+        "gender": "",
+        "city": "",
+        "state": "",
+        "country": "Bosnia and Herzegovina",
+        "location": ", , Bosnia and Herzegovina",
+        "year": "1715"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.4498275,
+          44.0562486
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "65",
+        "first_name": "Patrizio",
+        "last_name": "Novill",
+        "name": "Patrizio Novill",
+        "gender": "Male",
+        "city": "Innoshima",
+        "state": "",
+        "country": "Japan",
+        "location": "Innoshima, , Japan",
+        "year": "1743"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.193015,
+          34.276784
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "66",
+        "first_name": "Rebbecca",
+        "last_name": "Rawsen",
+        "name": "Rebbecca Rawsen",
+        "gender": "Female",
+        "city": "Reisdorf",
+        "state": "",
+        "country": "Luxembourg",
+        "location": "Reisdorf, , Luxembourg",
+        "year": "1830"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.2651155,
+          49.8674755
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "67",
+        "first_name": "Elise",
+        "last_name": "Buscher",
+        "name": "Elise Buscher",
+        "gender": "Female",
+        "city": "Zhangjiachang",
+        "state": "",
+        "country": "China",
+        "location": "Zhangjiachang, , China",
+        "year": "1716"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.832566,
+          40.083782
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "68",
+        "first_name": "Sindee",
+        "last_name": "Chappel",
+        "name": "Sindee Chappel",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "China",
+        "location": ", , China",
+        "year": "1766"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.123041,
+          33.792785
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "69",
+        "first_name": "Poppy",
+        "last_name": "",
+        "name": "Poppy ",
+        "gender": "Female",
+        "city": "Yangkang",
+        "state": "",
+        "country": "China",
+        "location": "Yangkang, , China",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.047651,
+          28.888555
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "70",
+        "first_name": "",
+        "last_name": "",
+        "name": " ",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Russia",
+        "location": ", , Russia",
+        "year": "1726"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          43.8674076,
+          43.555139
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "71",
+        "first_name": "Terri-jo",
+        "last_name": "Rowden",
+        "name": "Terri-jo Rowden",
+        "gender": "Bigender",
+        "city": "Thabazimbi",
+        "state": "",
+        "country": "",
+        "location": "Thabazimbi, , ",
+        "year": "1816"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.6170798,
+          -24.9250707
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "72",
+        "first_name": "Axel",
+        "last_name": "O'Fearguise",
+        "name": "Axel O'Fearguise",
+        "gender": "Male",
+        "city": "Barmash",
+        "state": "",
+        "country": "Albania",
+        "location": "Barmash, , Albania",
+        "year": "1646"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          20.6206167,
+          40.2779227
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "73",
+        "first_name": "Danya",
+        "last_name": "Rossoni",
+        "name": "Danya Rossoni",
+        "gender": "Male",
+        "city": "Mosrentgen",
+        "state": "",
+        "country": "Russia",
+        "location": "Mosrentgen, , Russia",
+        "year": "1634"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.4668955,
+          55.615632
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "74",
+        "first_name": "Neils",
+        "last_name": "",
+        "name": "Neils",
+        "gender": "Male",
+        "city": "Mercier",
+        "state": "",
+        "country": "Canada",
+        "location": "Mercier, , Canada",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.7525458,
+          45.3204459
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "75",
+        "first_name": "",
+        "last_name": "Elcox",
+        "name": " Elcox",
+        "gender": "Female",
+        "city": "Bintulu",
+        "state": "Sarawak",
+        "country": "Malaysia",
+        "location": "Bintulu, Sarawak, Malaysia",
+        "year": "1875"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.088634,
+          3.191408
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "76",
+        "first_name": "Ines",
+        "last_name": "Look",
+        "name": "Ines Look",
+        "gender": "Female",
+        "city": "Zerkten",
+        "state": "",
+        "country": "Morocco",
+        "location": "Zerkten, , Morocco",
+        "year": "1805"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.4060306,
+          31.4374773
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "77",
+        "first_name": "Wyatan",
+        "last_name": "",
+        "name": "Wyatan ",
+        "gender": "Male",
+        "city": "Oslo",
+        "state": "Oslo",
+        "country": "Norway",
+        "location": "Oslo, Oslo, Norway",
+        "year": "1610"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.8180311,
+          59.9173309
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "78",
+        "first_name": "Noella",
+        "last_name": "",
+        "name": "Noella ",
+        "gender": "",
+        "city": "Rio Negrinho",
+        "state": "",
+        "country": "Brazil",
+        "location": "Rio Negrinho, , Brazil",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -49.5483671,
+          -26.424537
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "79",
+        "first_name": "Moreen",
+        "last_name": "Tilliard",
+        "name": "Moreen Tilliard",
+        "gender": "",
+        "city": "Heyan",
+        "state": "",
+        "country": "China",
+        "location": "Heyan, , China",
+        "year": "1542"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.287077,
+          47.185098
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "80",
+        "first_name": "Alexander",
+        "last_name": "",
+        "name": "Alexander",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Guam",
+        "location": ", , Guam",
+        "year": "1613"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.7453228,
+          13.4677672
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "81",
+        "first_name": "Debbie",
+        "last_name": "Tyrone",
+        "name": "Debbie Tyrone",
+        "gender": "",
+        "city": "",
+        "state": "",
+        "country": "",
+        "location": ", , ",
+        "year": "1494"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.3088441,
+          8.5705151
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "82",
+        "first_name": "Debera",
+        "last_name": "Tolliday",
+        "name": "Debera Tolliday",
+        "gender": "Female",
+        "city": "Ngchesar Hamlet",
+        "state": "",
+        "country": "Palau",
+        "location": "Ngchesar Hamlet, , Palau",
+        "year": "1539"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.60991,
+          7.46932
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "83",
+        "first_name": "Welbie",
+        "last_name": "",
+        "name": "Welbie ",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Peru",
+        "location": ", , Peru",
+        "year": "1606"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.9922372,
+          -9.8998206
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "84",
+        "first_name": "Jessie",
+        "last_name": "Wilcot",
+        "name": "Jessie Wilcot",
+        "gender": "",
+        "city": "Nambalan",
+        "state": "",
+        "country": "Philippines",
+        "location": "Nambalan, , Philippines",
+        "year": "1896"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.465637,
+          15.5946381
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "85",
+        "first_name": "Allyson",
+        "last_name": "",
+        "name": "Allyson ",
+        "gender": "Female",
+        "city": "Al Hadā",
+        "state": "",
+        "country": "Saudi Arabia",
+        "location": "Al Hadā, , Saudi Arabia",
+        "year": "1721"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          40.2782239,
+          21.357765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "86",
+        "first_name": "Marquita",
+        "last_name": "Deppen",
+        "name": "Marquita Deppen",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Indonesia",
+        "location": ", , Indonesia",
+        "year": "1593"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.5917078,
+          -3.3619906
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "87",
+        "first_name": "Mitzi",
+        "last_name": "Malloch",
+        "name": "Mitzi Malloch",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "China",
+        "location": ", , China",
+        "year": "1672"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          102.743811,
+          25.015105
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "88",
+        "first_name": "Harriet",
+        "last_name": "Widdowes",
+        "name": "Harriet Widdowes",
+        "gender": "Female",
+        "city": "Asemanis",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Asemanis, , Indonesia",
+        "year": "1724"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.5755,
+          -6.9987
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "89",
+        "first_name": "Ralina",
+        "last_name": "Mains",
+        "name": "Ralina Mains",
+        "gender": "Female",
+        "city": "Roissy Charles-de-Gaulle",
+        "state": "Île-de-France",
+        "country": "France",
+        "location": "Roissy Charles-de-Gaulle, Île-de-France, France",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.5479245,
+          49.0096906
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "90",
+        "first_name": "Bryana",
+        "last_name": "Touret",
+        "name": "Bryana Touret",
+        "gender": "Female",
+        "city": "Kyshtym",
+        "state": "",
+        "country": "Russia",
+        "location": "Kyshtym, , Russia",
+        "year": "1565"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          60.538576,
+          55.7359757
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "91",
+        "first_name": "",
+        "last_name": "",
+        "name": " ",
+        "gender": "Male",
+        "city": "Raków",
+        "state": "",
+        "country": "Poland",
+        "location": "Raków, , Poland",
+        "year": "1893"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.0463888,
+          50.6735414
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "92",
+        "first_name": "Meggy",
+        "last_name": "Bennen",
+        "name": "Meggy Bennen",
+        "gender": "Genderfluid",
+        "city": "Đồi Ngô",
+        "state": "",
+        "country": "",
+        "location": "Đồi Ngô, , ",
+        "year": "1780"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.3846459,
+          21.3057815
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "93",
+        "first_name": "Natty",
+        "last_name": "",
+        "name": "Natty ",
+        "gender": "",
+        "city": "",
+        "state": "",
+        "country": "China",
+        "location": ", , China",
+        "year": "1675"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.604143,
+          30.912302
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "94",
+        "first_name": "Mack",
+        "last_name": "O'Nowlan",
+        "name": "Mack O'Nowlan",
+        "gender": "",
+        "city": "Shaowu",
+        "state": "",
+        "country": "China",
+        "location": "Shaowu, , China",
+        "year": "1888"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.492533,
+          27.340326
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "95",
+        "first_name": "Normie",
+        "last_name": "Lorenzo",
+        "name": "Normie Lorenzo",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Philippines",
+        "location": ", , Philippines",
+        "year": "1522"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          123.8572829,
+          9.6399306
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "96",
+        "first_name": "Adrien",
+        "last_name": "",
+        "name": "Adrien ",
+        "gender": "Male",
+        "city": "Sikur",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Sikur, , Indonesia",
+        "year": "1512"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.4134873,
+          -8.5392331
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "97",
+        "first_name": "Roderick",
+        "last_name": "Tisun",
+        "name": "Roderick Tisun",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Sri Lanka",
+        "location": ", , Sri Lanka",
+        "year": "1649"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.5148127,
+          5.9368109
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "98",
+        "first_name": "Tommie",
+        "last_name": "Crummay",
+        "name": "Tommie Crummay",
+        "gender": "Male",
+        "city": "Providencia",
+        "state": "",
+        "country": "Colombia",
+        "location": "Providencia, , Colombia",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.3756862,
+          13.3875121
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "99",
+        "first_name": "Erinna",
+        "last_name": "Roycroft",
+        "name": "Erinna Roycroft",
+        "gender": "Female",
+        "city": "Savannah",
+        "state": "",
+        "country": "United States",
+        "location": "Savannah, , United States",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.0973279,
+          32.0056072
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "100",
+        "first_name": "Cleve",
+        "last_name": "Pounder",
+        "name": "Cleve Pounder",
+        "gender": "Male",
+        "city": "Perches",
+        "state": "",
+        "country": "Haiti",
+        "location": "Perches, , Haiti",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.923832,
+          19.5230587
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "101",
+        "first_name": "Kalindi",
+        "last_name": "Huebner",
+        "name": "Kalindi Huebner",
+        "gender": "Female",
+        "city": "Kävlinge",
+        "state": "",
+        "country": "Sweden",
+        "location": "Kävlinge, , Sweden",
+        "year": "1889"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.1779513,
+          55.7309365
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "102",
+        "first_name": "Dalston",
+        "last_name": "",
+        "name": "Dalston ",
+        "gender": "Male",
+        "city": "Roi Et",
+        "state": "",
+        "country": "",
+        "location": "Roi Et, , ",
+        "year": "1865"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.5899733,
+          16.0501738
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "103",
+        "first_name": "Matthieu",
+        "last_name": "Defraine",
+        "name": "Matthieu Defraine",
+        "gender": "Male",
+        "city": "Zhangduangu",
+        "state": "",
+        "country": "China",
+        "location": "Zhangduangu, , China",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.955312,
+          38.135005
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "104",
+        "first_name": "Domeniga",
+        "last_name": "",
+        "name": "Domeniga ",
+        "gender": "Female",
+        "city": "Longxing",
+        "state": "",
+        "country": "",
+        "location": "Longxing, , ",
+        "year": "1832"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.79542,
+          29.696195
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "105",
+        "first_name": "Hillary",
+        "last_name": "Kivlehan",
+        "name": "Hillary Kivlehan",
+        "gender": "Genderfluid",
+        "city": "Xinfeng",
+        "state": "",
+        "country": "China",
+        "location": "Xinfeng, , China",
+        "year": "1890"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.922922,
+          25.386379
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "106",
+        "first_name": "Alessandro",
+        "last_name": "Vowles",
+        "name": "Alessandro Vowles",
+        "gender": "Male",
+        "city": "Ovsyanka",
+        "state": "",
+        "country": "Russia",
+        "location": "Ovsyanka, , Russia",
+        "year": "1566"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          92.5796162,
+          55.9562612
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "107",
+        "first_name": "Sabine",
+        "last_name": "Malbon",
+        "name": "Sabine Malbon",
+        "gender": "Female",
+        "city": "Talambung Laok",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Talambung Laok, , Indonesia",
+        "year": "1887"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.69823,
+          -7.0395
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "108",
+        "first_name": "",
+        "last_name": "Lantaph",
+        "name": " Lantaph",
+        "gender": "Male",
+        "city": "Lunyuk Ode",
+        "state": "",
+        "country": "",
+        "location": "Lunyuk Ode, , ",
+        "year": "1534"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.3028803,
+          -8.9670697
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "109",
+        "first_name": "Dael",
+        "last_name": "",
+        "name": "Dael ",
+        "gender": "Male",
+        "city": "Sacsamarca",
+        "state": "",
+        "country": "",
+        "location": "Sacsamarca, , ",
+        "year": "1743"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.3132878,
+          -13.9448918
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "110",
+        "first_name": "Dolph",
+        "last_name": "Sleet",
+        "name": "Dolph Sleet",
+        "gender": "Male",
+        "city": "Garmeh",
+        "state": "",
+        "country": "Iran",
+        "location": "Garmeh, , Iran",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          55.0396912,
+          33.5282289
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "111",
+        "first_name": "Claudius",
+        "last_name": "Paoletto",
+        "name": "Claudius Paoletto",
+        "gender": "",
+        "city": "Yirga ‘Alem",
+        "state": "",
+        "country": "Ethiopia",
+        "location": "Yirga ‘Alem, , Ethiopia",
+        "year": "1825"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.4139922,
+          6.7468164
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "112",
+        "first_name": "",
+        "last_name": "Southerns",
+        "name": " Southerns",
+        "gender": "Male",
+        "city": "Kumbo",
+        "state": "",
+        "country": "Cameroon",
+        "location": "Kumbo, , Cameroon",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.6759772,
+          6.2244851
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "113",
+        "first_name": "",
+        "last_name": "Butchers",
+        "name": " Butchers",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Uzbekistan",
+        "location": ", , Uzbekistan",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.845274,
+          41.0289533
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "114",
+        "first_name": "Karrah",
+        "last_name": "",
+        "name": "Karrah ",
+        "gender": "Female",
+        "city": "Klatakan",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Klatakan, , Indonesia",
+        "year": "1606"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.8882172,
+          -7.7013097
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "115",
+        "first_name": "Rosetta",
+        "last_name": "Chazotte",
+        "name": "Rosetta Chazotte",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "",
+        "location": ", , ",
+        "year": "1817"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.324372,
+          13.974293
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "116",
+        "first_name": "Danita",
+        "last_name": "",
+        "name": "Danita ",
+        "gender": "",
+        "city": "Covas da Raposa",
+        "state": "Setúbal",
+        "country": "Portugal",
+        "location": "Covas da Raposa, Setúbal, Portugal",
+        "year": "1690"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.1141307,
+          38.4600166
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "117",
+        "first_name": "Dominique",
+        "last_name": "Black",
+        "name": "Dominique Black",
+        "gender": "Female",
+        "city": "Fonte Boa",
+        "state": "",
+        "country": "Brazil",
+        "location": "Fonte Boa, , Brazil",
+        "year": "1894"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1415263,
+          -2.4681009
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "118",
+        "first_name": "Ronnie",
+        "last_name": "Tanner",
+        "name": "Ronnie Tanner",
+        "gender": "",
+        "city": "",
+        "state": "",
+        "country": "Indonesia",
+        "location": ", , Indonesia",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          97.9157099,
+          2.7121164
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "119",
+        "first_name": "Derward",
+        "last_name": "Lyngsted",
+        "name": "Derward Lyngsted",
+        "gender": "Male",
+        "city": "Mutum Biyu",
+        "state": "",
+        "country": "Nigeria",
+        "location": "Mutum Biyu, , Nigeria",
+        "year": "1834"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.7718025,
+          8.6450352
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "120",
+        "first_name": "Cassandry",
+        "last_name": "Billingham",
+        "name": "Cassandry Billingham",
+        "gender": "Female",
+        "city": "Villa Presidente Frei, Ñuñoa, Santiago, Chile",
+        "state": "",
+        "country": "Chile",
+        "location": "Villa Presidente Frei, Ñuñoa, Santiago, Chile, , Chile",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.582502,
+          -33.459409
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "121",
+        "first_name": "Natka",
+        "last_name": "Gosart",
+        "name": "Natka Gosart",
+        "gender": "Female",
+        "city": "Barreira",
+        "state": "",
+        "country": "Portugal",
+        "location": "Barreira, , Portugal",
+        "year": "1851"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.5404451,
+          41.2106113
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "122",
+        "first_name": "Leona",
+        "last_name": "Manna",
+        "name": "Leona Manna",
+        "gender": "Female",
+        "city": "Carabamba",
+        "state": "",
+        "country": "Peru",
+        "location": "Carabamba, , Peru",
+        "year": "1543"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.0452217,
+          -7.6209569
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "123",
+        "first_name": "Ganny",
+        "last_name": "Knath",
+        "name": "Ganny Knath",
+        "gender": "Male",
+        "city": "Xinglin",
+        "state": "",
+        "country": "China",
+        "location": "Xinglin, , China",
+        "year": "1710"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.670305,
+          46.465362
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "124",
+        "first_name": "Dagmar",
+        "last_name": "Butchard",
+        "name": "Dagmar Butchard",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "South Korea",
+        "location": ", , South Korea",
+        "year": "1773"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.3845475,
+          36.3504119
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "125",
+        "first_name": "",
+        "last_name": "Camerana",
+        "name": " Camerana",
+        "gender": "Female",
+        "city": "Wanghu",
+        "state": "",
+        "country": "",
+        "location": "Wanghu, , ",
+        "year": "1695"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.244678,
+          30.661419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "126",
+        "first_name": "Corinna",
+        "last_name": "Grzegorecki",
+        "name": "Corinna Grzegorecki",
+        "gender": "",
+        "city": "Waitakere",
+        "state": "",
+        "country": "New Zealand",
+        "location": "Waitakere, , New Zealand",
+        "year": "1632"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          174.5536678,
+          -36.8189073
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "127",
+        "first_name": "Petr",
+        "last_name": "Stoile",
+        "name": "Petr Stoile",
+        "gender": "Male",
+        "city": "Courtaboeuf",
+        "state": "Île-de-France",
+        "country": "France",
+        "location": "Courtaboeuf, Île-de-France, France",
+        "year": "1640"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.190167,
+          48.695223
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "128",
+        "first_name": "Burl",
+        "last_name": "",
+        "name": "Burl ",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "South Africa",
+        "location": ", , South Africa",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.086585,
+          -28.6038255
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "129",
+        "first_name": "",
+        "last_name": "Parrett",
+        "name": " Parrett",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "",
+        "location": ", , ",
+        "year": "1829"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          47.6381357,
+          -21.3032134
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "130",
+        "first_name": "Albertina",
+        "last_name": "",
+        "name": "Albertina ",
+        "gender": "",
+        "city": "Meishan",
+        "state": "",
+        "country": "",
+        "location": "Meishan, , ",
+        "year": "1834"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.848396,
+          30.07728
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "131",
+        "first_name": "Patrizia",
+        "last_name": "Keepe",
+        "name": "Patrizia Keepe",
+        "gender": "",
+        "city": "Haramgai",
+        "state": "",
+        "country": "",
+        "location": "Haramgai, , ",
+        "year": "1676"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          87.77418,
+          46.65684
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "132",
+        "first_name": "Tremaine",
+        "last_name": "Fike",
+        "name": "Tremaine Fike",
+        "gender": "Male",
+        "city": "Futang",
+        "state": "",
+        "country": "China",
+        "location": "Futang, , China",
+        "year": "1717"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.814504,
+          32.890479
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "133",
+        "first_name": "Marie-jeanne",
+        "last_name": "Marple",
+        "name": "Marie-jeanne Marple",
+        "gender": "Female",
+        "city": "Gulai",
+        "state": "",
+        "country": "China",
+        "location": "Gulai, , China",
+        "year": "1620"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.342399,
+          22.975052
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "134",
+        "first_name": "Frank",
+        "last_name": "",
+        "name": "Frank ",
+        "gender": "Male",
+        "city": "Dongshi",
+        "state": "",
+        "country": "China",
+        "location": "Dongshi, , China",
+        "year": "1742"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          118.460176,
+          24.660711
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "135",
+        "first_name": "Inge",
+        "last_name": "Cox",
+        "name": "Inge Cox",
+        "gender": "",
+        "city": "",
+        "state": "",
+        "country": "Indonesia",
+        "location": ", , Indonesia",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.1434668,
+          -7.893728
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "136",
+        "first_name": "Scarface",
+        "last_name": "Byer",
+        "name": "Scarface Byer",
+        "gender": "Male",
+        "city": "Vale Flores",
+        "state": "Lisboa",
+        "country": "",
+        "location": "Vale Flores, Lisboa, ",
+        "year": "1828"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.3643528,
+          38.7865307
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "137",
+        "first_name": null,
+        "last_name": null,
+        "name": null,
+        "gender": "Male",
+        "city": "Quxia",
+        "state": "",
+        "country": "China",
+        "location": "Quxia, , China",
+        "year": "1677"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          118.909159,
+          32.096344
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "138",
+        "first_name": "",
+        "last_name": "",
+        "name": null,
+        "gender": "Female",
+        "city": "Ikedachō",
+        "state": "",
+        "country": "Japan",
+        "location": "Ikedachō, , Japan",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.7812773,
+          33.9419512
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "139",
+        "first_name": "Mariana",
+        "last_name": "Annes",
+        "name": "Mariana Annes",
+        "gender": "Female",
+        "city": "Paradahan",
+        "state": "",
+        "country": "Philippines",
+        "location": "Paradahan, , Philippines",
+        "year": "1846"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.8590469,
+          14.3246136
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "140",
+        "first_name": "Dino",
+        "last_name": "Coat",
+        "name": "Dino Coat",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Costa Rica",
+        "location": ", , Costa Rica",
+        "year": "1816"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.7067059,
+          19.8022278
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "141",
+        "first_name": "Vyky",
+        "last_name": "Rediers",
+        "name": "Vyky Rediers",
+        "gender": "Female",
+        "city": "Mangulile",
+        "state": "",
+        "country": "Honduras",
+        "location": "Mangulile, , Honduras",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -86.8195237,
+          15.0365207
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "142",
+        "first_name": "Crysta",
+        "last_name": "Spellissy",
+        "name": "Crysta Spellissy",
+        "gender": "Female",
+        "city": "Sanjiang",
+        "state": "",
+        "country": "China",
+        "location": "Sanjiang, , China",
+        "year": "1673"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.607675,
+          25.783198
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "143",
+        "first_name": "Guglielma",
+        "last_name": "Keel",
+        "name": "Guglielma Keel",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Russia",
+        "location": ", , Russia",
+        "year": "1881"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          43.7825227,
+          45.0030925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "144",
+        "first_name": "Derward",
+        "last_name": "Figgins",
+        "name": "Derward Figgins",
+        "gender": "Male",
+        "city": "Mancagahar",
+        "state": "",
+        "country": "",
+        "location": "Mancagahar, , ",
+        "year": "1764"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.7073688,
+          -7.6569277
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "145",
+        "first_name": "Mady",
+        "last_name": "Peare",
+        "name": "Mady Peare",
+        "gender": "Female",
+        "city": "Kribi",
+        "state": "",
+        "country": "Cameroon",
+        "location": "Kribi, , Cameroon",
+        "year": "1604"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.9101915,
+          2.9405941
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "146",
+        "first_name": "Bliss",
+        "last_name": "Lademann",
+        "name": "Bliss Lademann",
+        "gender": "Female",
+        "city": "Nampula",
+        "state": "",
+        "country": "Mozambique",
+        "location": "Nampula, , Mozambique",
+        "year": "1500"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.2687161,
+          -15.1266347
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "147",
+        "first_name": "Lindsey",
+        "last_name": "Grocock",
+        "name": "Lindsey Grocock",
+        "gender": "",
+        "city": "Nikol’sk",
+        "state": "",
+        "country": "Russia",
+        "location": "Nikol’sk, , Russia",
+        "year": "1696"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          44.9318159,
+          60.0209443
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "148",
+        "first_name": "",
+        "last_name": "Pavett",
+        "name": null,
+        "gender": "Male",
+        "city": "Saint-Lô",
+        "state": "Basse-Normandie",
+        "country": "France",
+        "location": "Saint-Lô, Basse-Normandie, France",
+        "year": "1863"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.0793373,
+          49.0993758
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "149",
+        "first_name": "Almeria",
+        "last_name": "Grund",
+        "name": "Almeria Grund",
+        "gender": "",
+        "city": "Petrokamenskoye",
+        "state": "",
+        "country": "Russia",
+        "location": "Petrokamenskoye, , Russia",
+        "year": "1753"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          60.6484,
+          57.716
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "150",
+        "first_name": "Roxanna",
+        "last_name": "Fabbri",
+        "name": "Roxanna Fabbri",
+        "gender": "",
+        "city": "Siaya",
+        "state": "",
+        "country": "",
+        "location": "Siaya, , ",
+        "year": "1814"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.2747004,
+          -0.0998238
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "151",
+        "first_name": "Hephzibah",
+        "last_name": "Berndtsson",
+        "name": "Hephzibah Berndtsson",
+        "gender": "Female",
+        "city": "Furongqiao",
+        "state": "",
+        "country": "China",
+        "location": "Furongqiao, , China",
+        "year": "1656"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.300741,
+          29.509067
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "152",
+        "first_name": "",
+        "last_name": "",
+        "name": null,
+        "gender": "Male",
+        "city": "Santa Ana",
+        "state": "",
+        "country": "Peru",
+        "location": "Santa Ana, , Peru",
+        "year": "1657"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.1397677,
+          -13.0730531
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "153",
+        "first_name": "",
+        "last_name": "Machin",
+        "name": " Machin",
+        "gender": "Female",
+        "city": "Piotrków Kujawski",
+        "state": "",
+        "country": "Poland",
+        "location": "Piotrków Kujawski, , Poland",
+        "year": "1559"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.49897,
+          52.55106
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "154",
+        "first_name": "Trstram",
+        "last_name": "",
+        "name": "Trstram ",
+        "gender": "Male",
+        "city": "Rennes",
+        "state": "Bretagne",
+        "country": "France",
+        "location": "Rennes, Bretagne, France",
+        "year": "1751"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.7128603,
+          48.1164447
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "155",
+        "first_name": "Dionne",
+        "last_name": "Mogey",
+        "name": "Dionne Mogey",
+        "gender": "Female",
+        "city": "Xiaojin",
+        "state": "",
+        "country": "China",
+        "location": "Xiaojin, , China",
+        "year": "1509"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          102.363193,
+          30.999016
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "156",
+        "first_name": "",
+        "last_name": "",
+        "name": null,
+        "gender": "Male",
+        "city": "Registro",
+        "state": "",
+        "country": "Brazil",
+        "location": "Registro, , Brazil",
+        "year": "1860"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -47.8448116,
+          -24.5002295
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "157",
+        "first_name": "Forester",
+        "last_name": "Holstein",
+        "name": "Forester Holstein",
+        "gender": "Male",
+        "city": "Asmara",
+        "state": "",
+        "country": "Eritrea",
+        "location": "Asmara, , Eritrea",
+        "year": "1864"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.9250517,
+          15.3228767
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "158",
+        "first_name": "Bettye",
+        "last_name": "Willcock",
+        "name": "Bettye Willcock",
+        "gender": "Female",
+        "city": "Bloemhof",
+        "state": "",
+        "country": "South Africa",
+        "location": "Bloemhof, , South Africa",
+        "year": "1641"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.5710689,
+          -27.641736
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "159",
+        "first_name": "Birgitta",
+        "last_name": "",
+        "name": "Birgitta ",
+        "gender": "Genderfluid",
+        "city": "Söderköping",
+        "state": "",
+        "country": "",
+        "location": "Söderköping, , ",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.3502006,
+          58.4710363
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "160",
+        "first_name": "Rodrick",
+        "last_name": "O'Lennachain",
+        "name": "Rodrick O'Lennachain",
+        "gender": "Genderqueer",
+        "city": "Mikhaylovsk",
+        "state": "",
+        "country": "Russia",
+        "location": "Mikhaylovsk, , Russia",
+        "year": "1879"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          59.129251,
+          56.4428126
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "161",
+        "first_name": "Prinz",
+        "last_name": "Keymer",
+        "name": "Prinz Keymer",
+        "gender": "Male",
+        "city": "Panawuan",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Panawuan, , Indonesia",
+        "year": "1656"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          108.5017948,
+          -6.8806715
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "162",
+        "first_name": "Balduin",
+        "last_name": "Hendren",
+        "name": "Balduin Hendren",
+        "gender": "Male",
+        "city": "Jeżów",
+        "state": "",
+        "country": "Poland",
+        "location": "Jeżów, , Poland",
+        "year": "1782"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.9684918,
+          51.8135681
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "163",
+        "first_name": "Dory",
+        "last_name": "Gregorowicz",
+        "name": "Dory Gregorowicz",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Syria",
+        "location": ", , Syria",
+        "year": "1497"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.21564,
+          33.54832
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "164",
+        "first_name": "Seamus",
+        "last_name": "",
+        "name": "Seamus ",
+        "gender": "Male",
+        "city": "Yalkhoy-Mokhk",
+        "state": "",
+        "country": "Russia",
+        "location": "Yalkhoy-Mokhk, , Russia",
+        "year": "1830"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          46.19045,
+          43.10528
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "165",
+        "first_name": "Wright",
+        "last_name": "",
+        "name": "Wright ",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "United States",
+        "location": ", , United States",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.4863492,
+          37.7181398
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "166",
+        "first_name": "Tybalt",
+        "last_name": "Edgeson",
+        "name": "Tybalt Edgeson",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Finland",
+        "location": ", , Finland",
+        "year": "1704"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.7548524,
+          60.7373073
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "167",
+        "first_name": "Dene",
+        "last_name": "",
+        "name": "Dene",
+        "gender": "Male",
+        "city": "Il’ya",
+        "state": "",
+        "country": "Belarus",
+        "location": "Il’ya, , Belarus",
+        "year": "1878"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.2930165,
+          54.4168102
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "168",
+        "first_name": "Sharla",
+        "last_name": "Musicka",
+        "name": "Sharla Musicka",
+        "gender": "Female",
+        "city": "",
+        "state": "Kronoberg",
+        "country": "",
+        "location": ", Kronoberg, ",
+        "year": "1754"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.8058523,
+          56.8790044
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "169",
+        "first_name": "Nydia",
+        "last_name": "Hartegan",
+        "name": "Nydia Hartegan",
+        "gender": "Female",
+        "city": "",
+        "state": "Corse",
+        "country": "France",
+        "location": ", Corse, France",
+        "year": "1758"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.813275,
+          46.6473105
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "170",
+        "first_name": "Alaine",
+        "last_name": "Caudle",
+        "name": "Alaine Caudle",
+        "gender": "Female",
+        "city": "Shah Alam",
+        "state": "Selangor",
+        "country": "Malaysia",
+        "location": "Shah Alam, Selangor, Malaysia",
+        "year": "1568"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          101.5326734,
+          3.0100681
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "171",
+        "first_name": "",
+        "last_name": "Aasaf",
+        "name": " Aasaf",
+        "gender": "",
+        "city": "Desa Baregbeg",
+        "state": "",
+        "country": "",
+        "location": "Desa Baregbeg, , ",
+        "year": "1794"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          108.3682641,
+          -7.3000408
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "172",
+        "first_name": "Danika",
+        "last_name": "Benoy",
+        "name": "Danika Benoy",
+        "gender": "Female",
+        "city": "Shanglian",
+        "state": "",
+        "country": "China",
+        "location": "Shanglian, , China",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.271467,
+          24.749307
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "173",
+        "first_name": "Wildon",
+        "last_name": "Hollyman",
+        "name": "Wildon Hollyman",
+        "gender": "Male",
+        "city": "Dake",
+        "state": "",
+        "country": "China",
+        "location": "Dake, , China",
+        "year": "1757"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.556409,
+          26.076336
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "174",
+        "first_name": "Krishna",
+        "last_name": "Kezar",
+        "name": "Krishna Kezar",
+        "gender": "Male",
+        "city": "Munggang",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Munggang, , Indonesia",
+        "year": "1874"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.8569988,
+          -6.7837708
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "175",
+        "first_name": "Caitlin",
+        "last_name": "Dicte",
+        "name": "Caitlin Dicte",
+        "gender": "Female",
+        "city": "Westport",
+        "state": "",
+        "country": "",
+        "location": "Westport, , ",
+        "year": "1824"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          171.596443,
+          -41.748446
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "176",
+        "first_name": "Gisella",
+        "last_name": "Commins",
+        "name": "Gisella Commins",
+        "gender": "Female",
+        "city": "Schengen",
+        "state": "",
+        "country": "Luxembourg",
+        "location": "Schengen, , Luxembourg",
+        "year": "1895"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.3640878,
+          49.4709886
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "177",
+        "first_name": "Ignacius",
+        "last_name": "Crecy",
+        "name": "Ignacius Crecy",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Poland",
+        "location": ", , Poland",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.0440354,
+          50.800192
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "178",
+        "first_name": "Dee",
+        "last_name": "Leal",
+        "name": "Dee Leal",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Brazil",
+        "location": ", , Brazil",
+        "year": "1721"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -47.6931718,
+          -23.351784
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "179",
+        "first_name": "Jelene",
+        "last_name": "Menel",
+        "name": "Jelene Menel",
+        "gender": "Female",
+        "city": "",
+        "state": "Pahang",
+        "country": "Malaysia",
+        "location": ", Pahang, Malaysia",
+        "year": "1881"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.40391,
+          3.9671435
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "180",
+        "first_name": "Cornela",
+        "last_name": "Volleth",
+        "name": null,
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Peru",
+        "location": ", , Peru",
+        "year": "1577"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.705509,
+          -7.918516
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "181",
+        "first_name": "Denyse",
+        "last_name": "Keary",
+        "name": "Denyse Keary",
+        "gender": "Female",
+        "city": "Umeå",
+        "state": "Västerbotten",
+        "country": "Sweden",
+        "location": "Umeå, Västerbotten, Sweden",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          20.2848088,
+          63.8303942
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "182",
+        "first_name": "Poul",
+        "last_name": "Tomasello",
+        "name": "Poul Tomasello",
+        "gender": "Male",
+        "city": "Xifengshan",
+        "state": "",
+        "country": "",
+        "location": "Xifengshan, , ",
+        "year": "1792"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.869339,
+          29.476705
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "183",
+        "first_name": "Mill",
+        "last_name": "Nono",
+        "name": "Mill Nono",
+        "gender": "Male",
+        "city": "Sunagawa",
+        "state": "",
+        "country": "Japan",
+        "location": "Sunagawa, , Japan",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.8280167,
+          38.5733981
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "184",
+        "first_name": "Marcellus",
+        "last_name": "Hearnah",
+        "name": "Marcellus Hearnah",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Japan",
+        "location": ", , Japan",
+        "year": "1718"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.6026459,
+          32.5171226
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "185",
+        "first_name": "Braden",
+        "last_name": "Mival",
+        "name": "Braden Mival",
+        "gender": "Male",
+        "city": "Aykol",
+        "state": "",
+        "country": "China",
+        "location": "Aykol, , China",
+        "year": "1507"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.215838,
+          38.173303
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "186",
+        "first_name": "Claus",
+        "last_name": "Cuttle",
+        "name": "Claus Cuttle",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Andorra",
+        "location": ", , Andorra",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.5147392,
+          42.545625
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "187",
+        "first_name": "Holt",
+        "last_name": "Oke",
+        "name": "Holt Oke",
+        "gender": "Male",
+        "city": "San Isidro",
+        "state": "Veracruz Llave",
+        "country": "Mexico",
+        "location": "San Isidro, Veracruz Llave, Mexico",
+        "year": "1697"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1985584,
+          19.482042
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "188",
+        "first_name": "Gabrielle",
+        "last_name": "Lubeck",
+        "name": "Gabrielle Lubeck",
+        "gender": "Female",
+        "city": "Gaojian",
+        "state": "",
+        "country": "China",
+        "location": "Gaojian, , China",
+        "year": "1798"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.452907,
+          27.013081
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "189",
+        "first_name": "Alfons",
+        "last_name": "McGowran",
+        "name": "Alfons McGowran",
+        "gender": "Genderqueer",
+        "city": "Pabuaran",
+        "state": "",
+        "country": "",
+        "location": "Pabuaran, , ",
+        "year": "1881"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.8502879,
+          -6.4544294
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "190",
+        "first_name": "Lorna",
+        "last_name": "",
+        "name": "Lorna",
+        "gender": "Female",
+        "city": "Khóra",
+        "state": "",
+        "country": "Greece",
+        "location": "Khóra, , Greece",
+        "year": "1756"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.7419512,
+          37.9854094
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "191",
+        "first_name": "Normand",
+        "last_name": "Gerrelt",
+        "name": null,
+        "gender": "Male",
+        "city": "Vergara",
+        "state": "",
+        "country": "Uruguay",
+        "location": "Vergara, , Uruguay",
+        "year": "1615"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -53.9378421,
+          -32.9481877
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "192",
+        "first_name": "Lee",
+        "last_name": "",
+        "name": "Lee ",
+        "gender": "Male",
+        "city": "Phú Túc",
+        "state": "",
+        "country": "Vietnam",
+        "location": "Phú Túc, , Vietnam",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          108.6877976,
+          13.1956813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "193",
+        "first_name": "Francklyn",
+        "last_name": "Pye",
+        "name": "Francklyn Pye",
+        "gender": "Male",
+        "city": "Siaya",
+        "state": "",
+        "country": "Kenya",
+        "location": "Siaya, , Kenya",
+        "year": "1863"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.2747004,
+          -0.0998238
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "194",
+        "first_name": "Fredric",
+        "last_name": "MacEvilly",
+        "name": "Fredric MacEvilly",
+        "gender": "Male",
+        "city": "Nova Olímpia",
+        "state": "",
+        "country": "Brazil",
+        "location": "Nova Olímpia, , Brazil",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -53.088539,
+          -23.4739979
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "195",
+        "first_name": "Vivi",
+        "last_name": "Tenwick",
+        "name": null,
+        "gender": "",
+        "city": "Detchino",
+        "state": "",
+        "country": "Russia",
+        "location": "Detchino, , Russia",
+        "year": "1762"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.3116274,
+          54.8098373
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "196",
+        "first_name": "Carie",
+        "last_name": "Orneles",
+        "name": "Carie Orneles",
+        "gender": "",
+        "city": "Makati City",
+        "state": "",
+        "country": "Philippines",
+        "location": "Makati City, , Philippines",
+        "year": "1531"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.0409412,
+          14.5598164
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "197",
+        "first_name": "Justine",
+        "last_name": "Drane",
+        "name": "Justine Drane",
+        "gender": "Female",
+        "city": "Toride",
+        "state": "",
+        "country": "Japan",
+        "location": "Toride, , Japan",
+        "year": "1689"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.0636977,
+          35.8886106
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "198",
+        "first_name": "Francklin",
+        "last_name": "",
+        "name": "Francklin ",
+        "gender": "",
+        "city": "Kedrovoye",
+        "state": "",
+        "country": "Russia",
+        "location": "Kedrovoye, , Russia",
+        "year": "1519"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          60.8287334,
+          56.6941681
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "199",
+        "first_name": "Freddie",
+        "last_name": "Woolston",
+        "name": "Freddie Woolston",
+        "gender": "Male",
+        "city": "Nerekhta",
+        "state": "",
+        "country": "Russia",
+        "location": "Nerekhta, , Russia",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          40.5773582,
+          57.4572354
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "200",
+        "first_name": "Lonnard",
+        "last_name": "Holcroft",
+        "name": "Lonnard Holcroft",
+        "gender": "Male",
+        "city": "Billdal",
+        "state": "Västra Götaland",
+        "country": "Sweden",
+        "location": "Billdal, Västra Götaland, Sweden",
+        "year": "1761"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.9313139,
+          57.5901299
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "201",
+        "first_name": "Hamel",
+        "last_name": "Glaysher",
+        "name": null,
+        "gender": "Male",
+        "city": "Tiro",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Tiro, , Indonesia",
+        "year": "1517"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.374855,
+          -7.7823871
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "202",
+        "first_name": "Galven",
+        "last_name": "Dugood",
+        "name": "Galven Dugood",
+        "gender": "Genderfluid",
+        "city": "Surulangun Rawas",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Surulangun Rawas, , Indonesia",
+        "year": "1689"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          102.754898,
+          -2.622461
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "203",
+        "first_name": "Florencia",
+        "last_name": "",
+        "name": "Florencia ",
+        "gender": "Female",
+        "city": "Garango",
+        "state": "",
+        "country": "Burkina Faso",
+        "location": "Garango, , Burkina Faso",
+        "year": "1784"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.5352356,
+          11.8088575
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "204",
+        "first_name": "Darsey",
+        "last_name": "Idale",
+        "name": "Darsey Idale",
+        "gender": "Female",
+        "city": "Kemil",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Kemil, , Indonesia",
+        "year": "1669"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.7334404,
+          -2.945569
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "205",
+        "first_name": "Fernando",
+        "last_name": "Shawdforth",
+        "name": "Fernando Shawdforth",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "China",
+        "location": ", , China",
+        "year": "1745"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          118.644299,
+          39.586554
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "206",
+        "first_name": "Sella",
+        "last_name": "",
+        "name": "Sella",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "China",
+        "location": ", , China",
+        "year": "1757"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          108.960747,
+          34.26645
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "207",
+        "first_name": "Annabel",
+        "last_name": "Lambis",
+        "name": "Annabel Lambis",
+        "gender": "Female",
+        "city": "Sruki",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Sruki, , Indonesia",
+        "year": "1554"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.8104,
+          -6.8073
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "208",
+        "first_name": "Brewster",
+        "last_name": "Leathem",
+        "name": "Brewster Leathem",
+        "gender": "Male",
+        "city": "Kangaslampi",
+        "state": "",
+        "country": "Finland",
+        "location": "Kangaslampi, , Finland",
+        "year": "1854"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.2513674,
+          62.2956257
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "209",
+        "first_name": "Daven",
+        "last_name": "Tuffrey",
+        "name":null,
+        "gender": "",
+        "city": "San Francisco",
+        "state": "",
+        "country": "",
+        "location": "San Francisco, , ",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.4093552,
+          20.8965838
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "210",
+        "first_name": "Baily",
+        "last_name": "Nizet",
+        "name": "Baily Nizet",
+        "gender": "Male",
+        "city": "Pasirbatang",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Pasirbatang, , Indonesia",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          108.3534306,
+          -7.365205
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "211",
+        "first_name": "Martie",
+        "last_name": "Shallcroff",
+        "name": "Martie Shallcroff",
+        "gender": "Male",
+        "city": "Sandayong Sur",
+        "state": "",
+        "country": "Philippines",
+        "location": "Sandayong Sur, , Philippines",
+        "year": "1844"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.0211737,
+          10.4818973
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "212",
+        "first_name": "Albrecht",
+        "last_name": "",
+        "name": "Albrecht ",
+        "gender": "Male",
+        "city": "Bebedouro",
+        "state": "",
+        "country": "Brazil",
+        "location": "Bebedouro, , Brazil",
+        "year": "1609"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -48.4812248,
+          -20.9400441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "213",
+        "first_name": "Salomone",
+        "last_name": "Wilden",
+        "name": "Salomone Wilden",
+        "gender": "Male",
+        "city": "San",
+        "state": "",
+        "country": "Mali",
+        "location": "San, , Mali",
+        "year": "1538"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.8987523,
+          13.2944016
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "214",
+        "first_name": "Patin",
+        "last_name": "Crosio",
+        "name": "Patin Crosio",
+        "gender": "Male",
+        "city": "Bronnitsy",
+        "state": "",
+        "country": "Russia",
+        "location": "Bronnitsy, , Russia",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.2447393,
+          55.4055305
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "215",
+        "first_name": "Akim",
+        "last_name": "",
+        "name": "Akim ",
+        "gender": "Male",
+        "city": "Hulitu",
+        "state": "",
+        "country": "China",
+        "location": "Hulitu, , China",
+        "year": "1796"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.86699,
+          45.965631
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "216",
+        "first_name": "Aviva",
+        "last_name": "O'Cleary",
+        "name": "Aviva O'Cleary",
+        "gender": "Genderqueer",
+        "city": "",
+        "state": "",
+        "country": "Luxembourg",
+        "location": ", , Luxembourg",
+        "year": "1732"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.0280525,
+          49.4604602
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "217",
+        "first_name": "Libbie",
+        "last_name": "",
+        "name": "Libbie ",
+        "gender": "Female",
+        "city": "North Vancouver",
+        "state": "British Columbia",
+        "country": "",
+        "location": "North Vancouver, British Columbia, ",
+        "year": "1778"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -123.118728,
+          49.2826578
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "218",
+        "first_name": "",
+        "last_name": "Nanni",
+        "name": " Nanni",
+        "gender": "Male",
+        "city": "Tulungagung",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Tulungagung, , Indonesia",
+        "year": "1531"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.9641728,
+          -8.091221
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "219",
+        "first_name": "Amandie",
+        "last_name": "Syfax",
+        "name": null,
+        "gender": "Female",
+        "city": "Liopétri",
+        "state": "",
+        "country": "",
+        "location": "Liopétri, , ",
+        "year": "1678"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.8913539,
+          35.0018174
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "220",
+        "first_name": "Fran",
+        "last_name": "Leach",
+        "name": "Fran Leach",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "Croatia",
+        "location": ", , Croatia",
+        "year": "1784"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.9184542,
+          46.1743441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "221",
+        "first_name": "Morganne",
+        "last_name": "Swainston",
+        "name": "Morganne Swainston",
+        "gender": "Female",
+        "city": "Sarapul",
+        "state": "",
+        "country": "Russia",
+        "location": "Sarapul, , Russia",
+        "year": "1899"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          53.8155143,
+          56.5646213
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "222",
+        "first_name": "Lorri",
+        "last_name": "Jeannaud",
+        "name": "Lorri Jeannaud",
+        "gender": "Female",
+        "city": "Pinhais",
+        "state": "",
+        "country": "Brazil",
+        "location": "Pinhais, , Brazil",
+        "year": "1725"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -49.1347813,
+          -25.4021046
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "223",
+        "first_name": "Halette",
+        "last_name": "",
+        "name": "Halette",
+        "gender": "Female",
+        "city": "Chicoana",
+        "state": "",
+        "country": "Argentina",
+        "location": "Chicoana, , Argentina",
+        "year": "1864"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -65.5381671,
+          -25.1042007
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "224",
+        "first_name": "Tann",
+        "last_name": "Cahen",
+        "name": "Tann Cahen",
+        "gender": "Male",
+        "city": "Glencoe",
+        "state": "",
+        "country": "South Africa",
+        "location": "Glencoe, , South Africa",
+        "year": "1730"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.1531568,
+          -28.1804757
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "225",
+        "first_name": "Gena",
+        "last_name": "",
+        "name": "Gena ",
+        "gender": "Agender",
+        "city": "Al Manāqil",
+        "state": "",
+        "country": "Sudan",
+        "location": "Al Manāqil, , Sudan",
+        "year": "1881"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.000095,
+          14.2549626
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "226",
+        "first_name": "Mellie",
+        "last_name": "Emms",
+        "name": "Mellie Emms",
+        "gender": "Female",
+        "city": "Bressuire",
+        "state": "Poitou-Charentes",
+        "country": "France",
+        "location": "Bressuire, Poitou-Charentes, France",
+        "year": "1521"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.5451553,
+          46.8118134
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "227",
+        "first_name": "Lamont",
+        "last_name": "Maude",
+        "name": "Lamont Maude",
+        "gender": "Male",
+        "city": "Jincheng",
+        "state": "",
+        "country": "China",
+        "location": "Jincheng, , China",
+        "year": "1667"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.851831,
+          35.490701
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "228",
+        "first_name": "Diarmid",
+        "last_name": "",
+        "name": "Diarmid ",
+        "gender": "Genderfluid",
+        "city": "Ferdinandovac",
+        "state": "",
+        "country": "Croatia",
+        "location": "Ferdinandovac, , Croatia",
+        "year": "1726"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.2018057,
+          46.0523136
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "229",
+        "first_name": "Alison",
+        "last_name": "Cescon",
+        "name": "Alison Cescon",
+        "gender": "Female",
+        "city": "Mengmeng",
+        "state": "",
+        "country": "China",
+        "location": "Mengmeng, , China",
+        "year": "1851"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.435569,
+          28.679282
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "230",
+        "first_name": "",
+        "last_name": "Grinyer",
+        "name": " Grinyer",
+        "gender": "Female",
+        "city": "Ciusul",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Ciusul, , Indonesia",
+        "year": "1798"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.3449755,
+          -6.7392854
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "231",
+        "first_name": "Ibbie",
+        "last_name": "Mustarde",
+        "name": "Ibbie Mustarde",
+        "gender": "Female",
+        "city": "",
+        "state": "Hajdú-Bihar",
+        "country": "Hungary",
+        "location": ", Hajdú-Bihar, Hungary",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.5142121,
+          47.5202786
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "232",
+        "first_name": "Kiele",
+        "last_name": "Tash",
+        "name": "Kiele Tash",
+        "gender": "Female",
+        "city": "Beigang",
+        "state": "",
+        "country": "China",
+        "location": "Beigang, , China",
+        "year": "1623"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.2858846,
+          23.5958633
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "233",
+        "first_name": "Cathlene",
+        "last_name": "",
+        "name": "Cathlene ",
+        "gender": "Female",
+        "city": "Lukashin",
+        "state": "",
+        "country": "",
+        "location": "Lukashin, , ",
+        "year": "1823"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          44.0033056,
+          40.1851386
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "234",
+        "first_name": "",
+        "last_name": "Finlan",
+        "name": " Finlan",
+        "gender": "",
+        "city": "Merke",
+        "state": "",
+        "country": "Kazakhstan",
+        "location": "Merke, , Kazakhstan",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.1963111,
+          42.8718884
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "235",
+        "first_name": "Vicky",
+        "last_name": "",
+        "name": "Vicky ",
+        "gender": "Female",
+        "city": "",
+        "state": "Viseu",
+        "country": "Portugal",
+        "location": ", Viseu, Portugal",
+        "year": "1854"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.5780825,
+          40.8631854
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "236",
+        "first_name": "Flemming",
+        "last_name": "",
+        "name": "Flemming",
+        "gender": "Male",
+        "city": "Heshi",
+        "state": "",
+        "country": "China",
+        "location": "Heshi, , China",
+        "year": "1885"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.6988851,
+          24.3482735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "237",
+        "first_name": "Montague",
+        "last_name": "Brickhill",
+        "name": "Montague Brickhill",
+        "gender": "Male",
+        "city": "Longford",
+        "state": "",
+        "country": "Ireland",
+        "location": "Longford, , Ireland",
+        "year": "1865"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.8004329,
+          53.7283566
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "238",
+        "first_name": "Geno",
+        "last_name": "Blades",
+        "name": "Geno Blades",
+        "gender": "Polygender",
+        "city": "",
+        "state": "",
+        "country": "Argentina",
+        "location": ", , Argentina",
+        "year": "1501"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -58.7992473,
+          -34.4489078
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "239",
+        "first_name": "",
+        "last_name": "Kinson",
+        "name": " Kinson",
+        "gender": "",
+        "city": "Zhangatas",
+        "state": "",
+        "country": "Kazakhstan",
+        "location": "Zhangatas, , Kazakhstan",
+        "year": "1724"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.75,
+          43.56667
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "240",
+        "first_name": "Edythe",
+        "last_name": "",
+        "name": "Edythe ",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Philippines",
+        "location": ", , Philippines",
+        "year": "1740"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.6500015,
+          13.3666668
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "241",
+        "first_name": "Ruperto",
+        "last_name": "Tripean",
+        "name": "Ruperto Tripean",
+        "gender": "Male",
+        "city": "São Gabriel da Cachoeira",
+        "state": "",
+        "country": "Brazil",
+        "location": "São Gabriel da Cachoeira, , Brazil",
+        "year": "1554"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.1431414,
+          0.5582388
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "242",
+        "first_name": "Lindon",
+        "last_name": "Maciejewski",
+        "name": "Lindon Maciejewski",
+        "gender": "",
+        "city": "Matoupu",
+        "state": "",
+        "country": "China",
+        "location": "Matoupu, , China",
+        "year": "1668"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.723904,
+          38.320362
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "243",
+        "first_name": "Adlai",
+        "last_name": "Dick",
+        "name": "Adlai Dick",
+        "gender": "Male",
+        "city": "Luleå",
+        "state": "Norrbotten",
+        "country": "Sweden",
+        "location": "Luleå, Norrbotten, Sweden",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          22.1916654,
+          65.5948341
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "244",
+        "first_name": "",
+        "last_name": "Ollivier",
+        "name": " Ollivier",
+        "gender": "Female",
+        "city": "Maloye Verevo",
+        "state": "",
+        "country": "",
+        "location": "Maloye Verevo, , ",
+        "year": "1664"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.1696437,
+          59.615642
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "245",
+        "first_name": "Caspar",
+        "last_name": "McGougan",
+        "name": "Caspar McGougan",
+        "gender": "Male",
+        "city": "Sheffield",
+        "state": "England",
+        "country": "United Kingdom",
+        "location": "Sheffield, England, United Kingdom",
+        "year": "1606"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.7622544,
+          53.3992318
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "246",
+        "first_name": "Hendrick",
+        "last_name": "Nott",
+        "name": "Hendrick Nott",
+        "gender": "",
+        "city": "Lagoa Santa",
+        "state": "",
+        "country": "Brazil",
+        "location": "Lagoa Santa, , Brazil",
+        "year": "1507"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -43.9503713,
+          -19.5803242
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "247",
+        "first_name": "",
+        "last_name": "Balaisot",
+        "name": " Balaisot",
+        "gender": "",
+        "city": "Mahong",
+        "state": "",
+        "country": "",
+        "location": "Mahong, , ",
+        "year": "1693"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.1897677,
+          34.2948431
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "248",
+        "first_name": "Eldredge",
+        "last_name": "Cahalan",
+        "name": "Eldredge Cahalan",
+        "gender": "",
+        "city": "Sudikampir",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Sudikampir, , Indonesia",
+        "year": "1758"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          108.8408547,
+          -7.4574955
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "249",
+        "first_name": "Putnam",
+        "last_name": "Giovannardi",
+        "name": "Putnam Giovannardi",
+        "gender": "Male",
+        "city": "Jincun",
+        "state": "",
+        "country": "China",
+        "location": "Jincun, , China",
+        "year": "1522"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.01853,
+          31.3219
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "250",
+        "first_name": "Sophronia",
+        "last_name": "Bock",
+        "name": "Sophronia Bock",
+        "gender": "Agender",
+        "city": "Aberdeen",
+        "state": "Scotland",
+        "country": "United Kingdom",
+        "location": "Aberdeen, Scotland, United Kingdom",
+        "year": "1610"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.2508745,
+          56.968436
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "251",
+        "first_name": "Judye",
+        "last_name": "Kilgour",
+        "name": "Judye Kilgour",
+        "gender": "Female",
+        "city": "Yangqing",
+        "state": "",
+        "country": "",
+        "location": "Yangqing, , ",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.974848,
+          40.456951
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "252",
+        "first_name": "Missy",
+        "last_name": "Gatlin",
+        "name": "Missy Gatlin",
+        "gender": "Female",
+        "city": "",
+        "state": "Skåne",
+        "country": "Sweden",
+        "location": ", Skåne, Sweden",
+        "year": "1817"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.8237518,
+          55.8893778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "253",
+        "first_name": "",
+        "last_name": "Kelwaybamber",
+        "name": "Kelwaybamber",
+        "gender": "",
+        "city": "Cookshire-Eaton",
+        "state": "Québec",
+        "country": "Canada",
+        "location": "Cookshire-Eaton, Québec, Canada",
+        "year": "1663"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.6324,
+          45.41675
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "254",
+        "first_name": "Jennifer",
+        "last_name": "Mapson",
+        "name": "Jennifer Mapson",
+        "gender": "Female",
+        "city": "Pilzno",
+        "state": "",
+        "country": "",
+        "location": "Pilzno, , ",
+        "year": "1847"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.29492,
+          49.97976
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "255",
+        "first_name": "Lacee",
+        "last_name": "Norrey",
+        "name": "Lacee Norrey",
+        "gender": "",
+        "city": "Matabao",
+        "state": "",
+        "country": "Philippines",
+        "location": "Matabao, , Philippines",
+        "year": "1662"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          123.9181504,
+          9.9241833
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "256",
+        "first_name": "Jeanelle",
+        "last_name": "",
+        "name": "Jeanelle ",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Slovenia",
+        "location": ", , Slovenia",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5516829,
+          46.3376387
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "257",
+        "first_name": "Balduin",
+        "last_name": "Jeays",
+        "name": "Balduin Jeays",
+        "gender": "Male",
+        "city": "",
+        "state": "",
+        "country": "China",
+        "location": ", , China",
+        "year": "1526"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.240546,
+          25.456453
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "258",
+        "first_name": "Fanchette",
+        "last_name": "",
+        "name": "Fanchette ",
+        "gender": "Female",
+        "city": "Gaopu",
+        "state": "",
+        "country": "China",
+        "location": "Gaopu, , China",
+        "year": "1697"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          118.57189,
+          28.902428
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "259",
+        "first_name": "Petunia",
+        "last_name": "Iacopini",
+        "name": "Petunia Iacopini",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Peru",
+        "location": ", , Peru",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.6954668,
+          -16.8093546
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "260",
+        "first_name": "Maddi",
+        "last_name": "Raynton",
+        "name": "Maddi Raynton",
+        "gender": "Female",
+        "city": "Ninove",
+        "state": "Vlaanderen",
+        "country": "Belgium",
+        "location": "Ninove, Vlaanderen, Belgium",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9438609,
+          50.8441986
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "261",
+        "first_name": "Franklin",
+        "last_name": "Whetland",
+        "name": "Franklin Whetland",
+        "gender": "Male",
+        "city": "Pocohuanca",
+        "state": "",
+        "country": "Peru",
+        "location": "Pocohuanca, , Peru",
+        "year": "1514"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.083333,
+          -14.216667
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "262",
+        "first_name": "Kittie",
+        "last_name": "Tallet",
+        "name": "Kittie Tallet",
+        "gender": "Agender",
+        "city": "",
+        "state": "Île-de-France",
+        "country": "France",
+        "location": ", Île-de-France, France",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.2889821,
+          48.732568
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "263",
+        "first_name": "West",
+        "last_name": "Starcks",
+        "name": "West Starcks",
+        "gender": "Male",
+        "city": "Crasto",
+        "state": "Porto",
+        "country": "Portugal",
+        "location": "Crasto, Porto, Portugal",
+        "year": "1704"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.1991612,
+          41.3666
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "264",
+        "first_name": "",
+        "last_name": "Hackelton",
+        "name": " Hackelton",
+        "gender": "Bigender",
+        "city": "Tsaghveri",
+        "state": "",
+        "country": "Georgia",
+        "location": "Tsaghveri, , Georgia",
+        "year": "1581"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          43.4814896,
+          41.8012304
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "265",
+        "first_name": "Ransom",
+        "last_name": "Hedworth",
+        "name": "Ransom",
+        "gender": "",
+        "city": "Jarry",
+        "state": "Guadeloupe",
+        "country": "",
+        "location": "Jarry, Guadeloupe, ",
+        "year": "1896"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -61.558,
+          16.2359
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "266",
+        "first_name": "Michaela",
+        "last_name": "Roony",
+        "name": "Michaela Roony",
+        "gender": "Female",
+        "city": "Ebene",
+        "state": "",
+        "country": "",
+        "location": "Ebene, , ",
+        "year": "1872"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          57.4895998,
+          -20.2418916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "267",
+        "first_name": "Florenza",
+        "last_name": "",
+        "name": "Florenza ",
+        "gender": "Genderqueer",
+        "city": "Baitouli",
+        "state": "",
+        "country": "",
+        "location": "Baitouli, , ",
+        "year": "1796"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.505924,
+          39.905131
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "268",
+        "first_name": "",
+        "last_name": "Menichelli",
+        "name": " Menichelli",
+        "gender": "Female",
+        "city": "Paseyan",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Paseyan, , Indonesia",
+        "year": "1766"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.639243,
+          -6.8713485
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "269",
+        "first_name": "Mercie",
+        "last_name": "Dongles",
+        "name": "Mercie Dongles",
+        "gender": "Female",
+        "city": "Cikiruh",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Cikiruh, , Indonesia",
+        "year": "1505"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.7644596,
+          -6.8027421
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "270",
+        "first_name": "Tracey",
+        "last_name": "Schmidt",
+        "name": "Tracey Schmidt",
+        "gender": "",
+        "city": "",
+        "state": "Leiria",
+        "country": "Portugal",
+        "location": ", Leiria, Portugal",
+        "year": "1862"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.9189073,
+          39.876135
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "271",
+        "first_name": "Rivkah",
+        "last_name": "",
+        "name": "Rivkah ",
+        "gender": "Female",
+        "city": "Nobinobi",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Nobinobi, , Indonesia",
+        "year": "1623"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.458641,
+          -9.833763
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "272",
+        "first_name": "Kayla",
+        "last_name": "",
+        "name": "Kayla ",
+        "gender": "Female",
+        "city": "Auriflama",
+        "state": "",
+        "country": "Brazil",
+        "location": "Auriflama, , Brazil",
+        "year": "1556"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -50.5549719,
+          -20.6336382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "273",
+        "first_name": "Rose",
+        "last_name": "",
+        "name": "Rose ",
+        "gender": "Female",
+        "city": "Sa Bot",
+        "state": "",
+        "country": "Thailand",
+        "location": "Sa Bot, , Thailand",
+        "year": "1712"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.8677256,
+          15.2586581
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "274",
+        "first_name": "",
+        "last_name": "",
+        "name": " ",
+        "gender": "Male",
+        "city": "Oberá",
+        "state": "",
+        "country": "Argentina",
+        "location": "Oberá, , Argentina",
+        "year": "1638"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -55.9145502,
+          -27.3869255
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "275",
+        "first_name": "Dasi",
+        "last_name": "Dybbe",
+        "name": null,
+        "gender": "Female",
+        "city": "Camangcamang",
+        "state": "",
+        "country": "Philippines",
+        "location": "Camangcamang, , Philippines",
+        "year": "1800"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.9809409,
+          10.1206819
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "276",
+        "first_name": "Gayel",
+        "last_name": "Pinsent",
+        "name": "Gayel Pinsent",
+        "gender": "Female",
+        "city": "Steinkjer",
+        "state": "",
+        "country": "",
+        "location": "Steinkjer, , ",
+        "year": "1670"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.496376,
+          64.0128827
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "277",
+        "first_name": "Brand",
+        "last_name": "",
+        "name": "Brand ",
+        "gender": "Male",
+        "city": "Kwali",
+        "state": "",
+        "country": "Nigeria",
+        "location": "Kwali, , Nigeria",
+        "year": "1534"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.0605998,
+          8.8469761
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "278",
+        "first_name": "Andonis",
+        "last_name": "",
+        "name": "Andonis ",
+        "gender": "Male",
+        "city": "Jaguaribe",
+        "state": "",
+        "country": "Brazil",
+        "location": "Jaguaribe, , Brazil",
+        "year": "1843"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.7368187,
+          -6.0189936
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "279",
+        "first_name": "Sisile",
+        "last_name": "Brecken",
+        "name": "Sisile Brecken",
+        "gender": "Female",
+        "city": "Cigalontang",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Cigalontang, , Indonesia",
+        "year": "1632"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.9768875,
+          -7.3059077
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "280",
+        "first_name": "Desirae",
+        "last_name": "Skeene",
+        "name": "Desirae Skeene",
+        "gender": "Female",
+        "city": "Krong Pi Nang",
+        "state": "",
+        "country": "Thailand",
+        "location": "Krong Pi Nang, , Thailand",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          101.277052,
+          6.426373
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "281",
+        "first_name": "",
+        "last_name": "Twatt",
+        "name": " Twatt",
+        "gender": "Genderqueer",
+        "city": "",
+        "state": "",
+        "country": "Philippines",
+        "location": ", , Philippines",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.3439494,
+          14.0767924
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "282",
+        "first_name": "Sherwynd",
+        "last_name": "Dunnet",
+        "name": null,
+        "gender": "Male",
+        "city": "Santa Vitória do Palmar",
+        "state": "",
+        "country": "Brazil",
+        "location": "Santa Vitória do Palmar, , Brazil",
+        "year": "1899"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -53.3664818,
+          -33.5215632
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "283",
+        "first_name": "Jackqueline",
+        "last_name": "Britian",
+        "name": "Jackqueline Britian",
+        "gender": "Female",
+        "city": "Rivesaltes",
+        "state": "Languedoc-Roussillon",
+        "country": "France",
+        "location": "Rivesaltes, Languedoc-Roussillon, France",
+        "year": "1669"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.9134412,
+          42.8271637
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "284",
+        "first_name": "Derwin",
+        "last_name": "",
+        "name": "Derwin ",
+        "gender": "Male",
+        "city": "Lasek",
+        "state": "",
+        "country": "Poland",
+        "location": "Lasek, , Poland",
+        "year": "1753"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.9809619,
+          49.508379
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "285",
+        "first_name": "Pris",
+        "last_name": "Ventum",
+        "name": "Pris Ventum",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Indonesia",
+        "location": ", , Indonesia",
+        "year": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.011884,
+          -7.1072394
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "286",
+        "first_name": "Joelly",
+        "last_name": "Henrique",
+        "name": "Joelly Henrique",
+        "gender": "Female",
+        "city": "Sungai Nyamuk",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Sungai Nyamuk, , Indonesia",
+        "year": "1826"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.8663075,
+          4.1175121
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "287",
+        "first_name": "",
+        "last_name": "Wildman",
+        "name": "Wildman",
+        "gender": "Non-binary",
+        "city": "Lekaj",
+        "state": "",
+        "country": "",
+        "location": "Lekaj, , ",
+        "year": "1680"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.610198,
+          41.117916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "288",
+        "first_name": "Corrie",
+        "last_name": "",
+        "name": "Corrie ",
+        "gender": "Male",
+        "city": "Toktogul",
+        "state": "",
+        "country": "Kyrgyzstan",
+        "location": "Toktogul, , Kyrgyzstan",
+        "year": "1694"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9401509,
+          41.8760133
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "289",
+        "first_name": "Lind",
+        "last_name": "Philipsson",
+        "name": "Lind Philipsson",
+        "gender": "",
+        "city": "Pasirreungit",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Pasirreungit, , Indonesia",
+        "year": "1809"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          108.0331918,
+          -6.801576
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "290",
+        "first_name": "Grayce",
+        "last_name": "Carabine",
+        "name": "Grayce Carabine",
+        "gender": "Female",
+        "city": "Sosnovka",
+        "state": "",
+        "country": "Russia",
+        "location": "Sosnovka, , Russia",
+        "year": "1531"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.2921685,
+          54.1347287
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "291",
+        "first_name": "Cherilynn",
+        "last_name": "Horbart",
+        "name": "Cherilynn Horbart",
+        "gender": "Female",
+        "city": "Siquanpu",
+        "state": "",
+        "country": "China",
+        "location": "Siquanpu, , China",
+        "year": "1661"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          102.8054753,
+          30.2638032
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "292",
+        "first_name": "Saidee",
+        "last_name": "",
+        "name": "Saidee ",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "China",
+        "location": ", , China",
+        "year": "1525"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.173487,
+          27.855928
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "293",
+        "first_name": "Gloria",
+        "last_name": "Entwistle",
+        "name": "Gloria Entwistle",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Thailand",
+        "location": ", , Thailand",
+        "year": "1689"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          99.636919,
+          13.97491
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "294",
+        "first_name": "Evangelin",
+        "last_name": "",
+        "name": "Evangelin",
+        "gender": "Female",
+        "city": "Gaplokan",
+        "state": "",
+        "country": "Indonesia",
+        "location": "Gaplokan, , Indonesia",
+        "year": "1790"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.2785407,
+          -6.8907337
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "295",
+        "first_name": "Zondra",
+        "last_name": "Sang",
+        "name": "Zondra Sang",
+        "gender": "Female",
+        "city": "",
+        "state": "",
+        "country": "Indonesia",
+        "location": ", , Indonesia",
+        "year": "1876"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.4086488,
+          -0.3662126
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "296",
+        "first_name": "Roanna",
+        "last_name": "Vockins",
+        "name": "Roanna Vockins",
+        "gender": "Female",
+        "city": "Lingshan",
+        "state": "",
+        "country": "China",
+        "location": "Lingshan, , China",
+        "year": "1631"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.096494,
+          31.4299792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "297",
+        "first_name": "Derron",
+        "last_name": "Stille",
+        "name": "Derron Stille",
+        "gender": "",
+        "city": "Maying",
+        "state": "",
+        "country": "China",
+        "location": "Maying, , China",
+        "year": "1556"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.726317,
+          38.235041
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "298",
+        "first_name": "Penrod",
+        "last_name": "Garman",
+        "name": "Penrod Garman",
+        "gender": "Male",
+        "city": "Belgorod",
+        "state": "",
+        "country": "Russia",
+        "location": "Belgorod, , Russia",
+        "year": "1832"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.8469573,
+          50.4534011
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "299",
+        "first_name": "Anthia",
+        "last_name": "Osinin",
+        "name": "Anthia Osinin",
+        "gender": "Female",
+        "city": "Patenongan",
+        "state": "",
+        "country": "",
+        "location": "Patenongan, , ",
+        "year": "1839"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.8811,
+          -7.0009
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "referent_id": "300",
+        "first_name": "Annette",
+        "last_name": "",
+        "name": "Annette ",
+        "gender": "Female",
+        "city": "Punākha",
+        "state": "",
+        "country": "Bhutan",
+        "location": "Punākha, , Bhutan",
+        "year": "1681"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          89.8797459,
+          27.5920869
+        ]
+      }
+    }
+  ]
+}

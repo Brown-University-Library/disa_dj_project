@@ -6,6 +6,16 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" crossorigin="" />
 {% endblock header_other %}
 {% block content %}
+<div class="row controls">
+<div class="form-check form-switch">
+  <input class="form-check-input" type="checkbox" role="switch" id="toggle-enslaver" oninput="toggleLayer(enslaver)">
+  <label class="form-check-label" for="toggle-enslaver">Toggle enslavers</label>
+</div>
+<div class="form-check form-switch">
+  <input class="form-check-input" type="checkbox" role="switch" id="toggle-enslaved" oninput="toggleLayer(enslaved)">
+  <label class="form-check-label" for="toggle-enslaved">Toggle enslaved</label>
+</div>
+</div>
 <div id="map-container" style="height:80vh"></div>
 {% endblock content %}
 {% block page_specific_js %}
@@ -23,7 +33,15 @@ var map = L.map('map-container', {
 
 //the various basemaps
 const basemaps = {
-    Terrain: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.{ext}', {
+    Terrain: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
+        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        subdomains: 'abcd',
+        minZoom: 1,
+        //maxNativeZoom: 19,
+        maxZoom: 8,
+        ext: 'png'
+    }),
+    Textfree: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.{ext}', {
         attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         subdomains: 'abcd',
         minZoom: 1,
@@ -47,36 +65,38 @@ const basemaps = {
         ext: 'jpg'
     })
 };
-L.control.layers(basemaps).addTo(map);
+L.control.layers(basemaps, null, {collapsed:false}).addTo(map);
 basemaps.Terrain.addTo(map);
 
 // fetch the geojson
 var geoJsonData = new L.GeoJSON.AJAX(
-    "/static/data/stolen_relations_geocoded_wgs84.geojson", {
+    "/static/data/mock_geojson.geojson", {
 
-        // build each point
+      // build each point
         onEachFeature: function(feature, layer) {
 
-            var uuid = feature.properties.Referent_ID;
-            var name = feature.properties.Name;
-            var status = feature.properties.Status;
-            var date = feature.properties.Year;
+            var uuid = feature.properties.referent_id;
+            var name = feature.properties.name;
+            //var status = feature.properties.Status;
+            var date = feature.properties.year;
             var lat = feature.properties.lat;
             var lng = feature.properties.lng;
-            var location = feature.properties.Location.toString();
-            if (name == null) {
-                var popupText = '<a href="/people/' + uuid + '">A person whose name we do not know</a><br />' + status + '<br />' + date;
+            var location = feature.properties.location.toString();
+            if (name != null) {
+                var popupText = '<a href="/people/' + uuid + '">' + name + '</a><br />' + location + '<br />' + date ;
             } else {
-                var popupText = '<a href="/people/' + uuid + '">' + name + '</a><br />' + status + '<br />' + date;
+                var popupText = '<a href="/people/' + uuid + '">A person whose name we do not know</a><br />' + location + '<br/>' + date;
             };
 
             layer.bindPopup(popupText);
         }
+
     });
+
 // cluster points
 var markers = L.markerClusterGroup({
     chunkedLoading: true,
-    maxClusterRadius: 40,
+    maxClusterRadius: 30,
 });
 //geojson ajax listener
 geoJsonData.on('data:loaded', function() {
@@ -84,13 +104,14 @@ geoJsonData.on('data:loaded', function() {
     markers.addLayer(geoJsonData);
     map.addLayer(markers);
 });
+// IDK why this only shows on the *second* click
 markers.on('clusterclick', function(a) {
     var clusterCount = a.layer.getChildCount();
     var clusterChildren = a.layer.getAllChildMarkers();
     var clusterLocation = [];
 
     for (i = 0; i < clusterCount; i++) {
-        clusterLocation.push(clusterChildren[i].feature.properties.Location);
+        clusterLocation.push(clusterChildren[i].feature.properties.location);
         var clusterName = clusterLocation.shift();
     };
 
