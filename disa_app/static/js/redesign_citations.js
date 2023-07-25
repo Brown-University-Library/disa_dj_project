@@ -124,7 +124,7 @@ function main() {
     const TABLE_SELECTOR = '#all-sources',
         TABLE_DATA_URL = './?format=json';
 
-    const table = initializeTabulator(TABLE_SELECTOR, TABLE_DATA_URL);    
+    window.sr.table = initializeTabulator(TABLE_SELECTOR, TABLE_DATA_URL);    
 }
 
 window.addEventListener('DOMContentLoaded', main);
