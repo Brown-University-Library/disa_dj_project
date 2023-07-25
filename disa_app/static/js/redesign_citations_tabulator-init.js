@@ -1,7 +1,7 @@
 
 import { openSourceEditPage, initShowOnlyCurrentUserButton } from './redesign_citations_UI-handlers.js';
 
-const CACHE_EXPIRY_DAYS = 1,
+const CACHE_EXPIRY_DAYS = 0, // For now, ALWAYS refresh the cache
       CACHE_EXPIRY_MS = CACHE_EXPIRY_DAYS * 86400000;
 
 const DATA_CACHE_ID = 'sr-data-cache',
@@ -35,46 +35,66 @@ function ajaxRequestFunc(url) {
     const haveCachedData = (dataCache !== null),
           cacheIsFresh = (Number.isInteger(dataCacheTimestamp) && (now - dataCacheTimestamp < CACHE_EXPIRY_MS));
 
-    console.log('DATE', {dataCacheTimestamp, now, CACHE_EXPIRY_MS, interval: now - dataCacheTimestamp, cacheIsFresh})
+    // If cached data exists and is no longer fresh, then fetch new data
+    //  and schedule table update (non-blocking)
 
-    if (haveCachedData && cacheIsFresh) {
-      console.log("Pulling from cached data");
+    if (!cacheIsFresh && haveCachedData) {
+
+      const freshDataFetched = new Promise(resolve => {
+        fetchDataAndSetCache(url, resolve)
+      });
+
+      const tableIsInitialized = new Promise(resolve => {
+        window.sr.table.on('tableBuilt', resolve);
+      });
+
+      Promise.all([freshDataFetched, tableIsInitialized])
+        .then(results => {
+          const processedData = ajaxResponse(null, null, results[0]);
+          sr.table.replaceData(processedData);
+          console.log('Tabulator table updated with fresh data');
+        })
+        .catch(error => {
+          console.error('Error while updating data cache:', error);
+        });
+    }
+
+    // If there is cached data, then populate table immediately
+    // Otherwise, initialize data and cache
+
+    if (haveCachedData) {
       const data = JSON.parse(dataCache);
       resolve(data);
-    // } else if (haveCachedData && !cacheIsFresh) { 
-    // TODO if cached data exists, but it's old, then give Tabulator the old data
-    //   but fetch the new data and refresh Tabulator when the new data arrives
     } else {
-      console.log("Loading data & initializing cache");
+      console.log('Creating data cache and fetching data');
       fetchDataAndSetCache(url, resolve, reject);
     }
   });
 };
 
+// Formatter for incoming JSON
+
+const ajaxResponse = function(url, params, response) {
+
+  window.sr.userEmail = (response.user_documents.length) ?
+      response.user_documents[0].email :
+      undefined;
+
+  const rows = response.documents.map(docData => {
+      return {
+          title: docData.doc.display,
+          id: docData.doc.id,
+          date: docData.date.dt_date,
+          editor: docData.email
+      }
+  });
+
+  return rows;
+}
 
 // Main Tabulator setup
 
 function initializeTabulator(tableSelector, ajaxURL) {
-
-  // Formatter for incoming JSON
-
-  const ajaxResponse = function(url, params, response) {
-
-      window.sr.userEmail = (response.user_documents.length) ?
-          response.user_documents[0].email :
-          undefined;
-
-      const rows = response.documents.map(docData => {
-          return {
-              title: docData.doc.display,
-              id: docData.doc.id,
-              date: docData.date.dt_date,
-              editor: docData.email
-          }
-      });
-
-      return rows;
-  }
 
   const titleColumnFormatter = function(cell, formatterParams, onRendered) {
       const recordId = cell._cell.row.data.id;
