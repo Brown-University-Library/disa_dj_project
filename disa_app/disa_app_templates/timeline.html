@@ -1,0 +1,52 @@
+{% extends "disa_app_templates/base.html" %}
+{% load static %}
+{% block content %}
+<div class="row">
+    {% include "disa_app_templates/partials/explore_top.html" %}
+</div>
+<div class="timeline-filter">
+    <p>Start year <input type="number" step="1" min="1492" max="1899" id="startDate" value="1492"> to <input type="number" step="1" min="1493" max="1900" placeholder="1900" id="endDate" value="1900"></p>
+</div>
+<div class="timeline">
+    <ul>
+        <li data-year="1504">
+            <h2>1504: Foundation of the Sultanate of Sennar by Amara Dunqas, in what is modern Sudan</h2>
+            <p>The Funj Sultanate, also known as Funjistan, Sultanate of Sennar (after its capital Sennar) or Blue Sultanate, was a monarchy in what is now Sudan, northwestern Eritrea and western Ethiopia. Founded in 1504 by the Funj people, it quickly converted to Islam, although this embrace was only nominal. Until a more orthodox Islam took hold in the 18th century, the state remained an "African empire with a Muslim façade". It reached its peak in the late 17th century, but declined and eventually fell apart in the 18th and 19th centuries. In 1821, the last sultan, greatly reduced in power, surrendered to the Ottoman Egyptian invasion without a fight.</p>
+        </li>
+        <li data-year="1620">
+            <h2>1620: Almost the entire native population of Banda Islands was deported, driven away, starved to death or killed in an attempt to replace them with Dutch colonial slave labour.</h2>
+            <p>The population of the Banda Islands prior to Dutch conquest is generally estimated to have been around 13,000–15,000 people, some of whom were Malay and Javanese traders, as well as Chinese and Arabs. The actual numbers of Bandanese who were killed, forcibly expelled or fled the islands in 1621 remain uncertain. But readings of historical sources suggest around one thousand Bandanese likely survived in the islands, and were spread throughout the nutmeg groves as forced labourers. The Dutch subsequently re-settled the islands with imported slaves, convicts and indentured labourers (to work the nutmeg plantations), as well as immigrants from elsewhere in Indonesia. Most survivors fled as refugees to the islands of their trading partners, in particular Keffing and Guli Guli in the Seram Laut chain and Kei Besar.</p>
+        </li>
+        <li data-year="1779">
+            <h2>1779: Captain James Cook is killed by Hawaiian natives at Kealakekua Bay, following an attempted kidnapping and ransoming of ruling chief, Kalaniʻōpuʻu, in return for a stolen boat.</h2>
+            <p>Cook fired the first shot, and his men quickly shot several more natives. As Cook and his men attempted to retreat, Cook was stabbed through the chest by a native chief with an iron dagger which had been traded from Cook's own ship previously in the same visit. The majority of Cook's body was never recovered. Since Cook's men felt they could not leave without resupplying fresh water and further repair of their damaged mast, subsequent skirmishing resulted in dozens of native deaths by musket fire and the ships cannons; a portion of Kireekakooa, one of the towns in the bay, was also burned.</p>
+        </li>
+        <li data-year="1785">
+            <h2>The Northwest Indian War</h2>
+            <p>The Northwest Indian War (1785–1795), also known by other names, was an armed conflict for control of the Northwest Territory fought between the United States and a united group of Native American nations known today as the Northwestern Confederacy.</p>
+        </li>
+        <li data-year="1803">
+            <h2>1803: The United States almost doubles in size when it buys out France's territorial claims in North America in the Louisiana Purchase.</h2>
+            <p>This begins the American westward expansion to the Pacific, later called Manifest Destiny. It involves annexing and conquering land from Mexico, Britain, and Native Americans.</p>
+        </li>
+        <li data-year="1803">
+            <h2>1803: Toussaint Louverture dies in prison in France.</h2>
+            <p>The Haitian Revolution was a successful insurrection by self-liberated slaves against French colonial rule in Saint-Domingue, now the sovereign state of Haiti. The revolt began on 22 August 1791, and ended in 1804 with the former colony's independence. It involved black, biracial, French, Spanish, British, and Polish participants &mdash; with the ex-slave Toussaint Louverture emerging as Haiti's most prominent general. The revolution was the only slave uprising that led to the founding of a state which was both free from slavery (though not from forced labour) and ruled by non-whites and former captives.</p>
+        </li>
+        <li data-year="1817">
+            <h2>1817: First Seminole War begins in Florida.</h2>
+        </li>
+        <li data-year="1830">
+            <h2>U.S. Congress passes the Indian Removal Act which authorized the President to negotiate removal treaties with many native tribes living east of the Mississippi.</h2>
+            <p>The Indian Removal Act was signed into law on May 28, 1830, by United States President Andrew Jackson. The law, as described by Congress, provided "for an exchange of lands with the Indians residing in any of the states or territories, and for their removal west of the river Mississippi." During the Presidency of Jackson (1829–1837) and his successor Martin Van Buren (1837–1841) more than 60,000 Indians[4] from at least 18 tribes were forced to move west of the Mississippi River where they were allocated new lands as part of an ethnic cleansing. The southern tribes were resettled mostly in Indian Territory (Oklahoma). The northern tribes were resettled initially in Kansas. With a few exceptions, the United States east of the Mississippi and south of the Great Lakes was emptied of its Indian population. The movement westward of the Indian tribes was characterized by a large number of deaths occasioned by the hardships of the journey.</p>
+            <p>Legal efforts to allow Indian tribes to remain on their land in the eastern U.S. failed. Most famously, the Cherokee (excluding the Treaty Party) challenged their relocation, but were unsuccessful in the courts; they were forcibly removed by the United States government in a march to the west that later became known as the Trail of Tears. </p>
+        </li>
+        <li data-year="1865">
+            <h2>1865: Slavery is banned in the United States by the Thirteenth Amendment to the United States Constitution.</h2><p>The Thirteenth Amendment (Amendment XIII) to the United States Constitution abolished slavery and involuntary servitude, except as punishment for a crime.</p>
+        </li>
+    </ul>
+</div>
+{% endblock content %}
+{% block page_specific_js%}
+<script src="{% static 'js/timeline.js' %}"></script>
+{% endblock page_specific_js %}

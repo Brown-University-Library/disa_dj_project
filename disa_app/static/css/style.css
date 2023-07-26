@@ -9996,6 +9996,83 @@ figure img[src^="https://localcontexts.org/wp-content/uploads"]:hover {
   min-height: 5rem;
 }
 
+.timeline {
+  margin: 1rem auto;
+  position: relative;
+  overflow: auto;
+}
+.timeline:before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 5px;
+  background: #785d98;
+  left: 0;
+}
+.timeline ul {
+  list-style: none;
+  padding: 0 0 0 1rem;
+  z-index: 1;
+}
+.timeline ul li {
+  background: #785d98;
+  color: #fff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+.timeline ul li:before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 1rem solid #785d98;
+  border-left: 1rem solid transparent;
+  position: absolute;
+  left: -1rem;
+  top: 0;
+}
+.timeline ul li:nth-child(3n-2) {
+  background-color: #4aa3d9;
+}
+.timeline ul li:nth-child(3n-2):before {
+  border-top-color: #4aa3d9;
+}
+
+@media screen and (min-width: 40em) {
+  .timeline:before {
+    left: 50%;
+  }
+  .timeline ul {
+    padding-left: 0;
+    max-width: 70vw;
+    margin: 0 auto;
+  }
+  .timeline li {
+    width: 48%;
+  }
+  .timeline li:nth-child(even) {
+    float: right;
+    margin-top: 2rem;
+  }
+  .timeline li:nth-child(odd) {
+    float: left;
+  }
+  .timeline li:nth-child(odd):before {
+    border-top: 1rem solid #785d98;
+    border-right: 1rem solid transparent;
+    right: -1rem;
+    left: auto;
+  }
+  .timeline li:nth-child(3n-2) {
+    background-color: #4aa3d9;
+  }
+  .timeline li:nth-child(3n-2):before {
+    border-top-color: #4aa3d9;
+  }
+  .timeline li:nth-of-type(2n + 1) {
+    clear: both;
+  }
+}
 .clickable:hover {
   cursor: pointer;
   color: #785d98;

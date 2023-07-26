@@ -151,7 +151,14 @@ def explore( request ):
         resp = render( request, 'disa_app_templates/explore.html', context )
     return resp
     
-
+def timeline ( request ):
+    log.debug('\n\nstarting the timeline page')
+    context = {'foo': 'bar', 'foo2': 'bar2'}
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/timeline.html', context )
+    return resp
 # def browse_tabulator( request ):
 #     """ Displays tabulator page. """
 #     log.info( '\n\nstarting browse_tabulator()' )
