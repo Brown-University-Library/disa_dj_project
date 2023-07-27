@@ -552,6 +552,7 @@ def data_records( request, rec_id=None ):
         elif request.method == 'PUT':
             context: dict = view_data_records_manager.manage_reference_put( rec_id, request.body, user_id )
         elif request.method == 'POST':
+            time.sleep( 10 )  # temp-- to mimic db-hang
             context: dict = view_data_records_manager.manage_post( request.body, user_id )
         else:
             log.warning( 'shouldn\'t get here' )
