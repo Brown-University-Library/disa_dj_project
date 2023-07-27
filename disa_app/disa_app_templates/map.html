@@ -6,16 +6,6 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" crossorigin="" />
 {% endblock header_other %}
 {% block content %}
-<div class="row controls">
-<div class="form-check form-switch">
-  <input class="form-check-input" type="checkbox" role="switch" id="toggle-enslaver" oninput="toggleLayer(enslaver)">
-  <label class="form-check-label" for="toggle-enslaver">Toggle enslavers</label>
-</div>
-<div class="form-check form-switch">
-  <input class="form-check-input" type="checkbox" role="switch" id="toggle-enslaved" oninput="toggleLayer(enslaved)">
-  <label class="form-check-label" for="toggle-enslaved">Toggle enslaved</label>
-</div>
-</div>
 <div id="map-container" style="height:80vh"></div>
 {% endblock content %}
 {% block page_specific_js %}
