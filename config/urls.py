@@ -65,7 +65,9 @@ urlpatterns = [
 
     url( r'^data/sections/(?P<rfrnc_id>.*)/relationships/$', views.relationships_by_reference, name='data_reference_relationships_url' ),
     url( r'^data/relationships/$', views.data_relationships, name='data_relationships_url' ),
-    url( r'^data/relationships/(?P<rltnshp_id>.*)/$', views.data_relationships, name='data_relationships_url' ),
+    # url( r'^data/relationships/(?P<rltnshp_id>.*)/$', views.data_relationships, name='data_relationships_url' ),
+    url( r'^data/relationships/(?P<rltnshp_id>[^/]*)/record_(?P<record_id>.*)/$', views.data_relationships, name='data_relationships_url' ),
+    url( r'^data/relationships/(?P<rltnshp_id>[^/]*)/$', views.data_relationships, name='data_relationships_url' ),
 
     url( r'^data/reference_group/(?P<incoming_uuid>.*)/$', views.data_reference_group, name='data_group_url' ),
 
