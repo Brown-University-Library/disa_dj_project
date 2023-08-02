@@ -23,7 +23,13 @@
     <div class="form-floating">
         <!-- Transcription textarea -->
         <label for="formInputDISAItemTranscription">Transcription</label>
-        <wysiwyg-editor id="formInputDISAItemTranscription" api-key="ondkaoffzc1dnoz0vypajv5qg9fvnun0bss1ew22yncnvquc" toolbar="bold italic underline strikethrough fullscreen" :init="{ height:200,menubar:false,plugins:['fullscreen'], toolbar_mode: 'floating', formats: { underline: { inline: 'u' }, strikethrough: { inline: 's' }}}" v-model="currentItem.kludge.transcription" @onblur=="saveItemDataToServer" class="form-text"></wysiwyg-editor>
+        <wysiwyg-editor id="formInputDISAItemTranscription" 
+            api-key="ondkaoffzc1dnoz0vypajv5qg9fvnun0bss1ew22yncnvquc" 
+            toolbar="bold italic underline strikethrough table fullscreen" 
+            :init="{ height:200,menubar:false,plugins:['fullscreen', 'table'], toolbar_mode: 'floating', formats: { underline: { inline: 'u' }, strikethrough: { inline: 's' }}}" 
+            v-model="currentItem.kludge.transcription" 
+            @onblur=="saveItemDataToServer" 
+            class="form-text"></wysiwyg-editor>
     </div>
 </fieldset>
 <!-- Record date and location -->
