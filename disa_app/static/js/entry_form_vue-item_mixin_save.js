@@ -418,6 +418,21 @@ async function saveItemDataToServer() {
     if (false) { return }  // DEBUG: Skip send if true
 
     this.saveStatus = this.SAVE_STATUS.SAVE_IN_PROGRESS;
+
+    // If it's a new item and is in the process of
+    //  initializing on the DB, then don't proceed with save
+    // If it's a new item and is NOT initializing,
+    //  then set the initializing flag to block future saving
+    //  until we hear back from the DB that it's initialized
+
+    if (isNewItem) {
+      if (this.isInitializing) { 
+        return;
+      } else {
+        this.isInitializing = true;
+      }
+    }
+
     const response = await fetch(url, fetchOptions);
 
     if (response.ok) {
@@ -439,6 +454,7 @@ async function saveItemDataToServer() {
           console.log(`CURRENT ITEM `, this.currentItem);
           this.formData.doc.references.find(r => r.id === 'new').id = newItemDatabaseId;
           this.currentItemId = newItemDatabaseId;
+          this.isInitializing = false;
         }
       }
 
