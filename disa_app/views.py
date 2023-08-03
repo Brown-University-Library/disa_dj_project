@@ -192,7 +192,7 @@ def editor_index( request ):
     log.debug( f'start_time, ``{start_time}``' )
     target_time = start_time + datetime.timedelta(seconds=2)
     log.debug( f'target_time, ``{target_time}``' )
-    while datetime.datetime.now() < target_time:
+    while datetime.datetime.now() < target_time:  # 2023-Aug-03 -- what's this for?
         log.debug( f'now_time is, ``{datetime.datetime.now()}``' )
         time.sleep( 1 )
         log.debug( 'slept' )
@@ -555,7 +555,7 @@ def data_records( request, rec_id=None ):
         elif request.method == 'PUT':
             context: dict = view_data_records_manager.manage_reference_put( rec_id, request.body, user_id )
         elif request.method == 'POST':
-            time.sleep( 10 )  # temp-- to mimic db-hang
+            # time.sleep( 10 )  # temp -- this was to mimic a db-hang to address a javascript issue
             context: dict = view_data_records_manager.manage_post( request.body, user_id )
         else:
             log.warning( 'shouldn\'t get here' )
