@@ -1,9 +1,9 @@
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#"><i class="fa-solid fa-people-group"></i> People</a>
+        <a class="nav-link {% if 'explore' in request.path %} active{% endif %}" href="{% url 'explore_url' %}"><i class="fa-solid fa-people-group"></i> People</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link disabled" href="#"><i class="fa-solid fa-timeline"></i> Timeline</a>
+        <a class="nav-link {% if 'timeline' in request.path %} active{% endif %}" href="{% url 'timeline_url' %}"><i class="fa-solid fa-timeline"></i> Timeline</a>
     </li>
     <li class="nav-item">
         <a class="nav-link disabled" href="#"><i class="fa-solid fa-earth-americas"></i> Map</a>
