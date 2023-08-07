@@ -38,6 +38,7 @@ log = logging.getLogger(__name__)
 # main urls
 # ===========================
 
+@shib_login
 def about ( request ):
     log.debug('\n\nstarting about()')
     context = {
@@ -49,6 +50,7 @@ def about ( request ):
         resp = render( request, 'disa_app_templates/about.html', context )
     return resp
 
+@shib_login
 def learn ( request ):
     log.debug('\n\nstarting learn()')
     context = {
@@ -60,6 +62,7 @@ def learn ( request ):
         resp = render( request, 'disa_app_templates/learn.html', context )
     return resp
 
+@shib_login
 def educate ( request ):
     log.debug('\n\nstarting educate()')
     context = {
@@ -84,6 +87,7 @@ def home( request ):
         resp = render( request, 'disa_app_templates/home.html', context )
     return resp
 
+@shib_login
 def team ( request ):
     log.debug('\n\nstarting the team page')
     context = {'foo': 'bar', 'foo2': 'bar2'}
@@ -93,6 +97,7 @@ def team ( request ):
         resp = render( request, 'disa_app_templates/team.html', context )
     return resp
 
+@shib_login
 def contact ( request ):
     log.debug('\n\nstarting the contact page')
     context = {'foo': 'bar', 'foo2': 'bar2'}
@@ -102,6 +107,7 @@ def contact ( request ):
         resp = render( request, 'disa_app_templates/contact.html', context )
     return resp
 
+@shib_login
 def contribute ( request ):
     log.debug('\n\nstarting the contribute page')
     context = {'foo': 'bar', 'foo2': 'bar2'}
@@ -111,6 +117,7 @@ def contribute ( request ):
         resp = render( request, 'disa_app_templates/contribute.html', context )
     return resp
 
+@shib_login
 def partners ( request ):
     log.debug('\n\nstarting the tribal partners page')
     context = {'foo': 'bar', 'foo2': 'bar2'}
@@ -150,7 +157,8 @@ def explore( request ):
     else:
         resp = render( request, 'disa_app_templates/explore.html', context )
     return resp
-    
+
+@shib_login
 def timeline ( request ):
     log.debug('\n\nstarting the timeline page')
     context = {'foo': 'bar', 'foo2': 'bar2'}
@@ -210,7 +218,7 @@ def browse_logout( request ):
     log.debug( f'redirect_url, ```{redirect_url}```' )
     return HttpResponseRedirect( redirect_url )
 
-
+@shib_login
 def people( request ):
     log.debug( '\n\nstarting people()' )
     people: list = view_people_manager.query_people()
@@ -224,7 +232,7 @@ def people( request ):
         resp = render( request, 'disa_app_templates/people.html', context )
     return resp
 
-
+@shib_login
 def person( request, prsn_id ):
     log.debug( f'\n\nstarting person(), with prsn_id, `{prsn_id}`' )
     context: dict = view_person_manager.query_person( prsn_id )
@@ -237,7 +245,7 @@ def person( request, prsn_id ):
         resp = render( request, 'disa_app_templates/person_view.html', context )
     return resp
 
-
+@shib_login
 def source( request, src_id ):
     log.debug( f'\n\nstarting source(), with src_id, `{src_id}`' )
     redirect_url = reverse( 'edit_record_w_recid_url', kwargs={'rec_id': src_id} )
@@ -254,7 +262,7 @@ def editor_index( request ):
     log.debug( f'start_time, ``{start_time}``' )
     target_time = start_time + datetime.timedelta(seconds=2)
     log.debug( f'target_time, ``{target_time}``' )
-    while datetime.datetime.now() < target_time:
+    while datetime.datetime.now() < target_time:  # 2023-Aug-03 -- what's this for?
         log.debug( f'now_time is, ``{datetime.datetime.now()}``' )
         time.sleep( 1 )
         log.debug( 'slept' )
@@ -271,7 +279,7 @@ def editor_index( request ):
         resp = render( request, 'disa_app_templates/document_index.html', context )
     return resp
 
-
+@shib_login
 def search_results( request ):
     log.debug( '\n\nstarting search_results()' )
     srch_txt = request.GET.get( 'query', None )
@@ -617,6 +625,7 @@ def data_records( request, rec_id=None ):
         elif request.method == 'PUT':
             context: dict = view_data_records_manager.manage_reference_put( rec_id, request.body, user_id )
         elif request.method == 'POST':
+            # time.sleep( 10 )  # temp -- this was to mimic a db-hang to address a javascript issue
             context: dict = view_data_records_manager.manage_post( request.body, user_id )
         else:
             log.warning( 'shouldn\'t get here' )
@@ -729,27 +738,114 @@ def relationships_by_reference( request, rfrnc_id ):
     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     return resp
 
-
 @shib_login
-def data_relationships( request, rltnshp_id=None ):
+def data_relationships( request, rltnshp_id=None, record_id=None ):
     """ Called via ajax by views.edit_relationships() when `+` buton is clicked.
-        Url: '/data/relationships/' -- 'data_relationships_url' """
+        Url: '/data/relationships/' -- 'data_relationships_url' 
+        NOTE: 
+        - the response will be a redirect to the record (the "reference").
+        - the response.content will contain a json-string showing, eg, `{"relationship_id": 123, "new_relationship": true}`.
+        - the reason for the new_relationship boolean is to distinguish, in testing, whether the relationship was created or already-existing.
+        - as of 2023-June, the response.content is not being used by the front-end javascript.
+        """
     log.debug( '\n\nstarting data_relationships()' )
     log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rltnshp_id, ``{rltnshp_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     if request.method == 'POST':
-        rfrnc_id: str = v_data_relationships_manager.manage_relationships_post( request.body, user_id )
+        log.debug( 'starting POST flow handling' )
+        relationship_dict: dict = v_data_relationships_manager.manage_relationships_post( request.body, user_id )
+        rfrnc_id = relationship_dict['rfrnc_id']; assert type(rfrnc_id) == int
+        relationship_id = relationship_dict['relationship_id']; assert type(relationship_id) == int
+        relationship_is_new = relationship_dict['relationship_is_new']; assert type(relationship_is_new) == bool
         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
         log.debug( f'redirect_url, ```{redirect_url}```' )
-        resp = HttpResponseRedirect( redirect_url )
+        # resp = HttpResponseRedirect( redirect_url )
+        # resp = HttpResponseRedirect( redirect_url, 'FOO2' )
+        content_json = json.dumps( relationship_dict )
+        resp = HttpResponseRedirect( redirect_to=redirect_url, content=content_json )
     elif request.method == 'DELETE':
-        rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, request.body, user_id )
+        log.debug( 'starting DELETE flow handling' )
+        record_id = str( record_id )
+        assert type(record_id) == str
+        # reference_id = record_id
+        log.debug( f'record_id, ``{record_id}``')
+        rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, record_id, user_id )  # type: ignore
         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+        log.debug( f'redirect_url, ``{redirect_url}```' )
         resp = HttpResponseRedirect( redirect_url )
     else:
         log.warning( f'we shouldn\'t get here' )
         resp = HttpResponse( 'problem; see logs' )
     return resp
+
+
+# @shib_login
+# def data_relationships( request, rltnshp_id=None ):
+#     """ Called via ajax by views.edit_relationships() when `+` buton is clicked.
+#         Url: '/data/relationships/' -- 'data_relationships_url' 
+#         NOTE: 
+#         - the response will be a redirect to the record (the "reference").
+#         - the response.content will contain a json-string showing, eg, `{"relationship_id": 123, "new_relationship": true}`.
+#         - the reason for the new_relationship boolean is to distinguish, in testing, whether the relationship was created or already-existing.
+#         - as of 2023-June, the response.content is not being used by the front-end javascript.
+#         """
+#     log.debug( '\n\nstarting data_relationships()' )
+#     log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rltnshp_id, ``{rltnshp_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
+#     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+#     if request.method == 'POST':
+#         log.debug( 'starting POST flow handling' )
+#         relationship_dict: dict = v_data_relationships_manager.manage_relationships_post( request.body, user_id )
+#         rfrnc_id = relationship_dict['rfrnc_id']; assert type(rfrnc_id) == int
+#         relationship_id = relationship_dict['relationship_id']; assert type(relationship_id) == int
+#         relationship_is_new = relationship_dict['relationship_is_new']; assert type(relationship_is_new) == bool
+#         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+#         log.debug( f'redirect_url, ```{redirect_url}```' )
+#         # resp = HttpResponseRedirect( redirect_url )
+#         # resp = HttpResponseRedirect( redirect_url, 'FOO2' )
+#         content_json = json.dumps( relationship_dict )
+#         resp = HttpResponseRedirect( redirect_to=redirect_url, content=content_json )
+#     elif request.method == 'DELETE':
+#         log.debug( 'starting DELETE flow handling' )
+#         reference_id = request.GET['record']
+#         log.debug( f'reference_id, ``{reference_id}``')
+#         assert type(reference_id) == str
+#         rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, reference_id, user_id )  # type: ignore
+#         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+#         resp = HttpResponseRedirect( redirect_url )
+#     else:
+#         log.warning( f'we shouldn\'t get here' )
+#         resp = HttpResponse( 'problem; see logs' )
+#     return resp
+
+
+# @shib_login
+# def data_relationships( request, rltnshp_id=None ):
+#     """ Called via ajax by views.edit_relationships() when `+` buton is clicked.
+#         Url: '/data/relationships/' -- 'data_relationships_url' 
+#         NOTE: 
+#         - the response will be a redirect to the record (the "reference").
+#         - the response.content will contain a json-string showing, eg, `{"relationship_id": 123, "new_relationship": true}`.
+#         - the reason for the new_relationship boolean is to distinguish, in testing, whether the relationship was created or already-existing.
+#         - as of 2023-June, the response.content is not being used by the front-end javascript.
+#         """
+#     log.debug( '\n\nstarting data_relationships()' )
+#     log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rltnshp_id, ``{rltnshp_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
+#     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+#     if request.method == 'POST':
+#         rfrnc_id: str = v_data_relationships_manager.manage_relationships_post( request.body, user_id )
+#         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+#         log.debug( f'redirect_url, ```{redirect_url}```' )
+#         # resp = HttpResponseRedirect( redirect_url )
+#         # resp = HttpResponseRedirect( redirect_url, 'FOO2' )
+#         resp = HttpResponseRedirect( redirect_to=redirect_url, content='FOO4' )
+#     elif request.method == 'DELETE':
+#         rfrnc_id: str = v_data_relationships_manager.manage_relationships_delete( rltnshp_id, request.body, user_id )
+#         redirect_url = reverse( 'data_reference_relationships_url', kwargs={'rfrnc_id': rfrnc_id} )
+#         resp = HttpResponseRedirect( redirect_url )
+#     else:
+#         log.warning( f'we shouldn\'t get here' )
+#         resp = HttpResponse( 'problem; see logs' )
+#     return resp
 
 
 # ===========================
@@ -898,37 +994,4 @@ def redesign_citation( request, cite_id=None ):
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
         resp = render( request, 'disa_app_templates/redesign_citation.html', context )
-    return resp
-
-
-## testing --------------
-
-
-def js_demo_1( request ):
-    """ Explores js & template vars v1. """
-    log.debug( '\n\nstarting js_demo_1()' )
-    context = {}
-    resp = render( request, 'disa_app_templates/js_demo_1.html', context )
-    return resp
-
-
-def js_demo_2( request ):
-    """ Explores js & template vars v2. """
-    log.debug( '\n\nstarting js_demo_2()' )
-    context = { 'foo': 'bar' }
-    if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    else:
-        resp = render( request, 'disa_app_templates/js_demo_2.html', context )
-    return resp
-
-
-def js_demo_3( request ):
-    """ Explores js & template vars v3. """
-    log.debug( '\n\nstarting js_demo_3()' )
-    context = { 'foo2': 'bar2' }
-    if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    else:
-        resp = render( request, 'disa_app_templates/js_demo_3.html', context )
     return resp
