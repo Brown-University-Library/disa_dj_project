@@ -1,26 +1,23 @@
 // garbage to hide the native horizontal scrollbars
 .glider-track {
-    scrollbar-width: none;
+  scrollbar-width: none;
 }
 @-moz-document url-prefix() {
-    .glider-track {
-        margin-bottom: 17px;
-    }
-    .glider-contain {
-        overflow: hidden;
-    }
+  .glider-track {
+    margin-bottom: 17px;
+  }
+  .glider-contain {
+    overflow: hidden;
+  }
 }
 
 .glider-contain {
-    .card {
-        background-color: $primary;
-        color: $white;
-        padding: 2rem 1rem;
-        margin-right: 1rem;
-    }
-    button {
-        background-color: transparent;
-        border: solid 2px $primary;
-        border-radius: 50%;
-    }
+  .card {
+    background-color: $sand;
+    padding: 2rem 1rem;
+    margin-right: 1rem;
+  }
+  button {
+    border-radius: 50%;
+  }
 }

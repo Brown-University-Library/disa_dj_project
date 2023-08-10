@@ -18,8 +18,8 @@
 </head>
 
 <body class="container-fluid {% if user.is_authenticated %}user-editor {% endif %}">
-    <header class="d-flex py-2 row justify-content-between bg-primary">
-        <h1 class="col-md-4"><a href="{% url 'home_url' %}" class="link-light">Stolen Relations: <span>Recovering Stories of Indigenous Enslavement in the Americas</span></a></h1>
+    <header class="d-flex py-2 row justify-content-between bg-light">
+        <h1 class="col-md-4"><a href="{% url 'home_url' %}" class="text-dark">Stolen Relations <span>Recovering Stories of Indigenous Enslavement in the Americas</span></a></h1>
         {% if user.is_authenticated %}
         <div class="d-flex align-items-center col-md-2">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Admin</button>
@@ -41,8 +41,8 @@
         </div>
         {% endif %}
     </header>
-    <nav class="navbar navbar-expand-sm navbar-dark text-light bg-primary d-flex row">
-        <ul class="navbar-nav">
+    <nav class="navbar navbar-expand-sm bg-primary row">
+        <ul class="navbar-nav d-flex justify-content-between">
             {% block nav_options %}
             {% endblock nav_options %}
             <li class="nav-item">
@@ -64,15 +64,20 @@
         </ul>
         </div><!-- container -->
     </nav>
-    <section class="container">
-        <main class="row">
-            {% block content %}
-            {% endblock content %}
-        </main>
-    </section>
-    <footer class="container border-top my-2">
+    <main id="main" class="row">
+        {% block content %}
+        {% endblock content %}
+    </main>
+    <footer class="row my-2 bg-dark text-light">
         {% block footer %}
-        {% include "disa_app_templates/partials/acknowledgements.html" %}
+        <h1 class="border-bottom my-2 py-2">Stolen Relations <span>Recovering Stories of Indigenous Enslavement in the Americas</span></h1>
+        <div class="col-md-4">
+            <h2>Contact</h2>
+            <a href="mailto:stolenrelations-info@brown.edu">stolenrelations-info@brown.edu</a>
+        </div>
+        <div class="col-md-8">
+            {% include "disa_app_templates/partials/acknowledgements.html" %}
+        </div>
         {% endblock footer %}
     </footer>
     <!-- Bootstrap 5 JS via CDN -->

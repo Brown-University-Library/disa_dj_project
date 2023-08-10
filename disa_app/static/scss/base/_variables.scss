@@ -1,13 +1,3 @@
-/* Colors from Brown Visual Identity */
-$main-red: #ed1c24;
-$main-brown: #4e3629;
-$accent-gold: #ffc72c;
-$accent-gray: #98a4ae;
-$secondary-blue: #59cbe8;
-$secondary-emerald: #00b398;
-$secondary-navy: #003c71;
-$secondary-taupe: #b7b09c;
-
 /* these colors are derived from a photograph of Aquinnah Head and a photograph of wampum jeweley, with contrasts generated from coolors.co */
 $bone: #f0f0f0;
 $canary: #fffd82;
@@ -18,15 +8,22 @@ $lilac: #785d98;
 $mango: #ff8c42;
 $sand: #eccca2;
 
+// colors scraped from Common Media Figma docs
+$lace: #fff4e4;
+$sand: #f6da8a;
+$mint-blue: #dbe6de;
+$indigo-blue: #1d4462;
+$darkbrown: #3a1e15;
+
 // tweaking Bootstrap default colors to use generated color palette
-$primary: $lilac;
-$secondary: $carolina;
-$success: $emerald;
-$info: mix($carolina, $canary);
+$primary: $sand;
+$secondary: $mint-blue;
+$success: $indigo-blue;
+$info: $mint-blue;
 $warning: $canary;
 $danger: $mango;
-$light: $bone;
-$dark: $dark-black;
+$light: $lace;
+$dark: $darkbrown;
 
 /* Typography */
 $font-family-serif: "Playfair Display", serif;
