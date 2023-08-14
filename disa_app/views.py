@@ -151,7 +151,7 @@ def explore( request ):
     log.info( '\n\nstarting explore()' )
     log.debug( f'request.session.items(), ``{pprint.pformat(request.session.items())}``' )
     people: list = view_people_manager.query_people()
-    context = { 'data': people, 'user_is_authenticated': False }
+    context = { 'data': people, 'user_is_authenticated': True }
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:

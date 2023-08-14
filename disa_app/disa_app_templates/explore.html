@@ -52,11 +52,11 @@
         <div class="card">
             <h2><a href="{{ rfrnt.db_id }}">{{ rfrnt.calc_name }}</a></h2>
             <ul>
-                <li class="status status-$status">$status</li>
-                <li>$age</li>
-                <li>$race $tribe</li>
-                <li>$location</li>
-                <li>$relationships</li>
+                <li class="status status-$status">{{ rfrnt.calc_status }}</li>
+                <li>{{ rfrnt.calc_age }}</li>
+                <li>{{ rfrnt.calc_race }} $tribe</li>
+                <!--<li>$location</li>
+                <li>$relationships</li>-->
             </ul>
             <div><i class="fa-solid fa-file-lines"></i> 1 source<i class="fa-solid fa-globe-americas"></i> <i class="fa-solid fa-timeline"></i></div>
         </div>
