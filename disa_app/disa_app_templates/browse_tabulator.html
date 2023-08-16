@@ -15,21 +15,12 @@
 {% endif %}
 {% endblock nav_options %}
 {% block content %}
-<!-- language warning modal, appears immediately on load -->
+<!-- language warning modal, appears immediately if not previous acknowledged -->
 {% include "disa_app_templates/modals/warn_language.html" %}
 <!-- Details modal -->
 {% include "disa_app_templates/modals/record_details.html" %}
 <!-- "Loading ..." modal -->
-<div class="modal fade" id="loadingModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body" id="loadingModalMessage">
-                <i class="fa-solid fa-spinner fa-spin-pulse"></i>
-                Loading...
-            </div>
-        </div>
-    </div>
-</div>
+{% include "disa_app_templates/modals/loading.html" %}
 <!-- Main content container: search and results -->
 <section class="" id="main-content">
     <div class="row">
@@ -125,9 +116,15 @@
 {% block page_specific_js%}
 <!-- Main setup routine -->
 <script type="module" defer src="{% static 'js/browse_tabulator.js' %}"></script>
-<!-- trigger warningModal onload -->
 <script>
-var warningModal = new bootstrap.Modal('#warningModal').show();
+// if a user has not previously acknowledged the warning modal, show it
+if (localStorage.getItem("warning") != "acknowledged") {
+    const warningModal = new bootstrap.Modal('#warningModal').show();
+}
+// when a user closes the warning modal, record that in localStorage
+warningModal.addEventListener('hidden.bs.modal', event => {
+    localStorage.setItem("warning", "acknowledged");
+})
 
 </script>
 {% endblock page_specific_js %}
