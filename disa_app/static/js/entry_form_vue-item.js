@@ -283,11 +283,7 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
           console.log('DELETE ITEM LOCALLY');
           const itemIndex = this.formData.doc.references.findIndex(r => r.id === itemToDelete.id);
           this.formData.doc.references.splice(itemIndex, 1);
-          if (this.formData.doc.references.length > 0) {
-            this.currentItemId = this.formData.doc.references[0].id
-          } else {
-            this.createNewItem();
-          }
+          this.currentItemId = -1; // Go to "show all records" tab
         });
       },
 
