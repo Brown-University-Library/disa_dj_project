@@ -69,20 +69,26 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
                 <div aria-labelledby="New-Item" id="New-Item">
                     <!-- If no Record currently selected, then show list of all Records -->
                     <div v-if="currentItemId === -1 || !currentItemId">
-                        <h2>
+                        <h2 v-if="formData.doc.references.length > 0">
                             Records contained within this Source
+                        </h2>
+                        <h2 v-if="formData.doc.references.length === 0">
+                            This source contains no records
                         </h2>
                         <button type="button" class="btn btn-primary" v-on:click="createNewItem">
                             Create new record in this source
                         </button>
-                        <h3>Select a Record</h3>
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center clickable" v-for="item in formData.doc.references" v-on:click="currentItemId = item.id">
-                                <p class="mb-0" v-text="makeItemDisplayTitle(item, 50)">
-                                </p>
-                                <disa-id v-bind:forthis="item" class="float-end"></disa-id>
-                            </li>
-                        </ul>
+                        <!-- Show existing records (if there are any)-->
+                        <div v-if="formData.doc.references.length > 0">
+                            <h3>Select a Record</h3>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center clickable" v-for="item in formData.doc.references" v-on:click="currentItemId = item.id">
+                                    <p class="mb-0" v-text="makeItemDisplayTitle(item, 50)">
+                                    </p>
+                                    <disa-id v-bind:forthis="item" class="float-end"></disa-id>
+                                </li>
+                            </ul>
+                        </div>
                     </div><!-- end v-if -->
                     <!-- If there IS a current Record selected, then show edit interface for that Record -->
                     <!-- start edit Record form -->
