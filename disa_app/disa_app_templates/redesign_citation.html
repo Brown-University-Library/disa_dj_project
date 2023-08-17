@@ -97,7 +97,7 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
                             <!-- Create new Record button-->
                             <button type="button" class="btn btn-outline-primary btn-sm" v-on:click="createNewItem">Create new record in this source</button>
                             <!-- Delete Record button -->
-                            <button type="button" class="btn btn-outline-danger btn-sm">
+                            <button type="button" class="btn btn-outline-danger btn-sm" v-on:click="deleteItem">
                                 &times; delete this record
                             </button>
                         </div>
