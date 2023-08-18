@@ -44,22 +44,26 @@ basemaps.Terrain.addTo(map);
 
 // fetch the geojson
 var geoJsonData = new L.GeoJSON.AJAX(
-    "/static/data/stolen_relations_geocoded_wgs84.geojson", {
+    "/static/data/sr_geocoded_sample.geojson", {
 
       // build each point
         onEachFeature: function(feature, layer) {
 
-            var uuid = feature.properties.referent_id;
+            var uuid = feature.properties.Referent_ID;
             var name = feature.properties.Name;
             var status = feature.properties.Status;
             var date = feature.properties.Year;
             var lat = feature.properties.lat;
-            var lng = feature.properties.lng;
-            var location = feature.properties.Location.toString();
+            var lng = feature.properties.lon;
+            var location = feature.properties.from.toString();
             if (name != null) {
-                var popupText = '<a href="/people/' + uuid + '">' + name + '</a><br />' + location + '<br />' + date ;
+                // we can't currently link to the correct person in a point
+                //var popupText = '<a href="/people/' + uuid + '">' + name + '</a><br />' + location + '<br />' + date ;
+                var popupText = name + '<br />' + location + '<br />' + date ;
             } else {
-                var popupText = '<a href="/people/' + uuid + '">A person whose name we do not know</a><br />' + location + '<br/>' + date;
+                //var popupText = '<a href="/people/' + uuid + '">A person whose name we do not know</a><br />' + location + '<br/>' + date;
+                var popupText = 'A person whose name we do not know<br />' + location + '<br />' + date ;
+
             };
 
             layer.bindPopup(popupText);
@@ -86,7 +90,7 @@ markers.on('clustermouseover', function(a) {
     var clusterLocation = [];
 
     for (i = 0; i < clusterCount; i++) {
-        clusterLocation.push(clusterChildren[i].feature.properties.Location);
+        clusterLocation.push(clusterChildren[i].feature.properties.from);
         var clusterName = clusterLocation.shift();
     };
 
