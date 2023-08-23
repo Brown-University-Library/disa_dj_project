@@ -1,10 +1,19 @@
-//establish the map
-var map = L.map('map-container', {
-    center: [41, -71],
-    zoom: 5,
-    //maxZoom: 19
-});
-
+// if being referred by a People Detail page, the URL will have a lat/lon to center on
+var cameFrom = new URL(document.referrer);
+if (cameFrom.pathname.startsWith("/people")) {
+    // fetch query coords
+    function getQueryStringValue(key) {
+        return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+    }
+    var querylat = getQueryStringValue("lat");
+    var querylon = getQueryStringValue("lon");
+    var queryzoom = getQueryStringValue("zoom");
+    // establish the map with the coordinates from the query
+    var map = L.map('map-container').setView([querylat, querylon], queryzoom);
+} else {
+    //establish the default map
+    var map = L.map('map-container').setView([41, -71], 5);
+}
 //the various basemaps
 const basemaps = {
     Terrain: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
@@ -39,14 +48,14 @@ const basemaps = {
         ext: 'jpg'
     })
 };
-L.control.layers(basemaps, null, {collapsed:false}).addTo(map);
+L.control.layers(basemaps, null, { collapsed: false }).addTo(map);
 basemaps.Terrain.addTo(map);
 
 // fetch the geojson
 var geoJsonData = new L.GeoJSON.AJAX(
     "/static/data/sr_geocoded_sample.geojson", {
 
-      // build each point
+        // build each point
         onEachFeature: function(feature, layer) {
 
             var uuid = feature.properties.Referent_ID;
@@ -59,10 +68,10 @@ var geoJsonData = new L.GeoJSON.AJAX(
             if (name != null) {
                 // we can't currently link to the correct person in a point
                 //var popupText = '<a href="/people/' + uuid + '">' + name + '</a><br />' + location + '<br />' + date ;
-                var popupText = name + '<br />' + location + '<br />' + date ;
+                var popupText = name + '<br />' + location + '<br />' + date;
             } else {
                 //var popupText = '<a href="/people/' + uuid + '">A person whose name we do not know</a><br />' + location + '<br/>' + date;
-                var popupText = 'A person whose name we do not know<br />' + location + '<br />' + date ;
+                var popupText = 'A person whose name we do not know<br />' + location + '<br />' + date;
 
             };
 

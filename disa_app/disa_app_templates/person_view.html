@@ -125,13 +125,19 @@
         </table>
     </div>
 </div>
+{% comment %}
 <div class="row">
+    <a href="/map?lat=27.73&lon=98.39&zoom=5" class="btn btn-primary">link</a>
+    To link to the map page with the correct coordinates, see https://stackoverflow.com/a/44767237. Obviously we can't do this until lat/lon is available to this page.
     <div class="map-container" style="height:45.125rem"></div>
+    }
 </div>
+{% endcomment %}
 {% endblock content %}
 {% block page_specific_js %}
+<!-- not needed until lat/lon info is available
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js" integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/leaflet-extras/leaflet-providers/leaflet-providers.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/calvinmetcalf/leaflet-ajax@2/dist/leaflet.ajax.js"></script>
-<script src="{% static 'js/map-person.js' %}"></script>
+<script src="{% static 'js/map-person.js' %}"></script>-->
 {% endblock page_specific_js %}
