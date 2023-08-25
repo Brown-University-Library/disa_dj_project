@@ -29,61 +29,79 @@
 <!-- Record date and location -->
 <div class="row">
     <!-- Record date -->
-    <fieldset class="col-md flex-column input-group">
-        <legend class="visually-hidden">Event date</legend>
-        <h3>Event date</h3>
-        <div class="d-flex">
-            <label class="visually-hidden" for="formInputDISAEventDateMonth" class="">Month</label><select class="form-select" id="formInputDISAEventDateMonth" aria-label="Event date: month" placeholder="Month" v-model="currentItem.dateParts.month" v-on:change="saveItemDataToServer">
-                <option value="-1">Month unspecified</option>
-                <option value="01">January</option>
-                <option value="02">February</option>
-                <option value="03">March</option>
-                <option value="04">April</option>
-                <option value="05">May</option>
-                <option value="06">June</option>
-                <option value="07">July</option>
-                <option value="08">August</option>
-                <option value="09">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-            </select>
-            <label class="visually-hidden" for="formInputDISAEventDateDay">Day</label><input class="form-control" id="formInputDISAEventDateDay" type="number" min="0" max="31" placeholder="Day" v-model="currentItem.dateParts.day" v-on:change="saveItemDataToServer">
-            <label class="visually-hidden" for="formInputDISAEventDateYear">Year</label><input class="form-control" id="formInputDISAEventDateYear" type="number" min="1500" max="1900" placeholder="Year" v-model="currentItem.dateParts.year" v-on:change="saveItemDataToServer">
-        </div>
-    </fieldset>
+    <div class="col-md-3">
+        <fieldset class="input-group">
+            <legend class="visually-hidden">Event date</legend>
+            <h3>Event date</h3>
+            <div class="d-flex">
+                <label class="visually-hidden" for="formInputDISAEventDateMonth" class="">Month</label><select class="form-select" id="formInputDISAEventDateMonth" aria-label="Event date: month" placeholder="Month" v-model="currentItem.dateParts.month" v-on:change="saveItemDataToServer">
+                    <option value="-1">Month unspecified</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+                <label class="visually-hidden" for="formInputDISAEventDateDay">Day</label><input class="form-control" id="formInputDISAEventDateDay" type="number" min="0" max="31" placeholder="Day" v-model="currentItem.dateParts.day" v-on:change="saveItemDataToServer">
+                <label class="visually-hidden" for="formInputDISAEventDateYear">Year</label><input class="form-control" id="formInputDISAEventDateYear" type="number" min="1500" max="1900" placeholder="Year" v-model="currentItem.dateParts.year" v-on:change="saveItemDataToServer">
+            </div>
+        </fieldset>
+    </div>
     <!-- Record location -->
-    <fieldset class="col-md">
+    <fieldset class="col-md-9">
         <legend class="visually-hidden">Place</legend>
         <h3>Place</h3>
-        <div class="form-floating">
-            <!-- Colonial context -->
-            <select class="form-select" id="formInputDISAColonialContext" aria-label="Colonial context" v-model="currentItem.national_context_id" v-on:change="saveItemDataToServer">
-                <option v-for="(colonialContextOption, colonialContextOptionId) in MENU_OPTIONS.formInputDISAColonialContext" v-bind:value="colonialContextOptionId" v-text="colonialContextOption">
-            </select>
-            <label for="formInputDISAColonialContext">Colonial context</label>
-        </div>
-        <!-- Colony / state -->
         <div class="row">
-            <label for="formInputDISAColonyState" class="col-3 col-form-label">Colony / State</label>
-            <div class="col-9">
-                <disa-tags id="formInputDISAColonyState" v-model="currentItem.location_info['Colony/State'].value" v-bind:suggestions="MENU_OPTIONS.formInputDISAColonyState" single-value ref="colonyStateInput" v-on:input="saveItemDataToServer"></disa-tags>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <!-- Colonial context -->
+                    <select class="form-select" id="formInputDISAColonialContext" aria-label="Colonial context" v-model="currentItem.national_context_id" v-on:change="saveItemDataToServer">
+                        <option v-for="(colonialContextOption, colonialContextOptionId) in MENU_OPTIONS.formInputDISAColonialContext" v-bind:value="colonialContextOptionId" v-text="colonialContextOption">
+                    </select>
+                    <label for="formInputDISAColonialContext">Colonial context</label>
+                </div>
+                <!-- Colony / state -->
+                <div class="row my-1">
+                    <label for="formInputDISAColonyState" class="col-4 col-form-label">Colony / State</label>
+                    <div class="col-8">
+                        <disa-tags id="formInputDISAColonyState" v-model="currentItem.location_info['Colony/State'].value" v-bind:suggestions="MENU_OPTIONS.formInputDISAColonyState" single-value ref="colonyStateInput" v-on:input="saveItemDataToServer"></disa-tags>
+                    </div>
+                </div>
+                <!-- Town -->
+                <div class="row">
+                    <label for="formInputDISATown" class="col-4 col-form-label">Town</label>
+                    <div class="col-8">
+                        <disa-tags id="formInputDISATown" v-model="currentItem.location_info['City'].value" v-bind:suggestions="MENU_OPTIONS.formInputDISATown" single-value ref="townInput" v-on:input="saveItemDataToServer"></disa-tags>
+                    </div>
+                </div>
             </div>
-        </div>
-        <!-- Town -->
-        <div class="row">
-            <label for="formInputDISATown" class="col-3 col-form-label">Town</label>
-            <div class="col-9">
-                <disa-tags id="formInputDISATown" v-model="currentItem.location_info['City'].value" v-bind:suggestions="MENU_OPTIONS.formInputDISATown" single-value ref="townInput" v-on:input="saveItemDataToServer"></disa-tags>
-            </div>
-        </div>
-        <!-- Additional location info -->
-        <div class="row">
-            <label for="formInputDISAPlaceInfo" class="col-3">
-                Additional location info
-            </label>
-            <div class="col-9">
-                <disa-tags id="formInputDISAPlaceInfo" v-model="currentItem.location_info['Locale'].value" v-bind:suggestions="MENU_OPTIONS.formInputDISAPlaceInfo" single-value ref="localeInput" v-on:input="saveItemDataToServer"></disa-tags>
+            <!-- Additional location info -->
+            <div class="col-md-6">
+                <div class="row">
+                    <label for="formInputDISAPlaceInfo" class="col-4 col-form-label">
+                        Additional location info
+                    </label>
+                    <div class="col-8">
+                        <disa-tags id="formInputDISAPlaceInfo" v-model="currentItem.location_info['Locale'].value" v-bind:suggestions="MENU_OPTIONS.formInputDISAPlaceInfo" single-value ref="localeInput" v-on:input="saveItemDataToServer"></disa-tags>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <label for="formInputDISAPlaceLat" class="col-4 col-form-label">Latitude</label>
+                    <span class="col-8">
+                    <input type="text" inputmode="numeric" class="form-control" /></span>
+                </div>
+                <div class="row">
+                    <label for="formInputDISAPlaceLon" class="col-4 col-form-label">Longitude</label>
+                    <span class="col-8">
+                    <input type="text" inputmode="numeric" class="form-control" /></span>
+                </div>
             </div>
         </div>
     </fieldset>
