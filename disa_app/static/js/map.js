@@ -1,19 +1,26 @@
-// if being referred by a People Detail page, the URL will have a lat/lon to center on
-var cameFrom = new URL(document.referrer);
-if (cameFrom.pathname.startsWith("/people")) {
-    // fetch query coords
+// if being referred by a People Detail page, the URL will have queries in it
+/*const current = new URL(window.location.href);
+function hasQueryParams(current) {
+    return current.includes('?');
+    // break the lat, lon, and zoom out from the URL
     function getQueryStringValue(key) {
         return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
     }
-    var querylat = getQueryStringValue("lat");
-    var querylon = getQueryStringValue("lon");
-    var queryzoom = getQueryStringValue("zoom");
-    // establish the map with the coordinates from the query
-    var map = L.map('map-container').setView([querylat, querylon], queryzoom);
-} else {
-    //establish the default map
-    var map = L.map('map-container').setView([41, -71], 5);
+    let querylat = getQueryStringValue("lat");
+    let querylon = getQueryStringValue("lon");
+    let queryzoom = getQueryStringValue("zoom");
 }
+
+let cameFrom = new URL(document.referrer);
+if (cameFrom == undefined) { let cameFrom = "" }
+// if referrer was a people page, set map with query coordinates, else set default map
+if (cameFrom.pathname.startsWith("/people/")) {
+    let map = L.map('map-container').setView([querylat, querylon], queryzoom);
+} else {
+    let map = L.map('map-container').setView([41, -71], 5);
+}*/
+// establish the default map container
+let map = L.map('map-container').setView([41, -71], 5);
 //the various basemaps
 const basemaps = {
     Terrain: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {

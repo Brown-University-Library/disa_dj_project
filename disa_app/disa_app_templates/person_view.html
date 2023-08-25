@@ -1,7 +1,9 @@
 {% extends "disa_app_templates/base.html" %}
 {% load static %}
 {% block header_other %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!--
+    for when we have lat/lon info available
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer" />-->
 {% endblock header_other %}
 {% block content %}
 <div>
@@ -127,7 +129,6 @@
 </div>
 {% comment %}
 <div class="row">
-    <a href="/map?lat=27.73&lon=98.39&zoom=5" class="btn btn-primary">link</a>
     To link to the map page with the correct coordinates, see https://stackoverflow.com/a/44767237. Obviously we can't do this until lat/lon is available to this page.
     <div class="map-container" style="height:45.125rem"></div>
     }
