@@ -1,18 +1,18 @@
 :root {
-    --bs-body-bg: $lace;
-    --bs-body-color: $darkbrown;
-    --bs-link-color: inherit;
+  --bs-body-bg: $lace;
+  --bs-body-color: $darkbrown;
+  --bs-link-color: inherit;
 }
 
 body {
-    background-color: $lace;
-    color: $darkbrown;
+  background-color: $lace;
+  color: $darkbrown;
 }
 nav {
-    font-weight: bold;
-    text-transform: uppercase;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 .gradient {
-    background: $lace;
-    background: linear-gradient(90deg, $lace 0%, $sand 100%);
+  background: $lace;
+  background: linear-gradient(90deg, $lace 0%, $sand 100%);
 }
