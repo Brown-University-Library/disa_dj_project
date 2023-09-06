@@ -241,6 +241,14 @@ export const LOCAL_SETTINGS = {
       '35':'Multi-racial',
       '24':'White' */
     },
+    formInputDISAPersonAge_category: {
+      '<2':'Infant',
+      '>2-14':'Child',
+      '>14-25':'Youth/Young Adult',
+      '>25-40':'Adult',
+      '>40-55':'Older person',
+      '>55':'Elder'
+    }
     formInputDISAItemType: {	// @todo @birkin Load from server
       '1':'Baptism',
       '2':'Runaway',
