@@ -153,3 +153,6 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
 <!-- "Change Record" modal -->
 {% include "disa_app_templates/modals/change_record.html" %}
 {% endblock content %}
+{% block page_specific_js%}
+<script type="script" src="{% static 'js/editor/editor.age_category.js' %}"></script>
+{% endblock page_specific_js %}

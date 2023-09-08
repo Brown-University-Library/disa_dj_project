@@ -22,7 +22,7 @@ function prepareForTagify(data) {
     tagifiedData = '[]';
   }
 
-  console.log('TAGIFYING FROM ', data, ' TO ', tagifiedData);
+  //console.log('TAGIFYING FROM ', data, ' TO ', tagifiedData);
 
   return tagifiedData;
 }
@@ -277,7 +277,7 @@ function preprocessReferentData(referentData) {
   referentData.vocations = prepareForTagify(referentData.vocations);
   referentData.status    = prepareForTagify(referentData.enslavements);
   referentData.origins   = prepareForTagify(referentData.origins);
-  referentData.age_category   = prepareForTagify(referentData.age_category);
+  //referentData.age_category   = prepareForTagify(referentData.age_category);
 
   delete referentData.enslavements;
 

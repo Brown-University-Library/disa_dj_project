@@ -53,7 +53,7 @@ const componentDefinition = {
       tagifySettings.mode = 'select';
     }
 
-    console.log('TAGIFY INIT', {tagifySettings, el: this.$el, elVal: this.value, whitelist});
+    //console.log('TAGIFY INIT', {tagifySettings, el: this.$el, elVal: this.value, whitelist});
     this.tagify = new Tagify(this.$el, tagifySettings);
 
     // When tagify detects a blur event, pass it up

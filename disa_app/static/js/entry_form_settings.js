@@ -248,7 +248,7 @@ export const LOCAL_SETTINGS = {
       '>25-40':'Adult',
       '>40-55':'Older person',
       '>55':'Elder'
-    }
+    },
     formInputDISAItemType: {	// @todo @birkin Load from server
       '1':'Baptism',
       '2':'Runaway',
