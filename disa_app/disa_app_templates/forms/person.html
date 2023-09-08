@@ -80,6 +80,26 @@
         </div>
     </div>
 </fieldset>
+<fieldset>
+    <legend class="visually-hidden">Self-Associate</legend>
+    <h3>Self-Associate</h3>
+    <button class="btn btn-primary btn-sm" v-on:click.stop.prevent="newAssociationFormVisible = true" title="Enter information for a new self-association">Add new self-association</button>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- current referent -->
+            <span v-text="getReferentDisplayLabel(referent)"></span> <label for="formInputDISAAssociationObject">is also the person with the ID</label>
+            <!-- Object of association -->
+            <input type="text" id="formInputDISAAssociationObject" aria-label="This person's other appearance"></div>
+    </div>
+    <!-- existing associations -->
+    <div v-for="association in currentReferentAssociations">
+        <!-- the current referent -->
+        <disa-id v-bind:forthis="association"></disa-id>
+        <span v-text="getReferentDisplayLabel(referent)"></span> is also
+        <!-- the person in another record -->
+        <span v-text="getReferentDisplayLabelById(association.data.obj.id)"></span>
+    </div>
+</fieldset>
 <fieldset v-if="currentItem.referents.length > 1">
     <!-- Relationships <-->
     <legend class="visually-hidden">Relationships</legend>
@@ -89,7 +109,7 @@
     <div v-for="relationship in currentReferentRelationships">
         <!-- Subject of relationship (i.e. the current referent) -->
         <p>
-            <disa-id v-bind:forthis="relationship" class="float-end-x"></disa-id>
+            <!--<disa-id v-bind:forthis="relationship" ></disa-id>-->
             <span v-text="getReferentDisplayLabel(referent)"></span> is
             <!-- Relationship type -->
             <span v-text="MENU_OPTIONS.formInputDISARelationship[relationship.data.rel.id]"></span>
