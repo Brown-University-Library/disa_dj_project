@@ -45,7 +45,7 @@ function getTabulatorOptions(sr, showDetailsFunction) {
                   "Weyanoke", "Woolwa", "de Nacion Caribe Cuchibero" ]
       }
     },
-    { title:'Racial descriptor',      field:'all_races_menu',  sorter:'string',
+    { title:'Race',      field:'all_races_menu',  sorter:'string',
       headerFilter: 'select',
       headerFilterParams: { 
         values: ["Indian","Multi-racial","Black", "White", "Other"]
