@@ -89,7 +89,8 @@
             <div class="form-floating">
                 <disa-tags id="formInputDISAPersonAge_category" class="form-control" v-model="currentReferent.age_category" v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonAge_category" v-on:blur="saveReferentDataToServer"></disa-tags>
                 <label for="formInputDISAPersonAge_category">Age category</label>
-                <div class="form-text"><details><summary><i class="fa-solid fa-circle-info"></i> Check how ages are categorized.</summary>{% include "disa_app_templates/partials/age_categories.html" %}</div>
+                <div class="form-text">
+                    <details><summary><i class="fa-solid fa-circle-info"></i> Check how ages are categorized.</summary>{% include "disa_app_templates/partials/age_categories.html" %}</div>
             </div>
         </div>
     </div>
