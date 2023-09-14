@@ -6,16 +6,16 @@ ageInteger.addEventListener("change", populateCategory);
 
 function populateCategory(e) {
     var ageValue = ageInteger.value;
-    console.log(ageValue);
+    console.log("ageValue is: " + ageValue);
     if (ageValue <= 2) {
         ageCategory.value("Infant");
-    } else if (ageValue > 2 && <= 14) {
+    } else if (ageValue > 2 && ageValue <= 14) {
         ageCategory.value("Child");
-    } else if (ageValue > 14 && <= 25) {
+    } else if (ageValue > 14 && ageValue <= 25) {
         ageCategory.value("Youth/Young Adult");
-    } else if (ageValue > 25 && <= 40) {
+    } else if (ageValue > 25 && ageValue <= 40) {
         ageCategory.value("Adult");
-    } else if (ageValue > 40 && <= 55) {
+    } else if (ageValue > 40 && ageValue <= 55) {
         ageCategory.value("Older person");
     } else if (ageValue > 55) {
         ageCategory.value("Elder");
