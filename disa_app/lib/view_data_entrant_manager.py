@@ -57,6 +57,8 @@ class Getter():
                 'name_type': n.name_type.name,
                 'id': n.id } for n in rfrnt.names ]
         data['ent']['age'] = rfrnt.age
+        data['ent']['age_int'] = rfrnt.age_int
+        data['ent']['age_cat'] = rfrnt.age_cat
         data['ent']['sex'] = rfrnt.sex
         data['ent']['races'] = [
             { 'label': r.name, 'value': r.name,
