@@ -123,6 +123,7 @@ def manage_put( cite_id: str, user_id: int, payload: bytes ) -> dict:
         data_to_process['citation_type_id'] = incoming_data['citation_type_id'] or unspec.id
 
         cite = session.query( models_alch.Citation ).get( cite_id )
+        log.debug( f'cite, ``{cite}``' )
 
         cite.citation_type_id = data_to_process['citation_type_id']
         # doc.zotero_id = data['zotero_id']
@@ -151,7 +152,13 @@ def manage_put( cite_id: str, user_id: int, payload: bytes ) -> dict:
             cite.display = 'Document :: {}'.format(now.strftime('%Y %B %d'))
         else:
             vals = [ v[1] for v in sorted(citation_display) ]
+            log.debug( f'vals for cite_display, ``{vals}``' )
             cite.display = ', '.join(vals + addendums)
+            log.debug( f'ultimate cite.display, ``{cite.display}``' )
+        if len( cite.display ) > 499:
+            log.debug( 'citation-display too long; truncating' )
+            cite.display = f'{cite.display[:495]}...' 
+            log.debug( f'truncated cite.display, ``{cite.display}``' )
         session.add( cite )
         session.commit()
 
