@@ -17,29 +17,21 @@
     {% endblock header_other %}
 </head>
 
-<body class="container-fluid {% if user.is_authenticated %}user-editor {% endif %}">
+<body class="container">
     <header class="d-flex py-2 row justify-content-between bg-light">
-        <h1 class="col-md-4"><a href="{% url 'home_url' %}" class="text-dark">Stolen Relations <span>Recovering Stories of Indigenous Enslavement in the Americas</span></a></h1>
-        {% if user.is_authenticated %}
-        <div class="d-flex align-items-center col-md-2">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Admin</button>
-            <ul class="dropdown-menu">
+        <h1 class="sitename col-md-4"><a href="{% url 'home_url' %}" class="text-dark">Stolen Relations</a></h1>
+        <h2 class="col-md-5 align-self-md-end">Recovering Stories of Indigenous Enslavement in the Americas</h2>
+        <div class="col-md-2 align-self-md-start">
+            {% if user.is_authenticated %}
+            <button class="btn btn-primary dropdown-toggle starred" type="button" data-bs-toggle="dropdown">Admin</button>
+            <ul class="dropdown-menu align-self-md-end">
                 <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
                 <li><a class="dropdown-item" href="{% url 'logout_url' %}?next={% url 'login_url' %}">Logout</a></li>
             </ul>
+            {% else %}
+            <button class="btn btn-primary dropdown-toggle starred" type="button" href="{% url 'login_url' %}">Login</button>
+            {% endif %}
         </div>
-        <!-- When we have a flag for "logged-in community partner":
-            elif <a class="col-md-4 text-light" href="{% url 'logout_url' %}?next={% url 'login_url' %}">Logout</a>
-        -->
-        {% else %}
-        <div class="d-flex align-items-center col-md-2">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Logins</button>
-            <ul class="dropdown-menu">
-                <li><a href="{% url 'login_url' %}" class="dropdown-item">Editor login</a></li>
-                <!--<li><a href="{% url 'explore_url' %}" class="dropdown-item">Community Partner login</a></li>-->
-            </ul>
-        </div>
-        {% endif %}
     </header>
     <nav class="navbar navbar-expand-sm bg-primary row">
         <ul class="navbar-nav d-flex justify-content-between offset-1 col-10">
@@ -55,9 +47,28 @@
                     </ul>
                 </div>
             </li>
-            <li class="nav-item"><a href="{% url 'learn_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'learn' in request.path %} active{% endif %}">Learn</a></li>
+            <li class="nav-item">
+                <div class="d-flex align-items-center">
+                    <a href="{% url 'learn_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'learn' in request.path %} active{% endif %}">Learn</a>
+                    <span id="learn-trigger" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></span>
+                    <ul class="dropdown-menu">
+                        <li><a href="" class="dropdown-item">About Indigenous enslavement</a></li>
+                        <li><a href="" class="dropdown-item">Essays</a></li>
+                        <li><a href="" class="dropdown-item">Stories</a></li>
+                        <li><a href="" class="dropdown-item">Suggested reading</a></li>
+                    </ul>
+                </div>
+            </li>
             <li class="nav-item"><a class="nav-link{% if 'explore' in request.path %} active{% endif %}" href="{% url 'explore_url' %}" tabindex="-1" aria-disabled="false">Explore</a></li>
-            <li class="nav-item"><a href="{% url 'educate_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'educate' in request.path %} active{% endif %}">Educate</a></li>
+            <li class="nav-item">
+                <div class="d-flex align-items-center">
+                    <a href="{% url 'educate_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'educate' in request.path %} active{% endif %}">Educate</a>
+                    <span id="educate-trigger" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></span>
+                    <ul class="dropdown-menu">
+                        <li><a href="" class="dropdown-item">Lesson plans</a></li>
+                        <li><a href="" class="dropdown-item">Suggested reading</a></li>
+                </div>
+            </li>
             <li class="nav-item"><a href="{% url 'partners_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'partners' in request.path %} active{% endif %}">Tribal Partners</a></li>
             <li class="nav-item"><a href="{% url 'contribute_url' %}" tabindex="-1" aria-disabled="false" class="nav-link{% if 'contribute' in request.path %} active{% endif %}">How to Contribute</a></li>
             <li class="nav-item"><a href="#" tabindex="-1" aria-disabled="false" class="nav-link disabled" title="see indigenoussslavery.org for now!">Blog</a></li>
@@ -70,13 +81,19 @@
     </main>
     <footer class="row my-2 bg-dark text-light">
         {% block footer %}
-        <h1 class="border-bottom my-2 py-2">Stolen Relations <span>Recovering Stories of Indigenous Enslavement in the Americas</span></h1>
+        <div class="border-bottom my-2 py-2 d-flex">
+            <h1 class="sitename col-md-4"><a href="{% url 'home_url' %}" class="text-light">Stolen Relations</a></h1>
+            <h2 class="col-md-5 align-self-md-end">Recovering Stories of Indigenous Enslavement in the Americas</h2>
+        </div>
         <div class="col-md-4">
             <h2>Contact</h2>
-            <a href="mailto:stolenrelations-info@brown.edu">stolenrelations-info@brown.edu</a>
+            <p>Brown University <br />
+                <a href="mailto:stolenrelations-info@brown.edu">stolenrelations-info@brown.edu</a></p>
         </div>
         <div class="col-md-8">
-            {% include "disa_app_templates/partials/acknowledgements.html" %}
+            <h2>About this site</h2>
+            <p>Stolen Relation has been generously funded and supported by ...</p>
+            <p><a href="{% url 'about_url' %}">Read acknowledgments</a></p>
         </div>
         {% endblock footer %}
     </footer>

@@ -4,27 +4,28 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.css">
 {% endblock header_other %}
 {% block content %}
-<section class="hero row py-3">
-    <div class="col-md-4">
-        <p class="h1">Between 2.5 and 5 million Natives were enslaved in the Americas between 1492 and 1900.</p>
-        <p class="h2 fst-italic">This site begins to tell their stories.</p>
-        <a class="starred" href="{% url 'learn_url' %}">Find out more</a>
+<section class="hero py-5">
+    <div class="col-md-4 offset-md-1">
+        <p class="h2 text-light">Between 2.5 and 5 million Natives were enslaved in the Americas between 1492 and 1900.</p>
+        <p class="h3 fst-italic text-light">This site begins to tell their stories.</p>
+        <p class="text-secondary"><a href="{% url 'learn_url' %}">Find out more</a></p>
     </div>
 </section>
-<section class="row px-5 py-3 gradient">
-    <p class="lead"><a href="">Stolen Relations is a community-based project</a> that seeks to understand and illuminate the significance of the enslavement of Indigenous peoples in settler colonialism through the recovery of individual stories.</p>
+<section class="px-5 py-5 gradient">
+    <p class="lead"><a href="{% url 'about_url' %}">Stolen Relations is a community-based project</a> that seeks to understand and illuminate the significance of the enslavement of Indigenous peoples in settler colonialism through the recovery of individual stories.</p>
 </section>
 <section>
     <h2 class="my-3">Explore</h2>
     <div class="container">
         <h3>Stories</h3>
-        <section class="glider-contain">
+        <section class="glider-contain my-3">
             <div class="glider-stories">
                 <div class="card" aria-hidden="true">
                     <img src="https://picsum.photos/id/28/225/130?grayscale" class="card-img-top" alt="...">
                     <div class="card-body">
                         <p class="card-text">
                             Carrot cake powder donut sweet roll tiramisu jujubes topping. Powder muffin cookie topping halvah tiramisu. Soufflé powder wafer jelly sugar plum. </p>
+                        <p class="starred"><a href="">Learn more about Harry</a></p>
                     </div>
                 </div>
                 <div class="card" aria-hidden="true">
@@ -65,17 +66,23 @@
     </div>
 </section>
 </section>
-<section class="p-3 mb-2 bg-primary">
+<section class="p-3 mb-2 bg-secondary">
     <h2>Search the database</h2>
     <div class="container">
-    <p class="mx-3 fst-italic">Explore the stories, relationships, and journeys of over <span id="ref-count" class="badge bg-primary"></span> people.</p>
-    <form action="" class="form-floating">
-        <input type="text" id="general-search" name="general-search" placeholder="Try searching by name, document, tribe, or region" class="form-control"></input>
-        <label for="general-search">Try searching by name, document, tribe, or region</label></form>
+        <p class="mx-3 fst-italic">Explore the stories, relationships, and journeys of over <span id="ref-count"></span> people.</p>
+        <form action="" class="mx-3">
+            <div class="input-group">
+                <div class="form-floating">
+                    <input type="text" id="general-search" name="general-search" placeholder="Search names, documents, tribes, and more" class="form-control"></input>
+                    <label class="visually-hidden" for="general-search">Search names, documents, tribes, and more</label>
+                </div>
+                <button class="btn btn-primary" type="submit">&rarr;</button>
+            </div>
+        </form>
     </div>
 </section>
 <section class="row">
-    <h2>Map</h2>
+    <h3>Map</h3>
     <div class="col-md-5">
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio corporis totam, alias, mollitia corrupti adipisci. Consequuntur quibusdam voluptate labore quam, voluptates consectetur, ea adipisci, ipsa accusamus aspernatur veritatis et suscipit.</p>
         <p><a href="#" class="starred">Explore the map</a></p>
@@ -84,7 +91,7 @@
             <rect x="0" y="0" width="960" height="540" fill="#dbe6de"></rect>
             <path d="M0 460L22.8 450C45.7 440 91.3 420 137 419.2C182.7 418.3 228.3 436.7 274 441.3C319.7 446 365.3 437 411.2 437.5C457 438 503 448 548.8 443.3C594.7 438.7 640.3 419.3 686 411.5C731.7 403.7 777.3 407.3 823 410.7C868.7 414 914.3 417 937.2 418.5L960 420" fill="none" stroke-linecap="round" stroke-linejoin="miter" stroke="#f6da8aff" stroke-width="40"></path>
         </svg></div>
-    <h2>Timeline</h2>
+    <h3>Timeline</h3>
     <div class="col-md-5">
         <p>Lorem, ipsum dolor sit, amet consectetur adipisicing elit. Aspernatur porro ad iste officia omnis dicta vero quisquam velit provident deleniti atque optio in assumenda impedit laborum, repellendus aut expedita nobis?</p>
         <p><a href="{% url 'timeline_url' %}" class="starred">Explore the timeline</a></p>
@@ -93,7 +100,7 @@
             <rect x="0" y="0" width="960" height="540" fill="#f6da8aff"></rect>
             <path d="M323 0L323 540" fill="none" stroke-linecap="square" stroke-linejoin="miter" stroke="#dbe6de" stroke-width="40"></path>
         </svg></div>
-    <h2>Indigenous voices</h2>
+    <h3>Indigenous voices</h3>
     <section class="glider-contain">
         <div class="glider-voices">
             <div class="card" aria-hidden="true">

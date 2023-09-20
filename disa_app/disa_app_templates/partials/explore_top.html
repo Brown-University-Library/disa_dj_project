@@ -1,19 +1,19 @@
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link {% if 'explore' in request.path %} active{% endif %}" href="{% url 'explore_url' %}"><i class="fa-solid fa-people-group"></i> People</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link {% if 'timeline' in request.path %} active{% endif %}" href="{% url 'timeline_url' %}"><i class="fa-solid fa-timeline"></i> Timeline</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link disabled" href="#"><i class="fa-solid fa-earth-americas"></i> Map</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link disabled"><i class="fa-regular fa-comments"></i> Indigenous voices</a>
-    </li>
-</ul>
-<div class="alert alert-info">
+<div class="">
     <h2>Decolonizing Statement</h2>
     <p>Please note: The headings and terms in this database are largely derived from archival documents, which often contain terms, phrases, and biases that reduce, minimize, or alter Native identities and views of the world.</p>
     <p>The database currently contains <span id="ref-count" class="badge bg-primary"></span> references to individuals drawn from <span id="item-count" class="badge bg-primary"></span> archival records regarding the enslavement of indigenous populations in the Americas, from the 17<sup>th</sup> to the 19<sup>th</sup> centuries.</p>
 </div>
+<ul class="nav nav-tabs explore-tabs">
+    <li class="nav-item">
+        <a class="nav-link {% if 'explore' in request.path %} active{% endif %}" href="{% url 'explore_url' %}">People</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if 'timeline' in request.path %} active{% endif %}" href="{% url 'timeline_url' %}">Timeline</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if 'map' in request.path %} active{% endif %}" href="#">Map</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if 'voices' in request.path %} active{% endif %}">Indigenous voices</a>
+    </li>
+</ul>

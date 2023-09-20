@@ -31,6 +31,8 @@ urlpatterns = [
 
     url( r'^explore/$', views.explore, name='explore_url' ),
     url( r'^explore/timeline/$', views.timeline, name='timeline_url' ),
+    url( r'^explore/map/$', views.timeline, name='timeline_url' ),
+    url( r'^explore/voices/$', views.timeline, name='timeline_url' ),
     # url( r'^browse_logout/$', views.browse_logout, name='browse_logout_url' ),
 
     url( r'^dashboard/$', views.dashboard, name='dashboard_url' ),

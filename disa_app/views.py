@@ -167,6 +167,24 @@ def timeline ( request ):
     else:
         resp = render( request, 'disa_app_templates/timeline.html', context )
     return resp
+
+@shib_login
+def map ( request ):
+    log.debug('\n\nstarting the map page')
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/map.html', context )
+    return resp
+
+@shib_login
+def voices ( request ):
+    log.debug('\n\nstarting the voices page')
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        resp = render( request, 'disa_app_templates/voices.html', context )
+    return resp
 # def browse_tabulator( request ):
 #     """ Displays tabulator page. """
 #     log.info( '\n\nstarting browse_tabulator()' )

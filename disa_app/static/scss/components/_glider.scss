@@ -1,6 +1,6 @@
 // garbage to hide the native horizontal scrollbars
 .glider-track {
-  scrollbar-width: none;
+  scrollbar-width: none !important;
 }
 @-moz-document url-prefix() {
   .glider-track {
@@ -13,11 +13,15 @@
 
 .glider-contain {
   .card {
-    background-color: $sand;
+    background-color: darken($lace,5%);
     padding: 2rem 1rem;
     margin-right: 1rem;
+    border-width: 0;
+  }
+  .card-body > .starred {
+    font-weight: 600;
   }
   button {
-    border-radius: 50%;
+
   }
 }

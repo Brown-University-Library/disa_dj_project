@@ -2,7 +2,7 @@
 @import "../../node_modules/bootstrap/scss/functions";
 
 // import Google Fonts
-@import 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Raleway:ital,wght@0,400;0,600;1,400;1,600&display=swap';
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:ital@0;1&family=Playfair:ital,opsz@0,5..1200;1,5..1200&display=swap');
 
 // base files with Bootstrap overrides
 @import "base/variables";
@@ -53,6 +53,7 @@
 @import "layout/citation_form";
 
 // custom components
+@import "components/hero";
 @import "components/timeline";
 @import "components/collapsables";
 @import "components/tagify";

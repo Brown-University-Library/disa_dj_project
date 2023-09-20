@@ -6,27 +6,29 @@ $dark-black: #222;
 $emerald: #5b9279;
 $lilac: #785d98;
 $mango: #ff8c42;
-$sand: #eccca2;
 
 // colors scraped from Common Media Figma docs
-$lace: #fff4e4;
-$sand: #f6da8a;
-$mint-blue: #dbe6de;
-$indigo-blue: #1d4462;
-$darkbrown: #3a1e15;
+$lace: #fff5e4;
+$sand: #f5da89;
+$clementine: #edb02d;
+$indigo-blue: #1e4462;
+$tiffany-blue: #a4cfc8;
+$leaf: #276058;
+$plum: #733f57;
+$shadow: #290a00;
 
 // tweaking Bootstrap default colors to use generated color palette
 $primary: $sand;
-$secondary: $mint-blue;
-$success: $indigo-blue;
-$info: $mint-blue;
-$warning: $canary;
-$danger: $mango;
+$secondary: $clementine;
+$success: $leaf;
+$info: $tiffany-blue;
+$warning: $sand;
+$danger: $clementine;
 $light: $lace;
-$dark: $darkbrown;
+$dark: $shadow;
 
 /* Typography */
 $font-family-serif: "Playfair Display", serif;
-$font-family-sans-serif: "Raleway", sans-serif;
+$font-family-sans-serif: "Archivo", sans-serif;
 $headings-font-family: $font-family-serif;
 $font-family-base: $font-family-sans-serif;

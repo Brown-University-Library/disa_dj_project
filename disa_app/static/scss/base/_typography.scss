@@ -1,17 +1,28 @@
-h1 {
-  a {
-    text-decoration: none;
-  }
-
-  span {
-    font-style: italic;
-    display: block;
-    font-size: 0.8rem;
-  }
-}
 .starred {
-  position: relative;
-  padding-left: 2rem;
-  font-weight: 600;
-  @include star;
+    @include star;
+}
+header,
+footer {
+    h1 {
+        font-family: 'Archivo Black', $font-family-sans-serif;
+        text-transform: uppercase;
+        a {
+            text-decoration: none;
+        }
+        +h2 {
+            font-family: $font-family-serif;
+            font-size: 1rem;
+            font-style: italic;
+        }
+    }
+}
+h2 {
+  font-family: $font-family-sans-serif;
+}
+h3 {
+  font-family: $font-family-serif;
+  font-style: italic;
+}
+.explore-tabs li a {
+  @include star($indigo-blue);
 }

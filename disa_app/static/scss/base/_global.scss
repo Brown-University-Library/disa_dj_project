@@ -1,12 +1,12 @@
 :root {
   --bs-body-bg: $lace;
-  --bs-body-color: $darkbrown;
+  --bs-body-color: $shadow;
   --bs-link-color: inherit;
 }
 
 body {
   background-color: $lace;
-  color: $darkbrown;
+  color: $shadow;
 }
 nav {
   font-weight: bold;
@@ -14,5 +14,25 @@ nav {
 }
 .gradient {
   background: $lace;
-  background: linear-gradient(90deg, $lace 0%, $sand 100%);
+  background: linear-gradient(90deg, $lace 0%, $clementine 100%);
+}
+.lead {
+  font-family: $font-family-serif;
+  font-style: italic;
+  a {
+    font-family: $font-family-sans-serif;
+    font-style: normal;
+  }
+}
+
+.btn.btn-primary[type="submit"] {
+  background-color: $shadow;
+  color: $sand;
+  border-radius: 0;
+  border-color: $shadow;
+  &:hover,
+  &:active {
+    background-color: $sand;
+    color: $shadow;
+  }
 }

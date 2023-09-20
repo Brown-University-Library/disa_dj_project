@@ -4,8 +4,9 @@
 <div class="row">
     {% include "disa_app_templates/partials/explore_top.html" %}
 </div>
-<div class="timeline-filter">
-    <p>Start year <input type="number" step="1" min="1492" max="1899" id="startDate" value="1492"> to <input type="number" step="1" min="1493" max="1900" placeholder="1900" id="endDate" value="1900"></p>
+<div class="timeline-filter bg-secondary py-3">
+    <h2>Timeline</h2>
+    <p><label for="startDate">Start year</label><input type="number" step="1" min="1492" max="1899" id="startDate" value="1492"> <label for="endDate">End year</label><input type="number" step="1" min="1493" max="1900" placeholder="1900" id="endDate" value="1900"></p>
 </div>
 <div class="timeline">
     <ul>

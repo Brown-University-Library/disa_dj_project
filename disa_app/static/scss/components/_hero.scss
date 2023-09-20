@@ -1,0 +1,10 @@
+.hero {
+  background-color: rgba($primary, 0.25);
+  background-image: url("/static/images/landscape.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-blend-mode: overlay;
+  a {
+    @include star($secondary);
+  }
+}

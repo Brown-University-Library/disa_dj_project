@@ -1,0 +1,65 @@
+{% extends "disa_app_templates/base.html" %}
+{% load static %}
+{% block content %}
+<div class="row">
+    {% include "disa_app_templates/partials/explore_top.html" %}
+</div>
+<h1>Indigenous voices</h1>
+<div class="featured">
+<div class="col-md-5">
+    <h2>Featured</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio corporis totam, alias, mollitia corrupti adipisci. Consequuntur quibusdam voluptate labore quam, voluptates consectetur, ea adipisci, ipsa accusamus aspernatur veritatis et suscipit.</p>
+    </div>
+    <div class="col-md-7 placeholder bg-secondary"></div>
+</div>
+<h3>Recently Added</h3>
+<section class="glider-contain">
+        <div class="glider-voices">
+            <div class="card" aria-hidden="true">
+                <img src="https://picsum.photos/id/59/225/130?grayscale" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <p class="card-text">
+                        Carrot cake powder donut sweet roll tiramisu jujubes topping. Powder muffin cookie topping halvah tiramisu. Soufflé powder wafer jelly sugar plum. </p>
+                </div>
+            </div>
+            <div class="card" aria-hidden="true">
+                <img src="https://picsum.photos/id/54/225/130" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <p class="card-text">
+                        Biscuit cotton candy wafer dragée cupcake. Biscuit halvah marshmallow carrot cake gummies caramels topping. Candy canes marshmallow sweet tart icing apple pie.
+                    </p>
+                </div>
+            </div>
+            <div class="card" aria-hidden="true">
+                <img src="https://picsum.photos/id/53/225/130?grayscale" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <p class="card-text">
+                        Bear claw cotton candy gummies chocolate tart chupa chups fruitcake marzipan halvah. Jelly beans croissant candy canes pie pastry chocolate bar cupcake. Brownie cookie candy canes chocolate cake caramels.
+                    </p>
+                </div>
+            </div>
+            <div class="card" aria-hidden="true">
+                <img src="https://picsum.photos/id/51/225/130" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <p class="card-text">
+                        Croissant jelly chupa chups tootsie roll muffin. Bonbon soufflé bonbon jelly-o candy gummies toffee. Macaroon carrot cake chocolate bar lollipop toffee chupa chups. Carrot cake carrot cake oat cake cupcake donut.
+                    </p>
+                </div>
+            </div>
+            <div class="card" aria-hidden="true">
+                <img src="https://picsum.photos/id/46/225/130?grayscale" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <p class="card-text">
+                        Lemon drops jelly-o biscuit candy canes bear claw shortbread. Toffee cake pie sweet roll shortbread. Chocolate wafer bear claw bear claw cotton candy icing sweet roll chocolate. Oat cake gummi bears cake biscuit cookie.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <button aria-label="Previous" class="glider-voices-prev">«</button>
+        <button aria-label="Next" class="glider-voices-next">»</button>
+    </section>
+{% endblock content %}
+{% block page_specific_js%}
+<script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
+<script src="{% static 'js/sliders.js' %}"></script>
+{% endblock page_specific_js %}

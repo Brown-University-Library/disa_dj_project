@@ -7,7 +7,7 @@
     position: absolute;
     height: 100%;
     width: 5px;
-    background: $sand;
+    background: $clementine;
     left: 0;
   }
   ul {
@@ -15,8 +15,8 @@
     padding: 0 0 0 1rem;
     z-index: 1;
     li {
-      background: $sand;
-      color: $darkbrown;
+      background: $clementine;
+      color: $shadow;
       padding: 1rem;
       margin-bottom: 1rem;
       position: relative;
@@ -24,7 +24,7 @@
         content: "";
         width: 0;
         height: 0;
-        border-top: 1rem solid $sand;
+        border-top: 1rem solid $clementine;
         border-left: 1rem solid transparent;
         position: absolute;
         left: -1rem;
@@ -65,7 +65,7 @@
       float: left;
 
       &:before {
-        border-top: 1rem solid $sand;
+        border-top: 1rem solid $clementine;
         border-right: 1rem solid transparent;
         right: -1rem;
         left: auto;
