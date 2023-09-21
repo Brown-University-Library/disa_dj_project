@@ -72,7 +72,7 @@ var geoJsonData = new L.GeoJSON.AJAX(
             var lat = feature.properties.lat;
             var lng = feature.properties.lon;
             var location = feature.properties.from.toString();
-            if (name != null) {
+            if (name != " ") {
                 // we can't currently link to the correct person in a point
                 //var popupText = '<a href="/people/' + uuid + '">' + name + '</a><br />' + location + '<br />' + date ;
                 var popupText = name + '<br />' + location + '<br />' + date;
