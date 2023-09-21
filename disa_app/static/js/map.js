@@ -28,7 +28,7 @@ const basemaps = {
         subdomains: 'abcd',
         minZoom: 1,
         //maxNativeZoom: 19,
-        maxZoom: 8,
+        //maxZoom: 15,
         ext: 'png'
     }),
     Textfree: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.{ext}', {
@@ -36,14 +36,14 @@ const basemaps = {
         subdomains: 'abcd',
         minZoom: 1,
         //maxNativeZoom: 19,
-        maxZoom: 8,
+        //maxZoom: 8,
         ext: 'png'
     }),
     Labels: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', {
         attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         subdomains: 'abcd',
         //maxNativeZoom: 19,
-        maxZoom: 12,
+        //maxZoom: 12,
         ext: 'png'
     }),
     Watercolor: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
@@ -51,7 +51,7 @@ const basemaps = {
         subdomains: 'abcd',
         minZoom: 1,
         //maxNativeZoom: 19,
-        maxZoom: 13,
+        //maxZoom: 13,
         ext: 'jpg'
     })
 };
