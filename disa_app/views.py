@@ -172,6 +172,11 @@ def person( request, prsn_id ):
         resp = render( request, 'disa_app_templates/person_view.html', context )
     return resp
 
+# def map ( request ):
+#     context = { 'leaflet_data_url': build_url() }
+#     resp = render( request, 'disa_app_templates/map.html', context )
+#     return resp
+
 def map ( request ):
     resp = render( request, 'disa_app_templates/map.html' )
     return resp
