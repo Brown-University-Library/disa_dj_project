@@ -116,7 +116,10 @@ class Relationship_Test( TestCase ):
         self.assertEqual( 302, response.status_code )
         cntnt_dct = json.loads( response.content )
         self.assertEqual( ['relationship_id', 'relationship_is_new', 'rfrnc_id'], sorted(cntnt_dct.keys()) )
-        self.assertEqual( b'{"rfrnc_id": 1524, "relationship_id": 12849, "relationship_is_new": false}', response.content )  # test does distinguish between bytes and str
+        ## removing test below because the "new" relationship_id will be different each time the test-db is uploaded with production-data.
+        # self.assertEqual( b'{"rfrnc_id": 1524, "relationship_id": 12849, "relationship_is_new": false}', response.content )  # test does distinguish between bytes and str
+        self.assertEqual( 1524, cntnt_dct['rfrnc_id'] )
+        self.assertEqual( False, cntnt_dct['relationship_is_new'] )
         self.assertEqual( '/data/sections/1524/relationships/', response.headers['location'] )  # type: ignore
 
 
