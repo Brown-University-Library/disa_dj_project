@@ -871,7 +871,8 @@ def redesign_citations( request ):
     """ Displays main landing page of citations, with user's recently-edited citations first. """
     log.debug( '\n\nstarting redesign_citations()' )
     start_time = datetime.datetime.now()
-    if request.GET.get('format', '') != 'json':
+    # user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+    if request.GET.get('format', '') == 'json':
         user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
         context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
     else:
