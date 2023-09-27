@@ -19,5 +19,6 @@
     var static_url_to_something = "{% leaflet_data_url %}";
 </script>
 
-<script src="{% static 'js/map.js' %}"></script>
+<script src="{% static 'js/map.js' %}" type="module"></script>
+
 {% endblock page_specific_js %}
