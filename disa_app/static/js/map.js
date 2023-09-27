@@ -66,19 +66,19 @@ var geoJsonData = new L.GeoJSON.AJAX(
         onEachFeature: function(feature, layer) {
 
             var uuid = feature.properties.Referent_ID;
-            var name = feature.properties.Name;
+            var person_name = feature.properties.Name;
             var status = feature.properties.Status;
-            var date = feature.properties.Year;
+            var person_date = feature.properties.Year;
             var lat = feature.properties.lat;
             var lng = feature.properties.lon;
-            var location = feature.properties.from.toString();
-            if (name != " ") {
+            var person_location = feature.properties.from.toString();
+            if (person_name != " ") {
                 // we can't currently link to the correct person in a point
                 //var popupText = '<a href="/people/' + uuid + '">' + name + '</a><br />' + location + '<br />' + date ;
-                var popupText = name + '<br />' + location + '<br />' + date;
+                var popupText = person_name + '<br />' + person_location + '<br />' + person_date;
             } else {
                 //var popupText = '<a href="/people/' + uuid + '">A person whose name we do not know</a><br />' + location + '<br/>' + date;
-                var popupText = 'A person whose name we do not know<br />' + location + '<br />' + date;
+                var popupText = 'A person whose name we do not know<br />' + person_location + '<br />' + person_date;
 
             };
 
