@@ -871,22 +871,46 @@ def redesign_citations( request ):
     """ Displays main landing page of citations, with user's recently-edited citations first. """
     log.debug( '\n\nstarting redesign_citations()' )
     start_time = datetime.datetime.now()
-    # if project_settings.DEBUG == False:
-    #     return HttpResponse( 'Not yet running on production.' )
-    user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
-    context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
+    if request.GET.get('format', '') != 'json':
+        user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+        context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
+    else:
+        context = {}  # no data needed just to load the html-template -- which has javascript that will load the json``
     context['API_URL_ROOT'] = '%s://%s%s' % ( request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), reverse('data_root_url') )
     context['elapsed_time'] = str( datetime.datetime.now() - start_time )
     if request.user.is_authenticated:
         context['user_is_authenticated'] = True
         context['user_first_name'] = request.user.first_name
     if request.GET.get('format', '') == 'json':
+        log.debug( 'building json response' )
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
+        log.debug( 'building template response' )
         resp = render( request, 'disa_app_templates/redesign_citations.html', context )
     return resp
 
-    # data['API_URL_ROOT'] = '%s://%s%s' % ( scheme, host, reverse('data_root_url') )
+
+# @shib_login
+# def redesign_citations( request ):
+#     """ Displays main landing page of citations, with user's recently-edited citations first. """
+#     log.debug( '\n\nstarting redesign_citations()' )
+#     start_time = datetime.datetime.now()
+#     # if project_settings.DEBUG == False:
+#     #     return HttpResponse( 'Not yet running on production.' )
+#     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+#     context: dict = view_editor_index_manager.query_documents( request.user.username, user_id )
+#     context['API_URL_ROOT'] = '%s://%s%s' % ( request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), reverse('data_root_url') )
+#     context['elapsed_time'] = str( datetime.datetime.now() - start_time )
+#     if request.user.is_authenticated:
+#         context['user_is_authenticated'] = True
+#         context['user_first_name'] = request.user.first_name
+#     if request.GET.get('format', '') == 'json':
+#         log.debug( 'building json response' )
+#         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     else:
+#         log.debug( 'building template response' )
+#         resp = render( request, 'disa_app_templates/redesign_citations.html', context )
+#     return resp
 
 
 @shib_login
