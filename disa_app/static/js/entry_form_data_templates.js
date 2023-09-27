@@ -49,7 +49,7 @@ const ITEM_TEMPLATE = {
 
 const REFERENT_TEMPLATE = {
   age: undefined,
-  age_number: null,
+  age_integer: null,
   age_category: undefined,
   id: 'new',
   names:[
