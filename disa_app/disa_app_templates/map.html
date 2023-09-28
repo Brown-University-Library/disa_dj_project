@@ -14,5 +14,8 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/leaflet-extras/leaflet-providers/leaflet-providers.js"></script>
 <script type="text/javascript" src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/calvinmetcalf/leaflet-ajax@2/dist/leaflet.ajax.js"></script>
+<script type="text/javascript">
+    var leaflet_data_url = "{% static 'data/SR_geo.json' %}";
+</script>
 <script src="{% static 'js/map.js' %}" type="module"></script>
 {% endblock page_specific_js %}

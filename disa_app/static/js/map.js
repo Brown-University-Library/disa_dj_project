@@ -60,7 +60,7 @@ basemaps.Terrain.addTo(map);
 
 // fetch the geojson
 var geoJsonData = new L.GeoJSON.AJAX(
-    "/static/data/SR_geo.json", {
+    leaflet_data_url, {
 
         // build each point
         onEachFeature: function(feature, layer) {
