@@ -29,7 +29,7 @@ function getTabulatorOptions(sr, showDetailsFunction) {
       download: true 
     },
     // { title:'Roles',    field:'roles',              sorter:'string', headerFilter: true },
-    { title:'Sex',       field:'sex',   sorter:'string',
+    { title:'Gender',       field:'sex',   sorter:'string',
       headerFilter: 'select', headerFilterParams:{ values: ['Male','Female', 'Other'] } },
     { title:'Tribal nation',     field:'all_tribes', sorter:'string',
       headerFilter: 'select',
