@@ -29,7 +29,7 @@ function getTabulatorOptions(sr, showDetailsFunction) {
       download: true 
     },
     // { title:'Roles',    field:'roles',              sorter:'string', headerFilter: true },
-    { title:'Sex',       field:'sex',   sorter:'string',
+    { title:'Gender',       field:'sex',   sorter:'string',
       headerFilter: 'select', headerFilterParams:{ values: ['Male','Female', 'Other'] } },
     { title:'Tribal nation',     field:'all_tribes', sorter:'string',
       headerFilter: 'select',
@@ -45,7 +45,7 @@ function getTabulatorOptions(sr, showDetailsFunction) {
                   "Weyanoke", "Woolwa", "de Nacion Caribe Cuchibero" ]
       }
     },
-    { title:'Racial descriptor',      field:'all_races_menu',  sorter:'string',
+    { title:'Race',      field:'all_races_menu',  sorter:'string',
       headerFilter: 'select',
       headerFilterParams: { 
         values: ["Indian","Multi-racial","Black", "White", "Other"]
