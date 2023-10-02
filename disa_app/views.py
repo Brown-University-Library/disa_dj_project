@@ -172,6 +172,9 @@ def person( request, prsn_id ):
         resp = render( request, 'disa_app_templates/person_view.html', context )
     return resp
 
+def map ( request ):
+    resp = render( request, 'disa_app_templates/map.html' )
+    return resp
 
 def source( request, src_id ):
     log.debug( f'\n\nstarting source(), with src_id, `{src_id}`' )

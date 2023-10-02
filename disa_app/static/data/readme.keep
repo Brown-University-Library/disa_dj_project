@@ -1,5 +1,3 @@
-This file  simply ensures the 'data' directory exists in the git repo.
+The 'static/data' directory needs to exist for the generate_browse_data.py file to run properly, and git will not save an empty directory.
 
-(Git will not keep an empty directory.)
-
-The directory needs to exist for the generate_browse_data.py file to run properly.
+See the https://github.com/Brown-University-Library/merge-geo-into-browseJson repo for the source files and script used to generate SR_geo.json, which populates the Leaflet map.
