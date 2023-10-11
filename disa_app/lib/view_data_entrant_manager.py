@@ -56,9 +56,9 @@ class Getter():
             { 'first': n.first, 'last': n.last,
                 'name_type': n.name_type.name,
                 'id': n.id } for n in rfrnt.names ]
-        data['ent']['age'] = rfrnt.age
-        data['ent']['age_int'] = rfrnt.age_int
-        data['ent']['age_cat'] = rfrnt.age_cat
+        data['ent']['age_text'] = rfrnt.age
+        data['ent']['age_number'] = 40 # TEMP rfrnt.age_number
+        data['ent']['age_category'] = '(pending)' # TEMP rfrnt.age_category
         data['ent']['sex'] = rfrnt.sex
         data['ent']['races'] = [
             { 'label': r.name, 'value': r.name,
