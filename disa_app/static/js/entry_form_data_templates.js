@@ -48,7 +48,7 @@ const ITEM_TEMPLATE = {
 };
 
 const REFERENT_TEMPLATE = {
-  age: undefined,
+  age_text: undefined,
   age_integer: null,
   age_category: undefined,
   id: 'new',
