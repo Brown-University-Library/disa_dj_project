@@ -1,0 +1,21 @@
+{% extends "disa_app_templates/base.html" %}
+{% load static %}
+{% block header_other %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" crossorigin="" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" crossorigin="" />
+{% endblock header_other %}
+{% block content %}
+<div class="alert alert-danger my-2"><i class="fa-solid fa-bell"></i> Please note: the information in this map is not complete. It is under active development.</div>
+<div id="map-container" style="height:80vh" class="my-2"></div>
+{% endblock content %}
+{% block page_specific_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js" integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/leaflet-extras/leaflet-providers/leaflet-providers.js"></script>
+<script type="text/javascript" src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/calvinmetcalf/leaflet-ajax@2/dist/leaflet.ajax.js"></script>
+<script type="text/javascript">
+    var leaflet_data_url = "{% static 'data/SR_geo.json' %}";
+</script>
+<script src="{% static 'js/map.js' %}" type="module"></script>
+{% endblock page_specific_js %}

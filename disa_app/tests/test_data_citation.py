@@ -237,6 +237,69 @@ class Citation_Test( TestCase ):
         ## cleanup
         self.delete_new_citation()
 
+
+
+
+    def test_put_really_long_title_to_trigger_display_truncation(self):
+        """ Checks PUT to `http://127.0.0.1:8000/data/documents/abcd/` with very long title. """
+        ## create citation
+        self.create_new_citation()
+        ## PUT
+        put_url = reverse( 'data_documents_url', kwargs={'doc_id': self.post_resp_id} )
+        log.debug( f'put_url-url, ``{put_url}``' )
+        very_long_title = 'This sentence is 70 characters, including the space after the period. ' * 10
+        log.debug( f'very_long_title, ``{very_long_title}``' )
+        put_payload = {  # same as create, except for `shortTitle`, which was blank
+            'acknowledgements': '',
+            'citation_type_id': 20,  # means the fields below will be 'Book' fields
+            'comments': '',
+            'fields': {
+                'ISBN': '',
+                'abstractNote': '',
+                'accessDate': '',
+                'archive': '',
+                'archiveLocation': '',
+                'author': '',
+                'callNumber': '',
+                'date': '',
+                'edition': '',
+                'extra': '',
+                'language': '',
+                'libraryCatalog': '',
+                'numPages': '',
+                'numberOfVolumes': '',
+                'pages': '',
+                'place': '',
+                'publisher': '',
+                'rights': '',
+                'series': '',
+                'seriesNumber': '',
+                'shortTitle': '', 
+                'title': f'title--{very_long_title}',
+                'url': '',
+                'volume': ''}
+            }
+        jsn = json.dumps( put_payload )
+        put_response = self.client.put( put_url, data=jsn, content_type='application/json' )
+        put_resp_dct = json.loads( put_response.content )
+        log.debug( f'put_resp_dct, ``{pprint.pformat(put_resp_dct)}``' )
+        ## tests
+        self.assertEqual( 200, put_response.status_code )
+        display = put_resp_dct['doc']['citation']
+        log.debug( f'len(display), ``{len(display)}``' )
+        self.assertEqual(
+            True,
+            len(display) < 500
+            )
+        ## cleanup
+        self.delete_new_citation()
+
+
+
+
+
+
+
     ## DELETE ====================
 
     def test_delete_bad(self):
