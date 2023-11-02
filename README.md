@@ -7,21 +7,16 @@ On this page:
 
 # Glossary
 
-(terms sometimes used interchangeably in code, with clarifications — the first listed option is the one currently used by the project)
+Note: _Over the course of the project, the terminology has changed, with the result that different areas of the codebase use different names for the same concepts._ 
 
-- **source** / document / citation
+While we aspire to eventually to update for consistency, in the meantime, these three terms listed below are used interchangeably in code. The first listed option (in bold) is the one currently used by the project, and the term used in the database is indicated by `db`:
 
-    - There is no database 'document' object. Rather, a document is, conceptually, a `Citation` and associated `Reference` entries.
-
-- **record** / item / reference
-
-    - These are the same, the database contains `Reference` entries, each of which provide a linkage between a `Citation` entry and `Referent` entries. A `Reference` entry also contain transcription and other information.
-
-- **referent** / person / entrant
-
-    - An entrant and a referent are the same. The database contains `Referent` entries; a `Referent` is an individual mentioned in a `Reference`.
-    - A `Referent` provides a linkage between a `Person` and a `Reference`.
-    - The interface currently allows for relationships to be defined between `Referent` entries.
+- **source** / citation `db`<br />
+  The document that contains the Records. A Source includes bibliographic information (e.g. author, title, ...)
+- **record** / item / reference `db`<br />
+  The bit of text within the Source that describes a group of Referents (references to people) as well as an event or situation with date, location, etc. Typical Record types include self-emancipation notices (aka "Escape Slave ads") or a single baptismal record
+- **referent** `db` / person / entrant<br />
+  A reference to a person contained in a Record. Note that we reserve the term _Person_ to indicate a particular individual. There may be multiple references to the same Person across different Records, and therefore there may be multiple Referents that in fact are the same Person
 
 # Installation
 
