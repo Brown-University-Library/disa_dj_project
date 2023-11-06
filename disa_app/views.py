@@ -896,7 +896,7 @@ def redesign_citations( request ):
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
         log.debug( 'building template response' )
-        resp = render( request, 'disa_app_templates/redesign_citations.html', context )
+        resp = render( request, 'disa_app_templates/dashboard.html', context )
     return resp
 
 

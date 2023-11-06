@@ -23,40 +23,20 @@ if (cameFrom.pathname.startsWith("/people/")) {
 let map = L.map('map-container').setView([41, -71], 5);
 //the various basemaps
 const basemaps = {
-    Terrain: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
-        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        subdomains: 'abcd',
-        minZoom: 1,
-        //maxNativeZoom: 19,
-        //maxZoom: 15,
-        ext: 'png'
+    Standard: L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }),
-    Textfree: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.{ext}', {
-        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        subdomains: 'abcd',
-        minZoom: 1,
-        //maxNativeZoom: 19,
-        //maxZoom: 8,
-        ext: 'png'
-    }),
-    Labels: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', {
-        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        subdomains: 'abcd',
-        //maxNativeZoom: 19,
-        //maxZoom: 12,
-        ext: 'png'
-    }),
-    Watercolor: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
-        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        subdomains: 'abcd',
-        minZoom: 1,
-        //maxNativeZoom: 19,
-        //maxZoom: 13,
+    Watercolor: L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg', {
+        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         ext: 'jpg'
+    }),
+    Sketch: L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/about" target="_blank">OpenStreetMap</a> contributors',
     })
 };
+
 L.control.layers(basemaps, null, { collapsed: false }).addTo(map);
-basemaps.Terrain.addTo(map);
+basemaps.Sketch.addTo(map);
 
 // fetch the geojson
 var geoJsonData = new L.GeoJSON.AJAX(
@@ -65,23 +45,22 @@ var geoJsonData = new L.GeoJSON.AJAX(
         // build each point
         onEachFeature: function(feature, layer) {
 
-            var uuid = feature.properties.Referent_ID;
+            //var uuid = feature.properties.Referent_ID;
             var person_name = feature.properties.Name;
+            if (person_name = " ") {
+                var person_name = "A person whose name we do not know"
+            }
             var status = feature.properties.Status;
-            var person_date = feature.properties.Year;
+            if (feature.properties.Year) {
+                var person_date = feature.properties.Year;
+            } else {
+                var person_date = "";
+            }
             var lat = feature.properties.lat;
             var lng = feature.properties.lon;
             var person_location = feature.properties.from.toString();
-            if (person_name != " ") {
-                // we can't currently link to the correct person in a point
-                //var popupText = '<a href="/people/' + uuid + '">' + name + '</a><br />' + location + '<br />' + date ;
-                var popupText = person_name + '<br />' + person_location + '<br />' + person_date;
-            } else {
-                //var popupText = '<a href="/people/' + uuid + '">A person whose name we do not know</a><br />' + location + '<br/>' + date;
-                var popupText = 'A person whose name we do not know<br />' + person_location + '<br />' + person_date;
 
-            };
-
+            var popupText = person_name + '<br />' + person_location + '<br />' + person_date;
             layer.bindPopup(popupText);
         }
 
@@ -105,6 +84,7 @@ markers.on('clustermouseover', function(a) {
     var clusterChildren = a.layer.getAllChildMarkers();
     var clusterLocation = [];
 
+    let i;
     for (i = 0; i < clusterCount; i++) {
         clusterLocation.push(clusterChildren[i].feature.properties.from);
         var clusterName = clusterLocation.shift();

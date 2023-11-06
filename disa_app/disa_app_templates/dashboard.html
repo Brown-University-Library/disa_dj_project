@@ -1,0 +1,95 @@
+{% extends "disa_app_templates/base.html" %}
+{% load static %}
+{% block header_other %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@5/dist/css/tabulator_bootstrap5.min.css">
+{% endblock header_other %}
+{% block content %}
+<div class="row my-2">
+    <!-- Add new source -->
+    <div class="col-sm-12 col-md-4">
+        <div class="card">
+            <h2 class="card-header"><i class="fa-solid fa-circle-info"></i> Links</h2>
+            <div class="card-body">
+                <p><small>All of these links open in a new tab.</small></p>
+                <ul>
+                    <li>
+                        <a href="https://docs.google.com/document/d/1e6d1bsxpGnj5kak2jLBUb3qYnIS2vsDwv0Ejf2AlPo8/edit" target="_blank">
+                            RA guide
+                        </a>
+                    </li>
+                    <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScy4I14ew7R9YetXUTfejAcWK0YbNo2ATRqAl7ChmB6gcXC2Q/viewform" target="_blank" title="Link to Google form for submitting problem reports or requests for help">Report problems or ask for help</a></li>
+                    <li><a href="https://docs.google.com/document/d/1SmDSyShMIDhDIojJJS258rBUpfSF43YgM-xlTwyBTYI/edit?usp=sharing" target="_blank">Who to contact with questions</a></li>
+                    <li><a href="https://docs.google.com/spreadsheets/d/15gyNU_T_4JdM4SriUs2UkekOixAAx9T-8d8vn2WjuEU/edit#gid=0" target="_blank">Additional information spreadsheet</a></li>
+                    <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSeVq22dlWBUz3YDDUC2hCxv0iLs0wb2EuCayEsOEwjmsDn4CA/viewform" target="_blank">Image uploads form</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <div class="card">
+            <h1 class="card-header h2">
+                <i class="fa-solid fa-square-plus"></i> Create a new source
+            </h1>
+            <div class="card-body text-center">
+                <p class="card-text">Please double-check that a source does not already exist before you start entering information!</p>
+                <button type="button" class="btn btn-primary btn-lg" id="createNewSourceButton" title="Create a new source"><i class="fa-solid fa-square-plus"></i> Create a new source
+                </button>
+            </div>
+            <div class="card-footer">
+                <ul>
+                    <li>Does it mention specific people or groups of people?</li>
+                    <li>Is this person/group of Indigenous descent?</li>
+                    <li>Is this Indigenous person/group in some way unfree or coerced into labor (even if it's implied)?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <div class="card">
+            <h2 class="card-header"><i class="fa-solid fa-pen-nib"></i> Find an existing source</h2>
+            <div class="card-body row">
+                <!-- Title filter field -->
+                <div class="form-input">
+                    <label for="title-filter" class="col-3 form-label">Title</label>
+                    <input id="title-filter"></input>
+                </div>
+                <!-- Source ID filter field -->
+                <div class="form-input">
+                    <label for="id-filter" class="col-3 form-label">Source ID</label>
+                    <input id="id-filter"></input>
+                </div>
+                <!-- toggle all entries vs my entries -->
+                <div class="form-input">
+                    <label class="form-check-label col-6" for="current-user-only">
+                        Show only your entries
+                    </label>
+                    <input class="form-check-input" type="checkbox" id="current-user-only">
+                </div>
+                <!-- Editor filter field -->
+                <div class="form-input">
+                    <label for="editor-filter" class="form-label col-3">Editor</label>
+                    <input id="editor-filter"></input>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="all-sources"></div>
+<!-- Delete confirmation modal -->
+{% include "disa_app_templates/modals/confirm_deletion.html" %}
+{% endblock content %}
+{% block footer %}
+{% endblock footer %}
+{% block page_specific_js %}
+<!-- Tabulator -->
+<script>
+    window.sr = {};
+    window.sr.api_url_root = "{{ API_URL_ROOT }}";
+    window.sr.csrf_token = "{{ csrf_token }}";
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5/dist/js/tabulator.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2/moment.min.js"></script>
+<script src="{% static 'js/redesign_citations.js' %}" type="module"></script>
+{% endblock page_specific_js %}
