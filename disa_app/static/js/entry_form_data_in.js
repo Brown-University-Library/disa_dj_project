@@ -94,11 +94,13 @@ function preprocessSourceData(data) {
     (addLocHash, currAddLoc) => Object.assign(addLocHash, { [currAddLoc.id]: currAddLoc.value }),
     {}
   );
-
-  data.MENU_OPTIONS.formInputDISAItemType = data.formData.location_stuff.rec_types_list.reduce(
-    (recTypeHash, currRecType) => Object.assign(recTypeHash, { [currRecType.id]: currRecType.value }),
-    {}
-  );
+// Commented out for temporarily overriding for fall `23 data cleaning
+// (the record type values will come from entry_form_settings.js instead of the server)
+//
+//  data.MENU_OPTIONS.formInputDISAItemType = data.formData.location_stuff.rec_types_list.reduce(
+//    (recTypeHash, currRecType) => Object.assign(recTypeHash, { [currRecType.id]: currRecType.value }),
+//    {}
+//  );
 
 // Commented out for temporarily overriding for summer `23 data cleaning
 // (the status menu values will come from entry_form_settings.js instead of the server)
