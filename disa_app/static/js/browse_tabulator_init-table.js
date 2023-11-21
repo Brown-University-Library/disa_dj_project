@@ -70,7 +70,8 @@ function getTabulatorOptions(sr, showDetailsFunction) {
     { title:'Age', field:'age', visible: false, download: true },
     { title:'Reference_ID', field:'reference_data.reference_db_id', visible: false, download: true },
     { title:'Enslaved_by', field:'enslaved_by', visible: false, download: true },
-    { title:'Enslaved', field:'enslaved', visible: false, download: true }
+    { title:'Enslaved', field:'enslaved', visible: false, download: true },
+    { title:'Citation', field:'citation_data.display', visible: false, download: true }
   ];
 
   // Global options
