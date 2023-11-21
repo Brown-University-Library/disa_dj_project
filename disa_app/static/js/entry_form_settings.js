@@ -249,7 +249,10 @@ export const LOCAL_SETTINGS = {
       'Older person':'Older person',
       'Elder':'Elder'
     },
-    formInputDISAItemType: {	// @todo @birkin Load from server
+    // Temporary client-side override for fall `23 data cleaning
+    // (the record type items usually come from the server)
+    // See also entry_form_data_in.js
+    formInputDISAItemType: {
       '1':'Baptism',
       '2':'Runaway',
       '3':'Sale',
