@@ -89,7 +89,7 @@ class Client_Referent_API_Test( TestCase ):
         rfrnt_data_keys = sorted( resp_dct['ent'].keys() )
         # self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
         self.assertEqual(
-            ['age', 'enslavements', 'id', 'names', 'origins', 'races', 'sex', 'titles', 'tribes', 'uuid', 'vocations'],
+            ['age_category', 'age_number', 'age_text', 'enslavements', 'id', 'names', 'origins', 'races', 'sex', 'titles', 'tribes', 'uuid', 'vocations'],
             rfrnt_data_keys
             )
         ## cleanup
