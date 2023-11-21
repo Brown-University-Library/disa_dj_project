@@ -241,14 +241,6 @@ export const LOCAL_SETTINGS = {
       '35':'Multi-racial',
       '24':'White' */
     },
-    formInputDISAPersonAge_category: {
-      'Infant':'Infant',
-      'Child':'Child',
-      'Youth/Young Adult':'Youth/Young Adult',
-      'Adult':'Adult',
-      'Older person':'Older person',
-      'Elder':'Elder'
-    },
     // Temporary client-side override for fall `23 data cleaning
     // (the record type items usually come from the server)
     // See also entry_form_data_in.js
