@@ -1,9 +1,6 @@
 {% extends "disa_app_templates/base.html" %}
 {% load static %}
 {% block content %}
-<div class="row">
-    {% include "disa_app_templates/partials/explore_top.html" %}
-</div>
 <div class="timeline-filter bg-secondary py-3">
     <h2>Timeline</h2>
     <p><label for="startDate">Start year</label><input type="number" step="1" min="1492" max="1899" id="startDate" value="1492"> <label for="endDate">End year</label><input type="number" step="1" min="1493" max="1900" placeholder="1900" id="endDate" value="1900"></p>
@@ -13,7 +10,6 @@
         <li data-year="1504">
             <h2>1504: Foundation of the Sultanate of Sennar by Amara Dunqas, in what is modern Sudan</h2>
             <p>The Funj Sultanate, also known as <em>Funjistan, Sultanate of Sennar</em> (after its capital Sennar) or Blue Sultanate, was a monarchy in what is now Sudan, northwestern <strong>Eritrea</strong> and western <strong>Ethiopia</strong>. Founded in 1504 by the Funj people, it quickly converted to Islam, although this embrace was only nominal. Until a more orthodox Islam took hold in the 18th century, the state remained an "African empire with a Muslim façade". It reached its peak in the late 17th century, but declined and eventually fell apart in the 18th and 19th centuries. In 1821, the last sultan, greatly reduced in power, surrendered to the Ottoman Egyptian invasion without a fight.</p>
-            <p><a href="#">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perferendis recusandae, reiciendis provident eveniet suscipit in iste incidunt, adipisci expedita molestias. Iste voluptatum delectus quidem qui temporibus dicta mollitia dolore quisquam?</a></p>
         </li>
         <li data-year="1620">
             <h2>1620: Almost the entire native population of Banda Islands was deported, driven away, starved to death or killed in an attempt to replace them with Dutch colonial slave labour.</h2>
@@ -24,7 +20,7 @@
             <p>Cook fired the first shot, and his men quickly shot several more natives. As Cook and his men attempted to retreat, Cook was stabbed through the chest by a native chief with an iron dagger which had been traded from Cook's own ship previously in the same visit. The majority of Cook's body was never recovered. Since Cook's men felt they could not leave without resupplying fresh water and further repair of their damaged mast, subsequent skirmishing resulted in dozens of native deaths by musket fire and the ships cannons; a portion of Kireekakooa, one of the towns in the bay, was also burned.</p>
         </li>
         <li data-year="1785">
-            <h2>The Northwest Indian War</h2>
+            <h2>1785: The Northwest Indian War</h2>
             <p>The Northwest Indian War (1785–1795), also known by other names, was an armed conflict for control of the Northwest Territory fought between the United States and a united group of Native American nations known today as the Northwestern Confederacy.</p>
         </li>
         <li data-year="1803">
@@ -50,5 +46,8 @@
 </div>
 {% endblock content %}
 {% block page_specific_js%}
+<script type="text/javascript">
+var timeline_data_url = "{% static 'data/timeline.json' %}";
+</script>
 <script src="{% static 'js/timeline.js' %}"></script>
 {% endblock page_specific_js %}
