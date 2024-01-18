@@ -14,7 +14,7 @@ from typing import cast  # just used for type-annotation
 
 import sqlalchemy
 from disa_app import settings_app
-from sqlalchemy import Boolean, Integer, String, ForeignKey, DateTime, UnicodeText
+from sqlalchemy import Boolean, Float, Integer, String, ForeignKey, DateTime, UnicodeText
 from sqlalchemy import Column
 from sqlalchemy import create_engine
 from sqlalchemy import Table
@@ -451,12 +451,20 @@ class ReferentName(Base):
         return f'<Referent id, ``{self.referent_id}``; first, ``{self.first}``; last, ``{self.last}``>'
 
 
+class AgeCategory(Base):
+    __tablename__ = '1_age_categories'
+    uuid = Column(String(36), primary_key=True)
+    name = Column(String(50), nullable=False)
+
+
 class Referent(Base):
     __tablename__ = '5_referents'
 
     id = Column(Integer, primary_key=True)
     uuid: str = cast( str, Column(String(32)) )
     age = Column(String(255))
+    age_number = Column(Float)  # New column for age_number
+    age_category = Column(String(36), ForeignKey('1_age_categories.uuid'))  # New column for age_category
     sex = Column(String(255))
     primary_name_id = Column(Integer,
         ForeignKey('6_referent_names.id'),
@@ -465,6 +473,7 @@ class Referent(Base):
         nullable=False)
     person_id = Column(Integer, ForeignKey('1_people.id'),
         nullable=True)
+    age_category_relation = relationship('AgeCategory')  # New relationship for age_category
     names = relationship(
         'ReferentName',
         primaryjoin=(id == ReferentName.referent_id),

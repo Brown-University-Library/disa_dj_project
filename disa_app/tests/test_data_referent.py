@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import json, logging, pprint, secrets, uuid
+import json, logging, pprint, random, secrets, uuid
 from operator import itemgetter
 
 import requests
@@ -89,7 +89,7 @@ class Client_Referent_API_Test( TestCase ):
         rfrnt_data_keys = sorted( resp_dct['ent'].keys() )
         # self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
         self.assertEqual(
-            ['age', 'enslavements', 'id', 'names', 'origins', 'races', 'sex', 'titles', 'tribes', 'uuid', 'vocations'],
+            ['age_category', 'age_number', 'age_text', 'enslavements', 'id', 'names', 'origins', 'races', 'sex', 'titles', 'tribes', 'uuid', 'vocations'],
             rfrnt_data_keys
             )
         ## cleanup
@@ -122,42 +122,44 @@ class Client_Referent_API_Test( TestCase ):
 
     ## UPDATE ====================
 
-    def test_put_bad(self):
-        """ Checks bad PUT to `http://127.0.0.1:8000/data/entrants/1234/` -- no payload. """
-        put_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'foo'} )
-        put_response = self.client.put( put_url )  # will fail; no payload
-        self.assertEqual( 400, put_response.status_code )
-        self.assertTrue( b'Bad Request' in put_response.content )  # type: ignore
+    ## NOTE: referent PUTs are handled by a different endpoint; see the Client_Referent_Details_API_Test() class below.
 
-    def test_put_good(self):
-        """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/1234/`. """
-        ## create referent
-        self.create_new_referent()
-        ## PUT
-        put_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': self.new_db_id} )
-        log.debug( f'put_url-url, ``{put_url}``' )
-        random_name_part = secrets.choice( ['nameA', 'nameB', 'nameC', 'nameD'] )
-        put_payload = {
-            'id': self.new_db_id,
-            'name': {'first': f'test-first-{random_name_part}', 'id': 'name', 'last': f'test-last-{random_name_part}'},
-            'record_id': '49',
-            'roles': [
-                {'id': '3', 'name': 'Priest'},
-                {'id': '30', 'name': 'Previous Owner'}
-            ]
-        }
-        jsn = json.dumps( put_payload )
-        put_response = self.client.put( put_url, data=jsn, content_type='application/json' )
-        ## tests
-        self.assertEqual( 200, put_response.status_code )
-        resp_dct: dict = json.loads( put_response.content )  # type: ignore
-        self.assertEqual( 
-            ['first', 'id', 'last', 'name_id', 'person_id', 'roles', 'uuid'], 
-            sorted(resp_dct.keys()) )
-        self.assertEqual( f'test-first-{random_name_part}', resp_dct['first'] )
-        self.assertEqual( f'test-last-{random_name_part}', resp_dct['last'] )
-        ## cleanup
-        self.delete_new_referent()
+    # def test_put_bad(self):
+    #     """ Checks bad PUT to `http://127.0.0.1:8000/data/entrants/1234/` -- no payload. """
+    #     put_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': 'foo'} )
+    #     put_response = self.client.put( put_url )  # will fail; no payload
+    #     self.assertEqual( 400, put_response.status_code )
+    #     self.assertTrue( b'Bad Request' in put_response.content )  # type: ignore
+
+    # def test_put_good(self):
+    #     """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/1234/`. """
+    #     ## create referent
+    #     self.create_new_referent()
+    #     ## PUT
+    #     put_url = reverse( 'data_referent_url', kwargs={'rfrnt_id': self.new_db_id} )
+    #     log.debug( f'put_url-url, ``{put_url}``' )
+    #     random_name_part = secrets.choice( ['nameA', 'nameB', 'nameC', 'nameD'] )
+    #     put_payload = {
+    #         'id': self.new_db_id,
+    #         'name': {'first': f'test-first-{random_name_part}', 'id': 'name', 'last': f'test-last-{random_name_part}'},
+    #         'record_id': '49',
+    #         'roles': [
+    #             {'id': '3', 'name': 'Priest'},
+    #             {'id': '30', 'name': 'Previous Owner'}
+    #         ]
+    #     }
+    #     jsn = json.dumps( put_payload )
+    #     put_response = self.client.put( put_url, data=jsn, content_type='application/json' )
+    #     ## tests
+    #     self.assertEqual( 200, put_response.status_code )
+    #     resp_dct: dict = json.loads( put_response.content )  # type: ignore
+    #     self.assertEqual( 
+    #         ['first', 'id', 'last', 'name_id', 'person_id', 'roles', 'uuid'], 
+    #         sorted(resp_dct.keys()) )
+    #     self.assertEqual( f'test-first-{random_name_part}', resp_dct['first'] )
+    #     self.assertEqual( f'test-last-{random_name_part}', resp_dct['last'] )
+    #     ## cleanup
+    #     self.delete_new_referent()
 
     ## DELETE ====================
 
@@ -194,7 +196,11 @@ class Client_Referent_Details_API_Test( TestCase ):
 
     def test_put_details_good(self):
         """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/details/1234/`.
-            Note: the `random` part is to ensure there is different data being sent, and checked. """
+            Note: the `random` part is to ensure there is different data being sent, and checked. 
+            
+            [18/Jan/2024 15:46:21] DEBUG [view_data_entrant_manager-execute_details_update()::190] submitted data, ``{'id': '4110', 'record_id': '1676', 'age': 'some other age-text', 'age_text': 'some other age-text', 'age_number': 13.5, 'age_category': '3a592293-9d21-4cef-968a-fcebfd1c0835', 'names': [{'first': 'Henry', 'id': '4122', 'last': 'Huggins', 'name_type': '8'}], 'origins': [], 'races': [], 'roles': [], 'sex': 'Male', 'statuses': [], 'titles': [], 'tribes': [], 'vocations': []}``
+
+            """
         ## create referent
         # self.create_new_referent() -- eventually
         ## PUT
@@ -206,9 +212,21 @@ class Client_Referent_Details_API_Test( TestCase ):
         random_race_partB = secrets.choice( ['White', 'Unknown'] )
         random_tribe_partA = secrets.choice( ['Bocotora', 'Eastern Pequot'] )
         random_tribe_partB = secrets.choice( ['Mohegan', 'Wampanoag'] )
+
+        ## create a random float with one decimal point
+        random_age_number = round(random.uniform(1, 20), 1)
+        random_age_text = str( random_age_number )
+        random_uuid = secrets.choice( [
+            '78ac411b-be39-41e3-be66-43017e30d105', 
+            '761cc55d-8bf6-4737-a728-30f20c4d66b2',
+            '3a592293-9d21-4cef-968a-fcebfd1c0835',
+            ] )
+
         put_details_payload = {
             'names': [ {'id': target_rfrnt_id, 'first': f'test-first-{random_name_part}', 'last': f'test-last-{random_name_part}', 'name_type': '7'} ],
-            'age': '',
+            'age_text': random_age_text,
+            'age_number': random_age_number,
+            'age_category': random_uuid,
             'sex': 'Other',
             # 'races': [ {'id': 'India', 'name': 'India'}, {'id': 'Mustee', 'name': 'Mustee'} ],
             'races': [ {'id': random_race_partA, 'name': random_race_partA}, {'id': random_race_partB, 'name': random_race_partB} ],
@@ -233,6 +251,7 @@ class Client_Referent_Details_API_Test( TestCase ):
         log.debug( f'get_url for details comparison, ``{get_url}``' )
         get_response = self.client.get( get_url )
         get_resp_dct: dict = json.loads( get_response.content )  # type: ignore
+        log.debug( f'get_resp_dct, ``{pprint.pformat(get_resp_dct)}``' )
         self.assertEqual(
             [{'first': f'test-first-{random_name_part}', 'id': 2033, 'last': f'test-last-{random_name_part}', 'name_type': 'Given'}],
             get_resp_dct['ent']['names'],
@@ -247,6 +266,10 @@ class Client_Referent_Details_API_Test( TestCase ):
             # get_resp_dct['ent']['tribes'],
             sorted( get_resp_dct['ent']['tribes'], key=itemgetter('label') ),
             )
+        ## test age
+        self.assertEqual( random_age_text, get_resp_dct['ent']['age_text'] )
+        self.assertEqual( random_age_number, get_resp_dct['ent']['age_number'] )
+        self.assertEqual( random_uuid, get_resp_dct['ent']['age_category'] )
         ## cleanup
         # self.delete_new_referent() -- eventually
 
