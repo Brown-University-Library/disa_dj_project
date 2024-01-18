@@ -116,7 +116,7 @@ async function saveReferentDataToServer() {
       record_id: this.currentItemId.toString(),
       age: this.currentReferent.age_text || '',
       age_text: this.currentReferent.age_text || '',
-      age_number: this.currentReferent.age_number || null,
+      age_number: parseFloat(this.currentReferent.age_number) || null,
       age_category: this.currentReferent.age_category || null,
       names: this.currentReferent.names.map(
         name => Object.assign({ }, name, { id: name.id.toString() })
