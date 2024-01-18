@@ -47,7 +47,7 @@ var geoJsonData = new L.GeoJSON.AJAX(
 
             //var uuid = feature.properties.Referent_ID;
             var person_name = feature.properties.Name;
-            if (person_name = " ") {
+            if (person_name == " ") {
                 var person_name = "A person whose name we do not know"
             }
             var status = feature.properties.Status;
