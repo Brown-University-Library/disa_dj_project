@@ -198,9 +198,19 @@ class Client_Referent_Details_API_Test( TestCase ):
         """ Checks good PUT to `http://127.0.0.1:8000/data/entrants/details/1234/`.
             Note: the `random` part is to ensure there is different data being sent, and checked. 
             
-            "age":"about-5","age_text":"about-5","age_nu'
- b'mber":"5","age_category":"761cc55d-8bf6-4737-a728-30f20c4d66b2"
-            
+[18/Jan/2024 15:15:19] DEBUG [views-data_entrants_details()::525] payload, ```(b'{
+    "id":"4110",
+    "record_id":"1676",
+    "age":"",
+    "age_text":"",
+    "age_number":"12",
+    "age_category":null,
+ "names":[{"first":"Henry","id":"4122","last":"Huggins",
+ "nam'
+ b'e_type":"8"}],"origins":[],"races":[],"roles":[],"sex":"","statuses":[],
+ "tit'
+ b'les":[],"tribes":[],"vocations":[]}')```
+
             """
         ## create referent
         # self.create_new_referent() -- eventually
@@ -213,9 +223,12 @@ class Client_Referent_Details_API_Test( TestCase ):
         random_race_partB = secrets.choice( ['White', 'Unknown'] )
         random_tribe_partA = secrets.choice( ['Bocotora', 'Eastern Pequot'] )
         random_tribe_partB = secrets.choice( ['Mohegan', 'Wampanoag'] )
+
         put_details_payload = {
             'names': [ {'id': target_rfrnt_id, 'first': f'test-first-{random_name_part}', 'last': f'test-last-{random_name_part}', 'name_type': '7'} ],
-            'age': 'about 5',
+            'age_text': 'about 6',
+            'age_number': '12',
+            'age_category': null,
             'sex': 'Other',
             # 'races': [ {'id': 'India', 'name': 'India'}, {'id': 'Mustee', 'name': 'Mustee'} ],
             'races': [ {'id': random_race_partA, 'name': random_race_partA}, {'id': random_race_partB, 'name': random_race_partB} ],
@@ -226,6 +239,21 @@ class Client_Referent_Details_API_Test( TestCase ):
             'titles': [],
             'vocations': []
         }
+
+        # put_details_payload = {
+        #     'names': [ {'id': target_rfrnt_id, 'first': f'test-first-{random_name_part}', 'last': f'test-last-{random_name_part}', 'name_type': '7'} ],
+        #     'age': 'about 5',
+        #     'sex': 'Other',
+        #     # 'races': [ {'id': 'India', 'name': 'India'}, {'id': 'Mustee', 'name': 'Mustee'} ],
+        #     'races': [ {'id': random_race_partA, 'name': random_race_partA}, {'id': random_race_partB, 'name': random_race_partB} ],
+        #     # 'tribes': [ {'id': 'Bocotora', 'name': 'Bocotora'}, {'id': 'Eastern Pequot', 'name': 'Eastern Pequot'} ],
+        #     'tribes': [ {'id': random_tribe_partA, 'name': random_tribe_partA}, {'id': random_tribe_partB, 'name': random_tribe_partB} ],
+        #     'origins': [],
+        #     'statuses': [],
+        #     'titles': [],
+        #     'vocations': []
+        # }
+
         jsn = json.dumps( put_details_payload )
         put_details_response = self.client.put( put_details_url, data=jsn, content_type='application/json' )
         put_details_resp_dct: dict = json.loads( put_details_response.content )  # type: ignore -- should be, i.e., `{'redirect': '/editor/records/895/'}`
@@ -256,7 +284,7 @@ class Client_Referent_Details_API_Test( TestCase ):
             sorted( get_resp_dct['ent']['tribes'], key=itemgetter('label') ),
             )
         ## test age
-        expected = 'about 4'
+        expected = 'about 5'
         result = get_resp_dct['ent']['age_text']
         self.assertEqual( expected, result )
         ## cleanup
