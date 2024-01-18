@@ -194,7 +194,9 @@ class Details_Updater():
         rfrnt.names = [ self.common.update_referent_name( na, self.session )
             for na in data['names'] ]
         log.debug( f'rfrnt.names, ``{rfrnt.names}``' )
-        rfrnt.age = data['age']
+        rfrnt.age = data['age_text']
+        rfrnt.age_number = data['age_number']
+        rfrnt.age_category = data['age_category']
         rfrnt.sex = data['sex']
         rfrnt.primary_name = rfrnt.names[0]
         rfrnt.races = [ self.common.get_or_create_referent_attribute( ra, models_alch.Race, self.session )
