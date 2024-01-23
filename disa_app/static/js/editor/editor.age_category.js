@@ -1,5 +1,5 @@
 // autopopulate the age category if there's an age integer
-let ageInteger = document.getElementById('formInputDISAPersonAge_integer');
+let ageInteger = document.getElementById('formInputDISAPersonAge_number');
 let ageCategory = document.getElementById('formInputDISAPersonAge_category');
 
 ageInteger.addEventListener("change", populateCategory);
