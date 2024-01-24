@@ -88,6 +88,7 @@
         <div class="form-group my-2">
             <div class="form-floating">
                 <select id="formInputDISAPersonAge_category" class="form-select" v-model="currentReferent.age_category" v-bind:suggestions="MENU_OPTIONS.formInputDISAPersonAge_category" v-on:blur="saveReferentDataToServer">
+                    <option value=""></option>
                     <option v-for="(ageOption, ageOptionId) in MENU_OPTIONS.formInputDISAPersonAge_category" v-bind:value="ageOptionId" v-text="ageOption">
                 </select>
                 <label for="formInputDISAPersonAge_category">Age category</label>
