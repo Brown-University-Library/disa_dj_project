@@ -201,18 +201,6 @@ class Record_Test( TestCase ):
 
     # ## CREATE ====================
 
-    # def test_post_bad(self):
-    #     """ Checks `http://127.0.0.1:8000/data/records/` POST w/bad params. """
-    #     post_url = reverse( 'data_record_url' )
-    #     log.debug( f'post-url, ``{post_url}``' )
-    #     payload = {
-    #         'foo': 'bar'
-    #     }
-    #     response = self.client.post( post_url, payload )
-    #     log.debug( f'create_new_record response (bytes), ``{response.content}``' )
-    #     self.assertEqual( 400, response.status_code )
-    #     self.assertEqual( b'400 / Bad Request', response.content )
-
     def test_post_good(self):
         """ Checks `http://127.0.0.1:8000/data/records/` POST w/good params. """
         ## create record
@@ -224,6 +212,20 @@ class Record_Test( TestCase ):
         self.assertEqual( ['redirect'], list(self.post_resp_dct.keys()) )
         ## cleanup
         self.delete_new_record()
+
+    def test_post_bad(self):
+        """ Checks `http://127.0.0.1:8000/data/records/` POST w/bad params. """
+        # self.assertEqual( 1, 2 )
+        post_url = reverse( 'data_record_url' )
+        log.debug( f'post-url, ``{post_url}``' )
+        payload = {
+            'foo': 'bar'
+        }
+        response = self.client.post( post_url, payload )
+        log.debug( f'create_new_record response (bytes), ``{response.content}``' )
+        self.assertEqual( 400, response.status_code )
+        # self.assertEqual( b'400 / Bad Request', response.content )
+        self.assertTrue( b'400 / Bad Request' in response.content )
 
     # ## UPDATE ====================
 

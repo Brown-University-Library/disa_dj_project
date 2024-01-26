@@ -149,12 +149,66 @@ def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int ) ->
     ## end def manage_reference_put()
 
 
+# def manage_post( payload: bytes, request_user_id: int ) -> dict:
+#     """ Handles api call when 'Create' button is hit in `/editor/records/?doc_id=(123)`.
+#         Called by views.data_records() """
+#     log.debug( 'starting manage_post()' )
+#     session = make_session()
+#     data: dict = json.loads( payload )
+#     log.debug( f'data, ```{pprint.pformat(data)}```' )
+#     try:  # for debugging; remove afterwards
+#         reference_type: models_sqlalchemy.ReferenceType = get_or_create_type( data['record_type'], models_alch.ReferenceType, session )
+
+#         rfrnc = models_alch.Reference()
+#         rfrnc.citation_id = data['citation_id']
+#         rfrnc.national_context_id = data['national_context']
+#         rfrnc.reference_type_id = reference_type.id
+#         session.add( rfrnc )
+#         session.commit()
+
+#         rfrnc.locations = []
+#         rfrnc = process_record_locations( data['locations'], rfrnc, session )
+
+#         try:
+#             rfrnc.date = datetime.datetime.strptime(data['date'], '%m/%d/%Y')
+#         except:
+#             rfrnc.date = None
+#         rfrnc.reference_type_id = reference_type.id
+#         rfrnc.national_context_id = data['national_context']
+#         rfrnc.transcription = data['transcription']
+
+#         if 'image_url' in data.keys():
+#             log.debug( f'rfrnc.__dict__, ``{pprint.pformat(rfrnc.__dict__)}``' )
+#             rfrnc.image_url = data['image_url']
+#             log.debug( f'rfrnc.__dict__ now, ``{pprint.pformat(rfrnc.__dict__)}``' )
+
+#         session.add( rfrnc )
+#         session.commit()
+
+#         stamp_edit( request_user_id, rfrnc, session )
+
+#         # context =  { 'redirect': reverse( 'edit_record_url', kwargs={'rec_id': rfrnc.id} ) }
+#         context =  { 'redirect': reverse( 'edit_record_w_recid_url', kwargs={'rec_id': rfrnc.id} ) }
+#         log.debug( f'context, ```{context}```' )
+#     except:
+#         log.exception( '\n\nexception...' )
+#         raise Exception( 'problem; see logs' )
+
+#     return context
+
+
 def manage_post( payload: bytes, request_user_id: int ) -> dict:
     """ Handles api call when 'Create' button is hit in `/editor/records/?doc_id=(123)`.
         Called by views.data_records() """
     log.debug( 'starting manage_post()' )
     session = make_session()
-    data: dict = json.loads( payload )
+    data = {}
+    try:
+        data: dict = json.loads( payload )
+    except:
+        log.warning( 'bad payload; returning `Bad Request`' )
+        context = { 'err': '400 / Bad Request; bad payload' }
+        return context
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     try:  # for debugging; remove afterwards
         reference_type: models_sqlalchemy.ReferenceType = get_or_create_type( data['record_type'], models_alch.ReferenceType, session )
