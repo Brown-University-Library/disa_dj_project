@@ -250,7 +250,7 @@ def manage_post( payload: bytes, request_user_id: int ) -> dict:
         rfrnc.citation_id = data['citation_id']
         rfrnc.national_context_id = data['national_context']
         rfrnc.reference_type_id = reference_type.id
-        session.add( rfrnc )
+        session.add( rfrnc )  # the refrnc object should now have an id
         session.commit()
 
         rfrnc.locations = []
@@ -386,7 +386,7 @@ def process_record_locations( locData: list, recObj: models_alch.Reference, sess
     """ Creates additional Location records if necessary...
         Updates ReferenceLocation records if necessary...
         Creates a linkage between the Reference record and the ReferenceLocation record if necessary.
-        Called by manage_post() """
+        Called by manage_post() and manage_reference_put() """
     log.debug( f'starting process_record_locations(); locData, ```{pprint.pformat(locData)}```' )
     locations = []
     for loc in locData:
