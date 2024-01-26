@@ -84,17 +84,98 @@ def query_record( rec_id: str ) -> dict:
     ## end def query_record()
 
 
+
+# def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int ) -> dict:
+#     """ Handles api call when 'Create' button is hit in `/editor/records/?doc_id=(123)`.
+#         Called by views.data_records() """
+#     log.debug( 'starting manage_reference_put()' )
+#     log.debug( f'rec_id, ``{rec_id}``' )
+#     log.debug( f'payload, ``{payload}``' )
+
+#     try:
+
+#         session = make_session()
+#         data: dict = json.loads( payload )
+#         log.debug( f'data, ```{pprint.pformat(data)}```' )
+
+#         reference_type: models_sqlalchemy.ReferenceType = get_or_create_type( data['record_type'], models_alch.ReferenceType, session )
+
+#         # ref = models.Reference.query.get(refId)
+#         rfrnc = session.query( models_alch.Reference ).get( rec_id )
+
+#         rfrnc.locations = []
+#         rfrnc = process_record_locations( data['locations'], rfrnc, session )
+
+#         try:
+#             rfrnc.date = datetime.datetime.strptime(data['date'], '%m/%d/%Y')
+#         except:
+#             rfrnc.date = None
+#         rfrnc.reference_type_id = reference_type.id
+#         rfrnc.national_context_id = data['national_context']
+#         rfrnc.transcription = data['transcription']
+
+#         if 'image_url' in data.keys():
+#             log.debug( f'rfrnc.__dict__, ``{pprint.pformat(rfrnc.__dict__)}``' )
+#             log.debug( 'found `image_url` key' )
+#             rfrnc.image_url = data['image_url']
+#             log.debug( f'rfrnc.__dict__ now, ``{pprint.pformat(rfrnc.__dict__)}``' )
+
+#         session.add( rfrnc )
+#         session.commit()
+
+#         stamp_edit( request_user_id, rfrnc, session )
+
+#         data = { 'rec': {} }
+#         data['rec']['id'] = rfrnc.id
+#         data['rec']['date'] = ''
+#         if rfrnc.date:
+#             data['rec']['date'] = '{}/{}/{}'.format(rfrnc.date.month,
+#                 rfrnc.date.day, rfrnc.date.year)
+#         data['rec']['citation'] = rfrnc.citation.id
+#         data['rec']['transcription'] = rfrnc.transcription
+#         data['rec']['national_context'] = rfrnc.national_context_id
+#         data['rec']['locations'] = [
+#             { 'label':l.location.name, 'value':l.location.name,
+#                 'id': l.location.id } for l in rfrnc.locations ]
+#         data['rec']['record_type'] = {'label': rfrnc.reference_type.name,
+#             'value': rfrnc.reference_type.name, 'id':rfrnc.reference_type.id }
+
+#         # context =  { 'redirect': reverse( 'edit_record_url', kwargs={'rec_id': rfrnc.id} ) }
+#         # log.debug( f'data, ```{data}```' )
+#         log.debug( f'data, ```{pprint.pformat(data)}```' )
+#     except:
+#         log.exception( '\n\nexception...' )
+#         raise Exception( 'problem; see logs' )
+
+#     return data
+
+#     ## end def manage_reference_put()
+
+
 def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int ) -> dict:
     """ Handles api call when 'Create' button is hit in `/editor/records/?doc_id=(123)`.
         Called by views.data_records() """
     log.debug( 'starting manage_reference_put()' )
+    log.debug( f'rec_id, ``{rec_id}``' )
+    log.debug( f'payload, ``{payload}``' )
+
+    session = make_session()
+
+    if rec_id == None:
+        log.warning( 'bad rec_id; returning `Bad Request`' )
+        context = { 'err': '400 / Bad Request; no record-id' }
+        return context
+
+    data = {}
+    try:
+        data: dict = json.loads( payload )
+    except:
+        log.warning( 'bad payload; returning `Bad Request`' )
+        context = { 'err': '400 / Bad Request; bad payload' }
+        return context
+    log.debug( f'data, ```{pprint.pformat(data)}```' )
 
     try:
-
-        session = make_session()
-        data: dict = json.loads( payload )
-        log.debug( f'data, ```{pprint.pformat(data)}```' )
-
         reference_type: models_sqlalchemy.ReferenceType = get_or_create_type( data['record_type'], models_alch.ReferenceType, session )
 
         # ref = models.Reference.query.get(refId)
@@ -147,54 +228,6 @@ def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int ) ->
     return data
 
     ## end def manage_reference_put()
-
-
-# def manage_post( payload: bytes, request_user_id: int ) -> dict:
-#     """ Handles api call when 'Create' button is hit in `/editor/records/?doc_id=(123)`.
-#         Called by views.data_records() """
-#     log.debug( 'starting manage_post()' )
-#     session = make_session()
-#     data: dict = json.loads( payload )
-#     log.debug( f'data, ```{pprint.pformat(data)}```' )
-#     try:  # for debugging; remove afterwards
-#         reference_type: models_sqlalchemy.ReferenceType = get_or_create_type( data['record_type'], models_alch.ReferenceType, session )
-
-#         rfrnc = models_alch.Reference()
-#         rfrnc.citation_id = data['citation_id']
-#         rfrnc.national_context_id = data['national_context']
-#         rfrnc.reference_type_id = reference_type.id
-#         session.add( rfrnc )
-#         session.commit()
-
-#         rfrnc.locations = []
-#         rfrnc = process_record_locations( data['locations'], rfrnc, session )
-
-#         try:
-#             rfrnc.date = datetime.datetime.strptime(data['date'], '%m/%d/%Y')
-#         except:
-#             rfrnc.date = None
-#         rfrnc.reference_type_id = reference_type.id
-#         rfrnc.national_context_id = data['national_context']
-#         rfrnc.transcription = data['transcription']
-
-#         if 'image_url' in data.keys():
-#             log.debug( f'rfrnc.__dict__, ``{pprint.pformat(rfrnc.__dict__)}``' )
-#             rfrnc.image_url = data['image_url']
-#             log.debug( f'rfrnc.__dict__ now, ``{pprint.pformat(rfrnc.__dict__)}``' )
-
-#         session.add( rfrnc )
-#         session.commit()
-
-#         stamp_edit( request_user_id, rfrnc, session )
-
-#         # context =  { 'redirect': reverse( 'edit_record_url', kwargs={'rec_id': rfrnc.id} ) }
-#         context =  { 'redirect': reverse( 'edit_record_w_recid_url', kwargs={'rec_id': rfrnc.id} ) }
-#         log.debug( f'context, ```{context}```' )
-#     except:
-#         log.exception( '\n\nexception...' )
-#         raise Exception( 'problem; see logs' )
-
-#     return context
 
 
 def manage_post( payload: bytes, request_user_id: int ) -> dict:

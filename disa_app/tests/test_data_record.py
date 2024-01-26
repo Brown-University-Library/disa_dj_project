@@ -224,17 +224,17 @@ class Record_Test( TestCase ):
         response = self.client.post( post_url, payload )
         log.debug( f'create_new_record response (bytes), ``{response.content}``' )
         self.assertEqual( 400, response.status_code )
-        # self.assertEqual( b'400 / Bad Request', response.content )
         self.assertTrue( b'400 / Bad Request' in response.content )
 
     # ## UPDATE ====================
 
-    # def test_put_bad(self):
-    #     """ Checks bad PUT to `http://127.0.0.1:8000/data/records/foo/`. """
-    #     put_url = reverse( 'data_record_url', kwargs={'doc_id': 'foo'} )
-    #     put_response = self.client.put( put_url )
-    #     self.assertEqual( 400, put_response.status_code )
-    #     self.assertTrue( b'Bad Request' in put_response.content )
+    def test_put_bad__no_rec_id(self):
+        """ Checks invalid PUT to `http://127.0.0.1:8000/data/records/` 
+            only `http://127.0.0.1:8000/data/records/foo/` should take a PUT. """
+        put_url = reverse( 'data_record_url' )
+        put_response = self.client.put( put_url )
+        self.assertEqual( 400, put_response.status_code )
+        self.assertTrue( b'Bad Request' in put_response.content )
 
     def test_put_good(self):
         """ Checks good PUT to `http://127.0.0.1:8000/data/records/abcd/`.
@@ -256,7 +256,9 @@ class Record_Test( TestCase ):
                 'transcription': 'transcription_bbb'
                 }
         """
+        # self.assertEqual( 1, 2 )
         ## create citation
+        log.debug( 'creating new record' )
         self.create_new_record()
         ## PUT
         put_url = reverse( 'data_record_url', kwargs={'rec_id': self.create_resp_id} )
