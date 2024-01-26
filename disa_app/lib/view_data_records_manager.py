@@ -20,6 +20,72 @@ log = logging.getLogger(__name__)
 # main
 # -------------
 
+
+# def query_record( rec_id: str ) -> dict:
+#     """ Handles api call for GET reference-data and associated referent-data.
+#         Called by views.data_records() """
+#     log.debug( 'starting query_record()' )
+#     assert type(rec_id) == str
+#     data = { 'rec': {}, 'entrants': [] }
+#     if rec_id == None:
+#         data = json.dumps( data )
+#         log.debug( f'no rec_id; data, ```{pprint.pformat(data)}```' )
+#     session = make_session()
+#     # rec: models_sqlalchemy.Reference = session.query( models_alch.Reference ).get( rec_id )
+#     rec: models_alch.Reference = session.query( models_alch.Reference ).get( rec_id )
+#     data['rec']['id'] = rec.id
+#     data['rec']['date'] = None
+#     if rec.date:
+#         data['rec']['date'] = '{}/{}/{}'.format(rec.date.month,
+#             rec.date.day, rec.date.year)
+#     data['rec']['locations'] = [ {
+#         'label':l.location.name,
+#         'value':l.location.name,
+#         'id': l.location.id } for l in rec.locations ]
+#     data['rec']['transcription'] = rec.transcription
+#     data['rec']['national_context'] = rec.national_context_id
+
+#     log.debug( f'rec, ``{rec}``' )
+#     data['rec']['image_url'] = rec.image_url
+
+#     data['rec']['record_type'] = {
+#         'label': rec.reference_type.name,
+#         'value': rec.reference_type.name,
+#         'id':rec.reference_type.id }
+
+#     data['entrants'] = [ {
+#         'name_id': ent.primary_name.id,
+#         'first': ent.primary_name.first,
+#         'last': ent.primary_name.last,
+#         'id': ent.id,
+#         'person_id': ent.person_id,
+#         'roles': [ role.id for role in ent.roles ] } for ent in rec.referents ]
+
+#     data['rec']['header'] = '{}'.format(
+#         rec.reference_type.name or '').strip()
+
+#     groups = [ {
+#         'uuid': rfrnc_group.uuid,
+#         'count': rfrnc_group.count,
+#         'count_estimated': rfrnc_group.count_estimated,
+#         'description': rfrnc_group.description,
+#         'date_created': str( rfrnc_group.date_created ),
+#         'date_modified': str( rfrnc_group.date_modified ),
+#         'reference_id': rfrnc_group.reference_id } for rfrnc_group in rec.groups ]
+#     # log.debug( f'initial-groups, ``{pprint.pformat(groups)}``' )
+#     sorted_groups = sorted( groups, key=lambda k: k['date_modified'], reverse=True )
+#     # log.debug( f'sorted-groups, ``{pprint.pformat(sorted_groups)}``' )
+#     data['groups'] = {
+#         'group_data': sorted_groups,
+#         'group_sort_order': 'reverse date_modified'
+#     }
+
+#     log.debug( f'data, ```{pprint.pformat(data)}```' )
+#     return data
+
+#     ## end def query_record()
+
+
 def query_record( rec_id: str ) -> dict:
     """ Handles api call for GET reference-data and associated referent-data.
         Called by views.data_records() """
@@ -30,7 +96,9 @@ def query_record( rec_id: str ) -> dict:
         data = json.dumps( data )
         log.debug( f'no rec_id; data, ```{pprint.pformat(data)}```' )
     session = make_session()
-    rec: models_sqlalchemy.Reference = session.query( models_alch.Reference ).get( rec_id )
+    # rec: models_sqlalchemy.Reference = session.query( models_alch.Reference ).get( rec_id )
+    rec: models_alch.Reference = session.query( models_alch.Reference ).get( rec_id )
+    assert type(data) == dict
     data['rec']['id'] = rec.id
     data['rec']['date'] = None
     if rec.date:
@@ -345,9 +413,9 @@ def stamp_edit( request_user_id: int, reference_obj: models_alch.Reference, sess
     return
 
 
-# -------------
-# for reference
-# -------------
+# -------------------------------------------------------------------
+# old code, for reference
+# -------------------------------------------------------------------
 
 
 ## from DISA -- GET
