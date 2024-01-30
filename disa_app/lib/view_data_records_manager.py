@@ -284,6 +284,46 @@ def manage_post( payload: bytes, request_user_id: int ) -> dict:
     return context
 
 
+# def manage_reference_delete( rfrnc_id: str ) -> dict:  # or, much less likely, HttpResponseNotFound
+#     """ Handles api call when red `x` button is clicked...
+#         ...and then the 'Confirm delete' button is clicked in, eg, <http://127.0.0.1:8000/editor/documents/(123)/>.
+#         Called by views.data_reference()
+#         Note: this function is short enough that I could simply put this code directly into the views.data_reference()...
+#               ...but a good TODO would be to refactor that view and have a general views.data_record() url...
+#               ...handle the full CRUD set of methods -- which would all call this data_records_manager.py file """
+#     log.debug( 'starting manage_delete()' )
+#     context = {}
+#     try:
+#         assert type(rfrnc_id) == str
+#         if rfrnc_id == 'undefined':
+#             context = { 'err': '400 / Bad Request' }
+#             log.warning( f'should not receive `undefined` rfrnc_id' )
+#     except Exception as e:
+#         log.exception( 'Bad reference-id.' )
+#         context = { 'err': '400 / Bad Request' }
+#         log.warning( f'should not receive a rfrnc_id of, ``{rfrnc_id}``' )
+#     if context == {}:
+#         log.debug( 'context is empty; preparing to delete' )
+#         try:
+#             session = make_session()
+#             existing = session.query( models_alch.Reference ).get( rfrnc_id )
+#             if existing:
+#                 log.debug( 'found reference to delete' )
+#                 cite = existing.citation  # why did I get this?
+#                 session.delete( existing )
+#                 session.commit()
+#                 # redirect_url = reverse( 'edit_citation_url', kwargs={'cite_id': cite.id} )
+#                 redirect_url = reverse( 'redesign_citation_url', kwargs={'cite_id': cite.id} )
+#                 context =  { 'redirect': redirect_url }
+#             else:
+#                 context = { 'err': '404 / Not Found' }
+#                 log.warning( f'should not receive a not-found rfrnc_id of, ``{rfrnc_id}``' )
+#         except Exception as e:
+#             log.exception( 'Problem deleting reference.' )
+#     log.debug( f'context, ``{context}``' )
+#     return context
+
+
 def manage_reference_delete( rfrnc_id: str ) -> dict:  # or, much less likely, HttpResponseNotFound
     """ Handles api call when red `x` button is clicked...
         ...and then the 'Confirm delete' button is clicked in, eg, <http://127.0.0.1:8000/editor/documents/(123)/>.
@@ -291,7 +331,9 @@ def manage_reference_delete( rfrnc_id: str ) -> dict:  # or, much less likely, H
         Note: this function is short enough that I could simply put this code directly into the views.data_reference()...
               ...but a good TODO would be to refactor that view and have a general views.data_record() url...
               ...handle the full CRUD set of methods -- which would all call this data_records_manager.py file """
+    # raise Exception( 'halting reference-deletion' )  # for debugging
     log.debug( 'starting manage_delete()' )
+    log.debug( f'rfrnc_id, ``{rfrnc_id}``' )
     context = {}
     try:
         assert type(rfrnc_id) == str
@@ -303,14 +345,17 @@ def manage_reference_delete( rfrnc_id: str ) -> dict:  # or, much less likely, H
         context = { 'err': '400 / Bad Request' }
         log.warning( f'should not receive a rfrnc_id of, ``{rfrnc_id}``' )
     if context == {}:
+        log.debug( 'context is empty; preparing to delete' )
         try:
             session = make_session()
             existing = session.query( models_alch.Reference ).get( rfrnc_id )
+            log.debug( f'existing, ``{existing}``' )
             if existing:
                 log.debug( 'found reference to delete' )
                 cite = existing.citation  # why did I get this?
                 session.delete( existing )
                 session.commit()
+                log.debug( 'reference deleted' )
                 # redirect_url = reverse( 'edit_citation_url', kwargs={'cite_id': cite.id} )
                 redirect_url = reverse( 'redesign_citation_url', kwargs={'cite_id': cite.id} )
                 context =  { 'redirect': redirect_url }
@@ -357,6 +402,7 @@ def get_or_create_type( typeData: dict, typeModel: models_alch.ReferenceType, se
     return typ
 
 
+
 def process_record_locations( locData: list, recObj: models_alch.Reference, session: sqlalchemy.orm.session.Session ) -> models_alch.Reference:
     """ Creates additional Location records if necessary...
         Updates ReferenceLocation records if necessary...
@@ -365,16 +411,24 @@ def process_record_locations( locData: list, recObj: models_alch.Reference, sess
     log.debug( f'starting process_record_locations(); locData, ```{pprint.pformat(locData)}```' )
     locations = []
     for loc in locData:
+        log.debug( f'processing loc, ``{loc}``')
+        log.debug( f'loc["id"], ``{loc["id"]}``' )
         if loc['id'] == -1:
+            log.debug( 'about to create new location' )
             location = models_alch.Location(name=loc['value'])
             session.add(location)
             session.commit()
         elif loc['id'] == 0:
+            log.debug( 'skipping location creation' )
             continue
         else:
+            log.debug( 'about to retrieve existing location' )
             # location = models.Location.query.get(loc['id'])
             location = session.query( models_alch.Location ).get( loc['id'] )
+            log.debug( f'retrieved location, ``{location}``' )
         locations.append(location)
+    log.debug( f'locations, ``{locations}``' )
+
     # clny_state = models.LocationType.query.filter_by(name='Colony/State').first()
     clny_state = session.query( models_alch.LocationType ).filter_by( name='Colony/State' ).first()
 
@@ -397,6 +451,49 @@ def process_record_locations( locData: list, recObj: models_alch.Reference, sess
     session.commit()
     log.debug( 'returning reference-instance' )
     return recObj
+
+
+
+# def process_record_locations( locData: list, recObj: models_alch.Reference, session: sqlalchemy.orm.session.Session ) -> models_alch.Reference:
+#     """ Creates additional Location records if necessary...
+#         Updates ReferenceLocation records if necessary...
+#         Creates a linkage between the Reference record and the ReferenceLocation record if necessary.
+#         Called by manage_post() and manage_reference_put() """
+#     log.debug( f'starting process_record_locations(); locData, ```{pprint.pformat(locData)}```' )
+#     locations = []
+#     for loc in locData:
+#         if loc['id'] == -1:
+#             location = models_alch.Location(name=loc['value'])
+#             session.add(location)
+#             session.commit()
+#         elif loc['id'] == 0:
+#             continue
+#         else:
+#             # location = models.Location.query.get(loc['id'])
+#             location = session.query( models_alch.Location ).get( loc['id'] )
+#         locations.append(location)
+#     # clny_state = models.LocationType.query.filter_by(name='Colony/State').first()
+#     clny_state = session.query( models_alch.LocationType ).filter_by( name='Colony/State' ).first()
+
+#     # city = models.LocationType.query.filter_by(name='City').first()
+#     city = session.query( models_alch.LocationType ).filter_by( name='City' ).first()
+
+#     # locale = models.LocationType.query.filter_by(name='Locale').first()
+#     locale = session.query( models_alch.LocationType ).filter_by( name='Locale' ).first()
+
+#     loc_types = [ clny_state, city, locale ]
+#     for loc in locations:
+#         rec_loc = models_alch.ReferenceLocation()
+#         rec_loc.reference = recObj
+#         rec_loc.location = loc
+#         idx = locations.index( loc )
+#         rec_loc.location_rank = idx
+#         if idx < len(loc_types):
+#             rec_loc.location_type = loc_types[idx]
+#         session.add(rec_loc)
+#     session.commit()
+#     log.debug( 'returning reference-instance' )
+#     return recObj
 
 
 def stamp_edit( request_user_id: int, reference_obj: models_alch.Reference, session: sqlalchemy.orm.session.Session ) -> None:

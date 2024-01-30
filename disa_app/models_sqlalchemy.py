@@ -267,9 +267,10 @@ class Reference(Base):
             return ''
 
     def display_location_info( self ):
-        # session = make_session()
+        """ Returns list of dicts, where each dict has `location_name` and `location_type` keys.
+            Called by `dictify()` method. """
         locations_lst = []
-        rfrnc_locations = self.locations
+        rfrnc_locations = self.locations  # type: ignore -- possible because of ReferenceLocation() relationship
         log.debug( f'rfrnc_locations, ```{rfrnc_locations}```' )
         for rfrnc_location in rfrnc_locations:
             location_name = rfrnc_location.location.name
