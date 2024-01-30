@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import datetime, json, logging, operator, os, pprint
+import datetime, json, logging, operator, os, pprint, time
 
 import sqlalchemy
 from disa_app import settings_app
@@ -334,6 +334,7 @@ def manage_reference_delete( rfrnc_id: str ) -> dict:  # or, much less likely, H
     # raise Exception( 'halting reference-deletion' )  # for debugging
     log.debug( 'starting manage_delete()' )
     log.debug( f'rfrnc_id, ``{rfrnc_id}``' )
+    # time.sleep( 30 )  # for debugging
     context = {}
     try:
         assert type(rfrnc_id) == str
