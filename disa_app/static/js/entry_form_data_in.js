@@ -22,7 +22,7 @@ function prepareForTagify(data) {
     tagifiedData = '[]';
   }
 
-  console.log('TAGIFYING FROM ', data, ' TO ', tagifiedData);
+  //console.log('TAGIFYING FROM ', data, ' TO ', tagifiedData);
 
   return tagifiedData;
 }
@@ -31,6 +31,8 @@ function prepareForTagify(data) {
 
 
 // SOURCE
+// main routine to prepare data structure from browse.json
+// for use by Vue
 
 function preprocessSourceData(data) {
 
@@ -44,13 +46,13 @@ function preprocessSourceData(data) {
           dd = date.getDate().toString().padStart(2,'0')
     return `${yyyy}-${mm}-${dd}`;
   }
-  
+
   // data.formData.doc.fields.date = getDateInFormFormat(data.formData.doc.fields.date);
   data.formData.doc.fields.date = data.formData.doc.fields.date;
   // data.formData.doc.fields.accessDate = getDateInFormFormat(data.formData.doc.fields.accessDate);
   data.formData.doc.fields.accessDate = data.formData.doc.fields.accessDate;
 
-  // Merge incoming data with data structure template to create a
+  // Merge incoming data , i.e., browse.json, with data structure template to create a
   //  full data structure
 
   data.formData.doc.references = data.formData.doc.references.map(
@@ -131,7 +133,7 @@ async function getSourceData() {
 }
 
 
-// ITEM
+// ITEM (record)
 
 function preprocessItemData(itemData, oldItemData, relationshipsData, referentData) {
 
@@ -224,8 +226,6 @@ async function getItemData(itemId, oldItemData, apiInfo) {
   if (itemId) {
 
     // data_itemrecord_api_url_root variable set in redesign_citation.html
-    // @todo but is also available in apiInfo?
-
     const dataURL = `${data_itemrecord_api_url_root}${itemId}/`,
           itemDataPromise = fetch(dataURL).then(response => response.json()),
           referentDataPromise = itemDataPromise.then(itemData => {
@@ -237,6 +237,7 @@ async function getItemData(itemId, oldItemData, apiInfo) {
           }),
           relationshipsDataPromise = getRelationshipsData(itemId);
 
+    // fetch all THREE API endpoints: referent, relationships, AND record
     return Promise.all([referentDataPromise, relationshipsDataPromise, itemDataPromise])
            .then(([referentData, relationshipsData, itemData]) => {
       return preprocessItemData(itemData, oldItemData, relationshipsData, referentData);

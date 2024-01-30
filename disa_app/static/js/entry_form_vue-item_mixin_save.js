@@ -88,7 +88,7 @@ async function addNewReferentToForm(form) {
 
 async function saveReferentDataToServer() {
 
-  console.log('SAVE REFERENT - DATA', this.currentReferent);
+  console.log('SAVE REFERENT - VUE INSTANCE DATA', this.currentReferent);
 
   if (this.currentReferent && this.currentReferent.FULL_DATA_LOADED) {
 
@@ -114,7 +114,10 @@ async function saveReferentDataToServer() {
     const requestBody = JSON.stringify({
       id: this.currentReferentId.toString(),
       record_id: this.currentItemId.toString(),
-      age: this.currentReferent.age || '',
+      age: this.currentReferent.age_text || '',
+      age_text: this.currentReferent.age_text || '',
+      age_number: parseFloat(this.currentReferent.age_number) || null,
+      age_category: this.currentReferent.age_category || null,
       names: this.currentReferent.names.map(
         name => Object.assign({ }, name, { id: name.id.toString() })
       ),

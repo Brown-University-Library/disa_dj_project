@@ -241,6 +241,14 @@ export const LOCAL_SETTINGS = {
       '35':'Multi-racial',
       '24':'White' */
     },
+    formInputDISAPersonAge_category: {
+      '78ac411b-be39-41e3-be66-43017e30d105':'Infant',
+      '761cc55d-8bf6-4737-a728-30f20c4d66b2':'Child',
+      '3a592293-9d21-4cef-968a-fcebfd1c0835':'Youth / Young Adult',
+      '91372500-720a-44ae-9a97-2f7e6bab4a28':'Adult',
+      'c40e63bd-c119-476a-8195-771780cb7c33':'Older adult',
+      'affc059e-1c0b-464c-a7da-37ad66aefd5d':'Elder'
+    },  
     // Temporary client-side override for fall `23 data cleaning
     // (the record type items usually come from the server)
     // See also entry_form_data_in.js
