@@ -34,6 +34,15 @@ from django.shortcuts import render
 log = logging.getLogger(__name__)
 
 
+# temp SITE-DOWN...
+def site_down( request ):
+    """ Displays temporary site-down page. """
+    log.debug( '\n\nstarting site_down()' )
+    msg = '<p>The Stolen-Relations data-entry form site is temporarily down for maintenance.</p>'
+    resp = HttpResponse( msg )
+    return resp
+
+
 # ===========================
 # main urls
 # ===========================

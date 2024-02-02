@@ -11,6 +11,9 @@ admin.autodiscover()
 
 urlpatterns = [
 
+    ## temp SITE-DOWN...
+    url( r'^.*$', views.site_down, name='site_down_url' ),
+
     ## primary app urls...
 
     url( r'^info/$', views.info, name='info_url' ),
