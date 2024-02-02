@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import datetime, json, logging, pprint, secrets, uuid
+import datetime, json, logging, pprint, secrets, time, uuid
 
 import requests
 from disa_app import settings_app
@@ -207,7 +207,7 @@ class Record_Test( TestCase ):
         self.create_new_record()
         ## tests
         self.assertEqual( 200, self.create_resp_statuscode )
-        self.assertEqual( True, self.create_resp_id.isnumeric(),  )
+        self.assertEqual( True, self.create_resp_id.isnumeric(),  )  # type: ignore
         self.assertEqual( str, type(self.create_resp_id) )
         self.assertEqual( ['redirect'], list(self.post_resp_dct.keys()) )
         ## cleanup
@@ -256,10 +256,14 @@ class Record_Test( TestCase ):
                 'transcription': 'transcription_bbb'
                 }
         """
-        # self.assertEqual( 1, 2 )
+        log.debug( 'initial location-data...' )
+        manual_sql_query()  # temp; for debugging
         ## create citation
         log.debug( 'creating new record' )
         self.create_new_record()
+        # time.sleep( 30 )  # debugging
+        log.debug( 'after POST...' )
+        manual_sql_query()  # temp; for debugging
         ## PUT
         put_url = reverse( 'data_record_url', kwargs={'rec_id': self.create_resp_id} )
         log.debug( f'put_url-url, ``{put_url}``' )
@@ -275,6 +279,10 @@ class Record_Test( TestCase ):
         put_response = self.client.put( put_url, data=jsn, content_type='application/json' )
         put_resp_dct = json.loads( put_response.content )
         log.debug( f'put_resp_dct, ``{pprint.pformat(put_resp_dct)}``' )
+        log.debug( 'put complete; testing' )
+        log.debug( 'after PUT...' )
+        manual_sql_query()  # temp; for debugging
+        # time.sleep( 30 )  # debugging
         ## tests
         ''' Note, these are similar to the GET tests. '''
         self.assertEqual( 200, put_response.status_code )
@@ -304,8 +312,12 @@ class Record_Test( TestCase ):
                 self.random_put_record_type, put_resp_dct['rec']['record_type'] )
         self.assertEqual(
             self.random_put_transcription, put_resp_dct['rec']['transcription'] )
+        log.debug( 'after tests -- should be same as after PUT...' )
+        manual_sql_query()  # temp; for debugging
         ## cleanup
         self.delete_new_record()
+        log.debug( 'after DELETE...' )
+        manual_sql_query()  # temp; for debugging
 
     # ## DELETE ====================
 
@@ -335,3 +347,33 @@ class Record_Test( TestCase ):
             self.delete_resp_dct )  # for now, we're hard-coding new adds to citation-document #768
 
     ## end Record_Test()
+
+
+def manual_sql_query():
+    import sqlite3
+
+    # Path to the SQLite database
+    db_path = '../DBs/DISA.sqlite'
+
+    # Connect to the SQLite database
+    conn = sqlite3.connect(db_path)
+
+    # Create a cursor object
+    cursor = conn.cursor()
+
+    # Modify this query by replacing 'some_column' with the appropriate column name
+    query = '''SELECT * FROM `5_has_location` ORDER BY id DESC LIMIT 10;'''
+
+    # Execute the query
+    cursor.execute(query)
+
+    # Fetch the results
+    results = cursor.fetchall()
+
+    # Do something with the results
+    for row in results:
+        log.debug(f'row, ``{row}``')
+
+    # Close the cursor and connection
+    cursor.close()
+    conn.close()
