@@ -594,6 +594,7 @@ def data_records( request, rec_id=None ):
     except:
         log.exception( 'problem handling request' )
     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    db_session.close()
     return resp
 
 
@@ -620,6 +621,7 @@ def data_reference( request, rfrnc_id ):
             rspns = HttpResponseNotFound( '404 / Not Found' )
     else:
         rspns = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    db_session.close()
     return rspns
 
 
@@ -691,6 +693,7 @@ def data_documents( request, doc_id=None ):
         resp = HttpResponseServerError( context )
     else:
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    db_session.close()
     return resp
 
 
