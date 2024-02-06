@@ -12,6 +12,8 @@ from django.urls import reverse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from sqlalchemy.orm.session import Session as AlchSession
+
 
 log = logging.getLogger(__name__)
 CITATION_TYPES = [
@@ -34,11 +36,13 @@ def make_session() -> sqlalchemy.orm.session.Session:
     return session
 
 
-def manage_get( doc_id: str, user_id: int ) -> dict:
+def manage_get( doc_id: str, user_id: int, db_session: AlchSession ) -> dict:
     """ Queries and massages data for given doc_id.
         Called by views.data_documents() on GET """
     assert type(doc_id) == str; assert type(user_id) == int
-    session = make_session()
+    # session = make_session()
+    session = db_session
+
     data = { 'doc': {} }
     included: list = CITATION_TYPES
     # ct = models.CitationType.query.filter( models.CitationType.name.in_(included) ).all()
@@ -83,12 +87,14 @@ def manage_get( doc_id: str, user_id: int ) -> dict:
     ## end def manage_get()
 
 
-def manage_get_all( user_id: int ) -> dict:
+def manage_get_all( user_id: int, db_session: AlchSession ) -> dict:
     """ Queries and massages data for new-document.
         Called by views.data_documents() on GET, with no doc_id.
         2021-April-27: i don't think this is being used. """
     log.debug( f'\n\nstarting manage_get_all()' )
-    session = make_session()
+    # session = make_session()
+    session = db_session
+
     data = { 'doc': {} }
     included: list = CITATION_TYPES
     # ct = models.CitationType.query.filter( models.CitationType.name.in_(included) ).all()
@@ -99,11 +105,13 @@ def manage_get_all( user_id: int ) -> dict:
     return data
 
 
-def manage_put( cite_id: str, user_id: int, payload: bytes ) -> dict:
+def manage_put( cite_id: str, user_id: int, payload: bytes, db_session: AlchSession ) -> dict:
     """ Updates document.
         Called by views.data_documents() on PUT """
     assert type(cite_id) == str; assert type(user_id) == int; assert type(payload) == bytes
-    session = make_session()
+    # session = make_session()
+    session = db_session
+
     return_data = {}
 
     try:
@@ -267,7 +275,7 @@ def manage_put( cite_id: str, user_id: int, payload: bytes ) -> dict:
 #     ## end def manage_put()
 
 
-def manage_post( user_id, payload ):
+def manage_post( user_id, payload, db_session: AlchSession ):
     """ Updates document.
         Called by views.data_documents() on POST """
     log.debug( 'starting manage_post()' )
@@ -277,7 +285,9 @@ def manage_post( user_id, payload ):
 
     try:  # temp; remove after debugging
 
-        session = make_session()
+        # session = make_session()
+        session = db_session
+
         data: dict = json.loads( payload )
         log.debug( f'data, ``{pprint.pformat(data)}``' )
 
@@ -344,7 +354,7 @@ def manage_post( user_id, payload ):
     ## end def manage_post()
 
 
-def manage_delete( doc_id, user_uuid_str, user_email ):
+def manage_delete( doc_id: str, user_uuid_str: str, user_email: str, db_session: AlchSession ):
     """ Adds mark-for-deletion entry to django-db table.
         Called by: views.data_documents() when request.method is 'DELETE'. """
     log.debug( f'doc_id, ``{doc_id}``; user_uuid_str, ``{user_uuid_str}``; user_email, ``{user_email}``' )
@@ -355,7 +365,9 @@ def manage_delete( doc_id, user_uuid_str, user_email ):
 
     ## build citation_jsn for storage
     try:
-        session = make_session()
+        # session = make_session()
+        session = db_session
+        
         log.debug( f'session, ``{session}``' )
         citation_result = session.query( models_alch.Citation ).get( doc_id )
         log.debug( f'citation_result, ``{citation_result}``' )
