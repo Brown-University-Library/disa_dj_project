@@ -29,11 +29,11 @@ CITATION_TYPES = [
     'Webpage' ]
 
 
-def make_session() -> sqlalchemy.orm.session.Session:
-    engine = create_engine( settings_app.DB_URL, echo=True )
-    Session = sessionmaker( bind=engine )
-    session = Session()
-    return session
+# def make_session() -> sqlalchemy.orm.session.Session:
+#     engine = create_engine( settings_app.DB_URL, echo=True )
+#     Session = sessionmaker( bind=engine )
+#     session = Session()
+#     return session
 
 
 def manage_get( doc_id: str, user_id: int, db_session: AlchSession ) -> dict:
