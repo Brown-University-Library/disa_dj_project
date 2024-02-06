@@ -24,15 +24,50 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session as alch_Session  # just used for type-annotation
 
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.ext.declarative import declarative_base
+
+
 log = logging.getLogger(__name__)
 Base = declarative_base()
 
 
-def make_session() -> alch_Session:
-    engine = create_engine( settings_app.DB_URL, echo=True )
-    Session = sessionmaker( bind=engine )
-    session = Session()
-    return session
+# def make_session() -> alch_Session:
+#     engine = create_engine( settings_app.DB_URL, echo=True )
+#     Session = sessionmaker( bind=engine )
+#     session = Session()
+#     return session
+
+# Define the engine and base
+engine = create_engine(settings_app.DB_URL, echo=True)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# Create a thread-local session factory
+session_factory = sessionmaker(bind=engine)
+ScopedSession = scoped_session(session_factory)
+
+# Base class for your models
+Base = declarative_base()
+
+def make_session() -> ScopedSession:
+    """
+    Call this function to get a thread-local session
+    for the current thread.
+    """
+    return ScopedSession()
+
+def close_session(exception=None):
+    """
+    Call this function to close the thread-local session.
+    Optionally pass an exception if closing due to an exception.
+    """
+    if exception is not None:
+        # If there was an exception, you might want to rollback before closing
+        ScopedSession.rollback()
+    ScopedSession.remove()
+
 
 
 # ==========
