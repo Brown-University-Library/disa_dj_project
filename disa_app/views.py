@@ -606,8 +606,12 @@ def data_reference( request, rfrnc_id ):
         """
     log.debug( f'\n\nstarting data_reference()' )
     log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rfrnc_id, ``{rfrnc_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
+    
+    ## get db-session for this request ------------------------------
+    db_session: AlchSession = models_sqlalchemy.make_session()
+    
     assert type(rfrnc_id) == str
-    context: dict = view_data_records_manager.manage_reference_delete( rfrnc_id )
+    context: dict = view_data_records_manager.manage_reference_delete( rfrnc_id, db_session )
     rspns = HttpResponseNotFound( '404 / Not Found' )
     if 'err' in context.keys():
         if context['err'] == '400 / Bad Request':
@@ -648,9 +652,11 @@ def data_documents( request, doc_id=None ):
     log.debug( f'\n\nstarting data_documents, with doc_id, `{doc_id}`; with method, ```{request.method}```, with a payload of, `{request.body}`' )
     log.debug( f'request.user.id, ```{request.user.id}```; request.user.profile.old_db_id, ```{request.user.profile.old_db_id}```,' )
     log.debug( f'type(request.user.id), ```{type(request.user.id)}```; type(request.user.profile.old_db_id), ```{type(request.user.profile.old_db_id)}```,' )
+
     ## get db-session for this request ------------------------------
     db_session: AlchSession = models_sqlalchemy.make_session()
     log.debug( f'type(db_session), ``{type(db_session)}``' )
+
     ## get user info ------------------------------------------------
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     user_uuid = request.user.profile.uu_id
