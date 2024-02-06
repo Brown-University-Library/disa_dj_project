@@ -5,6 +5,12 @@ import datetime, json, logging, os, pprint, time
 
 import requests
 
+# -- sqlalchemy.orm.session.Session --
+# import sqlalchemy
+# from sqlalchemy import orm.session.Session
+# from sqlalchemy.orm import session.Session
+from sqlalchemy.orm.session import Session as AlchSession
+
 # from disa_app.lib import basic_auth
 # from django.shortcuts import get_object_or_404, render
 from disa_app import settings_app
@@ -29,6 +35,8 @@ from django.contrib.auth import logout as django_logout
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, HttpResponseRedirect, HttpResponseServerError
 from django.shortcuts import render
+
+from disa_app import models_sqlalchemy
 
 
 log = logging.getLogger(__name__)
@@ -516,6 +524,23 @@ def data_entrants( request, rfrnt_id: str ):
     return resp
 
 
+# @shib_login
+# def data_entrants_details( request, rfrnt_id ):
+#     """ Called via ajax by views.edit_person()
+#         Updates referent details.
+#         Url: 'data/entrants/details/<rfrnt_id>' -- 'data_entrants_details_url' """
+#     log.debug( f'\n\nstarting data_entrants_details(), with rfrnt_id, ``{rfrnt_id}``, and method, ``{request.method}``' )
+#     log.debug( f'payload, ```{pprint.pformat(request.body)}```' )
+#     log.debug( f'request.user.profile.old_db_id, ``{request.user.profile.old_db_id}``' )
+#     log.debug( f'request.user.id, ``{request.user.id}``' )
+#     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
+#     log.debug( f'user_id, ``{user_id}``' )
+#     data_entrant_details_updater = view_data_entrant_manager.Details_Updater()
+#     context: dict = data_entrant_details_updater.manage_details_put( request.body, user_id, rfrnt_id )
+#     resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+#     return resp
+
+
 @shib_login
 def data_entrants_details( request, rfrnt_id ):
     """ Called via ajax by views.edit_person()
@@ -539,6 +564,9 @@ def data_records( request, rec_id=None ):
         Url: '/data/records/<rec_id>/' -- 'data_record_url' """
     log.debug( '\n\nstarting data_records' )
     # log.debug( f'request.__dict__, ``{pprint.pformat(request.__dict__)}``' )
+    ## get db-session for this request ------------------------------
+    db_session: AlchSession = models_sqlalchemy.make_session()
+    
     context = {}
     try:
         log.debug( f'query_string, ``{request.META.get("QUERY_STRING", None)}``; rec_id, ``{rec_id}``; method, ``{request.method}``; payload, ``{request.body}``' )
@@ -552,15 +580,15 @@ def data_records( request, rec_id=None ):
         if request.method == 'GET':
             if rec_id:
                 log.debug( 'here, because rec_id exists' )
-                context: dict = view_data_records_manager.query_record( rec_id )
+                context: dict = view_data_records_manager.query_record( rec_id, db_session )
             else:
                 log.debug( f'here, because rec_id is None' )
                 context = { 'rec': {}, 'entrants': [] }
         elif request.method == 'PUT':
-            context: dict = view_data_records_manager.manage_reference_put( rec_id, request.body, user_id )
+            context: dict = view_data_records_manager.manage_reference_put( rec_id, request.body, user_id, db_session )
         elif request.method == 'POST':
             # time.sleep( 10 )  # temp -- this was to mimic a db-hang to address a javascript issue
-            context: dict = view_data_records_manager.manage_post( request.body, user_id )
+            context: dict = view_data_records_manager.manage_post( request.body, user_id, db_session )
         else:
             log.warning( 'shouldn\'t get here' )
     except:
@@ -620,22 +648,26 @@ def data_documents( request, doc_id=None ):
     log.debug( f'\n\nstarting data_documents, with doc_id, `{doc_id}`; with method, ```{request.method}```, with a payload of, `{request.body}`' )
     log.debug( f'request.user.id, ```{request.user.id}```; request.user.profile.old_db_id, ```{request.user.profile.old_db_id}```,' )
     log.debug( f'type(request.user.id), ```{type(request.user.id)}```; type(request.user.profile.old_db_id), ```{type(request.user.profile.old_db_id)}```,' )
+    ## get db-session for this request ------------------------------
+    db_session: AlchSession = models_sqlalchemy.make_session()
+    log.debug( f'type(db_session), ``{type(db_session)}``' )
+    ## get user info ------------------------------------------------
     user_id = request.user.profile.old_db_id if request.user.profile.old_db_id else request.user.id
     user_uuid = request.user.profile.uu_id
     user_email = request.user.profile.email
     log.debug( f'user_id, ```{user_id}```' )
     context = {}
     if request.method == 'GET' and doc_id:
-        context: dict = v_data_document_manager.manage_get( doc_id, user_id )
+        context: dict = v_data_document_manager.manage_get( doc_id, user_id, db_session )
     elif request.method == 'GET':  # called when clicking 'New document' button
-        context: dict = v_data_document_manager.manage_get_all( user_id )
+        context: dict = v_data_document_manager.manage_get_all( user_id, db_session )
     elif request.method == 'PUT':
-        context: dict = v_data_document_manager.manage_put( doc_id, user_id, request.body )
+        context: dict = v_data_document_manager.manage_put( doc_id, user_id, request.body, db_session )
     elif request.method == 'POST':
-        context: dict = v_data_document_manager.manage_post( user_id, request.body )
+        context: dict = v_data_document_manager.manage_post( user_id, request.body, db_session )
     elif request.method == 'DELETE':
         log.debug( 'DELETE detected' )
-        context: dict = v_data_document_manager.manage_delete( doc_id, user_uuid.hex, user_email )
+        context: dict = v_data_document_manager.manage_delete( doc_id, user_uuid.hex, user_email, db_session )
     else:
         msg = 'data_documents() other request.method handling coming'
         log.warning( f'message returned, ```{msg}``` -- but we shouldn\'t get here' )
