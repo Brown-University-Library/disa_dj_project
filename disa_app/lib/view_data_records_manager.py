@@ -12,6 +12,8 @@ from django.http import HttpResponseNotFound, HttpResponseRedirect
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from sqlalchemy.orm.session import Session as AlchSession
+
 
 log = logging.getLogger(__name__)
 
@@ -20,7 +22,7 @@ log = logging.getLogger(__name__)
 # main
 # -------------
 
-def query_record( rec_id: str ) -> dict:
+def query_record( rec_id: str, db_session: AlchSession ) -> dict:
     """ Handles api call for GET reference-data and associated referent-data.
         Called by views.data_records() """
     log.debug( 'starting query_record()' )
@@ -29,7 +31,9 @@ def query_record( rec_id: str ) -> dict:
     if rec_id == None:
         data = json.dumps( data )
         log.debug( f'no rec_id; data, ```{pprint.pformat(data)}```' )
-    session = make_session()
+    # session = make_session()
+    session = db_session
+    
     rec: models_sqlalchemy.Reference = session.query( models_alch.Reference ).get( rec_id )
     data['rec']['id'] = rec.id
     data['rec']['date'] = None
@@ -84,14 +88,16 @@ def query_record( rec_id: str ) -> dict:
     ## end def query_record()
 
 
-def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int ) -> dict:
+def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int, db_session: AlchSession ) -> dict:
     """ Handles api call when 'Create' button is hit in `/editor/records/?doc_id=(123)`.
         Called by views.data_records() """
     log.debug( 'starting manage_reference_put()' )
 
     try:
 
-        session = make_session()
+        # session = make_session()
+        session = db_session
+
         data: dict = json.loads( payload )
         log.debug( f'data, ```{pprint.pformat(data)}```' )
 
@@ -149,11 +155,13 @@ def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int ) ->
     ## end def manage_reference_put()
 
 
-def manage_post( payload: bytes, request_user_id: int ) -> dict:
+def manage_post( payload: bytes, request_user_id: int, db_session: AlchSession ) -> dict:
     """ Handles api call when 'Create' button is hit in `/editor/records/?doc_id=(123)`.
         Called by views.data_records() """
     log.debug( 'starting manage_post()' )
-    session = make_session()
+    # session = make_session()
+    session = db_session
+    
     data: dict = json.loads( payload )
     log.debug( f'data, ```{pprint.pformat(data)}```' )
     try:  # for debugging; remove afterwards
