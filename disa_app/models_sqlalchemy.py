@@ -51,12 +51,20 @@ ScopedSession = scoped_session(session_factory)
 # Base class for your models
 Base = declarative_base()
 
-def make_session() -> ScopedSession:
+# def make_session() -> ScopedSession:
+#     """
+#     Call this function to get a thread-local session
+#     for the current thread.
+#     """
+#     return ScopedSession()
+
+def make_session():
     """
     Call this function to get a thread-local session
     for the current thread.
     """
     return ScopedSession()
+
 
 def close_session(exception=None):
     """
