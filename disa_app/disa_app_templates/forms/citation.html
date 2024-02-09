@@ -122,17 +122,23 @@
         </div>
     </div><!-- end citation fields -->
     <div class="form-floating">
-        <textarea class="form-control" id="formInputDISAAcknowledgements" placeholder="Enter notes here..." v-model="formData.doc.acknowledgements" v-on:blur="saveSourceToServer"></textarea>
+        <textarea class="form-control" id="formInputDISAAcknowledgements" placeholder="Enter notes here..." 
+        v-model="formData.doc.acknowledgements" v-on:blur="saveSourceToServer"
+        tabindex="400"></textarea>
         <label for="formInputDISAAcknowledgements">Acknowledgements</label>
     </div>
     <div class="form-floating">
-        <textarea class="form-control" id="formInputDISABiblioResearcherNotes" placeholder="Enter notes here..." v-model="formData.doc.comments" v-on:blur="saveSourceToServer"></textarea>
+        <textarea class="form-control" id="formInputDISABiblioResearcherNotes" placeholder="Enter notes here..." 
+        v-model="formData.doc.comments" v-on:blur="saveSourceToServer"
+        tabindex="401"></textarea>
         <label for="formInputDISABiblioResearcherNotes">Researcher notes</label>
     </div>
-    <a type="button" class="btn btn-primary btn-md" href="../../redesign_citations/">
+    <a type="button" class="btn btn-primary btn-md" href="../../redesign_citations/"
+        tabindex="402">
         Save source and exit
     </a>
-    <button type="button" class="btn btn-primary btn-md" id="source-form-submit" v-on:click="openItemTab">
+    <button type="button" class="btn btn-primary btn-md" id="source-form-submit" v-on:click="openItemTab"
+        tabindex="403">
         Save source and continue to enter records
     </button>
 </form>
