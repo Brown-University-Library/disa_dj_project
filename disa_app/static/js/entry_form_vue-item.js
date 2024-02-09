@@ -388,7 +388,7 @@ function initializeItemForm(dataAndSettings, {DISA_ID_COMPONENT, TAG_INPUT_COMPO
                     (referent.names[0].first || referent.names[0].last)) {
           displayLabel = `${referent.names[0].first} ${referent.names[0].last}`
         } else {
-          displayLabel = `Individual-${referent.id}`;
+          displayLabel = `Name once known (ID ${referent.id})`;
         }
 
         return displayLabel;
