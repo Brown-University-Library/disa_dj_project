@@ -17,6 +17,7 @@ services:
     environment:
       - FOO_KEY=bar_val
       - DISA_DJ__ENV_SETTINGS_PATH=config/settings_localdev_env.sh
+      - PYTHONPATH=/sr_project_stuff
 
     env_file: ./config/settings_localdev_env.sh
 
