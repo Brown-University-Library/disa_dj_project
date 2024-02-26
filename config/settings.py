@@ -144,9 +144,13 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # logging
 
 ## disable module loggers
-# existing_logger_names = logging.getLogger().manager.loggerDict.keys()
-# print '- EXISTING_LOGGER_NAMES, `%s`' % existing_logger_names
+existing_logger_names = logging.getLogger().manager.loggerDict.keys()
+print( '- EXISTING_LOGGER_NAMES, `%s`' % existing_logger_names )
 logging.getLogger('requests').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy*').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.engine').setLevel( logging.WARNING )
+
 
 LOGGING = {
     'version': 1,

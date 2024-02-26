@@ -42,6 +42,13 @@ from disa_app import models_sqlalchemy
 log = logging.getLogger(__name__)
 
 
+existing_logger_names = logging.getLogger().manager.loggerDict.keys()
+print( f'- EXISTING_LOGGER_NAMES in views.py, `{pprint.pformat(list(existing_logger_names))}`' )
+logging.getLogger('sqlalchemy').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy*').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.engine').setLevel( logging.WARNING )
+
+
 # ===========================
 # main urls
 # ===========================
