@@ -24,20 +24,72 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session as alch_Session  # just used for type-annotation
 
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.ext.declarative import declarative_base
+
+
 log = logging.getLogger(__name__)
 Base = declarative_base()
 
 
-def make_session() -> alch_Session:
-    engine = create_engine( settings_app.DB_URL, echo=True )
-    Session = sessionmaker( bind=engine )
-    session = Session()
-    return session
+## session configuration --------------------------------------------
+"""
+This implements a `singleton-pattern` for the SQLAlchemy engine and scoped_session, 
+ensuring that these objects are instantiated only once.
+
+The `scoped_session` exists only for the duration of a request, and is then removed.
+"""
+
+engine = None
+ScopedSession = None
+
+def initialize_engine_session():
+    global engine, ScopedSession
+    if engine is None:
+        engine = create_engine( settings_app.DB_URL, echo=True )
+        session_factory = sessionmaker( bind=engine )
+        ScopedSession = scoped_session( session_factory )
+
+def make_session():
+    """
+    Call this function to get a thread-local session
+    for the current thread, initializing the engine and session factory
+    if they haven't been initialized yet.
+    """
+    if engine is None or ScopedSession is None:
+        initialize_engine_session()
+    return ScopedSession
+
+## Old session implementation. Problem here is that the engine-work happens each time, unnecessarily.
+# def make_session() -> alch_Session:
+#     engine = create_engine( settings_app.DB_URL, echo=True )
+#     Session = sessionmaker( bind=engine )
+#     session = Session()
+#     return session
+
+## Don't think this is needed, but leaving it here for now.
+# def close_session(exception=None):
+#     """
+#     Call this function to close the thread-local session.
+#     Optionally pass an exception if closing due to an exception.
+#     """
+#     if exception is not None:
+#         # If there was an exception, you might want to rollback before closing
+#         ScopedSession.rollback()
+#     ScopedSession.remove()
+
+## (end) session configuration --------------------------------------
 
 
 # ==========
 # RDF-ish
 # ==========
+
+
+# Base class for your models
+Base = declarative_base()
 
 
 citationtype_referencetypes = Table('3_citationtype_referencetypes',
