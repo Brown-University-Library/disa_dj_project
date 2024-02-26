@@ -24,6 +24,16 @@ For activating the virtual-environment manually, don't source the settings file 
 This allows not only the sourcing, but also creates the env-var used below by shellvars.
 """
 
+## silence sqlalchemy logging
+"""
+This is one of the earliest files loaded, so it's a good place to silence the sqlalchemy logging.
+"""
+import logging
+logging.getLogger('sqlalchemy.engine.base.Engine').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.engine.base').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.engine').setLevel( logging.WARNING )
+
+
 import os, pprint, sys
 import shellvars
 from django.core.wsgi import get_wsgi_application
