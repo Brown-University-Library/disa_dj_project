@@ -133,4 +133,6 @@ export DISA_DJ__DATABASE_URL="sqlite:///../DBs/DISA.sqlite"
 
 export DISA_DJ__TEMP_GROUPS_ENABLED_JSON="true"
 
+export SQLALCHEMY_ECHO="False"
+
 ## end ========================================================================

@@ -9,6 +9,37 @@ For the full list of settings and their values, see
 <https://docs.djangoproject.com/en/3.2/ref/settings/>
 """
 
+import logging
+logging.getLogger('sqlalchemy.engine.base.Engine').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.engine.base').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.engine').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.ext.baked').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.ext').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.dynamic.DynaLoader').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.dynamic').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.mapper.Mapper').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.mapper').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.path_registry').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.properties.ColumnProperty').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.properties').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.query.Query').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.query').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.relationships.RelationshipProperty').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.relationships').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.strategies.ColumnLoader').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.strategies.DeferredColumnLoader').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.strategies.DoNothingLoader').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.strategies.ExpressionColumnLoader').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.strategies.JoinedLoader').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.strategies.LazyLoader').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.strategies.NoLoader').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.strategies.SelectInLoader').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.strategies.SubqueryLoader').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm.strategies').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy.orm').setLevel( logging.WARNING )
+logging.getLogger('sqlalchemy').setLevel( logging.WARNING )
+
+
 import json, logging, os
 
 log = logging.getLogger(__name__)
@@ -148,7 +179,6 @@ existing_logger_names = logging.getLogger().manager.loggerDict.keys()
 print( '- EXISTING_LOGGER_NAMES, `%s`' % existing_logger_names )
 logging.getLogger('requests').setLevel( logging.WARNING )
 logging.getLogger('sqlalchemy').setLevel( logging.WARNING )
-logging.getLogger('sqlalchemy*').setLevel( logging.WARNING )
 logging.getLogger('sqlalchemy.engine').setLevel( logging.WARNING )
 
 
@@ -168,16 +198,17 @@ LOGGING = {
             'include_html': True,
         },
         'logfile': {
-            'level':'DEBUG',
+            # 'level':'DEBUG',
+            'level':'WARNING',
             'class':'logging.FileHandler',  # note: configure server to use system's log-rotate to avoid permissions issues
             'filename': os.environ.get(u'DISA_DJ__LOG_PATH'),
             'formatter': 'standard',
         },
-        'console':{
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
-            'formatter': 'standard'
-        },
+        # 'console':{
+        #     'level':'WARNING',
+        #     'class':'logging.StreamHandler',
+        #     'formatter': 'standard'
+        # },
     },
     'loggers': {
         'django.request': {
