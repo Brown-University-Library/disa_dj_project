@@ -60,7 +60,7 @@
                         {{ titles }}
                         {% endif %}
                     </dd>
-                    <dt>Vocation</dt>
+                    <dt>Occupation</dt>
                     <dd>
                         {% if vocations == "Not Listed" %}
                         <mark><i class="fa-solid fa-file-circle-question"></i> {{ vocations }}</mark>
@@ -95,7 +95,7 @@
         </table>
     </div>
     <div class="col-md-5">
-        <table class="table caption-top table-striped timeline">
+        <table class="table caption-top table-striped events">
             <caption>Timeline</caption>
             <tbody id="refs">
                 {% for ref in refs %} {# Note: `refs` here is person.references #}

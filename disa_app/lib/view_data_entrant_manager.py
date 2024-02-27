@@ -75,6 +75,7 @@ class Getter():
         data['ent']['vocations'] = [
             { 'label': v.name, 'value': v.name,
                 'id': v.name } for v in rfrnt.vocations ]
+        data['ent']['occupation_text'] = rfrnt.occupation_text
         data['ent']['enslavements'] = [
             { 'label': e.name, 'value': e.name,
                 'id': e.name } for e in rfrnt.enslavements ]
@@ -212,6 +213,7 @@ class Details_Updater():
         log.debug( f'rfrnt.enslavements from statuses-data, ``{rfrnt.enslavements}``' )
         rfrnt.vocations = [ self.common.get_or_create_referent_attribute( vo, models_alch.Vocation, self.session )
             for vo in data['vocations'] ]
+        rfrnt.occupation_text = data['occupation_text']
         try:
             self.session.add( rfrnt )
             log.debug( 'session.add ok' )
