@@ -12,12 +12,17 @@ function updateSourceFieldVisibility() {
 
   citationFields.forEach((citationField, defaultOrderIndex) => { 
     const fieldId = citationField.id;
+    const citationFieldInputElem = citationField.querySelector(':scope > input, :scope > textarea');
+    let tabOrder = 1;
+
     if (fieldStatus.required.includes(fieldId)) {
       citationField.hidden = false;
       citationField.style.order = (100 + defaultOrderIndex);
+      citationFieldInputElem.tabIndex = 100 + tabOrder++;
     } else if (fieldStatus.optional.includes(fieldId)) {
       citationField.hidden = false;
       citationField.style.order = (200 + defaultOrderIndex);
+      citationFieldInputElem.tabIndex = 200 + tabOrder++;
     } else {
       citationField.hidden = true;
     }
