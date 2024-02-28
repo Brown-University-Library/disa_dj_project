@@ -141,7 +141,9 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
                                     </div>
                                 </div>
                                 <div class="mb-1 form-floating">
-                                    <textarea name="record-notes" id="record-notes" class="form-control" placeholder="Researcher notes for this record"></textarea>
+                                    <textarea name="record-notes" id="record-notes" 
+                                        class="form-control" placeholder="Enter researcher notes for this record"
+                                        v-model="currentItem.researcher_notes"></textarea>
                                     <label for="record-notes" class="form-label">Researcher notes for this record</label>
                                 </div>
                             </fieldset>
