@@ -403,7 +403,7 @@ async function saveItemDataToServer() {
       national_context: this.currentItem.national_context_id,
       citation_id: this.formData.doc.id,
       image_url: this.currentItem.kludge.image_url,
-      researcher_notes: this.currentItem.kludge.researcher_notes,
+      researcher_notes: this.currentItem.researcher_notes,
     };
 
     const httpMethod = isNewItem ? 'POST' : 'PUT';
