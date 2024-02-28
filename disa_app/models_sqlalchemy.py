@@ -357,6 +357,7 @@ class Reference(Base):
             'national_context_id': self.national_context_id,
             'date': isodate,
             'transcription': self.transcription,
+            'researcher_notes': 'FAKE RESEARCHER NOTE IN SQLA',
             'referents': jsn_referents,
             'last_edit': last_edit_str,
             'location_info': self.display_location_info()
