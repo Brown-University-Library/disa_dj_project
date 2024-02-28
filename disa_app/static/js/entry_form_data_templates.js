@@ -36,7 +36,7 @@ const ITEM_TEMPLATE = {
   reference_type_id: 'IGNORE ME',
   referents:[],
   relationships:[],
-  researcher_notes: ''
+  researcher_notes: '',
   groups:[],
   transcription: 'IGNORE ME',
   // image_url: '',
