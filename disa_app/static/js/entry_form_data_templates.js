@@ -43,6 +43,8 @@ const ITEM_TEMPLATE = {
     transcription: '',
     reference_type_id: '13',
     image_url: ''
+    volume: '',
+    pages: ''
   },
   FULL_DATA_LOADED:false
 };
