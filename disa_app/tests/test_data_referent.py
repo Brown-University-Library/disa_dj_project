@@ -89,7 +89,7 @@ class Client_Referent_API_Test( TestCase ):
         rfrnt_data_keys = sorted( resp_dct['ent'].keys() )
         # self.assertEqual( ['method', 'payload', 'timestamp', 'url'], req_keys )
         self.assertEqual(
-            ['age_category', 'age_number', 'age_text', 'enslavements', 'id', 'names', 'origins', 'races', 'sex', 'titles', 'tribes', 'uuid', 'vocations'],
+            ['age_category', 'age_number', 'age_text', 'enslavements', 'id', 'names', 'occupation_text', 'origins', 'races', 'sex', 'titles', 'tribes', 'uuid', 'vocations'],
             rfrnt_data_keys
             )
         ## cleanup
@@ -202,7 +202,7 @@ class Client_Referent_Details_API_Test( TestCase ):
 
             """
         ## create referent
-        # self.create_new_referent() -- eventually
+        # self.test_put_details_good_new_referent() -- eventually
         ## PUT
         target_rfrnt_id = '2033'
         put_details_url = reverse( 'data_entrants_details_url', kwargs={'rfrnt_id': target_rfrnt_id} )
@@ -212,6 +212,7 @@ class Client_Referent_Details_API_Test( TestCase ):
         random_race_partB = secrets.choice( ['White', 'Unknown'] )
         random_tribe_partA = secrets.choice( ['Bocotora', 'Eastern Pequot'] )
         random_tribe_partB = secrets.choice( ['Mohegan', 'Wampanoag'] )
+        occupation_text = 'a job description ' + str(random.uniform(1, 20))
 
         ## create a random float with one decimal point
         random_age_number = round(random.uniform(1, 20), 1)
@@ -235,7 +236,8 @@ class Client_Referent_Details_API_Test( TestCase ):
             'origins': [],
             'statuses': [],
             'titles': [],
-            'vocations': []
+            'vocations': [],
+            'occupation_text': occupation_text
         }
         jsn = json.dumps( put_details_payload )
         put_details_response = self.client.put( put_details_url, data=jsn, content_type='application/json' )
@@ -270,6 +272,8 @@ class Client_Referent_Details_API_Test( TestCase ):
         self.assertEqual( random_age_text, get_resp_dct['ent']['age_text'] )
         self.assertEqual( random_age_number, get_resp_dct['ent']['age_number'] )
         self.assertEqual( random_uuid, get_resp_dct['ent']['age_category'] )
+        ## test occupation
+        self.assertEqual( occupation_text, get_resp_dct['ent']['occupation_text'] )
         ## cleanup
         # self.delete_new_referent() -- eventually
 

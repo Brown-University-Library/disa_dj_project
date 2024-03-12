@@ -61,6 +61,7 @@ const REFERENT_TEMPLATE = {
       name_type:'8' // Needs to have a value or breaks
     }
   ],
+  occupation_text: undefined,
   origins:'[]', // Tagify
   races:'[]', // Tagify
   record_id: undefined,

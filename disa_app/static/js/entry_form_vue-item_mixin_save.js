@@ -121,6 +121,7 @@ async function saveReferentDataToServer() {
       names: this.currentReferent.names.map(
         name => Object.assign({ }, name, { id: name.id.toString() })
       ),
+      occupation_text: this.currentReferent.occupation_text || '',
       origins: convertFromTagify(this.currentReferent.origins),
       races: convertFromTagify(this.currentReferent.races),
       roles: [], // @todo ?? this.currentReferent.roles,

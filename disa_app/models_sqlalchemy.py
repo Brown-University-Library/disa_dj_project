@@ -526,6 +526,7 @@ class Referent(Base):
         nullable=False)
     person_id = Column(Integer, ForeignKey('1_people.id'),
         nullable=True)
+    occupation_text = Column(String(500))
     age_category_relation = relationship('AgeCategory')  # New relationship for age_category
     names = relationship(
         'ReferentName',
