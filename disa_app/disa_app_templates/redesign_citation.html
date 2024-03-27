@@ -140,9 +140,19 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
                                         </section>
                                     </div>
                                 </div>
-                                <div class="col-4"><a type="button" class="btn btn-success btn-md" v-on:click="saveItemDataToServer" href="../../redesign_citations/">
-                                        Save record and return to citations list
-                                    </a></div>
+                                <div class="mb-1 form-floating">
+                                    <textarea name="record-notes" id="record-notes" 
+                                        class="form-control" placeholder="Enter researcher notes for this record"
+                                        v-model="currentItem.researcher_notes"
+                                        v-on:blur="saveItemDataToServer"></textarea>
+                                    <label for="record-notes" class="form-label">Researcher notes for this record</label>
+                                </div>
+                            </fieldset>
+                            <div class="col-4">
+                                <a type="button" class="btn btn-success btn-md" v-on:click="saveItemDataToServer" href="../../redesign_citations/">
+                                    Save record and return to citations list
+                                </a>
+                            </div>
                         </form>
                     </div><!-- end v-else Record -->
                 </div> <!-- /.tab-pane for Record -->
