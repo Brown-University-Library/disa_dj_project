@@ -294,6 +294,8 @@ class Reference(Base):
     date = Column(DateTime())
     transcription = Column(UnicodeText())
     image_url = Column( String(500) )
+    volume = FIXME
+    volume_pages = FIXME
     referents = relationship(
         'Referent', backref='reference', lazy=True, cascade="delete")
     groups = relationship(
@@ -359,7 +361,9 @@ class Reference(Base):
             'transcription': self.transcription,
             'referents': jsn_referents,
             'last_edit': last_edit_str,
-            'location_info': self.display_location_info()
+            'location_info': self.display_location_info(),
+            'volume': self.volume,
+            'volume_pages': self.volume_pages
             }
         return data
 

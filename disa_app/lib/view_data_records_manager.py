@@ -55,6 +55,9 @@ def query_record( rec_id: str, db_session: AlchSession ) -> dict:
         'value': rec.reference_type.name,
         'id':rec.reference_type.id }
 
+    data['rec']['volume'] = rec.volume
+    data['rec']['volume_pages'] = rec.volume_pages
+
     data['entrants'] = [ {
         'name_id': ent.primary_name.id,
         'first': ent.primary_name.first,
@@ -116,6 +119,8 @@ def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int, db_
         rfrnc.reference_type_id = reference_type.id
         rfrnc.national_context_id = data['national_context']
         rfrnc.transcription = data['transcription']
+        rfrnc.volume = data['volume']
+        rfrnc.volume_pages = data['volume_pages']
 
         if 'image_url' in data.keys():
             log.debug( f'rfrnc.__dict__, ``{pprint.pformat(rfrnc.__dict__)}``' )
@@ -142,6 +147,8 @@ def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int, db_
                 'id': l.location.id } for l in rfrnc.locations ]
         data['rec']['record_type'] = {'label': rfrnc.reference_type.name,
             'value': rfrnc.reference_type.name, 'id':rfrnc.reference_type.id }
+        data['rec']['volume'] = rfrnc.volume
+        data['rec']['volume_pages'] = rfrnc.volume_pages
 
         # context =  { 'redirect': reverse( 'edit_record_url', kwargs={'rec_id': rfrnc.id} ) }
         # log.debug( f'data, ```{data}```' )
@@ -184,6 +191,8 @@ def manage_post( payload: bytes, request_user_id: int, db_session: AlchSession )
         rfrnc.reference_type_id = reference_type.id
         rfrnc.national_context_id = data['national_context']
         rfrnc.transcription = data['transcription']
+        rfrnc.volume = data['volume']
+        rfrnc.volume_pages = data['volume_pages']
 
         if 'image_url' in data.keys():
             log.debug( f'rfrnc.__dict__, ``{pprint.pformat(rfrnc.__dict__)}``' )
