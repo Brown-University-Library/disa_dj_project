@@ -272,7 +272,7 @@ async function createItemOnServer() {
     citation_id: 8, // this.formData.doc.id,
     image_url:'',
     volume: '',
-    pages: ''
+    volume_pages: ''
   };
 
   const url = `${API_URL_ROOT}records/new/`,
@@ -406,7 +406,7 @@ async function saveItemDataToServer() {
       citation_id: this.formData.doc.id,
       image_url: this.currentItem.kludge.image_url,
       volume: this.currentItem.kludge.volume,
-      pages: this.currentItem.kludge.pages
+      volume_pages: this.currentItem.kludge.volume_pages
     };
 
     const httpMethod = isNewItem ? 'POST' : 'PUT';

@@ -44,7 +44,7 @@ const ITEM_TEMPLATE = {
     reference_type_id: '13',
     image_url: ''
     volume: '',
-    pages: ''
+    volume_pages: ''
   },
   FULL_DATA_LOADED:false
 };
