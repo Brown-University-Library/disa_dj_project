@@ -244,7 +244,7 @@ class Record_Test( TestCase ):
         self.create_new_record()
         ## tests
         self.assertEqual( 200, self.create_resp_statuscode )
-        self.assertEqual( True, self.create_resp_id.isnumeric(),  )
+        self.assertEqual( True, self.create_resp_id.isnumeric(),  )  # type: ignore
         self.assertEqual( str, type(self.create_resp_id) )
         self.assertEqual( ['redirect'], list(self.post_resp_dct.keys()) )
         ## cleanup
