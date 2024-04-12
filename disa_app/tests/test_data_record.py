@@ -32,6 +32,7 @@ class Record_Test( TestCase ):
         self.random_put_record_type = self.make_random_record_type()
         self.random_new_record_transcription_text = self.make_random_transcription()
         self.random_put_transcription = self.make_random_transcription()
+        self.random_new_researcher_notes = self.make_random_researcher_notes()
         self.random_put_researcher_notes = self.make_random_researcher_notes()
         self.random_new_record_image_url = secrets.choice( [
             'https://foo1.com', 'https://foo2.com', 'https://foo3.com',
@@ -57,7 +58,7 @@ class Record_Test( TestCase ):
             'national_context': self.random_new_record_national_context,    # int
             'record_type': self.random_new_record_record_type,              # dict; see self.random_new_record_record_type
             'transcription': self.random_new_record_transcription_text,     # string
-            'researcher_notes': self.random_new_record_researcher_notes     # string
+            'researcher_notes': self.random_new_researcher_notes            # string
             }
         if self.random_new_record_image_url:
             payload['image_url'] = self.random_new_record_image_url         # string; but no key-value data is sent if not filled-out
@@ -137,14 +138,25 @@ class Record_Test( TestCase ):
             ] )
         return t
 
-    def make_random_record_researcher_notes(self):
+    def make_random_researcher_notes(self):
         """ Provides data for POST and PUT.
             Called by setUp() """
         rn = secrets.choice( [
             'researcher_notes_aaaa', 'researcher_notes_bbb', 'researcher_notes_ccc',
             ''  # this is what is sent if the field is not filled out
             ] )
+        log.debug( f'rn, ``{rn}``' )
+        log.debug( f'type(rn), ``{type(rn)}``' )
         return rn
+
+    # def make_random_record_researcher_notes(self):
+    #     """ Provides data for POST and PUT.
+    #         Called by setUp() """
+    #     rn = secrets.choice( [
+    #         'researcher_notes_aaaa', 'researcher_notes_bbb', 'researcher_notes_ccc',
+    #         ''  # this is what is sent if the field is not filled out
+    #         ] )
+    #     return rn
 
     # ## GET LIST ===================
 
@@ -177,7 +189,7 @@ class Record_Test( TestCase ):
             sorted(resp_dct.keys()) )
         record_keys = sorted( resp_dct['rec'].keys() )
         self.assertEqual(
-            ['date', 'header', 'id', 'image_url', 'locations', 'national_context', 'record_type', 'transcription', 'researcher_notes'],
+            ['date', 'header', 'id', 'image_url', 'locations', 'national_context', 'record_type', 'researcher_notes', 'transcription'],
             record_keys )
         if self.random_new_record_date:
             date_object = datetime.datetime.strptime( self.random_new_record_date, '%m/%d/%Y')
@@ -208,7 +220,7 @@ class Record_Test( TestCase ):
         self.assertEqual(
             self.random_new_record_transcription_text, resp_dct['rec']['transcription'] )
         self.assertEqual(
-            self.random_new_record_researcher_notes, resp_dct['rec']['researcher_notes'] )
+            self.random_new_researcher_notes, resp_dct['rec']['researcher_notes'] )
         ## cleanup
         self.delete_new_record()
 
@@ -264,6 +276,7 @@ class Record_Test( TestCase ):
                     'label': 'Petition to Assembly',
                     'value': 'Petition to Assembly'
                     },
+                'researcher_notes': 'researcher_notes_ccc',
                 'transcription': 'transcription_bbb'
                 }
         """
@@ -294,7 +307,7 @@ class Record_Test( TestCase ):
         rec_keys = sorted( put_resp_dct['rec'].keys() )
         log.debug( f'rec_keys, ``{rec_keys}``' )
         self.assertEqual(  # similar to POST payload, except that has a key of `citation_id` instead of `citation`, and this has an `id` element.
-            ['citation', 'date', 'id', 'locations', 'national_context', 'record_type', 'transcription', 'researcher_notes' ],
+            ['citation', 'date', 'id', 'locations', 'national_context', 'record_type', 'researcher_notes', 'transcription' ],
             sorted(rec_keys) )
         if self.random_put_date:
             date_object = datetime.datetime.strptime( self.random_put_date, '%m/%d/%Y')
@@ -319,6 +332,8 @@ class Record_Test( TestCase ):
             self.random_put_researcher_notes, put_resp_dct['rec']['researcher_notes'] )
         ## cleanup
         self.delete_new_record()
+
+        ## end of def test_put_good()
 
     # ## DELETE ====================
 
