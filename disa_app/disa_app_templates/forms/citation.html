@@ -129,7 +129,7 @@
         <textarea class="form-control" id="formInputDISABiblioResearcherNotes" placeholder="Enter notes here..." v-model="formData.doc.comments" v-on:blur="saveSourceToServer"></textarea>
         <label for="formInputDISABiblioResearcherNotes">Researcher notes</label>
     </div>
-    <a type="button" class="btn btn-primary btn-md" href="../../redesign_citations/">
+    <a hidden type="button" class="btn btn-primary btn-md" href="../../redesign_citations/">
         Save source and exit
     </a>
     <button type="button" class="btn btn-primary btn-md" id="source-form-submit" v-on:click="openItemTab">
