@@ -39,7 +39,7 @@ const ITEM_TEMPLATE = {
   groups:[],
   transcription: 'IGNORE ME',
   volume: '',
-  volume_pages: ''
+  volume_pages: '',
   // image_url: '',
   kludge:{
     transcription: '',
