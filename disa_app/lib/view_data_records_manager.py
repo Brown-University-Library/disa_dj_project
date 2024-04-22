@@ -45,6 +45,7 @@ def query_record( rec_id: str, db_session: AlchSession ) -> dict:
         'value':l.location.name,
         'id': l.location.id } for l in rec.locations ]
     data['rec']['transcription'] = rec.transcription
+    data['rec']['researcher_notes'] = rec.researcher_notes
     data['rec']['national_context'] = rec.national_context_id
 
     log.debug( f'rec, ``{rec}``' )
@@ -121,6 +122,7 @@ def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int, db_
         rfrnc.transcription = data['transcription']
         rfrnc.volume = data['volume']
         rfrnc.volume_pages = data['volume_pages']
+        rfrnc.researcher_notes = data['researcher_notes']
 
         if 'image_url' in data.keys():
             log.debug( f'rfrnc.__dict__, ``{pprint.pformat(rfrnc.__dict__)}``' )
@@ -141,6 +143,7 @@ def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int, db_
                 rfrnc.date.day, rfrnc.date.year)
         data['rec']['citation'] = rfrnc.citation.id
         data['rec']['transcription'] = rfrnc.transcription
+        data['rec']['researcher_notes'] = rfrnc.researcher_notes
         data['rec']['national_context'] = rfrnc.national_context_id
         data['rec']['locations'] = [
             { 'label':l.location.name, 'value':l.location.name,
@@ -193,6 +196,7 @@ def manage_post( payload: bytes, request_user_id: int, db_session: AlchSession )
         rfrnc.transcription = data['transcription']
         rfrnc.volume = data['volume']
         rfrnc.volume_pages = data['volume_pages']
+        rfrnc.researcher_notes = data['researcher_notes']
 
         if 'image_url' in data.keys():
             log.debug( f'rfrnc.__dict__, ``{pprint.pformat(rfrnc.__dict__)}``' )

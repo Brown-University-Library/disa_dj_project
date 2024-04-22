@@ -296,6 +296,7 @@ class Reference(Base):
     image_url = Column( String(500) )
     volume = Column( String(100) )
     volume_pages = Column( String(100) )
+    researcher_notes = Column(UnicodeText())
     referents = relationship(
         'Referent', backref='reference', lazy=True, cascade="delete")
     groups = relationship(
@@ -359,6 +360,7 @@ class Reference(Base):
             'national_context_id': self.national_context_id,
             'date': isodate,
             'transcription': self.transcription,
+            'researcher_notes': self.researcher_notes,
             'referents': jsn_referents,
             'last_edit': last_edit_str,
             'location_info': self.display_location_info(),

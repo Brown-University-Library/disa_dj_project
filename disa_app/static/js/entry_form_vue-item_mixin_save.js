@@ -273,6 +273,7 @@ async function createItemOnServer() {
     image_url:'',
     volume: '',
     volume_pages: ''
+    researcher_notes:''
   };
 
   const url = `${API_URL_ROOT}records/new/`,
@@ -407,6 +408,7 @@ async function saveItemDataToServer() {
       image_url: this.currentItem.kludge.image_url,
       volume: this.currentItem.volume,
       volume_pages: this.currentItem.volume_pages
+      researcher_notes: this.currentItem.researcher_notes,
     };
 
     const httpMethod = isNewItem ? 'POST' : 'PUT';
