@@ -294,8 +294,8 @@ class Reference(Base):
     date = Column(DateTime())
     transcription = Column(UnicodeText())
     image_url = Column( String(500) )
-    volume = FIXME
-    volume_pages = FIXME
+    volume = Column( String(100) )
+    volume_pages = Column( String(100) )
     referents = relationship(
         'Referent', backref='reference', lazy=True, cascade="delete")
     groups = relationship(

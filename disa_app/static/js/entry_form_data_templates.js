@@ -38,13 +38,13 @@ const ITEM_TEMPLATE = {
   relationships:[],
   groups:[],
   transcription: 'IGNORE ME',
+  volume: '',
+  volume_pages: ''
   // image_url: '',
   kludge:{
     transcription: '',
     reference_type_id: '13',
     image_url: ''
-    volume: '',
-    volume_pages: ''
   },
   FULL_DATA_LOADED:false
 };

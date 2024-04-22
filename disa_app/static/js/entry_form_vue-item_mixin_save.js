@@ -405,8 +405,8 @@ async function saveItemDataToServer() {
       national_context: this.currentItem.national_context_id,
       citation_id: this.formData.doc.id,
       image_url: this.currentItem.kludge.image_url,
-      volume: this.currentItem.kludge.volume,
-      volume_pages: this.currentItem.kludge.volume_pages
+      volume: this.currentItem.volume,
+      volume_pages: this.currentItem.volume_pages
     };
 
     const httpMethod = isNewItem ? 'POST' : 'PUT';
