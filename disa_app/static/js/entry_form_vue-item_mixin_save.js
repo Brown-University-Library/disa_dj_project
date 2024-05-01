@@ -272,7 +272,7 @@ async function createItemOnServer() {
     citation_id: 8, // this.formData.doc.id,
     image_url:'',
     volume: '',
-    volume_pages: ''
+    volume_pages: '',
     researcher_notes:''
   };
 
@@ -407,7 +407,7 @@ async function saveItemDataToServer() {
       citation_id: this.formData.doc.id,
       image_url: this.currentItem.kludge.image_url,
       volume: this.currentItem.volume,
-      volume_pages: this.currentItem.volume_pages
+      volume_pages: this.currentItem.volume_pages,
       researcher_notes: this.currentItem.researcher_notes,
     };
 
