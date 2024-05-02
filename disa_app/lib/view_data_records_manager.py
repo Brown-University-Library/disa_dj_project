@@ -120,8 +120,8 @@ def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int, db_
         rfrnc.reference_type_id = reference_type.id
         rfrnc.national_context_id = data['national_context']
         rfrnc.transcription = data['transcription']
-        rfrnc.volume = data['volume']
-        rfrnc.volume_pages = data['volume_pages']
+        rfrnc.volume = data['record_citation_fields']['volume']
+        rfrnc.volume_pages = data['record_citation_fields']['volume_pages']
         rfrnc.researcher_notes = data['researcher_notes']
 
         if 'image_url' in data.keys():
@@ -194,8 +194,8 @@ def manage_post( payload: bytes, request_user_id: int, db_session: AlchSession )
         rfrnc.reference_type_id = reference_type.id
         rfrnc.national_context_id = data['national_context']
         rfrnc.transcription = data['transcription']
-        rfrnc.volume = data['volume']
-        rfrnc.volume_pages = data['volume_pages']
+        rfrnc.volume = data['record_citation_fields']['volume']
+        rfrnc.volume_pages = data['record_citation_fields']['volume_pages']
         rfrnc.researcher_notes = data['researcher_notes']
 
         if 'image_url' in data.keys():

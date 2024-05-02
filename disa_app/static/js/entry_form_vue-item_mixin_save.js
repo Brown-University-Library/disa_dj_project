@@ -406,8 +406,10 @@ async function saveItemDataToServer() {
       national_context: this.currentItem.national_context_id,
       citation_id: this.formData.doc.id,
       image_url: this.currentItem.kludge.image_url,
-      volume: this.currentItem.volume,
-      volume_pages: this.currentItem.volume_pages,
+      record_citation_fields: {
+        volume: this.currentItem.volume,
+        volume_pages: this.currentItem.volume_pages
+      },
       researcher_notes: this.currentItem.researcher_notes,
     };
 
