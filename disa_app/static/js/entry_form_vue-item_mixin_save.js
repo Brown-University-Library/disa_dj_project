@@ -270,7 +270,8 @@ async function createItemOnServer() {
     record_type:{},
     national_context: 3,
     citation_id: 8, // this.formData.doc.id,
-    image_url:''
+    image_url:'',
+    researcher_notes:''
   };
 
   const url = `${API_URL_ROOT}records/new/`,
@@ -402,7 +403,8 @@ async function saveItemDataToServer() {
       },
       national_context: this.currentItem.national_context_id,
       citation_id: this.formData.doc.id,
-      image_url: this.currentItem.kludge.image_url
+      image_url: this.currentItem.kludge.image_url,
+      researcher_notes: this.currentItem.researcher_notes,
     };
 
     const httpMethod = isNewItem ? 'POST' : 'PUT';
