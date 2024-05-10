@@ -163,27 +163,6 @@ def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int, db_
                 'id': l.location.id } for l in rfrnc.locations ]
         data['rec']['record_type'] = {'label': rfrnc.reference_type.name,
             'value': rfrnc.reference_type.name, 'id':rfrnc.reference_type.id }
-        # data['rec']['volume'] = rfrnc.volume
-        # data['rec']['volume_pages'] = rfrnc.volume_pages
-        # TEST HERE - START
-        #data['rec']['record_citation_fields'] = [
-        #    { '': } for z in rfrnc.record_citation_fields]
-        
-
-
-
-
-
-        '''
-        "record_citation_fields": {
-            "67": "test_pagez",
-            "105": "test_volzz"
-        }
-        '''
-        # TEST HERE - END
-
-        # context =  { 'redirect': reverse( 'edit_record_url', kwargs={'rec_id': rfrnc.id} ) }
-        # log.debug( f'data, ```{data}```' )
         log.debug( f'data, ```{pprint.pformat(data)}```' )
     except:
         log.exception( '\n\nexception...' )

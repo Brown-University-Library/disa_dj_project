@@ -395,18 +395,6 @@ class ReferenceType(Base):
             }
         return data
 
-
-# CREATE TABLE `4_citation_fields_reference` (
-#   `id` integer NOT NULL PRIMARY KEY AUTOINCREMENT
-# ,  `reference_id` integer DEFAULT NULL
-# ,  `field_id` integer DEFAULT NULL
-# ,  `field_data` varchar(512) DEFAULT NULL
-# ,  CONSTRAINT `4_citation_fields_reference_ibfk_1` FOREIGN KEY (`reference_id`) REFERENCES `4_references` (`id`)
-# ,  CONSTRAINT `4_citation_fields_reference_ibfk_2` FOREIGN KEY (`field_id`) REFERENCES `1_zotero_fields` (`id`)
-# );
-# CREATE INDEX "idx_4_citation_fields_reference_id" ON "4_citation_fields_reference" (`reference_id`);
-# CREATE INDEX "idx_4_citation_fields_reference_field_id" ON "4_citation_fields_reference" (`field_id`);
-
 class ReferenceCitationField(Base):
     __tablename__ = '4_citation_fields_reference'
 
