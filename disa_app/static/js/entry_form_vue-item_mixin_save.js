@@ -406,10 +406,12 @@ async function saveItemDataToServer() {
       national_context: this.currentItem.national_context_id,
       citation_id: this.formData.doc.id,
       image_url: this.currentItem.kludge.image_url,
-      record_citation_fields: {
-        volume: this.currentItem.volume,
-        volume_pages: this.currentItem.volume_pages
-      },
+      // Citation fields for the Record: compile into a hash between 
+      //  Zotero field ID (without leading 'z') and value;
+      //  Only add if not empty
+      record_citation_fields: Object.entries(this.currentItem.citation_fields)
+        .filter(([k, v]) => v !== '')
+        .reduce((acc, [k, v]) => { acc[k.substring(1)] = v; return acc }, {}),
       researcher_notes: this.currentItem.researcher_notes,
     };
 
