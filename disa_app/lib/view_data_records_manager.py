@@ -9,7 +9,7 @@ from disa_app.lib import person_common
 from django.conf import settings
 from django.urls import reverse
 from django.http import HttpResponseNotFound, HttpResponseRedirect
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, delete
 from sqlalchemy.orm import sessionmaker
 
 from sqlalchemy.orm.session import Session as AlchSession
@@ -352,6 +352,12 @@ def process_record_locations( locData: list, recObj: models_alch.Reference, sess
         log.debug( 'about to call session.add() on rec_loc' )
         session.add(rec_loc)
     session.commit()
+    ## delete any ReferenceLocation records that no longer have a record-id
+    stmt = delete( models_alch.ReferenceLocation ).where( models_alch.ReferenceLocation.reference_id == None )
+    result = session.execute(stmt)
+    session.commit() 
+    log.debug( f'deleted {result.rowcount} records where `reference_id` was NULL.' )
+    ## return updated record object
     log.debug( 'returning reference-instance' )
     return recObj
 
