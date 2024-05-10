@@ -31,7 +31,7 @@ def shib_login(func):
         log.debug( f'kwargs, ```{kwargs}```' )
         log.debug( f'request.path, ```{request.path}```' )
         log.debug( f'request.path_info, ```{request.path_info}```' )
-        log.debug( f'request.__dict__, ```{request.__dict__}```' )
+        # log.debug( f'request.__dict__, ```{request.__dict__}```' )
         if request.user.is_authenticated == True:
             log.debug( 'user already logged in; skip authentication' )
             pass

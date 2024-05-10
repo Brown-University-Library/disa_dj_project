@@ -318,15 +318,19 @@ def process_record_locations( locData: list, recObj: models_alch.Reference, sess
     locations = []
     for loc in locData:
         if loc['id'] == -1:
+            log.debug( 'loc-id is -1, so creating a new location' )
             location = models_alch.Location(name=loc['value'])
             session.add(location)
             session.commit()
         elif loc['id'] == 0:
+            log.debug( 'loc-id is 0, so skipping' )
             continue
         else:
+            log.debug( 'loc-id is neither -1 nor 0, so getting existing location' )
             # location = models.Location.query.get(loc['id'])
             location = session.query( models_alch.Location ).get( loc['id'] )
         locations.append(location)
+        log.debug( f'newly built locations list, ```{locations}```' )
     # clny_state = models.LocationType.query.filter_by(name='Colony/State').first()
     clny_state = session.query( models_alch.LocationType ).filter_by( name='Colony/State' ).first()
 
@@ -345,6 +349,7 @@ def process_record_locations( locData: list, recObj: models_alch.Reference, sess
         rec_loc.location_rank = idx
         if idx < len(loc_types):
             rec_loc.location_type = loc_types[idx]
+        log.debug( 'about to call session.add() on rec_loc' )
         session.add(rec_loc)
     session.commit()
     log.debug( 'returning reference-instance' )
