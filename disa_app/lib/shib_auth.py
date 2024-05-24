@@ -9,6 +9,8 @@
 
 import copy, json, logging, os, pprint
 
+from django.core.handlers import wsgi
+
 from django.contrib.auth import authenticate, get_backends, login
 from django.contrib.auth.models import User, Group
 from django.urls import reverse
@@ -21,17 +23,10 @@ log = logging.getLogger(__name__)
 
 def shib_login(func):
     """ Decorator to create a user object for the Shib user, if necessary, and log the user into Django.
-        Called by views.py decorators. """
-    # log.debug( 'starting shib_login() decorator' )
+        Called by views.py via the `@shib_login` decorator. """
     def decorator(request, *args, **kwargs):
-        log.debug( f'\n\n starting decorator(); coming from, ```{request.META.get("HTTP_REFERER", "referrer_unknown")}```' )
-        log.debug( f'heading to, ```{request.META["PATH_INFO"]}```' )
-        log.debug( f'authenticated?, ```{request.user.is_authenticated}```' )
-        log.debug( f'args, ```{args}```' )
-        log.debug( f'kwargs, ```{kwargs}```' )
-        log.debug( f'request.path, ```{request.path}```' )
-        log.debug( f'request.path_info, ```{request.path_info}```' )
-        # log.debug( f'request.__dict__, ```{request.__dict__}```' )
+        log.info( '\n\n' + 'starting shib_login decorator()' )
+        log_decorator_incoming_info( request, args, kwargs )
         if request.user.is_authenticated == True:
             log.debug( 'user already logged in; skip authentication' )
             pass
@@ -50,6 +45,25 @@ def shib_login(func):
                 return HttpResponseRedirect( reverse('login_url') )
         return func(request, *args, **kwargs)
     return decorator
+
+def log_decorator_incoming_info( 
+        request: wsgi.WSGIRequest, 
+        args: tuple, 
+        kwargs: dict 
+        ):
+    log.debug( f'type(request), `{type(request)}`' )
+    log.debug( f'type(args), `{type(args)}`' )
+    log.debug( f'type(kwargs), `{type(kwargs)}`' )
+    log.debug( f'args, `{args}`' )
+    log.debug( f'kwargs, `{kwargs}`' )
+    log.debug( f'coming from, ```{request.META.get("HTTP_REFERER", "referrer_unknown")}```' )
+    log.debug( f'heading to, ```{request.META["PATH_INFO"]}```' )
+    log.debug( f'authenticated?, ```{request.user.is_authenticated}```' )
+    log.debug( f'args, ```{args}```' )
+    log.debug( f'kwargs, ```{kwargs}```' )
+    log.debug( f'request.path, ```{request.path}```' )
+    log.debug( f'request.path_info, ```{request.path_info}```' )
+    pass
 
 
 class LoginDecoratorHelper(object):
