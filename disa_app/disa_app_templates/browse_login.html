@@ -1,8 +1,8 @@
-{% extends "disa_app_templates/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% block content %}
 {% if flag_maintenance %}
-{% include "disa_app_templates/partials/maintenance.html" %}
+{% include "partials/maintenance.html" %}
 {% else %}
 <form id="non_shib_form" action="{{ browse_url }}" method="POST">{% csrf_token %}
     <h1>Welcome!</h1>

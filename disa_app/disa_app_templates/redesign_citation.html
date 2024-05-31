@@ -1,4 +1,4 @@
-{% extends "disa_app_templates/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% block header_other %}
 <!-- Styles -->
@@ -26,7 +26,7 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
 {% endblock nav_options %}
 {% block sidebar %}
 <!-- insert offcanvas info -->
-{% include "disa_app_templates/modals/info_aside.html" %}
+{% include "modals/info_aside.html" %}
 {% endblock sidebar %}
 <!-- The content-block html below is within the redesign_base.html template's `<main class="container">` element. -->
 {% block content %}
@@ -58,7 +58,7 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
     <div class="tab-content">
         <!-- Source Tab -->
         <div class="tab-pane show active" role="tabpanel" aria-labelledby="bib-tab" id="Bibliographic-information">
-            {% include "disa_app_templates/forms/citation.html" %}
+            {% include "forms/citation.html" %}
         </div> <!-- /.tab-pane for Source -->
         <!-- Record Tab -->
         <div class="tab-pane" role="tabpanel" aria-labelledby="item-tab" id="Items">
@@ -103,7 +103,7 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
                         </div>
                         <!-- Main Record input form -->
                         <form id="item-form">
-                            {% include "disa_app_templates/forms/record_metadata.html" %}
+                            {% include "forms/record_metadata.html" %}
                             <!-- People (Referents/individuals and groups) -->
                             <fieldset class="row">
                                 <legend class="visually-hidden">People</legend>
@@ -123,7 +123,7 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
                                         <h5 class="card-title card-header clickable" v-on:click="currentReferentId = (currentReferentId === referent.id) ? -1 : referent.id" v-text="getReferentDisplayLabel(referent)"></h5>
                                         <section class="card-body" v-if="currentReferentId === referent.id">
                                             <disa-id v-bind:forthis="referent" class="float-end"></disa-id>
-                                            {% include "disa_app_templates/forms/person.html" %}
+                                            {% include "forms/person.html" %}
                                         </section>
                                     </div>
                                 </div><!-- end individual referent wrapper -->
@@ -136,7 +136,7 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
                                         <!-- Main (clickable accordion) header for this group -->
                                         <h5 class="card-header card-title clickable" v-on:click="currentGroupId = (currentGroupId === group.uuid) ? -1 : group.uuid" v-text="getGroupDisplayLabel(group)"></h5>
                                         <section class="card-body">
-                                            {% include "disa_app_templates/forms/group.html" %}
+                                            {% include "forms/group.html" %}
                                         </section>
                                     </div>
                                 </div>
@@ -161,5 +161,5 @@ var API_URL_ROOT = "{{ API_URL_ROOT }}", // eg `http://127.0.0.1:8000/data/`` --
     </div><!-- end tab content container -->
 </div> <!-- /#tabs_bibinfoanditems -->
 <!-- "Change Record" modal -->
-{% include "disa_app_templates/modals/change_record.html" %}
+{% include "modals/change_record.html" %}
 {% endblock content %}

@@ -1,4 +1,4 @@
-{% extends "disa_app_templates/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% block header_other %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@5/dist/css/tabulator.min.css">
@@ -16,11 +16,11 @@
 {% endblock nav_options %}
 {% block content %}
 <!-- language warning modal, appears immediately if not previous acknowledged -->
-{% include "disa_app_templates/modals/warn_language.html" %}
+{% include "modals/warn_language.html" %}
 <!-- Details modal -->
-{% include "disa_app_templates/modals/record_details.html" %}
+{% include "modals/record_details.html" %}
 <!-- "Loading ..." modal -->
-{% include "disa_app_templates/modals/loading.html" %}
+{% include "modals/loading.html" %}
 <!-- Main content container: search and results -->
 <section class="" id="main-content">
     <div class="row">
@@ -111,7 +111,7 @@
 </section>
 {% endblock content %}
 {% block footer %}
-{% include "disa_app_templates/partials/acknowledgements.html" %}
+{% include "partials/acknowledgements.html" %}
 {% endblock footer %}
 {% block page_specific_js%}
 <!-- Main setup routine -->
