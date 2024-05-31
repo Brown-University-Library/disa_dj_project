@@ -62,7 +62,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ '%s/disa_app' % BASE_DIR ],
+        'DIRS': [ '%s/disa_app/disa_app_templates' % BASE_DIR ],
         # 'DIRS': template_dirs,
         'APP_DIRS': True,
         'OPTIONS': {
