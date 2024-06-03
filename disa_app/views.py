@@ -960,36 +960,3 @@ def redesign_citation( request, cite_id=None ):
     else:
         resp = render( request, 'redesign_citation.html', context )
     return resp
-
-
-## testing --------------
-
-
-def js_demo_1( request ):
-    """ Explores js & template vars v1. """
-    log.debug( '\n\nstarting js_demo_1()' )
-    context = {}
-    resp = render( request, 'js_demo_1.html', context )
-    return resp
-
-
-def js_demo_2( request ):
-    """ Explores js & template vars v2. """
-    log.debug( '\n\nstarting js_demo_2()' )
-    context = { 'foo': 'bar' }
-    if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    else:
-        resp = render( request, 'js_demo_2.html', context )
-    return resp
-
-
-def js_demo_3( request ):
-    """ Explores js & template vars v3. """
-    log.debug( '\n\nstarting js_demo_3()' )
-    context = { 'foo2': 'bar2' }
-    if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    else:
-        resp = render( request, 'js_demo_3.html', context )
-    return resp
