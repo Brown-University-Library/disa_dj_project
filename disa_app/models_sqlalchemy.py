@@ -294,8 +294,6 @@ class Reference(Base):
     date = Column(DateTime())
     transcription = Column(UnicodeText())
     image_url = Column( String(500) )
-    volume = Column( String(100) )
-    volume_pages = Column( String(100) )
     researcher_notes = Column(UnicodeText())
     referents = relationship(
         'Referent', backref='reference', lazy=True, cascade="delete")

@@ -39,8 +39,7 @@ const ITEM_TEMPLATE = {
   researcher_notes: '',
   groups:[],
   transcription: 'IGNORE ME',
-  volume: '',
-  volume_pages: '',
+  citation_fields: {},
   // image_url: '',
   kludge:{
     transcription: '',

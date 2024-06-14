@@ -271,8 +271,6 @@ async function createItemOnServer() {
     national_context: 3,
     citation_id: 8, // this.formData.doc.id,
     image_url:'',
-    volume: '',
-    volume_pages: '',
     researcher_notes:''
   };
 
