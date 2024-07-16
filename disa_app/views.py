@@ -57,7 +57,7 @@ def info( request ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/info.html', context )
+        resp = render( request, 'info.html', context )
     return resp
 
 
@@ -88,7 +88,7 @@ def browse_tabulator( request ):
             # request.session.pop( 'browse_logged_in', None )
             # request.session.modified = True
             context = view_browse_manager.prepare_logged_in_get_context( bool(request.user.is_authenticated) )
-            resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_tabulator.html' )
+            resp = view_browse_manager.prepare_get_response( request, context, 'browse_tabulator.html' )
         else:  # show the login form
             log.debug( 'not logged-in path' )
             ( errant_submitted_username, errant_submitted_password ) = ( request.session.get('errant_browse_login_username', ''), request.session.get('errant_browse_login_password', '') )
@@ -97,50 +97,9 @@ def browse_tabulator( request ):
             request.session.pop( 'errant_browse_login_password', None )
             request.session.modified = True
             context = view_browse_manager.prepare_non_logged_in_get_context( errant_submitted_username, errant_submitted_password )
-            resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_login.html' )
+            resp = view_browse_manager.prepare_get_response( request, context, 'browse_login.html' )
             log.debug( 'ok should render the browse-login template' )
     return resp
-    
-
-# def browse_tabulator( request ):
-#     """ Displays tabulator page. """
-#     log.info( '\n\nstarting browse_tabulator()' )
-#     log.debug( f'request.session.items(), ``{pprint.pformat(request.session.items())}``' )
-#     ( submitted_username, submitted_password ) = ( request.POST.get('browse_login_username', ''), request.POST.get('browse_login_password', '') )
-#     assert type(submitted_username) == str; assert type(submitted_password) == str
-#     if request.method == 'POST':  # user has submitted browse login credentials
-#         credentials_valid = view_browse_manager.check_credentials_on_post( submitted_username, submitted_password )
-#         assert type( credentials_valid ) == bool
-#         if credentials_valid:  # redirect to a GET to show the browse data
-#             request.session['browse_logged_in'] = 'yes'
-#             request.session.pop( 'errant_browse_login_username', None )  # <https://stackoverflow.com/questions/11277432/how-can-i-remove-a-key-from-a-python-dictionary/15206537#15206537>
-#             request.session.pop( 'errant_browse_login_password', None )
-#         else:  # store any entered data to the session and redirect to a GET to the login form again
-#             ( request.session['errant_browse_login_username'], request.session['errant_browse_login_password'] ) = ( submitted_username, submitted_password )
-#         request.session.modified = True
-#         resp = view_browse_manager.prepare_self_redirect_on_post()
-#         return resp
-#     if request.method == 'GET':
-#         log.debug( 'handling GET' )
-#         is_browse_logged_in = view_browse_manager.check_browse_logged_in_on_get( dict(request.session), bool(request.user.is_authenticated) )
-#         assert type(is_browse_logged_in) == bool
-#         if is_browse_logged_in:  # show the browse data
-#             log.debug( 'logged-in path' )
-#             # request.session.pop( 'browse_logged_in', None )
-#             # request.session.modified = True
-#             context = view_browse_manager.prepare_logged_in_get_context( bool(request.user.is_authenticated) )
-#             resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_tabulator.html' )
-#         else:  # show the login form
-#             log.debug( 'not logged-in path' )
-#             ( errant_submitted_username, errant_submitted_password ) = ( request.session.get('errant_browse_login_username', ''), request.session.get('errant_browse_login_password', '') )
-#             assert type( errant_submitted_username ) == str; assert type( errant_submitted_password ) == str
-#             request.session.pop( 'errant_browse_login_username', None )
-#             request.session.pop( 'errant_browse_login_password', None )
-#             request.session.modified = True
-#             context = view_browse_manager.prepare_non_logged_in_get_context( errant_submitted_username, errant_submitted_password )
-#             resp = view_browse_manager.prepare_get_response( request, context, 'disa_app_templates/browse_login.html' )
-#             log.debug( 'ok should render the browse-login template' )
-#         return resp
 
 
 def browse_logout( request ):
@@ -164,7 +123,7 @@ def people( request ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/people.html', context )
+        resp = render( request, 'people.html', context )
     return resp
 
 
@@ -177,15 +136,15 @@ def person( request, prsn_id ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/person_view.html', context )
+        resp = render( request, 'person_view.html', context )
     return resp
 
 def map ( request ):
-    resp = render( request, 'disa_app_templates/map.html' )
+    resp = render( request, 'map.html' )
     return resp
 
 def timeline ( request ):
-    resp = render( request, 'disa_app_templates/timeline.html' )
+    resp = render( request, 'timeline.html' )
     return resp
 
 def source( request, src_id ):
@@ -218,7 +177,7 @@ def editor_index( request ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/document_index.html', context )
+        resp = render( request, 'document_index.html', context )
     return resp
 
 
@@ -236,7 +195,7 @@ def search_results( request ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/search_results.html', context )
+        resp = render( request, 'search_results.html', context )
     return resp
 
 
@@ -250,7 +209,7 @@ def datafile( request ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( j_string, content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/denormalized_document.html', {'j_string': j_string, 'search_query': srch_txt} )
+        resp = render( request, 'denormalized_document.html', {'j_string': j_string, 'search_query': srch_txt} )
     return resp
 
 
@@ -281,7 +240,7 @@ def login( request ):
         context['manual_login_error'] = request.session.get( 'manual_login_error', None )
         context['LOGIN_PROBLEM_EMAIL'] = settings_app.LOGIN_PROBLEM_EMAIL
         log.debug( f'non-json-context, ``{pprint.pformat(context)}``' )
-        resp = render( request, 'disa_app_templates/login_form.html', context )
+        resp = render( request, 'login_form.html', context )
     return resp
 
 
@@ -358,7 +317,7 @@ def user_pass_handler( request ):
 #     if request.GET.get('format', '') == 'json':
 #         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
 #     else:
-#         resp = render( request, 'disa_app_templates/document_edit.html', context )
+#         resp = render( request, 'document_edit.html', context )
 #     return resp
 
 
@@ -370,7 +329,7 @@ def edit_person( request, rfrnt_id=None ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/entrant_edit.html', context )
+        resp = render( request, 'entrant_edit.html', context )
     return resp
 
 
@@ -388,7 +347,7 @@ def edit_record( request, rec_id=None ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/record_edit.html', context )
+        resp = render( request, 'record_edit.html', context )
     return resp
 
 
@@ -401,7 +360,7 @@ def edit_record_w_recid( request, rec_id=None ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/record_edit.html', context )
+        resp = render( request, 'record_edit.html', context )
     return resp
 
 
@@ -416,7 +375,7 @@ def edit_relationships( request, rec_id: str ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/record_relationships.html', context )
+        resp = render( request, 'record_relationships.html', context )
     return resp
 
 
@@ -941,7 +900,7 @@ def redesign_citations( request ):
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
         log.debug( 'building template response' )
-        resp = render( request, 'disa_app_templates/dashboard.html', context )
+        resp = render( request, 'dashboard.html', context )
     return resp
 
 
@@ -964,7 +923,7 @@ def redesign_citations( request ):
 #         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
 #     else:
 #         log.debug( 'building template response' )
-#         resp = render( request, 'disa_app_templates/redesign_citations.html', context )
+#         resp = render( request, 'redesign_citations.html', context )
 #     return resp
 
 
@@ -999,38 +958,5 @@ def redesign_citation( request, cite_id=None ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
     else:
-        resp = render( request, 'disa_app_templates/redesign_citation.html', context )
-    return resp
-
-
-## testing --------------
-
-
-def js_demo_1( request ):
-    """ Explores js & template vars v1. """
-    log.debug( '\n\nstarting js_demo_1()' )
-    context = {}
-    resp = render( request, 'disa_app_templates/js_demo_1.html', context )
-    return resp
-
-
-def js_demo_2( request ):
-    """ Explores js & template vars v2. """
-    log.debug( '\n\nstarting js_demo_2()' )
-    context = { 'foo': 'bar' }
-    if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    else:
-        resp = render( request, 'disa_app_templates/js_demo_2.html', context )
-    return resp
-
-
-def js_demo_3( request ):
-    """ Explores js & template vars v3. """
-    log.debug( '\n\nstarting js_demo_3()' )
-    context = { 'foo2': 'bar2' }
-    if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
-    else:
-        resp = render( request, 'disa_app_templates/js_demo_3.html', context )
+        resp = render( request, 'redesign_citation.html', context )
     return resp

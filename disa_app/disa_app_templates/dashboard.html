@@ -1,4 +1,4 @@
-{% extends "disa_app_templates/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% block header_other %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@5/dist/css/tabulator_bootstrap5.min.css">
@@ -76,7 +76,7 @@
 </div>
 <div id="all-sources"></div>
 <!-- Delete confirmation modal -->
-{% include "disa_app_templates/modals/confirm_deletion.html" %}
+{% include "modals/confirm_deletion.html" %}
 {% endblock content %}
 {% block footer %}
 {% endblock footer %}

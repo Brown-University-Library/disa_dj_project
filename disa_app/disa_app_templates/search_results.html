@@ -1,4 +1,4 @@
-{% extends "disa_app_templates/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% block content %}
 <div class="alert alert-info">
@@ -127,7 +127,8 @@
 </div>
 {% endblock content %}
 {% block footer %}
-{% include "disa_app_templates/partials/acknowledgements.html" %}
+{% comment %} {% include "partials/acknowledgements.html" %} {% endcomment %}
+{% include "partials/acknowledgements.html" %}
 {% endblock footer %}
 {% block page_specific_js %}
 <script src="{% static 'js/hilitor.js' %}"></script>
