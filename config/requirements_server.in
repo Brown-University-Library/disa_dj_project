@@ -1,2 +1,4 @@
 -r requirements_base.txt
-PyMySQL==1.1.1
+
+./config/mysqlclient-2.0.3-cp38-cp38-linux_x86_64.whl
+# PyMySQL==1.1.1
