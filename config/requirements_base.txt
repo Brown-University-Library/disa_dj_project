@@ -14,7 +14,7 @@ charset-normalizer==2.0.12
     # via requests
 click==8.1.7
     # via pip-tools
-django==3.2.16
+django==3.2.25
     # via -r ./config/requirements_base.in
 idna==3.7
     # via requests

@@ -24,7 +24,7 @@ click==8.1.7
     # via
     #   -r ./config/requirements_base.txt
     #   pip-tools
-django==3.2.16
+django==3.2.25
     # via -r ./config/requirements_base.txt
 idna==3.7
     # via
