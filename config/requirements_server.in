@@ -1,0 +1,6 @@
+-r requirements_base.txt
+
+https://github.com/Brown-University-Library/disa_dj_project/raw/package-updates/config/mysqlclient-2.0.3-cp38-cp38-linux_x86_64.whl
+
+#./config/mysqlclient-2.0.3-cp38-cp38-linux_x86_64.whl
+# PyMySQL==1.1.1
