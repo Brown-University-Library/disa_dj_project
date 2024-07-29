@@ -34,7 +34,7 @@ importlib-metadata==8.0.0
     # via
     #   -r ./config/requirements_base.txt
     #   build
-mysqlclient @ https://github.com/Brown-University-Library/disa_dj_project/raw/package-updates/config/mysqlclient-2.0.3-cp38-cp38-linux_x86_64.whl
+mysqlclient @ https://github.com/Brown-University-Library/disa_dj_project/raw/main/config/mysqlclient-2.0.3-cp38-cp38-linux_x86_64.whl
     # via -r ./config/requirements_server.in
 packaging==24.1
     # via
