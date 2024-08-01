@@ -63,7 +63,7 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
     has_refs = [ cite
         for cite in all_cites if len(cite.references) > 0 ]
     log.debug( 'has_refs list built; about to build wrapped_refs' )
-    wrapped_refs = make_wrapped_refs( has_refs )
+    wrapped_refs: list = make_wrapped_refs( has_refs )
     log.debug( 'wrapped_refs built; about to build user_cites list' )
     user_cites = [ wrapped
         for wrapped in wrapped_refs if wrapped[1] == old_usr_db_id ]
@@ -156,16 +156,51 @@ def make_wrapped_refs( has_refs ):
 def sort_documents( wrappedDocs ) -> list:
     """ Sorts documents.
         Called by query_documents() """
-    log.debug( f'before sort (first 5), ```{pprint.pformat(wrappedDocs[0:5])}```...' )
+    log.debug( f'before sort (first 5), ``{pprint.pformat(wrappedDocs[0:5])}``...' )
     merge = {}
-    for w in wrappedDocs:
+    for (i, w) in enumerate(wrappedDocs):
+        log_this = False
+        if i < 10:
+            log_this = True
+        if log_this:
+            log.debug( f'w, ``{w}``' )
+            log.debug( f'w[0], ``{w[0]}``' )
+            log.debug( f'w[0].__dict__, ``{pprint.pformat(w[0].__dict__)}``' )
+            log.debug( f'w[0].id, ``{w[0].id}``' )
+            log.debug( f'w[2], ``{w[2]}``' )
+            log.debug( f'w[3], ``{w[3]}``' )
         if w[0].id not in merge or merge[w[0].id][0] < w[2]:
             merge[w[0].id] = (w[2], w[3], w[0])
         else:
             continue
-    sorted_docs = sorted([ merge[w] for w in merge], reverse=True)
-    log.debug( f'after sort (first 5), ```{pprint.pformat(sorted_docs[0:5])}```...' )
+    log.debug( 'merge built' )
+    log.debug( f'merge, ```{pprint.pformat(merge)}```' )
+    try:
+        # sorted_docs = sorted([ merge[w] for w in merge], reverse=True)
+        sorted_docs = sorted([merge[w] for w in merge], key=lambda x: x[0], reverse=True)
+    except Exception as e:
+        log.exception( f'error on sort' )
+        log.debug( f'w[0], ``{w[0]}``' )
+        log.debug( f'w[0].__dict__, ``{pprint.pformat(w[0].__dict__)}``' )
+        raise Exception( e )
+
+    log.debug( f'after sort (first 5), ``{pprint.pformat(sorted_docs[0:5])}``...' )
     return sorted_docs
+
+
+# def sort_documents( wrappedDocs ) -> list:
+#     """ Sorts documents.
+#         Called by query_documents() """
+#     log.debug( f'before sort (first 5), ```{pprint.pformat(wrappedDocs[0:5])}```...' )
+#     merge = {}
+#     for w in wrappedDocs:
+#         if w[0].id not in merge or merge[w[0].id][0] < w[2]:
+#             merge[w[0].id] = (w[2], w[3], w[0])
+#         else:
+#             continue
+#     sorted_docs = sorted([ merge[w] for w in merge], reverse=True)
+#     log.debug( f'after sort (first 5), ```{pprint.pformat(sorted_docs[0:5])}```...' )
+#     return sorted_docs
 
 
 def jsonify_entries( doc_list ) -> list:
