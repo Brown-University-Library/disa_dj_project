@@ -60,15 +60,15 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
     no_refs = [ (cite, old_usr_db_id, datetime.datetime.now(), '')
         for cite in all_cites if len(cite.references) == 0 ]
     log.debug( 'no_refs list built; about to build has_refs list' )
-    has_refs = [ cite
+    cites_with_refs: list = [ cite
         for cite in all_cites if len(cite.references) > 0 ]
     log.debug( 'has_refs list built; about to build wrapped_refs' )
-    wrapped_refs: list = make_wrapped_refs( has_refs )
+    wrapped_refs: list = make_wrapped_refs( cites_with_refs )
     log.debug( 'wrapped_refs built; about to build user_cites list' )
     user_cites = [ wrapped
         for wrapped in wrapped_refs if wrapped[1] == old_usr_db_id ]
     log.debug( 'user_cites list built; about to build srtd_all' )
-    srtd_all = sort_documents( wrapped_refs )  # was ```srtd_all = sort_documents(no_refs + wrapped_refs)```
+    srtd_all = sort_documents( wrapped_refs )
     log.debug( 'srtd_all built; about to build srtd_user' )
     srtd_user = sort_documents( user_cites )
     log.debug( 'srtd_user built; about to build user_documents' )
@@ -80,17 +80,21 @@ def query_documents( username: str, old_usr_db_id: int ) -> dict:
     return data
 
 
-def make_wrapped_refs( has_refs ):
+def make_wrapped_refs( cites_with_refs: list ) -> list:
     """ Takes list of citation-objects,
         Returns list of tuples, with each tuple comprised of a citation-object, the (last?) editor-id, the (last?) editor-timestamp, and the (last?) editor-email.
+        Example incoming data...
+            [ <Citation 1>, <Citation 2>, <Citation 3>, ... ]
+        Example returned data...
+            [
+                (<Citation 1>, 18, datetime.datetime(2018, 1, 23, 0, 54, 3), 'editor_a@brown.edu'),
+                (<Citation 1>, 33, datetime.datetime(2020, 4, 27, 14, 38, 53), 'editor_b@brown.edu'),
+                ...
+            ]
         Making this into a function instead of a list comprehension for clarity.
         Called by query_documents() """
-    # wrapped_refs = [ (cite, edit.user_id, edit.timestamp, edit.edited_by.email)
-    #                     for cite in has_refs
-    #                         for ref in cite.references
-    #                             for edit in ref.edits ]
     wrapped_refs = []
-    for cite in has_refs:
+    for cite in cites_with_refs:
         for ref in cite.references:
             for edit in ref.edits:
                 try:
@@ -103,36 +107,40 @@ def make_wrapped_refs( has_refs ):
     return wrapped_refs
 
 
-def sort_documents( wrappedDocs: list ) -> list:
-    """ Sorts documents by the date of most-recent-update.
+def sort_documents( wrapped_refs: list ) -> list:
+    """ Sorts citations by the date of most-recent-update.
+        Example incoming data...
+            [
+                ( <Citation 1>, 18, datetime.datetime(2018, 1, 23, 0, 54, 3), 'editor_a@brown.edu' ),
+                ( <Citation 1>, 33, datetime.datetime(2020, 4, 27, 14, 38, 53), 'editor_b@brown.edu' ),
+                ...
+            ]
+        Example returned data...
+            [
+                ( datetime.datetime(2024, 7, 30, 19, 36, 23), 'editor_x@brown.edu', <Citation 2363> ),
+                ( datetime.datetime(2024, 7, 30, 18, 48, 7), 'editor_y@brown.edu', <Citation 2381> )
+            ]
+        The "merge" work explanation...
+            - The code iterates over each wrapped_refs-tuple. For each wrapped_refs tuple:
+                - Checks if the citation's ID (w[0].id) is not already in the merge dictionary or if the current tuple's update time (w[2]) is more recent than the stored one.
+                    - If either condition is true, updates the merge dictionary with the current tuple's update time, editor email, and citation object.
+                    - Otherwise, skips to check the next tuple.
         Called by query_documents() """
-    log.debug( f'before sort (first 5), ``{pprint.pformat(wrappedDocs[0:5])}``...' )
+    log.debug( f'before sort (first 5), ``{pprint.pformat(wrapped_refs[0:5])}``...' )
     merge = {}
-    for (i, w) in enumerate(wrappedDocs):
-        # log_this = False
-        # if i < 10:
-        #     log_this = True
-        # if log_this:
-        #     log.debug( f'w, ``{w}``' )
-        #     log.debug( f'w[0], ``{w[0]}``' )
-        #     log.debug( f'w[0].__dict__, ``{pprint.pformat(w[0].__dict__)}``' )
-        #     log.debug( f'w[0].id, ``{w[0].id}``' )
-        #     log.debug( f'w[2], ``{w[2]}``' )
-        #     log.debug( f'w[3], ``{w[3]}``' )
+    for (i, w) in enumerate(wrapped_refs):
         if w[0].id not in merge or merge[w[0].id][0] < w[2]:
             merge[w[0].id] = (w[2], w[3], w[0])
         else:
             continue
     log.debug( 'merge built' )
     try:
-        # sorted_docs = sorted([ merge[w] for w in merge], reverse=True)
-        sorted_docs = sorted([merge[w] for w in merge], key=lambda x: x[0], reverse=True)
+        sorted_docs = sorted( [merge[w] for w in merge], key=lambda x: x[0], reverse=True )  # sorts on date-time tuple-element (most-recent first)
     except Exception as e:
         log.exception( f'error on sort' )
         log.debug( f'w[0], ``{w[0]}``' )
         log.debug( f'w[0].__dict__, ``{pprint.pformat(w[0].__dict__)}``' )
         raise Exception( e )
-
     log.debug( f'after sort (first 5), ``{pprint.pformat(sorted_docs[0:5])}``...' )
     return sorted_docs
 
