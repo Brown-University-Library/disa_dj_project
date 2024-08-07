@@ -9,7 +9,7 @@ from disa_app.lib import person_common
 from django.conf import settings
 from django.urls import reverse
 from django.http import HttpResponseNotFound, HttpResponseRedirect
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, delete
 from sqlalchemy.orm import sessionmaker
 
 from sqlalchemy.orm.session import Session as AlchSession
@@ -45,6 +45,7 @@ def query_record( rec_id: str, db_session: AlchSession ) -> dict:
         'value':l.location.name,
         'id': l.location.id } for l in rec.locations ]
     data['rec']['transcription'] = rec.transcription
+    data['rec']['researcher_notes'] = rec.researcher_notes
     data['rec']['national_context'] = rec.national_context_id
 
     log.debug( f'rec, ``{rec}``' )
@@ -54,6 +55,8 @@ def query_record( rec_id: str, db_session: AlchSession ) -> dict:
         'label': rec.reference_type.name,
         'value': rec.reference_type.name,
         'id':rec.reference_type.id }
+
+    data['rec']['citation_fields'] = { str(f.field_id): f.field_data for f in rec.citation_fields }
 
     data['entrants'] = [ {
         'name_id': ent.primary_name.id,
@@ -117,6 +120,23 @@ def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int, db_
         rfrnc.national_context_id = data['national_context']
         rfrnc.transcription = data['transcription']
 
+        # Add Record-level citation fields
+        # Delete old ones, then add new ones from incoming form data
+
+        session.query(models_alch.ReferenceCitationField).filter_by(reference_id=rec_id).delete()
+
+        citation_entries = []
+        for field_id, field_data in data['record_citation_fields'].items():            
+            citation_entries.append(models_alch.ReferenceCitationField(
+                reference_id=int(rec_id),
+                field_id=int(field_id),
+                field_data=field_data
+            ))
+
+        session.bulk_save_objects(citation_entries)
+
+        rfrnc.researcher_notes = data['researcher_notes']
+
         if 'image_url' in data.keys():
             log.debug( f'rfrnc.__dict__, ``{pprint.pformat(rfrnc.__dict__)}``' )
             log.debug( 'found `image_url` key' )
@@ -136,15 +156,13 @@ def manage_reference_put( rec_id: str, payload: bytes, request_user_id: int, db_
                 rfrnc.date.day, rfrnc.date.year)
         data['rec']['citation'] = rfrnc.citation.id
         data['rec']['transcription'] = rfrnc.transcription
+        data['rec']['researcher_notes'] = rfrnc.researcher_notes
         data['rec']['national_context'] = rfrnc.national_context_id
         data['rec']['locations'] = [
             { 'label':l.location.name, 'value':l.location.name,
                 'id': l.location.id } for l in rfrnc.locations ]
         data['rec']['record_type'] = {'label': rfrnc.reference_type.name,
             'value': rfrnc.reference_type.name, 'id':rfrnc.reference_type.id }
-
-        # context =  { 'redirect': reverse( 'edit_record_url', kwargs={'rec_id': rfrnc.id} ) }
-        # log.debug( f'data, ```{data}```' )
         log.debug( f'data, ```{pprint.pformat(data)}```' )
     except:
         log.exception( '\n\nexception...' )
@@ -184,6 +202,7 @@ def manage_post( payload: bytes, request_user_id: int, db_session: AlchSession )
         rfrnc.reference_type_id = reference_type.id
         rfrnc.national_context_id = data['national_context']
         rfrnc.transcription = data['transcription']
+        rfrnc.researcher_notes = data['researcher_notes']
 
         if 'image_url' in data.keys():
             log.debug( f'rfrnc.__dict__, ``{pprint.pformat(rfrnc.__dict__)}``' )
@@ -314,15 +333,19 @@ def process_record_locations( locData: list, recObj: models_alch.Reference, sess
     locations = []
     for loc in locData:
         if loc['id'] == -1:
+            log.debug( 'loc-id is -1, so creating a new location' )
             location = models_alch.Location(name=loc['value'])
             session.add(location)
             session.commit()
         elif loc['id'] == 0:
+            log.debug( 'loc-id is 0, so skipping' )
             continue
         else:
+            log.debug( 'loc-id is neither -1 nor 0, so getting existing location' )
             # location = models.Location.query.get(loc['id'])
             location = session.query( models_alch.Location ).get( loc['id'] )
         locations.append(location)
+        log.debug( f'newly built locations list, ```{locations}```' )
     # clny_state = models.LocationType.query.filter_by(name='Colony/State').first()
     clny_state = session.query( models_alch.LocationType ).filter_by( name='Colony/State' ).first()
 
@@ -341,8 +364,15 @@ def process_record_locations( locData: list, recObj: models_alch.Reference, sess
         rec_loc.location_rank = idx
         if idx < len(loc_types):
             rec_loc.location_type = loc_types[idx]
+        log.debug( 'about to call session.add() on rec_loc' )
         session.add(rec_loc)
     session.commit()
+    ## delete any ReferenceLocation records that no longer have a record-id
+    stmt = delete( models_alch.ReferenceLocation ).where( models_alch.ReferenceLocation.reference_id == None )
+    result = session.execute(stmt)
+    session.commit() 
+    log.debug( f'deleted {result.rowcount} records where `reference_id` was NULL.' )
+    ## return updated record object
     log.debug( 'returning reference-instance' )
     return recObj
 

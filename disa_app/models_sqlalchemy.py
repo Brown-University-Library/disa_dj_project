@@ -294,6 +294,7 @@ class Reference(Base):
     date = Column(DateTime())
     transcription = Column(UnicodeText())
     image_url = Column( String(500) )
+    researcher_notes = Column(UnicodeText())
     referents = relationship(
         'Referent', backref='reference', lazy=True, cascade="delete")
     groups = relationship(
@@ -357,9 +358,11 @@ class Reference(Base):
             'national_context_id': self.national_context_id,
             'date': isodate,
             'transcription': self.transcription,
+            'researcher_notes': self.researcher_notes,
             'referents': jsn_referents,
             'last_edit': last_edit_str,
-            'location_info': self.display_location_info()
+            'location_info': self.display_location_info(),
+            'citation_fields': { str(f.field_id): f.field_data for f in self.citation_fields }
             }
         return data
 
@@ -390,6 +393,19 @@ class ReferenceType(Base):
             }
         return data
 
+class ReferenceCitationField(Base):
+    __tablename__ = '4_citation_fields_reference'
+
+    id = Column(Integer, primary_key=True)
+    reference_id = Column(Integer, ForeignKey('4_references.id'))
+    field_id = Column(Integer, ForeignKey('1_zotero_fields.id'))
+    field_data = Column(String(255))
+    reference = relationship(Reference,
+        primaryjoin=(reference_id == Reference.id),
+        backref='citation_fields')
+    field = relationship(ZoteroField,
+        primaryjoin=(field_id == ZoteroField.id),
+        backref='references')
 
 class Location(Base):
     __tablename__ = '1_locations'

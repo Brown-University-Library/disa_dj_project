@@ -1,7 +1,6 @@
 /* controlling TK label key */
-figure {
-  img[src^="https://localcontexts.org/wp-content/uploads"]
-  {
+figure.tk {
+  img {
     height: auto;
     width: 2rem;
     margin-right: $spacer;

@@ -1,4 +1,4 @@
-{% extends "disa_app_templates/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% block header_other %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@5/dist/css/tabulator.min.css">
@@ -16,11 +16,11 @@
 {% endblock nav_options %}
 {% block content %}
 <!-- language warning modal, appears immediately if not previous acknowledged -->
-{% include "disa_app_templates/modals/warn_language.html" %}
+{% include "modals/warn_language.html" %}
 <!-- Details modal -->
-{% include "disa_app_templates/modals/record_details.html" %}
+{% include "modals/record_details.html" %}
 <!-- "Loading ..." modal -->
-{% include "disa_app_templates/modals/loading.html" %}
+{% include "modals/loading.html" %}
 <!-- Main content container: search and results -->
 <section class="" id="main-content">
     <div class="row">
@@ -46,12 +46,12 @@
                 please contact <a href="mailto:linford_fisher@brown.edu">Lin Fisher</a>.
             </p>
             <div>
-                <figure class="d-flex figure">
-                    <a href="https://localcontexts.org/label/tk-community-voice/" class="flex-shrink-0"><img src="https://localcontexts.org/wp-content/uploads/2020/11/tk_label_cv.png" class="figure-img"></a>
+                <figure class="d-flex figure tk">
+                    <a href="https://localcontexts.org/label/tk-community-voice/" class="flex-shrink-0"><img src="{% static '/images/tk-community-voice.png' %}" class="figure-img"></a>
                     <figcaption class="flex-grow figure-caption"><a href="https://localcontexts.org/label/tk-community-voice/">TK Community Voice</a></figcaption>
                 </figure>
-                <figure class="d-flex figure">
-                    <a href="https://localcontexts.org/label/tk-non-commercial/" class="flex-shrink-0"><img class="figure-img" src="https://localcontexts.org/wp-content/uploads/2020/11/tk_label_nc.png" /></a>
+                <figure class="d-flex figure tk">
+                    <a href="https://localcontexts.org/label/tk-non-commercial/" class="flex-shrink-0"><img class="figure-img" src="{% static '/images/tk-non-commercial.png' %}" /></a>
                     <figcaption class="flex-grow-1 figure-caption"><a href="https://localcontexts.org/label/tk-non-commercial/">Non-Commercial</a></figcaption>
                 </figure>
             </div>
@@ -111,7 +111,7 @@
 </section>
 {% endblock content %}
 {% block footer %}
-{% include "disa_app_templates/partials/acknowledgements.html" %}
+{% include "partials/acknowledgements.html" %}
 {% endblock footer %}
 {% block page_specific_js%}
 <!-- Main setup routine -->

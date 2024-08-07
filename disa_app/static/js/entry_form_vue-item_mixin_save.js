@@ -270,7 +270,8 @@ async function createItemOnServer() {
     record_type:{},
     national_context: 3,
     citation_id: 8, // this.formData.doc.id,
-    image_url:''
+    image_url:'',
+    researcher_notes:''
   };
 
   const url = `${API_URL_ROOT}records/new/`,
@@ -402,7 +403,14 @@ async function saveItemDataToServer() {
       },
       national_context: this.currentItem.national_context_id,
       citation_id: this.formData.doc.id,
-      image_url: this.currentItem.kludge.image_url
+      image_url: this.currentItem.kludge.image_url,
+      // Citation fields for the Record: compile into a hash between 
+      //  Zotero field ID (without leading 'z') and value;
+      //  Only add if not empty
+      record_citation_fields: Object.entries(this.currentItem.citation_fields)
+        .filter(([k, v]) => v !== '')
+        .reduce((acc, [k, v]) => { acc[k.substring(1)] = v; return acc }, {}),
+      researcher_notes: this.currentItem.researcher_notes,
     };
 
     const httpMethod = isNewItem ? 'POST' : 'PUT';
