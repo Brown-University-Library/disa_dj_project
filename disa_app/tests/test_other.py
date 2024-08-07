@@ -205,9 +205,8 @@ class DockerTest( TestCase ):
                     req_file_end_idx = line.find( suffix, req_file_start_idx )
                     req_filestem = line[ req_file_start_idx:req_file_end_idx ].strip()
                     req_filename = f'{req_filestem}{suffix}'
-                    req_filepath = pathlib.Path( f'./config/{req_filename}' )
+                    req_filepath_to_test = pathlib.Path( f'./config/{req_filename}' ).resolve()
                     ## assertion ------------------------------------
-                    self.assertTrue( req_filepath.exists(), f'in dockerfile, ``{dockerfile_path}``, the requirements, ``{req_filepath}`` does not exist' )
+                    self.assertTrue( req_filepath_to_test.exists(), f'in dockerfile, ``{dockerfile_path}``, the requirements, ``{req_filepath_to_test}`` does not exist' )
                     log.debug( 'test passed' )
-                    break
                         
