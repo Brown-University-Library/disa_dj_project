@@ -36,6 +36,7 @@ const basemaps = {
 };
 basemaps.Watercolor.addTo(map);
 
+// create marker cluster group and subgroups for feedrom statuses
 var mcg = L.markerClusterGroup({
         chunkedLoading: true,
         maxClusterRadius: 30
@@ -43,6 +44,10 @@ var mcg = L.markerClusterGroup({
     unfree = L.featureGroup.subGroup(mcg),
     free = L.featureGroup.subGroup(mcg);
 mcg.addTo(map);
+// Adding to map now adds all child layers into the parent group.
+free.addTo(map);
+unfree.addTo(map);
+
 // fetch the geojson
 var geoJsonData = new L.GeoJSON.AJAX(
     leaflet_data_url, {
@@ -92,10 +97,15 @@ mcg.on('clustermouseover', function(a) {
     var clusterPopup = clusterName + '<br />' + clusterCount + ' people are in the database in this location.';
     a.layer.bindPopup(clusterPopup);
 });
-var layerControl = L.control.layers(basemaps, null, { collapsed: false }).addTo(map);
-layerControl.addOverlay(free, 'Free');
-layerControl.addOverlay(unfree, 'Unfree');
-layerControl.addTo(map);
+let basemapsControl = L.control.layers(basemaps, null, { collapsed: false }).addTo(map);
+let overlayControls = L.control.layers(null, null, { collapsed: false, position: "bottomleft"});
+overlayControls.addOverlay(free, 'Free').addOverlay(unfree, 'Unfree').addTo(map);
 
-free.addTo(map); // Adding to map now adds all child layers into the parent group.
-unfree.addTo(map);
+// move the overlaycontrols outside the map for styling etc
+let oldParent = document.getElementsByClassName('leaflet-bottom leaflet-left')
+let newParent = document.getElementById('custom-controls');
+
+while (oldParent[0].childNodes.length > 0) {
+    newParent.appendChild(oldParent[0].childNodes[0]);
+}
+
