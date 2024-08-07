@@ -190,7 +190,9 @@ class DockerTest( TestCase ):
     """ Checks Docker stuff. """
 
     def test_requirements_exists(self):
-        """ Checks that the requirements file specified in the Dockerfile(s) actually exists. """
+        """ Checks that the requirements file specified in the Dockerfile(s) actually exists. 
+            Note that there's no `break` after a successful assert, 
+                because there can be more than one requirements-line in a Dockerfile. """
         ## get dockerfile paths -------------------------------------
         dockerfile_paths: list = [ './Dockerfile', './Dockerfile.dev' ]
         for dockerfile_path in dockerfile_paths:
@@ -200,13 +202,14 @@ class DockerTest( TestCase ):
             for line in dockerfile_lines:
                 if 'requirements' in line:
                     ## get requirements filename --------------------
-                    req_file_start_idx = line.find( 'requirements' )
+                    req_filestem_start_idx = line.find( 'requirements' )
                     suffix = '.txt'
-                    req_file_end_idx = line.find( suffix, req_file_start_idx )
-                    req_filestem = line[ req_file_start_idx:req_file_end_idx ].strip()
+                    req_filestem_end_idx = line.find( suffix, req_filestem_start_idx )  # looks for `.txt` _after_ `requirements` 
+                    req_filestem = line[ req_filestem_start_idx:req_filestem_end_idx ].strip()  # would find, say, `requirements` or `requirements_local`
                     req_filename = f'{req_filestem}{suffix}'
                     req_filepath_to_test = pathlib.Path( f'./config/{req_filename}' ).resolve()
                     ## assertion ------------------------------------
-                    self.assertTrue( req_filepath_to_test.exists(), f'in dockerfile, ``{dockerfile_path}``, the requirements, ``{req_filepath_to_test}`` does not exist' )
+                    failure_message = f'in dockerfile, ``{dockerfile_path}``, the requirements, ``{req_filepath_to_test}`` does not exist'
+                    self.assertTrue( req_filepath_to_test.exists(), failure_message )
                     log.debug( 'test passed' )
                         
