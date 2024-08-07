@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import json, logging, pprint, uuid
+import json, logging, pathlib, pprint, uuid
 
 import requests
 from disa_app import settings_app
@@ -184,3 +184,30 @@ class SearchTest( TestCase ):
                 )
 
     # end class SearchTest()
+
+
+class DockerTest( TestCase ):
+    """ Checks Docker stuff. """
+
+    def test_requirements_exists(self):
+        """ Checks that the requirements file specified in the Dockerfile(s) actually exists. """
+        ## get dockerfile paths -------------------------------------
+        dockerfile_paths: list = [ './Dockerfile', './Dockerfile.dev' ]
+        for dockerfile_path in dockerfile_paths:
+            dockerfile_lines = []
+            with open( dockerfile_path ) as f:
+                dockerfile_lines = f.readlines()
+            for line in dockerfile_lines:
+                if 'requirements' in line:
+                    ## get requirements filename --------------------
+                    req_file_start_idx = line.find( 'requirements' )
+                    suffix = '.txt'
+                    req_file_end_idx = line.find( suffix, req_file_start_idx )
+                    req_filestem = line[ req_file_start_idx:req_file_end_idx ].strip()
+                    req_filename = f'{req_filestem}{suffix}'
+                    req_filepath = pathlib.Path( f'./config/{req_filename}' )
+                    ## assertion ------------------------------------
+                    self.assertTrue( req_filepath.exists(), f'in dockerfile, ``{dockerfile_path}``, the requirements, ``{req_filepath}`` does not exist' )
+                    log.debug( 'test passed' )
+                    break
+                        
