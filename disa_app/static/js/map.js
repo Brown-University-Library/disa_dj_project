@@ -34,9 +34,19 @@ const basemaps = {
         attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/about" target="_blank">OpenStreetMap</a> contributors',
     })
 };
+basemaps.Watercolor.addTo(map);
 
-L.control.layers(basemaps, null, { collapsed: false }).addTo(map);
-basemaps.Sketch.addTo(map);
+// create marker cluster group and subgroups for feedrom statuses
+var mcg = L.markerClusterGroup({
+        chunkedLoading: true,
+        maxClusterRadius: 30
+    }),
+    unfree = L.featureGroup.subGroup(mcg),
+    free = L.featureGroup.subGroup(mcg);
+mcg.addTo(map);
+// Adding to map now adds all child layers into the parent group.
+free.addTo(map);
+unfree.addTo(map);
 
 // fetch the geojson
 var geoJsonData = new L.GeoJSON.AJAX(
@@ -62,24 +72,18 @@ var geoJsonData = new L.GeoJSON.AJAX(
 
             var popupText = person_name + '<br />' + person_location + '<br />' + person_date;
             layer.bindPopup(popupText);
+            // add to the appropriate subgroup for dynamic filtering
+            if (status.startsWith("free")) {
+                layer.addTo(free)
+            } else {
+                layer.addTo(unfree)
+            }
         }
 
     });
-
-// cluster points
-var markers = L.markerClusterGroup({
-    chunkedLoading: true,
-    maxClusterRadius: 30,
-});
-//geojson ajax listener
-geoJsonData.on('data:loaded', function() {
-    // Add the cluster data after the geojson layer has loaded.
-    markers.addLayer(geoJsonData);
-    map.addLayer(markers);
-});
 // IDK why `clustermouseover` actually triggers on a click and `clusterclick` triggers on the *second* click of a cluster
 // popup shows a cluster's location, taken from the first record in the cluster, and how many records it holds
-markers.on('clustermouseover', function(a) {
+mcg.on('clustermouseover', function(a) {
     var clusterCount = a.layer.getChildCount();
     var clusterChildren = a.layer.getAllChildMarkers();
     var clusterLocation = [];
@@ -93,3 +97,15 @@ markers.on('clustermouseover', function(a) {
     var clusterPopup = clusterName + '<br />' + clusterCount + ' people are in the database in this location.';
     a.layer.bindPopup(clusterPopup);
 });
+let basemapsControl = L.control.layers(basemaps, null, { collapsed: false }).addTo(map);
+let overlayControls = L.control.layers(null, null, { collapsed: false, position: "bottomleft"});
+overlayControls.addOverlay(free, 'Free').addOverlay(unfree, 'Unfree').addTo(map);
+
+// move the overlaycontrols outside the map for styling etc
+let oldParent = document.getElementsByClassName('leaflet-bottom leaflet-left')
+let newParent = document.getElementById('custom-controls');
+
+while (oldParent[0].childNodes.length > 0) {
+    newParent.appendChild(oldParent[0].childNodes[0]);
+}
+
