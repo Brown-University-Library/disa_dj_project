@@ -111,6 +111,7 @@ export async function savePersonChanges(payload = {}) {
     removeReferents = removeDashesFromUuids(payload.removeReferents ?? []),
     linkTargetReferentUuid = removeDashesFromUuid(payload.linkTargetReferent?.referent_uuid ?? null),
     researcherNote = payload.notes ?? "",
+    referentNotesByUuid = payload.referentNotes ?? {},
     responses = [];
 
   let personUuid = payload.selectedPersonUuid ?? null;
@@ -129,6 +130,7 @@ export async function savePersonChanges(payload = {}) {
     linkTargetReferent: linkTargetReferentUuid,
     researcherNote,
     personUuid,
+    referentNotesByUuid,
   });
   if (addReferents.length > 0) {
     console.log("DRAMA 1");
@@ -143,7 +145,7 @@ export async function savePersonChanges(payload = {}) {
           //referent_uuid_2: referentUuid,
           referent_uuid: referentUuid, // TODO: submit multiples
           by_value: "TBD",
-          note: "note coming soon",
+          note: referentNotesByUuid[formatUuid(referentUuid)] ?? "",
         }),
       );
       console.log("DRAMA 2 RESPONSE", response);

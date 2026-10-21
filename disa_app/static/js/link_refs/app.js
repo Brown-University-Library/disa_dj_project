@@ -86,6 +86,12 @@ export class LinkRefsApp {
           this.views.personEditor.tables.person?.getData?.() ??
           this.state.personData ??
           [];
+        const notesByReferentUUID = personRows.reduce((acc, row) => {
+          if (row.referent_uuid) {
+            acc[row.referent_uuid] = row.notes ?? "";
+          }
+          return acc;
+        }, {});
         const referentsToAdd = personRows
           .filter((row) => (row.membershipStatus ?? "existing") === "added")
           .map((row) => row.referent_uuid)
@@ -107,6 +113,7 @@ export class LinkRefsApp {
           removeReferents: referentsToRemove,
           linkTargetReferent,
           notes: this.state.notes ?? "",
+          referentNotes: notesByReferentUUID,
         }
 
         console.log("Payload for saving person changes:", payload);
