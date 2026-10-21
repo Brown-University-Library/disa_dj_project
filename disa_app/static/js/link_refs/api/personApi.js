@@ -124,47 +124,28 @@ export async function savePersonChanges(payload = {}) {
   }
 
   // Call API to add Referents
-  console.log("DRAMA 0", {
-    addReferents,
-    removeReferents,
-    linkTargetReferent: linkTargetReferentUuid,
-    researcherNote,
-    personUuid,
-    referentNotesByUuid,
-  });
+
   if (addReferents.length > 0) {
-    console.log("DRAMA 1");
-    addReferents.forEach(async (referentUuid) => {
-      console.log("DRAMA 2");
+
+    for (const referentUuid of addReferents) {
+      console.log("[save] linking", { personUuid, referentUuid });
+
       const response = await fetchJson(
-        // API_ENDPOINTS.SAVE_PERSON_CHANGES,
         `/data/person/${personUuid}/link-referents/`,
         buildRequestOptions({
-          // referent_uuid_1: str, referent_uuid_2: str, by_value: str, note: str
-          //referent_uuid_1: linkTargetReferent,
-          //referent_uuid_2: referentUuid,
-          referent_uuid: referentUuid, // TODO: submit multiples
+          referent_uuid: referentUuid,
           by_value: "TBD",
           note: referentNotesByUuid[formatUuid(referentUuid)] ?? "",
         }),
       );
-      console.log("DRAMA 2 RESPONSE", response);
-      responses.push(response);
-    });
 
-    /*
-    const response = await fetchJson(
-      API_ENDPOINTS.SAVE_PERSON_CHANGES,
-      buildRequestOptions({
-        // referent_uuid_1: str, referent_uuid_2: str, by_value: str, note: str
-        referent_uuid_1: linkTargetReferent,
-        referent_uuid_2: 
-        //person_uuid: personUuid,
-        //referent_uuids: addReferents,
-        //researcher_note: researcherNote,
-      }),
-    );
-    responses.push(response);*/
+      console.log("[save] link completed", {
+        personUuid,
+        referentUuid,
+        response,
+      });
+      responses.push(response);
+    }
   }
 
   // Call API to remove Referents
@@ -184,5 +165,5 @@ export async function savePersonChanges(payload = {}) {
     responses.push(response);
   }
 
-  return responses.length > 0 ? responses[responses.length - 1] : { ok: true };
+  return personUuid;
 }

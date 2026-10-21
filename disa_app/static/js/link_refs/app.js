@@ -55,7 +55,6 @@ export class LinkRefsApp {
       // Called when user clicks "Change Person" button in the Person Editor view
 
       onChangePerson: () => {
-        // alert("YES - Change Person button clicked");
         this.goTo(VIEW_KEYS.SELECT_PERSON);
       },
 
@@ -126,35 +125,24 @@ export class LinkRefsApp {
         // Submit payload to API and handle response
 
         try {
-          await savePersonChanges(payload);
 
-          // Refresh data and re-render the app
-          // (Apparently need to wait a bit to ensure the backend has processed 
-          // the changes before fetching updated data - this seems kludgy)
+          const personUuid = await savePersonChanges(payload);
 
-          const WAIT_TIME_MS = 2000; // Wait time for backend (mySQL?)
+          const [people, referents] = await Promise.all([
+            getPeopleList(),
+            loadReferentData(),
+          ]);
 
-          setTimeout(async () => {
-            const [people, referents] = await Promise.all([
-              getPeopleList(),
-              loadReferentData(),
-            ]);
+          const peopleData = normalizePeopleGroups(people);
+                    
+          this.state = loadInitialData(this.state, {
+            peopleData,
+            referentData: referents,
+          });
 
-            const peopleData = normalizePeopleGroups(people);
+          this.state = selectPersonAndOpenEditor(this.state, personUuid);
 
-            this.state = loadInitialData(this.state, {
-              peopleData,
-              referentData: referents,
-            });
-
-            this.state = selectPersonAndOpenEditor(
-              this.state,
-              this.state.selectedPersonUuid,
-            );
-
-            this.render();
-          }, WAIT_TIME_MS);
-
+          this.render();
         } catch (error) {
           this.state = setError(this.state, error);
           console.error(error);
