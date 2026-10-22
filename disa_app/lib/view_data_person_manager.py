@@ -18,7 +18,8 @@ GET_ALL_PEOPLE_SQL = """
         people.uuid AS person_uuid,
         referents.uuid AS referent_uuid,
         referent_names.first AS referent_first_name,
-        referent_names.last AS referent_last_name
+        referent_names.last AS referent_last_name,
+        person_referents.researcher_log AS referent_researcher_log
     FROM `1_people` AS people
     LEFT JOIN `6_is_person` AS person_referents
         ON person_referents.person_uuid = people.uuid
@@ -43,7 +44,7 @@ def get_all_people() -> dict:
         rows = cursor.fetchall()
 
         people_by_uuid = {}
-        for person_uuid, referent_uuid, first_name, last_name in rows:
+        for person_uuid, referent_uuid, first_name, last_name, referent_researcher_log in rows:
             if person_uuid not in people_by_uuid:
                 people_by_uuid[person_uuid] = {
                     'person_uuid': person_uuid,
@@ -59,6 +60,11 @@ def get_all_people() -> dict:
                 people_by_uuid[person_uuid]['referents'].append({
                     'referent_uuid': referent_uuid,
                     'name': referent_name,
+                    'researcher_log': (
+                        json.loads(referent_researcher_log)
+                        if referent_researcher_log is not None
+                        else None
+                    ),
                 })
 
         return {'people': list(people_by_uuid.values())}

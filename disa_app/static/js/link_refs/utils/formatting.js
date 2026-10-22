@@ -39,3 +39,27 @@ export function displayLocation(rowData) {
 export function pluralizeReferents(count) {
   return `${count} referent${count === 1 ? "" : "s"}`;
 }
+
+
+// Parses a date string in the format "YYYY-MM-DD_HHMMSSffffff" 
+// (what is stored in the database Person logs) and returns a Date object
+
+export function parseDatabaseDate(dateString) {
+  const match = dateString.match(
+    /^(\d{4})-(\d{2})-(\d{2})_(\d{2})(\d{2})(\d{2})(\d{6})$/
+  );
+
+  if (!match) throw new Error("Invalid date format");
+
+  const [, year, month, day, hour, minute, second, milliseconds] = match;
+
+  return new Date(
+    Number(year),
+    Number(month) - 1, // Months are zero-based
+    Number(day),
+    Number(hour),
+    Number(minute),
+    Number(second),
+    Number(milliseconds.slice(0, 3))
+  );
+}

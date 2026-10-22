@@ -29,10 +29,11 @@ export async function loadReferentData() {
 
 export function normalizePeopleGroups(people) {
   return people.flatMap(({ person_uuid, referents = [] }) =>
-    referents.map(({ referent_uuid, name }) => ({
+    referents.map(({ referent_uuid, name, researcher_log }) => ({
       person_uuid: formatUuid(person_uuid),
       referent_uuid: formatUuid(referent_uuid),
       name,
+      researcher_log,
     })),
   );
 }

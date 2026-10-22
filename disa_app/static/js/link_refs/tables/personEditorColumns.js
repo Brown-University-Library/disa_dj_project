@@ -1,3 +1,8 @@
+
+import { parseDatabaseDate } from "../utils/formatting.js";
+
+// Referent table columns for Tabulator
+
 export const REFERENT_TABLE_COLUMNS = [
   {
     field: "moveToPerson",
@@ -21,6 +26,47 @@ export const REFERENT_TABLE_COLUMNS = [
     width: 120,
   },
 ];
+
+
+// Person table columns for Tabulator
+// (with some helper functions)
+
+function formatResearcherLogSummary(logJson) {
+  const logEntries = Object.entries(logJson ?? {})
+    .sort((a, b) => b[0] - a[0])
+    .map(([timestamp, {by, note, type}]) => {
+      return { timestamp, by, note, type };
+    });
+
+  const summary = logEntries
+  .map(({ timestamp, by, note, type }) => `${type}`)
+  .join("; ");
+
+  return summary || "No activity";
+}
+
+function formatResearcherLogDetails(logJson) {
+  const logHTML = Object.entries(logJson ?? {})
+  .sort((a, b) => b[0] - a[0])
+  .map(([timestamp, {by, note, type}]) => {
+    
+    timestamp = parseDatabaseDate(timestamp).toLocaleString();
+
+    note = note.replaceAll(/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/g, (match) => {
+      return `<abbr title="${match}">${match.slice(0, 4)}</abbr>`;
+    });
+    note = note.replaceAll('"', "&quot;");
+    const popup = `
+      <li>
+        <strong>${timestamp}: ${type} (${by})</strong>
+        <p>${note}</p>
+      </li>`;
+
+    return popup;
+  }).join("");
+  return `<ul>${logHTML}</ul>`;
+}
+
 
 export const PERSON_TABLE_COLUMNS = [
   {
@@ -59,7 +105,18 @@ export const PERSON_TABLE_COLUMNS = [
     width: 100,
   },
   {
-    title: "Notes",
+    title: "Activity log",
+    field: "researcher_log",
+    formatter: (cell) => formatResearcherLogSummary(cell.getValue()),
+    variableHeight: true,
+    cellClick: (e, cell) => {
+      // const logJson = cell.getValue();
+      cell.popup(formatResearcherLogDetails(cell.getValue()), "center");
+    },
+    width: 300,
+  },
+  {
+    title: "New note (click to edit)",
     field: "notes",
     editor: "textarea",
     editorParams: {
