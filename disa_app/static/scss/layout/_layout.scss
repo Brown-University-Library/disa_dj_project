@@ -1,12 +1,1 @@
-/* controlling TK label key */
-figure.tk {
-  img {
-    height: auto;
-    width: 2rem;
-    margin-right: $spacer;
 
-    &:hover {
-      filter: hue-rotate(90deg);
-    }
-  }
-}

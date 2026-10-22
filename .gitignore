@@ -17,3 +17,6 @@ migrations
 .env_*
 .ruff_cache/
 .pytest_cache/
+
+
+node_modules

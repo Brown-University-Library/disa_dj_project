@@ -21,25 +21,12 @@
 <body class="container-fluid {% if user.is_authenticated %}user-editor {% endif %}">
     <header class="d-flex py-2 row  justify-content-between bg-primary">
         <h1 class="col-md-4"><a href="{% url 'info_url' %}" class="link-light">Stolen Relations: <span>Recovering Stories of Indigenous Enslavement in the Americas</span></a></h1>
-        {% if not flag_maintenance %}
-        <form class="col-md-4 mx-2" role="search" class="" action="{% url 'search_results_url' %}" method="get">
-            <label for="query" class="visually-hidden">Search</label>
-            {% if search_query %}
-            <input class="form-control" type="text" placeholder="searched: `{{ search_query }}`" aria-label="Search" id="query" name="query">
-            {% else %}
-            <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" id="query" name="query">
-            {% endif %}
-        </form>
-        {% endif %}
     </header>
     <nav class="navbar navbar-expand-sm navbar-dark text-light bg-primary d-flex row">
         <ul class="navbar-nav justify-content-center">
             {% block nav_options %}
             {% endblock nav_options %}
             {% if user_is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'browse_url' %}" tabindex="-1" aria-disabled="false"><i class="fa-solid fa-rectangle-list"></i> Browse</a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'redesign_citations_url' %}" tabindex="-1" aria-disabled="false"><i class="fa-solid fa-book-bookmark"></i> Records</a>
             </li>

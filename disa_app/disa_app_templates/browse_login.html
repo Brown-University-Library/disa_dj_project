@@ -4,7 +4,7 @@
 {% if flag_maintenance %}
 {% include "partials/maintenance.html" %}
 {% else %}
-<form id="non_shib_form" action="{{ browse_url }}" method="POST">{% csrf_token %}
+<form id="non_shib_form" action="{% url 'redesign_citations_url' %}" method="POST">{% csrf_token %}
     <h1>Welcome!</h1>
     <h2>Please login with your username and password</h2>
     <div class="mb-3"><label for="username_field_input" class="form-label">Username:</label>
